@@ -8,5 +8,5 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "arrowParens": "always",
-  "endofLine": "auto"
+  "endOfLine": "auto"
 }
