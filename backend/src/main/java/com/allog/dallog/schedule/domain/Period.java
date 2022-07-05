@@ -2,11 +2,20 @@ package com.allog.dallog.schedule.domain;
 
 import com.allog.dallog.schedule.exception.InvalidPeriodException;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Period {
 
+    @Column(nullable = false)
     private LocalDateTime startDateTime;
+
+    @Column(nullable = false)
     private LocalDateTime endDateTime;
+
+    protected Period() {
+    }
 
     public Period(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         validate(startDateTime, endDateTime);
