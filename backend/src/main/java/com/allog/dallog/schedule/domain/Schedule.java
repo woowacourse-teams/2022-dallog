@@ -35,4 +35,8 @@ public class Schedule {
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
     }
+
+    public Long getId() {
+        return Id;
+    }
 }
