@@ -2,6 +2,7 @@ package com.allog.dallog.schedule.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.schedule.exception.InvalidPeriodException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class PeriodTest {
 
         // when & then
         assertThatThrownBy(() -> new Period(startDateTime, endDateTime))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(InvalidPeriodException.class)
             .hasMessage("종료일시가 시작일시보다 이전일 수 없습니다.");
     }
 }

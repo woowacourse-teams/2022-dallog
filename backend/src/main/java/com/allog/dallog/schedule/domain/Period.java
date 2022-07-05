@@ -1,5 +1,6 @@
 package com.allog.dallog.schedule.domain;
 
+import com.allog.dallog.schedule.exception.InvalidPeriodException;
 import java.time.LocalDateTime;
 
 public class Period {
@@ -16,7 +17,7 @@ public class Period {
 
     private void validate(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         if (startDateTime.isAfter(endDateTime)) {
-            throw new IllegalArgumentException("종료일시가 시작일시보다 이전일 수 없습니다.");
+            throw new InvalidPeriodException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
     }
 }
