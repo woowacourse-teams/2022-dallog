@@ -1,5 +1,17 @@
 import ReactDOM from 'react-dom';
-import App from './App';
+import { ThemeProvider } from '@emotion/react';
+
+import theme from '@/styles/theme';
+import GlobalStyle from '@/styles/GlobalStyle';
+
+import App from '@/App';
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<App />, rootElement);
+
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <GlobalStyle />
+    <App />
+  </ThemeProvider>,
+  rootElement
+);
