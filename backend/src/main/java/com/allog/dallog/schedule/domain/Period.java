@@ -29,4 +29,12 @@ public class Period {
             throw new InvalidPeriodException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
     }
+
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
 }

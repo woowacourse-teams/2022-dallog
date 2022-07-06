@@ -39,4 +39,20 @@ public class Schedule {
     public Long getId() {
         return Id;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public LocalDateTime getStartDateTime() {
+        return period.getStartDateTime();
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return period.getEndDateTime();
+    }
+
+    public String getMemo() {
+        return memo;
+    }
 }

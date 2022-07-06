@@ -29,7 +29,7 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
             memo);
 
         // then
-        상태코드_201이_반환됨(response);
+        상태코드_201이_반환된다(response);
     }
 
     @DisplayName("월별 일정정보를 조회한다.")
@@ -46,7 +46,7 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 월별_일정을_조회한다(year, month);
 
         // then
-        상태코드_200이_반환됨(response);
+        상태코드_200이_반환된다(response);
     }
 
     private ExtractableResponse<Response> 새로운_일정을_등록한다(final String title,
@@ -65,18 +65,18 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
             .extract();
     }
 
-    private ExtractableResponse<Response> 월별_일정을_조회한다(int year, int month) {
+    private ExtractableResponse<Response> 월별_일정을_조회한다(final int year, final int month) {
         return RestAssured.given().log().all()
             .when().get("/api/schedules?year={year}&month={month}", year, month)
             .then().log().all()
             .extract();
     }
 
-    private void 상태코드_200이_반환됨(ExtractableResponse<Response> response) {
+    private void 상태코드_200이_반환된다(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private void 상태코드_201이_반환됨(ExtractableResponse<Response> response) {
+    private void 상태코드_201이_반환된다(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 }
