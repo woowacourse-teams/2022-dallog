@@ -3,7 +3,10 @@ import { css, Theme } from '@emotion/react';
 const fieldSet = ({ flex }: Theme) => css`
   ${flex.column}
 
-  align-items:flex-start;
+  width: 500px;
+  height: 60px;
+
+  align-items: flex-start;
   gap: 10px;
 
   font-size: 20px;
@@ -14,9 +17,9 @@ const label = css`
 `;
 
 const input = ({ colors }: Theme) => css`
-  width: 500px;
-  height: 60px;
   padding: 12px;
+
+  width: 100%;
 
   border-radius: 8px;
   border: 1px solid ${colors.GRAY_400};
