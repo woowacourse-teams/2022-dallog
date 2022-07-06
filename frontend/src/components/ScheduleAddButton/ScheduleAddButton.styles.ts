@@ -6,12 +6,12 @@ const scheduleAddButton = ({ colors }: Theme) => css`
 
   border-radius: 50%;
 
-  background: ${colors.yellow_500};
+  background: ${colors.YELLOW_500};
 
   font-size: 20px;
   line-height: 20px;
   font-weight: 700;
-  color: ${colors.white};
+  color: ${colors.WHITE};
 
   &:hover {
     opacity: 0.7;

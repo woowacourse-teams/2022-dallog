@@ -5,7 +5,7 @@ const navBar = ({ colors }: Theme) => css`
   height: 64px;
   padding: 8px;
 
-  background: ${colors.yellow_500};
+  background: ${colors.YELLOW_500};
 
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
