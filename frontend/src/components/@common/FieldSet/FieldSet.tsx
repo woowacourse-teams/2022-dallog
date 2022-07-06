@@ -1,4 +1,5 @@
 import { SerializedStyles, useTheme } from '@emotion/react';
+import React from 'react';
 
 import { fieldSet, input, label } from './FieldSet.styles';
 
@@ -6,9 +7,10 @@ interface FieldSetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
   cssProp?: SerializedStyles;
   labelText?: string;
+  refProp?: React.MutableRefObject<null | HTMLInputElement>;
 }
 
-function FieldSet({ type = 'text', id, cssProp, labelText, placeholder }: FieldSetProps) {
+function FieldSet({ type = 'text', id, cssProp, labelText, placeholder, refProp }: FieldSetProps) {
   const theme = useTheme();
 
   return (
@@ -18,9 +20,9 @@ function FieldSet({ type = 'text', id, cssProp, labelText, placeholder }: FieldS
           {labelText}
         </label>
       )}
-      <input type={type} id={id} css={input(theme)} placeholder={placeholder} />
+      <input type={type} id={id} css={input(theme)} placeholder={placeholder} ref={refProp} />
     </div>
   );
 }
 
-export default FieldSet;
+export default React.forwardRef(FieldSet);
