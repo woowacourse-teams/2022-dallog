@@ -4,14 +4,14 @@ import { button } from './Button.styles';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
-  css?: SerializedStyles;
+  cssProp?: SerializedStyles;
   onClick?: () => void;
   children?: string | JSX.Element | JSX.Element[];
 }
 
-function Button({ type = 'button', css, onClick, children, ...props }: ButtonProps) {
+function Button({ type = 'button', cssProp, onClick, children, ...props }: ButtonProps) {
   return (
-    <button type={type} css={[button, css]} onClick={onClick} {...props}>
+    <button type={type} css={[button, cssProp]} onClick={onClick} {...props}>
       {children}
     </button>
   );

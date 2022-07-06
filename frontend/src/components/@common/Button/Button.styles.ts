@@ -7,6 +7,10 @@ const button = css`
   text-align: center;
 
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export { button };
