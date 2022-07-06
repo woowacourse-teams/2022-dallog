@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack serve --mode development --open --hot",
     "build": "webpack --mode production",
-    "prestart": "npm build",
+    "prestart": "npm run build",
     "start": "webpack --mode development",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
