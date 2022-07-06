@@ -5,11 +5,13 @@
     "plugin:react/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
+    "plugin:import/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "import/named": "off",
     "import/no-unresolved": "off",
     "@typescript-eslint/no-var-requires": "off"
   }

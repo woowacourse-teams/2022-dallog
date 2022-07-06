@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import NavBar from './NavBar';

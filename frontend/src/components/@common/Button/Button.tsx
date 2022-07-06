@@ -1,18 +1,17 @@
-// eslint-disable-next-line import/named
 import { SerializedStyles } from '@emotion/react';
 
 import { button } from './Button.styles';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
-  css?: SerializedStyles;
-  onClick?: () => void;
+  cssProp?: SerializedStyles;
+  onClick?: (e?: React.FormEvent) => void;
   children?: string | JSX.Element | JSX.Element[];
 }
 
-function Button({ type = 'button', css, onClick, children, ...props }: ButtonProps) {
+function Button({ type = 'button', cssProp, onClick, children, ...props }: ButtonProps) {
   return (
-    <button type={type} css={[button, css]} onClick={onClick} {...props}>
+    <button {...props} type={type} css={[button, cssProp]} onClick={onClick}>
       {children}
     </button>
   );
