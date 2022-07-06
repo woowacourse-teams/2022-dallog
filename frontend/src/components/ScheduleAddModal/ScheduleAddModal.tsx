@@ -14,11 +14,19 @@ import {
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
 
-function ScheduleAddModal() {
+interface ScheduleAddModalProps {
+  closeModal: () => void;
+}
+
+function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   const theme = useTheme();
 
+  const handleClickScheduleAddModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div css={scheduleAddModal}>
+    <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form}>
         <FieldSet placeholder="제목을 입력하세요." />
         <Button cssProp={allDayButton(theme)}>종일</Button>
@@ -29,8 +37,10 @@ function ScheduleAddModal() {
         </div>
         <FieldSet placeholder="메모를 추가하세요." />
         <div css={controlButtons}>
-          <Button cssProp={cancelButton(theme)}>취소</Button>
-          <Button type="submit" cssProp={saveButton(theme)}>
+          <Button cssProp={cancelButton(theme)} onClick={closeModal}>
+            취소
+          </Button>
+          <Button type="submit" cssProp={saveButton(theme)} onClick={closeModal}>
             저장
           </Button>
         </div>

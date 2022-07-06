@@ -7,6 +7,6 @@ export default {
   component: ScheduleAddModal,
 } as ComponentMeta<typeof ScheduleAddModal>;
 
-const Template: ComponentStory<typeof ScheduleAddModal> = () => <ScheduleAddModal />;
+const Template: ComponentStory<typeof ScheduleAddModal> = (args) => <ScheduleAddModal {...args} />;
 
 export const Primary = Template.bind({});
