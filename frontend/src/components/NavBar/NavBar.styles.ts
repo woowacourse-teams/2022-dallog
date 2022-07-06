@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { css, Theme } from '@emotion/react';
 
 const navBar = ({ colors }: Theme) => css`
