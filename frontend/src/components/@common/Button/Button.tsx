@@ -5,13 +5,13 @@ import { button } from './Button.styles';
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   cssProp?: SerializedStyles;
-  onClick?: () => void;
+  onClick?: (e?: React.FormEvent) => void;
   children?: string | JSX.Element | JSX.Element[];
 }
 
 function Button({ type = 'button', cssProp, onClick, children, ...props }: ButtonProps) {
   return (
-    <button type={type} css={[button, cssProp]} onClick={onClick} {...props}>
+    <button {...props} type={type} css={[button, cssProp]} onClick={onClick}>
       {children}
     </button>
   );

@@ -7,6 +7,11 @@ export default {
   component: ScheduleAddButton,
 } as ComponentMeta<typeof ScheduleAddButton>;
 
-const Template: ComponentStory<typeof ScheduleAddButton> = () => <ScheduleAddButton />;
+const Template: ComponentStory<typeof ScheduleAddButton> = (args) => (
+  <ScheduleAddButton {...args} />
+);
 
 export const Primary = Template.bind({});
+Primary.args = {
+  onClick: () => void 0,
+};
