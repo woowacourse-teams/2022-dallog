@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { SerializedStyles } from '@emotion/react';
 
 import { button } from './Button.styles';
