@@ -14,6 +14,9 @@ import javax.persistence.Table;
 @Table(name = "SCHEDULES")
 public class Schedule {
 
+    private static final int MAX_TITLE_LENGTH = 20;
+    private static final int MAX_MEMO_LENGTH = 255;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -33,14 +36,21 @@ public class Schedule {
     public Schedule(final String title, final LocalDateTime startDateTime,
         final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
+        validateMemoLength(memo);
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
     }
 
     private void validateTitleLength(String title) {
-        if (title.length() > 20) {
+        if (title.length() > MAX_TITLE_LENGTH) {
             throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
+        }
+    }
+
+    private void validateMemoLength(String memo) {
+        if (memo.length() > MAX_MEMO_LENGTH) {
+            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
         }
     }
 
