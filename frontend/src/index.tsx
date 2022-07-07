@@ -6,6 +6,12 @@ import GlobalStyle from '@/styles/GlobalStyle';
 
 import App from '@/App';
 
+import { worker } from '@/mocks/browser';
+
+if (process.env.NODE_ENV === 'development') {
+  worker.start();
+}
+
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
