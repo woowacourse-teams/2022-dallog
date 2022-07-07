@@ -34,7 +34,7 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
     e.stopPropagation();
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitScheduleAddForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValidRef = Object.values(inputRef).every(
@@ -66,7 +66,7 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
 
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
-      <form css={form} onSubmit={onSubmit}>
+      <form css={form} onSubmit={handleSubmitScheduleAddForm}>
         <FieldSet placeholder="제목을 입력하세요." refProp={inputRef.title} />
         <Button cssProp={allDayButton(theme)}>종일</Button>
         <div css={dateTime(theme)}>
