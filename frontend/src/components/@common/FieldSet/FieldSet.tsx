@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import { SerializedStyles, useTheme } from '@emotion/react';
 
 import { fieldSet, input, label } from './FieldSet.styles';
@@ -24,4 +26,4 @@ function FieldSet({ type = 'text', id, cssProp, labelText, placeholder, refProp 
   );
 }
 
-export default React.forwardRef(FieldSet);
+export default forwardRef(FieldSet);
