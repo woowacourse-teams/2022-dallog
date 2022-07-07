@@ -1,6 +1,10 @@
 import { css, Theme } from '@emotion/react';
 
 const navBar = ({ colors }: Theme) => css`
+  position: fixed;
+  top: 0;
+  left: 0;
+
   width: 100%;
   height: 64px;
   padding: 8px;

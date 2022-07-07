@@ -1,8 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
 const scheduleAddModal = ({ colors }: Theme) => css`
-  width: 600px;
-  height: 600px;
+  width: 480px;
+  height: 640px;
   padding: 50px;
   border-radius: 12px;
 
@@ -17,7 +17,7 @@ const form = ({ flex }: Theme) => css`
 `;
 
 const allDayButton = ({ colors }: Theme) => css`
-  width: 500px;
+  width: 100%;
   height: 36px;
   border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
@@ -31,6 +31,8 @@ const allDayButton = ({ colors }: Theme) => css`
 
 const dateTime = ({ flex }: Theme) => css`
   ${flex.column}
+
+  width:100%;
 
   gap: 10px;
 `;

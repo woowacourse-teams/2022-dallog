@@ -2,7 +2,7 @@ import { css, Theme } from '@emotion/react';
 
 const colors = {
   YELLOW_500: '#FCC419',
-  WHITE: '#fff',
+  WHITE: '#ffffff',
   GRAY_000: '#f8f9fa',
   GRAY_100: '#f1f3f5',
   GRAY_200: '#e9ecef',
@@ -13,7 +13,7 @@ const colors = {
   GRAY_700: '#495057',
   GRAY_800: '#343a40',
   GRAY_900: '#212529',
-  BLACK: '#000',
+  BLACK: '#000000',
 };
 
 const flex = {
