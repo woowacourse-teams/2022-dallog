@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Period {
-
+    
     @Column(nullable = false)
     private LocalDateTime startDateTime;
 
