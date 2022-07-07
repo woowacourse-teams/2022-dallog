@@ -1,9 +1,14 @@
 package com.allog.dallog.schedule.domain;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class ScheduleTest {
 
@@ -17,6 +22,21 @@ public class ScheduleTest {
         String memo = "알록달록 팀회의 - 선릉 큰 강의실";
 
         // when & then
-        Assertions.assertDoesNotThrow(() -> new Schedule(title, startDateTime, endDateTime, memo));
+        assertDoesNotThrow(() -> new Schedule(title, startDateTime, endDateTime, memo));
+    }
+
+    @DisplayName("일정 제목의 길이가 20을 초과하는 경우 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"일이삼사오육칠팔구십일이삼사오육칠팔구십일",
+        "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 회의"})
+    void 일정_제목의_길이가_20을_초과하는_경우_예외를_던진다(final String title) {
+        // given
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 5, 12, 30);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
+        String memo = "알록달록 팀회의 - 선릉 큰 강의실";
+
+        // when & then
+        assertThatThrownBy(() -> new Schedule(title, startDateTime, endDateTime, memo))
+            .isInstanceOf(InvalidScheduleException.class);
     }
 }

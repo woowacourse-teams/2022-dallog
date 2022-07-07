@@ -1,5 +1,6 @@
 package com.allog.dallog.schedule.domain;
 
+import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -17,7 +18,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(nullable = false)
+    @Column(length = 20, nullable = false)
     private String title;
 
     @Embedded
@@ -31,9 +32,16 @@ public class Schedule {
 
     public Schedule(final String title, final LocalDateTime startDateTime,
         final LocalDateTime endDateTime, final String memo) {
+        validateTitleLength(title);
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
+    }
+
+    private void validateTitleLength(String title) {
+        if (title.length() > 20) {
+            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
+        }
     }
 
     public Long getId() {
