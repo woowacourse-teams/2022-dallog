@@ -3,7 +3,7 @@ import { css, Theme } from '@emotion/react';
 const fieldSet = ({ flex }: Theme) => css`
   ${flex.column}
 
-  width: 500px;
+  width:100%;
   height: 60px;
 
   align-items: flex-start;

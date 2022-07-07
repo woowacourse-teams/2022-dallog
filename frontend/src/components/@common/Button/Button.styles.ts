@@ -9,7 +9,7 @@ const button = css`
   cursor: pointer;
 
   &:hover {
-    opacity: 0.7;
+    filter: brightness(1.1);
   }
 `;
 

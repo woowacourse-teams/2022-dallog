@@ -10,8 +10,7 @@ const dimmer = ({ colors, flex }: Theme, isOpen: boolean) => css`
   width: 100%;
   height: 100%;
 
-  background: ${isOpen ? colors.GRAY_900 : 'transparent'};
-  opacity: 0.9;
+  background: ${isOpen ? `${colors.BLACK}bb` : 'transparent'};
 `;
 
 export { dimmer };
