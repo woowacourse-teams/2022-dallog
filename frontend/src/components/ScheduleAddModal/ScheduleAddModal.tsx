@@ -16,11 +16,20 @@ import {
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
 
-interface ScheduleAddModalProps {
-  closeModal: () => void;
+interface Schedule {
+  id: number;
+  title: string;
+  startDateTime: string;
+  endDateTime: string;
+  memo: string;
 }
 
-function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
+interface ScheduleAddModalProps {
+  closeModal: () => void;
+  setSchedule: React.Dispatch<React.SetStateAction<Schedule[]>>;
+}
+
+function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
   const theme = useTheme();
 
   const inputRef = {
@@ -62,6 +71,17 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
       },
       body,
     });
+
+    setSchedule((prev) => [
+      ...prev,
+      {
+        id: prev.length,
+        title: title.current?.value as string,
+        startDateTime: startDateTime.current?.value as string,
+        endDateTime: endDateTime.current?.value as string,
+        memo: memo.current?.value as string,
+      },
+    ]);
   };
 
   return (

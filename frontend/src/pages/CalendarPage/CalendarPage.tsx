@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import useModal from '@/hooks/useModal';
 
 import PageLayout from '@/components/PageLayout/PageLayout';
@@ -6,14 +8,41 @@ import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton'
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
+interface Schedule {
+  id: number;
+  title: string;
+  startDateTime: string;
+  endDateTime: string;
+  memo: string;
+}
+
 function CalendarPage() {
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+
   const { isOpen, openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      const response = await fetch('/api/schedules', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
+      const { data } = await response.json();
+
+      setSchedules(data);
+    };
+
+    fetchSchedules();
+  }, []);
 
   return (
     <PageLayout>
-      <Calendar />
+      <Calendar schedules={schedules} />
       <ModalPortal isOpen={isOpen} closeModal={closeModal}>
-        <ScheduleAddModal closeModal={closeModal} />
+        <ScheduleAddModal setSchedule={setSchedules} closeModal={closeModal} />
       </ModalPortal>
       <ScheduleAddButton onClick={openModal} />
     </PageLayout>
