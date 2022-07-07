@@ -9,7 +9,9 @@
     "prestart": "npm run build",
     "start": "webpack --mode development",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "check-lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "check-prettier": "prettier -c ."
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
