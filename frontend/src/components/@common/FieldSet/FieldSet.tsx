@@ -1,5 +1,4 @@
 import { SerializedStyles, useTheme } from '@emotion/react';
-import React from 'react';
 
 import { fieldSet, input, label } from './FieldSet.styles';
 
