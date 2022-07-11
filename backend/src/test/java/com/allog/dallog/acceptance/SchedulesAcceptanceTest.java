@@ -32,9 +32,9 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
         상태코드_201이_반환된다(response);
     }
 
-    @DisplayName("월별 일정정보를 조회한다.")
+    @DisplayName("월별 일정정보를 조회하면 상태코드 200을 반환한다.")
     @Test
-    void 월별_일정정보를_조회한다() {
+    void 월별_일정정보를_조회하면_상태코드_200을_반환한다() {
         // given
         int year = 2022;
         int month = 7;
