@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { useMutation } from 'react-query';
 import { useTheme } from '@emotion/react';
 
 import { Schedule } from '@/@types';
@@ -18,6 +19,8 @@ import {
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
 
+import scheduleApi from '@/api/schedule';
+
 interface ScheduleAddModalProps {
   closeModal: () => void;
   setSchedule: React.Dispatch<React.SetStateAction<Schedule[]>>;
@@ -25,6 +28,8 @@ interface ScheduleAddModalProps {
 
 function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
   const theme = useTheme();
+
+  const { isLoading, error, mutate: postSchedule } = useMutation(scheduleApi.post);
 
   const inputRef = {
     title: useRef<HTMLInputElement>(null),
@@ -40,43 +45,33 @@ function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
   const handleSubmitScheduleAddForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isValidRef = Object.values(inputRef).every(
-      (inputRef) => inputRef.current instanceof HTMLInputElement
+    const [title, startDateTime, endDateTime, memo] = Object.values(inputRef).map(
+      (el) => el.current
     );
 
-    if (!isValidRef) {
+    if (
+      !(title instanceof HTMLInputElement) ||
+      !(memo instanceof HTMLInputElement) ||
+      !(startDateTime instanceof HTMLInputElement) ||
+      !(endDateTime instanceof HTMLInputElement)
+    ) {
       return;
     }
 
-    const [title, startDateTime, endDateTime, memo] = Object.values(inputRef);
+    const body = {
+      title: title.value,
+      startDateTime: startDateTime.value,
+      endDateTime: endDateTime.value,
+      memo: memo.value,
+    };
 
-    const body = await JSON.stringify({
-      title: title.current?.value,
-      startDateTime: startDateTime.current?.value,
-      endDateTime: endDateTime.current?.value,
-      memo: memo.current?.value,
-    });
-
-    await fetch('/api/schedules', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body,
-    });
-
-    setSchedule((prev) => [
-      ...prev,
-      {
-        id: prev.length,
-        title: title.current?.value as string,
-        startDateTime: startDateTime.current?.value as string,
-        endDateTime: endDateTime.current?.value as string,
-        memo: memo.current?.value as string,
-      },
-    ]);
+    postSchedule(body);
+    setSchedule((prev) => [...prev, { id: prev.length, ...body }]);
   };
+
+  if (isLoading) return <>Loading</>;
+
+  if (error) return <>Error</>;
 
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>

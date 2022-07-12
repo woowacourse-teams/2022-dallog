@@ -1,17 +1,10 @@
 import { rest } from 'msw';
 
-interface PostScheduleReqBody {
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
+import { Schedule } from '@/@types';
 
-interface ScheduleResponse extends PostScheduleReqBody {
-  id: number;
-}
+import scheduleApi from '@/api/schedule';
 
-const scheduleDB: ScheduleResponse[] = [
+const scheduleDB: Schedule[] = [
   {
     id: 1,
     title: '우테코 데모데이',
@@ -29,14 +22,14 @@ const scheduleDB: ScheduleResponse[] = [
 ];
 
 const handlers = [
-  rest.post<PostScheduleReqBody>('/api/schedules', (req, res, ctx) => {
+  rest.post<Omit<Schedule, 'id'>>(scheduleApi.endpoint, (req, res, ctx) => {
     scheduleDB.push({ id: scheduleDB.length + 1, ...req.body });
 
     return res(ctx.status(201));
   }),
 
-  rest.get('/api/schedules', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ data: scheduleDB }));
+  rest.get(scheduleApi.endpoint, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ schedules: scheduleDB }));
   }),
 ];
 

@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+import { useQuery } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import useModal from '@/hooks/useModal';
 
@@ -10,27 +13,31 @@ import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton'
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
+import { CACHE_KEY } from '@/constants';
+
+import scheduleApi from '@/api/schedule';
+
 function CalendarPage() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const { isLoading, error } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
+    CACHE_KEY.SCHEDULES,
+    scheduleApi.get,
+    {
+      onSuccess: (data) => onSuccessGetSchedules(data),
+    }
+  );
 
   const { isOpen, openModal, closeModal } = useModal();
 
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      const response = await fetch('/api/schedules', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
-      const { data } = await response.json();
+  const onSuccessGetSchedules = (data: AxiosResponse<{ schedules: Schedule[] }>) => {
+    if (typeof data !== 'undefined') {
+      setSchedules(data.data.schedules);
+    }
+  };
 
-      setSchedules(data);
-    };
+  if (isLoading) return <>Loading</>;
 
-    fetchSchedules();
-  }, []);
+  if (error) return <>Error</>;
 
   return (
     <PageLayout>
