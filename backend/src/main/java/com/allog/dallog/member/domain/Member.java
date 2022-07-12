@@ -3,6 +3,7 @@ package com.allog.dallog.member.domain;
 import com.allog.dallog.member.exception.InvalidMemberException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,10 +21,13 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String profileImageUrl;
 
+    @Column(nullable = false)
     private String displayName;
 
     @Enumerated(value = EnumType.STRING)
