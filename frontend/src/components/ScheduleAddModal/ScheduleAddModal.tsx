@@ -2,6 +2,8 @@ import { useRef } from 'react';
 
 import { useTheme } from '@emotion/react';
 
+import { Schedule } from '@/@types';
+
 import {
   allDayButton,
   arrow,
@@ -15,14 +17,6 @@ import {
 
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
-
-interface Schedule {
-  id: number;
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
 
 interface ScheduleAddModalProps {
   closeModal: () => void;

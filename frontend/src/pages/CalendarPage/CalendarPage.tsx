@@ -2,19 +2,13 @@ import { useEffect, useState } from 'react';
 
 import useModal from '@/hooks/useModal';
 
+import { Schedule } from '@/@types';
+
 import PageLayout from '@/components/PageLayout/PageLayout';
 import Calendar from '@/components/Calendar/Calendar';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
-
-interface Schedule {
-  id: number;
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
 
 function CalendarPage() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);

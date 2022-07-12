@@ -1,12 +1,6 @@
-import { calendar, schedule } from './Calendar.styles';
+import { Schedule } from '@/@types';
 
-interface Schedule {
-  id: number;
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
+import { calendar, schedule } from './Calendar.styles';
 
 interface CalendarProps {
   schedules: Schedule[];
