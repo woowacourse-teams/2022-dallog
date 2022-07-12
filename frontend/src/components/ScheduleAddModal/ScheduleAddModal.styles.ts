@@ -1,9 +1,9 @@
 import { css, Theme } from '@emotion/react';
 
 const scheduleAddModal = ({ colors }: Theme) => css`
-  width: 480px;
-  height: 640px;
-  padding: 50px;
+  width: 120rem;
+  height: 160rem;
+  padding: 12.5rem;
   border-radius: 12px;
 
   background: ${colors.WHITE};
@@ -18,27 +18,27 @@ const form = ({ flex }: Theme) => css`
 
 const allDayButton = ({ colors }: Theme) => css`
   width: 100%;
-  height: 36px;
+  height: 9rem;
   border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
-  filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
+  filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
 
   background: ${colors.WHITE};
 
-  font-size: 20px;
+  font-size: 5rem;
   color: ${colors.GRAY_600};
 `;
 
 const dateTime = ({ flex }: Theme) => css`
   ${flex.column}
 
-  width:100%;
+  width: 100%;
 
-  gap: 10px;
+  gap: 2.5rem;
 `;
 
 const arrow = ({ colors }: Theme) => css`
-  font-size: 24px;
+  font-size: 6rem;
   font-weight: bold;
   color: ${colors.GRAY_500};
 `;
@@ -47,31 +47,31 @@ const controlButtons = ({ flex }: Theme) => css`
   ${flex.row}
 
   align-self: flex-end;
-  gap: 20px;
+  gap: 5rem;
 `;
 
 const cancelButton = ({ colors }: Theme) => css`
-  width: 90px;
-  height: 40px;
+  width: 22.5rem;
+  height: 10rem;
   border: 2px solid ${colors.GRAY_500};
   border-radius: 8px;
-  filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
+  filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
 
   background: ${colors.WHITE};
 
-  font-size: 20px;
+  font-size: 5rem;
   color: ${colors.GRAY_600};
 `;
 
 const saveButton = ({ colors }: Theme) => css`
-  width: 90px;
-  height: 40px;
+  width: 22.5rem;
+  height: 10rem;
   border-radius: 8px;
   filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
 
   background: ${colors.YELLOW_500};
 
-  font-size: 20px;
+  font-size: 5rem;
   color: ${colors.WHITE};
 `;
 

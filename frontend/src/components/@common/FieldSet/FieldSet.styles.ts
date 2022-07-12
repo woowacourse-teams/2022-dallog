@@ -3,21 +3,21 @@ import { css, Theme } from '@emotion/react';
 const fieldSet = ({ flex }: Theme) => css`
   ${flex.column}
 
-  width:100%;
-  height: 60px;
+  width: 100%;
+  height: 15rem;
 
   align-items: flex-start;
-  gap: 10px;
+  gap: 2.5rem;
 
-  font-size: 20px;
+  font-size: 5rem;
 `;
 
 const label = css`
-  padding: 0 4px;
+  padding: 0 1rem;
 `;
 
 const input = ({ colors }: Theme) => css`
-  padding: 12px;
+  padding: 3rem;
 
   width: 100%;
 
