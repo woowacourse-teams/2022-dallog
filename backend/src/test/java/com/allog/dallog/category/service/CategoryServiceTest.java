@@ -25,7 +25,7 @@ class CategoryServiceTest {
         String name = "BE 공식일정";
         CategoryCreateRequest request = new CategoryCreateRequest(name);
 
-        //when
+        // when
         Long id = categoryService.save(request);
 
         // then
