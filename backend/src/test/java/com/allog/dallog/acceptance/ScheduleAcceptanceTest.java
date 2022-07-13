@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @DisplayName("일정 관련 기능")
-class SchedulesAcceptanceTest extends AcceptanceTest {
+class ScheduleAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("정상적인 일정정보를 등록하면 상태코드 201을 반환한다.")
     @Test
