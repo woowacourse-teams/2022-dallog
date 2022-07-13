@@ -16,7 +16,7 @@ const global = css`
 
   body {
     font-family: 'Pretendard', sans-serif;
-    font-size: 1rem;
+    font-size: 3rem;
   }
 `;
 
