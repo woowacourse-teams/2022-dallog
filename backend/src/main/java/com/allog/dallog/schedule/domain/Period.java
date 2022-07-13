@@ -2,6 +2,7 @@ package com.allog.dallog.schedule.domain;
 
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -35,5 +36,22 @@ public class Period {
 
     public LocalDateTime getEndDateTime() {
         return endDateTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Period period = (Period) o;
+        return Objects.equals(startDateTime, period.startDateTime) && Objects.equals(endDateTime, period.endDateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDateTime, endDateTime);
     }
 }
