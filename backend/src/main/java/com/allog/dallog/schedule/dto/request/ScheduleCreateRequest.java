@@ -2,12 +2,12 @@ package com.allog.dallog.schedule.dto.request;
 
 import com.allog.dallog.schedule.domain.Schedule;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ScheduleCreateRequest {
 
-    @NotNull
+    @NotBlank
     private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -16,7 +16,7 @@ public class ScheduleCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDateTime;
 
-    @NotNull
+    @NotBlank
     private String memo;
 
     private ScheduleCreateRequest() {
