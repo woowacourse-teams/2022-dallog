@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import useModal from '@/hooks/useModal';
+
+import { Schedule } from '@/@types';
 
 import PageLayout from '@/components/PageLayout/PageLayout';
 import Calendar from '@/components/Calendar/Calendar';
@@ -8,41 +11,36 @@ import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton'
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
-interface Schedule {
-  id: number;
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
+import { CACHE_KEY } from '@/constants';
+
+import scheduleApi from '@/api/schedule';
 
 function CalendarPage() {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const {
+    isLoading,
+    error,
+    data: schedulesGetResponse,
+    refetch: refetchSchedules,
+  } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
+    CACHE_KEY.SCHEDULES,
+    scheduleApi.get
+  );
 
   const { isOpen, openModal, closeModal } = useModal();
 
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      const response = await fetch('/api/schedules', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
-      const { data } = await response.json();
+  if (isLoading || schedulesGetResponse === undefined) {
+    return <>Loading</>;
+  }
 
-      setSchedules(data);
-    };
-
-    fetchSchedules();
-  }, []);
+  if (error) {
+    return <>Error</>;
+  }
 
   return (
     <PageLayout>
-      <Calendar schedules={schedules} />
+      <Calendar schedules={schedulesGetResponse.data.schedules} />
       <ModalPortal isOpen={isOpen} closeModal={closeModal}>
-        <ScheduleAddModal setSchedule={setSchedules} closeModal={closeModal} />
+        <ScheduleAddModal refetch={refetchSchedules} closeModal={closeModal} />
       </ModalPortal>
       <ScheduleAddButton onClick={openModal} />
     </PageLayout>

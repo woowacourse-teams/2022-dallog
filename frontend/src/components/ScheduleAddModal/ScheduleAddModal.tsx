@@ -1,6 +1,10 @@
 import { useRef } from 'react';
 
+import { RefetchOptions, RefetchQueryFilters, useMutation, QueryObserverResult } from 'react-query';
 import { useTheme } from '@emotion/react';
+import { AxiosError, AxiosResponse } from 'axios';
+
+import { Schedule } from '@/@types';
 
 import {
   allDayButton,
@@ -16,21 +20,34 @@ import {
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
 
-interface Schedule {
-  id: number;
-  title: string;
-  startDateTime: string;
-  endDateTime: string;
-  memo: string;
-}
+import { createPostBody } from '@/utils';
+
+import scheduleApi from '@/api/schedule';
 
 interface ScheduleAddModalProps {
   closeModal: () => void;
-  setSchedule: React.Dispatch<React.SetStateAction<Schedule[]>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>>;
 }
 
-function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
+function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
   const theme = useTheme();
+
+  const {
+    isLoading,
+    error,
+    mutate: postSchedule,
+  } = useMutation<
+    AxiosResponse<{ schedules: Schedule[] }>,
+    AxiosError,
+    Omit<Schedule, 'id'>,
+    unknown
+  >(scheduleApi.post, {
+    onSuccess: () => {
+      onSuccessPostSchedule();
+    },
+  });
 
   const inputRef = {
     title: useRef<HTMLInputElement>(null),
@@ -46,43 +63,23 @@ function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
   const handleSubmitScheduleAddForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isValidRef = Object.values(inputRef).every(
-      (inputRef) => inputRef.current instanceof HTMLInputElement
-    );
+    const body = createPostBody(inputRef);
 
-    if (!isValidRef) {
+    if (!body) {
       return;
     }
 
-    const [title, startDateTime, endDateTime, memo] = Object.values(inputRef);
-
-    const body = await JSON.stringify({
-      title: title.current?.value,
-      startDateTime: startDateTime.current?.value,
-      endDateTime: endDateTime.current?.value,
-      memo: memo.current?.value,
-    });
-
-    await fetch('/api/schedules', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body,
-    });
-
-    setSchedule((prev) => [
-      ...prev,
-      {
-        id: prev.length,
-        title: title.current?.value as string,
-        startDateTime: startDateTime.current?.value as string,
-        endDateTime: endDateTime.current?.value as string,
-        memo: memo.current?.value as string,
-      },
-    ]);
+    postSchedule(body);
   };
+
+  const onSuccessPostSchedule = () => {
+    refetch();
+    closeModal();
+  };
+
+  if (isLoading) return <>Loading</>;
+
+  if (error) return <>Error</>;
 
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>

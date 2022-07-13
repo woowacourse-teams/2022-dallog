@@ -6,15 +6,15 @@ const calendar = ({ flex }: Theme) => css`
   width: 100%;
   height: 100%;
 
-  gap: 20px;
+  gap: 5rem;
 `;
 
 const schedule = ({ colors }: Theme) => css`
-  padding: 20px;
+  padding: 5rem;
   border: 1px solid ${colors.BLACK};
 
-  font-size: 16px;
-  line-height: 32px;
+  font-size: 4rem;
+  line-height: 8rem;
 `;
 
 export { calendar, schedule };
