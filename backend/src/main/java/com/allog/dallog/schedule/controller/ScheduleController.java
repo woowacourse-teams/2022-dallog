@@ -32,8 +32,8 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<ListResponse<ScheduleResponse>> findByYearAndMonth(
-        @RequestParam final int year, @RequestParam final int month) {
+    public ResponseEntity<ListResponse<ScheduleResponse>> findByYearAndMonth(@RequestParam final int year,
+                                                                             @RequestParam final int month) {
         List<ScheduleResponse> responses = scheduleService.findByYearAndMonth(year, month);
         return ResponseEntity.ok(new ListResponse<>(responses));
     }

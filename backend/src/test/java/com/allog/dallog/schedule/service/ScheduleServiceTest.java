@@ -28,8 +28,8 @@ class ScheduleServiceTest {
         LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
         String memo = "알록달록 팀회의 - 선릉 큰 강의실";
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title,
-            startDateTime, endDateTime, memo);
+        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
+                memo);
 
         // when
         Long id = scheduleService.save(scheduleCreateRequest);
@@ -47,12 +47,12 @@ class ScheduleServiceTest {
         LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
         String memo = "알록달록 팀회의 - 선릉 큰 강의실";
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title,
-            startDateTime, endDateTime, memo);
+        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
+                memo);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
-            isInstanceOf(InvalidScheduleException.class);
+                isInstanceOf(InvalidScheduleException.class);
     }
 
     @DisplayName("새로운 일정을 생성 할 떄 일정 메모의 길이가 255를 초과하는 경우 예외를 던진다.")
@@ -64,12 +64,12 @@ class ScheduleServiceTest {
         LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
         String memo = "1".repeat(256);
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title,
-            startDateTime, endDateTime, memo);
+        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
+                memo);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
-            isInstanceOf(InvalidScheduleException.class);
+                isInstanceOf(InvalidScheduleException.class);
     }
 
     @DisplayName("새로운 일정을 생성 할 떄 종료일시가 시작일시 이전이라면 예외를 던진다.")
@@ -81,12 +81,12 @@ class ScheduleServiceTest {
         LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
         String memo = "1".repeat(256);
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title,
-            startDateTime, endDateTime, memo);
+        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
+                memo);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
-            isInstanceOf(InvalidScheduleException.class);
+                isInstanceOf(InvalidScheduleException.class);
     }
 
     @DisplayName("연도와 월을 전달받아 해당 월에 해당하는 일정 목록을 가져온다.")
@@ -94,12 +94,11 @@ class ScheduleServiceTest {
     void 연도와_월을_전달받아_해당_월에_해당하는_일정_목록을_가져온다() {
         // given
         ScheduleCreateRequest scheduleCreateRequest1 = new ScheduleCreateRequest("알록달록 회의 1",
-            LocalDateTime.of(2022, 7, 5, 12, 30), LocalDateTime.of(2022, 7, 6, 14, 30),
-            "알록달록 팀회의 - 선릉 큰 강의실");
+                LocalDateTime.of(2022, 7, 5, 12, 30), LocalDateTime.of(2022, 7, 6, 14, 30), "알록달록 팀회의 - 선릉 큰 강의실");
 
         ScheduleCreateRequest scheduleCreateRequest2 = new ScheduleCreateRequest("알록달록 회의 2",
-            LocalDateTime.of(2022, 8, 5, 12, 30), LocalDateTime.of(2022, 8, 6, 14, 30),
-            "알록달록 팀회의 - 잠실 큰 강의실");
+                LocalDateTime.of(2022, 8, 5, 12, 30), LocalDateTime.of(2022, 8, 6, 14, 30),
+                "알록달록 팀회의 - 잠실 큰 강의실");
 
         scheduleService.save(scheduleCreateRequest1);
         scheduleService.save(scheduleCreateRequest2);

@@ -22,8 +22,8 @@ public class ScheduleCreateRequest {
     private ScheduleCreateRequest() {
     }
 
-    public ScheduleCreateRequest(final String title, final LocalDateTime startDateTime,
-        final LocalDateTime endDateTime, final String memo) {
+    public ScheduleCreateRequest(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
+                                 final String memo) {
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;

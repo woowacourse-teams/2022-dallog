@@ -20,9 +20,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달하면_그_사이에_해당하는_일정을_조회한다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 7, 15, 14, 20),
-            LocalDateTime.of(2022, 7, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 7, 15, 16, 20), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
@@ -42,9 +42,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_시작일시와_같으면_조회된다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 7, 1, 0, 0),
-            LocalDateTime.of(2022, 7, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 7, 15, 16, 20), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
@@ -64,9 +64,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_종료일시와_같으면_조회된다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 7, 31, 0, 0),
-            LocalDateTime.of(2022, 8, 12, 13, 10), "달록");
+                LocalDateTime.of(2022, 8, 12, 13, 10), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
@@ -86,9 +86,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_종료일시_이후이면_조회되지_않는다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 7, 31, 0, 1),
-            LocalDateTime.of(2022, 8, 12, 13, 10), "달록");
+                LocalDateTime.of(2022, 8, 12, 13, 10), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
@@ -108,9 +108,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_종료날짜가_시작일시와_같으면_조회된다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 6, 12, 13, 40),
-            LocalDateTime.of(2022, 7, 1, 0, 0), "달록");
+                LocalDateTime.of(2022, 7, 1, 0, 0), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);
@@ -130,9 +130,9 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_종료날짜가_시작일시_이전이면_조회되지_않는다() {
         // given
         Schedule schedule1 = new Schedule("알록1", LocalDateTime.of(2022, 6, 12, 13, 40),
-            LocalDateTime.of(2022, 6, 30, 23, 59), "달록");
+                LocalDateTime.of(2022, 6, 30, 23, 59), "달록");
         Schedule schedule2 = new Schedule("알록2", LocalDateTime.of(2022, 8, 15, 14, 20),
-            LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
+                LocalDateTime.of(2022, 8, 15, 16, 20), "달록");
 
         scheduleRepository.save(schedule1);
         scheduleRepository.save(schedule2);

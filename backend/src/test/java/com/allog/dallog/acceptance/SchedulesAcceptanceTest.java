@@ -25,8 +25,7 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
         String memo = "알록달록 회의가 있어요";
 
         // given & when
-        ExtractableResponse<Response> response = 새로운_일정을_등록한다(title, startDateTime, endDateTime,
-            memo);
+        ExtractableResponse<Response> response = 새로운_일정을_등록한다(title, startDateTime, endDateTime, memo);
 
         // then
         상태코드_201이_반환된다(response);
@@ -49,8 +48,8 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
         상태코드_200이_반환된다(response);
     }
 
-    private ExtractableResponse<Response> 새로운_일정을_등록한다(final String title,
-        final String startDateTime, final String endDateTime, final String memo) {
+    private ExtractableResponse<Response> 새로운_일정을_등록한다(final String title, final String startDateTime,
+                                                       final String endDateTime, final String memo) {
         Map<String, String> params = new HashMap<>();
         params.put("title", title);
         params.put("startDateTime", startDateTime);
@@ -58,25 +57,25 @@ class SchedulesAcceptanceTest extends AcceptanceTest {
         params.put("memo", memo);
 
         return RestAssured.given().log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(params)
-            .when().post("/api/schedules")
-            .then().log().all()
-            .extract();
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post("/api/schedules")
+                .then().log().all()
+                .extract();
     }
 
     private ExtractableResponse<Response> 월별_일정을_조회한다(final int year, final int month) {
         return RestAssured.given().log().all()
-            .when().get("/api/schedules?year={year}&month={month}", year, month)
-            .then().log().all()
-            .extract();
+                .when().get("/api/schedules?year={year}&month={month}", year, month)
+                .then().log().all()
+                .extract();
     }
 
-    private void 상태코드_200이_반환된다(ExtractableResponse<Response> response) {
+    private void 상태코드_200이_반환된다(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private void 상태코드_201이_반환된다(ExtractableResponse<Response> response) {
+    private void 상태코드_201이_반환된다(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 }

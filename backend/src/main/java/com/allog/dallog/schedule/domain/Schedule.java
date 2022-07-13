@@ -33,8 +33,8 @@ public class Schedule {
     protected Schedule() {
     }
 
-    public Schedule(final String title, final LocalDateTime startDateTime,
-        final LocalDateTime endDateTime, final String memo) {
+    public Schedule(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
+                    final String memo) {
         validateTitleLength(title);
         validateMemoLength(memo);
         this.title = title;

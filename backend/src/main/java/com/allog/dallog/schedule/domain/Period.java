@@ -19,7 +19,6 @@ public class Period {
 
     public Period(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
         validate(startDateTime, endDateTime);
-
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
