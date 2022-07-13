@@ -1,3 +1,7 @@
+interface InputRef {
+  [index: string]: React.RefObject<HTMLInputElement>;
+}
+
 interface Schedule {
   id: number;
   title: string;
@@ -6,4 +10,4 @@ interface Schedule {
   memo: string;
 }
 
-export { Schedule };
+export { InputRef, Schedule };

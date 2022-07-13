@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useQuery } from 'react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 
@@ -18,32 +16,31 @@ import { CACHE_KEY } from '@/constants';
 import scheduleApi from '@/api/schedule';
 
 function CalendarPage() {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const { isLoading, error } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
+  const {
+    isLoading,
+    error,
+    data: schedulesGetResponse,
+    refetch: refetchSchedules,
+  } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
     CACHE_KEY.SCHEDULES,
-    scheduleApi.get,
-    {
-      onSuccess: (data) => onSuccessGetSchedules(data),
-    }
+    scheduleApi.get
   );
 
   const { isOpen, openModal, closeModal } = useModal();
 
-  const onSuccessGetSchedules = (data: AxiosResponse<{ schedules: Schedule[] }>) => {
-    if (typeof data !== 'undefined') {
-      setSchedules(data.data.schedules);
-    }
-  };
+  if (isLoading || schedulesGetResponse === undefined) {
+    return <>Loading</>;
+  }
 
-  if (isLoading) return <>Loading</>;
-
-  if (error) return <>Error</>;
+  if (error) {
+    return <>Error</>;
+  }
 
   return (
     <PageLayout>
-      <Calendar schedules={schedules} />
+      <Calendar schedules={schedulesGetResponse.data.schedules} />
       <ModalPortal isOpen={isOpen} closeModal={closeModal}>
-        <ScheduleAddModal setSchedule={setSchedules} closeModal={closeModal} />
+        <ScheduleAddModal refetch={refetchSchedules} closeModal={closeModal} />
       </ModalPortal>
       <ScheduleAddButton onClick={openModal} />
     </PageLayout>

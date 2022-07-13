@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 
-import { useMutation } from 'react-query';
+import { RefetchOptions, RefetchQueryFilters, useMutation, QueryObserverResult } from 'react-query';
 import { useTheme } from '@emotion/react';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { Schedule } from '@/@types';
 
@@ -19,17 +20,34 @@ import {
 import Button from '../@common/Button/Button';
 import FieldSet from '../@common/FieldSet/FieldSet';
 
+import { createPostBody } from '@/utils';
+
 import scheduleApi from '@/api/schedule';
 
 interface ScheduleAddModalProps {
   closeModal: () => void;
-  setSchedule: React.Dispatch<React.SetStateAction<Schedule[]>>;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>>;
 }
 
-function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
+function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
   const theme = useTheme();
 
-  const { isLoading, error, mutate: postSchedule } = useMutation(scheduleApi.post);
+  const {
+    isLoading,
+    error,
+    mutate: postSchedule,
+  } = useMutation<
+    AxiosResponse<{ schedules: Schedule[] }>,
+    AxiosError,
+    Omit<Schedule, 'id'>,
+    unknown
+  >(scheduleApi.post, {
+    onSuccess: () => {
+      onSuccessPostSchedule();
+    },
+  });
 
   const inputRef = {
     title: useRef<HTMLInputElement>(null),
@@ -45,28 +63,18 @@ function ScheduleAddModal({ closeModal, setSchedule }: ScheduleAddModalProps) {
   const handleSubmitScheduleAddForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const [title, startDateTime, endDateTime, memo] = Object.values(inputRef).map(
-      (el) => el.current
-    );
+    const body = createPostBody(inputRef);
 
-    if (
-      !(title instanceof HTMLInputElement) ||
-      !(memo instanceof HTMLInputElement) ||
-      !(startDateTime instanceof HTMLInputElement) ||
-      !(endDateTime instanceof HTMLInputElement)
-    ) {
+    if (!body) {
       return;
     }
 
-    const body = {
-      title: title.value,
-      startDateTime: startDateTime.value,
-      endDateTime: endDateTime.value,
-      memo: memo.value,
-    };
-
     postSchedule(body);
-    setSchedule((prev) => [...prev, { id: prev.length, ...body }]);
+  };
+
+  const onSuccessPostSchedule = () => {
+    refetch();
+    closeModal();
   };
 
   if (isLoading) return <>Loading</>;
