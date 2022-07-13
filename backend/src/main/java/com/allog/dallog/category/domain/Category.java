@@ -35,6 +35,9 @@ public class Category {
     }
 
     private void validateNameLength(final String name) {
+        if (name.isBlank()) {
+            throw new InvalidCategoryException("카테고리 이름은 공백일 수 없습니다.");
+        }
         if (name.length() > MAX_NAME_LENGTH) {
             throw new InvalidCategoryException("카테고리 이름의 길이는 20을 초과할 수 없습니다.");
         }

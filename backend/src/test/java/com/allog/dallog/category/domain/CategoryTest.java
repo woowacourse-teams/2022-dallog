@@ -21,6 +21,17 @@ class CategoryTest {
         assertDoesNotThrow(() -> new Category(name));
     }
 
+    @DisplayName("카테고리 이름이 공백인 경우 예외를 던진다.")
+    @Test
+    void 카테고리_이름이_공백인_경우_예외를_던진다() {
+        // given
+        String name = "";
+
+        // when & then
+        assertThatThrownBy(() -> new Category(name))
+                .isInstanceOf(InvalidCategoryException.class);
+    }
+
     @DisplayName("카테고리 이름의 길이가 20을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"일이삼사오육칠팔구십일이삼사오육칠팔구십일",
