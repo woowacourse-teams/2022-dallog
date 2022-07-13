@@ -28,7 +28,7 @@ public class ScheduleService {
         return schedule.getId();
     }
 
-    public List<ScheduleResponse> findByYearAndMonth(int year, int month) {
+    public List<ScheduleResponse> findByYearAndMonth(final int year, final int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusDays(startDate.lengthOfMonth());
 

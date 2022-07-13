@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SCHEDULES")
+@Table(name = "schedules")
 public class Schedule {
 
     private static final int MAX_TITLE_LENGTH = 20;
@@ -21,13 +21,13 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Embedded
     private Period period;
 
-    @Column(name = "MEMO", nullable = false)
+    @Column(name = "memo", nullable = false)
     private String memo;
 
     protected Schedule() {
