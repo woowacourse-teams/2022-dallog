@@ -28,16 +28,15 @@ public class ScheduleService {
         return schedule.getId();
     }
 
-    public List<ScheduleResponse> findByYearAndMonth(int year, int month) {
+    public List<ScheduleResponse> findByYearAndMonth(final int year, final int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusDays(startDate.lengthOfMonth());
 
-        List<Schedule> schedules = scheduleRepository.findByBetween(
-            LocalDateTime.of(startDate, LocalTime.MIN),
-            LocalDateTime.of(endDate, LocalTime.MIN));
+        List<Schedule> schedules = scheduleRepository.findByBetween(LocalDateTime.of(startDate, LocalTime.MIN),
+                LocalDateTime.of(endDate, LocalTime.MIN));
 
         return schedules.stream()
-            .map(ScheduleResponse::new)
-            .collect(Collectors.toList());
+                .map(ScheduleResponse::new)
+                .collect(Collectors.toList());
     }
 }

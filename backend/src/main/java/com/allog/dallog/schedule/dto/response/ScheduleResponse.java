@@ -13,11 +13,11 @@ public class ScheduleResponse {
 
     public ScheduleResponse(final Schedule schedule) {
         this(schedule.getId(), schedule.getTitle(), schedule.getStartDateTime(),
-            schedule.getEndDateTime(), schedule.getMemo());
+                schedule.getEndDateTime(), schedule.getMemo());
     }
 
     public ScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
-        final LocalDateTime endDateTime, final String memo) {
+                            final LocalDateTime endDateTime, final String memo) {
         this.id = id;
         this.title = title;
         this.startDateTime = startDateTime;
