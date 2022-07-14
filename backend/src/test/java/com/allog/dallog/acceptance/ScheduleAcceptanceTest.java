@@ -1,7 +1,5 @@
 package com.allog.dallog.acceptance;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -9,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @DisplayName("일정 관련 기능")
@@ -69,13 +66,5 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
                 .when().get("/api/schedules?year={year}&month={month}", year, month)
                 .then().log().all()
                 .extract();
-    }
-
-    private void 상태코드_200이_반환된다(final ExtractableResponse<Response> response) {
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    }
-
-    private void 상태코드_201이_반환된다(final ExtractableResponse<Response> response) {
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 }
