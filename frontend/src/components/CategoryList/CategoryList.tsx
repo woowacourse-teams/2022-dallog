@@ -1,8 +1,6 @@
-import { useTheme } from '@emotion/react';
-
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
-import { categoryLayout, intersectTarget } from './CategoryList.styles';
+import { categoryTable, categoryTableHeader, intersectTarget } from './CategoryList.styles';
 
 import CategoryItem from '@/components/CategoryItem/CategoryItem';
 import useIntersect from '@/hooks/useIntersect';
@@ -18,15 +16,13 @@ interface CategoryListProps {
 }
 
 function CategoryList({ categoryList, getMoreCategories, hasNextPage }: CategoryListProps) {
-  const theme = useTheme();
-
   const ref = useIntersect(() => {
     hasNextPage && getMoreCategories();
   });
 
   return (
-    <div>
-      <div css={categoryLayout(theme)}>
+    <div css={categoryTable}>
+      <div css={categoryTableHeader}>
         <span> 생성 날짜 </span>
         <span> 카테고리 이름 </span>
       </div>

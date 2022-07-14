@@ -1,17 +1,20 @@
 import { css, Theme } from '@emotion/react';
 
-const categoryLayout = ({ colors, flex }: Theme) => css`
+const categoryTable = css`
+  width: 100%;
+`;
+
+const categoryTableHeader = ({ flex, colors }: Theme) => css`
   ${flex.row}
 
   justify-content:space-around;
 
-  width: 90%;
   height: 12rem;
-  margin: auto;
   border-bottom: 2px solid ${colors.GRAY_400};
 
   background: ${colors.GRAY_100};
 
+  font-size: 4rem;
   font-weight: 700;
 `;
 
@@ -19,4 +22,4 @@ const intersectTarget = css`
   height: 10rem;
 `;
 
-export { categoryLayout, intersectTarget };
+export { categoryTable, categoryTableHeader, intersectTarget };
