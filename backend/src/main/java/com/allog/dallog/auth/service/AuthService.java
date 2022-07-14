@@ -1,10 +1,10 @@
 package com.allog.dallog.auth.service;
 
+import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.support.JwtTokenProvider;
-import com.allog.dallog.infrastructure.oauth.client.OAuthClient;
-import com.allog.dallog.infrastructure.oauth.dto.OAuthMember;
-import com.allog.dallog.infrastructure.oauth.endpoint.OAuthEndpoint;
+import com.allog.dallog.auth.support.OAuthClient;
+import com.allog.dallog.auth.support.OAuthEndpoint;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.member.service.MemberService;

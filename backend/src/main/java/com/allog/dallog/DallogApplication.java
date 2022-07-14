@@ -9,5 +9,4 @@ public class DallogApplication {
     public static void main(String[] args) {
         SpringApplication.run(DallogApplication.class, args);
     }
-
 }

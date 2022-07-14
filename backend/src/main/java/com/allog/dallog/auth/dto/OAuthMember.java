@@ -1,4 +1,4 @@
-package com.allog.dallog.infrastructure.oauth.dto;
+package com.allog.dallog.auth.dto;
 
 public class OAuthMember {
 

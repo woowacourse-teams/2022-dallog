@@ -1,5 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.endpoint;
 
+import com.allog.dallog.auth.support.OAuthEndpoint;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

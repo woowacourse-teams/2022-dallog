@@ -1,6 +1,7 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.infrastructure.oauth.dto.OAuthMember;
+import com.allog.dallog.auth.dto.OAuthMember;
+import com.allog.dallog.auth.support.OAuthClient;
 
 public class StubOAuthClient implements OAuthClient {
 

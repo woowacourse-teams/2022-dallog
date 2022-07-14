@@ -1,4 +1,4 @@
-package com.allog.dallog.infrastructure.oauth.endpoint;
+package com.allog.dallog.auth.support;
 
 @FunctionalInterface
 public interface OAuthEndpoint {
