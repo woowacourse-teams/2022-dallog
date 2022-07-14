@@ -1,3 +1,9 @@
+interface CategoryType {
+  id: number;
+  name: string;
+  createdAt: string;
+}
+
 interface InputRef {
   [index: string]: React.RefObject<HTMLInputElement>;
 }
@@ -10,4 +16,4 @@ interface Schedule {
   memo: string;
 }
 
-export { InputRef, Schedule };
+export { CategoryType, InputRef, Schedule };
