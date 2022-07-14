@@ -4,6 +4,7 @@ import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.global.dto.FindSliceResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +27,13 @@ public class CategoryService {
         return category.getId();
     }
 
-    public List<CategoryResponse> findSliceBy(final PageRequest request) {
-        return categoryRepository.findSliceBy(request)
+    public FindSliceResponse<CategoryResponse> findSliceBy(final PageRequest request) {
+        long count = categoryRepository.count();
+        List<CategoryResponse> responses = categoryRepository.findSliceBy(request.previousOrFirst())
                 .getContent()
                 .stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
+        return new FindSliceResponse<>(request.getPageNumber(), count, responses);
     }
 }

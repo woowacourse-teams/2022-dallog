@@ -2,11 +2,12 @@ package com.allog.dallog.category.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
-import java.util.List;
+import com.allog.dallog.global.dto.FindSliceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,15 +38,13 @@ class CategoryServiceTest {
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일",
-            "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
+    @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
         CategoryCreateRequest request = new CategoryCreateRequest(name);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(request)).
-                isInstanceOf(InvalidCategoryException.class);
+        assertThatThrownBy(() -> categoryService.save(request)).isInstanceOf(InvalidCategoryException.class);
     }
 
     @DisplayName("페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
@@ -58,17 +57,16 @@ class CategoryServiceTest {
         categoryService.save(new CategoryCreateRequest("지원플랫폼 근로"));
         categoryService.save(new CategoryCreateRequest("파랑의 코틀린 스터디"));
 
-        int page = 1;
+        int page = 2;
         int size = 2;
         PageRequest request = PageRequest.of(page, size);
 
         // when
-        List<CategoryResponse> response = categoryService.findSliceBy(request);
+        FindSliceResponse<CategoryResponse> response = categoryService.findSliceBy(request);
 
         // then
-        assertThat(response)
-                .hasSize(size)
-                .extracting(CategoryResponse::getName)
-                .contains("알록달록 회의", "지원플랫폼 근로");
+        assertAll(() -> assertThat(response.getData()).hasSize(size).extracting(CategoryResponse::getName)
+                        .contains("알록달록 회의", "지원플랫폼 근로"), () -> assertThat(response.getPage()).isEqualTo(page),
+                () -> assertThat(response.getTotalCount()).isEqualTo(5));
     }
 }
