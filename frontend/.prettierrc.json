@@ -8,5 +8,18 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "arrowParens": "always",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "importOrder": [
+    "@/hooks/(.*)$",
+    "@/@types",
+    "@/styles/(.*)$",
+    "@/(components/@common/|components/|pages/)(.*)$",
+    "@/constants",
+    "@/utils",
+    "@/(api|mocks)/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true
 }
