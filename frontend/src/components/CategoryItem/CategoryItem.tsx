@@ -1,4 +1,4 @@
-import { CategoryType } from '@/@types';
+import { CategoryType } from '@/@types/category';
 import { useTheme } from '@emotion/react';
 
 import { categoryLayout } from './CategoryItem.styles';
