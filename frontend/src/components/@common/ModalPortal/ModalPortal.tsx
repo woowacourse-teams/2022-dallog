@@ -1,6 +1,5 @@
-import ReactDOM from 'react-dom';
-
 import { useTheme } from '@emotion/react';
+import ReactDOM from 'react-dom';
 
 import { dimmer } from './ModalPortal.styles';
 

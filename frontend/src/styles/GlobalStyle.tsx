@@ -1,5 +1,5 @@
+import { css, Global } from '@emotion/react';
 import emotionReset from 'emotion-reset';
-import { Global, css } from '@emotion/react';
 
 const global = css`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.4/dist/web/static/pretendard.css');

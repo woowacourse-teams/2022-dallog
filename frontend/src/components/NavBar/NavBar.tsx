@@ -1,5 +1,6 @@
-import { navBar } from './NavBar.styles';
 import { useTheme } from '@emotion/react';
+
+import { navBar } from './NavBar.styles';
 
 function NavBar() {
   const theme = useTheme();
