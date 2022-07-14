@@ -17,7 +17,7 @@ class CategoryRepositoryTest {
 
     @DisplayName("페이지와 사이즈를 받아 해당하는 구간의 카테고리를 조회한다.")
     @Test
-    void 페이지와_리밋을_받아_해당하는_구간의_카테고리를_조회한다() {
+    void 페이지와_사이즈를_받아_해당하는_구간의_카테고리를_조회한다() {
         // given
         categoryRepository.save(new Category("BE 공식일정"));
         categoryRepository.save(new Category("FE 공식일정"));

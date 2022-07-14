@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
-import com.allog.dallog.global.dto.FindSliceResponse;
+import com.allog.dallog.global.dto.FindByPageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +44,8 @@ class CategoryServiceTest {
         CategoryCreateRequest request = new CategoryCreateRequest(name);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(request)).isInstanceOf(InvalidCategoryException.class);
+        assertThatThrownBy(() -> categoryService.save(request))
+                .isInstanceOf(InvalidCategoryException.class);
     }
 
     @DisplayName("페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
@@ -62,11 +63,15 @@ class CategoryServiceTest {
         PageRequest request = PageRequest.of(page, size);
 
         // when
-        FindSliceResponse<CategoryResponse> response = categoryService.findSliceBy(request);
+        FindByPageResponse<CategoryResponse> response = categoryService.findAll(request);
 
         // then
-        assertAll(() -> assertThat(response.getData()).hasSize(size).extracting(CategoryResponse::getName)
-                        .contains("알록달록 회의", "지원플랫폼 근로"), () -> assertThat(response.getPage()).isEqualTo(page),
-                () -> assertThat(response.getTotalCount()).isEqualTo(5));
+        assertAll(() -> {
+            assertThat(response.getData())
+                    .hasSize(size)
+                    .extracting(CategoryResponse::getName)
+                    .contains("알록달록 회의", "지원플랫폼 근로");
+            assertThat(response.getPage()).isEqualTo(page);
+        });
     }
 }

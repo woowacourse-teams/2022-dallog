@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.global.dto.FindSliceResponse;
+import com.allog.dallog.global.dto.FindByPageResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -41,15 +41,14 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(page, size);
-        FindSliceResponse findSliceResponse = response.as(FindSliceResponse.class);
+        FindByPageResponse findByPageResponse = response.as(FindByPageResponse.class);
 
         // then
-        assertAll(
-                () -> 상태코드_200이_반환된다(response),
-                () -> assertThat(findSliceResponse.getPage()).isEqualTo(page),
-                () -> assertThat(findSliceResponse.getTotalCount()).isEqualTo(3),
-                () -> assertThat(findSliceResponse.getData()).hasSize(3)
-        );
+        assertAll(() -> {
+            상태코드_200이_반환된다(response);
+            assertThat(findByPageResponse.getPage()).isEqualTo(page);
+            assertThat(findByPageResponse.getData()).hasSize(3);
+        });
     }
 
     private ExtractableResponse<Response> 새로운_카테고리를_등록한다(final String name) {

@@ -3,7 +3,7 @@ package com.allog.dallog.category.controller;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.global.dto.FindSliceResponse;
+import com.allog.dallog.global.dto.FindByPageResponse;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -32,9 +32,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<FindSliceResponse<CategoryResponse>> findSliceBy(@RequestParam final int page,
-                                                                           @RequestParam final int size) {
+    public ResponseEntity<FindByPageResponse<CategoryResponse>> findAll(@RequestParam final int page,
+                                                                        @RequestParam final int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return ResponseEntity.ok(categoryService.findSliceBy(pageRequest));
+        return ResponseEntity.ok(categoryService.findAll(pageRequest));
     }
 }
