@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import CategoryList from './CategoryList';
 
-import { categoryDB } from '@/mocks/handlers';
+import { categoryDB } from '@/mocks/data';
 
 export default {
   title: 'Components/CategoryList',

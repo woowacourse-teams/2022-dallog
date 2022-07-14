@@ -3,4 +3,8 @@ const CACHE_KEY = {
   CATEGORIES: 'categories',
 };
 
-export { CACHE_KEY };
+const API = {
+  CATEGORY_GET_SIZE: 4,
+};
+
+export { CACHE_KEY, API };

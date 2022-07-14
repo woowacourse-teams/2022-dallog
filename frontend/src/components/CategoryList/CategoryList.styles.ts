@@ -15,4 +15,8 @@ const categoryLayout = ({ colors, flex }: Theme) => css`
   font-weight: 700;
 `;
 
-export { categoryLayout };
+const intersectTarget = css`
+  height: 10rem;
+`;
+
+export { categoryLayout, intersectTarget };
