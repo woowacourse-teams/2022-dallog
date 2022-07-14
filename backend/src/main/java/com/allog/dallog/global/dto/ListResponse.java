@@ -6,7 +6,7 @@ public class ListResponse<T> {
 
     private List<T> data;
 
-    private ListResponse() {
+    protected ListResponse() {
     }
 
     public ListResponse(List<T> data) {

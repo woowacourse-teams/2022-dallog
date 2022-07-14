@@ -1,6 +1,10 @@
 package com.allog.dallog.acceptance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.global.dto.FindByPageResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -24,12 +28,42 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         상태코드_201이_반환된다(response);
     }
 
+    @DisplayName("카테고리를 등록하고 페이징을 통해 나누어 조회한다.")
+    @Test
+    void 카테고리를_등록하고_페이징을_통해_나누어_조회한다() {
+        // given
+        새로운_카테고리를_등록한다("BE 공식일정");
+        새로운_카테고리를_등록한다("FE 공식일정");
+        새로운_카테고리를_등록한다("알록달록 회의");
+
+        int page = 1;
+        int size = 8;
+
+        // when
+        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(page, size);
+        FindByPageResponse findByPageResponse = response.as(FindByPageResponse.class);
+
+        // then
+        assertAll(() -> {
+            상태코드_200이_반환된다(response);
+            assertThat(findByPageResponse.getPage()).isEqualTo(page);
+            assertThat(findByPageResponse.getData()).hasSize(3);
+        });
+    }
+
     private ExtractableResponse<Response> 새로운_카테고리를_등록한다(final String name) {
         CategoryCreateRequest request = new CategoryCreateRequest(name);
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
                 .when().post("/api/categories")
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> 카테고리를_페이징을_통해_조회한다(final int page, final int size) {
+        return RestAssured.given().log().all()
+                .when().get("/api/categories?page={page}&size={size}", page, size)
                 .then().log().all()
                 .extract();
     }
