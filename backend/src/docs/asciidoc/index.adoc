@@ -1,0 +1,32 @@
+= 달록 API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== Schedule(일정)
+
+=== 일정 등록
+
+==== Request
+
+include::{snippets}/schedule/save/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/schedule/save/http-response.adoc[]
+
+=== 월별 일정 조회
+
+==== Request
+
+include::{snippets}/schedule/find/http-request.adoc[]
+
+==== RequestParameters
+
+include::{snippets}/schedule/find/request-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/schedule/find/http-response.adoc[]

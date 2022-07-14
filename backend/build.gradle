@@ -61,8 +61,4 @@ task copyDocument(type: Copy) {
 
 bootJar {
     dependsOn copyDocument
-    copy {
-        from "${asciidoctor.outputDir}"
-        into 'static/docs'
-    }
 }
