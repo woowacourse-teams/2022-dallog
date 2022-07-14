@@ -3,6 +3,7 @@ package com.allog.dallog.schedule.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.DatabaseCleaner;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
@@ -12,7 +13,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
+@ActiveProfiles("test")
+@Transactional
 @SpringBootTest
 class ScheduleServiceTest {
 

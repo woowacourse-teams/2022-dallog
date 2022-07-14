@@ -14,8 +14,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<<<<<<< HEAD
 import org.springframework.data.domain.PageRequest;
+=======
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+>>>>>>> 2cf9fb9 (refactor: 전체 테스트 코드 격리 및 변경)
 
+@ActiveProfiles("test")
+@Transactional
 @SpringBootTest
 class CategoryServiceTest {
 

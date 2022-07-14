@@ -1,104 +1,94 @@
 package com.allog.dallog.schedule.controller;
 
-import static com.allog.dallog.DocumentUtils.getRequestSpecification;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.schedule.service.ScheduleService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-class ScheduleControllerTest extends ControllerTest {
+@AutoConfigureRestDocs
+@WebMvcTest(ScheduleController.class)
+class ScheduleControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper ObjectMapper;
+
+    @MockBean
+    private ScheduleService scheduleService;
 
     @DisplayName("일정 정보를 등록한다.")
     @Test
-    void 일정_정보를_등록한다() {
-        //given
-        String title = "팀 회식";
-        String startDateTime = "2022-07-04T18:00";
-        String endDateTime = "2022-07-04T21:00";
-        String memo = "18시 호프집 회식 - 인원 6명";
+    void 일정_정보를_등록한다() throws Exception {
+        // given
+        Map<String, String> params = new HashMap<>();
+        params.put("title", "팀 회의");
+        params.put("startDateTime", "2022-07-04T18:00");
+        params.put("endDateTime", "2022-07-04T21:00");
+        params.put("memo", "세모 회의실 6시 회의");
 
-        // when
-        ExtractableResponse<Response> response = 새로운_일정을_등록한다(title, startDateTime, endDateTime, memo);
+        given(scheduleService.save(new ScheduleCreateRequest("팀 회의", LocalDateTime.of(2022, 7, 10, 0, 0),
+                LocalDateTime.of(2022, 7, 10, 0, 0), "세모 회의실 6시 회의")))
+                .willReturn(1L);
 
-        // then
-        상태코드_201이_반환된다(response);
+        // when & then
+        mockMvc.perform(post("/api/schedules")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ObjectMapper.writeValueAsString(params)))
+                .andDo(print())
+                .andDo(document("schedule/save",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isCreated());
     }
-
 
     @DisplayName("월별 일정 정보를 조회한다.")
     @Test
-    void 월별_일정_정보를_조회한다() {
-        // given
-        int year = 2022;
-        int month = 7;
+    void 월별_일정_정보를_조회한다() throws Exception {
+        //given
+        given(scheduleService.findByYearAndMonth(2022, 7))
+                .willReturn(List.of(new ScheduleResponse(1L, "dd", LocalDateTime.of(2022, 7, 10, 0, 0),
+                        LocalDateTime.of(2022, 7, 10, 10, 0), "호호")));
 
-        새로운_일정을_등록한다("7월 팀 회식", "2022-07-04T18:00", "2022-07-04T21:00", "18시 호프집 회식 - 인원 6명");
-        새로운_일정을_등록한다("8월 팀 회식", "2022-08-07T18:00", "2022-08-07T21:00", "18시 치킨집 회식 - 인원 9명");
-
-        // when
-        ExtractableResponse<Response> response = 월별_일정을_조회한다(year, month);
-
-        // then
-        상태코드_200이_반환된다(response);
-    }
-
-    private ExtractableResponse<Response> 새로운_일정을_등록한다(final String title, final String startDateTime,
-                                             final String endDateTime, final String memo) {
-        Map<String, String> params = new HashMap<>();
-        params.put("title", title);
-        params.put("startDateTime", startDateTime);
-        params.put("endDateTime", endDateTime);
-        params.put("memo", memo);
-
-        return RestAssured
-                .given(getRequestSpecification()).log().all()
-                .accept("application/json")
-                .filter(document("schedule/save",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()
-                        )))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/api/schedules")
-                .then().log().all()
-                .extract();
-    }
-
-    private ExtractableResponse<Response> 월별_일정을_조회한다(final int year, final int month) {
-        return RestAssured
-                .given(getRequestSpecification()).log().all()
-                .accept("application/json")
-                .filter(document("schedule/find",
+        // when & then
+        mockMvc.perform(get("/api/schedules?year=2022&month=7")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("schedule/find",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
-                                parameterWithName("year").description("일정을 조회할 년도"),
-                                parameterWithName("month").description("일정을 조회할 월")
-                        )))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/schedules?year={year}&month={month}", year, month)
-                .then().log().all()
-                .extract();
-    }
-
-    private void 상태코드_200이_반환된다(final ExtractableResponse<Response> response) {
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-    }
-
-    private void 상태코드_201이_반환된다(final ExtractableResponse<Response> response) {
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+                                parameterWithName("year").description("년도"),
+                                parameterWithName("month").description("월")
+                        )
+                ))
+                .andExpect(status().isOk());
     }
 }
