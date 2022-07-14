@@ -10,8 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Table(name = "schedules")
+@Entity
 public class Schedule {
 
     private static final int MAX_TITLE_LENGTH = 20;
@@ -19,6 +19,7 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "title", nullable = false)
