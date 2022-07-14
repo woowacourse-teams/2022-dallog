@@ -37,10 +37,10 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다("알록달록 회의");
 
         int page = 1;
-        int limit = 8;
+        int size = 8;
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(page, limit);
+        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(page, size);
         ListResponse categoryResponses = response.as(ListResponse.class);
 
         // then
@@ -60,9 +60,9 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    private ExtractableResponse<Response> 카테고리를_페이징을_통해_조회한다(final int page, final int limit) {
+    private ExtractableResponse<Response> 카테고리를_페이징을_통해_조회한다(final int page, final int size) {
         return RestAssured.given().log().all()
-                .when().get("/api/schedules?page={page}&limit={limit}", page, limit)
+                .when().get("/api/categories?page={page}&size={size}", page, size)
                 .then().log().all()
                 .extract();
     }
