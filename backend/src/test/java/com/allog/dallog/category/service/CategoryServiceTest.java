@@ -4,13 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 class CategoryServiceTest {
@@ -43,5 +46,29 @@ class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.save(request)).
                 isInstanceOf(InvalidCategoryException.class);
+    }
+
+    @DisplayName("페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
+    @Test
+    void 페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
+        // given
+        categoryService.save(new CategoryCreateRequest("BE 공식일정"));
+        categoryService.save(new CategoryCreateRequest("FE 공식일정"));
+        categoryService.save(new CategoryCreateRequest("알록달록 회의"));
+        categoryService.save(new CategoryCreateRequest("지원플랫폼 근로"));
+        categoryService.save(new CategoryCreateRequest("파랑의 코틀린 스터디"));
+
+        int page = 1;
+        int size = 2;
+        PageRequest request = PageRequest.of(page, size);
+
+        // when
+        List<CategoryResponse> response = categoryService.findSliceBy(request);
+
+        // then
+        assertThat(response)
+                .hasSize(size)
+                .extracting(CategoryResponse::getName)
+                .contains("알록달록 회의", "지원플랫폼 근로");
     }
 }
