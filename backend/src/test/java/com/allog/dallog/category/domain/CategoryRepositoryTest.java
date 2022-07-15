@@ -1,7 +1,9 @@
 package com.allog.dallog.category.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,16 @@ class CategoryRepositoryTest {
         Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
 
         // then
-        assertThat(categories.getContent())
-                .hasSize(size)
-                .extracting(Category::getName)
-                .contains("알록달록 회의", "지원플랫폼 근로");
+        assertAll(
+                () -> assertThat(categories.getContent())
+                        .hasSize(size)
+                        .extracting(Category::getName)
+                        .contains("알록달록 회의", "지원플랫폼 근로"),
+                () -> assertThat(categories.getContent().stream()
+                        .map(Category::getCreatedAt)
+                        .allMatch(Objects::nonNull))
+                        .isTrue()
+        );
     }
 
     @DisplayName("조회 시 데이터가 존재하지 않는 경우 빈 슬라이스가 반환된다.")

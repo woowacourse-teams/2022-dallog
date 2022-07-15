@@ -1,5 +1,6 @@
 package com.allog.dallog.schedule.domain;
 
+import com.allog.dallog.global.domain.BaseEntity;
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 
 @Table(name = "schedules")
 @Entity
-public class Schedule {
+public class Schedule extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 20;
     private static final int MAX_MEMO_LENGTH = 255;

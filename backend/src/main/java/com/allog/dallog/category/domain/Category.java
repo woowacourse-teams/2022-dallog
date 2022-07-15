@@ -1,7 +1,7 @@
 package com.allog.dallog.category.domain;
 
 import com.allog.dallog.category.exception.InvalidCategoryException;
-import java.time.LocalDateTime;
+import com.allog.dallog.global.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Table(name = "categories")
 @Entity
-public class Category {
+public class Category extends BaseEntity {
 
     public static final int MAX_NAME_LENGTH = 20;
 
@@ -23,16 +23,12 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     protected Category() {
     }
 
     public Category(final String name) {
         validateNameLength(name);
         this.name = name;
-        this.createdAt = LocalDateTime.now();
     }
 
     private void validateNameLength(final String name) {
@@ -50,9 +46,5 @@ public class Category {
 
     public String getName() {
         return name;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }
