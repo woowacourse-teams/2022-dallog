@@ -2,4 +2,8 @@ const CACHE_KEY = {
   SCHEDULES: 'schedules',
 };
 
-export { CACHE_KEY };
+const PATH = {
+  CALENDAR_PAGE: '/',
+};
+
+export { CACHE_KEY, PATH };
