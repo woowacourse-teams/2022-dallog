@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import GlobalStyle from '@/styles/GlobalStyle';
 import theme from '@/styles/theme';
@@ -12,12 +13,15 @@ if (process.env.NODE_ENV === 'development') {
   worker.start();
 }
 
+const queryClient = new QueryClient();
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    <App />
-  </ThemeProvider>,
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <App />
+    </ThemeProvider>
+  </QueryClientProvider>,
   rootElement
 );
