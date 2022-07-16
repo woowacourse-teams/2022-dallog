@@ -1,6 +1,6 @@
 import { InputRef } from '@/@types';
 
-function createPostBody(inputRef: InputRef) {
+const createPostBody = (inputRef: InputRef) => {
   const inputElements = Object.values(inputRef).map((el) => el.current);
   const isValidInputRefs = inputElements.every((el) => el instanceof HTMLInputElement);
 
@@ -17,6 +17,14 @@ function createPostBody(inputRef: InputRef) {
   }, {});
 
   return body;
-}
+};
 
-export { createPostBody };
+const getDate = () => {
+  return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
+};
+
+const getDateTime = () => {
+  return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
+};
+
+export { createPostBody, getDate, getDateTime };

@@ -16,17 +16,17 @@ const form = ({ flex }: Theme) => css`
   justify-content: space-between;
 `;
 
-const allDayButton = ({ colors }: Theme) => css`
+const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
   width: 100%;
   height: 9rem;
   border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
   filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
 
-  background: ${colors.WHITE};
+  background: ${isAllDay ? colors.YELLOW_500 : colors.WHITE};
 
   font-size: 5rem;
-  color: ${colors.GRAY_600};
+  color: ${isAllDay ? colors.WHITE : colors.GRAY_600};
 `;
 
 const dateTime = ({ flex }: Theme) => css`

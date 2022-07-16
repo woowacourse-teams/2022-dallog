@@ -7,10 +7,19 @@ interface FieldSetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
   cssProp?: SerializedStyles;
   labelText?: string;
+  defaultValue?: string;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
 }
 
-function FieldSet({ type = 'text', id, cssProp, labelText, placeholder, refProp }: FieldSetProps) {
+function FieldSet({
+  type = 'text',
+  id,
+  cssProp,
+  labelText,
+  placeholder,
+  defaultValue,
+  refProp,
+}: FieldSetProps) {
   const theme = useTheme();
 
   return (
@@ -20,7 +29,14 @@ function FieldSet({ type = 'text', id, cssProp, labelText, placeholder, refProp 
           {labelText}
         </label>
       )}
-      <input type={type} id={id} css={input(theme)} placeholder={placeholder} ref={refProp} />
+      <input
+        type={type}
+        id={id}
+        css={input(theme)}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        ref={refProp}
+      />
     </div>
   );
 }

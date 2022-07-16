@@ -1,17 +1,16 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation } from 'react-query';
 
 import { Schedule } from '@/@types';
 
-import Button from '@/components/@common/Button/Button';
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
-
-import { createPostBody } from '@/utils';
+import { createPostBody, getDate, getDateTime } from '@/utils';
 
 import scheduleApi from '@/api/schedule';
 
+import Button from '../@common/Button/Button';
+import FieldSet from '../@common/FieldSet/FieldSet';
 import {
   allDayButton,
   arrow,
@@ -31,6 +30,7 @@ interface ScheduleAddModalProps {
 }
 
 function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
+  const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
   const {
@@ -47,6 +47,10 @@ function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
       onSuccessPostSchedule();
     },
   });
+
+  const handleClickAllDayButton = () => {
+    setAllDay((prev) => !prev);
+  };
 
   const inputRef = {
     title: useRef<HTMLInputElement>(null),
@@ -80,15 +84,35 @@ function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
 
   if (error) return <>Error</>;
 
+  const dateFieldSet = isAllDay
+    ? {
+        type: 'date',
+        defaultValue: getDate(),
+      }
+    : {
+        type: 'datetime-local',
+        defaultValue: getDateTime(),
+      };
+
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
         <FieldSet placeholder="제목을 입력하세요." refProp={inputRef.title} />
-        <Button cssProp={allDayButton(theme)}>종일</Button>
-        <div css={dateTime(theme)}>
-          <FieldSet type="datetime-local" refProp={inputRef.startDateTime} />
+        <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
+          종일
+        </Button>
+        <div css={dateTime(theme)} key={dateFieldSet.type}>
+          <FieldSet
+            type={dateFieldSet.type}
+            defaultValue={dateFieldSet.defaultValue}
+            refProp={inputRef.startDateTime}
+          />
           <p css={arrow(theme)}>↓</p>
-          <FieldSet type="datetime-local" refProp={inputRef.endDateTime} />
+          <FieldSet
+            type={dateFieldSet.type}
+            defaultValue={dateFieldSet.defaultValue}
+            refProp={inputRef.endDateTime}
+          />
         </div>
         <FieldSet placeholder="메모를 추가하세요." refProp={inputRef.memo} />
         <div css={controlButtons}>
