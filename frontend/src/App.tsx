@@ -1,14 +1,16 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 
-const queryClient = new QueryClient();
+import { PATH } from '@/constants';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CalendarPage />
-    </QueryClientProvider>
+    <Router>
+      <Routes>
+        <Route path={PATH.CALENDAR_PAGE} element={<CalendarPage />} />
+      </Routes>
+    </Router>
   );
 }
 
