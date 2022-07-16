@@ -1,11 +1,13 @@
+import { AxiosError, AxiosResponse } from 'axios';
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from 'react-query';
+
+import useIntersect from '@/hooks/useIntersect';
+
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
-import { categoryTable, categoryTableHeader, intersectTarget } from './CategoryList.styles';
-
 import CategoryItem from '@/components/CategoryItem/CategoryItem';
-import useIntersect from '@/hooks/useIntersect';
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from 'react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+
+import { categoryTable, categoryTableHeader, intersectTarget } from './CategoryList.styles';
 
 interface CategoryListProps {
   categoryList: CategoryType[];

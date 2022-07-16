@@ -2,8 +2,8 @@ import { rest } from 'msw';
 
 import { Schedule } from '@/@types';
 
-import scheduleApi from '@/api/schedule';
 import categoryApi from '@/api/categories';
+import scheduleApi from '@/api/schedule';
 
 import { categoryDB, scheduleDB } from './data';
 

@@ -1,17 +1,18 @@
+import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useInfiniteQuery } from 'react-query';
 
 import { CategoriesGetResponseType } from '@/@types/category';
 
+import FieldSet from '@/components/@common/FieldSet/FieldSet';
 import CategoryList from '@/components/CategoryList/CategoryList';
 import PageLayout from '@/components/PageLayout/PageLayout';
 
 import { API, CACHE_KEY } from '@/constants';
 
 import categoryApi from '@/api/categories';
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
+
 import { categoryNav, categoryPage, categorySearch } from './CategoryPage.styles';
-import { useTheme } from '@emotion/react';
 
 function CategoryPage() {
   const theme = useTheme();
