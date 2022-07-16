@@ -8,6 +8,7 @@ interface FieldSetProps extends React.HTMLAttributes<HTMLInputElement> {
   cssProp?: SerializedStyles;
   labelText?: string;
   defaultValue?: string;
+  autoFocus?: boolean;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
 }
 
@@ -18,6 +19,7 @@ function FieldSet({
   labelText,
   placeholder,
   defaultValue,
+  autoFocus,
   refProp,
 }: FieldSetProps) {
   const theme = useTheme();
@@ -35,6 +37,7 @@ function FieldSet({
         css={input(theme)}
         placeholder={placeholder}
         defaultValue={defaultValue}
+        autoFocus={autoFocus}
         ref={refProp}
       />
     </div>
