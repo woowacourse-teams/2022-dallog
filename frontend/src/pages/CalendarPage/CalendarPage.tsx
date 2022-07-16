@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 
 import useModal from '@/hooks/useModal';
 
@@ -11,11 +12,19 @@ import PageLayout from '@/components/PageLayout/PageLayout';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, PATH, STORAGE_KEY } from '@/constants';
 
+import loginApi from '@/api/login';
 import scheduleApi from '@/api/schedule';
 
 function CalendarPage() {
+  const navigate = useNavigate();
+
+  const { data: accessToken } = useQuery<string>(CACHE_KEY.AUTH, loginApi.auth, {
+    retry: false,
+    onSuccess: (data) => onSuccessAuth(data),
+  });
+
   const {
     isLoading,
     error,
@@ -23,10 +32,18 @@ function CalendarPage() {
     refetch: refetchSchedules,
   } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
     CACHE_KEY.SCHEDULES,
-    scheduleApi.get
+    scheduleApi.get,
+    {
+      enabled: !!accessToken,
+    }
   );
 
   const { isOpen, openModal, closeModal } = useModal();
+
+  const onSuccessAuth = (accessToken: string) => {
+    localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
+    navigate(PATH.CALENDAR_PAGE);
+  };
 
   if (isLoading || schedulesGetResponse === undefined) {
     return <>Loading</>;

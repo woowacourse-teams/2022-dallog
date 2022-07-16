@@ -3,13 +3,19 @@ const API = {
 };
 
 const CACHE_KEY = {
-  SCHEDULES: 'schedules',
+  AUTH: 'auth',
   CATEGORIES: 'categories',
+  ENTER: 'enter',
+  SCHEDULES: 'schedules',
+};
+
+const STORAGE_KEY = {
+  ACCESS_TOKEN: 'accessToken',
 };
 
 const PATH = {
-  CALENDAR_PAGE: '/',
+  CALENDAR_PAGE: '/auth',
   START_PAGE: '/start',
 };
 
-export { API, CACHE_KEY, PATH };
+export { API, CACHE_KEY, STORAGE_KEY, PATH };
