@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 
-import GlobalStyle from '../src/styles/GlobalStyle';
-import theme from '../src/styles/theme';
+import GlobalStyle from '@/styles/GlobalStyle';
+import theme from '@/styles/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

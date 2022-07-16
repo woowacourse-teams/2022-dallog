@@ -1,10 +1,16 @@
-import { useRef } from 'react';
-
-import { RefetchOptions, RefetchQueryFilters, useMutation, QueryObserverResult } from 'react-query';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
+import { useRef } from 'react';
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation } from 'react-query';
 
 import { Schedule } from '@/@types';
+
+import Button from '@/components/@common/Button/Button';
+import FieldSet from '@/components/@common/FieldSet/FieldSet';
+
+import { createPostBody } from '@/utils';
+
+import scheduleApi from '@/api/schedule';
 
 import {
   allDayButton,
@@ -16,13 +22,6 @@ import {
   saveButton,
   scheduleAddModal,
 } from './ScheduleAddModal.styles';
-
-import Button from '../@common/Button/Button';
-import FieldSet from '../@common/FieldSet/FieldSet';
-
-import { createPostBody } from '@/utils';
-
-import scheduleApi from '@/api/schedule';
 
 interface ScheduleAddModalProps {
   closeModal: () => void;

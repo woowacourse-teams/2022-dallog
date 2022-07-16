@@ -1,12 +1,12 @@
-import ReactDOM from 'react-dom';
 import { ThemeProvider } from '@emotion/react';
+import ReactDOM from 'react-dom';
 
-import theme from '@/styles/theme';
 import GlobalStyle from '@/styles/GlobalStyle';
-
-import App from '@/App';
+import theme from '@/styles/theme';
 
 import { worker } from '@/mocks/browser';
+
+import App from './App';
 
 if (process.env.NODE_ENV === 'development') {
   worker.start();

@@ -1,6 +1,5 @@
-import { forwardRef } from 'react';
-
 import { SerializedStyles, useTheme } from '@emotion/react';
+import { forwardRef } from 'react';
 
 import { fieldSet, input, label } from './FieldSet.styles';
 

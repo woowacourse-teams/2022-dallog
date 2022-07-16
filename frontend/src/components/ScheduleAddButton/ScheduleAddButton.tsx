@@ -1,8 +1,8 @@
 import { useTheme } from '@emotion/react';
 
-import { scheduleAddButton } from './ScheduleAddButton.styles';
+import Button from '@/components/@common/Button/Button';
 
-import Button from '../@common/Button/Button';
+import { scheduleAddButton } from './ScheduleAddButton.styles';
 
 interface ScheduleAddButtonProps {
   onClick: () => void;
