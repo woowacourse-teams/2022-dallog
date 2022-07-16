@@ -9,6 +9,7 @@ const CACHE_KEY = {
 
 const PATH = {
   CALENDAR_PAGE: '/',
+  START_PAGE: '/start',
 };
 
 export { API, CACHE_KEY, PATH };

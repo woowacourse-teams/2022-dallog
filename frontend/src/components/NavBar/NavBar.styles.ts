@@ -1,6 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
-const navBar = ({ colors }: Theme) => css`
+const navBar = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
   position: fixed;
   top: 0;
   left: 0;
@@ -9,9 +11,17 @@ const navBar = ({ colors }: Theme) => css`
   height: 16rem;
   padding: 2rem;
 
-  background: ${colors.YELLOW_500};
+  background: ${colors.WHITE};
 
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-export { navBar };
+const loginButton = ({ colors }: Theme) => css`
+  background: transparent;
+
+  font-size: 5rem;
+  font-weight: bold;
+  color: ${colors.GRAY_700};
+`;
+
+export { loginButton, navBar };
