@@ -3,11 +3,11 @@ import { useTheme } from '@emotion/react';
 
 import { categoryItem } from './CategoryItem.styles';
 
-interface CategoryProps {
+interface CategoryItemProps {
   category: CategoryType;
 }
 
-function CategoryItem({ category }: CategoryProps) {
+function CategoryItem({ category }: CategoryItemProps) {
   const theme = useTheme();
 
   return (

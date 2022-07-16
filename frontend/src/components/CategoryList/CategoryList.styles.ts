@@ -7,7 +7,7 @@ const categoryTable = css`
 const categoryTableHeader = ({ flex, colors }: Theme) => css`
   ${flex.row}
 
-  justify-content:space-around;
+  justify-content: space-around;
 
   height: 12rem;
   border-bottom: 2px solid ${colors.GRAY_400};

@@ -27,7 +27,7 @@ const handlers = [
       ctx.status(200),
       ctx.json({
         totalCount: 18,
-        page: page,
+        page,
         data: slicedCategories,
       })
     );

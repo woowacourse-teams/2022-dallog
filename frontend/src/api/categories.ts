@@ -13,10 +13,6 @@ const categoryApi = {
     const response = await axios.get<CategoriesGetResponseType>(categoryApi.endpoint, {
       params: { page, size },
       headers: categoryApi.headers,
-      transformResponse: (res) => {
-        const categories = JSON.parse(res);
-        return categories;
-      },
     });
 
     return response;

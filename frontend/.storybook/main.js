@@ -17,6 +17,7 @@ module.exports = {
       '@': path.resolve(__dirname, '../src/'),
     };
     config.resolve.extensions.push('.ts', '.tsx');
+
     return config;
   },
 };
