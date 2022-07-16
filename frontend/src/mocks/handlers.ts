@@ -2,24 +2,10 @@ import { rest } from 'msw';
 
 import { Schedule } from '@/@types';
 
+import categoryApi from '@/api/categories';
 import scheduleApi from '@/api/schedule';
 
-const scheduleDB: Schedule[] = [
-  {
-    id: 1,
-    title: '우테코 데모데이',
-    startDateTime: '2022-07-07T14:00',
-    endDateTime: '2022-07-07T18:00',
-    memo: '달록팀 스프린트 1차 발표',
-  },
-  {
-    id: 2,
-    title: '테코톡',
-    startDateTime: '2022-07-09T14:00',
-    endDateTime: '2022-07-10T20:00',
-    memo: '레벨3 첫 테코톡',
-  },
-];
+import { categoryDB, scheduleDB } from './data';
 
 const handlers = [
   rest.post<Omit<Schedule, 'id'>>(scheduleApi.endpoint, (req, res, ctx) => {
@@ -30,6 +16,21 @@ const handlers = [
 
   rest.get(scheduleApi.endpoint, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ schedules: scheduleDB }));
+  }),
+
+  rest.get(categoryApi.endpoint, (req, res, ctx) => {
+    const page = parseInt(req.url.searchParams.get('page') as string);
+    const size = parseInt(req.url.searchParams.get('size') as string);
+    const slicedCategories = categoryDB.data.slice((page - 1) * size, (page - 1) * size + size);
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        totalCount: 18,
+        page,
+        data: slicedCategories,
+      })
+    );
   }),
 ];
 
