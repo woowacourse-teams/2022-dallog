@@ -4,7 +4,7 @@ import { button } from './Button.styles';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
-  cssProp?: SerializedStyles | (({ colors, flex }: Theme) => SerializedStyles);
+  cssProp?: SerializedStyles;
   onClick?: (e?: React.FormEvent) => void;
   children?: string | JSX.Element | JSX.Element[];
 }

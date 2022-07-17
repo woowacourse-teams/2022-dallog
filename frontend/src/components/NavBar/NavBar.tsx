@@ -12,8 +12,8 @@ function NavBar({ openLoginModal }: NavBarProps) {
   const theme = useTheme();
 
   return (
-    <div css={navBar(theme)}>
-      <Button cssProp={loginButton} onClick={openLoginModal}>
+    <div css={navBar}>
+      <Button cssProp={loginButton(theme)} onClick={openLoginModal}>
         👤&nbsp;&nbsp;로그인
       </Button>
     </div>
