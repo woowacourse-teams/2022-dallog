@@ -61,7 +61,7 @@ class AuthServiceTest {
 
     @DisplayName("이미 가입된 회원에 대한 Authorization Code를 전달받으면 추가로 유저가 생성되지 않는다")
     @Test
-    void 이미_가입된_회원에_대한_Authorization_Code를_전달받으면_유저가_추가로_생성되지_않는다() {
+    void 이미_가입된_회원에_대한_Authorization_Code를_전달받으면_추가로_유저가_생성되지_않는다() {
         // 이미 가입된 유저가 소셜 로그인 버튼을 클릭했을 경우엔 회원가입 과정이 생략되고, 곧바로 access token이 발급되어야 한다.
 
         // given
