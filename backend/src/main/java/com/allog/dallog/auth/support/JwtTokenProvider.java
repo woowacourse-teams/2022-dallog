@@ -19,13 +19,13 @@ public class JwtTokenProvider {
     private final SecretKey key;
     private final long validityInMilliseconds;
 
-    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey,
-                            @Value("${security.jwt.token.expire-length}") long validityInMilliseconds) {
+    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") final String secretKey,
+                            @Value("${security.jwt.token.expire-length}") final long validityInMilliseconds) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String createToken(String payload) {
+    public String createToken(final String payload) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -37,7 +37,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getPayload(String token) {
+    public String getPayload(final String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -46,7 +46,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public void validateToken(String token) {
+    public void validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
