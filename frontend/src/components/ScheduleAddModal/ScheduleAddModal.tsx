@@ -63,7 +63,7 @@ function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
     e.stopPropagation();
   };
 
-  const handleSubmitScheduleAddForm = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitScheduleAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const body = createPostBody(inputRef);
