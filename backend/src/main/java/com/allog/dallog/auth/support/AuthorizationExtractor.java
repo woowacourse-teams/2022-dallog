@@ -1,7 +1,7 @@
 package com.allog.dallog.auth.support;
 
 import com.allog.dallog.auth.exception.EmptyAuthorizationHeaderException;
-import com.allog.dallog.auth.exception.InvalidTokenFormatException;
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +22,7 @@ public class AuthorizationExtractor {
 
     private static void validateAuthorizationFormat(final String authorizationHeader) {
         if (!authorizationHeader.toLowerCase().startsWith(BEARER_TYPE.toLowerCase())) {
-            throw new InvalidTokenFormatException();
+            throw new InvalidTokenException("token 형식이 잘못 되었습니다.");
         }
     }
 }
