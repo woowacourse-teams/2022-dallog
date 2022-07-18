@@ -1,12 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
+import CategoryPage from '@/pages/CategoryPage/CategoryPage';
+import MyPage from '@/pages/MyPage/MyPage';
 import StartPage from '@/pages/StartPage/StartPage';
 
 import { PATH } from '@/constants';
-
-import CategoryPage from './pages/CategoryPage/CategoryPage';
-import MyPage from './pages/MyPage/MyPage';
 
 function App() {
   return (
