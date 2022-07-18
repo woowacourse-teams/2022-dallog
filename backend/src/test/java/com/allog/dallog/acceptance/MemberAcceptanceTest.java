@@ -22,9 +22,6 @@ import org.springframework.http.MediaType;
 @Import(TestConfig.class)
 public class MemberAcceptanceTest extends AcceptanceTest {
 
-    private static final TypeRef<CommonResponse<TokenResponse>> COMMON_OF_TOKEN_TYPE_REF = new TypeRef<>() {
-    };
-
     private static final TypeRef<CommonResponse<MemberResponse>> COMMON_OF_MEMBER_TYPE_REF = new TypeRef<>() {
     };
 
