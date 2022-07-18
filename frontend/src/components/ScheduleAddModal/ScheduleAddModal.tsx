@@ -101,13 +101,13 @@ function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
         </Button>
-        <div css={dateTime(theme)} key={dateFieldSet.type}>
+        <div css={dateTime} key={dateFieldSet.type}>
           <FieldSet
             type={dateFieldSet.type}
             defaultValue={dateFieldSet.defaultValue}
             refProp={inputRef.startDateTime}
           />
-          <p css={arrow(theme)}>↓</p>
+          <p css={arrow}>↓</p>
           <FieldSet
             type={dateFieldSet.type}
             defaultValue={dateFieldSet.defaultValue}

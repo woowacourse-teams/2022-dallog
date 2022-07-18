@@ -1,4 +1,4 @@
-import { SerializedStyles } from '@emotion/react';
+import { SerializedStyles, Theme } from '@emotion/react';
 
 import { button } from './Button.styles';
 

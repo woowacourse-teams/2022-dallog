@@ -3,13 +3,14 @@ import NavBar from '@/components/NavBar/NavBar';
 import { content } from './PageLayout.styles';
 
 interface PageLayoutProps {
+  openLoginModal?: () => void;
   children: JSX.Element | JSX.Element[];
 }
 
-function PageLayout({ children }: PageLayoutProps) {
+function PageLayout({ openLoginModal, children }: PageLayoutProps) {
   return (
     <>
-      <NavBar />
+      <NavBar openLoginModal={openLoginModal} />
       <div css={content}>{children}</div>
     </>
   );
