@@ -15,7 +15,9 @@ const STORAGE_KEY = {
 
 const PATH = {
   CALENDAR_PAGE: '/auth',
+  CATEGORY: 'category',
   START_PAGE: '/start',
+  PROFILE: 'profile',
 };
 
 export { API, CACHE_KEY, STORAGE_KEY, PATH };

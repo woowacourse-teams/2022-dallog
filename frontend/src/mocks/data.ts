@@ -115,4 +115,14 @@ const categoryDB: {
   ],
 };
 
-export { scheduleDB, categoryDB };
+const profileDB = {
+  data: {
+    id: 1,
+    email: 'example@email.com',
+    displayName: '매트',
+    profileImageUri: 'https://img.insight.co.kr/static/2020/05/04/700/51wlu5y2281iku1o0hms.jpg',
+    socialType: 'GOOGLE',
+  },
+};
+
+export { scheduleDB, categoryDB, profileDB };
