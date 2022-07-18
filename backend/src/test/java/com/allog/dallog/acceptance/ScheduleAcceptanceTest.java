@@ -21,7 +21,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         String endDateTime = "2022-07-05T07:00";
         String memo = "알록달록 회의가 있어요";
 
-        // given & when
+        // when
         ExtractableResponse<Response> response = 새로운_일정을_등록한다(title, startDateTime, endDateTime, memo);
 
         // then
