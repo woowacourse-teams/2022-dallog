@@ -60,6 +60,7 @@
     "html-webpack-plugin": "^5.5.0",
     "msw": "^0.43.0",
     "prettier": "^2.7.1",
+    "react-icons": "^4.4.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
