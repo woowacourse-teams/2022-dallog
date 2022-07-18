@@ -2,7 +2,10 @@ package com.allog.dallog.auth.dto;
 
 public class TokenResponse {
 
-    private final String accessToken;
+    private String accessToken;
+
+    private TokenResponse() {
+    }
 
     public TokenResponse(final String accessToken) {
         this.accessToken = accessToken;

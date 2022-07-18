@@ -28,6 +28,10 @@ public class MemberResponse {
                 member.getSocialType());
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }
