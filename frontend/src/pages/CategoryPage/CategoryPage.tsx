@@ -10,13 +10,11 @@ import PageLayout from '@/components/PageLayout/PageLayout';
 
 import { API, CACHE_KEY } from '@/constants';
 
-import categoryApi from '@/api/categories';
+import categoryApi from '@/api/category';
 
 import { categoryNav, categoryPage, categorySearch } from './CategoryPage.styles';
 
 function CategoryPage() {
-  const theme = useTheme();
-
   const {
     isLoading,
     error,
@@ -47,7 +45,7 @@ function CategoryPage() {
 
   return (
     <PageLayout>
-      <div css={categoryPage(theme)}>
+      <div css={categoryPage}>
         <div css={categoryNav}>
           <FieldSet placeholder="카테고리 검색" cssProp={categorySearch} />
         </div>

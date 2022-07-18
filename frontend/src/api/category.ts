@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { CategoriesGetResponseType } from '@/@types/category';
+import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
 const categoryApi = {
   endpoint: '/api/categories',
@@ -12,6 +12,14 @@ const categoryApi = {
   get: async (page: number, size: number) => {
     const response = await axios.get<CategoriesGetResponseType>(categoryApi.endpoint, {
       params: { page, size },
+      headers: categoryApi.headers,
+    });
+
+    return response;
+  },
+
+  post: async (body: Pick<CategoryType, 'name'>) => {
+    const response = await axios.post(categoryApi.endpoint, body, {
       headers: categoryApi.headers,
     });
 
