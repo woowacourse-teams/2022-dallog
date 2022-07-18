@@ -3,9 +3,10 @@ import { rest } from 'msw';
 import { Schedule } from '@/@types';
 
 import categoryApi from '@/api/categories';
+import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
 
-import { categoryDB, scheduleDB } from './data';
+import { categoryDB, profileDB, scheduleDB } from './data';
 
 const handlers = [
   rest.post<Omit<Schedule, 'id'>>(scheduleApi.endpoint, (req, res, ctx) => {
@@ -31,6 +32,10 @@ const handlers = [
         data: slicedCategories,
       })
     );
+  }),
+
+  rest.get(profileApi.endpoint, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(profileDB));
   }),
 ];
 
