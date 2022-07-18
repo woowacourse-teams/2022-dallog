@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.config.TestConfig;
+import com.allog.dallog.fixture.OAuthMemberFixtures;
 import com.allog.dallog.global.dto.CommonResponse;
 import com.allog.dallog.member.dto.MemberResponse;
 import io.restassured.RestAssured;
@@ -43,9 +44,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(memberResponse.getEmail()).isEqualTo("dev.hyeonic@gmail.com");
-            assertThat(memberResponse.getDisplayName()).isEqualTo("Fake Name");
-            assertThat(memberResponse.getProfileImageUrl()).isEqualTo("Fake Profile Image Url");
+            assertThat(memberResponse.getEmail()).isEqualTo(OAuthMemberFixtures.EMAIL);
+            assertThat(memberResponse.getDisplayName()).isEqualTo(OAuthMemberFixtures.DISPLAY_NAME);
+            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(OAuthMemberFixtures.PROFILE_IMAGE_URI);
         });
     }
 
