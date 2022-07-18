@@ -30,7 +30,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const theme = useTheme();
 
   const { mutate } = useMutation<
-    AxiosResponse<{ name: string }>,
+    AxiosResponse<Pick<CategoryType, 'name'>>,
     AxiosError,
     Pick<CategoryType, 'name'>,
     unknown
