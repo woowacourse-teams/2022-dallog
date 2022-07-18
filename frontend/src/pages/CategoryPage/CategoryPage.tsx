@@ -10,7 +10,7 @@ import PageLayout from '@/components/PageLayout/PageLayout';
 
 import { API, CACHE_KEY } from '@/constants';
 
-import categoryApi from '@/api/categories';
+import categoryApi from '@/api/category';
 
 import { categoryNav, categoryPage, categorySearch } from './CategoryPage.styles';
 
