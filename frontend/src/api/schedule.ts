@@ -18,7 +18,7 @@ const scheduleApi = {
   },
 
   post: async (body: Omit<Schedule, 'id'>) => {
-    const response = axios.post(scheduleApi.endpoint, body, {
+    const response = await axios.post(scheduleApi.endpoint, body, {
       headers: scheduleApi.headers,
     });
 
