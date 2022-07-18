@@ -15,10 +15,10 @@ const STORAGE_KEY = {
 };
 
 const PATH = {
-  CALENDAR_PAGE: '/auth',
+  CALENDAR: '/',
   CATEGORY: '/category',
-  START_PAGE: '/start',
   PROFILE: '/profile',
+  START: '/start',
 };
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토'];

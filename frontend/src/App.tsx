@@ -11,8 +11,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path={PATH.CALENDAR_PAGE} element={<CalendarPage />} />
-        <Route path={PATH.START_PAGE} element={<StartPage />} />
+        <Route path={PATH.CALENDAR} element={<CalendarPage />} />
+        <Route path={PATH.START} element={<StartPage />} />
         <Route path={PATH.CATEGORY} element={<CategoryPage />} />
         <Route path={PATH.PROFILE} element={<MyPage />} />
       </Routes>

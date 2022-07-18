@@ -42,7 +42,7 @@ function CalendarPage() {
 
   const onSuccessAuth = (accessToken: string) => {
     localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
-    navigate(PATH.CALENDAR_PAGE);
+    navigate(PATH.CALENDAR);
   };
 
   if (isLoading || schedulesGetResponse === undefined) {
