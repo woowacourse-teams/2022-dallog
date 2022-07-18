@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 
@@ -22,7 +21,6 @@ import {
 function MyPage() {
   const accessToken = 'Bearer aaaaaaaaaa.bbbbbbbbbb.cccccccccc';
 
-  const theme = useTheme();
   const {
     isLoading,
     error,
@@ -43,7 +41,7 @@ function MyPage() {
 
   return (
     <PageLayout>
-      <div css={myPage(theme)}>
+      <div css={myPage}>
         <div css={infoTable}>
           <div css={infoTableHeader}>프로필</div>
           <div css={textInfo}>

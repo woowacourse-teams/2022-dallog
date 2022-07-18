@@ -28,7 +28,7 @@ const infoTableHeader = ({ colors }: Theme) => css`
 const textInfo = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
-  justify-content:space-between;
+  justify-content: space-between;
 
   width: 96%;
   padding: 3rem;
