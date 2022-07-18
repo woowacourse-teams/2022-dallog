@@ -10,6 +10,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,12 +35,12 @@ public class GoogleOAuthClient implements OAuthClient {
                              @Value("${oauth.google.client_id}") final String googleClientId,
                              @Value("${oauth.google.client_secret}") final String googleClientSecret,
                              @Value("${oauth.google.token_uri}") final String googleTokenUri,
-                             final RestTemplate restTemplate, final ObjectMapper objectMapper) {
+                             final RestTemplateBuilder restTemplateBuilder, final ObjectMapper objectMapper) {
         this.googleRedirectUri = googleRedirectUri;
         this.googleClientId = googleClientId;
         this.googleClientSecret = googleClientSecret;
         this.googleTokenUri = googleTokenUri;
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
     }
 

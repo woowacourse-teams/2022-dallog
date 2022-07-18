@@ -2,7 +2,10 @@ package com.allog.dallog.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.auth.dto.TokenResponse;
+import com.allog.dallog.global.dto.CommonResponse;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +17,9 @@ import org.springframework.test.annotation.DirtiesContext;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AcceptanceTest {
+
+    protected static final TypeRef<CommonResponse<TokenResponse>> COMMON_OF_TOKEN_TYPE_REF = new TypeRef<>() {
+    };
 
     @LocalServerPort
     int port;

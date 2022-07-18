@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.config.TestConfig;
+import com.allog.dallog.fixture.OAuthMemberFixtures;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
 import java.util.List;
@@ -48,11 +49,11 @@ class AuthServiceTest {
     @Test
     void Authorization_Code를_받으면_회원이_데이터베이스에_저장된다() {
         // given
-        String code = "authorization code";
+        String code = OAuthMemberFixtures.CODE;
         authService.generateTokenWithCode(code);
 
         // when
-        boolean actual = memberRepository.existsByEmail("dev.hyeonic@gmail.com");
+        boolean actual = memberRepository.existsByEmail(OAuthMemberFixtures.EMAIL);
         // SutbOAuthClient가 반환하는 OAuthMember의 이메일
 
         // then

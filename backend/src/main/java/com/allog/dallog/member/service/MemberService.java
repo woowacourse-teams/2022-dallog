@@ -2,6 +2,7 @@ package com.allog.dallog.member.service;
 
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.exception.NoSuchMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,13 @@ public class MemberService {
     @Transactional
     public Member save(final Member member) {
         return memberRepository.save(member);
+    }
+
+    public MemberResponse findById(final Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(NoSuchMemberException::new);
+
+        return new MemberResponse(member);
     }
 
     public Member findByEmail(final String email) {
