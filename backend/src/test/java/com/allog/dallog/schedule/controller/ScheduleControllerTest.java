@@ -47,13 +47,13 @@ class ScheduleControllerTest {
     void 일정_정보를_등록한다() throws Exception {
         // given
         Map<String, String> params = new HashMap<>();
-        params.put("title", "팀 회의");
-        params.put("startDateTime", "2022-07-04T18:00");
-        params.put("endDateTime", "2022-07-04T21:00");
+        params.put("title", "알록");
+        params.put("startDateTime", "2022-07-15T14:20");
+        params.put("endDateTime", "2022-07-15T16:20");
         params.put("memo", "세모 회의실 6시 회의");
 
-        given(scheduleService.save(new ScheduleCreateRequest("팀 회의", LocalDateTime.of(2022, 7, 10, 0, 0),
-                LocalDateTime.of(2022, 7, 10, 0, 0), "세모 회의실 6시 회의")))
+        given(scheduleService.save(new ScheduleCreateRequest("알록", LocalDateTime.of(2022, 7, 15, 14, 20),
+                LocalDateTime.of(2022, 7, 15, 16, 20), "달록")))
                 .willReturn(1L);
 
         // when & then
@@ -74,8 +74,8 @@ class ScheduleControllerTest {
     void 월별_일정_정보를_조회한다() throws Exception {
         //given
         given(scheduleService.findByYearAndMonth(2022, 7))
-                .willReturn(List.of(new ScheduleResponse(1L, "dd", LocalDateTime.of(2022, 7, 10, 0, 0),
-                        LocalDateTime.of(2022, 7, 10, 10, 0), "호호")));
+                .willReturn(List.of(new ScheduleResponse(1L, "알록", LocalDateTime.of(2022, 7, 15, 14, 20),
+                        LocalDateTime.of(2022, 7, 15, 16, 20), "달록")));
 
         // when & then
         mockMvc.perform(get("/api/schedules?year=2022&month=7")

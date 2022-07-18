@@ -477,16 +477,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/schedules HTTP/1.1
+Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Type: application/json
-Host: localhost:65365
-Content-Length: 167
+Content-Length: 150
+Host: localhost:8080
 
 {
-  "startDateTime" : "2022-08-07T18:00",
-  "memo" : "18시 치킨집 회식 - 인원 9명",
-  "title" : "8월 팀 회식",
-  "endDateTime" : "2022-08-07T21:00"
+  "startDateTime" : "2022-07-15T14:20",
+  "memo" : "세모 회의실 6시 회의",
+  "title" : "알록",
+  "endDateTime" : "2022-07-15T16:20"
 }</code></pre>
 </div>
 </div>
@@ -496,10 +496,7 @@ Content-Length: 167
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
-Location: /api/schedules/2
-Date: Thu, 14 Jul 2022 05:25:51 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive</code></pre>
+Location: /api/schedules/0</code></pre>
 </div>
 </div>
 </div>
@@ -512,8 +509,7 @@ Connection: keep-alive</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/schedules?year=2022&amp;month=7 HTTP/1.1
 Accept: application/json
-Content-Type: application/json
-Host: localhost:65365</code></pre>
+Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
@@ -533,11 +529,11 @@ Host: localhost:65365</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>year</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일정을 조회할 년도</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">년도</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>month</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일정을 조회할 월</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">월</p></td>
 </tr>
 </tbody>
 </table>
@@ -548,19 +544,15 @@ Host: localhost:65365</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Thu, 14 Jul 2022 05:25:51 GMT
-Keep-Alive: timeout=60
-Connection: keep-alive
-Content-Length: 219
+Content-Length: 180
 
 {
   "data" : [ {
     "id" : 1,
-    "title" : "7월 팀 회식",
-    "startDateTime" : "2022-07-04T18:00:00",
-    "endDateTime" : "2022-07-04T21:00:00",
-    "memo" : "18시 호프집 회식 - 인원 6명"
+    "title" : "알록",
+    "startDateTime" : "2022-07-15T14:20:00",
+    "endDateTime" : "2022-07-15T16:20:00",
+    "memo" : "달록"
   } ]
 }</code></pre>
 </div>
@@ -573,7 +565,7 @@ Content-Length: 219
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-14 14:07:05 +0900
+Last updated 2022-07-14 14:27:50 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -55,7 +55,7 @@ asciidoctor {
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
 
-    from file("build/docs/asciidoc")
+    from "${asciidoctor.outputDir}"
     into file("src/main/resources/static/docs")
 }
 
