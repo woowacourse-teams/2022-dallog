@@ -7,6 +7,7 @@ const CACHE_KEY = {
   CATEGORIES: 'categories',
   ENTER: 'enter',
   SCHEDULES: 'schedules',
+  PROFILE: 'profile',
 };
 
 const STORAGE_KEY = {
@@ -15,9 +16,9 @@ const STORAGE_KEY = {
 
 const PATH = {
   CALENDAR_PAGE: '/auth',
-  CATEGORY: 'category',
+  CATEGORY: '/category',
   START_PAGE: '/start',
-  PROFILE: 'profile',
+  PROFILE: '/profile',
 };
 
 export { API, CACHE_KEY, STORAGE_KEY, PATH };
