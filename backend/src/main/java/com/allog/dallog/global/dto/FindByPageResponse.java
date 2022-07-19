@@ -4,6 +4,8 @@ import java.util.List;
 
 public class FindByPageResponse<T> extends ListResponse<T> {
 
+    private static final int START_PAGE_INDEX = 1;
+
     private int page;
 
     private FindByPageResponse() {
@@ -12,7 +14,7 @@ public class FindByPageResponse<T> extends ListResponse<T> {
 
     public FindByPageResponse(final int page, final List<T> responses) {
         super(responses);
-        this.page = page;
+        this.page = page + START_PAGE_INDEX;
     }
 
     public int getPage() {

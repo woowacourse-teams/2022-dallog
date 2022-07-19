@@ -7,7 +7,7 @@ import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.global.dto.FindByPageResponse;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +27,12 @@ public class CategoryService {
         return category.getId();
     }
 
-    public FindByPageResponse<CategoryResponse> findAll(final PageRequest request) {
-        List<CategoryResponse> responses = categoryRepository.findSliceBy(request.previousOrFirst())
+    public FindByPageResponse<CategoryResponse> findAll(final Pageable pageable) {
+        List<CategoryResponse> responses = categoryRepository.findSliceBy(pageable)
                 .getContent()
                 .stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
-        return new FindByPageResponse<>(request.getPageNumber(), responses);
+        return new FindByPageResponse<>(pageable.getPageNumber(), responses);
     }
 }

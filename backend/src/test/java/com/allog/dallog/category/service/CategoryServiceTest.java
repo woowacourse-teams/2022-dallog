@@ -62,7 +62,7 @@ class CategoryServiceTest {
         categoryService.save(new CategoryCreateRequest("지원플랫폼 근로"));
         categoryService.save(new CategoryCreateRequest("파랑의 코틀린 스터디"));
 
-        int page = 2;
+        int page = 1; // page index 0부터 시작
         int size = 2;
         PageRequest request = PageRequest.of(page, size);
 
@@ -75,7 +75,7 @@ class CategoryServiceTest {
                     .hasSize(size)
                     .extracting(CategoryResponse::getName)
                     .contains("알록달록 회의", "지원플랫폼 근로");
-            assertThat(response.getPage()).isEqualTo(page);
+            assertThat(response.getPage()).isEqualTo(page + 1); // 반환 값은 page index 1부터 시작
         });
     }
 }
