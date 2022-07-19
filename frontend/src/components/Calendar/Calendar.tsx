@@ -31,13 +31,15 @@ function Calendar() {
   const [calendarMonth, setCalendarMonth] = useState(
     getCalendarMonth(getThisYear(), getThisMonth())
   );
+
   const [current, setCurrent] = useState({
-    year: calendarMonth[15].year,
-    month: calendarMonth[15].month,
+    year: getThisYear(),
+    month: getThisMonth(),
   });
 
   const handleClickBeforeMonthButton = () => {
     const { year, month } = getBeforeYearMonth(current.year, current.month);
+
     setCurrent({ year, month });
     setCalendarMonth(getCalendarMonth(year, month));
   };
@@ -45,12 +47,14 @@ function Calendar() {
   const handleClickTodayButton = () => {
     const year = getThisYear();
     const month = getThisMonth();
+
     setCurrent({ year, month });
     setCalendarMonth(getCalendarMonth(year, month));
   };
 
   const handleClickNextMonthButton = () => {
     const { year, month } = getNextYearMonth(current.year, current.month);
+
     setCurrent({ year, month });
     setCalendarMonth(getCalendarMonth(year, month));
   };
@@ -86,6 +90,7 @@ function Calendar() {
       <div css={calendarGrid(rowNum)}>
         {calendarMonth.map((info) => {
           const key = `${info.year}${info.month}${info.date}${info.day}`;
+
           return (
             <CalendarDate key={key} dateInfo={info} isThisMonth={current.month === info.month} />
           );
