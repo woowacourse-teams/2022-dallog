@@ -28,7 +28,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 자체_토큰을_생성한다(oauthProvider, code);
-        TokenResponse tokenResponse = response.as(COMMON_OF_TOKEN_TYPE_REF).getData();
+        TokenResponse tokenResponse = response.as(TokenResponse.class);
 
         // then
         assertAll(() -> {

@@ -3,7 +3,6 @@ package com.allog.dallog.auth.controller;
 import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.service.AuthService;
-import com.allog.dallog.global.dto.CommonResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,14 +22,14 @@ public class AuthController {
     }
 
     @GetMapping("/{oauthProvider}/link")
-    public ResponseEntity<CommonResponse<String>> generateLink(@PathVariable final String oauthProvider) {
-        return ResponseEntity.ok(new CommonResponse<>(authService.generateGoogleLink()));
+    public ResponseEntity<String> generateLink(@PathVariable final String oauthProvider) {
+        return ResponseEntity.ok(authService.generateGoogleLink());
     }
 
     @PostMapping("/{oauthProvider}/token")
-    public ResponseEntity<CommonResponse<TokenResponse>> generateToken(@PathVariable final String oauthProvider,
-                                                                       @RequestBody final TokenRequest tokenRequest) {
+    public ResponseEntity<TokenResponse> generateToken(@PathVariable final String oauthProvider,
+                                                       @RequestBody final TokenRequest tokenRequest) {
         TokenResponse tokenResponse = authService.generateTokenWithCode(tokenRequest.getCode());
-        return ResponseEntity.ok(new CommonResponse<>(tokenResponse));
+        return ResponseEntity.ok(tokenResponse);
     }
 }
