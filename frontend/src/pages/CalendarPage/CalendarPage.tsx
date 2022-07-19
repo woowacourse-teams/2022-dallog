@@ -55,7 +55,7 @@ function CalendarPage() {
 
   return (
     <PageLayout>
-      <Calendar schedules={schedulesGetResponse.data.schedules} />
+      <Calendar />
       <ModalPortal isOpen={isOpen} closeModal={closeModal}>
         <ScheduleAddModal refetch={refetchSchedules} closeModal={closeModal} />
       </ModalPortal>
