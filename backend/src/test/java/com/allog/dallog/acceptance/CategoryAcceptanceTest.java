@@ -36,7 +36,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다("FE 공식일정");
         새로운_카테고리를_등록한다("알록달록 회의");
 
-        int page = 1;
+        int page = 0;
         int size = 8;
 
         // when

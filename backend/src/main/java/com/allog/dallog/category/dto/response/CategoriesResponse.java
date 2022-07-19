@@ -4,8 +4,6 @@ import java.util.List;
 
 public class CategoriesResponse {
 
-    private static final int START_PAGE_INDEX = 1;
-
     private int page;
     private List<CategoryResponse> data;
 
@@ -13,7 +11,7 @@ public class CategoriesResponse {
     }
 
     public CategoriesResponse(final int page, final List<CategoryResponse> data) {
-        this.page = page + START_PAGE_INDEX;
+        this.page = page;
         this.data = data;
     }
 

@@ -62,7 +62,7 @@ class CategoryServiceTest {
         categoryService.save(new CategoryCreateRequest("지원플랫폼 근로"));
         categoryService.save(new CategoryCreateRequest("파랑의 코틀린 스터디"));
 
-        int page = 1; // page index 0부터 시작
+        int page = 1;
         int size = 2;
         PageRequest request = PageRequest.of(page, size);
 
