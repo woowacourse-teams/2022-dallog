@@ -1,5 +1,6 @@
 package com.allog.dallog.auth.controller;
 
+import com.allog.dallog.auth.dto.OAuthUriResponse;
 import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.service.AuthService;
@@ -21,9 +22,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("/{oauthProvider}/link")
-    public ResponseEntity<String> generateLink(@PathVariable final String oauthProvider) {
-        return ResponseEntity.ok(authService.generateGoogleLink());
+    @GetMapping("/{oauthProvider}/oauth-uri")
+    public ResponseEntity<OAuthUriResponse> generateLink(@PathVariable final String oauthProvider) {
+        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(authService.generateGoogleLink());
+        return ResponseEntity.ok(oAuthUriResponse);
     }
 
     @PostMapping("/{oauthProvider}/token")
