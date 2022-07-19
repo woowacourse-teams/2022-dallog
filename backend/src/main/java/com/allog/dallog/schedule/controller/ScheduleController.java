@@ -1,8 +1,8 @@
 package com.allog.dallog.schedule.controller;
 
-import com.allog.dallog.global.dto.ListResponse;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.schedule.dto.response.SchedulesResponse;
 import com.allog.dallog.schedule.service.ScheduleService;
 import java.net.URI;
 import java.util.List;
@@ -32,9 +32,9 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<ListResponse<ScheduleResponse>> findByYearAndMonth(@RequestParam final int year,
-                                                                             @RequestParam final int month) {
+    public ResponseEntity<SchedulesResponse> findByYearAndMonth(@RequestParam final int year,
+                                                                @RequestParam final int month) {
         List<ScheduleResponse> responses = scheduleService.findByYearAndMonth(year, month);
-        return ResponseEntity.ok(new ListResponse<>(responses));
+        return ResponseEntity.ok(new SchedulesResponse(responses));
     }
 }
