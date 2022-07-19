@@ -5,21 +5,21 @@ import java.util.List;
 public class CategoriesResponse {
 
     private int page;
-    private List<CategoryResponse> data;
+    private List<CategoryResponse> categories;
 
     public CategoriesResponse() {
     }
 
-    public CategoriesResponse(final int page, final List<CategoryResponse> data) {
+    public CategoriesResponse(final int page, final List<CategoryResponse> categories) {
         this.page = page;
-        this.data = data;
+        this.categories = categories;
     }
 
     public int getPage() {
         return page;
     }
 
-    public List<CategoryResponse> getData() {
-        return data;
+    public List<CategoryResponse> getCategories() {
+        return categories;
     }
 }

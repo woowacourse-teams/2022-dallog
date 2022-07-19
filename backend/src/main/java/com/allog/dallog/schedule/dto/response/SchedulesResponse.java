@@ -4,16 +4,16 @@ import java.util.List;
 
 public class SchedulesResponse {
 
-    private List<ScheduleResponse> data;
+    private List<ScheduleResponse> schedules;
 
     public SchedulesResponse() {
     }
 
-    public SchedulesResponse(final List<ScheduleResponse> data) {
-        this.data = data;
+    public SchedulesResponse(final List<ScheduleResponse> schedules) {
+        this.schedules = schedules;
     }
 
-    public List<ScheduleResponse> getData() {
-        return data;
+    public List<ScheduleResponse> getSchedules() {
+        return schedules;
     }
 }

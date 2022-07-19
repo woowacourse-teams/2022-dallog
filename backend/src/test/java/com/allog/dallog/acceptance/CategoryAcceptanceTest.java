@@ -47,7 +47,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             상태코드_200이_반환된다(response);
             assertThat(categoriesResponse.getPage()).isEqualTo(page);
-            assertThat(categoriesResponse.getData()).hasSize(3);
+            assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }
 
