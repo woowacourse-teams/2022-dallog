@@ -26,9 +26,10 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody final CategoryCreateRequest request) {
+    public ResponseEntity<CategoryResponse> save(@Valid @RequestBody final CategoryCreateRequest request) {
         Long id = categoryService.save(request);
-        return ResponseEntity.created(URI.create("/api/categories/" + id)).build();
+        CategoryResponse categoryResponse = categoryService.findById(id);
+        return ResponseEntity.created(URI.create("/api/categories/" + id)).body(categoryResponse);
     }
 
     @GetMapping
