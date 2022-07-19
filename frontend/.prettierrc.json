@@ -17,6 +17,7 @@
     "@/constants",
     "@/utils",
     "@/(api|mocks)/(.*)$",
+    "react-icons",
     "^[./]"
   ],
   "importOrderSeparation": true,
