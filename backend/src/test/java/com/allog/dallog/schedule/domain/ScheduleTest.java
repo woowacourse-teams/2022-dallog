@@ -21,8 +21,8 @@ public class ScheduleTest {
     void 일정을_생성한다() {
         // given
         String title = TITLE;
-        LocalDateTime startDateTime = LocalDateTime.parse(START_DATE_TIME);
-        LocalDateTime endDateTime = LocalDateTime.parse(END_DATE_TIME);
+        LocalDateTime startDateTime = START_DATE_TIME;
+        LocalDateTime endDateTime = END_DATE_TIME;
         String memo = MEMO;
 
         // when & then
@@ -35,8 +35,8 @@ public class ScheduleTest {
     void 일정_제목의_길이가_20을_초과하는_경우_예외를_던진다(final String title) {
         //given
         String titleForSave = title;
-        LocalDateTime startDateTime = LocalDateTime.parse(START_DATE_TIME);
-        LocalDateTime endDateTime = LocalDateTime.parse(END_DATE_TIME);
+        LocalDateTime startDateTime = START_DATE_TIME;
+        LocalDateTime endDateTime = END_DATE_TIME;
         String memo = MEMO;
 
         // when & then
@@ -49,8 +49,8 @@ public class ScheduleTest {
     void 일정_메모의_길이가_255를_초과하는_경우_예외를_던진다() {
         // given
         String title = TITLE;
-        LocalDateTime startDateTime = LocalDateTime.parse(START_DATE_TIME);
-        LocalDateTime endDateTime = LocalDateTime.parse(END_DATE_TIME);
+        LocalDateTime startDateTime = START_DATE_TIME;
+        LocalDateTime endDateTime = END_DATE_TIME;
         String memo = "1".repeat(256);
 
         // when & then

@@ -1,13 +1,14 @@
 package com.allog.dallog.schedule.service;
 
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.common.fixtures.ScheduleFixtures;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
@@ -26,14 +27,11 @@ class ScheduleServiceTest {
     @Autowired
     private ScheduleService scheduleService;
 
-    private final LocalDateTime START_DATA_TIME = LocalDateTime.parse(ScheduleFixtures.START_DATE_TIME);
-    private final LocalDateTime END_DATA_TIME = LocalDateTime.parse(ScheduleFixtures.END_DATE_TIME);
-
     @DisplayName("새로운 일정을 생성한다.")
     @Test
     void 새로운_일정을_생성한다() {
         // given
-        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATA_TIME, END_DATA_TIME, MEMO);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // when
         Long id = scheduleService.save(request);
@@ -48,7 +46,7 @@ class ScheduleServiceTest {
         // given
         String title = "일이삼사오육칠팔구십일이삼사오육칠팔구십일";
 
-        ScheduleCreateRequest request = new ScheduleCreateRequest(title, START_DATA_TIME, END_DATA_TIME, MEMO);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(title, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(request)).
@@ -61,7 +59,7 @@ class ScheduleServiceTest {
         // given
         String memo = "1".repeat(256);
 
-        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATA_TIME, END_DATA_TIME, memo);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, memo);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(request)).

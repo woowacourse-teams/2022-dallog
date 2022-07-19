@@ -1,5 +1,11 @@
 package com.allog.dallog.schedule.controller;
 
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -17,10 +23,7 @@ import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.service.ScheduleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,21 +52,15 @@ class ScheduleControllerTest {
     @Test
     void 일정_정보를_등록한다() throws Exception {
         // given
-        Map<String, String> params = new HashMap<>();
-        params.put("title", "알록");
-        params.put("startDateTime", "2022-07-15T14:20");
-        params.put("endDateTime", "2022-07-15T16:20");
-        params.put("memo", "세모 회의실 6시 회의");
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
 
-        given(scheduleService.save(new ScheduleCreateRequest("알록", LocalDateTime.of(2022, 7, 15, 14, 20),
-                LocalDateTime.of(2022, 7, 15, 16, 20), "달록")))
-                .willReturn(1L);
+        given(scheduleService.save(request)).willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/api/schedules")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ObjectMapper.writeValueAsString(params)))
+                        .content(ObjectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andDo(document("schedule/save",
                         preprocessRequest(prettyPrint()),
@@ -76,9 +73,8 @@ class ScheduleControllerTest {
     @Test
     void 월별_일정_정보를_조회한다() throws Exception {
         //given
-        given(scheduleService.findByYearAndMonth(2022, 7))
-                .willReturn(List.of(new ScheduleResponse(1L, "알록", LocalDateTime.of(2022, 7, 15, 14, 20),
-                        LocalDateTime.of(2022, 7, 15, 16, 20), "달록")));
+        given(scheduleService.findByYearAndMonth(YEAR, MONTH))
+                .willReturn(List.of(new ScheduleResponse(1L, TITLE, START_DATE_TIME, END_DATE_TIME, MEMO)));
 
         // when & then
         mockMvc.perform(get("/api/schedules?year=2022&month=7")

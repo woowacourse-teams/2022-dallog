@@ -11,7 +11,7 @@ public class ScheduleAcceptanceFixture {
 
     public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String title, final String startDateTime,
                                                              final String endDateTime, final String memo) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("title", title);
         params.put("startDateTime", startDateTime);
         params.put("endDateTime", endDateTime);
