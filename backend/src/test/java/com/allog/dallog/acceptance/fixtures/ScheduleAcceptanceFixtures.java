@@ -1,4 +1,4 @@
-package com.allog.dallog.acceptance.fixture;
+package com.allog.dallog.acceptance.fixtures;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.MediaType;
 
-public class ScheduleAcceptanceFixture {
+public class ScheduleAcceptanceFixtures {
 
     public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String title, final String startDateTime,
                                                              final String endDateTime, final String memo) {
