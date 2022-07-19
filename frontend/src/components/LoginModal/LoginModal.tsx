@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import { FcGoogle } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 
 import Button from '@/components/@common/Button/Button';
@@ -7,7 +8,7 @@ import { CACHE_KEY } from '@/constants';
 
 import loginApi from '@/api/login';
 
-import { content, googleLoginButton, loginModal, title } from './LoginModal.styles';
+import { content, loginButton, loginModal, loginText, title } from './LoginModal.styles';
 
 function LoginModal() {
   const theme = useTheme();
@@ -37,8 +38,9 @@ function LoginModal() {
     <div css={loginModal} onClick={handleClickLoginModal}>
       <h1 css={title}>로그인</h1>
       <div css={content}>
-        <Button cssProp={googleLoginButton(theme)} onClick={handleClickGoogleLoginButton}>
-          Google 계정으로 계속하기
+        <Button cssProp={loginButton(theme)} onClick={handleClickGoogleLoginButton}>
+          <FcGoogle size={18} />
+          <span css={loginText}>Google 계정으로 계속하기</span>
         </Button>
       </div>
     </div>

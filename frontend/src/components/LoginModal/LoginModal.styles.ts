@@ -23,10 +23,15 @@ const content = ({ flex }: Theme) => css`
   height: 100%;
 `;
 
-const googleLoginButton = ({ colors }: Theme) => css`
+const loginButton = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
+  position: relative;
+  justify-content: flex-start;
+
   width: 75rem;
   height: 15rem;
-  padding: 2rem;
+  padding: 4rem;
   border: 1px solid ${colors.GRAY_400};
   border-radius: 8px;
   box-shadow: 2px 2px 2px ${colors.GRAY_400};
@@ -41,4 +46,13 @@ const googleLoginButton = ({ colors }: Theme) => css`
   }
 `;
 
-export { content, googleLoginButton, loginModal, title };
+const loginText = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+`;
+
+export { content, loginButton, loginModal, loginText, title };
