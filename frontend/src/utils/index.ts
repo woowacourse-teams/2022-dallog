@@ -19,12 +19,4 @@ const createPostBody = (inputRef: InputRef) => {
   return body;
 };
 
-const getDate = () => {
-  return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
-};
-
-const getDateTime = () => {
-  return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
-};
-
-export { createPostBody, getDate, getDateTime };
+export { createPostBody };

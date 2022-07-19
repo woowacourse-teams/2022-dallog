@@ -1,23 +1,101 @@
-import { Schedule } from '@/@types';
+import { useTheme } from '@emotion/react';
+import { useState } from 'react';
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-import { calendar, schedule } from './Calendar.styles';
+import CalendarDate from '@/components/CalendarDate/CalendarDate';
 
-interface CalendarProps {
-  schedules: Schedule[];
-}
+import { DAYS } from '@/constants';
 
-function Calendar({ schedules }: CalendarProps) {
+import {
+  getBeforeYearMonth,
+  getCalendarMonth,
+  getNextYearMonth,
+  getThisMonth,
+  getThisYear,
+} from '@/utils/date';
+
+import Button from '../@common/Button/Button';
+import {
+  calendar,
+  calendarGrid,
+  calendarHeader,
+  dayBar,
+  monthPicker,
+  navBarGrid,
+  navButton,
+} from './Calendar.styles';
+
+function Calendar() {
+  const theme = useTheme();
+
+  const [calendarMonth, setCalendarMonth] = useState(
+    getCalendarMonth(getThisYear(), getThisMonth())
+  );
+
+  const [current, setCurrent] = useState({
+    year: getThisYear(),
+    month: getThisMonth(),
+  });
+
+  const handleClickBeforeMonthButton = () => {
+    const { year, month } = getBeforeYearMonth(current.year, current.month);
+
+    setCurrent({ year, month });
+    setCalendarMonth(getCalendarMonth(year, month));
+  };
+
+  const handleClickTodayButton = () => {
+    const year = getThisYear();
+    const month = getThisMonth();
+
+    setCurrent({ year, month });
+    setCalendarMonth(getCalendarMonth(year, month));
+  };
+
+  const handleClickNextMonthButton = () => {
+    const { year, month } = getNextYearMonth(current.year, current.month);
+
+    setCurrent({ year, month });
+    setCalendarMonth(getCalendarMonth(year, month));
+  };
+
+  const rowNum = Math.ceil(calendarMonth.length / 7);
+
   return (
     <div css={calendar}>
-      {schedules.map(({ id, title, startDateTime, endDateTime, memo }) => {
-        return (
-          <div key={id} css={schedule}>
-            📅 {startDateTime.split('T').join(' ')} ~ {endDateTime.split('T').join(' ')}
-            <p>&lt; {title} &gt;</p>
-            {memo}
-          </div>
-        );
-      })}
+      <div css={calendarHeader(theme)}>
+        <span>
+          {current.year}년 {current.month}월
+        </span>
+        <div css={monthPicker}>
+          <Button cssProp={navButton} onClick={handleClickBeforeMonthButton}>
+            <AiOutlineLeft />
+          </Button>
+          <Button cssProp={navButton} onClick={handleClickTodayButton}>
+            Today
+          </Button>
+          <Button cssProp={navButton} onClick={handleClickNextMonthButton}>
+            <AiOutlineRight />
+          </Button>
+        </div>
+      </div>
+
+      <div css={navBarGrid}>
+        {DAYS.map((day) => (
+          <span key={day} css={dayBar(theme, day)}>
+            {day}
+          </span>
+        ))}
+      </div>
+      <div css={calendarGrid(rowNum)}>
+        {calendarMonth.map((info) => {
+          const key = `${info.year}${info.month}${info.date}${info.day}`;
+
+          return (
+            <CalendarDate key={key} dateInfo={info} isThisMonth={current.month === info.month} />
+          );
+        })}
+      </div>
     </div>
   );
 }

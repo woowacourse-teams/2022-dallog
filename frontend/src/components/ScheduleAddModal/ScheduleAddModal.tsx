@@ -5,7 +5,8 @@ import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation }
 
 import { Schedule } from '@/@types';
 
-import { createPostBody, getDate, getDateTime } from '@/utils';
+import { createPostBody } from '@/utils';
+import { getDate, getDateTime } from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
 

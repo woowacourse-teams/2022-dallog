@@ -21,4 +21,6 @@ const PATH = {
   PROFILE: '/profile',
 };
 
-export { API, CACHE_KEY, STORAGE_KEY, PATH };
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+export { API, CACHE_KEY, DAYS, STORAGE_KEY, PATH };
