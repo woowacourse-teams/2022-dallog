@@ -1,8 +1,8 @@
 package com.allog.dallog.schedule.domain;
 
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DAY_OF_MONTH;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DAY_OF_MONTH;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +33,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(1);
@@ -53,7 +53,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(1);
@@ -63,7 +63,7 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_종료일시와_같으면_조회된다() {
         // given
-        Schedule schedule1 = new Schedule(TITLE, START_DATE,
+        Schedule schedule1 = new Schedule(TITLE, START_DAY_OF_MONTH,
                 LocalDateTime.of(2022, 8, 12, 13, 10), MEMO);
 
         Schedule schedule2 = new Schedule(TITLE, LocalDateTime.of(2022, 8, 15, 14, 20),
@@ -73,7 +73,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(1);
@@ -93,7 +93,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(0);
@@ -104,7 +104,7 @@ class ScheduleRepositoryTest {
     void 시작일시와_종료일시를_전달할_때_일정의_종료날짜가_시작일시와_같으면_조회된다() {
         // given
         Schedule schedule1 = new Schedule(TITLE, LocalDateTime.of(2022, 6, 12, 13, 40),
-                START_DATE, MEMO);
+                START_DAY_OF_MONTH, MEMO);
 
         Schedule schedule2 = new Schedule(TITLE, LocalDateTime.of(2022, 8, 15, 14, 20),
                 LocalDateTime.of(2022, 8, 15, 16, 20), MEMO);
@@ -113,7 +113,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(1);
@@ -133,7 +133,7 @@ class ScheduleRepositoryTest {
         scheduleRepository.save(schedule2);
 
         // when
-        List<Schedule> schedules = scheduleRepository.findByBetween(START_DATE, END_DATE);
+        List<Schedule> schedules = scheduleRepository.findByBetween(START_DAY_OF_MONTH, END_DAY_OF_MONTH);
 
         // then
         assertThat(schedules).hasSize(0);

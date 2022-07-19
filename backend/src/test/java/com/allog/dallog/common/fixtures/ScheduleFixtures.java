@@ -12,8 +12,8 @@ public class ScheduleFixtures {
     public static final String START_DATE_TIME_STRING = "2022-07-04T13:00";
     public static final String END_DATE_TIME_STRING = "2022-07-05T07:00";
 
-    public static final LocalDateTime START_DATE = LocalDateTime.of(2022, 7, 1, 0, 0);
-    public static final LocalDateTime END_DATE = LocalDateTime.of(2022, 7, 31, 0, 0);
+    public static final LocalDateTime START_DAY_OF_MONTH = LocalDateTime.of(2022, 7, 1, 0, 0);
+    public static final LocalDateTime END_DAY_OF_MONTH = LocalDateTime.of(2022, 7, 31, 0, 0);
 
     public static final int YEAR = 2022;
     public static final int MONTH = 7;
