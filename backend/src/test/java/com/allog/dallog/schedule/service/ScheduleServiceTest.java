@@ -1,5 +1,11 @@
 package com.allog.dallog.schedule.service;
 
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -25,16 +31,10 @@ class ScheduleServiceTest {
     @Test
     void 새로운_일정을_생성한다() {
         // given
-        String title = "알록달록 회의";
-        LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 5, 12, 30);
-        LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
-        String memo = "알록달록 팀회의 - 선릉 큰 강의실";
-
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
-                memo);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // when
-        Long id = scheduleService.save(scheduleCreateRequest);
+        Long id = scheduleService.save(request);
 
         // then
         assertThat(id).isNotNull();
@@ -45,15 +45,11 @@ class ScheduleServiceTest {
     void 새로운_일정을_생성_할_때_일정_제목의_길이가_20을_초과하는_경우_예외를_던진다() {
         // given
         String title = "일이삼사오육칠팔구십일이삼사오육칠팔구십일";
-        LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 5, 12, 30);
-        LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
-        String memo = "알록달록 팀회의 - 선릉 큰 강의실";
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
-                memo);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(title, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
+        assertThatThrownBy(() -> scheduleService.save(request)).
                 isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -61,16 +57,12 @@ class ScheduleServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_일정_메모의_길이가_255를_초과하는_경우_예외를_던진다() {
         // given
-        String title = "알록달록 회의";
-        LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 5, 12, 30);
-        LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
         String memo = "1".repeat(256);
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
-                memo);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, memo);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
+        assertThatThrownBy(() -> scheduleService.save(request)).
                 isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -78,16 +70,13 @@ class ScheduleServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_종료일시가_시작일시_이전이라면_예외를_던진다() {
         // given
-        String title = "알록달록 회의";
         LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 7, 12, 30);
         LocalDateTime endDateTime = LocalDateTime.of(2022, 7, 6, 14, 30);
-        String memo = "1".repeat(256);
 
-        ScheduleCreateRequest scheduleCreateRequest = new ScheduleCreateRequest(title, startDateTime, endDateTime,
-                memo);
+        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, startDateTime, endDateTime, MEMO);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(scheduleCreateRequest)).
+        assertThatThrownBy(() -> scheduleService.save(request)).
                 isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -95,21 +84,21 @@ class ScheduleServiceTest {
     @Test
     void 연도와_월을_전달받아_해당_월에_해당하는_일정_목록을_가져온다() {
         // given
-        ScheduleCreateRequest scheduleCreateRequest1 = new ScheduleCreateRequest("알록달록 회의 1",
-                LocalDateTime.of(2022, 7, 5, 12, 30), LocalDateTime.of(2022, 7, 6, 14, 30), "알록달록 팀회의 - 선릉 큰 강의실");
+        LocalDateTime startDateTime1 = LocalDateTime.of(2022, 7, 5, 12, 30);
+        LocalDateTime endDateTime1 = LocalDateTime.of(2022, 7, 6, 14, 30);
 
-        ScheduleCreateRequest scheduleCreateRequest2 = new ScheduleCreateRequest("알록달록 회의 2",
-                LocalDateTime.of(2022, 8, 5, 12, 30), LocalDateTime.of(2022, 8, 6, 14, 30),
-                "알록달록 팀회의 - 잠실 큰 강의실");
+        ScheduleCreateRequest request1 = new ScheduleCreateRequest(TITLE, startDateTime1, endDateTime1, MEMO);
 
-        scheduleService.save(scheduleCreateRequest1);
-        scheduleService.save(scheduleCreateRequest2);
+        LocalDateTime startDateTime2 = LocalDateTime.of(2022, 8, 5, 12, 30);
+        LocalDateTime endDateTime2 = LocalDateTime.of(2022, 8, 6, 14, 30);
 
-        int year = 2022;
-        int month = 7;
+        ScheduleCreateRequest request2 = new ScheduleCreateRequest(TITLE, startDateTime2, endDateTime2, MEMO);
+
+        scheduleService.save(request1);
+        scheduleService.save(request2);
 
         // when
-        List<ScheduleResponse> schedules = scheduleService.findByYearAndMonth(year, month);
+        List<ScheduleResponse> schedules = scheduleService.findByYearAndMonth(YEAR, MONTH);
 
         // then
         assertThat(schedules).hasSize(1);

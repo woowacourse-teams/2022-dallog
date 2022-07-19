@@ -1,4 +1,4 @@
-package com.allog.dallog.config;
+package com.allog.dallog.common.config;
 
 import com.allog.dallog.auth.support.OAuthClient;
 import com.allog.dallog.infrastructure.oauth.client.StubOAuthClient;

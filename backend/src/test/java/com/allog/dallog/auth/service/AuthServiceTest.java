@@ -3,8 +3,8 @@ package com.allog.dallog.auth.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.auth.dto.TokenResponse;
-import com.allog.dallog.config.TestConfig;
-import com.allog.dallog.fixture.OAuthMemberFixtures;
+import com.allog.dallog.common.config.TestConfig;
+import com.allog.dallog.common.fixtures.OAuthMemberFixtures;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
 import java.util.List;

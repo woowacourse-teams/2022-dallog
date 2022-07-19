@@ -1,4 +1,4 @@
-package com.allog.dallog.fixture;
+package com.allog.dallog.common.fixtures;
 
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.SocialType;

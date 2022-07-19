@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
-import com.allog.dallog.config.TestConfig;
+import com.allog.dallog.common.config.TestConfig;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.category.domain.Category;
-import com.allog.dallog.fixture.CategoryFixtures;
-import com.allog.dallog.fixture.MemberFixtures;
+import com.allog.dallog.common.fixtures.CategoryFixtures;
+import com.allog.dallog.common.fixtures.MemberFixtures;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
