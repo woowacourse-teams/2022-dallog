@@ -1,5 +1,4 @@
 import { useTheme } from '@emotion/react';
-import { FcGoogle } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 
 import Button from '@/components/@common/Button/Button';
@@ -8,7 +7,21 @@ import { CACHE_KEY } from '@/constants';
 
 import loginApi from '@/api/login';
 
-import { content, loginButton, loginModal, loginText, title } from './LoginModal.styles';
+import { FaGithub } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import { RiKakaoTalkFill } from 'react-icons/ri';
+import { SiNaver } from 'react-icons/si';
+
+import {
+  content,
+  githubLoginButton,
+  googleLoginButton,
+  kakaoLoginButton,
+  loginModal,
+  loginText,
+  naverLoginButton,
+  title,
+} from './LoginModal.styles';
 
 function LoginModal() {
   const theme = useTheme();
@@ -38,9 +51,21 @@ function LoginModal() {
     <div css={loginModal} onClick={handleClickLoginModal}>
       <h1 css={title}>로그인</h1>
       <div css={content}>
-        <Button cssProp={loginButton(theme)} onClick={handleClickGoogleLoginButton}>
-          <FcGoogle size={18} />
-          <span css={loginText}>Google 계정으로 계속하기</span>
+        <Button cssProp={naverLoginButton(theme)}>
+          <SiNaver size={20} />
+          <p css={loginText}>Naver 계정으로 계속하기</p>
+        </Button>
+        <Button cssProp={kakaoLoginButton(theme)}>
+          <RiKakaoTalkFill size={20} />
+          <p css={loginText}>Kakao 계정으로 계속하기</p>
+        </Button>
+        <Button cssProp={githubLoginButton(theme)}>
+          <FaGithub size={20} />
+          <p css={loginText}>Github 계정으로 계속하기</p>
+        </Button>
+        <Button cssProp={googleLoginButton(theme)} onClick={handleClickGoogleLoginButton}>
+          <FcGoogle size={20} />
+          <p css={loginText}>Google 계정으로 계속하기</p>
         </Button>
       </div>
     </div>

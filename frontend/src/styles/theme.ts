@@ -1,7 +1,9 @@
 import { css, Theme } from '@emotion/react';
 
 const colors = {
+  YELLOW_400: '#fee500',
   YELLOW_500: '#FCC419',
+  GREEN_500: '#03c75a',
   WHITE: '#ffffff',
   GRAY_000: '#f8f9fa',
   GRAY_100: '#f1f3f5',
