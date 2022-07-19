@@ -1,10 +1,11 @@
 package com.allog.dallog.category.controller;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.global.dto.FindByPageResponse;
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<FindByPageResponse<CategoryResponse>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findAll(pageable));
+    public ResponseEntity<CategoriesResponse> findAll(Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        List<CategoryResponse> categoryResponses = categoryService.findAll(pageable);
+        return ResponseEntity.ok(new CategoriesResponse(pageNumber, categoryResponses));
     }
 }

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
-import com.allog.dallog.global.dto.FindByPageResponse;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -67,15 +67,14 @@ class CategoryServiceTest {
         PageRequest request = PageRequest.of(page, size);
 
         // when
-        FindByPageResponse<CategoryResponse> response = categoryService.findAll(request);
+        List<CategoryResponse> response = categoryService.findAll(request);
 
         // then
         assertAll(() -> {
-            assertThat(response.getData())
+            assertThat(response)
                     .hasSize(size)
                     .extracting(CategoryResponse::getName)
                     .contains("알록달록 회의", "지원플랫폼 근로");
-            assertThat(response.getPage()).isEqualTo(page + 1); // 반환 값은 page index 1부터 시작
         });
     }
 }
