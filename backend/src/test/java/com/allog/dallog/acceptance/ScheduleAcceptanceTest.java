@@ -2,12 +2,12 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixture.ScheduleAcceptanceFixture.새로운_일정을_등록한다;
 import static com.allog.dallog.acceptance.fixture.ScheduleAcceptanceFixture.월별_일정을_조회한다;
-import static com.allog.dallog.common.fixture.ScheduleFixture.END_DATE_TIME;
-import static com.allog.dallog.common.fixture.ScheduleFixture.MEMO;
-import static com.allog.dallog.common.fixture.ScheduleFixture.MONTH;
-import static com.allog.dallog.common.fixture.ScheduleFixture.START_DATE_TIME;
-import static com.allog.dallog.common.fixture.ScheduleFixture.TITLE;
-import static com.allog.dallog.common.fixture.ScheduleFixture.YEAR;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

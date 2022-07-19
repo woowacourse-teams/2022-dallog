@@ -1,13 +1,13 @@
 package com.allog.dallog.schedule.service;
 
-import static com.allog.dallog.common.fixture.ScheduleFixture.MEMO;
-import static com.allog.dallog.common.fixture.ScheduleFixture.MONTH;
-import static com.allog.dallog.common.fixture.ScheduleFixture.TITLE;
-import static com.allog.dallog.common.fixture.ScheduleFixture.YEAR;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.common.fixture.ScheduleFixture;
+import com.allog.dallog.common.fixtures.ScheduleFixtures;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
@@ -26,8 +26,8 @@ class ScheduleServiceTest {
     @Autowired
     private ScheduleService scheduleService;
 
-    private final LocalDateTime START_DATA_TIME = LocalDateTime.parse(ScheduleFixture.START_DATE_TIME);
-    private final LocalDateTime END_DATA_TIME = LocalDateTime.parse(ScheduleFixture.END_DATE_TIME);
+    private final LocalDateTime START_DATA_TIME = LocalDateTime.parse(ScheduleFixtures.START_DATE_TIME);
+    private final LocalDateTime END_DATA_TIME = LocalDateTime.parse(ScheduleFixtures.END_DATE_TIME);
 
     @DisplayName("새로운 일정을 생성한다.")
     @Test

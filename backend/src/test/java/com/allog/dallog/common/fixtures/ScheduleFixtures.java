@@ -1,8 +1,8 @@
-package com.allog.dallog.common.fixture;
+package com.allog.dallog.common.fixtures;
 
 import java.time.LocalDateTime;
 
-public class ScheduleFixture {
+public class ScheduleFixtures {
 
     public static final String TITLE = "알록달록 회의";
     public static final String START_DATE_TIME = "2022-07-04T13:00";

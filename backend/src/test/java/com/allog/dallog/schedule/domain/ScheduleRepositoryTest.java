@@ -1,9 +1,9 @@
 package com.allog.dallog.schedule.domain;
 
-import static com.allog.dallog.common.fixture.ScheduleFixture.END_DATE;
-import static com.allog.dallog.common.fixture.ScheduleFixture.MEMO;
-import static com.allog.dallog.common.fixture.ScheduleFixture.START_DATE;
-import static com.allog.dallog.common.fixture.ScheduleFixture.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;

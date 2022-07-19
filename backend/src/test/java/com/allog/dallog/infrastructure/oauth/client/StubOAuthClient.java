@@ -1,6 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import static com.allog.dallog.fixture.OAuthMemberFixtures.OAUTH_MEMBER;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_MEMBER;
 
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.support.OAuthClient;

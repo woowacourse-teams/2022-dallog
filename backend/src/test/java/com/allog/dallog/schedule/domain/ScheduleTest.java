@@ -1,9 +1,9 @@
 package com.allog.dallog.schedule.domain;
 
-import static com.allog.dallog.common.fixture.ScheduleFixture.END_DATE_TIME;
-import static com.allog.dallog.common.fixture.ScheduleFixture.MEMO;
-import static com.allog.dallog.common.fixture.ScheduleFixture.START_DATE_TIME;
-import static com.allog.dallog.common.fixture.ScheduleFixture.TITLE;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
