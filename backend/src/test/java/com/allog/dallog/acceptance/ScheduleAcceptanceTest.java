@@ -2,10 +2,10 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixture.ScheduleAcceptanceFixture.새로운_일정을_등록한다;
 import static com.allog.dallog.acceptance.fixture.ScheduleAcceptanceFixture.월별_일정을_조회한다;
-import static com.allog.dallog.common.fixture.ScheduleFixture.END_DATA_TIME;
+import static com.allog.dallog.common.fixture.ScheduleFixture.END_DATE_TIME;
 import static com.allog.dallog.common.fixture.ScheduleFixture.MEMO;
 import static com.allog.dallog.common.fixture.ScheduleFixture.MONTH;
-import static com.allog.dallog.common.fixture.ScheduleFixture.START_DATA_TIME;
+import static com.allog.dallog.common.fixture.ScheduleFixture.START_DATE_TIME;
 import static com.allog.dallog.common.fixture.ScheduleFixture.TITLE;
 import static com.allog.dallog.common.fixture.ScheduleFixture.YEAR;
 
@@ -21,7 +21,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_일정정보를_등록하면_상태코드_201을_반환한다() {
         // given & when
-        ExtractableResponse<Response> response = 새로운_일정을_등록한다(TITLE, START_DATA_TIME, END_DATA_TIME, MEMO);
+        ExtractableResponse<Response> response = 새로운_일정을_등록한다(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // then
         상태코드_201이_반환된다(response);
@@ -31,8 +31,8 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 월별_일정정보를_조회하면_상태코드_200을_반환한다() {
         // given
-        새로운_일정을_등록한다(TITLE, START_DATA_TIME, END_DATA_TIME, MEMO);
-        새로운_일정을_등록한다(TITLE, START_DATA_TIME, END_DATA_TIME, MEMO);
+        새로운_일정을_등록한다(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
+        새로운_일정을_등록한다(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
 
         // when
         ExtractableResponse<Response> response = 월별_일정을_조회한다(YEAR, MONTH);
