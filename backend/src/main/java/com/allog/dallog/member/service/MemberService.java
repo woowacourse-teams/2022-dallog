@@ -23,10 +23,12 @@ public class MemberService {
     }
 
     public MemberResponse findById(final Long id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(NoSuchMemberException::new);
+        return new MemberResponse(getMember(id));
+    }
 
-        return new MemberResponse(member);
+    public Member getMember(final Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(NoSuchMemberException::new);
     }
 
     public Member findByEmail(final String email) {
