@@ -9,7 +9,7 @@ const calendarDate = ({ colors }: Theme, day: number, isThisMonth: boolean) => c
 const dateBorder = ({ colors }: Theme) => css`
   position: relative;
 
-  height: 30rem;
+  height: 100%;
   padding: 1rem;
   border-top: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};

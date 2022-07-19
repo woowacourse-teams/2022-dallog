@@ -15,7 +15,15 @@ import {
 } from '@/utils/date';
 
 import Button from '../@common/Button/Button';
-import { calendarGrid, calendarHeader, dayBar, monthPicker } from './Calendar.styles';
+import {
+  calendar,
+  calendarGrid,
+  calendarHeader,
+  dayBar,
+  monthPicker,
+  navBarGrid,
+  navButton,
+} from './Calendar.styles';
 
 function Calendar() {
   const theme = useTheme();
@@ -46,31 +54,36 @@ function Calendar() {
     setCurrent({ year, month });
     setCalendarMonth(getCalendarMonth(year, month));
   };
+
+  const rowNum = Math.ceil(calendarMonth.length / 7);
+
   return (
-    <>
+    <div css={calendar}>
       <div css={calendarHeader(theme)}>
         <span>
           {current.year}년 {current.month}월
         </span>
         <div css={monthPicker}>
-          <Button onClick={handleClickBeforeMonthButton}>
+          <Button cssProp={navButton} onClick={handleClickBeforeMonthButton}>
             <AiOutlineLeft />
           </Button>
-          <Button onClick={handleClickTodayButton}>Today</Button>
-          <Button onClick={handleClickNextMonthButton}>
+          <Button cssProp={navButton} onClick={handleClickTodayButton}>
+            Today
+          </Button>
+          <Button cssProp={navButton} onClick={handleClickNextMonthButton}>
             <AiOutlineRight />
           </Button>
         </div>
       </div>
 
-      <div css={calendarGrid}>
+      <div css={navBarGrid}>
         {DAYS.map((day) => (
           <span key={day} css={dayBar(theme, day)}>
             {day}
           </span>
         ))}
       </div>
-      <div css={calendarGrid}>
+      <div css={calendarGrid(rowNum)}>
         {calendarMonth.map((info) => {
           const key = `${info.year}${info.month}${info.date}${info.day}`;
           return (
@@ -78,7 +91,7 @@ function Calendar() {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 

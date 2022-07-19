@@ -13,11 +13,9 @@ function CalendarDate({ dateInfo, isThisMonth }: CalendarDateProps) {
   const theme = useTheme();
 
   return (
-    <div>
-      <div css={calendarDate(theme, dateInfo.day, isThisMonth)}>
-        <div css={dateBorder}>
-          <span css={dateText}> {dateInfo.date}</span>
-        </div>
+    <div css={calendarDate(theme, dateInfo.day, isThisMonth)}>
+      <div css={dateBorder}>
+        <span css={dateText}> {dateInfo.date}</span>
       </div>
     </div>
   );
