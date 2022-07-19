@@ -2,7 +2,6 @@ package com.allog.dallog.member.controller;
 
 import com.allog.dallog.auth.dto.LoginMember;
 import com.allog.dallog.auth.support.AuthenticationPrincipal;
-import com.allog.dallog.global.dto.CommonResponse;
 import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,8 @@ public class MemberController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<CommonResponse<MemberResponse>> findMe(@AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<MemberResponse> findMe(@AuthenticationPrincipal LoginMember loginMember) {
         MemberResponse response = memberService.findById(loginMember.getId());
-        return ResponseEntity.ok(new CommonResponse<>(response));
+        return ResponseEntity.ok(response);
     }
 }
