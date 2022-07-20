@@ -125,4 +125,51 @@ const profileDB = {
   },
 };
 
-export { scheduleDB, categoryDB, profileDB };
+const subscriptionDB = {
+  subscriptions: [
+    {
+      category: {
+        id: 1,
+        name: 'BE 일정',
+        creator: {
+          id: 1,
+          email: 'example@email.com',
+          displayName: 'example',
+          profileImageUri: '/image.png',
+        },
+        createdAt: '2022-07-19T16:42',
+      },
+      color: '#ffffff',
+    },
+    {
+      category: {
+        id: 2,
+        name: 'BE 일정',
+        creator: {
+          id: 1,
+          email: 'example@email.com',
+          displayName: 'example',
+          profileImageUri: '/image.png',
+        },
+        createdAt: '2022-07-19T16:42',
+      },
+      color: '#123423',
+    },
+    {
+      category: {
+        id: 5,
+        name: '카테고리 5',
+        creator: {
+          id: 1,
+          email: 'example@email.com',
+          displayName: 'example',
+          profileImageUri: '/image.png',
+        },
+        createdAt: '2022-07-19T16:42',
+      },
+      color: '#876453',
+    },
+  ],
+};
+
+export { scheduleDB, categoryDB, profileDB, subscriptionDB };

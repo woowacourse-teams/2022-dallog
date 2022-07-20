@@ -12,6 +12,7 @@ const CACHE_KEY = {
   ENTER: 'enter',
   SCHEDULES: 'schedules',
   PROFILE: 'profile',
+  SUBSCRIPTIONS: 'subscriptions',
 };
 
 const STORAGE_KEY = {

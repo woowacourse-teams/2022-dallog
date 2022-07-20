@@ -6,8 +6,9 @@ import { CategoryType } from '@/@types/category';
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
+import subscriptionApi from '@/api/subscription';
 
-import { categoryDB, profileDB, scheduleDB } from './data';
+import { categoryDB, profileDB, scheduleDB, subscriptionDB } from './data';
 
 const handlers = [
   rest.get(categoryApi.endpoint, (req, res, ctx) => {
@@ -47,6 +48,10 @@ const handlers = [
     scheduleDB.push({ id: scheduleDB.length + 1, ...req.body });
 
     return res(ctx.status(201));
+  }),
+
+  rest.get(subscriptionApi.getEndpoint, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(subscriptionDB));
   }),
 ];
 
