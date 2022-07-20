@@ -142,7 +142,7 @@ class SubscriptionServiceTest {
         subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
 
         // when
-        subscriptionService.deleteById(subscriptionResponse.getId());
+        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), member.getId());
 
         // then
         assertThat(subscriptionService.findByMemberId(member.getId()).getSubscriptions()).hasSize(2);
@@ -151,8 +151,11 @@ class SubscriptionServiceTest {
     @DisplayName("존재하지 않는 구독 정보를 삭제할 경우 예외를 던진다.")
     @Test
     void 존재하지_않는_구독_정보를_삭제할_경우_예외를_던진다() {
-        // given & when & then
-        assertThatThrownBy(() -> subscriptionService.deleteById(0L))
+        // given
+        MemberResponse member = memberService.save(MEMBER);
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, member.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
     }
 }
