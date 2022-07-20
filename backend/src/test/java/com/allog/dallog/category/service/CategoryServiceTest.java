@@ -8,11 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,10 +74,10 @@ class CategoryServiceTest {
         PageRequest request = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         // when
-        List<CategoryResponse> response = categoryService.findAll(request);
+        CategoriesResponse response = categoryService.findAll(request);
 
         // then
-        assertThat(response)
+        assertThat(response.getCategories())
                 .hasSize(PAGE_SIZE)
                 .extracting(CategoryResponse::getName)
                 .contains("알록달록 회의", "지원플랫폼 근로");
@@ -98,10 +98,10 @@ class CategoryServiceTest {
         PageRequest request = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         // when
-        List<CategoryResponse> response = categoryService.findMine(memberId, request);
+        CategoriesResponse response = categoryService.findMine(memberId, request);
 
         // then
-        assertThat(response)
+        assertThat(response.getCategories())
                 .hasSize(PAGE_SIZE)
                 .extracting(CategoryResponse::getName)
                 .contains("알록달록 회의", "지원플랫폼 근로");
