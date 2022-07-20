@@ -1,5 +1,7 @@
 package com.allog.dallog.acceptance;
 
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
+
 import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;

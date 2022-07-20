@@ -1,5 +1,7 @@
 package com.allog.dallog.category.domain;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -27,23 +29,22 @@ class CategoryRepositoryTest {
         categoryRepository.save(new Category("지원플랫폼 근로"));
         categoryRepository.save(new Category("파랑의 코틀린 스터디"));
 
-        int page = 1;
-        int size = 2;
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         // when
         Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
 
         // then
-        assertAll(
-                () -> assertThat(categories.getContent())
-                        .hasSize(size)
-                        .extracting(Category::getName)
-                        .contains("알록달록 회의", "지원플랫폼 근로"),
-                () -> assertThat(categories.getContent().stream()
-                        .map(Category::getCreatedAt)
-                        .allMatch(Objects::nonNull))
-                        .isTrue()
+        assertAll(() -> {
+                    assertThat(categories.getContent())
+                            .hasSize(PAGE_SIZE)
+                            .extracting(Category::getName)
+                            .contains("알록달록 회의", "지원플랫폼 근로");
+                    assertThat(categories.getContent().stream()
+                            .map(Category::getCreatedAt)
+                            .allMatch(Objects::nonNull))
+                            .isTrue();
+                }
         );
     }
 
@@ -51,9 +52,7 @@ class CategoryRepositoryTest {
     @Test
     void 조회_시_데이터가_존재하지_않는_경우_빈_슬라이스가_반환된다() {
         // given
-        int page = 1;
-        int size = 2;
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         // when
         Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
