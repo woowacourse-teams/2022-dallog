@@ -130,7 +130,7 @@ const subscriptionDB = {
     {
       category: {
         id: 1,
-        name: 'BE 일정',
+        name: 'BE 공식일정',
         creator: {
           id: 1,
           email: 'example@email.com',
@@ -144,7 +144,7 @@ const subscriptionDB = {
     {
       category: {
         id: 2,
-        name: 'BE 일정',
+        name: '알록달록 팀 회의',
         creator: {
           id: 1,
           email: 'example@email.com',

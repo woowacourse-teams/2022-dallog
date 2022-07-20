@@ -2,6 +2,7 @@ import { rest } from 'msw';
 
 import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
+import { SubscriptionType } from '@/@types/subscription';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
@@ -53,6 +54,27 @@ const handlers = [
   rest.get(subscriptionApi.getEndpoint, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(subscriptionDB));
   }),
+
+  rest.post<Pick<SubscriptionType, 'color'>>(
+    `/api/members/me/categories/:id/subscriptions`,
+    (req, res, ctx) => {
+      const { id } = req.params;
+      const categoryId = parseInt(id as string);
+      const newSubscription = {
+        category: {
+          id: categoryDB.data[categoryId - 1].id,
+          name: categoryDB.data[categoryId - 1].name,
+          creator: profileDB.data,
+          createdAt: categoryDB.data[categoryId - 1].createdAt,
+        },
+        color: req.body.color,
+      };
+
+      subscriptionDB.subscriptions.push(newSubscription);
+
+      return res(ctx.status(201), ctx.json(newSubscription));
+    }
+  ),
 ];
 
 export { handlers };
