@@ -69,8 +69,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
         // given
-        ExtractableResponse<Response> tokenCreateResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
-        TokenResponse tokenResponse = tokenCreateResponse.as(TokenResponse.class);
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
         새로운_카테고리를_등록한다(tokenResponse, "BE 공식일정");
         새로운_카테고리를_등록한다(tokenResponse, "FE 공식일정");
         새로운_카테고리를_등록한다(tokenResponse, "알록달록 회의");
