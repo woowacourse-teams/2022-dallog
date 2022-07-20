@@ -77,7 +77,8 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         int page = 0;
 
         // when
-        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(tokenResponse, page, PAGE_SIZE);
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_페이징을_통해_조회한다(tokenResponse.getAccessToken(), page, PAGE_SIZE);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
@@ -88,10 +89,10 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private ExtractableResponse<Response> 내가_등록한_카테고리를_페이징을_통해_조회한다(final TokenResponse tokenResponse, final int page,
+    private ExtractableResponse<Response> 내가_등록한_카테고리를_페이징을_통해_조회한다(final String accessToken, final int page,
                                                                     final int size) {
         return RestAssured.given().log().all()
-                .auth().oauth2(tokenResponse.getAccessToken())
+                .auth().oauth2(accessToken)
                 .when().get("/api/categories/me?page={page}&size={size}", page, size)
                 .then().log().all()
                 .extract();
