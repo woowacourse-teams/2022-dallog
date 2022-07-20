@@ -7,6 +7,9 @@ export default {
   component: SubscribeButton,
 } as ComponentMeta<typeof SubscribeButton>;
 
-const Template: ComponentStory<typeof SubscribeButton> = () => <SubscribeButton />;
+const Template: ComponentStory<typeof SubscribeButton> = (args) => <SubscribeButton {...args} />;
 
 export const Primary = Template.bind({});
+Primary.args = {
+  isSubscribing: true,
+};
