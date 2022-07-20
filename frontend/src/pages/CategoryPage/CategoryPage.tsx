@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useInfiniteQuery } from 'react-query';
 
