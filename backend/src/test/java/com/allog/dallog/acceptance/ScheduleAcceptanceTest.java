@@ -1,5 +1,7 @@
 package com.allog.dallog.acceptance;
 
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.새로운_일정을_등록한다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.월별_일정을_조회한다;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME_STRING;

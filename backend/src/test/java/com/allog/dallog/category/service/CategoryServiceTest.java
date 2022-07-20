@@ -1,5 +1,8 @@
 package com.allog.dallog.category.service;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,14 +31,13 @@ class CategoryServiceTest {
     @Test
     void 새로운_카테고리를_생성한다() {
         // given
-        String name = "BE 공식일정";
-        CategoryCreateRequest request = new CategoryCreateRequest(name);
+        CategoryCreateRequest request = new CategoryCreateRequest(CATEGORY_NAME);
 
         // when
         CategoryResponse response = categoryService.save(request);
 
         // then
-        assertThat(response.getName()).isEqualTo(name);
+        assertThat(response.getName()).isEqualTo(CATEGORY_NAME);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
@@ -60,9 +62,7 @@ class CategoryServiceTest {
         categoryService.save(new CategoryCreateRequest("지원플랫폼 근로"));
         categoryService.save(new CategoryCreateRequest("파랑의 코틀린 스터디"));
 
-        int page = 1;
-        int size = 2;
-        PageRequest request = PageRequest.of(page, size);
+        PageRequest request = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
         // when
         List<CategoryResponse> response = categoryService.findAll(request);
@@ -70,7 +70,7 @@ class CategoryServiceTest {
         // then
         assertAll(() -> {
             assertThat(response)
-                    .hasSize(size)
+                    .hasSize(PAGE_SIZE)
                     .extracting(CategoryResponse::getName)
                     .contains("알록달록 회의", "지원플랫폼 근로");
         });
