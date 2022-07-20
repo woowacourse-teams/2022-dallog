@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
 import com.allog.dallog.common.fixtures.MemberFixtures;
 import com.allog.dallog.member.domain.Member;
@@ -39,11 +40,12 @@ class SubscriptionServiceTest {
     void 새로운_구독을_생성한다() {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        Long categoryId = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
 
         // when
-        Long id = subscriptionService.save(member.getId(), categoryId, new SubscriptionCreateRequest(color));
+        Long id = subscriptionService.save(member.getId(), categoryResponse.getId(),
+                new SubscriptionCreateRequest(color));
 
         // then
         assertThat(id).isNotNull();
@@ -55,10 +57,10 @@ class SubscriptionServiceTest {
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        Long categoryId = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryId,
+        assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color))).isInstanceOf(InvalidSubscriptionException.class);
     }
 
@@ -67,9 +69,10 @@ class SubscriptionServiceTest {
     void 구독_id를_기반으로_단건_조회한다() {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        Long categoryId = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
-        Long id = subscriptionService.save(member.getId(), categoryId, new SubscriptionCreateRequest(color));
+        Long id = subscriptionService.save(member.getId(), categoryResponse.getId(),
+                new SubscriptionCreateRequest(color));
 
         // when
         SubscriptionResponse subscriptionResponse = subscriptionService.findById(id);
@@ -77,7 +80,7 @@ class SubscriptionServiceTest {
         // then
         assertAll(() -> {
             assertThat(subscriptionResponse.getId()).isEqualTo(id);
-            assertThat(subscriptionResponse.getCategory().getId()).isEqualTo(categoryId);
+            assertThat(subscriptionResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
             assertThat(subscriptionResponse.getColor()).isEqualTo(color);
         });
     }

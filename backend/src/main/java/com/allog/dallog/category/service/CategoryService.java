@@ -22,9 +22,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public Long save(final CategoryCreateRequest request) {
+    public CategoryResponse save(final CategoryCreateRequest request) {
         Category category = categoryRepository.save(request.toEntity());
-        return category.getId();
+        return new CategoryResponse(category);
     }
 
     public List<CategoryResponse> findAll(final Pageable pageable) {

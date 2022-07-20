@@ -32,10 +32,10 @@ class CategoryServiceTest {
         CategoryCreateRequest request = new CategoryCreateRequest(name);
 
         // when
-        Long id = categoryService.save(request);
+        CategoryResponse response = categoryService.save(request);
 
         // then
-        assertThat(id).isNotNull();
+        assertThat(response.getName()).isEqualTo(name);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
