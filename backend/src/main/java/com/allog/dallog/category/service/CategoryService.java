@@ -4,6 +4,7 @@ import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.category.exception.NoSuchCategoryException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +22,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public Long save(final CategoryCreateRequest request) {
+    public CategoryResponse save(final CategoryCreateRequest request) {
         Category category = categoryRepository.save(request.toEntity());
-        return category.getId();
+        return new CategoryResponse(category);
     }
 
     public List<CategoryResponse> findAll(final Pageable pageable) {
@@ -32,5 +33,14 @@ public class CategoryService {
                 .stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public CategoryResponse findById(final Long id) {
+        return new CategoryResponse(getCategory(id));
+    }
+
+    public Category getCategory(final Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(NoSuchCategoryException::new);
     }
 }

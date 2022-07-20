@@ -5,9 +5,12 @@ import java.time.LocalDateTime;
 
 public class CategoryResponse {
 
-    private final Long id;
-    private final String name;
-    private final LocalDateTime createdAt;
+    private Long id;
+    private String name;
+    private LocalDateTime createdAt;
+
+    private CategoryResponse() {
+    }
 
     public CategoryResponse(final Category category) {
         this(category.getId(), category.getName(), category.getCreatedAt());

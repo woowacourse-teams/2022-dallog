@@ -25,10 +25,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        String oauthProvider = "google";
-        String code = "sddsfsg4wedfabladsgklvdskfngdakfjgnkd";
-
-        TokenResponse tokenResponse = 자체_토큰을_생성한다(oauthProvider, code);
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAuthMemberFixtures.OAUTH_PROVIDER, OAuthMemberFixtures.CODE);
 
         // when
         ExtractableResponse<Response> response = 자신의_정보를_조회한다(tokenResponse);

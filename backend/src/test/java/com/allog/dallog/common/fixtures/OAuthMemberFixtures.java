@@ -4,6 +4,8 @@ import com.allog.dallog.auth.dto.OAuthMember;
 
 public class OAuthMemberFixtures {
 
+    public static final String OAUTH_PROVIDER = "google";
+
     public static final String CODE = "authorization code";
 
     public static final String EMAIL = "example@email.com";
