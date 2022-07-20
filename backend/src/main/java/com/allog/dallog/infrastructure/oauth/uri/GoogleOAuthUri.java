@@ -1,12 +1,12 @@
-package com.allog.dallog.infrastructure.oauth.endpoint;
+package com.allog.dallog.infrastructure.oauth.uri;
 
-import com.allog.dallog.auth.support.OAuthEndpoint;
+import com.allog.dallog.auth.support.OAuthUri;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GoogleOAuthEndpoint implements OAuthEndpoint {
+public class GoogleOAuthUri implements OAuthUri {
 
     private static final String GOOGLE_OAUTH_END_POINT = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final List<String> SCOPES = List.of("https://www.googleapis.com/auth/userinfo.profile",
@@ -15,8 +15,8 @@ public class GoogleOAuthEndpoint implements OAuthEndpoint {
     private final String googleRedirectUri;
     private final String googleClientId;
 
-    public GoogleOAuthEndpoint(@Value("${oauth.google.redirect_uri}") final String googleRedirectUri,
-                               @Value("${oauth.google.client_id}") final String googleClientId) {
+    public GoogleOAuthUri(@Value("${oauth.google.redirect_uri}") final String googleRedirectUri,
+                          @Value("${oauth.google.client_id}") final String googleClientId) {
         this.googleRedirectUri = googleRedirectUri;
         this.googleClientId = googleClientId;
     }

@@ -4,7 +4,7 @@ import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.support.JwtTokenProvider;
 import com.allog.dallog.auth.support.OAuthClient;
-import com.allog.dallog.auth.support.OAuthEndpoint;
+import com.allog.dallog.auth.support.OAuthUri;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.member.service.MemberService;
@@ -15,21 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final OAuthEndpoint oAuthEndpoint;
+    private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthService(final OAuthEndpoint oAuthEndpoint, final OAuthClient oAuthClient,
+    public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient,
                        final MemberService memberService, final JwtTokenProvider jwtTokenProvider) {
-        this.oAuthEndpoint = oAuthEndpoint;
+        this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     public String generateGoogleLink() {
-        return oAuthEndpoint.generate();
+        return oAuthUri.generate();
     }
 
     @Transactional
