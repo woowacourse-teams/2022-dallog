@@ -7,8 +7,11 @@ import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import com.allog.dallog.subscription.repository.SubscriptionRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,16 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, request.getColor()));
 
         return new SubscriptionResponse(subscription);
+    }
+
+    public SubscriptionsResponse findByMemberId(final Long memberId) {
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
+
+        List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
+                .map(SubscriptionResponse::new)
+                .collect(Collectors.toList());
+
+        return new SubscriptionsResponse(subscriptionResponses);
     }
 
     public SubscriptionResponse findById(final Long id) {

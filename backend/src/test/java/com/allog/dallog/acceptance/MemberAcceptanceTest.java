@@ -2,6 +2,9 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.common.config.TestConfig;
-import com.allog.dallog.common.fixtures.OAuthMemberFixtures;
 import com.allog.dallog.member.dto.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -28,8 +30,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        ExtractableResponse<Response> tokenCreateResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
-        TokenResponse tokenResponse = tokenCreateResponse.as(TokenResponse.class);
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
 
         // when
         ExtractableResponse<Response> response = 자신의_정보를_조회한다(tokenResponse);
@@ -38,9 +39,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(memberResponse.getEmail()).isEqualTo(OAuthMemberFixtures.EMAIL);
-            assertThat(memberResponse.getDisplayName()).isEqualTo(OAuthMemberFixtures.DISPLAY_NAME);
-            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(OAuthMemberFixtures.PROFILE_IMAGE_URI);
+            assertThat(memberResponse.getEmail()).isEqualTo(EMAIL);
+            assertThat(memberResponse.getDisplayName()).isEqualTo(DISPLAY_NAME);
+            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(PROFILE_IMAGE_URI);
         });
     }
 

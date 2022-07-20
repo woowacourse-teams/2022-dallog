@@ -10,4 +10,5 @@ public class MemberFixtures {
     public static final String DISPLAY_NAME = "example";
 
     public static final Member MEMBER = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
+    public static final Member CREATOR = new Member("creator@email.com", "/image.png", "creator", SocialType.GOOGLE);
 }

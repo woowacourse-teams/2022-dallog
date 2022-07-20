@@ -1,11 +1,11 @@
 package com.allog.dallog.subscription.domain;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY;
+import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.category.domain.Category;
-import com.allog.dallog.common.fixtures.CategoryFixtures;
-import com.allog.dallog.common.fixtures.MemberFixtures;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +19,8 @@ class SubscriptionTest {
     @Test
     void 구독을_생성한다() {
         // given
-        Member member = MemberFixtures.MEMBER;
-        Category category = CategoryFixtures.CATEGORY;
+        Member member = MEMBER;
+        Category category = CATEGORY;
         String color = "#c9ad2e";
 
         // when & then
@@ -32,8 +32,8 @@ class SubscriptionTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        Member member = MemberFixtures.MEMBER;
-        Category category = CategoryFixtures.CATEGORY;
+        Member member = MEMBER;
+        Category category = CATEGORY;
 
         // when & then
         assertThatThrownBy(() -> new Subscription(member, category, color))

@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.global.config.JpaConfig;
+import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
@@ -31,12 +32,12 @@ class CategoryRepositoryTest {
     @Test
     void 페이지와_사이즈를_받아_해당하는_구간의_카테고리를_조회한다() {
         // given
-        memberRepository.save(MEMBER);
-        categoryRepository.save(new Category("BE 공식일정", MEMBER));
-        categoryRepository.save(new Category("FE 공식일정", MEMBER));
-        categoryRepository.save(new Category("알록달록 회의", MEMBER));
-        categoryRepository.save(new Category("지원플랫폼 근로", MEMBER));
-        categoryRepository.save(new Category("파랑의 코틀린 스터디", MEMBER));
+        Member member = memberRepository.save(MEMBER);
+        categoryRepository.save(new Category("BE 공식일정", member));
+        categoryRepository.save(new Category("FE 공식일정", member));
+        categoryRepository.save(new Category("알록달록 회의", member));
+        categoryRepository.save(new Category("지원플랫폼 근로", member));
+        categoryRepository.save(new Category("파랑의 코틀린 스터디", member));
 
         PageRequest pageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 
