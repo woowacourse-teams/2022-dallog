@@ -14,7 +14,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @SpringBootTest
 class MemberServiceTest {
 
@@ -51,13 +53,14 @@ class MemberServiceTest {
     @DisplayName("주어진 이메일로 가입된 회원이 있는지 확인한다.")
     @CsvSource(value = {"registerd@gmail.com,true", "notregistered@naver.com,false"})
     @ParameterizedTest
-    void 주어진_이메일로_가입된_회원이_있는지_확인한다(String email, boolean expected) {
+    void 주어진_이메일로_가입된_회원이_있는지_확인한다(String input, boolean expected) {
         // given
+        String email = "registerd@gmail.com";
         Member member = new Member(email, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
         memberService.save(member);
 
         // when
-        boolean actual = memberService.existsByEmail(email);
+        boolean actual = memberService.existsByEmail(input);
 
         // then
         assertThat(actual).isEqualTo(expected);
