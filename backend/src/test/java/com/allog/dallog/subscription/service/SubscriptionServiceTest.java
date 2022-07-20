@@ -40,7 +40,7 @@ class SubscriptionServiceTest {
     void 새로운_구독을_생성한다() {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
 
         // when
@@ -58,7 +58,7 @@ class SubscriptionServiceTest {
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryResponse.getId(),
@@ -70,7 +70,7 @@ class SubscriptionServiceTest {
     void 구독_id를_기반으로_단건_조회한다() {
         // given
         Member member = memberService.save(MemberFixtures.MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
+        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
         SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color));

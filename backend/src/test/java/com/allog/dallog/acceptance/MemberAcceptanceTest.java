@@ -1,10 +1,10 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.common.fixtures.OAuthMemberFixtures;
@@ -26,7 +26,8 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAuthMemberFixtures.OAUTH_PROVIDER, OAuthMemberFixtures.CODE);
+        ExtractableResponse<Response> tokenCreateResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
+        TokenResponse tokenResponse = tokenCreateResponse.as(TokenResponse.class);
 
         // when
         ExtractableResponse<Response> response = 자신의_정보를_조회한다(tokenResponse);
@@ -39,17 +40,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
             assertThat(memberResponse.getDisplayName()).isEqualTo(OAuthMemberFixtures.DISPLAY_NAME);
             assertThat(memberResponse.getProfileImageUrl()).isEqualTo(OAuthMemberFixtures.PROFILE_IMAGE_URI);
         });
-    }
-
-    private TokenResponse 자체_토큰을_생성한다(final String oauthProvider, final String code) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokenRequest(code))
-                .when().post("/api/auth/{oauthProvider}/token", oauthProvider)
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .as(TokenResponse.class);
     }
 
     private ExtractableResponse<Response> 자신의_정보를_조회한다(final TokenResponse tokenResponse) {
