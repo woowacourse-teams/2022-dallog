@@ -43,7 +43,9 @@ public class CategoryService {
     }
 
     public CategoriesResponse findMine(final Long memberId, final Pageable pageable) {
-        List<CategoryResponse> categoryResponses = categoryRepository.findSliceByMemberId(pageable, memberId)
+        Member member = memberService.getMember(memberId);
+
+        List<CategoryResponse> categoryResponses = categoryRepository.findSliceByMemberId(pageable, member.getId())
                 .getContent()
                 .stream()
                 .map(CategoryResponse::new)
