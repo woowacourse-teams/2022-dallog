@@ -40,4 +40,12 @@ public class CategoryController {
         List<CategoryResponse> categoryResponses = categoryService.findAll(pageable);
         return ResponseEntity.ok(new CategoriesResponse(pageNumber, categoryResponses));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<CategoriesResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember,
+                                                       Pageable pageable) {
+        int pageNumber = pageable.getPageNumber();
+        List<CategoryResponse> categoryResponses = categoryService.findMine(loginMember.getId(), pageable);
+        return ResponseEntity.ok(new CategoriesResponse(pageNumber, categoryResponses));
+    }
 }

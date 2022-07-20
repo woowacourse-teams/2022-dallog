@@ -70,22 +70,21 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
         // given
         TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
-        새로운_카테고리를_등록한다(tokenResponse, "BE 공식일정");
-        새로운_카테고리를_등록한다(tokenResponse, "FE 공식일정");
-        새로운_카테고리를_등록한다(tokenResponse, "알록달록 회의");
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
 
         int page = 0;
-        int size = 2;
 
         // when
-        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(tokenResponse, page, size);
+        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(tokenResponse, page, PAGE_SIZE);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
             assertThat(categoriesResponse.getPage()).isEqualTo(page);
-            assertThat(categoriesResponse.getCategories()).hasSize(3);
+            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE);
         });
     }
 
