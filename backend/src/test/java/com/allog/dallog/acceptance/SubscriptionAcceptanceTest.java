@@ -3,6 +3,7 @@ package com.allog.dallog.acceptance;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -11,7 +12,6 @@ import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.common.config.TestConfig;
-import com.allog.dallog.common.fixtures.SubscriptionFixtures;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import io.restassured.RestAssured;
@@ -99,7 +99,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         return RestAssured.given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new SubscriptionCreateRequest(SubscriptionFixtures.COLOR_RED))
+                .body(new SubscriptionCreateRequest(COLOR_RED))
                 .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryResponse.getId())
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
