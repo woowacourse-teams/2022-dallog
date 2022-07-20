@@ -2,6 +2,10 @@ const API = {
   CATEGORY_GET_SIZE: 4,
 };
 
+const ATOM_KEY = {
+  USER: 'userState',
+};
+
 const CACHE_KEY = {
   AUTH: 'auth',
   CATEGORIES: 'categories',
@@ -15,12 +19,12 @@ const STORAGE_KEY = {
 };
 
 const PATH = {
-  CALENDAR_PAGE: '/auth',
+  MAIN: '/',
+  AUTH: '/oauth',
   CATEGORY: '/category',
-  START_PAGE: '/start',
   PROFILE: '/profile',
 };
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
-export { API, CACHE_KEY, DAYS, STORAGE_KEY, PATH };
+export { API, ATOM_KEY, CACHE_KEY, DAYS, STORAGE_KEY, PATH };

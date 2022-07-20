@@ -1,21 +1,25 @@
 import axios from 'axios';
 
 const loginApi = {
-  baseUrl: 'http://09d2-218-39-176-142.ngrok.io/api/auth/google',
-  entryEndpoint: '/link',
-  tokenEndpoint: '/token',
+  baseUrl: 'http://3.38.116.83:8080',
+  endPoint: {
+    googleEntry: '/api/auth/google/oauth-uri',
+    googleToken: '/api/auth/google/token',
+  },
 
   getUrl: async () => {
-    const { data } = await axios.get(`${loginApi.baseUrl}${loginApi.entryEndpoint}`);
+    const { data } = await axios.get(`${loginApi.baseUrl}${loginApi.endPoint.googleEntry}`);
 
-    return data.data;
+    return data.oAuthUri;
   },
 
   auth: async () => {
     const code = new URLSearchParams(location.search).get('code');
-    const { data } = await axios.post(`${loginApi.baseUrl}${loginApi.tokenEndpoint}`, { code });
+    const { data } = await axios.post(`${loginApi.baseUrl}${loginApi.endPoint.googleToken}`, {
+      code,
+    });
 
-    return data.data.accessToken;
+    return data.accessToken;
   },
 };
 

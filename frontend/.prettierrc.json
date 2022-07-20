@@ -12,11 +12,13 @@
   "importOrder": [
     "@/hooks/(.*)$",
     "@/@types",
+    "@/atoms",
     "@/styles/(.*)$",
     "@/(components/@common/|components/|pages/)(.*)$",
     "@/constants",
     "@/utils",
     "@/(api|mocks)/(.*)$",
+    "react-icons",
     "^[./]"
   ],
   "importOrderSeparation": true,

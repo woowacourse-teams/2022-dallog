@@ -1,5 +1,7 @@
 import { InputRef } from '@/@types';
 
+import { STORAGE_KEY } from '@/constants';
+
 const createPostBody = (inputRef: InputRef) => {
   const inputElements = Object.values(inputRef).map((el) => el.current);
   const isValidInputRefs = inputElements.every((el) => el instanceof HTMLInputElement);
@@ -19,4 +21,12 @@ const createPostBody = (inputRef: InputRef) => {
   return body;
 };
 
-export { createPostBody };
+const getAccessToken = () => {
+  return localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
+};
+
+const setAccessToken = (accessToken: string) => {
+  localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
+};
+
+export { createPostBody, getAccessToken, setAccessToken };
