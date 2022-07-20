@@ -20,6 +20,7 @@ const STORAGE_KEY = {
 
 const PATH = {
   MAIN: '/',
+  AUTH: '/oauth',
   CATEGORY: '/category',
   PROFILE: '/profile',
 };
