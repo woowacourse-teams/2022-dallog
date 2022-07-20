@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Slice<Category> findSliceBy(final Pageable pageable);
+
+    Slice<Category> findSliceByMemberId(final Pageable pageable, final Long memberId);
 }
