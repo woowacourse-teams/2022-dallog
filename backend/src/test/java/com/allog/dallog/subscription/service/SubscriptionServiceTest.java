@@ -103,7 +103,6 @@ class SubscriptionServiceTest {
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
         MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-
         CategoryResponse categoryResponse1 = categoryService.save(creator.getId(),
                 CategoryFixtures.CATEGORY_CREATE_REQUEST_1);
         CategoryResponse categoryResponse2 = categoryService.save(creator.getId(),
@@ -111,13 +110,13 @@ class SubscriptionServiceTest {
         CategoryResponse categoryResponse3 = categoryService.save(creator.getId(),
                 CategoryFixtures.CATEGORY_CREATE_REQUEST_3);
 
-        subscriptionService.save(creator.getId(), categoryResponse1.getId(), SubscriptionFixtures.CREATE_REQUEST_RED);
-        subscriptionService.save(creator.getId(), categoryResponse2.getId(), SubscriptionFixtures.CREATE_REQUEST_BLUE);
-        subscriptionService.save(creator.getId(), categoryResponse3.getId(),
-                SubscriptionFixtures.CREATE_REQUEST_YELLOW);
+        MemberResponse member = memberService.save(MEMBER);
+        subscriptionService.save(member.getId(), categoryResponse1.getId(), SubscriptionFixtures.CREATE_REQUEST_RED);
+        subscriptionService.save(member.getId(), categoryResponse2.getId(), SubscriptionFixtures.CREATE_REQUEST_BLUE);
+        subscriptionService.save(member.getId(), categoryResponse3.getId(), SubscriptionFixtures.CREATE_REQUEST_YELLOW);
 
         // when
-        SubscriptionsResponse subscriptionsResponse = subscriptionService.findAByMemberId(creator.getId());
+        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);

@@ -41,7 +41,7 @@ public class SubscriptionService {
         return new SubscriptionResponse(subscription);
     }
 
-    public SubscriptionsResponse findAByMemberId(final Long memberId) {
+    public SubscriptionsResponse findByMemberId(final Long memberId) {
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
 
         List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
