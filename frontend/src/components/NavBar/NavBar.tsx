@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { userState } from '@/atoms';
 
@@ -19,7 +19,7 @@ interface NavBarProps {
 }
 
 function NavBar({ openLoginModal }: NavBarProps) {
-  const [user] = useRecoilState(userState);
+  const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -41,12 +41,12 @@ function NavBar({ openLoginModal }: NavBarProps) {
         🌙&nbsp;&nbsp;달록
       </Button>
       <div css={menus}>
-        {!user.accessToken && (
+        {!accessToken && (
           <Button cssProp={loginButton(theme)} onClick={openLoginModal}>
             로그인
           </Button>
         )}
-        {user.accessToken && (
+        {accessToken && (
           <>
             <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
               <FiCalendar size={28} />
