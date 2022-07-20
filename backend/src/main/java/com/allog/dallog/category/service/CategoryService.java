@@ -40,6 +40,14 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    public List<CategoryResponse> findMine(final Long memberId, final Pageable pageable) {
+        return categoryRepository.findSliceByMemberId(pageable, memberId)
+                .getContent()
+                .stream()
+                .map(CategoryResponse::new)
+                .collect(Collectors.toList());
+    }
+
     public CategoryResponse findById(final Long id) {
         return new CategoryResponse(getCategory(id));
     }
