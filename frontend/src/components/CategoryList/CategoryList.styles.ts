@@ -22,4 +22,9 @@ const intersectTarget = css`
   height: 10rem;
 `;
 
-export { categoryTable, categoryTableHeader, intersectTarget };
+const item = css`
+  flex: 1 1 0;
+  text-align: center;
+`;
+
+export { categoryTable, categoryTableHeader, intersectTarget, item };

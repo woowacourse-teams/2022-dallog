@@ -11,4 +11,9 @@ const categoryItem = ({ colors, flex }: Theme) => css`
   font-size: 4rem;
 `;
 
-export { categoryItem };
+const item = css`
+  flex: 1 1 0;
+  text-align: center;
+`;
+
+export { categoryItem, item };

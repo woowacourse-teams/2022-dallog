@@ -2,7 +2,9 @@ import { useTheme } from '@emotion/react';
 
 import { CategoryType } from '@/@types/category';
 
-import { categoryItem } from './CategoryItem.styles';
+import SubscribeButton from '@/components/SubscribeButton/SubscribeButton';
+
+import { categoryItem, item } from './CategoryItem.styles';
 
 interface CategoryItemProps {
   category: CategoryType;
@@ -13,8 +15,11 @@ function CategoryItem({ category }: CategoryItemProps) {
 
   return (
     <div css={categoryItem(theme)}>
-      <span>{category.createdAt.split('T')[0]}</span>
-      <span>{category.name}</span>
+      <span css={item}>{category.createdAt.split('T')[0]}</span>
+      <span css={item}>{category.name}</span>
+      <div css={item}>
+        <SubscribeButton></SubscribeButton>
+      </div>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
 import CategoryItem from '@/components/CategoryItem/CategoryItem';
 
-import { categoryTable, categoryTableHeader, intersectTarget } from './CategoryList.styles';
+import { categoryTable, categoryTableHeader, intersectTarget, item } from './CategoryList.styles';
 
 interface CategoryListProps {
   categoryList: CategoryType[];
@@ -25,8 +25,9 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
   return (
     <div css={categoryTable}>
       <div css={categoryTableHeader}>
-        <span> 생성 날짜 </span>
-        <span> 카테고리 이름 </span>
+        <span css={item}> 생성 날짜 </span>
+        <span css={item}> 카테고리 이름 </span>
+        <span css={item}> 구독 상태 </span>
       </div>
       {categoryList.map((category) => (
         <CategoryItem key={category.id} category={category} />
