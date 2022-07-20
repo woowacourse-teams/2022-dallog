@@ -106,4 +106,18 @@ class CategoryServiceTest {
                 .extracting(CategoryResponse::getName)
                 .contains("알록달록 회의", "지원플랫폼 근로");
     }
+
+    @DisplayName("id를 통해 카테고리를 단건 조회한다.")
+    @Test
+    void id를_통해_카테고리를_단건_조회한다() {
+        // given
+        Member member = memberRepository.save(MEMBER);
+        categoryService.save(member.getId(), new CategoryCreateRequest("BE 공식일정"));
+        CategoryResponse savedCategory = categoryService.save(member.getId(), new CategoryCreateRequest("FE 공식일정"));
+
+        // when & then
+        assertThat(categoryService.findById(savedCategory.getId()))
+                .usingRecursiveComparison()
+                .isEqualTo(savedCategory);
+    }
 }
