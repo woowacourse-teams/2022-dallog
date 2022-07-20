@@ -1,5 +1,8 @@
 package com.allog.dallog.acceptance;
 
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
 

@@ -1,5 +1,9 @@
 package com.allog.dallog.acceptance;
 
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE;
@@ -43,6 +47,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
         새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
         새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+
         // when
         ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(PAGE_NUMBER, PAGE_SIZE);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
