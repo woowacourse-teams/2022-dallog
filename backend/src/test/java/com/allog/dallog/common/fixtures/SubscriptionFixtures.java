@@ -1,4 +1,4 @@
-package com.allog.dallog.fixture;
+package com.allog.dallog.common.fixtures;
 
 public class SubscriptionFixtures {
 
