@@ -28,7 +28,7 @@ interface CategoryListProps {
 function CategoryList({ categoryList, getMoreCategories, hasNextPage }: CategoryListProps) {
   const { accessToken } = useRecoilValue(userState);
 
-  const { data: subscriptionsGetResponse } = useQuery<
+  const { data: subscriptionsGetResponse, refetch: refetchSubscriptions } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
   >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
@@ -53,7 +53,14 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
       {categoryList.map((category) => {
         const isSubscribing = subscriptions.includes(category.id);
 
-        return <CategoryItem key={category.id} category={category} isSubscribing={isSubscribing} />;
+        return (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            isSubscribing={isSubscribing}
+            refetch={refetchSubscriptions}
+          />
+        );
       })}
       <div ref={ref} css={intersectTarget}></div>
     </div>
