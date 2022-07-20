@@ -12,7 +12,7 @@ import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
-import com.allog.dallog.subscription.exception.NosuchSubscriptionException;
+import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -87,6 +87,6 @@ class SubscriptionServiceTest {
     void 존재하지_않는_구독_정보인_경우_예외를_던진다() {
         // given & when & then
         assertThatThrownBy(() -> subscriptionService.findById(0L))
-                .isInstanceOf(NosuchSubscriptionException.class);
+                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 }

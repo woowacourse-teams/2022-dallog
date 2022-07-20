@@ -7,7 +7,7 @@ import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
-import com.allog.dallog.subscription.exception.NosuchSubscriptionException;
+import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import com.allog.dallog.subscription.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +38,7 @@ public class SubscriptionService {
 
     public SubscriptionResponse findById(final Long id) {
         Subscription subscription = subscriptionRepository.findById(id)
-                .orElseThrow(NosuchSubscriptionException::new);
+                .orElseThrow(NoSuchSubscriptionException::new);
 
         return new SubscriptionResponse(subscription);
     }
