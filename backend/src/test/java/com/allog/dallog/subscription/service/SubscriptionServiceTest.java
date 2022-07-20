@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
@@ -148,14 +149,14 @@ class SubscriptionServiceTest {
         assertThat(subscriptionService.findByMemberId(member.getId()).getSubscriptions()).hasSize(2);
     }
 
-    @DisplayName("존재하지 않는 구독 정보를 삭제할 경우 예외를 던진다.")
+    @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")
     @Test
-    void 존재하지_않는_구독_정보를_삭제할_경우_예외를_던진다() {
+    void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
         MemberResponse member = memberService.save(MEMBER);
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, member.getId()))
-                .isInstanceOf(NoSuchSubscriptionException.class);
+                .isInstanceOf(NoPermissionException.class);
     }
 }
