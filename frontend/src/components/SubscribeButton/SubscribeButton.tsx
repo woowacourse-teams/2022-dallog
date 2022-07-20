@@ -1,5 +1,4 @@
 import { useTheme } from '@emotion/react';
-import { useEffect, useState } from 'react';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -7,19 +6,16 @@ import { subscribeButton } from './SubscribeButton.styles';
 
 interface SubscribeButtonProps {
   isSubscribing: boolean;
+  handleClickSubscribeButton: () => void;
 }
 
-function SubscribeButton({ isSubscribing }: SubscribeButtonProps) {
-  const [isSubscribe, setSubscribe] = useState(isSubscribing);
-
+function SubscribeButton({ isSubscribing, handleClickSubscribeButton }: SubscribeButtonProps) {
   const theme = useTheme();
 
-  useEffect(() => {
-    setSubscribe(isSubscribing);
-  }, [isSubscribing]);
-
   return (
-    <Button cssProp={subscribeButton(theme, isSubscribe)}>{isSubscribe ? '구독중' : '구독'}</Button>
+    <Button cssProp={subscribeButton(theme, isSubscribing)} onClick={handleClickSubscribeButton}>
+      {isSubscribing ? '구독중' : '구독'}
+    </Button>
   );
 }
 

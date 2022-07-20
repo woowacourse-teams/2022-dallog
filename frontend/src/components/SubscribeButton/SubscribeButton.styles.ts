@@ -1,11 +1,11 @@
 import { css, Theme } from '@emotion/react';
 
-const subscribeButton = ({ colors }: Theme, isSubscribe: boolean) => css`
+const subscribeButton = ({ colors }: Theme, isSubscribing: boolean) => css`
   width: 15rem;
   height: 8rem;
   border-radius: 3px;
 
-  background-color: ${isSubscribe ? colors.GRAY_500 : colors.YELLOW_500};
+  background-color: ${isSubscribing ? colors.GRAY_500 : colors.YELLOW_500};
 
   font-size: 3.5rem;
   font-weight: 700;
