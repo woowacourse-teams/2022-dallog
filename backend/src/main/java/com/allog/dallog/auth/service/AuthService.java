@@ -39,7 +39,7 @@ public class AuthService {
 
         saveMemberIfNotExists(oAuthMember, email);
 
-        Member foundMember = memberService.findByEmail(email);
+        Member foundMember = memberService.getByEmail(email);
         String accessToken = jwtTokenProvider.createToken(String.valueOf(foundMember.getId()));
 
         return new TokenResponse(accessToken);

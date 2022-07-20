@@ -44,7 +44,7 @@ class MemberServiceTest {
         MemberResponse savedMember = memberService.save(member);
 
         // when
-        Member foundMember = memberService.findByEmail(EMAIL);
+        Member foundMember = memberService.getByEmail(EMAIL);
 
         // then
         assertThat(foundMember.getId()).isEqualTo(savedMember.getId());
