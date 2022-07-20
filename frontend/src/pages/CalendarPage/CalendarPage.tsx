@@ -7,13 +7,14 @@ import { Schedule } from '@/@types';
 
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import Calendar from '@/components/Calendar/Calendar';
-import PageLayout from '@/components/PageLayout/PageLayout';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
 import { CACHE_KEY } from '@/constants';
 
 import scheduleApi from '@/api/schedule';
+
+import { calendarPage } from './CalendarPage.styles';
 
 function CalendarPage() {
   const {
@@ -37,13 +38,13 @@ function CalendarPage() {
   }
 
   return (
-    <PageLayout>
+    <div css={calendarPage}>
       <Calendar />
       <ModalPortal isOpen={isOpen} closeModal={closeModal}>
         <ScheduleAddModal refetch={refetchSchedules} closeModal={closeModal} />
       </ModalPortal>
       <ScheduleAddButton onClick={openModal} />
-    </PageLayout>
+    </div>
   );
 }
 
