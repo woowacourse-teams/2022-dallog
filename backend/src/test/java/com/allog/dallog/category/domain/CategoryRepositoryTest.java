@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.global.config.JpaConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,4 +71,37 @@ class CategoryRepositoryTest {
         // then
         assertThat(categories).hasSize(0);
     }
+
+    @DisplayName("특정 멤버가 생성한 카테고리를 페이징을 통해 조회한다.")
+    @Test
+    void 특정_멤버가_생성한_카테고리를_페이징을_통해_조회한다() {
+        // given
+        Member member2 = new Member("a@eamil.com", "/image.png", "parang", SocialType.GOOGLE);
+        memberRepository.save(MEMBER);
+        memberRepository.save(member2);
+        categoryRepository.save(new Category("BE 공식일정", MEMBER));
+        categoryRepository.save(new Category("FE 공식일정", MEMBER));
+        categoryRepository.save(new Category("알록달록 회의", MEMBER));
+        categoryRepository.save(new Category("지원플랫폼 근로", member2));
+        categoryRepository.save(new Category("파랑의 코틀린 스터디", member2));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        // when
+        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, MEMBER.getId());
+
+        // then
+        assertAll(() -> {
+                    assertThat(categories.getContent())
+                            .hasSize(3)
+                            .extracting(Category::getName)
+                            .containsExactlyInAnyOrder("BE 공식일정", "FE 공식일정", "알록달록 회의");
+                    assertThat(categories.getContent().stream()
+                            .map(Category::getCreatedAt)
+                            .allMatch(Objects::nonNull))
+                            .isTrue();
+                }
+        );
+    }
+
 }

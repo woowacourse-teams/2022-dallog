@@ -64,4 +64,37 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract();
     }
+
+    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 페이징을 통해 나누어 조회한다.")
+    @Test
+    void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
+        // given
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME);
+
+        int page = 0;
+
+        // when
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_페이징을_통해_조회한다(tokenResponse.getAccessToken(), page, PAGE_SIZE);
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+
+        // then
+        assertAll(() -> {
+            상태코드_200이_반환된다(response);
+            assertThat(categoriesResponse.getPage()).isEqualTo(page);
+            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE);
+        });
+    }
+
+    private ExtractableResponse<Response> 내가_등록한_카테고리를_페이징을_통해_조회한다(final String accessToken, final int page,
+                                                                    final int size) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().get("/api/categories/me?page={page}&size={size}", page, size)
+                .then().log().all()
+                .extract();
+    }
 }

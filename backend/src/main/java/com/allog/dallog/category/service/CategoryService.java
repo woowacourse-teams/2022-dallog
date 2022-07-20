@@ -3,6 +3,7 @@ package com.allog.dallog.category.service;
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
 import com.allog.dallog.member.domain.Member;
@@ -32,12 +33,22 @@ public class CategoryService {
         return new CategoryResponse(category);
     }
 
-    public List<CategoryResponse> findAll(final Pageable pageable) {
-        return categoryRepository.findSliceBy(pageable)
+    public CategoriesResponse findAll(final Pageable pageable) {
+        List<CategoryResponse> categoryResponses = categoryRepository.findSliceBy(pageable)
                 .getContent()
                 .stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
+        return new CategoriesResponse(pageable.getPageNumber(), categoryResponses);
+    }
+
+    public CategoriesResponse findMine(final Long memberId, final Pageable pageable) {
+        List<CategoryResponse> categoryResponses = categoryRepository.findSliceByMemberId(pageable, memberId)
+                .getContent()
+                .stream()
+                .map(CategoryResponse::new)
+                .collect(Collectors.toList());
+        return new CategoriesResponse(pageable.getPageNumber(), categoryResponses);
     }
 
     public CategoryResponse findById(final Long id) {
