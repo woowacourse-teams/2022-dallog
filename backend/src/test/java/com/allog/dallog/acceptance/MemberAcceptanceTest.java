@@ -30,8 +30,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        ExtractableResponse<Response> tokenCreateResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
-        TokenResponse tokenResponse = tokenCreateResponse.as(TokenResponse.class);
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
 
         // when
         ExtractableResponse<Response> response = 자신의_정보를_조회한다(tokenResponse);
