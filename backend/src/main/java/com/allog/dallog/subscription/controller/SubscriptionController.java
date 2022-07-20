@@ -26,9 +26,7 @@ public class SubscriptionController {
                                                      @PathVariable final Long categoryId,
                                                      @RequestBody final SubscriptionCreateRequest request) {
         SubscriptionResponse response = subscriptionService.save(loginMember.getId(), categoryId, request);
-        SubscriptionResponse subscriptionResponse = subscriptionService.findById(response.getId());
         return ResponseEntity.created(
-                        URI.create("/api/members/me/" + categoryId + "/subscriptions/" + response.getId()))
-                .body(subscriptionResponse);
+                URI.create("/api/members/me/" + categoryId + "/subscriptions/" + response.getId())).body(response);
     }
 }
