@@ -53,4 +53,12 @@ public class CategoryAcceptanceFixtures {
                 .then().log().all()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 내가_등록한_카테고리를_삭제한다(final String accessToken, final Long id) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().delete("/api/categories/{id}", id)
+                .then().log().all()
+                .extract();
+    }
 }
