@@ -18,8 +18,8 @@ public class MemberService {
     }
 
     @Transactional
-    public Member save(final Member member) {
-        return memberRepository.save(member);
+    public MemberResponse save(final Member member) {
+        return new MemberResponse(memberRepository.save(member));
     }
 
     public MemberResponse findById(final Long id) {

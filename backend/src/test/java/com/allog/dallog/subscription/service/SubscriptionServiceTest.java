@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
@@ -39,7 +39,7 @@ class SubscriptionServiceTest {
     @Test
     void 새로운_구독을_생성한다() {
         // given
-        Member member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(MEMBER);
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
 
@@ -57,7 +57,7 @@ class SubscriptionServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        Member member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(MEMBER);
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
 
         // when & then
@@ -69,7 +69,7 @@ class SubscriptionServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        Member member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(MEMBER);
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
         SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
