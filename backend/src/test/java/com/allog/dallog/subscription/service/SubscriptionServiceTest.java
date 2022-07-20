@@ -125,4 +125,34 @@ class SubscriptionServiceTest {
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
     }
+
+    @DisplayName("구독 정보를 삭제한다.")
+    @Test
+    void 구독_정보를_삭제한다() {
+        // given
+        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
+        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
+        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
+        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
+
+        MemberResponse member = memberService.save(MEMBER);
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse1.getId(),
+                CREATE_REQUEST_RED);
+        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
+        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+
+        // when
+        subscriptionService.deleteById(subscriptionResponse.getId());
+
+        // then
+        assertThat(subscriptionService.findByMemberId(member.getId()).getSubscriptions()).hasSize(2);
+    }
+
+    @DisplayName("존재하지 않는 구독 정보를 삭제할 경우 예외를 던진다.")
+    @Test
+    void 존재하지_않는_구독_정보를_삭제할_경우_예외를_던진다() {
+        // given & when & then
+        assertThatThrownBy(() -> subscriptionService.deleteById(0L))
+                .isInstanceOf(NoSuchSubscriptionException.class);
+    }
 }

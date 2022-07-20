@@ -57,4 +57,12 @@ public class SubscriptionService {
 
         return new SubscriptionResponse(subscription);
     }
+
+    public void deleteById(final Long id) {
+        if (!subscriptionRepository.existsById(id)) {
+            throw new NoSuchSubscriptionException();
+        }
+
+        subscriptionRepository.deleteById(id);
+    }
 }
