@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.member.dto.MemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +25,7 @@ class MemberServiceTest {
         Member member = new Member("devhudi@gmail.com", "/image.png", "후디", SocialType.GOOGLE);
 
         // when
-        Member actual = memberService.save(member);
+        MemberResponse actual = memberService.save(member);
 
         // then
         assertThat(actual).isNotNull();
@@ -38,7 +39,7 @@ class MemberServiceTest {
         String profileImageUrl = "/image.png";
         String displayName = "후디";
         Member member = new Member(email, profileImageUrl, displayName, SocialType.GOOGLE);
-        Member savedMember = memberService.save(member);
+        MemberResponse savedMember = memberService.save(member);
 
         // when
         Member foundMember = memberService.findByEmail(email);

@@ -1,5 +1,7 @@
 package com.allog.dallog.category.controller;
 
+import com.allog.dallog.auth.dto.LoginMember;
+import com.allog.dallog.auth.support.AuthenticationPrincipal;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
@@ -26,8 +28,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> save(@Valid @RequestBody final CategoryCreateRequest request) {
-        CategoryResponse categoryResponse = categoryService.save(request);
+    public ResponseEntity<CategoryResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
+                                                 @Valid @RequestBody final CategoryCreateRequest request) {
+        CategoryResponse categoryResponse = categoryService.save(loginMember.getId(), request);
         return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
     }
 
