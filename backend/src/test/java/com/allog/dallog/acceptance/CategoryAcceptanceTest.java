@@ -2,6 +2,7 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.id를_통해_카테고리를_가져온다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_삭제한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_수정한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
@@ -9,6 +10,7 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_404가_반환된다;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
@@ -103,6 +105,26 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             상태코드_204가_반환된다(response);
             assertThat(categoryResponse.getName()).isEqualTo(MODIFIED_CATEGORY_NAME);
+        });
+    }
+
+    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 삭제하면 상태코드 204를 반환한다.")
+    @Test
+    void 카테고리를_등록하고_내가_등록한_카테고리를_삭제하면_상태코드_204를_반환한다() {
+        // given
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
+        CategoryResponse savedCategory = 새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME)
+                .as(CategoryResponse.class);
+
+        // when
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_삭제한다(tokenResponse.getAccessToken(), savedCategory.getId());
+        ExtractableResponse<Response> categoryResponse = id를_통해_카테고리를_가져온다(savedCategory.getId());
+
+        // then
+        assertAll(() -> {
+            상태코드_204가_반환된다(response);
+            상태코드_404가_반환된다(categoryResponse);
         });
     }
 }

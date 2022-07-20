@@ -19,4 +19,8 @@ public class CommonAcceptanceFixtures {
     public static void 상태코드_204가_반환된다(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
+
+    public static void 상태코드_404가_반환된다(final ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
 }
