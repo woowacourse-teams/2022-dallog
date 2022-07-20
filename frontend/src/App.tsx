@@ -1,9 +1,8 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
+import MainPage from '@/pages/MainPage/MainPage';
 import MyPage from '@/pages/MyPage/MyPage';
-import StartPage from '@/pages/StartPage/StartPage';
 
 import { PATH } from '@/constants';
 
@@ -11,9 +10,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path={PATH.CALENDAR} element={<CalendarPage />} />
-        <Route path={PATH.START} element={<StartPage />} />
         <Route path={PATH.CATEGORY} element={<CategoryPage />} />
+        <Route path={PATH.MAIN} element={<MainPage />} />
         <Route path={PATH.PROFILE} element={<MyPage />} />
       </Routes>
     </Router>

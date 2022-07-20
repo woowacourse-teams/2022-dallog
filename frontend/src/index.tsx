@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { RecoilRoot } from 'recoil';
 
 import GlobalStyle from '@/styles/GlobalStyle';
 import theme from '@/styles/theme';
@@ -17,11 +18,13 @@ const queryClient = new QueryClient();
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-  </QueryClientProvider>,
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </RecoilRoot>,
   rootElement
 );

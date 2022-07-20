@@ -12,6 +12,7 @@
   "importOrder": [
     "@/hooks/(.*)$",
     "@/@types",
+    "@/atoms",
     "@/styles/(.*)$",
     "@/(components/@common/|components/|pages/)(.*)$",
     "@/constants",
