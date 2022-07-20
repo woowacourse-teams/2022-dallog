@@ -1,5 +1,8 @@
 package com.allog.dallog.member.service;
 
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.member.domain.Member;
@@ -22,7 +25,7 @@ class MemberServiceTest {
     @Test
     void 회원을_저장한다() {
         // given
-        Member member = new Member("devhudi@gmail.com", "/image.png", "후디", SocialType.GOOGLE);
+        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
 
         // when
         MemberResponse actual = memberService.save(member);
@@ -35,14 +38,11 @@ class MemberServiceTest {
     @Test
     void 이메일로_회원을_찾는다() {
         // given
-        String email = "newmember@gmail.com";
-        String profileImageUrl = "/image.png";
-        String displayName = "후디";
-        Member member = new Member(email, profileImageUrl, displayName, SocialType.GOOGLE);
+        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
         MemberResponse savedMember = memberService.save(member);
 
         // when
-        Member foundMember = memberService.findByEmail(email);
+        Member foundMember = memberService.findByEmail(EMAIL);
 
         // then
         assertThat(foundMember.getId()).isEqualTo(savedMember.getId());
@@ -51,16 +51,13 @@ class MemberServiceTest {
     @DisplayName("주어진 이메일로 가입된 회원이 있는지 확인한다.")
     @CsvSource(value = {"registerd@gmail.com,true", "notregistered@naver.com,false"})
     @ParameterizedTest
-    void 주어진_이메일로_가입된_회원이_있는지_확인한다(String input, boolean expected) {
+    void 주어진_이메일로_가입된_회원이_있는지_확인한다(String email, boolean expected) {
         // given
-        String email = "registerd@gmail.com";
-        String profileImageUrl = "/image.png";
-        String displayName = "후디";
-        Member member = new Member(email, profileImageUrl, displayName, SocialType.GOOGLE);
+        Member member = new Member(email, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
         memberService.save(member);
 
         // when
-        boolean actual = memberService.existsByEmail(input);
+        boolean actual = memberService.existsByEmail(email);
 
         // then
         assertThat(actual).isEqualTo(expected);

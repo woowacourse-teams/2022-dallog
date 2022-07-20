@@ -1,5 +1,8 @@
 package com.allog.dallog.member.domain;
 
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,14 +20,11 @@ class MemberRepositoryTest {
     @Test
     void 이메일을_통해_회원을_찾는다() {
         // given
-        String email = "devhudi@gmail.com";
-        String profileImageUrl = "/image.png";
-        String displayName = "후디";
-        Member member = new Member(email, profileImageUrl, displayName, SocialType.GOOGLE);
+        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
         Member savedMember = memberRepository.save(member);
 
         // when
-        Member foundMember = memberRepository.findByEmail(email).get();
+        Member foundMember = memberRepository.findByEmail(EMAIL).get();
 
         // then
         assertThat(savedMember.getId()).isEqualTo(foundMember.getId());
@@ -34,16 +34,10 @@ class MemberRepositoryTest {
     @Test
     void 중복된_이메일이_존재하는_경우_true를_반환한다() {
         // given
-        String email = "dev.hyeonic@gmail.com";
-        String profileImageUrl = "/image.png";
-        String displayName = "매트";
-        Member member = new Member(email, profileImageUrl, displayName, SocialType.GOOGLE);
+        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
         memberRepository.save(member);
 
-        // when
-        boolean actual = memberRepository.existsByEmail(email);
-
-        // then
-        assertThat(actual).isTrue();
+        // when & then
+        assertThat(memberRepository.existsByEmail(EMAIL)).isTrue();
     }
 }
