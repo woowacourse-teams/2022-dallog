@@ -25,9 +25,10 @@ public class SubscriptionController {
     public ResponseEntity<SubscriptionResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
                                                      @PathVariable final Long categoryId,
                                                      @RequestBody final SubscriptionCreateRequest request) {
-        Long id = subscriptionService.save(loginMember.getId(), categoryId, request);
-        SubscriptionResponse subscriptionResponse = subscriptionService.findById(id);
+        SubscriptionResponse response = subscriptionService.save(loginMember.getId(), categoryId, request);
+        SubscriptionResponse subscriptionResponse = subscriptionService.findById(response.getId());
         return ResponseEntity.created(
-                URI.create("/api/members/me/" + categoryId + "/subscriptions/" + id)).body(subscriptionResponse);
+                        URI.create("/api/members/me/" + categoryId + "/subscriptions/" + response.getId()))
+                .body(subscriptionResponse);
     }
 }

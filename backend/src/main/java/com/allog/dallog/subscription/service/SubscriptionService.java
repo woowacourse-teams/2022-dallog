@@ -28,12 +28,14 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public Long save(final Long memberId, final Long categoryId, final SubscriptionCreateRequest request) {
+    public SubscriptionResponse save(final Long memberId, final Long categoryId,
+                                     final SubscriptionCreateRequest request) {
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
 
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, request.getColor()));
-        return subscription.getId();
+
+        return new SubscriptionResponse(subscription);
     }
 
     public SubscriptionResponse findById(final Long id) {

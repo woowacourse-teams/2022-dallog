@@ -44,11 +44,12 @@ class SubscriptionServiceTest {
         String color = "#ffffff";
 
         // when
-        Long id = subscriptionService.save(member.getId(), categoryResponse.getId(),
+        SubscriptionResponse response = subscriptionService.save(member.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color));
 
         // then
-        assertThat(id).isNotNull();
+        assertThat(response.getCategory().getName()).isEqualTo("BE 일정");
+        assertThat(response.getColor()).isEqualTo(color);
     }
 
     @DisplayName("색 정보 형식이 잘못된 경우 예외를 던진다.")
@@ -71,17 +72,17 @@ class SubscriptionServiceTest {
         Member member = memberService.save(MemberFixtures.MEMBER);
         CategoryResponse categoryResponse = categoryService.save(new CategoryCreateRequest("BE 일정"));
         String color = "#ffffff";
-        Long id = subscriptionService.save(member.getId(), categoryResponse.getId(),
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color));
 
         // when
-        SubscriptionResponse subscriptionResponse = subscriptionService.findById(id);
+        SubscriptionResponse foundResponse = subscriptionService.findById(subscriptionResponse.getId());
 
         // then
         assertAll(() -> {
-            assertThat(subscriptionResponse.getId()).isEqualTo(id);
-            assertThat(subscriptionResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
-            assertThat(subscriptionResponse.getColor()).isEqualTo(color);
+            assertThat(foundResponse.getId()).isEqualTo(subscriptionResponse.getId());
+            assertThat(foundResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
+            assertThat(foundResponse.getColor()).isEqualTo(color);
         });
     }
 
