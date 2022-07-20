@@ -10,6 +10,7 @@ import { PATH } from '@/constants';
 
 import { BiCategory } from 'react-icons/bi';
 import { FaUserCircle } from 'react-icons/fa';
+import { FiCalendar } from 'react-icons/fi';
 
 import { loginButton, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
@@ -22,7 +23,7 @@ function NavBar({ openLoginModal }: NavBarProps) {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleClickLogoButton = () => {
+  const handleClickMainButton = () => {
     navigate(PATH.MAIN);
   };
 
@@ -36,7 +37,7 @@ function NavBar({ openLoginModal }: NavBarProps) {
 
   return (
     <div css={navBar}>
-      <Button cssProp={menu(theme)} onClick={handleClickLogoButton}>
+      <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
         🌙&nbsp;&nbsp;달록
       </Button>
       <div css={menus}>
@@ -47,6 +48,10 @@ function NavBar({ openLoginModal }: NavBarProps) {
         )}
         {user.accessToken && (
           <>
+            <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
+              <FiCalendar size={28} />
+              <span css={menuTitle}>달력</span>
+            </Button>
             <Button cssProp={menu(theme)} onClick={handleClickCategoryMenuButton}>
               <BiCategory size={28} />
               <span css={menuTitle}>카테고리</span>
