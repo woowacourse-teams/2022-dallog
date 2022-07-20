@@ -33,8 +33,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/api/members/me/subscriptions")
-    public ResponseEntity<SubscriptionsResponse> findMineSubscriptions(
-            @AuthenticationPrincipal final LoginMember loginMember) {
+    public ResponseEntity<SubscriptionsResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember) {
         SubscriptionsResponse response = subscriptionService.findByMemberId(loginMember.getId());
         return ResponseEntity.ok(response);
     }
