@@ -8,10 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
+import com.allog.dallog.common.fixtures.CategoryFixtures;
+import com.allog.dallog.common.fixtures.MemberFixtures;
+import com.allog.dallog.common.fixtures.SubscriptionFixtures;
 import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
@@ -92,5 +96,30 @@ class SubscriptionServiceTest {
         // given & when & then
         assertThatThrownBy(() -> subscriptionService.findById(0L))
                 .isInstanceOf(NoSuchSubscriptionException.class);
+    }
+
+    @DisplayName("회원 정보를 기반으로 구독 정보를 조회한다.")
+    @Test
+    void 회원_정보를_기반으로_구독_정보를_조회한다() {
+        // given
+        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
+
+        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(),
+                CategoryFixtures.CATEGORY_CREATE_REQUEST_1);
+        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(),
+                CategoryFixtures.CATEGORY_CREATE_REQUEST_2);
+        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(),
+                CategoryFixtures.CATEGORY_CREATE_REQUEST_3);
+
+        subscriptionService.save(creator.getId(), categoryResponse1.getId(), SubscriptionFixtures.CREATE_REQUEST_RED);
+        subscriptionService.save(creator.getId(), categoryResponse2.getId(), SubscriptionFixtures.CREATE_REQUEST_BLUE);
+        subscriptionService.save(creator.getId(), categoryResponse3.getId(),
+                SubscriptionFixtures.CREATE_REQUEST_YELLOW);
+
+        // when
+        SubscriptionsResponse subscriptionsResponse = subscriptionService.findAByMemberId(creator.getId());
+
+        // then
+        assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
     }
 }

@@ -9,12 +9,7 @@ import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDE
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.common.config.TestConfig;
-<<<<<<< HEAD
-import com.allog.dallog.fixture.SubscriptionFixtures;
-=======
-import com.allog.dallog.common.fixtures.OAuthMemberFixtures;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
->>>>>>> e056d17 (test: SubscriptionRepository 검증 추가)
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

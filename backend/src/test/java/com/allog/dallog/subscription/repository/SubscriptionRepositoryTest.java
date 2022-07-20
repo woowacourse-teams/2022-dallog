@@ -36,6 +36,8 @@ class SubscriptionRepositoryTest {
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
         Member member = memberRepository.save(MemberFixtures.MEMBER);
+
+        Member creator = memberRepository.save(MemberFixtures.CREATOR);
         Category category1 = categoryRepository.save(CategoryFixtures.CATEGORY_1);
         Category category2 = categoryRepository.save(CategoryFixtures.CATEGORY_2);
         Category category3 = categoryRepository.save(CategoryFixtures.CATEGORY_3);
