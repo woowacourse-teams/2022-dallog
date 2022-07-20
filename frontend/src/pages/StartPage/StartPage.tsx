@@ -8,11 +8,9 @@ interface StartPageProps {
 
 function StartPage({ isLoginModalOpen, closeLoginModal }: StartPageProps) {
   return (
-    <>
-      <ModalPortal isOpen={isLoginModalOpen} closeModal={closeLoginModal}>
-        <LoginModal />
-      </ModalPortal>
-    </>
+    <ModalPortal isOpen={isLoginModalOpen} closeModal={closeLoginModal}>
+      <LoginModal />
+    </ModalPortal>
   );
 }
 
