@@ -16,6 +16,7 @@ import com.allog.dallog.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
+import com.allog.dallog.category.exception.NoSuchCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -131,8 +132,8 @@ class CategoryServiceTest {
     void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
         // given
         Member creator = memberRepository.save(CREATOR);
-        categoryService.save(creator.getId(), new CategoryCreateRequest("BE 공식일정"));
-        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+        CategoryResponse savedCategory = categoryService.save(creator.getId(),
+                new CategoryCreateRequest(CATEGORY_NAME));
 
         // when
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
@@ -150,13 +151,44 @@ class CategoryServiceTest {
         // given
         Member member = memberRepository.save(MEMBER);
         Member creator = memberRepository.save(CREATOR);
-        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+        CategoryResponse savedCategory = categoryService.save(creator.getId(),
+                new CategoryCreateRequest(CATEGORY_NAME));
 
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
 
         // when & then
         assertThatThrownBy(
                 () -> categoryService.update(member.getId(), savedCategory.getId(), categoryUpdateRequest))
+                .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("회원과 카테고리 id를 통해 카테고리를 삭제한다.")
+    @Test
+    void 회원과_카테고리_id를_통해_카테고리를_삭제한다() {
+        // given
+        Member creator = memberRepository.save(CREATOR);
+        CategoryResponse savedCategory = categoryService.save(creator.getId(),
+                new CategoryCreateRequest(CATEGORY_NAME));
+
+        // when
+        categoryService.delete(creator.getId(), savedCategory.getId());
+
+        //then
+        assertThatThrownBy(() -> categoryService.getCategory(savedCategory.getId()))
+                .isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("자신이 만들지 않은 카테고리를 삭제할 경우 예외를 던진다.")
+    @Test
+    void 자신이_만들지_않은_카테고리를_삭제할_경우_예외를_던진다() {
+        // given
+        Member member = memberRepository.save(MEMBER);
+        Member creator = memberRepository.save(CREATOR);
+        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.delete(member.getId(), savedCategory.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 }

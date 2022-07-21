@@ -75,4 +75,15 @@ public class CategoryService {
 
         category.changeName(request.getName());
     }
+
+    @Transactional
+    public void delete(final Long memberId, final Long categoryId) {
+        memberService.getMember(memberId);
+
+        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
+            throw new NoPermissionException();
+        }
+
+        categoryRepository.deleteById(categoryId);
+    }
 }
