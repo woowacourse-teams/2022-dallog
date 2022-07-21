@@ -3,6 +3,7 @@ package com.allog.dallog.category.controller;
 import com.allog.dallog.auth.dto.LoginMember;
 import com.allog.dallog.auth.support.AuthenticationPrincipal;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,5 +50,13 @@ public class CategoryController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryResponse> findById(@PathVariable final Long categoryId) {
         return ResponseEntity.ok().body(categoryService.findById(categoryId));
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long categoryId,
+                                       @RequestBody final CategoryUpdateRequest request) {
+        categoryService.update(loginMember.getId(), categoryId, request);
+        return ResponseEntity.noContent().build();
     }
 }

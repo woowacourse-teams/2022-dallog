@@ -38,7 +38,7 @@ public class CategoryAcceptanceFixtures {
 
     public static ExtractableResponse<Response> id를_통해_카테고리를_가져온다(final Long id) {
         return RestAssured.given().log().all()
-                .when().get("/api/categories/{id}", id)
+                .when().get("/api/categories/{categoryId}", id)
                 .then().log().all()
                 .extract();
     }
@@ -48,8 +48,9 @@ public class CategoryAcceptanceFixtures {
         CategoryUpdateRequest request = new CategoryUpdateRequest(name);
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
-                .when().patch("/api/categories/{id}", id)
+                .when().patch("/api/categories/{categoryId}", id)
                 .then().log().all()
                 .extract();
     }
@@ -57,7 +58,7 @@ public class CategoryAcceptanceFixtures {
     public static ExtractableResponse<Response> 내가_등록한_카테고리를_삭제한다(final String accessToken, final Long id) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
-                .when().delete("/api/categories/{id}", id)
+                .when().delete("/api/categories/{categoryId}", id)
                 .then().log().all()
                 .extract();
     }
