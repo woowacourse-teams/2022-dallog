@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 
-import useModal from '@/hooks/useModal';
+import useToggle from '@/hooks/useToggle';
 
 import { Schedule } from '@/@types';
 
@@ -27,7 +27,7 @@ function CalendarPage() {
     scheduleApi.get
   );
 
-  const { isOpen, openModal, closeModal } = useModal();
+  const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
 
   if (isLoading || schedulesGetResponse === undefined) {
     return <>Loading</>;
@@ -40,10 +40,10 @@ function CalendarPage() {
   return (
     <div css={calendarPage}>
       <Calendar />
-      <ModalPortal isOpen={isOpen} closeModal={closeModal}>
-        <ScheduleAddModal refetch={refetchSchedules} closeModal={closeModal} />
+      <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
+        <ScheduleAddModal refetch={refetchSchedules} closeModal={toggleCalendarAddModalOpen} />
       </ModalPortal>
-      <ScheduleAddButton onClick={openModal} />
+      <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
     </div>
   );
 }

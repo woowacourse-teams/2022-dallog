@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import useModal from '@/hooks/useModal';
+import useToggle from '@/hooks/useToggle';
 
 import NavBar from '@/components/NavBar/NavBar';
 import ProtectRoute from '@/components/ProtectRoute';
@@ -12,15 +12,17 @@ import MyPage from '@/pages/MyPage/MyPage';
 import { PATH } from '@/constants';
 
 function App() {
-  const { isOpen, openModal, closeModal } = useModal();
+  const { state: isLoginModalOpen, toggleState: toggleLoginModalOpen } = useToggle();
 
   return (
     <Router>
-      <NavBar openLoginModal={openModal} />
+      <NavBar openLoginModal={toggleLoginModalOpen} />
       <Routes>
         <Route
           path={PATH.MAIN}
-          element={<MainPage isLoginModalOpen={isOpen} closeLoginModal={closeModal} />}
+          element={
+            <MainPage isLoginModalOpen={isLoginModalOpen} closeLoginModal={toggleLoginModalOpen} />
+          }
         />
         <Route path={PATH.AUTH} element={<AuthPage />} />
         <Route element={<ProtectRoute />}>
