@@ -27,10 +27,10 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_카테고리_정보를_등록하면_상태코드_201을_반환한다() {
         // given
-        String token = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
 
         // when
-        ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(token, CATEGORY_NAME);
+        ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
 
         // then
         상태코드_201이_반환된다(response);
@@ -40,11 +40,11 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_페이징을_통해_나누어_조회한다() {
         // given
-        String token = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
-        새로운_카테고리를_등록한다(token, CATEGORY_NAME);
-        새로운_카테고리를_등록한다(token, CATEGORY_NAME);
-        새로운_카테고리를_등록한다(token, CATEGORY_NAME);
-        새로운_카테고리를_등록한다(token, CATEGORY_NAME);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
+        새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
 
         // when
         ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(PAGE_NUMBER, PAGE_SIZE);
