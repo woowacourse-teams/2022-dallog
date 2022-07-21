@@ -1,4 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import useToggle from '@/hooks/useToggle';
@@ -12,22 +13,32 @@ import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
 import { CACHE_KEY } from '@/constants';
 
+import { getThisMonth, getThisYear } from '@/utils/date';
+
 import scheduleApi from '@/api/schedule';
 
 import { calendarPage } from './CalendarPage.styles';
 
 function CalendarPage() {
+  const [current, setCurrent] = useState({
+    year: getThisYear(),
+    month: getThisMonth(),
+  });
+
   const {
     isLoading,
     error,
     data: schedulesGetResponse,
     refetch: refetchSchedules,
-  } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(
-    CACHE_KEY.SCHEDULES,
-    scheduleApi.get
+  } = useQuery<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>(CACHE_KEY.SCHEDULES, () =>
+    scheduleApi.get(current.year, current.month)
   );
 
   const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
+
+  useEffect(() => {
+    refetchSchedules();
+  }, [current]);
 
   if (isLoading || schedulesGetResponse === undefined) {
     return <>Loading</>;
@@ -39,7 +50,7 @@ function CalendarPage() {
 
   return (
     <div css={calendarPage}>
-      <Calendar />
+      <Calendar current={current} setCurrent={setCurrent} />
       <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
         <ScheduleAddModal refetch={refetchSchedules} closeModal={toggleCalendarAddModalOpen} />
       </ModalPortal>

@@ -2,17 +2,22 @@ import axios from 'axios';
 
 import { Schedule } from '@/@types';
 
+import { API_KEY } from '@/constants';
+
 const scheduleApi = {
-  endpoint: '/api/schedule',
+  endpoint: `${API_KEY}/api/schedules`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 
-  get: async () => {
-    const response = await axios.get<{ schedules: Schedule[] }>(scheduleApi.endpoint, {
-      headers: scheduleApi.headers,
-    });
+  get: async (year: number, month: number) => {
+    const response = await axios.get<{ schedules: Schedule[] }>(
+      `${scheduleApi.endpoint}?year=${year}&month=${month}`,
+      {
+        headers: scheduleApi.headers,
+      }
+    );
 
     return response;
   },
