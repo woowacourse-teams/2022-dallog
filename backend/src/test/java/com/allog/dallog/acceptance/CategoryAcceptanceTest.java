@@ -10,7 +10,6 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_404가_반환된다;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
@@ -119,12 +118,9 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> response
                 = 내가_등록한_카테고리를_삭제한다(tokenResponse.getAccessToken(), savedCategory.getId());
-        ExtractableResponse<Response> categoryResponse = id를_통해_카테고리를_가져온다(savedCategory.getId());
+        // todo: ExceptionHandler 구현 이후 카테고리 단건 조회 응답 상태코드 404인지 확인
 
         // then
-        assertAll(() -> {
-            상태코드_204가_반환된다(response);
-            상태코드_404가_반환된다(categoryResponse);
-        });
+        상태코드_204가_반환된다(response);
     }
 }
