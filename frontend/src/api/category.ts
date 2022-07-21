@@ -20,9 +20,9 @@ const categoryApi = {
     return response;
   },
 
-  post: async (body: Pick<CategoryType, 'name'>) => {
+  post: async (accessToken: string | null, body: Pick<CategoryType, 'name'>) => {
     const response = await axios.post(categoryApi.endpoint, body, {
-      headers: categoryApi.headers,
+      headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
     return response;
