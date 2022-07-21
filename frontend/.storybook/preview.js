@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import GlobalStyle from '@/styles/GlobalStyle';
@@ -22,8 +23,11 @@ export const decorators = [
     <RecoilRoot>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+
         <QueryClientProvider client={queryClient}>
-          <Story />
+          <Router>
+            <Story />
+          </Router>
         </QueryClientProvider>
       </ThemeProvider>
     </RecoilRoot>
