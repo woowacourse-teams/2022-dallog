@@ -10,6 +10,8 @@ import { userState } from '@/atoms';
 
 import SubscribeButton from '@/components/SubscribeButton/SubscribeButton';
 
+import { CONFIRM_MESSAGE } from '@/constants';
+
 import subscriptionApi from '@/api/subscription';
 
 import { categoryItem, item } from './CategoryItem.styles';
@@ -31,7 +33,7 @@ function CategoryItem({ category, isSubscribing, refetch }: CategoryItemProps) {
     color: '#ffffff',
   };
 
-  const { mutate } = useMutation<
+  const { mutate: postSubscription } = useMutation<
     AxiosResponse<Pick<SubscriptionType, 'color'>>,
     AxiosError,
     Pick<SubscriptionType, 'color'>,
@@ -42,8 +44,23 @@ function CategoryItem({ category, isSubscribing, refetch }: CategoryItemProps) {
     },
   });
 
+  const { mutate: deleteSubscription } = useMutation(
+    () => subscriptionApi.delete(accessToken, category.id),
+    {
+      onSuccess: () => {
+        refetch();
+      },
+    }
+  );
+
+  const unsubscribe = () => {
+    if (window.confirm(CONFIRM_MESSAGE.UNSUBSCRIBE)) {
+      deleteSubscription();
+    }
+  };
+
   const handleClickSubscribeButton = () => {
-    !isSubscribing && mutate(body);
+    isSubscribing ? unsubscribe() : postSubscription(body);
   };
 
   return (

@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { SubscriptionType } from '@/@types/subscription';
 
 const subscriptionApi = {
   getEndpoint: '/api/members/me/subscriptions',
   postEndpoint: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
+  deleteEndpoint: (categoryId: number) => `/api/members/me/subscriptions/${categoryId}`,
 
   headers: {
     'Content-Type': 'application/json',
@@ -28,6 +29,14 @@ const subscriptionApi = {
     body: Pick<SubscriptionType, 'color'>
   ) => {
     const response = await axios.post(subscriptionApi.postEndpoint(categoryId), body, {
+      headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
+    });
+
+    return response;
+  },
+
+  delete: async (accessToken: string | null, categoryId: number): Promise<AxiosResponse<null>> => {
+    const response = await axios.delete<null>(subscriptionApi.deleteEndpoint(categoryId), {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
