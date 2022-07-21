@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const loginApi = {
-  baseUrl: 'http://3.38.116.83:8080',
+  baseUrl: process.env.API_KEY,
   endPoint: {
     googleEntry: '/api/auth/google/oauth-uri',
     googleToken: '/api/auth/google/token',
