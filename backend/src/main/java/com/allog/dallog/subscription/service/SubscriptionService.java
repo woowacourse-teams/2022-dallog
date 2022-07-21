@@ -1,5 +1,6 @@
 package com.allog.dallog.subscription.service;
 
+import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.service.CategoryService;
 import com.allog.dallog.member.domain.Member;
@@ -42,7 +43,9 @@ public class SubscriptionService {
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
+        Member member = memberService.getMember(memberId);
+
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
 
         List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
                 .map(SubscriptionResponse::new)
@@ -56,5 +59,15 @@ public class SubscriptionService {
                 .orElseThrow(NoSuchSubscriptionException::new);
 
         return new SubscriptionResponse(subscription);
+    }
+
+    public void deleteByIdAndMemberId(final Long id, final Long memberId) {
+        Member member = memberService.getMember(memberId);
+
+        if (!subscriptionRepository.existsByIdAndMemberId(id, member.getId())) {
+            throw new NoPermissionException();
+        }
+
+        subscriptionRepository.deleteByIdAndMemberId(id, member.getId());
     }
 }

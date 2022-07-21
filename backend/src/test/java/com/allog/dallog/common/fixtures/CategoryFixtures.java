@@ -15,6 +15,10 @@ public class CategoryFixtures {
 
     public static final Category CATEGORY = new Category(CATEGORY_NAME, MEMBER);
 
+    public static final String CATEGORY_1_NAME = "BE 일정";
+    public static final String CATEGORY_2_NAME = "BE 일정";
+    public static final String CATEGORY_3_NAME = "BE 일정";
+
     public static final Category CATEGORY_1 = new Category("BE 일정", CREATOR);
     public static final Category CATEGORY_2 = new Category("FE 일정", CREATOR);
     public static final Category CATEGORY_3 = new Category("공통 일정", CREATOR);

@@ -1,8 +1,8 @@
 package com.allog.dallog.subscription.repository;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_2;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_3;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_1_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_2_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_3_NAME;
 import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
 import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
@@ -40,13 +40,12 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        Member member = memberRepository.save(MEMBER);
-
         Member creator = memberRepository.save(CREATOR);
-        Category category1 = categoryRepository.save(CATEGORY_1);
-        Category category2 = categoryRepository.save(CATEGORY_2);
-        Category category3 = categoryRepository.save(CATEGORY_3);
+        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
+        Category category2 = categoryRepository.save(new Category(CATEGORY_2_NAME, creator));
+        Category category3 = categoryRepository.save(new Category(CATEGORY_3_NAME, creator));
 
+        Member member = memberRepository.save(MEMBER);
         Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
         Subscription subscription2 = new Subscription(member, category2, COLOR_BLUE);
         Subscription subscription3 = new Subscription(member, category3, COLOR_YELLOW);
@@ -73,5 +72,37 @@ class SubscriptionRepositoryTest {
 
         // then
         assertThat(subscriptions).isEmpty();
+    }
+
+    @DisplayName("회원의 특정 구독 정보 여부를 확인한다.")
+    @Test
+    void 회원의_특정_구독_정보_여부를_확인한다() {
+        // given
+        Member creator = memberRepository.save(CREATOR);
+        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
+
+        Member member = memberRepository.save(MEMBER);
+        Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
+
+        subscriptionRepository.save(subscription1);
+
+        // when
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(subscription1.getId(), member.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("회원의 존재하지 않는 구독 정보 여부를 확인한다.")
+    @Test
+    void 회원의_존재하지_않는_구독_정보_여부를_확인한다() {
+        // given
+        Member member = memberRepository.save(MEMBER);
+
+        // when
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(0L, member.getId());
+
+        // then
+        assertThat(actual).isFalse();
     }
 }

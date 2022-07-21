@@ -8,6 +8,7 @@ import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.subscription.service.SubscriptionService;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,12 @@ public class SubscriptionController {
     public ResponseEntity<SubscriptionsResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember) {
         SubscriptionsResponse response = subscriptionService.findByMemberId(loginMember.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/api/members/me/subscriptions/{subscriptionId}")
+    public ResponseEntity<Void> deleteById(@AuthenticationPrincipal final LoginMember loginMember,
+                                           @PathVariable final Long subscriptionId) {
+        subscriptionService.deleteByIdAndMemberId(subscriptionId, loginMember.getId());
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.allog.dallog.acceptance;
 
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
@@ -7,12 +8,12 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.auth.dto.TokenRequest;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -35,7 +36,14 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         CategoryResponse categoryResponse = 새로운_카테고리를_등록한다(tokenResponse, "BE 공식일정");
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_구독한다(tokenResponse, categoryResponse);
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().oauth2(tokenResponse.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new SubscriptionCreateRequest(COLOR_RED))
+                .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryResponse.getId())
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract();
 
         // then
         상태코드_201이_반환된다(response);
@@ -55,13 +63,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         카테고리를_구독한다(tokenResponse, categoryResponse3);
 
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(tokenResponse.getAccessToken())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/members/me/subscriptions")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract();
+        ExtractableResponse<Response> response = 구독_목록을_조회한다(tokenResponse);
         SubscriptionsResponse subscriptionsResponse = response.as(SubscriptionsResponse.class);
 
         // then
@@ -71,15 +73,30 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         });
     }
 
-    private TokenResponse 자체_토큰을_생성한다(final String oauthProvider, final String code) {
-        return RestAssured.given().log().all()
+    @DisplayName("구독을 취소할 경우 204를 반환한다.")
+    @Test
+    void 구독을_취소할_경우_204를_반환한다() {
+        // given
+        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
+        CategoryResponse categoryResponse1 = 새로운_카테고리를_등록한다(tokenResponse, "BE 일정");
+        CategoryResponse categoryResponse2 = 새로운_카테고리를_등록한다(tokenResponse, "FE 일정");
+        CategoryResponse categoryResponse3 = 새로운_카테고리를_등록한다(tokenResponse, "공통 일정");
+
+        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(tokenResponse, categoryResponse1);
+        카테고리를_구독한다(tokenResponse, categoryResponse2);
+        카테고리를_구독한다(tokenResponse, categoryResponse3);
+
+        // when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .auth().oauth2(tokenResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokenRequest(code))
-                .when().post("/api/auth/{oauthProvider}/token", oauthProvider)
+                .when().delete("/api/members/me/subscriptions/{subscriptionId}", subscriptionResponse.getId())
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .as(TokenResponse.class);
+                .statusCode(HttpStatus.NO_CONTENT.value())
+                .extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     private CategoryResponse 새로운_카테고리를_등록한다(final TokenResponse tokenResponse, final String name) {
@@ -94,8 +111,8 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .as(CategoryResponse.class);
     }
 
-    private ExtractableResponse<Response> 카테고리를_구독한다(final TokenResponse tokenResponse,
-                                                     final CategoryResponse categoryResponse) {
+    private SubscriptionResponse 카테고리를_구독한다(final TokenResponse tokenResponse,
+                                            final CategoryResponse categoryResponse) {
         return RestAssured.given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -103,6 +120,17 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryResponse.getId())
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
+                .extract()
+                .as(SubscriptionResponse.class);
+    }
+
+    private ExtractableResponse<Response> 구독_목록을_조회한다(final TokenResponse tokenResponse) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(tokenResponse.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/api/members/me/subscriptions")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
                 .extract();
     }
 }
