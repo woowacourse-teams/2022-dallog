@@ -2,7 +2,6 @@ package com.allog.dallog.member.service;
 
 import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
 import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
 import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,12 +54,13 @@ class MemberServiceTest {
     @Test
     void id를_통해_회원을_단건_조회한다() {
         // given
-        MemberResponse savedMember = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
 
         // when & then
-        assertThat(memberService.findById(savedMember.getId()))
+        assertThat(memberService.findById(member.getId()))
                 .usingRecursiveComparison()
-                .isEqualTo(savedMember);
+                .isEqualTo(member);
     }
 
     @DisplayName("주어진 이메일로 가입된 회원이 있는지 확인한다.")

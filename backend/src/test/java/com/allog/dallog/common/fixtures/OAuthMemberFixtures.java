@@ -1,7 +1,5 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.auth.dto.OAuthMember;
-
 public class OAuthMemberFixtures {
 
     public static final String OAUTH_PROVIDER = "google";
@@ -12,5 +10,7 @@ public class OAuthMemberFixtures {
     public static final String DISPLAY_NAME = "example";
     public static final String PROFILE_IMAGE_URI = "/image.png";
 
-    public static final OAuthMember OAUTH_MEMBER = new OAuthMember(EMAIL, DISPLAY_NAME, PROFILE_IMAGE_URI);
+    public static final String EMAIL2 = "another@email.com";
+    public static final String DISPLAY_NAME2 = "another";
+    public static final String PROFILE_IMAGE_URI2 = "/image.png";
 }

@@ -1,13 +1,18 @@
 package com.allog.dallog.subscription.service;
 
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_2;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_3;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_BLUE;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_RED;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_YELLOW;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_1_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_2_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_3_NAME;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME2;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL2;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI2;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_YELLOW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -16,7 +21,8 @@ import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.common.fixtures.MemberFixtures;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
@@ -49,9 +55,10 @@ class SubscriptionServiceTest {
     @Test
     void 새로운_구독을_생성한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
+        String color = COLOR_RED;
 
         // when
         SubscriptionResponse response = subscriptionService.save(member.getId(), categoryResponse.getId(),
@@ -69,7 +76,8 @@ class SubscriptionServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
 
         // when & then
@@ -81,9 +89,10 @@ class SubscriptionServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
+        String color = COLOR_RED;
         SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color));
 
@@ -110,15 +119,17 @@ class SubscriptionServiceTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
+        MemberResponse creator = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        CategoryResponse response = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_1_NAME));
+        CategoryResponse response2 = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_2_NAME));
+        CategoryResponse response3 = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_3_NAME));
 
-        MemberResponse member = memberService.save(MEMBER);
-        subscriptionService.save(member.getId(), categoryResponse1.getId(), CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE));
+        subscriptionService.save(member.getId(), response.getId(), new SubscriptionCreateRequest(COLOR_RED));
+        subscriptionService.save(member.getId(), response2.getId(), new SubscriptionCreateRequest(COLOR_BLUE));
+        subscriptionService.save(member.getId(), response3.getId(), new SubscriptionCreateRequest(COLOR_YELLOW));
 
         // when
         SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
@@ -131,16 +142,18 @@ class SubscriptionServiceTest {
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
+        MemberResponse creator = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        CategoryResponse response = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_1_NAME));
+        CategoryResponse response2 = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_2_NAME));
+        CategoryResponse response3 = categoryService.save(creator.getId(), new CategoryCreateRequest(CATEGORY_3_NAME));
 
-        MemberResponse member = memberService.save(MEMBER);
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse1.getId(),
-                CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE));
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), response.getId(),
+                new SubscriptionCreateRequest(COLOR_RED));
+        subscriptionService.save(member.getId(), response2.getId(), new SubscriptionCreateRequest(COLOR_BLUE));
+        subscriptionService.save(member.getId(), response3.getId(), new SubscriptionCreateRequest(COLOR_YELLOW));
 
         // when
         subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), member.getId());
@@ -153,7 +166,8 @@ class SubscriptionServiceTest {
     @Test
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        MemberResponse member = memberService.save(
+                new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, member.getId()))

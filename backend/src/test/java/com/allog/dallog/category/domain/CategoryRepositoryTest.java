@@ -4,14 +4,16 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_0;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_8;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR2;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.global.config.JpaConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ class CategoryRepositoryTest {
     @Test
     void 페이지와_사이즈를_받아_해당하는_구간의_카테고리를_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         categoryRepository.save(new Category("BE 공식일정", creator));
         categoryRepository.save(new Category("FE 공식일정", creator));
         categoryRepository.save(new Category("알록달록 회의", creator));
@@ -73,8 +75,8 @@ class CategoryRepositoryTest {
     @Test
     void 특정_멤버가_생성한_카테고리를_페이징을_통해_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Member creator2 = memberRepository.save(CREATOR2);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        Member creator2 = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         categoryRepository.save(new Category("BE 공식일정", creator));
         categoryRepository.save(new Category("FE 공식일정", creator));
         categoryRepository.save(new Category("알록달록 회의", creator));

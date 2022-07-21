@@ -3,7 +3,9 @@ package com.allog.dallog.category.service;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -13,6 +15,7 @@ import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +40,7 @@ class CategoryServiceTest {
     void 새로운_카테고리를_생성한다() {
         // given
         CategoryCreateRequest request = new CategoryCreateRequest(CATEGORY_NAME);
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
 
         // when
         CategoryResponse response = categoryService.save(creator.getId(), request);
@@ -52,7 +55,7 @@ class CategoryServiceTest {
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
         CategoryCreateRequest request = new CategoryCreateRequest(name);
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
 
         // when & then
         assertThatThrownBy(() -> categoryService.save(creator.getId(), request))
@@ -63,7 +66,7 @@ class CategoryServiceTest {
     @Test
     void 페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         Long creatorId = creator.getId();
         categoryService.save(creatorId, new CategoryCreateRequest("BE 공식일정"));
         categoryService.save(creatorId, new CategoryCreateRequest("FE 공식일정"));
@@ -87,7 +90,7 @@ class CategoryServiceTest {
     @Test
     void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         Long creatorId = creator.getId();
         categoryService.save(creatorId, new CategoryCreateRequest("BE 공식일정"));
         categoryService.save(creatorId, new CategoryCreateRequest("FE 공식일정"));
@@ -111,7 +114,7 @@ class CategoryServiceTest {
     @Test
     void id를_통해_카테고리를_단건_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
         categoryService.save(creator.getId(), new CategoryCreateRequest("BE 공식일정"));
         CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
 
