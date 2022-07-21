@@ -4,6 +4,8 @@ import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
+import { API_KEY } from '@/constants';
+
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
@@ -28,9 +30,10 @@ const handlers = [
 
   rest.post<Pick<CategoryType, 'name'>>(categoryApi.endpoint, (req, res, ctx) => {
     categoryDB.categories.push({
+      ...req.body,
       id: categoryDB.categories.length + 1,
       createdAt: new Date().toISOString().slice(0, -5),
-      ...req.body,
+      creator: profileDB,
     });
 
     return res(ctx.status(201));
@@ -55,7 +58,7 @@ const handlers = [
   }),
 
   rest.post<Pick<SubscriptionType, 'color'>>(
-    `/api/members/me/categories/:id/subscriptions`,
+    `${API_KEY}/api/members/me/categories/:id/subscriptions`,
     (req, res, ctx) => {
       const { id } = req.params;
       const categoryId = parseInt(id as string);
@@ -63,7 +66,7 @@ const handlers = [
         category: {
           id: categoryDB.categories[categoryId - 1].id,
           name: categoryDB.categories[categoryId - 1].name,
-          creator: profileDB.data,
+          creator: profileDB,
           createdAt: categoryDB.categories[categoryId - 1].createdAt,
         },
         color: req.body.color,
@@ -75,7 +78,7 @@ const handlers = [
     }
   ),
 
-  rest.delete(`/api/members/me/subscriptions/:id`, (req, res, ctx) => {
+  rest.delete(`${API_KEY}/api/members/me/subscriptions/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const categoryId = parseInt(id as string);
     const subscriptionIndex = subscriptionDB.subscriptions.findIndex(
