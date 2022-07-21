@@ -1,12 +1,17 @@
 package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.id를_통해_카테고리를_가져온다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_삭제한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_수정한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
@@ -15,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.category.dto.response.CategoriesResponse;
+import com.allog.dallog.category.dto.response.CategoryResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -79,5 +85,42 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
             assertThat(categoriesResponse.getPage()).isEqualTo(page);
             assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE_2);
         });
+    }
+
+    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 수정하면 상태코드 204를 반환한다.")
+    @Test
+    void 카테고리를_등록하고_내가_등록한_카테고리를_수정하면_상태코드_204를_반환한다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME)
+                .as(CategoryResponse.class);
+
+        // when
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_수정한다(accessToken, savedCategory.getId(), MODIFIED_CATEGORY_NAME);
+        CategoryResponse categoryResponse = id를_통해_카테고리를_가져온다(savedCategory.getId()).as(CategoryResponse.class);
+
+        // then
+        assertAll(() -> {
+            상태코드_204가_반환된다(response);
+            assertThat(categoryResponse.getName()).isEqualTo(MODIFIED_CATEGORY_NAME);
+        });
+    }
+
+    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 삭제하면 상태코드 204를 반환한다.")
+    @Test
+    void 카테고리를_등록하고_내가_등록한_카테고리를_삭제하면_상태코드_204를_반환한다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME)
+                .as(CategoryResponse.class);
+
+        // when
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_삭제한다(accessToken, savedCategory.getId());
+        // todo: ExceptionHandler 구현 이후 카테고리 단건 조회 응답 상태코드 404인지 확인
+
+        // then
+        상태코드_204가_반환된다(response);
     }
 }
