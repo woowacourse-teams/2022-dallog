@@ -23,6 +23,8 @@ class MemberServiceTest {
     @Autowired
     private MemberService memberService;
 
+    private Member member;
+
     @DisplayName("회원을 저장한다.")
     @Test
     void 회원을_저장한다() {
