@@ -58,7 +58,7 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
             key={category.id}
             category={category}
             isSubscribing={isSubscribing}
-            refetch={refetchSubscriptions}
+            refetchSubscriptions={refetchSubscriptions}
           />
         );
       })}

@@ -75,6 +75,20 @@ const handlers = [
       return res(ctx.status(201), ctx.json(newSubscription));
     }
   ),
+
+  rest.delete(`/api/members/me/subscriptions/:id`, (req, res, ctx) => {
+    const { id } = req.params;
+    const categoryId = parseInt(id as string);
+    const subscriptionIndex = subscriptionDB.subscriptions.findIndex(
+      (el) => el.category.id === categoryId
+    );
+
+    if (subscriptionIndex > -1) {
+      subscriptionDB.subscriptions.splice(subscriptionIndex, 1);
+    }
+
+    return res(ctx.status(204));
+  }),
 ];
 
 export { handlers };

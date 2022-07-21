@@ -15,6 +15,12 @@ const CACHE_KEY = {
   SUBSCRIPTIONS: 'subscriptions',
 };
 
+const CONFIRM_MESSAGE = {
+  UNSUBSCRIBE: '구독을 해제하시겠습니까?',
+};
+
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
 const STORAGE_KEY = {
   ACCESS_TOKEN: 'accessToken',
 };
@@ -26,6 +32,4 @@ const PATH = {
   PROFILE: '/profile',
 };
 
-const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
-export { API, ATOM_KEY, CACHE_KEY, DAYS, STORAGE_KEY, PATH };
+export { API, ATOM_KEY, CACHE_KEY, CONFIRM_MESSAGE, DAYS, STORAGE_KEY, PATH };
