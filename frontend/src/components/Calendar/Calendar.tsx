@@ -26,17 +26,25 @@ import {
   navButton,
 } from './Calendar.styles';
 
-function Calendar() {
+interface CalendarProps {
+  current: {
+    year: number;
+    month: number;
+  };
+  setCurrent: React.Dispatch<
+    React.SetStateAction<{
+      year: number;
+      month: number;
+    }>
+  >;
+}
+
+function Calendar({ current, setCurrent }: CalendarProps) {
   const theme = useTheme();
 
   const [calendarMonth, setCalendarMonth] = useState(
     getCalendarMonth(getThisYear(), getThisMonth())
   );
-
-  const [current, setCurrent] = useState({
-    year: getThisYear(),
-    month: getThisMonth(),
-  });
 
   const handleClickBeforeMonthButton = () => {
     const { year, month } = getBeforeYearMonth(current.year, current.month);
