@@ -27,10 +27,10 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        String token = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
 
         // when
-        ExtractableResponse<Response> response = 자신의_정보를_조회한다(token);
+        ExtractableResponse<Response> response = 자신의_정보를_조회한다(accessToken);
         MemberResponse memberResponse = response.as(MemberResponse.class);
 
         // then
