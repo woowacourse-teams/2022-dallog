@@ -11,6 +11,7 @@ import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,13 @@ public class CategoryController {
                                        @PathVariable final Long categoryId,
                                        @RequestBody final CategoryUpdateRequest request) {
         categoryService.update(loginMember.getId(), categoryId, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long categoryId) {
+        categoryService.delete(loginMember.getId(), categoryId);
         return ResponseEntity.noContent().build();
     }
 }
