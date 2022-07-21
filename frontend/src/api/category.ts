@@ -2,8 +2,10 @@ import axios from 'axios';
 
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
+import { API_KEY } from '@/constants';
+
 const categoryApi = {
-  endpoint: '/api/categories',
+  endpoint: `${API_KEY}/api/categories`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -18,9 +20,9 @@ const categoryApi = {
     return response;
   },
 
-  post: async (body: Pick<CategoryType, 'name'>) => {
+  post: async (accessToken: string | null, body: Pick<CategoryType, 'name'>) => {
     const response = await axios.post(categoryApi.endpoint, body, {
-      headers: categoryApi.headers,
+      headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
     return response;

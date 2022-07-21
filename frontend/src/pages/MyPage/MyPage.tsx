@@ -1,7 +1,10 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
 import { ProfileType } from '@/@types/profile';
+
+import { userState } from '@/atoms';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -17,7 +20,7 @@ import {
 } from './MyPage.styles';
 
 function MyPage() {
-  const accessToken = 'Bearer aaaaaaaaaa.bbbbbbbbbb.cccccccccc';
+  const { accessToken } = useRecoilValue(userState);
 
   const {
     isLoading,
@@ -35,7 +38,7 @@ function MyPage() {
     return <div>Error</div>;
   }
 
-  const { displayName, email, profileImageUri } = profileGetResponse.data;
+  const { displayName, email, profileImageUrl } = profileGetResponse.data;
 
   return (
     <div css={myPage}>
@@ -51,7 +54,7 @@ function MyPage() {
         </div>
         <div css={imageInfo}>
           <span>프로필 사진</span>
-          <img src={profileImageUri} css={imageSize} alt="프로필 이미지" />
+          <img src={profileImageUrl} css={imageSize} alt="프로필 이미지" />
         </div>
       </div>
     </div>

@@ -2,8 +2,11 @@ import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef } from 'react';
 import { useMutation } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
+
+import { userState } from '@/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import FieldSet from '@/components/@common/FieldSet/FieldSet';
@@ -29,12 +32,14 @@ interface CategoryAddModalProps {
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const theme = useTheme();
 
-  const { mutate } = useMutation<
+  const { accessToken } = useRecoilValue(userState);
+
+  const { mutate: postCategory } = useMutation<
     AxiosResponse<Pick<CategoryType, 'name'>>,
     AxiosError,
     Pick<CategoryType, 'name'>,
     unknown
-  >(categoryApi.post, { onSuccess: () => onSuccessPostCategory() });
+  >((body) => categoryApi.post(accessToken, body), { onSuccess: () => onSuccessPostCategory() });
 
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
@@ -53,7 +58,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
       return;
     }
 
-    mutate(body);
+    postCategory(body);
   };
 
   const onSuccessPostCategory = () => {

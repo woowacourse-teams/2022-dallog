@@ -21,10 +21,10 @@ function CategoryPage() {
     hasNextPage,
   } = useInfiniteQuery<AxiosResponse<CategoriesGetResponseType>, AxiosError>(
     CACHE_KEY.CATEGORIES,
-    ({ pageParam = 1 }) => categoryApi.get(pageParam, API.CATEGORY_GET_SIZE),
+    ({ pageParam = 0 }) => categoryApi.get(pageParam, API.CATEGORY_GET_SIZE),
     {
       getNextPageParam: ({ data }) => {
-        if (data.data.length) {
+        if (data.categories.length > 0) {
           return data.page + 1;
         }
       },
@@ -39,7 +39,7 @@ function CategoryPage() {
     return <div>Error</div>;
   }
 
-  const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.data);
+  const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.categories);
 
   return (
     <div css={categoryPage}>

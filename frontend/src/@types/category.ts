@@ -1,13 +1,15 @@
+import { ProfileType } from './profile';
+
 interface CategoryType {
   id: number;
   name: string;
+  creator: ProfileType;
   createdAt: string;
 }
 
 interface CategoriesGetResponseType {
-  totalCount: number;
   page: number;
-  data: CategoryType[];
+  categories: CategoryType[];
 }
 
 export { CategoryType, CategoriesGetResponseType };
