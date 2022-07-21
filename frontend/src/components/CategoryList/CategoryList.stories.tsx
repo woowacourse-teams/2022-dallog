@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof CategoryList> = (args) => <CategoryList {.
 
 export const Primary = Template.bind({});
 Primary.args = {
-  categoryList: categoryDB.data,
+  categoryList: categoryDB.categories,
 };
