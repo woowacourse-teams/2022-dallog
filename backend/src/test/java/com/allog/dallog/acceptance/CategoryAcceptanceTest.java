@@ -7,8 +7,8 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,14 +47,14 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(PAGE_NUMBER, PAGE_SIZE);
+        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(PAGE_NUMBER_1, PAGE_SIZE_2);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getPage()).isEqualTo(PAGE_NUMBER);
-            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE);
+            assertThat(categoriesResponse.getPage()).isEqualTo(PAGE_NUMBER_1);
+            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE_2);
         });
     }
 
@@ -70,14 +70,14 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         int page = 0;
 
         // when
-        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(accessToken, page, PAGE_SIZE);
+        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(accessToken, page, PAGE_SIZE_2);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
             assertThat(categoriesResponse.getPage()).isEqualTo(page);
-            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE);
+            assertThat(categoriesResponse.getCategories()).hasSize(PAGE_SIZE_2);
         });
     }
 }

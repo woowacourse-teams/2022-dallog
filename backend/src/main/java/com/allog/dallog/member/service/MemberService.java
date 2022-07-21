@@ -31,7 +31,7 @@ public class MemberService {
                 .orElseThrow(NoSuchMemberException::new);
     }
 
-    public Member findByEmail(final String email) {
+    public Member getByEmail(final String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchMemberException::new);
     }
