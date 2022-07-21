@@ -111,13 +111,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_삭제하면_상태코드_204를_반환한다() {
         // given
-        TokenResponse tokenResponse = 자체_토큰을_생성한다(OAUTH_PROVIDER, CODE);
-        CategoryResponse savedCategory = 새로운_카테고리를_등록한다(tokenResponse, CATEGORY_NAME)
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME)
                 .as(CategoryResponse.class);
 
         // when
         ExtractableResponse<Response> response
-                = 내가_등록한_카테고리를_삭제한다(tokenResponse.getAccessToken(), savedCategory.getId());
+                = 내가_등록한_카테고리를_삭제한다(accessToken, savedCategory.getId());
         // todo: ExceptionHandler 구현 이후 카테고리 단건 조회 응답 상태코드 404인지 확인
 
         // then
