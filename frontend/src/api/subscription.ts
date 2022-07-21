@@ -2,10 +2,13 @@ import axios, { AxiosResponse } from 'axios';
 
 import { SubscriptionType } from '@/@types/subscription';
 
+import { API_KEY } from '@/constants';
+
 const subscriptionApi = {
-  getEndpoint: '/api/members/me/subscriptions',
-  postEndpoint: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
-  deleteEndpoint: (categoryId: number) => `/api/members/me/subscriptions/${categoryId}`,
+  getEndpoint: `${API_KEY}/api/members/me/subscriptions`,
+  postEndpoint: (categoryId: number) =>
+    `${API_KEY}/api/members/me/categories/${categoryId}/subscriptions`,
+  deleteEndpoint: (categoryId: number) => `${API_KEY}/api/members/me/subscriptions/${categoryId}`,
 
   headers: {
     'Content-Type': 'application/json',

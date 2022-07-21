@@ -1,6 +1,9 @@
+import { ProfileType } from './profile';
+
 interface CategoryType {
   id: number;
   name: string;
+  creator: ProfileType;
   createdAt: string;
 }
 

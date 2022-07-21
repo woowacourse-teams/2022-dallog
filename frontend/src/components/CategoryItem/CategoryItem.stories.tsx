@@ -1,5 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { profileDB } from '@/mocks/data';
+
 import CategoryItem from './CategoryItem';
 
 export default {
@@ -11,5 +13,5 @@ const Template: ComponentStory<typeof CategoryItem> = (args) => <CategoryItem {.
 
 export const Primary = Template.bind({});
 Primary.args = {
-  category: { id: 1, name: '달록 공식 일정', createdAt: '2022-07-04T13:00:00' },
+  category: { id: 1, name: '달록 공식 일정', createdAt: '2022-07-04T13:00:00', creator: profileDB },
 };
