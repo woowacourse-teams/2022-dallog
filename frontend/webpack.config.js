@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const prod = process.env.NODE_ENV === 'production';
 
@@ -50,6 +51,7 @@ module.exports = {
       template: './src/index.html',
     }),
     new CleanWebpackPlugin(),
+    new Dotenv(),
   ],
   devServer: {
     historyApiFallback: true,
