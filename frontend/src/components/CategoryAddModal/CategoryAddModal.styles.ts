@@ -4,7 +4,7 @@ const categoryAddModal = ({ colors, flex }: Theme) => css`
   ${flex.column}
 
   width: 120rem;
-  height: 160rem;
+  height: 90rem;
   padding: 12.5rem;
   border-radius: 12px;
   justify-content: space-between;
