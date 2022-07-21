@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
-const content = css`
+const calendarPage = css`
   margin-top: 16rem;
   padding: 2rem;
 `;
 
-export { content };
+export { calendarPage };

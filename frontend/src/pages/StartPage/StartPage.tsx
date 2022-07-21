@@ -1,18 +1,16 @@
-import useModal from '@/hooks/useModal';
-
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import LoginModal from '@/components/LoginModal/LoginModal';
-import PageLayout from '@/components/PageLayout/PageLayout';
 
-function StartPage() {
-  const { isOpen, openModal, closeModal } = useModal();
+interface StartPageProps {
+  isLoginModalOpen: boolean;
+  closeLoginModal: () => void;
+}
 
+function StartPage({ isLoginModalOpen, closeLoginModal }: StartPageProps) {
   return (
-    <PageLayout openLoginModal={openModal}>
-      <ModalPortal isOpen={isOpen} closeModal={closeModal}>
-        <LoginModal />
-      </ModalPortal>
-    </PageLayout>
+    <ModalPortal isOpen={isLoginModalOpen} closeModal={closeLoginModal}>
+      <LoginModal />
+    </ModalPortal>
   );
 }
 

@@ -15,6 +15,8 @@ const global = css`
   }
 
   body {
+    overflow: overlay;
+
     font-family: 'Pretendard', sans-serif;
     font-size: 3rem;
   }

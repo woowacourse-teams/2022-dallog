@@ -3,6 +3,8 @@ import { css, Theme } from '@emotion/react';
 const myPage = ({ colors }: Theme) => css`
   width: 100vw;
   height: 100vh;
+  margin-top: 16rem;
+  padding: 2rem;
 
   background: ${colors.GRAY_100};
 `;
