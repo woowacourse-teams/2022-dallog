@@ -5,7 +5,9 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGOR
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,6 +21,7 @@ import com.allog.dallog.category.exception.InvalidCategoryException;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,10 +29,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CategoryServiceTest {
 
     @Autowired
@@ -149,8 +154,9 @@ class CategoryServiceTest {
     @Test
     void 자신이_만들지_않은_카테고리를_수정할_경우_예외를_던진다() {
         // given
-        Member member = memberRepository.save(MEMBER);
-        Member creator = memberRepository.save(CREATOR);
+        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        Member creator = memberRepository.save(
+                new Member("creator@email.com", "/image.png", "creator", SocialType.GOOGLE));
         CategoryResponse savedCategory = categoryService.save(creator.getId(),
                 new CategoryCreateRequest(CATEGORY_NAME));
 
@@ -182,8 +188,9 @@ class CategoryServiceTest {
     @Test
     void 자신이_만들지_않은_카테고리를_삭제할_경우_예외를_던진다() {
         // given
-        Member member = memberRepository.save(MEMBER);
-        Member creator = memberRepository.save(CREATOR);
+        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        Member creator = memberRepository.save(
+                new Member("creator@email.com", "/image.png", "creator", SocialType.GOOGLE));
         CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
 
         // when & then
