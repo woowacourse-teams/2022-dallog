@@ -52,7 +52,10 @@ class CategoryRepositoryTest {
             assertThat(categories.getContent()).hasSize(PAGE_SIZE_2).extracting(Category::getName)
                     .contains("알록달록 회의", "지원플랫폼 근로");
             assertThat(
-                    categories.getContent().stream().map(Category::getCreatedAt).allMatch(Objects::nonNull)).isTrue();
+                    categories.getContent().stream()
+                            .map(Category::getCreatedAt)
+                            .allMatch(Objects::nonNull))
+                    .isTrue();
         });
     }
 
@@ -95,4 +98,31 @@ class CategoryRepositoryTest {
         });
     }
 
+    @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 있으면 true를 반환한다.")
+    @Test
+    void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_있으면_true를_반환한다() {
+        // given
+        Member creator = memberRepository.save(CREATOR);
+        Category category = categoryRepository.save(new Category("BE 공식일정", creator));
+
+        // when
+        boolean actual = categoryRepository.existsByIdAndMemberId(category.getId(), creator.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 없으면 false를 반환한다.")
+    @Test
+    void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_없으면_false를_반환한다() {
+        // given
+        Member creator = memberRepository.save(CREATOR);
+        Category category = categoryRepository.save(new Category("BE 공식일정", creator));
+
+        // when
+        boolean actual = categoryRepository.existsByIdAndMemberId(category.getId(), creator.getId() + 1L);
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }
