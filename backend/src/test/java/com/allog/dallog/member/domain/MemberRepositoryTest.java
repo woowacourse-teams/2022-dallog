@@ -21,8 +21,7 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
-        memberRepository.save(member);
+        member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
     }
 
     @DisplayName("이메일을 통해 회원을 찾는다.")

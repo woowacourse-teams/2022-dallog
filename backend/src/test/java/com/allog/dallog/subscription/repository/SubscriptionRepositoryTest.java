@@ -22,6 +22,7 @@ import com.allog.dallog.member.domain.MemberRepository;
 import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.subscription.domain.Subscription;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,23 +42,30 @@ class SubscriptionRepositoryTest {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    private Member creator;
+    private Member member;
+
+    private Category firstCategory;
+    private Category secondCategory;
+    private Category thirdCategory;
+
+    @BeforeEach
+    void setUp() {
+        creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        member = memberRepository.save(new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE));
+
+        firstCategory = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
+        secondCategory = categoryRepository.save(new Category(CATEGORY_2_NAME, creator));
+        thirdCategory = categoryRepository.save(new Category(CATEGORY_3_NAME, creator));
+    }
+
     @DisplayName("회원 정보를 기반으로 구독 정보를 조회한다.")
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
-        Category category2 = categoryRepository.save(new Category(CATEGORY_2_NAME, creator));
-        Category category3 = categoryRepository.save(new Category(CATEGORY_3_NAME, creator));
-
-        Member member = memberRepository.save(new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE));
-        Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
-        Subscription subscription2 = new Subscription(member, category2, COLOR_BLUE);
-        Subscription subscription3 = new Subscription(member, category3, COLOR_YELLOW);
-
-        subscriptionRepository.save(subscription1);
-        subscriptionRepository.save(subscription2);
-        subscriptionRepository.save(subscription3);
+        subscriptionRepository.save(new Subscription(member, firstCategory, COLOR_RED));
+        subscriptionRepository.save(new Subscription(member, secondCategory, COLOR_BLUE));
+        subscriptionRepository.save(new Subscription(member, thirdCategory, COLOR_YELLOW));
 
         // when
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
@@ -69,10 +77,7 @@ class SubscriptionRepositoryTest {
     @DisplayName("회원의 구독 정보가 존재하지 않는 경우 빈 리스트가 조회된다.")
     @Test
     void 회원의_구독_정보가_존재하지_않는_경우_빈_리스트가_조회된다() {
-        // given
-        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-
-        // when
+        // given & when
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
 
         // then
@@ -83,16 +88,10 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_특정_구독_정보_여부를_확인한다() {
         // given
-        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
-
-        Member member = memberRepository.save(new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE));
-        Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
-
-        subscriptionRepository.save(subscription1);
+        Subscription subscription = subscriptionRepository.save(new Subscription(member, firstCategory, COLOR_RED));
 
         // when
-        boolean actual = subscriptionRepository.existsByIdAndMemberId(subscription1.getId(), member.getId());
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(subscription.getId(), member.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -101,10 +100,7 @@ class SubscriptionRepositoryTest {
     @DisplayName("회원의 존재하지 않는 구독 정보 여부를 확인한다.")
     @Test
     void 회원의_존재하지_않는_구독_정보_여부를_확인한다() {
-        // given
-        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-
-        // when
+        // given & when
         boolean actual = subscriptionRepository.existsByIdAndMemberId(0L, member.getId());
 
         // then
