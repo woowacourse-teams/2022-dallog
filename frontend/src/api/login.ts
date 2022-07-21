@@ -1,21 +1,22 @@
 import axios from 'axios';
 
+import { API_KEY } from '@/constants';
+
 const loginApi = {
-  baseUrl: process.env.API_KEY,
   endPoint: {
     googleEntry: '/api/auth/google/oauth-uri',
     googleToken: '/api/auth/google/token',
   },
 
   getUrl: async () => {
-    const { data } = await axios.get(`${loginApi.baseUrl}${loginApi.endPoint.googleEntry}`);
+    const { data } = await axios.get(`${API_KEY}${loginApi.endPoint.googleEntry}`);
 
     return data.oAuthUri;
   },
 
   auth: async () => {
     const code = new URLSearchParams(location.search).get('code');
-    const { data } = await axios.post(`${loginApi.baseUrl}${loginApi.endPoint.googleToken}`, {
+    const { data } = await axios.post(`${API_KEY}${loginApi.endPoint.googleToken}`, {
       code,
     });
 

@@ -2,21 +2,18 @@ import axios from 'axios';
 
 import { ProfileType } from '@/@types/profile';
 
+import { API_KEY } from '@/constants';
+
 const profileApi = {
-  endpoint: '/api/members/me',
+  endpoint: `${API_KEY}/api/members/me`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 
-  get: async (accessToken: string) => {
+  get: async (accessToken: string | null) => {
     const response = await axios.get<ProfileType>(profileApi.endpoint, {
       headers: { ...profileApi.headers, Authorization: `Bearer ${accessToken}` },
-      transformResponse: (res) => {
-        const profile = JSON.parse(res).data;
-
-        return profile;
-      },
     });
 
     return response;
