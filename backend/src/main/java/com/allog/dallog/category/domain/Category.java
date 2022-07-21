@@ -49,6 +49,10 @@ public class Category extends BaseEntity {
         }
     }
 
+    public void changeName(final String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

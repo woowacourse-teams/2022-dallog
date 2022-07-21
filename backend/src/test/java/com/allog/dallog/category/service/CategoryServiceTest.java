@@ -1,13 +1,18 @@
 package com.allog.dallog.category.service;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
+import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.auth.exception.NoPermissionException;
+import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.InvalidCategoryException;
@@ -119,5 +124,39 @@ class CategoryServiceTest {
         assertThat(categoryService.findById(savedCategory.getId()))
                 .usingRecursiveComparison()
                 .isEqualTo(savedCategory);
+    }
+
+    @DisplayName("회원과 카테고리 id를 통해 카테고리를 수정한다.")
+    @Test
+    void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
+        // given
+        Member creator = memberRepository.save(CREATOR);
+        categoryService.save(creator.getId(), new CategoryCreateRequest("BE 공식일정"));
+        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+
+        // when
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
+        categoryService.update(creator.getId(), savedCategory.getId(), categoryUpdateRequest);
+
+        //then
+        Category category = categoryService.getCategory(savedCategory.getId());
+        assertThat(category.getName())
+                .isEqualTo(MODIFIED_CATEGORY_NAME);
+    }
+
+    @DisplayName("자신이 만들지 않은 카테고리를 수정할 경우 예외를 던진다.")
+    @Test
+    void 자신이_만들지_않은_카테고리를_수정할_경우_예외를_던진다() {
+        // given
+        Member member = memberRepository.save(MEMBER);
+        Member creator = memberRepository.save(CREATOR);
+        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.update(member.getId(), savedCategory.getId(), categoryUpdateRequest))
+                .isInstanceOf(NoPermissionException.class);
     }
 }
