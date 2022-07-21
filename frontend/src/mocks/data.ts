@@ -19,9 +19,9 @@ const scheduleDB: Schedule[] = [
 ];
 
 const categoryDB: {
-  data: CategoryType[];
+  categories: CategoryType[];
 } = {
-  data: [
+  categories: [
     {
       id: 1,
       name: 'BE 공식일정',

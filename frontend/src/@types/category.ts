@@ -5,9 +5,8 @@ interface CategoryType {
 }
 
 interface CategoriesGetResponseType {
-  totalCount: number;
   page: number;
-  data: CategoryType[];
+  categories: CategoryType[];
 }
 
 export { CategoryType, CategoriesGetResponseType };
