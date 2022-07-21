@@ -19,12 +19,12 @@ import { categoryItem, item } from './CategoryItem.styles';
 interface CategoryItemProps {
   category: CategoryType;
   isSubscribing: boolean;
-  refetch: <T>(
+  refetchSubscriptions: <T>(
     options?: (RefetchOptions & RefetchQueryFilters<T>) | undefined
   ) => Promise<QueryObserverResult<AxiosResponse<SubscriptionType[]>, AxiosError>>;
 }
 
-function CategoryItem({ category, isSubscribing, refetch }: CategoryItemProps) {
+function CategoryItem({ category, isSubscribing, refetchSubscriptions }: CategoryItemProps) {
   const theme = useTheme();
 
   const { accessToken } = useRecoilValue(userState);
@@ -40,7 +40,7 @@ function CategoryItem({ category, isSubscribing, refetch }: CategoryItemProps) {
     unknown
   >(() => subscriptionApi.post(accessToken, category.id, body), {
     onSuccess: () => {
-      refetch();
+      refetchSubscriptions();
     },
   });
 
@@ -48,7 +48,7 @@ function CategoryItem({ category, isSubscribing, refetch }: CategoryItemProps) {
     () => subscriptionApi.delete(accessToken, category.id),
     {
       onSuccess: () => {
-        refetch();
+        refetchSubscriptions();
       },
     }
   );
