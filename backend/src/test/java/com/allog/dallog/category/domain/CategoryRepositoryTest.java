@@ -4,9 +4,12 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_0;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_8;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME2;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL2;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -15,6 +18,7 @@ import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
 import com.allog.dallog.member.domain.SocialType;
 import java.util.Objects;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +37,38 @@ class CategoryRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    private Member neo;
+    private Member pobi;
+
+    private Category 백엔드_공식일정;
+    private Category 프론트엔드_공식일정;
+    private Category 알록달록_회의;
+    private Category 지원플랫폼_근로;
+    private Category 파랑의_코틀린_스터디;
+
+    @BeforeEach
+    void setUp() {
+        neo = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
+        pobi = new Member(EMAIL2, PROFILE_IMAGE_URI2, DISPLAY_NAME2, SocialType.GOOGLE);
+        memberRepository.save(neo);
+        memberRepository.save(pobi);
+
+        백엔드_공식일정 = new Category("BE 공식일정", neo);
+        프론트엔드_공식일정 = new Category("FE 공식일정", neo);
+        알록달록_회의 = new Category("알록달록 회의", neo);
+        지원플랫폼_근로 = new Category("지원플랫폼 근로", pobi);
+        파랑의_코틀린_스터디 = new Category("파랑의 코틀린 스터디", pobi);
+    }
+
     @DisplayName("페이지와 사이즈를 받아 해당하는 구간의 카테고리를 조회한다.")
     @Test
     void 페이지와_사이즈를_받아_해당하는_구간의_카테고리를_조회한다() {
         // given
-        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        categoryRepository.save(new Category("BE 공식일정", creator));
-        categoryRepository.save(new Category("FE 공식일정", creator));
-        categoryRepository.save(new Category("알록달록 회의", creator));
-        categoryRepository.save(new Category("지원플랫폼 근로", creator));
-        categoryRepository.save(new Category("파랑의 코틀린 스터디", creator));
+        categoryRepository.save(백엔드_공식일정);
+        categoryRepository.save(프론트엔드_공식일정);
+        categoryRepository.save(알록달록_회의);
+        categoryRepository.save(지원플랫폼_근로);
+        categoryRepository.save(파랑의_코틀린_스터디);
 
         PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
 
@@ -58,35 +84,20 @@ class CategoryRepositoryTest {
         });
     }
 
-    @DisplayName("조회 시 데이터가 존재하지 않는 경우 빈 슬라이스가 반환된다.")
-    @Test
-    void 조회_시_데이터가_존재하지_않는_경우_빈_슬라이스가_반환된다() {
-        // given
-        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
-
-        // when
-        Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
-
-        // then
-        assertThat(categories).hasSize(0);
-    }
-
     @DisplayName("특정 멤버가 생성한 카테고리를 페이징을 통해 조회한다.")
     @Test
     void 특정_멤버가_생성한_카테고리를_페이징을_통해_조회한다() {
         // given
-        Member creator = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        Member creator2 = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        categoryRepository.save(new Category("BE 공식일정", creator));
-        categoryRepository.save(new Category("FE 공식일정", creator));
-        categoryRepository.save(new Category("알록달록 회의", creator));
-        categoryRepository.save(new Category("지원플랫폼 근로", creator2));
-        categoryRepository.save(new Category("파랑의 코틀린 스터디", creator2));
+        categoryRepository.save(백엔드_공식일정);
+        categoryRepository.save(프론트엔드_공식일정);
+        categoryRepository.save(알록달록_회의);
+        categoryRepository.save(지원플랫폼_근로);
+        categoryRepository.save(파랑의_코틀린_스터디);
 
         PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_0, PAGE_SIZE_8);
 
         // when
-        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, creator.getId());
+        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, neo.getId());
 
         // then
         assertAll(() -> {

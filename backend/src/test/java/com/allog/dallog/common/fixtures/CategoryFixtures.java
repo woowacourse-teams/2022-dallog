@@ -6,6 +6,7 @@ public class CategoryFixtures {
 
     public static final int PAGE_NUMBER_0 = 0;
     public static final int PAGE_NUMBER_1 = 1;
+
     public static final int PAGE_SIZE_2 = 2;
     public static final int PAGE_SIZE_8 = 8;
 
