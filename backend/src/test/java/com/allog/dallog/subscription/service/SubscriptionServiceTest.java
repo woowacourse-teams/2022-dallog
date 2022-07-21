@@ -1,13 +1,12 @@
 package com.allog.dallog.subscription.service;
 
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_2;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_3;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_BLUE;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_RED;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_YELLOW;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_YELLOW;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -16,7 +15,8 @@ import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.common.fixtures.MemberFixtures;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
@@ -25,6 +25,7 @@ import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import javax.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SubscriptionServiceTest {
 
+    private final CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest("BE 일정");
+
     @Autowired
     private MemberService memberService;
 
@@ -45,22 +48,30 @@ class SubscriptionServiceTest {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    private MemberResponse memberResponse;
+    private CategoryResponse firstCategoryResponse;
+    private CategoryResponse secondCategoryResponse;
+    private CategoryResponse thirdCategoryResponse;
+
+    @BeforeEach
+    void setUp() {
+        memberResponse = memberService.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
+        firstCategoryResponse = categoryService.save(memberResponse.getId(), categoryCreateRequest);
+        secondCategoryResponse = categoryService.save(memberResponse.getId(), categoryCreateRequest);
+        thirdCategoryResponse = categoryService.save(memberResponse.getId(), categoryCreateRequest);
+    }
+
     @DisplayName("새로운 구독을 생성한다.")
     @Test
     void 새로운_구독을_생성한다() {
-        // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
-
-        // when
-        SubscriptionResponse response = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        // given & when
+        SubscriptionResponse response = subscriptionService.save(memberResponse.getId(), firstCategoryResponse.getId(),
+                new SubscriptionCreateRequest(COLOR_RED));
 
         // then
         assertAll(() -> {
             assertThat(response.getCategory().getName()).isEqualTo("BE 일정");
-            assertThat(response.getColor()).isEqualTo(color);
+            assertThat(response.getColor()).isEqualTo(COLOR_RED);
         });
     }
 
@@ -68,12 +79,8 @@ class SubscriptionServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
-        // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-
-        // when & then
-        assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryResponse.getId(),
+        // given & when & then
+        assertThatThrownBy(() -> subscriptionService.save(memberResponse.getId(), firstCategoryResponse.getId(),
                 new SubscriptionCreateRequest(color))).isInstanceOf(InvalidSubscriptionException.class);
     }
 
@@ -81,11 +88,8 @@ class SubscriptionServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(memberResponse.getId(),
+                firstCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_RED));
 
         // when
         SubscriptionResponse foundResponse = subscriptionService.findById(subscriptionResponse.getId());
@@ -93,8 +97,8 @@ class SubscriptionServiceTest {
         // then
         assertAll(() -> {
             assertThat(foundResponse.getId()).isEqualTo(subscriptionResponse.getId());
-            assertThat(foundResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
-            assertThat(foundResponse.getColor()).isEqualTo(color);
+            assertThat(foundResponse.getCategory().getId()).isEqualTo(firstCategoryResponse.getId());
+            assertThat(foundResponse.getColor()).isEqualTo(COLOR_RED);
         });
     }
 
@@ -110,18 +114,13 @@ class SubscriptionServiceTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
-
-        MemberResponse member = memberService.save(MEMBER);
-        subscriptionService.save(member.getId(), categoryResponse1.getId(), CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        Long memberId = memberResponse.getId();
+        subscriptionService.save(memberId, firstCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_RED));
+        subscriptionService.save(memberId, secondCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_BLUE));
+        subscriptionService.save(memberId, thirdCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_YELLOW));
 
         // when
-        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
+        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(memberId);
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
@@ -131,32 +130,27 @@ class SubscriptionServiceTest {
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
-
-        MemberResponse member = memberService.save(MEMBER);
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse1.getId(),
-                CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        Long memberId = memberResponse.getId();
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(memberId, firstCategoryResponse.getId(),
+                new SubscriptionCreateRequest(COLOR_RED));
+        subscriptionService.save(memberId, secondCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_BLUE));
+        subscriptionService.save(memberId, thirdCategoryResponse.getId(), new SubscriptionCreateRequest(COLOR_YELLOW));
 
         // when
-        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), member.getId());
+        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), memberId);
 
         // then
-        assertThat(subscriptionService.findByMemberId(member.getId()).getSubscriptions()).hasSize(2);
+        assertThat(subscriptionService.findByMemberId(memberId).getSubscriptions()).hasSize(2);
     }
 
     @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")
     @Test
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        Long memberId = memberResponse.getId();
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, member.getId()))
+        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, memberId))
                 .isInstanceOf(NoPermissionException.class);
     }
 }
