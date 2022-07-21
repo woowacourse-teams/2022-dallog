@@ -1,9 +1,12 @@
 package com.allog.dallog.subscription.domain;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_EMAIL;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROFILE_IMAGE_URI;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

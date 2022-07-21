@@ -1,9 +1,9 @@
 package com.allog.dallog.subscription.service;
 
 
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.DISPLAY_NAME;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
+import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_YELLOW;

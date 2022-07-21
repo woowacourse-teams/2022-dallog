@@ -1,7 +1,7 @@
 package com.allog.dallog.auth.service;
 
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
+import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.auth.dto.TokenResponse;
@@ -52,7 +52,7 @@ class AuthServiceTest {
         authService.generateTokenWithCode(CODE);
 
         // when & then
-        assertThat(memberRepository.existsByEmail(EMAIL)).isTrue();
+        assertThat(memberRepository.existsByEmail(OAUTH_EMAIL)).isTrue();
         // SutbOAuthClient가 반환하는 OAuthMember의 이메일
     }
 
