@@ -11,15 +11,17 @@ import { PATH } from '@/constants';
 import { BiCategory } from 'react-icons/bi';
 import { FaUserCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
-import { HiMenu } from 'react-icons/hi';
+import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
 import { loginButton, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
 interface NavBarProps {
-  openLoginModal?: () => void;
+  isSideBarOpen: boolean;
+  toggleSideBarOpen: () => void;
+  openLoginModal: () => void;
 }
 
-function NavBar({ openLoginModal }: NavBarProps) {
+function NavBar({ isSideBarOpen, toggleSideBarOpen, openLoginModal }: NavBarProps) {
   const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
   const navigate = useNavigate();
@@ -39,8 +41,9 @@ function NavBar({ openLoginModal }: NavBarProps) {
   return (
     <div css={navBar}>
       <div css={menus}>
-        <Button cssProp={menu(theme)}>
-          <HiMenu size={28} />
+        <Button cssProp={menu(theme)} onClick={toggleSideBarOpen}>
+          {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
+          <span css={menuTitle}>메뉴</span>
         </Button>
         <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
           🌙&nbsp;&nbsp;달록
