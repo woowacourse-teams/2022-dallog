@@ -11,6 +11,7 @@ import { PATH } from '@/constants';
 import { BiCategory } from 'react-icons/bi';
 import { FaUserCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
+import { HiMenu } from 'react-icons/hi';
 
 import { loginButton, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
@@ -37,9 +38,14 @@ function NavBar({ openLoginModal }: NavBarProps) {
 
   return (
     <div css={navBar}>
-      <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
-        🌙&nbsp;&nbsp;달록
-      </Button>
+      <div css={menus}>
+        <Button cssProp={menu(theme)}>
+          <HiMenu size={28} />
+        </Button>
+        <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
+          🌙&nbsp;&nbsp;달록
+        </Button>
+      </div>
       <div css={menus}>
         {!accessToken && (
           <Button cssProp={loginButton(theme)} onClick={openLoginModal}>

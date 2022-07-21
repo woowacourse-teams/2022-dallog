@@ -10,7 +10,7 @@ const navBar = ({ colors, flex }: Theme) => css`
 
   width: 100%;
   height: 16rem;
-  padding: 2rem 5rem;
+  padding: 2rem 5rem 2rem 2rem;
 
   background: ${colors.WHITE};
 
@@ -23,7 +23,9 @@ const menus = ({ flex }: Theme) => css`
   gap: 3rem;
 `;
 
-const menu = ({ colors }: Theme) => css`
+const menu = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
   position: relative;
 
   background: transparent;
