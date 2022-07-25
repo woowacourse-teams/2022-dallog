@@ -1,6 +1,7 @@
 package com.allog.dallog.auth.support;
 
 import com.allog.dallog.auth.dto.LoginMember;
+import com.allog.dallog.auth.service.AuthService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -12,10 +13,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
 
-    public AuthenticationPrincipalArgumentResolver(final JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public AuthenticationPrincipalArgumentResolver(final AuthService authService) {
+        this.authService = authService;
     }
 
     @Override
@@ -28,9 +29,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String accessToken = AuthorizationExtractor.extract(request);
-        jwtTokenProvider.validateToken(accessToken);
+        authService.validateToken(accessToken);
 
-        Long id = Long.parseLong(jwtTokenProvider.getPayload(accessToken));
+        Long id = Long.parseLong(authService.getPayload(accessToken));
 
         return new LoginMember(id);
     }

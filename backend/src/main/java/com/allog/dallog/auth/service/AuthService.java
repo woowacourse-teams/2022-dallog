@@ -2,6 +2,7 @@ package com.allog.dallog.auth.service;
 
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import com.allog.dallog.auth.support.JwtTokenProvider;
 import com.allog.dallog.auth.support.OAuthClient;
 import com.allog.dallog.auth.support.OAuthUri;
@@ -54,5 +55,15 @@ public class AuthService {
     private Member generateMemberBy(final OAuthMember oAuthMember) {
         return new Member(oAuthMember.getEmail(), oAuthMember.getProfileImageUrl(), oAuthMember.getDisplayName(),
                 SocialType.GOOGLE);
+    }
+
+    public void validateToken(final String accessToken) {
+        if (accessToken == null || !jwtTokenProvider.validateToken(accessToken)) {
+            throw new InvalidTokenException("권한이 없습니다.");
+        }
+    }
+
+    public String getPayload(final String accessToken) {
+        return jwtTokenProvider.getPayload(accessToken);
     }
 }

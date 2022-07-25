@@ -1,6 +1,5 @@
 package com.allog.dallog.auth.support;
 
-import com.allog.dallog.auth.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -46,16 +45,16 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public void validateToken(final String token) {
+    public boolean validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
 
-            claims.getBody().getExpiration().before(new Date());
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidTokenException();
+            return false;
         }
     }
 }

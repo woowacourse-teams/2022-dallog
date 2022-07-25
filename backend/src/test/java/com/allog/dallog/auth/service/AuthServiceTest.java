@@ -3,8 +3,10 @@ package com.allog.dallog.auth.service;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.auth.dto.TokenResponse;
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
@@ -70,5 +72,16 @@ class AuthServiceTest {
 
         // then
         assertThat(actual).hasSize(1);
+    }
+
+    @DisplayName("validateToken 메서드는 유효하지 않은 토큰을 전달하면 예외를 던진다.")
+    @Test
+    void validateToken_메서드는_유효하지_않은_토큰을_전달하면_예외를_던진다() {
+        // given
+        String malformedToken = "malformed";
+
+        // when & then
+        assertThatThrownBy(() -> authService.validateToken(malformedToken))
+                .isInstanceOf(InvalidTokenException.class);
     }
 }
