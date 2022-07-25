@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-import { API_KEY } from '@/constants';
+import dallogApi from './';
 
 const loginApi = {
   endPoint: {
@@ -9,14 +7,14 @@ const loginApi = {
   },
 
   getUrl: async () => {
-    const { data } = await axios.get(`${API_KEY}${loginApi.endPoint.googleEntry}`);
+    const { data } = await dallogApi.get(loginApi.endPoint.googleEntry);
 
     return data.oAuthUri;
   },
 
   auth: async () => {
     const code = new URLSearchParams(location.search).get('code');
-    const { data } = await axios.post(`${API_KEY}${loginApi.endPoint.googleToken}`, {
+    const { data } = await dallogApi.post(loginApi.endPoint.googleToken, {
       code,
     });
 

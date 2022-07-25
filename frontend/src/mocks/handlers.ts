@@ -4,7 +4,7 @@ import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { API_KEY } from '@/constants';
+import { API_URL } from '@/constants';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
@@ -58,7 +58,7 @@ const handlers = [
   }),
 
   rest.post<Pick<SubscriptionType, 'color'>>(
-    `${API_KEY}/api/members/me/categories/:id/subscriptions`,
+    `${API_URL}/api/members/me/categories/:id/subscriptions`,
     (req, res, ctx) => {
       const { id } = req.params;
       const categoryId = parseInt(id as string);
@@ -79,7 +79,7 @@ const handlers = [
     }
   ),
 
-  rest.delete(`${API_KEY}/api/members/me/subscriptions/:id`, (req, res, ctx) => {
+  rest.delete(`${API_URL}/api/members/me/subscriptions/:id`, (req, res, ctx) => {
     const { id } = req.params;
     const subscriptionId = parseInt(id as string);
     const subscriptionIndex = subscriptionDB.subscriptions.findIndex(

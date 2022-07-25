@@ -1,18 +1,16 @@
-import axios from 'axios';
-
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
-import { API_KEY } from '@/constants';
+import dallogApi from './';
 
 const categoryApi = {
-  endpoint: `${API_KEY}/api/categories`,
+  endpoint: '/api/categories',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 
   get: async (page: number, size: number) => {
-    const response = await axios.get<CategoriesGetResponseType>(categoryApi.endpoint, {
+    const response = await dallogApi.get<CategoriesGetResponseType>(categoryApi.endpoint, {
       params: { page, size },
       headers: categoryApi.headers,
     });
@@ -21,7 +19,7 @@ const categoryApi = {
   },
 
   post: async (accessToken: string | null, body: Pick<CategoryType, 'name'>) => {
-    const response = await axios.post(categoryApi.endpoint, body, {
+    const response = await dallogApi.post(categoryApi.endpoint, body, {
       headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 

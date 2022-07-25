@@ -1,18 +1,16 @@
-import axios from 'axios';
-
 import { Schedule } from '@/@types';
 
-import { API_KEY } from '@/constants';
+import dallogApi from './';
 
 const scheduleApi = {
-  endpoint: `${API_KEY}/api/schedules`,
+  endpoint: '/api/schedules',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 
   get: async (year: number, month: number) => {
-    const response = await axios.get<{ schedules: Schedule[] }>(
+    const response = await dallogApi.get<{ schedules: Schedule[] }>(
       `${scheduleApi.endpoint}?year=${year}&month=${month}`,
       {
         headers: scheduleApi.headers,
@@ -23,7 +21,7 @@ const scheduleApi = {
   },
 
   post: async (body: Omit<Schedule, 'id'>) => {
-    const response = await axios.post(scheduleApi.endpoint, body, {
+    const response = await dallogApi.post(scheduleApi.endpoint, body, {
       headers: scheduleApi.headers,
     });
 

@@ -2,7 +2,7 @@ const API = {
   CATEGORY_GET_SIZE: 4,
 };
 
-const API_KEY = process.env.API_KEY;
+const API_URL = process.env.API_URL;
 
 const ATOM_KEY = {
   USER: 'userState',
@@ -34,4 +34,4 @@ const PATH = {
   PROFILE: '/profile',
 };
 
-export { API, API_KEY, ATOM_KEY, CACHE_KEY, CONFIRM_MESSAGE, DAYS, STORAGE_KEY, PATH };
+export { API, API_URL, ATOM_KEY, CACHE_KEY, CONFIRM_MESSAGE, DAYS, STORAGE_KEY, PATH };

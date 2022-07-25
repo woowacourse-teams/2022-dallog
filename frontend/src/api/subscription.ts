@@ -1,15 +1,13 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 import { SubscriptionType } from '@/@types/subscription';
 
-import { API_KEY } from '@/constants';
+import dallogApi from './';
 
 const subscriptionApi = {
-  getEndpoint: `${API_KEY}/api/members/me/subscriptions`,
-  postEndpoint: (categoryId: number) =>
-    `${API_KEY}/api/members/me/categories/${categoryId}/subscriptions`,
-  deleteEndpoint: (subscriptionId: number) =>
-    `${API_KEY}/api/members/me/subscriptions/${subscriptionId}`,
+  getEndpoint: '/api/members/me/subscriptions',
+  postEndpoint: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
+  deleteEndpoint: (subscriptionId: number) => `/api/members/me/subscriptions/${subscriptionId}`,
 
   headers: {
     'Content-Type': 'application/json',
@@ -17,7 +15,7 @@ const subscriptionApi = {
   },
 
   get: async (accessToken: string | null) => {
-    const response = await axios.get<SubscriptionType[]>(subscriptionApi.getEndpoint, {
+    const response = await dallogApi.get<SubscriptionType[]>(subscriptionApi.getEndpoint, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
       transformResponse: (res) => {
         return JSON.parse(res).subscriptions;
@@ -32,7 +30,7 @@ const subscriptionApi = {
     categoryId: number,
     body: Pick<SubscriptionType, 'color'>
   ) => {
-    const response = await axios.post(subscriptionApi.postEndpoint(categoryId), body, {
+    const response = await dallogApi.post(subscriptionApi.postEndpoint(categoryId), body, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
@@ -43,7 +41,7 @@ const subscriptionApi = {
     accessToken: string | null,
     subscriptionId: number
   ): Promise<AxiosResponse<null>> => {
-    const response = await axios.delete<null>(subscriptionApi.deleteEndpoint(subscriptionId), {
+    const response = await dallogApi.delete<null>(subscriptionApi.deleteEndpoint(subscriptionId), {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
