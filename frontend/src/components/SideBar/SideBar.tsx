@@ -1,6 +1,9 @@
 import { useTheme } from '@emotion/react';
+import { useRecoilValue } from 'recoil';
 
 import useToggle from '@/hooks/useToggle';
+
+import { sideBarState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
@@ -11,17 +14,15 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 import { button, list, myCategory, sideBar, title } from './SideBar.styles';
 
-interface SideBarProps {
-  isOpen: boolean;
-}
-
-function SideBar({ isOpen }: SideBarProps) {
+function SideBar() {
+  const isSideBarOpen = useRecoilValue(sideBarState);
   const theme = useTheme();
+
   const { state: isCategoryAddModalOpen, toggleState: toggleCategoryAddModalOpen } = useToggle();
 
   return (
-    <div css={sideBar(theme, isOpen)}>
-      <div css={list(theme, isOpen)}>
+    <div css={sideBar(theme, isSideBarOpen)}>
+      <div css={list(theme, isSideBarOpen)}>
         <div css={title}>
           <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
             <CategoryAddModal closeModal={toggleCategoryAddModalOpen} />

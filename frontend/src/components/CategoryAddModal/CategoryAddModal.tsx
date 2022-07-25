@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import FieldSet from '@/components/@common/FieldSet/FieldSet';

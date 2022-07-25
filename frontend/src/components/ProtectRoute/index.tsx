@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
 

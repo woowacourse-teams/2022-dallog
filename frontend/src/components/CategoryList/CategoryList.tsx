@@ -7,7 +7,7 @@ import useIntersect from '@/hooks/useIntersect';
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import CategoryItem from '@/components/CategoryItem/CategoryItem';
 

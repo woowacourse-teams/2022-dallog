@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import { ProfileType } from '@/@types/profile';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants';
 

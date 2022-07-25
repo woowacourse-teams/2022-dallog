@@ -14,16 +14,11 @@ import { PATH } from '@/constants';
 
 function App() {
   const { state: isLoginModalOpen, toggleState: toggleLoginModalOpen } = useToggle();
-  const { state: isSideBarOpen, toggleState: toggleSideBarOpen } = useToggle();
 
   return (
     <Router>
-      <NavBar
-        isSideBarOpen={isSideBarOpen}
-        toggleSideBarOpen={toggleSideBarOpen}
-        openLoginModal={toggleLoginModalOpen}
-      />
-      <SideBar isOpen={isSideBarOpen} />
+      <NavBar openLoginModal={toggleLoginModalOpen} />
+      <SideBar />
       <Routes>
         <Route
           path={PATH.MAIN}
