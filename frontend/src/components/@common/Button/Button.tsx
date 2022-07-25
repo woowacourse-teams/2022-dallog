@@ -1,10 +1,10 @@
-import { SerializedStyles } from '@emotion/react';
+import { SerializedStyles, Theme } from '@emotion/react';
 
 import { button } from './Button.styles';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
-  cssProp?: SerializedStyles;
+  cssProp?: SerializedStyles | (({ colors, flex }: Theme) => SerializedStyles);
   onClick?: (e?: React.FormEvent) => void;
   children?: string | JSX.Element | JSX.Element[];
 }

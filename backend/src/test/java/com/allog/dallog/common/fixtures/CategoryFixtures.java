@@ -9,6 +9,7 @@ import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 public class CategoryFixtures {
 
     public static final String CATEGORY_NAME = "달록";
+    public static final String MODIFIED_CATEGORY_NAME = "수정된 달록";
 
     public static final int PAGE_NUMBER_0 = 0;
     public static final int PAGE_NUMBER_1 = 1;

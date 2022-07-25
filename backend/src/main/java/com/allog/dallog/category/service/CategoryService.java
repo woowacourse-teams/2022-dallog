@@ -1,8 +1,10 @@
 package com.allog.dallog.category.service;
 
+import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
@@ -60,5 +62,30 @@ public class CategoryService {
     public Category getCategory(final Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(NoSuchCategoryException::new);
+    }
+
+    @Transactional
+    public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
+        memberService.getMember(memberId);
+        Category category = getCategory(categoryId);
+
+        validatePermission(memberId, categoryId);
+
+        category.changeName(request.getName());
+    }
+
+    @Transactional
+    public void delete(final Long memberId, final Long categoryId) {
+        memberService.getMember(memberId);
+
+        validatePermission(memberId, categoryId);
+
+        categoryRepository.deleteById(categoryId);
+    }
+
+    private void validatePermission(final Long memberId, final Long categoryId) {
+        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
+            throw new NoPermissionException();
+        }
     }
 }

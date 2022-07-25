@@ -40,6 +40,11 @@ public class Category extends BaseEntity {
         this.member = member;
     }
 
+    public void changeName(final String name) {
+        validateNameLength(name);
+        this.name = name;
+    }
+
     private void validateNameLength(final String name) {
         if (name.isBlank()) {
             throw new InvalidCategoryException("카테고리 이름은 공백일 수 없습니다.");
