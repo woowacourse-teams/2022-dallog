@@ -28,7 +28,7 @@ interface CategoryListProps {
 function CategoryList({ categoryList, getMoreCategories, hasNextPage }: CategoryListProps) {
   const { accessToken } = useRecoilValue(userState);
 
-  const { data: subscriptionsGetResponse, refetch: refetchSubscriptions } = useQuery<
+  const { data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
   >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
@@ -41,7 +41,12 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
     return <div></div>;
   }
 
-  const subscriptions = subscriptionsGetResponse.data.map((el) => el.category.id);
+  const subscriptionList = subscriptionsGetResponse.data.map((el) => {
+    return {
+      subscriptionId: el.id,
+      categoryId: el.category.id,
+    };
+  });
 
   return (
     <div css={categoryTable}>
@@ -51,15 +56,12 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
         <span css={item}> 구독 상태 </span>
       </div>
       {categoryList.map((category) => {
-        const isSubscribing = subscriptions.includes(category.id);
+        const { subscriptionId } = subscriptionList.find((el) => el.categoryId === category.id) ?? {
+          subscriptionId: -1,
+        };
 
         return (
-          <CategoryItem
-            key={category.id}
-            category={category}
-            isSubscribing={isSubscribing}
-            refetchSubscriptions={refetchSubscriptions}
-          />
+          <CategoryItem key={category.id} category={category} subscriptionId={subscriptionId} />
         );
       })}
       <div ref={ref} css={intersectTarget}></div>

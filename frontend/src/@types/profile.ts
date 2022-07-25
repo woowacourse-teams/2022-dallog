@@ -2,7 +2,7 @@ interface ProfileType {
   id: number;
   email: string;
   displayName: string;
-  profileImageUri: string;
+  profileImageUrl: string;
   socialType: string;
 }
 

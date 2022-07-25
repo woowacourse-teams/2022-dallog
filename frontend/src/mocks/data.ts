@@ -1,6 +1,14 @@
 import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
 
+const profileDB = {
+  id: 1,
+  email: 'example@email.com',
+  displayName: '매트',
+  profileImageUrl: 'https://img.insight.co.kr/static/2020/05/04/700/51wlu5y2281iku1o0hms.jpg',
+  socialType: 'GOOGLE',
+};
+
 const scheduleDB: Schedule[] = [
   {
     id: 1,
@@ -19,115 +27,124 @@ const scheduleDB: Schedule[] = [
 ];
 
 const categoryDB: {
-  data: CategoryType[];
+  categories: CategoryType[];
 } = {
-  data: [
+  categories: [
     {
       id: 1,
       name: 'BE 공식일정',
       createdAt: '2022-07-04T13:00:00',
+      creator: profileDB,
     },
     {
       id: 2,
       name: '알록달록 팀 회의',
       createdAt: '2022-07-08T15:00:00',
+      creator: profileDB,
     },
     {
       id: 3,
       name: '카테고리 3',
       createdAt: '2022-07-05T13:00:00',
+      creator: profileDB,
     },
     {
       id: 4,
       name: '카테고리 4',
       createdAt: '2022-07-03T15:00:00',
+      creator: profileDB,
     },
     {
       id: 5,
       name: '카테고리 5',
       createdAt: '2022-07-02T13:00:00',
+      creator: profileDB,
     },
     {
       id: 6,
       name: '카테고리 6',
       createdAt: '2022-07-01T15:00:00',
+      creator: profileDB,
     },
     {
       id: 7,
       name: '카테고리 7',
       createdAt: '2022-07-11T13:00:00',
+      creator: profileDB,
     },
     {
       id: 8,
       name: '카테고리 8',
       createdAt: '2022-07-12T15:00:00',
+      creator: profileDB,
     },
     {
       id: 9,
       name: '카테고리 9',
       createdAt: '2022-07-13T13:00:00',
+      creator: profileDB,
     },
     {
       id: 10,
       name: '카테고리 10',
       createdAt: '2022-07-14T15:00:00',
+      creator: profileDB,
     },
     {
       id: 11,
       name: '카테고리 11',
       createdAt: '2022-07-15T13:00:00',
+      creator: profileDB,
     },
     {
       id: 12,
       name: '카테고리 12',
       createdAt: '2022-07-16T15:00:00',
+      creator: profileDB,
     },
     {
       id: 13,
       name: '카테고리 13',
       createdAt: '2022-07-18T13:00:00',
+      creator: profileDB,
     },
     {
       id: 14,
       name: '카테고리 14',
       createdAt: '2022-07-20T15:00:00',
+      creator: profileDB,
     },
     {
       id: 15,
       name: '카테고리 15',
       createdAt: '2022-07-12T13:00:00',
+      creator: profileDB,
     },
     {
       id: 16,
       name: '카테고리 16',
       createdAt: '2022-07-13T15:00:00',
+      creator: profileDB,
     },
     {
       id: 17,
       name: '카테고리 17',
       createdAt: '2022-07-25T13:00:00',
+      creator: profileDB,
     },
     {
       id: 18,
       name: '카테고리 18',
       createdAt: '2022-07-30T15:00:00',
+      creator: profileDB,
     },
   ],
-};
-
-const profileDB = {
-  data: {
-    id: 1,
-    email: 'example@email.com',
-    displayName: '매트',
-    profileImageUri: 'https://img.insight.co.kr/static/2020/05/04/700/51wlu5y2281iku1o0hms.jpg',
-    socialType: 'GOOGLE',
-  },
 };
 
 const subscriptionDB = {
   subscriptions: [
     {
+      id: 1,
       category: {
         id: 1,
         name: 'BE 공식일정',
@@ -135,13 +152,14 @@ const subscriptionDB = {
           id: 1,
           email: 'example@email.com',
           displayName: 'example',
-          profileImageUri: '/image.png',
+          profileImageUrl: '/image.png',
         },
         createdAt: '2022-07-19T16:42',
       },
       color: '#ffffff',
     },
     {
+      id: 2,
       category: {
         id: 2,
         name: '알록달록 팀 회의',
@@ -149,13 +167,14 @@ const subscriptionDB = {
           id: 1,
           email: 'example@email.com',
           displayName: 'example',
-          profileImageUri: '/image.png',
+          profileImageUrl: '/image.png',
         },
         createdAt: '2022-07-19T16:42',
       },
       color: '#123423',
     },
     {
+      id: 3,
       category: {
         id: 5,
         name: '카테고리 5',
@@ -163,7 +182,7 @@ const subscriptionDB = {
           id: 1,
           email: 'example@email.com',
           displayName: 'example',
-          profileImageUri: '/image.png',
+          profileImageUrl: '/image.png',
         },
         createdAt: '2022-07-19T16:42',
       },

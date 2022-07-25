@@ -1,11 +1,15 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 import { SubscriptionType } from '@/@types/subscription';
 
+import dallogApi from './';
+
 const subscriptionApi = {
-  getEndpoint: '/api/members/me/subscriptions',
-  postEndpoint: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
-  deleteEndpoint: (categoryId: number) => `/api/members/me/subscriptions/${categoryId}`,
+  endpoint: {
+    get: '/api/members/me/subscriptions',
+    post: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
+    delete: (subscriptionId: number) => `/api/members/me/subscriptions/${subscriptionId}`,
+  },
 
   headers: {
     'Content-Type': 'application/json',
@@ -13,7 +17,7 @@ const subscriptionApi = {
   },
 
   get: async (accessToken: string | null) => {
-    const response = await axios.get<SubscriptionType[]>(subscriptionApi.getEndpoint, {
+    const response = await dallogApi.get<SubscriptionType[]>(subscriptionApi.endpoint.get, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
       transformResponse: (res) => {
         return JSON.parse(res).subscriptions;
@@ -28,15 +32,18 @@ const subscriptionApi = {
     categoryId: number,
     body: Pick<SubscriptionType, 'color'>
   ) => {
-    const response = await axios.post(subscriptionApi.postEndpoint(categoryId), body, {
+    const response = await dallogApi.post(subscriptionApi.endpoint.post(categoryId), body, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
     return response;
   },
 
-  delete: async (accessToken: string | null, categoryId: number): Promise<AxiosResponse<null>> => {
-    const response = await axios.delete<null>(subscriptionApi.deleteEndpoint(categoryId), {
+  delete: async (
+    accessToken: string | null,
+    subscriptionId: number
+  ): Promise<AxiosResponse<null>> => {
+    const response = await dallogApi.delete<null>(subscriptionApi.endpoint.delete(subscriptionId), {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 

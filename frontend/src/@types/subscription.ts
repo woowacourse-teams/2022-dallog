@@ -1,4 +1,5 @@
 interface SubscriptionType {
+  id: number;
   category: {
     id: number;
     name: string;

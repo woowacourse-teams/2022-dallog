@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
@@ -10,7 +10,7 @@ import { userState } from '@/atoms';
 
 import SubscribeButton from '@/components/SubscribeButton/SubscribeButton';
 
-import { CONFIRM_MESSAGE } from '@/constants';
+import { CACHE_KEY, CONFIRM_MESSAGE } from '@/constants';
 
 import subscriptionApi from '@/api/subscription';
 
@@ -18,14 +18,12 @@ import { categoryItem, item } from './CategoryItem.styles';
 
 interface CategoryItemProps {
   category: CategoryType;
-  isSubscribing: boolean;
-  refetchSubscriptions: <T>(
-    options?: (RefetchOptions & RefetchQueryFilters<T>) | undefined
-  ) => Promise<QueryObserverResult<AxiosResponse<SubscriptionType[]>, AxiosError>>;
+  subscriptionId: number;
 }
 
-function CategoryItem({ category, isSubscribing, refetchSubscriptions }: CategoryItemProps) {
+function CategoryItem({ category, subscriptionId }: CategoryItemProps) {
   const theme = useTheme();
+  const queryClient = useQueryClient();
 
   const { accessToken } = useRecoilValue(userState);
 
@@ -40,15 +38,15 @@ function CategoryItem({ category, isSubscribing, refetchSubscriptions }: Categor
     unknown
   >(() => subscriptionApi.post(accessToken, category.id, body), {
     onSuccess: () => {
-      refetchSubscriptions();
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
     },
   });
 
   const { mutate: deleteSubscription } = useMutation(
-    () => subscriptionApi.delete(accessToken, category.id),
+    () => subscriptionApi.delete(accessToken, subscriptionId),
     {
       onSuccess: () => {
-        refetchSubscriptions();
+        queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       },
     }
   );
@@ -60,7 +58,7 @@ function CategoryItem({ category, isSubscribing, refetchSubscriptions }: Categor
   };
 
   const handleClickSubscribeButton = () => {
-    isSubscribing ? unsubscribe() : postSubscription(body);
+    subscriptionId > 0 ? unsubscribe() : postSubscription(body);
   };
 
   return (
@@ -69,7 +67,7 @@ function CategoryItem({ category, isSubscribing, refetchSubscriptions }: Categor
       <span css={item}>{category.name}</span>
       <div css={item}>
         <SubscribeButton
-          isSubscribing={isSubscribing}
+          isSubscribing={subscriptionId > 0}
           handleClickSubscribeButton={handleClickSubscribeButton}
         ></SubscribeButton>
       </div>
