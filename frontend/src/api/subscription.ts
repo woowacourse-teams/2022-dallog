@@ -8,7 +8,8 @@ const subscriptionApi = {
   getEndpoint: `${API_KEY}/api/members/me/subscriptions`,
   postEndpoint: (categoryId: number) =>
     `${API_KEY}/api/members/me/categories/${categoryId}/subscriptions`,
-  deleteEndpoint: (categoryId: number) => `${API_KEY}/api/members/me/subscriptions/${categoryId}`,
+  deleteEndpoint: (subscriptionId: number) =>
+    `${API_KEY}/api/members/me/subscriptions/${subscriptionId}`,
 
   headers: {
     'Content-Type': 'application/json',
@@ -38,8 +39,11 @@ const subscriptionApi = {
     return response;
   },
 
-  delete: async (accessToken: string | null, categoryId: number): Promise<AxiosResponse<null>> => {
-    const response = await axios.delete<null>(subscriptionApi.deleteEndpoint(categoryId), {
+  delete: async (
+    accessToken: string | null,
+    subscriptionId: number
+  ): Promise<AxiosResponse<null>> => {
+    const response = await axios.delete<null>(subscriptionApi.deleteEndpoint(subscriptionId), {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 

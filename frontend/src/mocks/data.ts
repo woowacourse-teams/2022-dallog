@@ -144,6 +144,7 @@ const categoryDB: {
 const subscriptionDB = {
   subscriptions: [
     {
+      id: 1,
       category: {
         id: 1,
         name: 'BE 공식일정',
@@ -158,6 +159,7 @@ const subscriptionDB = {
       color: '#ffffff',
     },
     {
+      id: 2,
       category: {
         id: 2,
         name: '알록달록 팀 회의',
@@ -172,6 +174,7 @@ const subscriptionDB = {
       color: '#123423',
     },
     {
+      id: 3,
       category: {
         id: 5,
         name: '카테고리 5',

@@ -63,6 +63,7 @@ const handlers = [
       const { id } = req.params;
       const categoryId = parseInt(id as string);
       const newSubscription = {
+        id: subscriptionDB.subscriptions.length + 1,
         category: {
           id: categoryDB.categories[categoryId - 1].id,
           name: categoryDB.categories[categoryId - 1].name,
@@ -80,9 +81,9 @@ const handlers = [
 
   rest.delete(`${API_KEY}/api/members/me/subscriptions/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const categoryId = parseInt(id as string);
+    const subscriptionId = parseInt(id as string);
     const subscriptionIndex = subscriptionDB.subscriptions.findIndex(
-      (el) => el.category.id === categoryId
+      (el) => el.id === subscriptionId
     );
 
     if (subscriptionIndex > -1) {
