@@ -1,14 +1,15 @@
 import { css, Theme } from '@emotion/react';
 
-const sideBar = ({ colors, flex }: Theme, isOpen: boolean) => css`
+const sideBar = ({ colors, flex }: Theme, isSideBarOpen: boolean) => css`
   ${flex.row}
 
-  position: absolute;
+  overflow: hidden;
+  position: fixed;
   z-index: 10;
 
-  width: ${isOpen ? '64rem' : '0'};
-  height: 100vh;
-  padding: ${isOpen ? '5rem' : '0'};
+  width: ${isSideBarOpen ? '64rem' : '0'};
+  height: calc(100vh - 16rem);
+  padding: ${isSideBarOpen ? '5rem' : '0'};
   border: 1px solid ${colors.GRAY_400};
 
   background: ${colors.WHITE};
@@ -16,10 +17,10 @@ const sideBar = ({ colors, flex }: Theme, isOpen: boolean) => css`
   transition: width 0.3s;
 `;
 
-const list = ({ flex }: Theme, isOpen: boolean) => css`
+const list = ({ flex }: Theme, isSideBarOpen: boolean) => css`
   ${flex.column}
 
-  display: ${isOpen ? 'flex' : 'none'};
+  display: ${isSideBarOpen ? 'flex' : 'none'};
   gap: 3rem;
 
   width: 56rem;

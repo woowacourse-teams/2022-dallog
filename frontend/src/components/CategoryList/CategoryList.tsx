@@ -7,7 +7,7 @@ import useIntersect from '@/hooks/useIntersect';
 import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import CategoryItem from '@/components/CategoryItem/CategoryItem';
 
@@ -49,23 +49,27 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
   });
 
   return (
-    <div css={categoryTable}>
+    <>
       <div css={categoryTableHeader}>
         <span css={item}> 생성 날짜 </span>
         <span css={item}> 카테고리 이름 </span>
         <span css={item}> 구독 상태 </span>
       </div>
-      {categoryList.map((category) => {
-        const { subscriptionId } = subscriptionList.find((el) => el.categoryId === category.id) ?? {
-          subscriptionId: -1,
-        };
+      <div css={categoryTable}>
+        {categoryList.map((category) => {
+          const { subscriptionId } = subscriptionList.find(
+            (el) => el.categoryId === category.id
+          ) ?? {
+            subscriptionId: -1,
+          };
 
-        return (
-          <CategoryItem key={category.id} category={category} subscriptionId={subscriptionId} />
-        );
-      })}
-      <div ref={ref} css={intersectTarget}></div>
-    </div>
+          return (
+            <CategoryItem key={category.id} category={category} subscriptionId={subscriptionId} />
+          );
+        })}
+        <div ref={ref} css={intersectTarget}></div>
+      </div>
+    </>
   );
 }
 

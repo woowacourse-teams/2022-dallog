@@ -5,6 +5,7 @@ const API = {
 const API_URL = process.env.API_URL;
 
 const ATOM_KEY = {
+  SIDE_BAR: 'sideBarState',
   USER: 'userState',
 };
 
@@ -23,6 +24,10 @@ const CONFIRM_MESSAGE = {
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
+const SELECTOR_KEY = {
+  SIDE_BAR: 'sideBarSelector',
+};
+
 const STORAGE_KEY = {
   ACCESS_TOKEN: 'accessToken',
 };
@@ -34,4 +39,14 @@ const PATH = {
   PROFILE: '/profile',
 };
 
-export { API, API_URL, ATOM_KEY, CACHE_KEY, CONFIRM_MESSAGE, DAYS, STORAGE_KEY, PATH };
+export {
+  API,
+  API_URL,
+  ATOM_KEY,
+  CACHE_KEY,
+  CONFIRM_MESSAGE,
+  DAYS,
+  SELECTOR_KEY,
+  STORAGE_KEY,
+  PATH,
+};

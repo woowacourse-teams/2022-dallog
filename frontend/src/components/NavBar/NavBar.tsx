@@ -1,8 +1,9 @@
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
+import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -16,15 +17,18 @@ import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 import { loginButton, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
 interface NavBarProps {
-  isSideBarOpen: boolean;
-  toggleSideBarOpen: () => void;
   openLoginModal: () => void;
 }
 
-function NavBar({ isSideBarOpen, toggleSideBarOpen, openLoginModal }: NavBarProps) {
+function NavBar({ openLoginModal }: NavBarProps) {
+  const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
   const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const handleClickSideBarButton = () => {
+    toggleSideBarOpen(isSideBarOpen);
+  };
 
   const handleClickMainButton = () => {
     navigate(PATH.MAIN);
@@ -41,7 +45,7 @@ function NavBar({ isSideBarOpen, toggleSideBarOpen, openLoginModal }: NavBarProp
   return (
     <div css={navBar}>
       <div css={menus}>
-        <Button cssProp={menu(theme)} onClick={toggleSideBarOpen}>
+        <Button cssProp={menu(theme)} onClick={handleClickSideBarButton}>
           {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
           <span css={menuTitle}>메뉴</span>
         </Button>

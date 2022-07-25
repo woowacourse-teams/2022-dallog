@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import StartPage from '@/pages/StartPage/StartPage';

@@ -4,6 +4,7 @@ import { useInfiniteQuery } from 'react-query';
 import { CategoriesGetResponseType } from '@/@types/category';
 
 import FieldSet from '@/components/@common/FieldSet/FieldSet';
+import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import CategoryList from '@/components/CategoryList/CategoryList';
 
 import { API, CACHE_KEY } from '@/constants';
@@ -42,16 +43,18 @@ function CategoryPage() {
   const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.categories);
 
   return (
-    <div css={categoryPage}>
-      <div css={categoryNav}>
-        <FieldSet placeholder="카테고리 검색" cssProp={categorySearch} />
+    <PageLayout>
+      <div css={categoryPage}>
+        <div css={categoryNav}>
+          <FieldSet placeholder="카테고리 검색" cssProp={categorySearch} />
+        </div>
+        <CategoryList
+          categoryList={categoryList}
+          getMoreCategories={fetchNextPage}
+          hasNextPage={hasNextPage}
+        />
       </div>
-      <CategoryList
-        categoryList={categoryList}
-        getMoreCategories={fetchNextPage}
-        hasNextPage={hasNextPage}
-      />
-    </div>
+    </PageLayout>
   );
 }
 

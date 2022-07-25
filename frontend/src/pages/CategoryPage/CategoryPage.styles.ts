@@ -5,18 +5,17 @@ const categoryPage = ({ flex }: Theme) => css`
 
   align-items: center;
 
-  margin-top: 16rem;
-  padding: 10rem 20rem;
+  padding: 5rem;
 `;
 
 const categoryNav = css`
   width: 100%;
+  margin-bottom: 5rem;
 `;
 
 const categorySearch = css`
   width: 62.5rem;
   height: 12.5rem;
-  margin-bottom: 17.5rem;
 `;
 
 export { categoryPage, categoryNav, categorySearch };

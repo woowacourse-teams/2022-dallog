@@ -4,7 +4,9 @@ import { useRecoilValue } from 'recoil';
 
 import { ProfileType } from '@/@types/profile';
 
-import { userState } from '@/atoms';
+import { userState } from '@/recoil/atoms';
+
+import PageLayout from '@/components/@common/PageLayout/PageLayout';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -41,23 +43,25 @@ function MyPage() {
   const { displayName, email, profileImageUrl } = profileGetResponse.data;
 
   return (
-    <div css={myPage}>
-      <div css={infoTable}>
-        <div css={infoTableHeader}>프로필</div>
-        <div css={textInfo}>
-          <span>이름(닉네임)</span>
-          <span>{displayName}</span>
-        </div>
-        <div css={textInfo}>
-          <span>계정</span>
-          <span>{email}</span>
-        </div>
-        <div css={imageInfo}>
-          <span>프로필 사진</span>
-          <img src={profileImageUrl} css={imageSize} alt="프로필 이미지" />
+    <PageLayout>
+      <div css={myPage}>
+        <div css={infoTable}>
+          <div css={infoTableHeader}>프로필</div>
+          <div css={textInfo}>
+            <span>이름(닉네임)</span>
+            <span>{displayName}</span>
+          </div>
+          <div css={textInfo}>
+            <span>계정</span>
+            <span>{email}</span>
+          </div>
+          <div css={imageInfo}>
+            <span>프로필 사진</span>
+            <img src={profileImageUrl} css={imageSize} alt="프로필 이미지" />
+          </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 }
 
