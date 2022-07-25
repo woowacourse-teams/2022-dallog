@@ -53,7 +53,7 @@ const handlers = [
     return res(ctx.status(201));
   }),
 
-  rest.get(subscriptionApi.getEndpoint, (req, res, ctx) => {
+  rest.get(subscriptionApi.endpoint.get, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(subscriptionDB));
   }),
 
