@@ -24,22 +24,25 @@ public class GoogleOAuthClient implements OAuthClient {
 
     private static final String JWT_DELIMITER = "\\.";
 
-    private final String googleRedirectUri;
-    private final String googleClientId;
-    private final String googleClientSecret;
-    private final String googleTokenUri;
+    private final String clientId;
+    private final String clientSecret;
+    private final String grantType;
+    private final String redirectUri;
+    private final String tokenUri;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public GoogleOAuthClient(@Value("${oauth.google.redirect_uri}") final String googleRedirectUri,
-                             @Value("${oauth.google.client_id}") final String googleClientId,
-                             @Value("${oauth.google.client_secret}") final String googleClientSecret,
-                             @Value("${oauth.google.token_uri}") final String googleTokenUri,
+    public GoogleOAuthClient(@Value("${oauth.google.client-id}") final String clientId,
+                             @Value("${oauth.google.client-secret}") final String clientSecret,
+                             @Value("oauth.google.grant-type") final String grantType,
+                             @Value("${oauth.google.redirect-uri}") final String redirectUri,
+                             @Value("${oauth.google.token-uri}") final String tokenUri,
                              final RestTemplateBuilder restTemplateBuilder, final ObjectMapper objectMapper) {
-        this.googleRedirectUri = googleRedirectUri;
-        this.googleClientId = googleClientId;
-        this.googleClientSecret = googleClientSecret;
-        this.googleTokenUri = googleTokenUri;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.grantType = grantType;
+        this.redirectUri = redirectUri;
+        this.tokenUri = tokenUri;
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -63,16 +66,16 @@ public class GoogleOAuthClient implements OAuthClient {
         MultiValueMap<String, String> params = generateRequestParams(code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return restTemplate.postForEntity(googleTokenUri, request, GoogleTokenResponse.class).getBody();
+        return restTemplate.postForEntity(tokenUri, request, GoogleTokenResponse.class).getBody();
     }
 
     private MultiValueMap<String, String> generateRequestParams(final String code) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", googleClientId);
-        params.add("client_secret", googleClientSecret);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
         params.add("code", code);
-        params.add("grant_type", "authorization_code");
-        params.add("redirect_uri", googleRedirectUri);
+        params.add("grant_type", grantType);
+        params.add("redirect_uri", redirectUri);
         return params;
     }
 

@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/dallog;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+oauth:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    redirect-uri: ${GOOGLE_REDIRECT_URI}
+    oauth-end-point: https://accounts.google.com/o/oauth2/v2/auth
+    response-type: code
+    scopes: https://www.googleapis.com/auth/userinfo.profile, https://www.googleapis.com/auth/userinfo.email
+    token-uri: ${GOOGLE_TOKEN_URI}
+    grant-type: authorization_code
+
+security:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY}
+      expire-length: ${JWT_EXPIRE_LENGTH}
