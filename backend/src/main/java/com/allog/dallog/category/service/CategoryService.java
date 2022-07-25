@@ -69,9 +69,7 @@ public class CategoryService {
         memberService.getMember(memberId);
         Category category = getCategory(categoryId);
 
-        if (!categoryRepository.existsByIdAndMemberId(category.getId(), memberId)) {
-            throw new NoPermissionException();
-        }
+        validatePermission(memberId, categoryId);
 
         category.changeName(request.getName());
     }
@@ -80,10 +78,14 @@ public class CategoryService {
     public void delete(final Long memberId, final Long categoryId) {
         memberService.getMember(memberId);
 
+        validatePermission(memberId, categoryId);
+
+        categoryRepository.deleteById(categoryId);
+    }
+
+    private void validatePermission(final Long memberId, final Long categoryId) {
         if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
             throw new NoPermissionException();
         }
-
-        categoryRepository.deleteById(categoryId);
     }
 }
