@@ -7,6 +7,7 @@ import useToggle from '@/hooks/useToggle';
 import { Schedule } from '@/@types';
 
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Calendar from '@/components/Calendar/Calendar';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
@@ -49,13 +50,15 @@ function CalendarPage() {
   }
 
   return (
-    <div css={calendarPage}>
-      <Calendar current={current} setCurrent={setCurrent} />
-      <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
-        <ScheduleAddModal refetch={refetchSchedules} closeModal={toggleCalendarAddModalOpen} />
-      </ModalPortal>
-      <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
-    </div>
+    <PageLayout>
+      <div css={calendarPage}>
+        <Calendar current={current} setCurrent={setCurrent} />
+        <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
+          <ScheduleAddModal refetch={refetchSchedules} closeModal={toggleCalendarAddModalOpen} />
+        </ModalPortal>
+        <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
+      </div>
+    </PageLayout>
   );
 }
 

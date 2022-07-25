@@ -1,7 +1,10 @@
 import { css, Theme } from '@emotion/react';
 
 const categoryTable = css`
+  overflow-y: scroll;
+
   width: 100%;
+  height: 72vh;
 `;
 
 const categoryTableHeader = ({ flex, colors }: Theme) => css`
@@ -9,6 +12,7 @@ const categoryTableHeader = ({ flex, colors }: Theme) => css`
 
   justify-content: space-around;
 
+  width: 100%;
   height: 12rem;
   border-bottom: 2px solid ${colors.GRAY_400};
 

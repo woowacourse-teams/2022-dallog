@@ -3,11 +3,12 @@ import { css, Theme } from '@emotion/react';
 const sideBar = ({ colors, flex }: Theme, isSideBarOpen: boolean) => css`
   ${flex.row}
 
-  position: absolute;
+  overflow: hidden;
+  position: fixed;
   z-index: 10;
 
   width: ${isSideBarOpen ? '64rem' : '0'};
-  height: 100vh;
+  height: calc(100vh - 16rem);
   padding: ${isSideBarOpen ? '5rem' : '0'};
   border: 1px solid ${colors.GRAY_400};
 
