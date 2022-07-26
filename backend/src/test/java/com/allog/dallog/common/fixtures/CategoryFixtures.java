@@ -27,7 +27,6 @@ public class CategoryFixtures {
     public static final String 후디_JPA_스터디_이름 = "후디 JPA 스터디";
     public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름);
 
-
     public static Category 공통_일정(final Member creator) {
         return new Category(공통_일정_이름, creator);
     }

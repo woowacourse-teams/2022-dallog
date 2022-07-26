@@ -7,9 +7,9 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.관리자;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_BLUE;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_RED;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_YELLOW;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -117,9 +117,9 @@ class SubscriptionServiceTest {
         CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse member = memberService.save(MEMBER);
-        subscriptionService.save(member.getId(), 공통_일정.getId(), CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), BE_일정.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), FE_일정.getId(), CREATE_REQUEST_YELLOW);
+        subscriptionService.save(member.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(member.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
+        subscriptionService.save(member.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
         SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
@@ -139,9 +139,9 @@ class SubscriptionServiceTest {
 
         MemberResponse 후디 = memberService.save(후디());
         SubscriptionResponse subscriptionResponse = subscriptionService.save(후디.getId(), 공통_일정.getId(),
-                CREATE_REQUEST_RED);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(후디.getId(), FE_일정.getId(), CREATE_REQUEST_YELLOW);
+                빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
         subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), 후디.getId());

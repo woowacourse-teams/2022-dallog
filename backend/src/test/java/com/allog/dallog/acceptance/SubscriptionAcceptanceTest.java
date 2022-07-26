@@ -4,7 +4,11 @@ import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -32,14 +36,14 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     void 인증된_회원이_카테고리를_구독하면_201을_반환한다() {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
-        CategoryResponse categoryResponse = 새로운_카테고리를_등록한다(accessToken, "BE 공식일정");
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new SubscriptionCreateRequest(COLOR_RED))
-                .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryResponse.getId())
+                .body(빨간색_구독_생성_요청)
+                .when().post("/api/members/me/categories/{categoryId}/subscriptions", 공통_일정.getId())
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
                 .extract();
@@ -53,13 +57,13 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     void 인증된_회원이_구독_목록을_조회하면_200을_반환한다() {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
-        CategoryResponse categoryResponse1 = 새로운_카테고리를_등록한다(accessToken, "BE 일정");
-        CategoryResponse categoryResponse2 = 새로운_카테고리를_등록한다(accessToken, "FE 일정");
-        CategoryResponse categoryResponse3 = 새로운_카테고리를_등록한다(accessToken, "공통 일정");
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
 
-        카테고리를_구독한다(accessToken, categoryResponse1);
-        카테고리를_구독한다(accessToken, categoryResponse2);
-        카테고리를_구독한다(accessToken, categoryResponse3);
+        카테고리를_구독한다(accessToken, 공통_일정);
+        카테고리를_구독한다(accessToken, BE_일정);
+        카테고리를_구독한다(accessToken, FE_일정);
 
         // when
         ExtractableResponse<Response> response = 구독_목록을_조회한다(accessToken);
@@ -77,13 +81,13 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     void 구독을_취소할_경우_204를_반환한다() {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
-        CategoryResponse categoryResponse1 = 새로운_카테고리를_등록한다(accessToken, "BE 일정");
-        CategoryResponse categoryResponse2 = 새로운_카테고리를_등록한다(accessToken, "FE 일정");
-        CategoryResponse categoryResponse3 = 새로운_카테고리를_등록한다(accessToken, "공통 일정");
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
 
-        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(accessToken, categoryResponse1);
-        카테고리를_구독한다(accessToken, categoryResponse2);
-        카테고리를_구독한다(accessToken, categoryResponse3);
+        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(accessToken, 공통_일정);
+        카테고리를_구독한다(accessToken, BE_일정);
+        카테고리를_구독한다(accessToken, FE_일정);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -98,8 +102,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    private CategoryResponse 새로운_카테고리를_등록한다(final String accessToken, final String name) {
-        CategoryCreateRequest request = new CategoryCreateRequest(name);
+    private CategoryResponse 새로운_카테고리를_등록한다(final String accessToken, final CategoryCreateRequest request) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -114,7 +117,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new SubscriptionCreateRequest(COLOR_RED))
+                .body(new SubscriptionCreateRequest(빨간색))
                 .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryResponse.getId())
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())

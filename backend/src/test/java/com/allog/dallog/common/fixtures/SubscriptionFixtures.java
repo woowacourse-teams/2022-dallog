@@ -1,14 +1,33 @@
 package com.allog.dallog.common.fixtures;
 
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
 
 public class SubscriptionFixtures {
 
-    public static final String COLOR_RED = "#FF0000";
-    public static final String COLOR_BLUE = "#0000FF";
-    public static final String COLOR_YELLOW = "#FFFF00";
+    /* 빨간색 구독 */
+    public static final String 빨간색 = "#FF0000";
+    public static final SubscriptionCreateRequest 빨간색_구독_생성_요청 = new SubscriptionCreateRequest(빨간색);
 
-    public static final SubscriptionCreateRequest CREATE_REQUEST_RED = new SubscriptionCreateRequest(COLOR_RED);
-    public static final SubscriptionCreateRequest CREATE_REQUEST_BLUE = new SubscriptionCreateRequest(COLOR_BLUE);
-    public static final SubscriptionCreateRequest CREATE_REQUEST_YELLOW = new SubscriptionCreateRequest(COLOR_YELLOW);
+    /* 빨간색 구독 */
+    public static final String 파란색 = "#0000FF";
+    public static final SubscriptionCreateRequest 파란색_구독_생성_요청 = new SubscriptionCreateRequest(파란색);
+
+    /* 빨간색 구독 */
+    public static final String 노란색 = "#FFFF00";
+    public static final SubscriptionCreateRequest 노란색_구독_생성_요청 = new SubscriptionCreateRequest(노란색);
+
+    public static Subscription 빨간색_구독(final Member member, final Category category) {
+        return new Subscription(member, category, 빨간색);
+    }
+
+    public static Subscription 파란색_구독(final Member member, final Category category) {
+        return new Subscription(member, category, 파란색);
+    }
+
+    public static Subscription 노란색_구독(final Member member, final Category category) {
+        return new Subscription(member, category, 노란색);
+    }
 }
