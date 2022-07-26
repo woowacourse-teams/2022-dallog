@@ -2,6 +2,7 @@ package com.allog.dallog.infrastructure.oauth.client;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.global.config.properties.GoogleProperties;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,25 +24,13 @@ public class GoogleOAuthClient implements OAuthClient {
 
     private static final String JWT_DELIMITER = "\\.";
 
-    private final String clientId;
-    private final String clientSecret;
-    private final String grantType;
-    private final String redirectUri;
-    private final String tokenUri;
+    private final GoogleProperties googleProperties;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public GoogleOAuthClient(@Value("${oauth.google.client-id}") final String clientId,
-                             @Value("${oauth.google.client-secret}") final String clientSecret,
-                             @Value("oauth.google.grant-type") final String grantType,
-                             @Value("${oauth.google.redirect-uri}") final String redirectUri,
-                             @Value("${oauth.google.token-uri}") final String tokenUri,
-                             final RestTemplateBuilder restTemplateBuilder, final ObjectMapper objectMapper) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.grantType = grantType;
-        this.redirectUri = redirectUri;
-        this.tokenUri = tokenUri;
+    public GoogleOAuthClient(final GoogleProperties googleProperties, final RestTemplateBuilder restTemplateBuilder,
+                             final ObjectMapper objectMapper) {
+        this.googleProperties = googleProperties;
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -66,16 +54,16 @@ public class GoogleOAuthClient implements OAuthClient {
         MultiValueMap<String, String> params = generateRequestParams(code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return restTemplate.postForEntity(tokenUri, request, GoogleTokenResponse.class).getBody();
+        return restTemplate.postForEntity(googleProperties.getTokenUri(), request, GoogleTokenResponse.class).getBody();
     }
 
     private MultiValueMap<String, String> generateRequestParams(final String code) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", clientId);
-        params.add("client_secret", clientSecret);
+        params.add("client_id", googleProperties.getClientId());
+        params.add("client_secret", googleProperties.getClientSecret());
         params.add("code", code);
-        params.add("grant_type", grantType);
-        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", googleProperties.getGrantType());
+        params.add("redirect_uri", googleProperties.getRedirectUri());
         return params;
     }
 

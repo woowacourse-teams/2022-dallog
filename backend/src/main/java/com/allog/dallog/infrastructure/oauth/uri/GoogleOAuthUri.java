@@ -1,34 +1,24 @@
 package com.allog.dallog.infrastructure.oauth.uri;
 
 import com.allog.dallog.domain.auth.application.OAuthUri;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
+import com.allog.dallog.global.config.properties.GoogleProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GoogleOAuthUri implements OAuthUri {
 
-    private final String oauthEndPoint;
-    private final String clientId;
-    private final String redirectUri;
-    private final List<String> scopes;
+    private final GoogleProperties googleProperties;
 
-    public GoogleOAuthUri(@Value("${oauth.google.oauth-end-point}") final String oauthEndPoint,
-                          @Value("${oauth.google.client-id}") final String clientId,
-                          @Value("${oauth.google.redirect-uri}") final String redirectUri,
-                          @Value("${oauth.google.scopes}") final List<String> scopes) {
-        this.oauthEndPoint = oauthEndPoint;
-        this.clientId = clientId;
-        this.redirectUri = redirectUri;
-        this.scopes = scopes;
+    public GoogleOAuthUri(final GoogleProperties googleProperties) {
+        this.googleProperties = googleProperties;
     }
 
     @Override
     public String generate() {
-        return oauthEndPoint + "?"
-                + "client_id=" + clientId + "&"
-                + "redirect_uri=" + redirectUri + "&"
+        return googleProperties.getoAuthEndPoint() + "?"
+                + "client_id=" + googleProperties.getClientId() + "&"
+                + "redirect_uri=" + googleProperties.getRedirectUri() + "&"
                 + "response_type=code&"
-                + "scope=" + String.join(" ", scopes);
+                + "scope=" + String.join(" ", googleProperties.getScopes());
     }
 }
