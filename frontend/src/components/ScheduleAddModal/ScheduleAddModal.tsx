@@ -1,9 +1,11 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { Schedule } from '@/@types';
+
+import { CACHE_KEY } from '@/constants';
 
 import { createPostBody } from '@/utils';
 import { getDate, getDateTime } from '@/utils/date';
@@ -25,15 +27,13 @@ import {
 
 interface ScheduleAddModalProps {
   closeModal: () => void;
-  refetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<AxiosResponse<{ schedules: Schedule[] }>, AxiosError>>;
 }
 
-function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
+function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
+  const queryClient = useQueryClient();
   const {
     isLoading,
     error,
@@ -77,7 +77,7 @@ function ScheduleAddModal({ closeModal, refetch }: ScheduleAddModalProps) {
   };
 
   const onSuccessPostSchedule = () => {
-    refetch();
+    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
     closeModal();
   };
 

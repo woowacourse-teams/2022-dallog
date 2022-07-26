@@ -1,24 +1,25 @@
 import { useTheme } from '@emotion/react';
-import { useState } from 'react';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useEffect } from 'react';
+import { useQuery } from 'react-query';
 
-import CalendarDate from '@/components/CalendarDate/CalendarDate';
+import useCalendar from '@/hooks/useCalendar';
 
-import { DAYS } from '@/constants';
+import { Schedule } from '@/@types';
 
-import {
-  getBeforeYearMonth,
-  getCalendarMonth,
-  getNextYearMonth,
-  getThisMonth,
-  getThisYear,
-} from '@/utils/date';
+import Button from '@/components/@common/Button/Button';
+
+import { CACHE_KEY, DAYS } from '@/constants';
+
+import scheduleApi from '@/api/schedule';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
-import Button from '../@common/Button/Button';
 import {
   calendarGrid,
   calendarHeader,
+  dateBorder,
+  dateText,
   dayBar,
   monthPicker,
   navBarGrid,
@@ -27,49 +28,29 @@ import {
   todayButton,
 } from './Calendar.styles';
 
-interface CalendarProps {
-  current: {
-    year: number;
-    month: number;
-  };
-  setCurrent: React.Dispatch<
-    React.SetStateAction<{
-      year: number;
-      month: number;
-    }>
-  >;
-}
-
-function Calendar({ current, setCurrent }: CalendarProps) {
+function Calendar() {
   const theme = useTheme();
 
-  const [calendarMonth, setCalendarMonth] = useState(
-    getCalendarMonth(getThisYear(), getThisMonth())
-  );
+  const { calendarMonth, current, moveToBeforeMonth, moveToToday, moveToNextMonth } = useCalendar();
 
-  const handleClickBeforeMonthButton = () => {
-    const { year, month } = getBeforeYearMonth(current.year, current.month);
-
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
-  };
-
-  const handleClickTodayButton = () => {
-    const year = getThisYear();
-    const month = getThisMonth();
-
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
-  };
-
-  const handleClickNextMonthButton = () => {
-    const { year, month } = getNextYearMonth(current.year, current.month);
-
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
-  };
+  const { isLoading, error, data, refetch } = useQuery<
+    AxiosResponse<{ schedules: Schedule[] }>,
+    AxiosError
+  >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(current.year, current.month));
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
+
+  useEffect(() => {
+    refetch();
+  }, [current]);
+
+  if (isLoading || data === undefined) {
+    return <>Loading</>;
+  }
+
+  if (error) {
+    return <>Error</>;
+  }
 
   return (
     <>
@@ -78,20 +59,19 @@ function Calendar({ current, setCurrent }: CalendarProps) {
           {current.year}년 {current.month}월
         </span>
         <div css={monthPicker}>
-          <Button cssProp={navButton} onClick={handleClickBeforeMonthButton}>
+          <Button cssProp={navButton} onClick={moveToBeforeMonth}>
             <AiOutlineLeft />
             <span css={navButtonTitle}>전 달</span>
           </Button>
-          <Button cssProp={todayButton} onClick={handleClickTodayButton}>
+          <Button cssProp={todayButton} onClick={moveToToday}>
             오늘
           </Button>
-          <Button cssProp={navButton} onClick={handleClickNextMonthButton}>
+          <Button cssProp={navButton} onClick={moveToNextMonth}>
             <AiOutlineRight />
             <span css={navButtonTitle}>다음 달</span>
           </Button>
         </div>
       </div>
-
       <div css={navBarGrid}>
         {DAYS.map((day) => (
           <span key={day} css={dayBar(theme, day)}>
@@ -104,7 +84,9 @@ function Calendar({ current, setCurrent }: CalendarProps) {
           const key = `${info.year}${info.month}${info.date}${info.day}`;
 
           return (
-            <CalendarDate key={key} dateInfo={info} isThisMonth={current.month === info.month} />
+            <div key={key} css={dateBorder(theme, info.day)}>
+              <span css={dateText(theme, info.day, current.month === info.month)}>{info.date}</span>
+            </div>
           );
         })}
       </div>
