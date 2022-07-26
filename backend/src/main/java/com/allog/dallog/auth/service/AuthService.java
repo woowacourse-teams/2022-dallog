@@ -56,12 +56,11 @@ public class AuthService {
                 SocialType.GOOGLE);
     }
 
-    public void validateExistsMember(final Long id) {
-        memberService.validateExistsMember(id);
-    }
-
-    public String getPayload(final String accessToken) {
+    public Long extractMemberId(final String accessToken) {
         jwtTokenProvider.validateToken(accessToken);
-        return jwtTokenProvider.getPayload(accessToken);
+        String payload = jwtTokenProvider.getPayload(accessToken);
+        Long memberId = Long.valueOf(payload);
+        memberService.validateExistsMember(memberId);
+        return memberId;
     }
 }
