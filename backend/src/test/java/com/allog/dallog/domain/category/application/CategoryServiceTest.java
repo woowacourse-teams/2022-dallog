@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
@@ -147,6 +148,19 @@ class CategoryServiceTest {
         assertThat(category.getName()).isEqualTo(우테코_공통_일정_이름);
     }
 
+    @DisplayName("존재하지 않는 카테고리를 수정할 경우 예외를 던진다.")
+    @Test
+    void 존재하지_않는_카테고리를_수정할_경우_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(BE_일정_이름);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.update(관리자.getId(), 공통_일정.getId() + 1, categoryUpdateRequest))
+                .isInstanceOf(NoSuchCategoryException.class);
+    }
+
     @DisplayName("자신이 만들지 않은 카테고리를 수정할 경우 예외를 던진다.")
     @Test
     void 자신이_만들지_않은_카테고리를_수정할_경우_예외를_던진다() {
@@ -174,6 +188,18 @@ class CategoryServiceTest {
 
         //then
         assertThatThrownBy(() -> categoryService.getCategory(savedCategory.getId()))
+                .isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("존재하지 않는 카테고리를 삭제할 경우 예외를 던진다.")
+    @Test
+    void 존재하지_않는_카테고리를_삭제할_경우_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
