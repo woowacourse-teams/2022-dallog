@@ -11,17 +11,15 @@ class JwtTokenProviderTest {
 
     private static final String JWT_SECRET_KEY = "A".repeat(32); // Secret Key는 최소 32바이트 이상이어야함.
     private static final int JWT_EXPIRE_LENGTH = 3600;
+    private static final String PAYLOAD = "payload";
 
     private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, JWT_EXPIRE_LENGTH);
 
     @DisplayName("JWT 토큰을 생성한다.")
     @Test
     void JWT_토큰을_생성한다() {
-        // given
-        String payload = "hello";
-
-        // when
-        String actual = jwtTokenProvider.createToken(payload);
+        // given & when
+        String actual = jwtTokenProvider.createToken(PAYLOAD);
 
         // then
         assertThat(actual.split("\\.")).hasSize(3);
@@ -31,14 +29,13 @@ class JwtTokenProviderTest {
     @Test
     void JWT_토큰의_Payload를_가져온다() {
         // given
-        String expected = "Hello";
-        String token = jwtTokenProvider.createToken(expected);
+        String token = jwtTokenProvider.createToken(PAYLOAD);
 
         // when
         String actual = jwtTokenProvider.getPayload(token);
 
         // then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(PAYLOAD);
     }
 
     @DisplayName("validateToken 메서드는 만료된 토큰을 전달하면 예외를 던진다.")
@@ -46,7 +43,7 @@ class JwtTokenProviderTest {
     void validateToken_메서드는_만료된_토큰을_전달하면_예외를_던진다() {
         // given
         JwtTokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0);
-        String expiredToken = expiredJwtTokenProvider.createToken("payload");
+        String expiredToken = expiredJwtTokenProvider.createToken(PAYLOAD);
 
         // when & then
         assertThatThrownBy(() -> jwtTokenProvider.validateToken(expiredToken))

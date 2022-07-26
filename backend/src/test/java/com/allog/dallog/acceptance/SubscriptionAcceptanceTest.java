@@ -2,8 +2,8 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -31,7 +31,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_카테고리를_구독하면_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse categoryResponse = 새로운_카테고리를_등록한다(accessToken, "BE 공식일정");
 
         // when
@@ -52,7 +52,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_구독_목록을_조회하면_200을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse categoryResponse1 = 새로운_카테고리를_등록한다(accessToken, "BE 일정");
         CategoryResponse categoryResponse2 = 새로운_카테고리를_등록한다(accessToken, "FE 일정");
         CategoryResponse categoryResponse3 = 새로운_카테고리를_등록한다(accessToken, "공통 일정");
@@ -76,7 +76,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 구독을_취소할_경우_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse categoryResponse1 = 새로운_카테고리를_등록한다(accessToken, "BE 일정");
         CategoryResponse categoryResponse2 = 새로운_카테고리를_등록한다(accessToken, "FE 일정");
         CategoryResponse categoryResponse3 = 새로운_카테고리를_등록한다(accessToken, "공통 일정");
