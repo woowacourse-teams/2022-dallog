@@ -130,6 +130,18 @@ class CategoryServiceTest {
                 .isEqualTo(공통_일정);
     }
 
+    @DisplayName("id를 통해 카테고리를 단건 조회할 때 카테고리가 존재하지 않다면 예외가 발생한다.")
+    @Test
+    void id를_통해_카테고리를_단건_조회할_때_카테고리가_존재하지_않다면_예외가_발생한다() {
+        // given
+        Member creator = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(creator.getId(), 공통_일정_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.findById(공통_일정.getId() + 1))
+                .isInstanceOf(NoSuchCategoryException.class);
+    }
+
     @DisplayName("회원과 카테고리 id를 통해 카테고리를 수정한다.")
     @Test
     void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
