@@ -47,7 +47,7 @@ class JwtTokenProviderTest {
         String expiredToken = expiredJwtTokenProvider.createToken("payload");
 
         // when & then
-        assertThat(jwtTokenProvider.validateToken(expiredToken)).isFalse();
+        assertThat(jwtTokenProvider.isValidToken(expiredToken)).isFalse();
     }
 
     @DisplayName("validateToken 메서드는 유효하지 않은 토큰을 전달하면 false를 반환한다.")
@@ -57,6 +57,6 @@ class JwtTokenProviderTest {
         String malformedToken = "malformed";
 
         // when & then
-        assertThat(jwtTokenProvider.validateToken(malformedToken)).isFalse();
+        assertThat(jwtTokenProvider.isValidToken(malformedToken)).isFalse();
     }
 }

@@ -45,14 +45,16 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(final String token) {
+    public boolean isValidToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
 
-            return !claims.getBody().getExpiration().before(new Date());
+            return !claims.getBody()
+                    .getExpiration()
+                    .before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
