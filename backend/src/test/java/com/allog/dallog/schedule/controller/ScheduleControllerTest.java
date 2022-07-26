@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.auth.support.JwtTokenProvider;
+import com.allog.dallog.auth.service.AuthService;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.service.ScheduleService;
@@ -30,13 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureRestDocs
 @WebMvcTest(ScheduleController.class)
-@Import(JwtTokenProvider.class)
 class ScheduleControllerTest {
 
     @Autowired
@@ -44,6 +42,9 @@ class ScheduleControllerTest {
 
     @Autowired
     private ObjectMapper ObjectMapper;
+
+    @MockBean
+    private AuthService authService;
 
     @MockBean
     private ScheduleService scheduleService;

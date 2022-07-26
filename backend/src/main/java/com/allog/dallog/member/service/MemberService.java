@@ -39,4 +39,8 @@ public class MemberService {
     public boolean existsByEmail(final String email) {
         return memberRepository.existsByEmail(email);
     }
+
+    public boolean existsById(final Long id) {
+        return memberRepository.existsById(id);
+    }
 }

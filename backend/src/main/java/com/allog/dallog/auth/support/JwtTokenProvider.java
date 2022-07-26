@@ -53,9 +53,11 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
 
-            claims.getBody().getExpiration().before(new Date());
+            claims.getBody()
+                    .getExpiration()
+                    .before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidTokenException();
+            throw new InvalidTokenException("권한이 없습니다.");
         }
     }
 }

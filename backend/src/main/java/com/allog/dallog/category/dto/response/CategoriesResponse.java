@@ -1,6 +1,8 @@
 package com.allog.dallog.category.dto.response;
 
+import com.allog.dallog.category.domain.Category;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoriesResponse {
 
@@ -10,9 +12,15 @@ public class CategoriesResponse {
     public CategoriesResponse() {
     }
 
-    public CategoriesResponse(final int page, final List<CategoryResponse> categories) {
+    public CategoriesResponse(final int page, final List<Category> categories) {
         this.page = page;
-        this.categories = categories;
+        this.categories = convertToResponses(categories);
+    }
+
+    private List<CategoryResponse> convertToResponses(final List<Category> categories) {
+        return categories.stream()
+                .map(CategoryResponse::new)
+                .collect(Collectors.toList());
     }
 
     public int getPage() {

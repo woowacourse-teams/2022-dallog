@@ -3,8 +3,11 @@ package com.allog.dallog.auth.service;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
 import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.auth.dto.TokenResponse;
+import com.allog.dallog.auth.exception.InvalidTokenException;
+import com.allog.dallog.auth.exception.NotFoundMemberException;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
@@ -70,5 +73,16 @@ class AuthServiceTest {
 
         // then
         assertThat(actual).hasSize(1);
+    }
+
+    @DisplayName("회원이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void 회원이_존재하지_않으면_예외를_던진다() {
+        // given
+        Long id = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> authService.validateExistsMember(id))
+                .isInstanceOf(NotFoundMemberException.class);
     }
 }
