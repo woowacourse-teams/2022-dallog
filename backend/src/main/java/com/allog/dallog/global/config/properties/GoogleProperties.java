@@ -18,9 +18,8 @@ public class GoogleProperties {
     private final String grantType;
 
     public GoogleProperties(final String clientId, final String clientSecret, final String redirectUri,
-                            final String oAuthEndPoint,
-                            final String responseType, final List<String> scopes, final String tokenUri,
-                            final String grantType) {
+                            final String oAuthEndPoint, final String responseType, final List<String> scopes,
+                            final String tokenUri, final String grantType) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;

@@ -28,7 +28,9 @@ oauth:
     redirect-uri: ${GOOGLE_REDIRECT_URI}
     oauth-end-point: https://accounts.google.com/o/oauth2/v2/auth
     response-type: code
-    scopes: https://www.googleapis.com/auth/userinfo.profile, https://www.googleapis.com/auth/userinfo.email
+    scopes:
+      - https://www.googleapis.com/auth/userinfo.profile
+      - https://www.googleapis.com/auth/userinfo.email
     token-uri: ${GOOGLE_TOKEN_URI}
     grant-type: authorization_code
 
