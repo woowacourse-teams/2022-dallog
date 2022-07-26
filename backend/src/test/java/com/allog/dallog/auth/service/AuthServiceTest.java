@@ -93,7 +93,7 @@ class AuthServiceTest {
         Long id = 0L;
 
         // when & then
-        assertThatThrownBy(() -> authService.validateExistsId(id))
+        assertThatThrownBy(() -> authService.validateExistsMember(id))
                 .isInstanceOf(NotFoundDataException.class);
     }
 }

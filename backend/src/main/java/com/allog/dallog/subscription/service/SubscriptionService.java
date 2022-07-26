@@ -43,9 +43,7 @@ public class SubscriptionService {
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {
-        Member member = memberService.getMember(memberId);
-
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
 
         List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
                 .map(SubscriptionResponse::new)
@@ -62,12 +60,10 @@ public class SubscriptionService {
     }
 
     public void deleteByIdAndMemberId(final Long id, final Long memberId) {
-        Member member = memberService.getMember(memberId);
-
-        if (!subscriptionRepository.existsByIdAndMemberId(id, member.getId())) {
+        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
         }
 
-        subscriptionRepository.deleteByIdAndMemberId(id, member.getId());
+        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
     }
 }

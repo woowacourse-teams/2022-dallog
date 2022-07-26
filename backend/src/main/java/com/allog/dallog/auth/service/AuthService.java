@@ -64,13 +64,13 @@ public class AuthService {
         }
     }
 
-    public String getPayload(final String accessToken) {
-        return jwtTokenProvider.getPayload(accessToken);
-    }
-
-    public void validateExistsId(final Long id) {
+    public void validateExistsMember(final Long id) {
         if (!memberService.existsById(id)) {
             throw new NotFoundDataException("존재하지 않는 회원 입니다.");
         }
+    }
+
+    public String getPayload(final String accessToken) {
+        return jwtTokenProvider.getPayload(accessToken);
     }
 }
