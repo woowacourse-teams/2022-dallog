@@ -20,8 +20,8 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.category.dto.response.CategoriesResponse;
-import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;

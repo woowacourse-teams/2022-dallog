@@ -1,9 +1,9 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.category.domain.Category;
-import com.allog.dallog.member.domain.Member;
-import com.allog.dallog.subscription.domain.Subscription;
-import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 
 public class SubscriptionFixtures {
 
