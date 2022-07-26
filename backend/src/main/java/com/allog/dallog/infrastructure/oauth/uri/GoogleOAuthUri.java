@@ -8,25 +8,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class GoogleOAuthUri implements OAuthUri {
 
-    private static final String GOOGLE_OAUTH_END_POINT = "https://accounts.google.com/o/oauth2/v2/auth";
-    private static final List<String> SCOPES = List.of("https://www.googleapis.com/auth/userinfo.profile",
-            "https://www.googleapis.com/auth/userinfo.email");
+    private final String oauthEndPoint;
+    private final String clientId;
+    private final String redirectUri;
+    private final List<String> scopes;
 
-    private final String googleRedirectUri;
-    private final String googleClientId;
-
-    public GoogleOAuthUri(@Value("${oauth.google.redirect_uri}") final String googleRedirectUri,
-                          @Value("${oauth.google.client_id}") final String googleClientId) {
-        this.googleRedirectUri = googleRedirectUri;
-        this.googleClientId = googleClientId;
+    public GoogleOAuthUri(@Value("${oauth.google.oauth-end-point}") final String oauthEndPoint,
+                          @Value("${oauth.google.client-id}") final String clientId,
+                          @Value("${oauth.google.redirect-uri}") final String redirectUri,
+                          @Value("${oauth.google.scopes}") final List<String> scopes) {
+        this.oauthEndPoint = oauthEndPoint;
+        this.clientId = clientId;
+        this.redirectUri = redirectUri;
+        this.scopes = scopes;
     }
 
     @Override
     public String generate() {
-        return GOOGLE_OAUTH_END_POINT + "?"
-                + "client_id=" + googleClientId + "&"
-                + "redirect_uri=" + googleRedirectUri + "&"
+        return oauthEndPoint + "?"
+                + "client_id=" + clientId + "&"
+                + "redirect_uri=" + redirectUri + "&"
                 + "response_type=code&"
-                + "scope=" + String.join(" ", SCOPES);
+                + "scope=" + String.join(" ", scopes);
     }
 }
