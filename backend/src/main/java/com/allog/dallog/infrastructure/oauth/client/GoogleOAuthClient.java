@@ -1,7 +1,7 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.auth.dto.OAuthMember;
-import com.allog.dallog.auth.support.OAuthClient;
+import com.allog.dallog.domain.auth.application.OAuthClient;
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

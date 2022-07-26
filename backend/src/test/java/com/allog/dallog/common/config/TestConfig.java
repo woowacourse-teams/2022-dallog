@@ -1,6 +1,6 @@
 package com.allog.dallog.common.config;
 
-import com.allog.dallog.auth.support.OAuthClient;
+import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.infrastructure.oauth.client.StubOAuthClient;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

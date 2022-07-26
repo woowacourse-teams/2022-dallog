@@ -11,12 +11,12 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.common.config.TestConfig;
-import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
-import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
-import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

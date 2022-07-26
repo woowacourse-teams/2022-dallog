@@ -4,8 +4,8 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이름;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_프로필;
 
-import com.allog.dallog.auth.dto.OAuthMember;
-import com.allog.dallog.auth.support.OAuthClient;
+import com.allog.dallog.domain.auth.application.OAuthClient;
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 
 public class StubOAuthClient implements OAuthClient {
 

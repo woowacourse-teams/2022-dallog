@@ -1,8 +1,8 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.category.domain.Category;
-import com.allog.dallog.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.domain.member.domain.Member;
 
 public class CategoryFixtures {
 

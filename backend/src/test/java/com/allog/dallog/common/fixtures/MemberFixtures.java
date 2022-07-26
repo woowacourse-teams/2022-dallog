@@ -1,7 +1,7 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.member.domain.Member;
-import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.SocialType;
 
 public class MemberFixtures {
 

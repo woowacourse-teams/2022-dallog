@@ -1,6 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.uri;
 
-import com.allog.dallog.auth.support.OAuthUri;
+import com.allog.dallog.domain.auth.application.OAuthUri;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
