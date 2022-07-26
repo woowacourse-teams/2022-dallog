@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.exception.InvalidTokenException;
-import com.allog.dallog.auth.exception.NotFoundDataException;
+import com.allog.dallog.auth.exception.NotFoundMemberException;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
@@ -94,6 +94,6 @@ class AuthServiceTest {
 
         // when & then
         assertThatThrownBy(() -> authService.validateExistsMember(id))
-                .isInstanceOf(NotFoundDataException.class);
+                .isInstanceOf(NotFoundMemberException.class);
     }
 }
