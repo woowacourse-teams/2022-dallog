@@ -24,7 +24,7 @@ const menus = ({ flex }: Theme) => css`
   gap: 3rem;
 `;
 
-const menu = ({ colors, flex }: Theme) => css`
+const logo = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
   position: relative;
@@ -34,6 +34,19 @@ const menu = ({ colors, flex }: Theme) => css`
   font-size: 5rem;
   font-weight: bold;
   color: ${colors.GRAY_700};
+`;
+
+const menu = ({ colors, flex }: Theme) => css`
+  ${logo({ colors, flex })}
+
+  width: 11rem;
+  height: 11rem;
+
+  &:hover {
+    border-radius: 50%;
+
+    background: ${colors.GRAY_300};
+  }
 
   &:hover span {
     visibility: visible;
@@ -59,7 +72,7 @@ const menuTitle = ({ colors }: Theme) => css`
 
   padding: 2rem 3rem;
 
-  background: ${colors.GRAY_700};
+  background: ${colors.GRAY_700}ee;
 
   font-size: 3rem;
   font-weight: normal;
@@ -67,4 +80,4 @@ const menuTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-export { loginButton, menu, menus, menuTitle, navBar };
+export { loginButton, logo, menu, menus, menuTitle, navBar };

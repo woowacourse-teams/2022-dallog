@@ -14,7 +14,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
-import { loginButton, menu, menus, menuTitle, navBar } from './NavBar.styles';
+import { loginButton, logo, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
 interface NavBarProps {
   openLoginModal: () => void;
@@ -49,7 +49,7 @@ function NavBar({ openLoginModal }: NavBarProps) {
           {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
           <span css={menuTitle}>메뉴</span>
         </Button>
-        <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
+        <Button cssProp={logo(theme)} onClick={handleClickMainButton}>
           🌙&nbsp;&nbsp;달록
         </Button>
       </div>

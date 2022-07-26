@@ -12,7 +12,7 @@ const scheduleAddButton = ({ colors }: Theme) => css`
   background: ${colors.YELLOW_500};
 
   font-size: 7rem;
-  line-height: 11rem;
+  line-height: 7rem;
   font-weight: 700;
   color: ${colors.WHITE};
 `;

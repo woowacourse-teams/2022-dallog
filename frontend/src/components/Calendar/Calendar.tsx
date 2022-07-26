@@ -17,13 +17,14 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 import Button from '../@common/Button/Button';
 import {
-  calendar,
   calendarGrid,
   calendarHeader,
   dayBar,
   monthPicker,
   navBarGrid,
   navButton,
+  navButtonTitle,
+  todayButton,
 } from './Calendar.styles';
 
 interface CalendarProps {
@@ -71,7 +72,7 @@ function Calendar({ current, setCurrent }: CalendarProps) {
   const rowNum = Math.ceil(calendarMonth.length / 7);
 
   return (
-    <div css={calendar}>
+    <>
       <div css={calendarHeader(theme)}>
         <span>
           {current.year}년 {current.month}월
@@ -79,12 +80,14 @@ function Calendar({ current, setCurrent }: CalendarProps) {
         <div css={monthPicker}>
           <Button cssProp={navButton} onClick={handleClickBeforeMonthButton}>
             <AiOutlineLeft />
+            <span css={navButtonTitle}>전 달</span>
           </Button>
-          <Button cssProp={navButton} onClick={handleClickTodayButton}>
-            Today
+          <Button cssProp={todayButton} onClick={handleClickTodayButton}>
+            오늘
           </Button>
           <Button cssProp={navButton} onClick={handleClickNextMonthButton}>
             <AiOutlineRight />
+            <span css={navButtonTitle}>다음 달</span>
           </Button>
         </div>
       </div>
@@ -105,7 +108,7 @@ function Calendar({ current, setCurrent }: CalendarProps) {
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
 
