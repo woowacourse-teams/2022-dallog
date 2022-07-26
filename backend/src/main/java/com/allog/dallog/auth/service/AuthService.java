@@ -3,6 +3,7 @@ package com.allog.dallog.auth.service;
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.exception.InvalidTokenException;
+import com.allog.dallog.auth.exception.NotFoundDataException;
 import com.allog.dallog.auth.support.JwtTokenProvider;
 import com.allog.dallog.auth.support.OAuthClient;
 import com.allog.dallog.auth.support.OAuthUri;
@@ -65,5 +66,11 @@ public class AuthService {
 
     public String getPayload(final String accessToken) {
         return jwtTokenProvider.getPayload(accessToken);
+    }
+
+    public void validateExistsId(final Long id) {
+        if (!memberService.existsById(id)) {
+            throw new NotFoundDataException("존재하지 않는 회원 입니다.");
+        }
     }
 }

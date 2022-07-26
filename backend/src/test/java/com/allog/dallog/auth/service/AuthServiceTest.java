@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.auth.dto.TokenResponse;
 import com.allog.dallog.auth.exception.InvalidTokenException;
+import com.allog.dallog.auth.exception.NotFoundDataException;
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
@@ -83,5 +84,16 @@ class AuthServiceTest {
         // when & then
         assertThatThrownBy(() -> authService.validateToken(malformedToken))
                 .isInstanceOf(InvalidTokenException.class);
+    }
+
+    @DisplayName("회원이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void 회원이_존재하지_않으면_예외를_던진다() {
+        // given
+        Long id = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> authService.validateExistsId(id))
+                .isInstanceOf(NotFoundDataException.class);
     }
 }
