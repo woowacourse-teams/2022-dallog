@@ -1,7 +1,7 @@
 package com.allog.dallog.subscription.domain;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

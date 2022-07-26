@@ -2,12 +2,13 @@ package com.allog.dallog.subscription.service;
 
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.관리자;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.exception.NoPermissionException;
-import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
 import com.allog.dallog.member.dto.MemberResponse;
@@ -50,18 +50,16 @@ class SubscriptionServiceTest {
     @Test
     void 새로운_구독을_생성한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
         // when
-        SubscriptionResponse response = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
 
         // then
         assertAll(() -> {
-            assertThat(response.getCategory().getName()).isEqualTo("BE 일정");
-            assertThat(response.getColor()).isEqualTo(color);
+            assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
+            assertThat(response.getColor()).isEqualTo(빨간색);
         });
     }
 
@@ -70,11 +68,11 @@ class SubscriptionServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse categoryResponse = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryResponse.getId(),
+        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color))).isInstanceOf(InvalidSubscriptionException.class);
     }
 
@@ -82,20 +80,18 @@ class SubscriptionServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
 
         // when
-        SubscriptionResponse foundResponse = subscriptionService.findById(subscriptionResponse.getId());
+        SubscriptionResponse foundResponse = subscriptionService.findById(빨간색_구독.getId());
 
         // then
         assertAll(() -> {
-            assertThat(foundResponse.getId()).isEqualTo(subscriptionResponse.getId());
-            assertThat(foundResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
-            assertThat(foundResponse.getColor()).isEqualTo(color);
+            assertThat(foundResponse.getId()).isEqualTo(빨간색_구독.getId());
+            assertThat(foundResponse.getCategory().getId()).isEqualTo(BE_일정.getId());
+            assertThat(foundResponse.getColor()).isEqualTo(빨간색);
         });
     }
 
@@ -116,13 +112,13 @@ class SubscriptionServiceTest {
         CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
         CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
-        MemberResponse member = memberService.save(MEMBER);
-        subscriptionService.save(member.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
-        subscriptionService.save(member.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
-        subscriptionService.save(member.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
+        MemberResponse 후디 = memberService.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
-        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
+        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디.getId());
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);

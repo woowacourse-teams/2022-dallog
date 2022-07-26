@@ -1,6 +1,6 @@
 package com.allog.dallog.category.domain;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -19,7 +19,7 @@ class CategoryTest {
         String name = "BE 공식일정";
 
         // when & then
-        assertDoesNotThrow(() -> new Category(name, MEMBER));
+        assertDoesNotThrow(() -> new Category(name, 후디()));
     }
 
     @DisplayName("카테고리 이름이 공백인 경우 예외를 던진다.")
@@ -29,7 +29,7 @@ class CategoryTest {
         String name = "";
 
         // when & then
-        assertThatThrownBy(() -> new Category(name, MEMBER))
+        assertThatThrownBy(() -> new Category(name, 후디()))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
@@ -39,7 +39,7 @@ class CategoryTest {
             "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 카테고리_이름의_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given & when & then
-        assertThatThrownBy(() -> new Category(name, MEMBER))
+        assertThatThrownBy(() -> new Category(name, 후디()))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 }

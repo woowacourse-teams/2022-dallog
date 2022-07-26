@@ -6,11 +6,11 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.관리자;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
