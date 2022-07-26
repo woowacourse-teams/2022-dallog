@@ -5,12 +5,11 @@ import ProtectRoute from '@/components/ProtectRoute';
 import SideBar from '@/components/SideBar/SideBar';
 import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
+import LoginPage from '@/pages/LoginPage/LoginPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import MyPage from '@/pages/MyPage/MyPage';
 
 import { PATH } from '@/constants';
-
-import LoginPage from './pages/LoginPage/LoginPage';
 
 function App() {
   return (
