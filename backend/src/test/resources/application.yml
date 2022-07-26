@@ -19,6 +19,11 @@ spring:
     hibernate:
       ddl-auto: create
 
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
 logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
