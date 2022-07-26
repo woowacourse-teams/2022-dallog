@@ -2,7 +2,6 @@ package com.allog.dallog.auth.service;
 
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
-import com.allog.dallog.auth.exception.NotFoundMemberException;
 import com.allog.dallog.auth.support.JwtTokenProvider;
 import com.allog.dallog.auth.support.OAuthClient;
 import com.allog.dallog.auth.support.OAuthUri;

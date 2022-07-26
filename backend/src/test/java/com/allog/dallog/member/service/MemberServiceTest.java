@@ -4,9 +4,11 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이메일;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.dto.MemberResponse;
+import com.allog.dallog.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +81,16 @@ class MemberServiceTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @DisplayName("회원이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void 회원이_존재하지_않으면_예외를_던진다() {
+        // given
+        Long id = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> memberService.validateExistsMember(id))
+                .isInstanceOf(NoSuchMemberException.class);
     }
 }

@@ -41,8 +41,8 @@ public class MemberService {
     }
 
     public void validateExistsMember(final Long id) {
-        if (memberRepository.existsById(id)) {
-            throw new NoSuchMemberException("이미 존재하는 회원입니다.");
+        if (!memberRepository.existsById(id)) {
+            throw new NoSuchMemberException("존재하지 않는 회원입니다.");
         }
     }
 }
