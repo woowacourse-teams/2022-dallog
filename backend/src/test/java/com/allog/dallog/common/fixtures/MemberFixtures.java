@@ -5,6 +5,10 @@ import com.allog.dallog.member.domain.SocialType;
 
 public class MemberFixtures {
 
+    public static final String 파랑_이메일 = "parang@email.com";
+    public static final String 파랑_프로필 = "/parang.png";
+    public static final String 파랑_이름 = "파랑";
+
     public static final String EMAIL = "example@email.com";
     public static final String PROFILE_IMAGE_URI = "/image.png";
     public static final String DISPLAY_NAME = "example";
