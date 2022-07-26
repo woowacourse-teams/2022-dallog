@@ -11,11 +11,11 @@ public class SubscriptionFixtures {
     public static final String 빨간색 = "#FF0000";
     public static final SubscriptionCreateRequest 빨간색_구독_생성_요청 = new SubscriptionCreateRequest(빨간색);
 
-    /* 빨간색 구독 */
+    /* 파란색 구독 */
     public static final String 파란색 = "#0000FF";
     public static final SubscriptionCreateRequest 파란색_구독_생성_요청 = new SubscriptionCreateRequest(파란색);
 
-    /* 빨간색 구독 */
+    /* 노란색 구독 */
     public static final String 노란색 = "#FFFF00";
     public static final SubscriptionCreateRequest 노란색_구독_생성_요청 = new SubscriptionCreateRequest(노란색);
 
