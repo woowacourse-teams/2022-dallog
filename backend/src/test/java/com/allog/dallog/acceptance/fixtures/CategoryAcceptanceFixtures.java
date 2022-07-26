@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 
 public class CategoryAcceptanceFixtures {
 
-    public static ExtractableResponse<Response> 새로운_카테고리를_등록한다(final String accessToken, final String name) {
-        CategoryCreateRequest request = new CategoryCreateRequest(name);
+    public static ExtractableResponse<Response> 새로운_카테고리를_등록한다(final String accessToken,
+                                                               final CategoryCreateRequest request) {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

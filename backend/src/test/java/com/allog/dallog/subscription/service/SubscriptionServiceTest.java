@@ -1,22 +1,23 @@
 package com.allog.dallog.subscription.service;
 
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_2;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_CREATE_REQUEST_3;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_BLUE;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_RED;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.CREATE_REQUEST_YELLOW;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.exception.NoPermissionException;
-import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.category.service.CategoryService;
-import com.allog.dallog.common.fixtures.MemberFixtures;
 import com.allog.dallog.member.dto.MemberResponse;
 import com.allog.dallog.member.service.MemberService;
 import com.allog.dallog.subscription.dto.request.SubscriptionCreateRequest;
@@ -49,18 +50,16 @@ class SubscriptionServiceTest {
     @Test
     void 새로운_구독을_생성한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
         // when
-        SubscriptionResponse response = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
 
         // then
         assertAll(() -> {
-            assertThat(response.getCategory().getName()).isEqualTo("BE 일정");
-            assertThat(response.getColor()).isEqualTo(color);
+            assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
+            assertThat(response.getColor()).isEqualTo(빨간색);
         });
     }
 
@@ -69,11 +68,11 @@ class SubscriptionServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse categoryResponse = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(member.getId(), categoryResponse.getId(),
+        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), categoryResponse.getId(),
                 new SubscriptionCreateRequest(color))).isInstanceOf(InvalidSubscriptionException.class);
     }
 
@@ -81,20 +80,18 @@ class SubscriptionServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
-        CategoryResponse categoryResponse = categoryService.save(member.getId(), new CategoryCreateRequest("BE 일정"));
-        String color = "#ffffff";
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color));
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
 
         // when
-        SubscriptionResponse foundResponse = subscriptionService.findById(subscriptionResponse.getId());
+        SubscriptionResponse foundResponse = subscriptionService.findById(빨간색_구독.getId());
 
         // then
         assertAll(() -> {
-            assertThat(foundResponse.getId()).isEqualTo(subscriptionResponse.getId());
-            assertThat(foundResponse.getCategory().getId()).isEqualTo(categoryResponse.getId());
-            assertThat(foundResponse.getColor()).isEqualTo(color);
+            assertThat(foundResponse.getId()).isEqualTo(빨간색_구독.getId());
+            assertThat(foundResponse.getCategory().getId()).isEqualTo(BE_일정.getId());
+            assertThat(foundResponse.getColor()).isEqualTo(빨간색);
         });
     }
 
@@ -110,18 +107,18 @@ class SubscriptionServiceTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
+        MemberResponse 관리자 = memberService.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
-        MemberResponse member = memberService.save(MEMBER);
-        subscriptionService.save(member.getId(), categoryResponse1.getId(), CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        MemberResponse 후디 = memberService.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
-        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(member.getId());
+        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디.getId());
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
@@ -131,32 +128,32 @@ class SubscriptionServiceTest {
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        MemberResponse creator = memberService.save(MemberFixtures.CREATOR);
-        CategoryResponse categoryResponse1 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_1);
-        CategoryResponse categoryResponse2 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_2);
-        CategoryResponse categoryResponse3 = categoryService.save(creator.getId(), CATEGORY_CREATE_REQUEST_3);
+        MemberResponse 관리자 = memberService.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
-        MemberResponse member = memberService.save(MEMBER);
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(member.getId(), categoryResponse1.getId(),
-                CREATE_REQUEST_RED);
-        subscriptionService.save(member.getId(), categoryResponse2.getId(), CREATE_REQUEST_BLUE);
-        subscriptionService.save(member.getId(), categoryResponse3.getId(), CREATE_REQUEST_YELLOW);
+        MemberResponse 후디 = memberService.save(후디());
+        SubscriptionResponse subscriptionResponse = subscriptionService.save(후디.getId(), 공통_일정.getId(),
+                빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
-        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), member.getId());
+        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), 후디.getId());
 
         // then
-        assertThat(subscriptionService.findByMemberId(member.getId()).getSubscriptions()).hasSize(2);
+        assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(2);
     }
 
     @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")
     @Test
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
-        MemberResponse member = memberService.save(MEMBER);
+        MemberResponse 관리자 = memberService.save(관리자());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, member.getId()))
+        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 }

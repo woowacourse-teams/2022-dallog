@@ -1,32 +1,48 @@
 package com.allog.dallog.common.fixtures;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.member.domain.Member;
 
 public class CategoryFixtures {
 
-    public static final String CATEGORY_NAME = "달록";
-    public static final String MODIFIED_CATEGORY_NAME = "수정된 달록";
+    /* 공통 일정 카테고리 */
+    public static final String 공통_일정_이름 = "공통 일정";
+    public static final CategoryCreateRequest 공통_일정_생성_요청 = new CategoryCreateRequest(공통_일정_이름);
 
-    public static final int PAGE_NUMBER_0 = 0;
-    public static final int PAGE_NUMBER_1 = 1;
-    public static final int PAGE_SIZE_2 = 2;
-    public static final int PAGE_SIZE_8 = 8;
+    /* BE 일정 카테고리 */
+    public static final String BE_일정_이름 = "BE 일정";
+    public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름);
 
-    public static final Category CATEGORY = new Category(CATEGORY_NAME, MEMBER);
+    /* FE 일정 카테고리 */
+    public static final String FE_일정_이름 = "FE 일정";
+    public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름);
 
-    public static final String CATEGORY_1_NAME = "BE 일정";
-    public static final String CATEGORY_2_NAME = "BE 일정";
-    public static final String CATEGORY_3_NAME = "BE 일정";
+    /* 매트 아고라 카테고리 */
+    public static final String 매트_아고라_이름 = "매트 아고라";
+    public static final CategoryCreateRequest 매트_아고라_생성_요청 = new CategoryCreateRequest(매트_아고라_이름);
 
-    public static final Category CATEGORY_1 = new Category("BE 일정", CREATOR);
-    public static final Category CATEGORY_2 = new Category("FE 일정", CREATOR);
-    public static final Category CATEGORY_3 = new Category("공통 일정", CREATOR);
+    /* 후디 JPA 스터디 카테고리 */
+    public static final String 후디_JPA_스터디_이름 = "후디 JPA 스터디";
+    public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름);
 
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_1 = new CategoryCreateRequest("BE 일정");
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_2 = new CategoryCreateRequest("FE 일정");
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_3 = new CategoryCreateRequest("공통 일정");
+    public static Category 공통_일정(final Member creator) {
+        return new Category(공통_일정_이름, creator);
+    }
+
+    public static Category BE_일정(final Member creator) {
+        return new Category(BE_일정_이름, creator);
+    }
+
+    public static Category FE_일정(final Member creator) {
+        return new Category(FE_일정_이름, creator);
+    }
+
+    public static Category 매트_아고라(final Member creator) {
+        return new Category(매트_아고라_이름, creator);
+    }
+
+    public static Category 후디_JPA_스터디(final Member creator) {
+        return new Category(후디_JPA_스터디_이름, creator);
+    }
 }

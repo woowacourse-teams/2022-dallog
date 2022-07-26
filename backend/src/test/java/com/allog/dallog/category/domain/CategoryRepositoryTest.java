@@ -1,11 +1,16 @@
 package com.allog.dallog.category.domain;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_0;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_8;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR2;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -35,22 +40,23 @@ class CategoryRepositoryTest {
     @Test
     void 페이지와_사이즈를_받아_해당하는_구간의_카테고리를_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        categoryRepository.save(new Category("BE 공식일정", creator));
-        categoryRepository.save(new Category("FE 공식일정", creator));
-        categoryRepository.save(new Category("알록달록 회의", creator));
-        categoryRepository.save(new Category("지원플랫폼 근로", creator));
-        categoryRepository.save(new Category("파랑의 코틀린 스터디", creator));
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+        categoryRepository.save(FE_일정(관리자));
+        categoryRepository.save(매트_아고라(관리자));
+        categoryRepository.save(후디_JPA_스터디(관리자));
 
-        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
+        PageRequest pageRequest = PageRequest.of(1, 2);
 
         // when
         Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
 
         // then
         assertAll(() -> {
-            assertThat(categories.getContent()).hasSize(PAGE_SIZE_2).extracting(Category::getName)
-                    .contains("알록달록 회의", "지원플랫폼 근로");
+            assertThat(categories.getContent()).hasSize(2)
+                    .extracting(Category::getName)
+                    .contains(FE_일정_이름, 매트_아고라_이름);
             assertThat(
                     categories.getContent().stream()
                             .map(Category::getCreatedAt)
@@ -63,7 +69,7 @@ class CategoryRepositoryTest {
     @Test
     void 조회_시_데이터가_존재하지_않는_경우_빈_슬라이스가_반환된다() {
         // given
-        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
+        PageRequest pageRequest = PageRequest.of(1, 2);
 
         // when
         Slice<Category> categories = categoryRepository.findSliceBy(pageRequest);
@@ -76,25 +82,29 @@ class CategoryRepositoryTest {
     @Test
     void 특정_멤버가_생성한_카테고리를_페이징을_통해_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Member creator2 = memberRepository.save(CREATOR2);
-        categoryRepository.save(new Category("BE 공식일정", creator));
-        categoryRepository.save(new Category("FE 공식일정", creator));
-        categoryRepository.save(new Category("알록달록 회의", creator));
-        categoryRepository.save(new Category("지원플랫폼 근로", creator2));
-        categoryRepository.save(new Category("파랑의 코틀린 스터디", creator2));
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+        categoryRepository.save(FE_일정(관리자));
 
-        PageRequest pageRequest = PageRequest.of(PAGE_NUMBER_0, PAGE_SIZE_8);
+        Member 후디 = memberRepository.save(후디());
+        categoryRepository.save(후디_JPA_스터디(후디));
+
+        PageRequest pageRequest = PageRequest.of(0, 8);
 
         // when
-        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, creator.getId());
+        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, 관리자.getId());
 
         // then
         assertAll(() -> {
-            assertThat(categories.getContent()).hasSize(3).extracting(Category::getName)
-                    .containsExactlyInAnyOrder("BE 공식일정", "FE 공식일정", "알록달록 회의");
+            assertThat(categories.getContent()).hasSize(3)
+                    .extracting(Category::getName)
+                    .containsExactlyInAnyOrder(공통_일정_이름, BE_일정_이름, FE_일정_이름);
             assertThat(
-                    categories.getContent().stream().map(Category::getCreatedAt).allMatch(Objects::nonNull)).isTrue();
+                    categories.getContent().stream()
+                            .map(Category::getCreatedAt)
+                            .allMatch(Objects::nonNull))
+                    .isTrue();
         });
     }
 
@@ -102,11 +112,11 @@ class CategoryRepositoryTest {
     @Test
     void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_있으면_true를_반환한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category = categoryRepository.save(new Category("BE 공식일정", creator));
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
         // when
-        boolean actual = categoryRepository.existsByIdAndMemberId(category.getId(), creator.getId());
+        boolean actual = categoryRepository.existsByIdAndMemberId(공통_일정.getId(), 관리자.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -116,11 +126,11 @@ class CategoryRepositoryTest {
     @Test
     void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_없으면_false를_반환한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category = categoryRepository.save(new Category("BE 공식일정", creator));
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
         // when
-        boolean actual = categoryRepository.existsByIdAndMemberId(category.getId(), creator.getId() + 1L);
+        boolean actual = categoryRepository.existsByIdAndMemberId(공통_일정.getId(), 0L);
 
         // then
         assertThat(actual).isFalse();

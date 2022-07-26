@@ -1,13 +1,13 @@
 package com.allog.dallog.subscription.repository;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_1_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_2_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_3_NAME;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_YELLOW;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.category.domain.Category;
@@ -40,22 +40,22 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
-        Category category2 = categoryRepository.save(new Category(CATEGORY_2_NAME, creator));
-        Category category3 = categoryRepository.save(new Category(CATEGORY_3_NAME, creator));
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        Category BE_일정 = categoryRepository.save(BE_일정(관리자));
+        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
 
-        Member member = memberRepository.save(MEMBER);
-        Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
-        Subscription subscription2 = new Subscription(member, category2, COLOR_BLUE);
-        Subscription subscription3 = new Subscription(member, category3, COLOR_YELLOW);
+        Member 후디 = memberRepository.save(후디());
+        Subscription 빨간색_구독 = 빨간색_구독(후디, 공통_일정);
+        Subscription 파란색_구독 = 파란색_구독(후디, BE_일정);
+        Subscription 노란색_구독 = 노란색_구독(후디, FE_일정);
 
-        subscriptionRepository.save(subscription1);
-        subscriptionRepository.save(subscription2);
-        subscriptionRepository.save(subscription3);
+        subscriptionRepository.save(빨간색_구독);
+        subscriptionRepository.save(파란색_구독);
+        subscriptionRepository.save(노란색_구독);
 
         // when
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(후디.getId());
 
         // then
         assertThat(subscriptions).hasSize(3);
@@ -65,10 +65,10 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_구독_정보가_존재하지_않는_경우_빈_리스트가_조회된다() {
         // given
-        Member member = memberRepository.save(MEMBER);
+        Member 관리자 = memberRepository.save(관리자());
 
         // when
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(관리자.getId());
 
         // then
         assertThat(subscriptions).isEmpty();
@@ -78,16 +78,15 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_특정_구독_정보_여부를_확인한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
-        Member member = memberRepository.save(MEMBER);
-        Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
-
-        subscriptionRepository.save(subscription1);
+        Member 후디 = memberRepository.save(후디());
+        Subscription 빨간색_구독 = 빨간색_구독(후디, 공통_일정);
+        subscriptionRepository.save(빨간색_구독);
 
         // when
-        boolean actual = subscriptionRepository.existsByIdAndMemberId(subscription1.getId(), member.getId());
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(빨간색_구독.getId(), 후디.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -97,7 +96,7 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_존재하지_않는_구독_정보_여부를_확인한다() {
         // given
-        Member member = memberRepository.save(MEMBER);
+        Member member = memberRepository.save(관리자());
 
         // when
         boolean actual = subscriptionRepository.existsByIdAndMemberId(0L, member.getId());
