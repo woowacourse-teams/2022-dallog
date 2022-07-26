@@ -11,7 +11,6 @@ import com.allog.dallog.category.exception.NoSuchCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.service.MemberService;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,21 +35,15 @@ public class CategoryService {
     }
 
     public CategoriesResponse findAll(final Pageable pageable) {
-        List<CategoryResponse> categoryResponses = categoryRepository.findSliceBy(pageable)
-                .getContent()
-                .stream()
-                .map(CategoryResponse::new)
-                .collect(Collectors.toList());
-        return new CategoriesResponse(pageable.getPageNumber(), categoryResponses);
+        List<Category> categories = categoryRepository.findSliceBy(pageable).getContent();
+
+        return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoriesResponse findMine(final Long memberId, final Pageable pageable) {
-        List<CategoryResponse> categoryResponses = categoryRepository.findSliceByMemberId(pageable, memberId)
-                .getContent()
-                .stream()
-                .map(CategoryResponse::new)
-                .collect(Collectors.toList());
-        return new CategoriesResponse(pageable.getPageNumber(), categoryResponses);
+        List<Category> categories = categoryRepository.findSliceByMemberId(pageable, memberId).getContent();
+
+        return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoryResponse findById(final Long id) {
