@@ -58,9 +58,7 @@ public class AuthService {
     }
 
     public void validateExistsMember(final Long id) {
-        if (!memberService.existsById(id)) {
-            throw new NotFoundMemberException("존재하지 않는 회원 입니다.");
-        }
+        memberService.validateExistsMember(id);
     }
 
     public String getPayload(final String accessToken) {

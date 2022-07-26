@@ -32,7 +32,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         Long id = Long.parseLong(authService.getPayload(accessToken));
         authService.validateExistsMember(id);
-
         return new LoginMember(id);
     }
 }
