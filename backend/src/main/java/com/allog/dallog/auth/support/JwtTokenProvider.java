@@ -1,5 +1,6 @@
 package com.allog.dallog.auth.support;
 
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -45,18 +46,18 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean isValidToken(final String token) {
+    public void validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
 
-            return !claims.getBody()
+            claims.getBody()
                     .getExpiration()
                     .before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            throw new InvalidTokenException("권한이 없습니다.");
         }
     }
 }

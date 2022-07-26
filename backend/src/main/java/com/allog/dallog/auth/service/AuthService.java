@@ -2,7 +2,6 @@ package com.allog.dallog.auth.service;
 
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.TokenResponse;
-import com.allog.dallog.auth.exception.InvalidTokenException;
 import com.allog.dallog.auth.exception.NotFoundMemberException;
 import com.allog.dallog.auth.support.JwtTokenProvider;
 import com.allog.dallog.auth.support.OAuthClient;
@@ -58,12 +57,6 @@ public class AuthService {
                 SocialType.GOOGLE);
     }
 
-    public void validateToken(final String accessToken) {
-        if (accessToken == null || !jwtTokenProvider.isValidToken(accessToken)) {
-            throw new InvalidTokenException("권한이 없습니다.");
-        }
-    }
-
     public void validateExistsMember(final Long id) {
         if (!memberService.existsById(id)) {
             throw new NotFoundMemberException("존재하지 않는 회원 입니다.");
@@ -71,6 +64,7 @@ public class AuthService {
     }
 
     public String getPayload(final String accessToken) {
+        jwtTokenProvider.validateToken(accessToken);
         return jwtTokenProvider.getPayload(accessToken);
     }
 }

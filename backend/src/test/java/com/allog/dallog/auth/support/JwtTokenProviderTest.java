@@ -1,7 +1,9 @@
 package com.allog.dallog.auth.support;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,24 +41,26 @@ class JwtTokenProviderTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    @DisplayName("validateToken 메서드는 만료된 토큰을 전달하면 false를 반환한다.")
+    @DisplayName("validateToken 메서드는 만료된 토큰을 전달하면 예외를 던진다.")
     @Test
-    void validateToken_메서드는_만료된_토큰을_전달하면_false를_반환한다() {
+    void validateToken_메서드는_만료된_토큰을_전달하면_예외를_던진다() {
         // given
         JwtTokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0);
         String expiredToken = expiredJwtTokenProvider.createToken("payload");
 
         // when & then
-        assertThat(jwtTokenProvider.isValidToken(expiredToken)).isFalse();
+        assertThatThrownBy(() -> jwtTokenProvider.validateToken(expiredToken))
+                .isInstanceOf(InvalidTokenException.class);
     }
 
-    @DisplayName("validateToken 메서드는 유효하지 않은 토큰을 전달하면 false를 반환한다.")
+    @DisplayName("validateToken 메서드는 유효하지 않은 토큰을 전달하면 예외를 던진다.")
     @Test
-    void validateToken_메서드는_유효하지_않은_토큰을_전달하면_false를_반환한다() {
+    void validateToken_메서드는_유효하지_않은_토큰을_전달하면_예외를_던진다() {
         // given
         String malformedToken = "malformed";
 
         // when & then
-        assertThat(jwtTokenProvider.isValidToken(malformedToken)).isFalse();
+        assertThatThrownBy(() -> jwtTokenProvider.validateToken(malformedToken))
+                .isInstanceOf(InvalidTokenException.class);
     }
 }

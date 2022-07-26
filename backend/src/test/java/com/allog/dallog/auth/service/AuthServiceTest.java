@@ -75,17 +75,6 @@ class AuthServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    @DisplayName("validateToken 메서드는 유효하지 않은 토큰을 전달하면 예외를 던진다.")
-    @Test
-    void validateToken_메서드는_유효하지_않은_토큰을_전달하면_예외를_던진다() {
-        // given
-        String malformedToken = "malformed";
-
-        // when & then
-        assertThatThrownBy(() -> authService.validateToken(malformedToken))
-                .isInstanceOf(InvalidTokenException.class);
-    }
-
     @DisplayName("회원이 존재하지 않으면 예외를 던진다.")
     @Test
     void 회원이_존재하지_않으면_예외를_던진다() {
