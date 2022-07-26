@@ -1,13 +1,15 @@
 package com.allog.dallog.category.service;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
-import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
-import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.관리자;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,7 +23,6 @@ import com.allog.dallog.category.exception.InvalidCategoryException;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
-import com.allog.dallog.member.domain.SocialType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,14 +46,13 @@ class CategoryServiceTest {
     @Test
     void 새로운_카테고리를_생성한다() {
         // given
-        CategoryCreateRequest request = new CategoryCreateRequest(CATEGORY_NAME);
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(관리자());
 
         // when
-        CategoryResponse response = categoryService.save(creator.getId(), request);
+        CategoryResponse response = categoryService.save(creator.getId(), 공통_일정_생성_요청);
 
         // then
-        assertThat(response.getName()).isEqualTo(CATEGORY_NAME);
+        assertThat(response.getName()).isEqualTo(공통_일정_이름);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
@@ -61,7 +61,7 @@ class CategoryServiceTest {
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
         CategoryCreateRequest request = new CategoryCreateRequest(name);
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(관리자());
 
         // when & then
         assertThatThrownBy(() -> categoryService.save(creator.getId(), request))
@@ -72,97 +72,93 @@ class CategoryServiceTest {
     @Test
     void 페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(관리자());
         Long creatorId = creator.getId();
-        categoryService.save(creatorId, new CategoryCreateRequest("BE 공식일정"));
-        categoryService.save(creatorId, new CategoryCreateRequest("FE 공식일정"));
-        categoryService.save(creatorId, new CategoryCreateRequest("알록달록 회의"));
-        categoryService.save(creatorId, new CategoryCreateRequest("지원플랫폼 근로"));
-        categoryService.save(creatorId, new CategoryCreateRequest("파랑의 코틀린 스터디"));
+        categoryService.save(creatorId, 공통_일정_생성_요청);
+        categoryService.save(creatorId, BE_일정_생성_요청);
+        categoryService.save(creatorId, FE_일정_생성_요청);
+        categoryService.save(creatorId, 매트_아고라_생성_요청);
+        categoryService.save(creatorId, 후디_JPA_스터디_생성_요청);
 
-        PageRequest request = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
+        PageRequest request = PageRequest.of(1, 2);
 
         // when
         CategoriesResponse response = categoryService.findAll(request);
 
         // then
         assertThat(response.getCategories())
-                .hasSize(PAGE_SIZE_2)
+                .hasSize(2)
                 .extracting(CategoryResponse::getName)
-                .contains("알록달록 회의", "지원플랫폼 근로");
+                .contains(FE_일정_이름, 매트_아고라_이름);
     }
 
     @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
     @Test
     void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
+        Member creator = memberRepository.save(관리자());
         Long creatorId = creator.getId();
-        categoryService.save(creatorId, new CategoryCreateRequest("BE 공식일정"));
-        categoryService.save(creatorId, new CategoryCreateRequest("FE 공식일정"));
-        categoryService.save(creatorId, new CategoryCreateRequest("알록달록 회의"));
-        categoryService.save(creatorId, new CategoryCreateRequest("지원플랫폼 근로"));
-        categoryService.save(creatorId, new CategoryCreateRequest("파랑의 코틀린 스터디"));
+        categoryService.save(creatorId, 공통_일정_생성_요청);
+        categoryService.save(creatorId, BE_일정_생성_요청);
+        categoryService.save(creatorId, FE_일정_생성_요청);
+        categoryService.save(creatorId, 매트_아고라_생성_요청);
+        categoryService.save(creatorId, 후디_JPA_스터디_생성_요청);
 
-        PageRequest request = PageRequest.of(PAGE_NUMBER_1, PAGE_SIZE_2);
+        PageRequest request = PageRequest.of(1, 2);
 
         // when
         CategoriesResponse response = categoryService.findMine(creatorId, request);
 
         // then
         assertThat(response.getCategories())
-                .hasSize(PAGE_SIZE_2)
+                .hasSize(2)
                 .extracting(CategoryResponse::getName)
-                .contains("알록달록 회의", "지원플랫폼 근로");
+                .contains(FE_일정_이름, 매트_아고라_이름);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")
     @Test
     void id를_통해_카테고리를_단건_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        categoryService.save(creator.getId(), new CategoryCreateRequest("BE 공식일정"));
-        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+        Member creator = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(creator.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThat(categoryService.findById(savedCategory.getId()))
+        assertThat(categoryService.findById(공통_일정.getId()))
                 .usingRecursiveComparison()
-                .isEqualTo(savedCategory);
+                .isEqualTo(공통_일정);
     }
 
     @DisplayName("회원과 카테고리 id를 통해 카테고리를 수정한다.")
     @Test
     void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        CategoryResponse savedCategory = categoryService.save(creator.getId(),
-                new CategoryCreateRequest(CATEGORY_NAME));
+        Member creator = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(creator.getId(), 공통_일정_생성_요청);
+
+        String 우테코_공통_일정_이름 = "우테코 공통 일정";
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(우테코_공통_일정_이름);
 
         // when
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
-        categoryService.update(creator.getId(), savedCategory.getId(), categoryUpdateRequest);
+        categoryService.update(creator.getId(), 공통_일정.getId(), categoryUpdateRequest);
+        Category category = categoryService.getCategory(공통_일정.getId());
 
         //then
-        Category category = categoryService.getCategory(savedCategory.getId());
-        assertThat(category.getName())
-                .isEqualTo(MODIFIED_CATEGORY_NAME);
+        assertThat(category.getName()).isEqualTo(우테코_공통_일정_이름);
     }
 
     @DisplayName("자신이 만들지 않은 카테고리를 수정할 경우 예외를 던진다.")
     @Test
     void 자신이_만들지_않은_카테고리를_수정할_경우_예외를_던진다() {
         // given
-        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        Member creator = memberRepository.save(
-                new Member("creator@email.com", "/image.png", "creator", SocialType.GOOGLE));
-        CategoryResponse savedCategory = categoryService.save(creator.getId(),
-                new CategoryCreateRequest(CATEGORY_NAME));
+        Member 관리자 = memberRepository.save(관리자());
+        Member 매트 = memberRepository.save(매트());
 
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(MODIFIED_CATEGORY_NAME);
+        CategoryResponse savedCategory = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
 
         // when & then
-        assertThatThrownBy(
-                () -> categoryService.update(member.getId(), savedCategory.getId(), categoryUpdateRequest))
+        assertThatThrownBy(() -> categoryService.update(매트.getId(), savedCategory.getId(), categoryUpdateRequest))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -170,12 +166,11 @@ class CategoryServiceTest {
     @Test
     void 회원과_카테고리_id를_통해_카테고리를_삭제한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        CategoryResponse savedCategory = categoryService.save(creator.getId(),
-                new CategoryCreateRequest(CATEGORY_NAME));
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse savedCategory = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when
-        categoryService.delete(creator.getId(), savedCategory.getId());
+        categoryService.delete(관리자.getId(), savedCategory.getId());
 
         //then
         assertThatThrownBy(() -> categoryService.getCategory(savedCategory.getId()))
@@ -186,14 +181,13 @@ class CategoryServiceTest {
     @Test
     void 자신이_만들지_않은_카테고리를_삭제할_경우_예외를_던진다() {
         // given
-        Member member = memberRepository.save(new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE));
-        Member creator = memberRepository.save(
-                new Member("creator@email.com", "/image.png", "creator", SocialType.GOOGLE));
-        CategoryResponse savedCategory = categoryService.save(creator.getId(), new CategoryCreateRequest("FE 공식일정"));
+        Member 관리자 = memberRepository.save(관리자());
+        Member 매트 = memberRepository.save(매트());
+        CategoryResponse savedCategory = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
         assertThatThrownBy(
-                () -> categoryService.delete(member.getId(), savedCategory.getId()))
+                () -> categoryService.delete(매트.getId(), savedCategory.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 }

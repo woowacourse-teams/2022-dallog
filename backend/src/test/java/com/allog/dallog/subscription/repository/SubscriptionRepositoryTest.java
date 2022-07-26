@@ -1,9 +1,9 @@
 package com.allog.dallog.subscription.repository;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_1_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_2_NAME;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_3_NAME;
-import static com.allog.dallog.common.fixtures.MemberFixtures.CREATOR;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_BLUE;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.COLOR_RED;
@@ -40,10 +40,10 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
-        Category category2 = categoryRepository.save(new Category(CATEGORY_2_NAME, creator));
-        Category category3 = categoryRepository.save(new Category(CATEGORY_3_NAME, creator));
+        Member 관리자 = memberRepository.save(관리자());
+        Category category1 = categoryRepository.save(공통_일정(관리자));
+        Category category2 = categoryRepository.save(BE_일정(관리자));
+        Category category3 = categoryRepository.save(FE_일정(관리자));
 
         Member member = memberRepository.save(MEMBER);
         Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
@@ -78,8 +78,8 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_특정_구독_정보_여부를_확인한다() {
         // given
-        Member creator = memberRepository.save(CREATOR);
-        Category category1 = categoryRepository.save(new Category(CATEGORY_1_NAME, creator));
+        Member creator = memberRepository.save(관리자());
+        Category category1 = categoryRepository.save(공통_일정(creator));
 
         Member member = memberRepository.save(MEMBER);
         Subscription subscription1 = new Subscription(member, category1, COLOR_RED);
