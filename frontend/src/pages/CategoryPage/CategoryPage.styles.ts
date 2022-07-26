@@ -5,6 +5,7 @@ const categoryPage = ({ flex }: Theme) => css`
 
   align-items: center;
 
+  height: 100%;
   padding: 5rem;
 `;
 

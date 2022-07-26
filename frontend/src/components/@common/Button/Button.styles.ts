@@ -3,6 +3,8 @@ import { css } from '@emotion/react';
 const button = css`
   border: none;
 
+  background: transparent;
+
   font-family: inherit;
   text-align: center;
 

@@ -2,41 +2,75 @@ import { css, Theme } from '@emotion/react';
 
 import { DAYS } from '@/constants';
 
-const calendar = css`
-  margin: 3rem;
-`;
-
-const calendarHeader = ({ flex }: Theme) => css`
+const calendarHeader = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
-  justify-content:space-between;
+  justify-content: space-between;
 
   width: 100%;
-  padding: 3rem;
+  padding: 3rem 2rem;
 
-  font-size: 6rem;
-  font-weight: 700;
+  font-size: 5rem;
+  font-weight: 500;
+  color: ${colors.GRAY_700};
 `;
 
 const monthPicker = ({ flex }: Theme) => css`
   ${flex.row}
 
-  justify-content:space-around;
+  justify-content: space-around;
   align-items: center;
-
-  width: 40rem;
 `;
 
-const navButton = css`
-  background: transparent;
+const todayButton = ({ colors }: Theme) => css`
+  width: 12rem;
+  height: 8rem;
 
-  font-size: 5rem;
-  line-height: 3rem;
-  font-weight: 700;
+  padding: auto 0;
+
+  font-size: 4rem;
+  line-height: 4rem;
+  font-weight: 500;
+  color: ${colors.GRAY_700};
+`;
+
+const navButton = ({ colors }: Theme) => css`
+  position: relative;
+
+  width: 8rem;
+  height: 8rem;
+  padding: 0;
+
+  font-size: 4rem;
+  line-height: 4rem;
+  color: ${colors.GRAY_600};
 
   &:hover {
-    transform: scale(1.1);
+    border-radius: 50%;
+    background: ${colors.GRAY_300};
   }
+
+  &:hover span {
+    visibility: visible;
+  }
+`;
+
+const navButtonTitle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
 `;
 
 const navBarGrid = css`
@@ -51,15 +85,54 @@ const calendarGrid = (rowNum: number) => css`
 `;
 
 const dayBar = ({ colors }: Theme, day: string) => css`
-  padding: 3rem;
+  padding: 2rem 3rem;
   border-top: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};
+  border-left: ${day === DAYS[0] && `1px solid ${colors.GRAY_300}`};
 
-  background: ${day === DAYS[0] || day === DAYS[6] ? colors.GRAY_100 : colors.WHITE};
-
-  font-size: 3.5rem;
-  font-weight: 700;
+  font-size: 3rem;
   text-align: right;
+  color: ${day === DAYS[0] && colors.RED_400};
 `;
 
-export { calendar, calendarHeader, navBarGrid, calendarGrid, dayBar, monthPicker, navButton };
+const dateBorder = ({ colors }: Theme, day: number) => css`
+  position: relative;
+
+  height: 100%;
+  padding: 1rem;
+  border-bottom: 1px solid ${colors.GRAY_300};
+  border-right: 1px solid ${colors.GRAY_300};
+  border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
+`;
+
+const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean) => css`
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+
+  padding: 1rem;
+
+  font-size: 3rem;
+  font-weight: 500;
+
+  color: ${day === 0
+    ? isThisMonth
+      ? colors.RED_400
+      : `${colors.RED_400}80`
+    : isThisMonth
+    ? colors.GRAY_700
+    : `${colors.GRAY_700}80`};
+`;
+
+export {
+  calendarGrid,
+  calendarHeader,
+  dayBar,
+  dateBorder,
+  dateText,
+  monthPicker,
+  navBarGrid,
+  navButton,
+  navButtonTitle,
+  todayButton,
+};

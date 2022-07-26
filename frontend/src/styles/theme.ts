@@ -16,6 +16,16 @@ const colors = {
   GRAY_800: '#343a40',
   GRAY_900: '#212529',
   BLACK: '#000000',
+  RED_000: '#fff5f5',
+  RED_100: '#ffe3e3',
+  RED_200: '#ffc9c9',
+  RED_300: '#ffa8a8',
+  RED_400: '#ff8787',
+  RED_500: '#ff6b6b',
+  RED_600: '#fa5252',
+  RED_700: '#f03e3e',
+  RED_800: '#e03131',
+  RED_900: '#c92a2a',
 };
 
 const flex = {

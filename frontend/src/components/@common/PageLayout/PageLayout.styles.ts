@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 const pageLayout = (isSideBarOpen: boolean) => css`
-  overflow-y: scroll;
+  overflow-y: auto;
 
   height: calc(100vh - 16rem);
   margin-top: 16rem;

@@ -2,6 +2,7 @@ import { css, Theme } from '@emotion/react';
 
 const myPage = ({ colors }: Theme) => css`
   width: 100%;
+  height: 100%;
   padding: 2rem;
 
   background: ${colors.GRAY_100};
