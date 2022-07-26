@@ -1,14 +1,17 @@
 import { css, Theme } from '@emotion/react';
 
-const loginModal = ({ colors, flex }: Theme) => css`
+const login = ({ flex }: Theme) => css`
   ${flex.column}
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   width: 105rem;
   height: 140rem;
   padding: 12.5rem;
   border-radius: 12px;
-
-  background: ${colors.WHITE};
 `;
 
 const title = ({ colors }: Theme) => css`
@@ -17,12 +20,14 @@ const title = ({ colors }: Theme) => css`
   color: ${colors.GRAY_700};
 `;
 
-const content = ({ flex }: Theme) => css`
+const content = ({ colors, flex }: Theme) => css`
   ${flex.column}
 
   gap: 3rem;
 
   height: 100%;
+
+  background: ${colors.WHITE};
 `;
 
 const loginButton = ({ colors, flex }: Theme) => css`
@@ -85,8 +90,8 @@ export {
   githubLoginButton,
   googleLoginButton,
   kakaoLoginButton,
+  login,
   loginButton,
-  loginModal,
   loginText,
   naverLoginButton,
   title,

@@ -16,11 +16,7 @@ import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
 import { loginButton, logo, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
-interface NavBarProps {
-  openLoginModal: () => void;
-}
-
-function NavBar({ openLoginModal }: NavBarProps) {
+function NavBar() {
   const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
   const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
@@ -42,6 +38,10 @@ function NavBar({ openLoginModal }: NavBarProps) {
     navigate(PATH.PROFILE);
   };
 
+  const handleClickLoginButton = () => {
+    navigate(PATH.LOGIN);
+  };
+
   return (
     <div css={navBar}>
       <div css={menus}>
@@ -55,7 +55,7 @@ function NavBar({ openLoginModal }: NavBarProps) {
       </div>
       <div css={menus}>
         {!accessToken && (
-          <Button cssProp={loginButton(theme)} onClick={openLoginModal}>
+          <Button cssProp={loginButton(theme)} onClick={handleClickLoginButton}>
             로그인
           </Button>
         )}
