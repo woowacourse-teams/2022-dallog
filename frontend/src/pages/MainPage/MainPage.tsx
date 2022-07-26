@@ -8,12 +8,7 @@ import StartPage from '@/pages/StartPage/StartPage';
 
 import { getAccessToken } from '@/utils';
 
-interface MainPageProps {
-  isLoginModalOpen: boolean;
-  closeLoginModal: () => void;
-}
-
-function MainPage({ isLoginModalOpen, closeLoginModal }: MainPageProps) {
+function MainPage() {
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
@@ -21,7 +16,7 @@ function MainPage({ isLoginModalOpen, closeLoginModal }: MainPageProps) {
   }, []);
 
   if (!user.accessToken) {
-    return <StartPage isLoginModalOpen={isLoginModalOpen} closeLoginModal={closeLoginModal} />;
+    return <StartPage />;
   }
 
   return <CalendarPage />;

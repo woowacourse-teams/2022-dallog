@@ -1,17 +1,5 @@
-import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
-import LoginModal from '@/components/LoginModal/LoginModal';
-
-interface StartPageProps {
-  isLoginModalOpen: boolean;
-  closeLoginModal: () => void;
-}
-
-function StartPage({ isLoginModalOpen, closeLoginModal }: StartPageProps) {
-  return (
-    <ModalPortal isOpen={isLoginModalOpen} closeModal={closeLoginModal}>
-      <LoginModal />
-    </ModalPortal>
-  );
+function StartPage() {
+  return <>달력에 기록을 공유할 때, 달록 입니다.</>;
 }
 
 export default StartPage;

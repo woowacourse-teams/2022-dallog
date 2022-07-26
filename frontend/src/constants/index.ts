@@ -36,6 +36,7 @@ const PATH = {
   MAIN: '/',
   AUTH: '/oauth',
   CATEGORY: '/category',
+  LOGIN: '/login',
   PROFILE: '/profile',
 };
 

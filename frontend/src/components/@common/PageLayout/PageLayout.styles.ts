@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 
 const pageLayout = (isSideBarOpen: boolean) => css`
   overflow-y: auto;
+  position: relative;
 
   height: calc(100vh - 16rem);
   margin-top: 16rem;
