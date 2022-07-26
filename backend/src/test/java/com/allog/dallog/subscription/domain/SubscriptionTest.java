@@ -1,7 +1,7 @@
 package com.allog.dallog.subscription.domain;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY;
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -19,12 +19,12 @@ class SubscriptionTest {
     @Test
     void 구독을_생성한다() {
         // given
-        Member member = MEMBER;
-        Category category = CATEGORY;
+        Member 후디 = 후디();
+        Category 후디_JPA_스터디 = 후디_JPA_스터디(후디);
         String color = "#c9ad2e";
 
         // when & then
-        assertDoesNotThrow(() -> new Subscription(member, category, color));
+        assertDoesNotThrow(() -> new Subscription(후디, 후디_JPA_스터디, color));
     }
 
     @DisplayName("색 정보 형식이 잘못된 경우 예외를 던진다.")
@@ -32,11 +32,11 @@ class SubscriptionTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
     void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
         // given
-        Member member = MEMBER;
-        Category category = CATEGORY;
+        Member 후디 = 후디();
+        Category 후디_JPA_스터디 = 후디_JPA_스터디(후디);
 
         // when & then
-        assertThatThrownBy(() -> new Subscription(member, category, color))
+        assertThatThrownBy(() -> new Subscription(후디, 후디_JPA_스터디, color))
                 .isInstanceOf(InvalidSubscriptionException.class);
     }
 }

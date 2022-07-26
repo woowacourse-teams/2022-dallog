@@ -1,19 +1,11 @@
 package com.allog.dallog.common.fixtures;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.MEMBER;
-
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.SocialType;
 
 public class CategoryFixtures {
-
-    public static final Category CATEGORY = new Category("달록", MEMBER);
-
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_1 = new CategoryCreateRequest("BE 일정");
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_2 = new CategoryCreateRequest("FE 일정");
-    public static final CategoryCreateRequest CATEGORY_CREATE_REQUEST_3 = new CategoryCreateRequest("공통 일정");
 
     /* 공통 일정 카테고리 */
     public static final String 공통_일정_이름 = "공통 일정";
