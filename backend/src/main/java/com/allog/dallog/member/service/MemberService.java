@@ -40,7 +40,9 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
-    public boolean existsById(final Long id) {
-        return memberRepository.existsById(id);
+    public void validateExistsMember(final Long id) {
+        if (!memberRepository.existsById(id)) {
+            throw new NoSuchMemberException("존재하지 않는 회원입니다.");
+        }
     }
 }

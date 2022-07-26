@@ -10,12 +10,12 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
+import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.MODIFIED_CATEGORY_NAME;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_NUMBER_1;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.PAGE_SIZE_2;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.CODE;
-import static com.allog.dallog.common.fixtures.OAuthMemberFixtures.OAUTH_PROVIDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -33,7 +33,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_카테고리_정보를_등록하면_상태코드_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
 
         // when
         ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
@@ -46,7 +46,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_페이징을_통해_나누어_조회한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
@@ -68,7 +68,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
         새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME);
@@ -91,7 +91,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_수정하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME)
                 .as(CategoryResponse.class);
 
@@ -111,7 +111,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_삭제하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(OAUTH_PROVIDER, CODE);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, CATEGORY_NAME)
                 .as(CategoryResponse.class);
 

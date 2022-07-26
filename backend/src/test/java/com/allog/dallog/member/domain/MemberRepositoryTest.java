@@ -1,8 +1,7 @@
 package com.allog.dallog.member.domain;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.DISPLAY_NAME;
-import static com.allog.dallog.common.fixtures.MemberFixtures.EMAIL;
-import static com.allog.dallog.common.fixtures.MemberFixtures.PROFILE_IMAGE_URI;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.global.config.JpaConfig;
@@ -23,24 +22,22 @@ class MemberRepositoryTest {
     @Test
     void 이메일을_통해_회원을_찾는다() {
         // given
-        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
-        Member savedMember = memberRepository.save(member);
+        Member 파랑 = memberRepository.save(파랑());
 
         // when
-        Member foundMember = memberRepository.findByEmail(EMAIL).get();
+        Member actual = memberRepository.findByEmail(파랑_이메일).get();
 
         // then
-        assertThat(savedMember.getId()).isEqualTo(foundMember.getId());
+        assertThat(actual.getId()).isEqualTo(파랑.getId());
     }
 
     @DisplayName("중복된 이메일이 존재하는 경우 true를 반환한다.")
     @Test
     void 중복된_이메일이_존재하는_경우_true를_반환한다() {
         // given
-        Member member = new Member(EMAIL, PROFILE_IMAGE_URI, DISPLAY_NAME, SocialType.GOOGLE);
-        memberRepository.save(member);
+        memberRepository.save(파랑());
 
         // when & then
-        assertThat(memberRepository.existsByEmail(EMAIL)).isTrue();
+        assertThat(memberRepository.existsByEmail(파랑_이메일)).isTrue();
     }
 }
