@@ -8,22 +8,20 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
-import SubscribeButton from '@/components/SubscribeButton/SubscribeButton';
+import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY, CONFIRM_MESSAGE } from '@/constants';
+import { CACHE_KEY } from '@/constants';
 
 import subscriptionApi from '@/api/subscription';
 
-import { categoryItem, item } from './CategoryItem.styles';
+import { categoryItem, item, subscribeButton } from './UnsubscribedCategoryItem.styles';
 
-interface CategoryItemProps {
+interface UnsubscribedCategoryItemProps {
   category: CategoryType;
-  subscriptionId: number;
 }
 
-function CategoryItem({ category, subscriptionId }: CategoryItemProps) {
+function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   const theme = useTheme();
-  const queryClient = useQueryClient();
 
   const { accessToken } = useRecoilValue(userState);
 
@@ -31,7 +29,8 @@ function CategoryItem({ category, subscriptionId }: CategoryItemProps) {
     color: '#ffffff',
   };
 
-  const { mutate: postSubscription } = useMutation<
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation<
     AxiosResponse<Pick<SubscriptionType, 'color'>>,
     AxiosError,
     Pick<SubscriptionType, 'color'>,
@@ -42,37 +41,21 @@ function CategoryItem({ category, subscriptionId }: CategoryItemProps) {
     },
   });
 
-  const { mutate: deleteSubscription } = useMutation(
-    () => subscriptionApi.delete(accessToken, subscriptionId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-      },
-    }
-  );
-
-  const unsubscribe = () => {
-    if (window.confirm(CONFIRM_MESSAGE.UNSUBSCRIBE)) {
-      deleteSubscription();
-    }
-  };
-
   const handleClickSubscribeButton = () => {
-    subscriptionId > 0 ? unsubscribe() : postSubscription(body);
+    mutate(body);
   };
 
   return (
-    <div css={categoryItem(theme)}>
+    <div css={categoryItem}>
       <span css={item}>{category.createdAt.split('T')[0]}</span>
       <span css={item}>{category.name}</span>
       <div css={item}>
-        <SubscribeButton
-          isSubscribing={subscriptionId > 0}
-          handleClickSubscribeButton={handleClickSubscribeButton}
-        ></SubscribeButton>
+        <Button cssProp={subscribeButton(theme)} onClick={handleClickSubscribeButton}>
+          구독
+        </Button>
       </div>
     </div>
   );
 }
 
-export default CategoryItem;
+export default UnsubscribedCategoryItem;

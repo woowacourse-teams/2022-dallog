@@ -16,4 +16,17 @@ const item = css`
   text-align: center;
 `;
 
-export { categoryItem, item };
+const subscribeButton = ({ colors }: Theme) => css`
+  width: 15rem;
+  height: 8rem;
+  border-radius: 3px;
+
+  background-color: ${colors.YELLOW_500};
+
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+  color: ${colors.WHITE};
+`;
+
+export { categoryItem, item, subscribeButton };
