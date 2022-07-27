@@ -463,6 +463,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_member회원">Member(회원)</a>
+<ul class="sectlevel2">
+<li><a href="#_내_정보_조회">내 정보 조회</a>
+<ul class="sectlevel3">
+<li><a href="#_request_3">Request</a></li>
+<li><a href="#_response_3">Response</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -479,14 +489,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/schedules HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 150
+Content-Length: 173
 Host: localhost:8080
 
 {
-  "startDateTime" : "2022-07-15T14:20",
-  "memo" : "세모 회의실 6시 회의",
-  "title" : "알록",
-  "endDateTime" : "2022-07-15T16:20"
+  "title" : "알록달록 회의",
+  "startDateTime" : "2022-07-15T16:00:00",
+  "endDateTime" : "2022-07-16T16:00:00",
+  "memo" : "알록달록 회의가 있어요"
 }</code></pre>
 </div>
 </div>
@@ -496,6 +506,9 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Location: /api/schedules/0</code></pre>
 </div>
 </div>
@@ -543,18 +556,52 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 180
+Content-Length: 224
 
 {
-  "data" : [ {
+  "schedules" : [ {
     "id" : 1,
-    "title" : "알록",
-    "startDateTime" : "2022-07-15T14:20:00",
-    "endDateTime" : "2022-07-15T16:20:00",
-    "memo" : "달록"
+    "title" : "알록달록 회의",
+    "startDateTime" : "2022-07-15T16:00:00",
+    "endDateTime" : "2022-07-16T16:00:00",
+    "memo" : "알록달록 회의가 있어요"
   } ]
 }</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_member회원">Member(회원)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_내_정보_조회">내 정보 조회</h3>
+<div class="sect3">
+<h4 id="_request_3">Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/members/me HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer aaaaa.bbbbb.ccccc
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_3">Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 </div>
@@ -565,7 +612,7 @@ Content-Length: 180
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-07-14 14:27:50 +0900
+Last updated 2022-07-27 16:33:10 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -30,3 +30,19 @@ include::{snippets}/schedule/find/request-parameters.adoc[]
 ==== Response
 
 include::{snippets}/schedule/find/http-response.adoc[]
+
+== Member(회원)
+
+=== 내 정보 조회
+
+==== Request
+
+include::{snippets}/member/me/http-request.adoc[]
+
+==== RequestHeaders
+
+include::{snippets}/member/me/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/member/me/http-response.adoc[]
