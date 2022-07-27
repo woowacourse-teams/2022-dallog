@@ -1,6 +1,5 @@
-package com.allog.dallog.domain.subscription.repository;
+package com.allog.dallog.domain.subscription.domain;
 
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

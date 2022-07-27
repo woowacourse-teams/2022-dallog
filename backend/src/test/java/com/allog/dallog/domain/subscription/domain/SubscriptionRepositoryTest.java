@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.subscription.repository;
+package com.allog.dallog.domain.subscription.domain;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
@@ -12,11 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.subscription.repository.SubscriptionRepository;
-import com.allog.dallog.global.config.JpaConfig;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.global.config.JpaConfig;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
