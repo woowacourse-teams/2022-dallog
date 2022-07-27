@@ -38,7 +38,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesResponse> findAll(Pageable pageable) {
+    public ResponseEntity<CategoriesResponse> findAll(final Pageable pageable) {
         return ResponseEntity.ok(categoryService.findAll(pageable));
     }
 

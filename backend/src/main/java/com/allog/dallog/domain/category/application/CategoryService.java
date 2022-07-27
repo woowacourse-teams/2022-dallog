@@ -57,7 +57,6 @@ public class CategoryService {
 
     @Transactional
     public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
-        memberService.getMember(memberId);
         Category category = getCategory(categoryId);
 
         validatePermission(memberId, categoryId);
@@ -67,11 +66,16 @@ public class CategoryService {
 
     @Transactional
     public void delete(final Long memberId, final Long categoryId) {
-        memberService.getMember(memberId);
-
+        validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 
         categoryRepository.deleteById(categoryId);
+    }
+
+    private void validateCategoryExisting(final Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다.");
+        }
     }
 
     private void validatePermission(final Long memberId, final Long categoryId) {
