@@ -11,6 +11,7 @@ import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import com.allog.dallog.global.dto.ErrorResponse;
+import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,12 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException() {
         ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(OAuthException.class)
+    public ResponseEntity<ErrorResponse> handleOAuthException() {
+        ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 
