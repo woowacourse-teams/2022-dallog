@@ -16,4 +16,11 @@ const userState = atom({
   },
 });
 
-export { sideBarState, userState };
+const snackBarState = atom({
+  key: ATOM_KEY.SNACK_BAR,
+  default: {
+    text: '',
+  },
+});
+
+export { snackBarState, sideBarState, userState };
