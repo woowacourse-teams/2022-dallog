@@ -4,6 +4,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독;
@@ -34,6 +35,39 @@ class SubscriptionRepositoryTest {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+
+    @DisplayName("존재하지 않는 카테고리를 확인할 경우 true를 반환한다.")
+    @Test
+    void 존재하지_않는_카테고리를_확인할_경우_true를_반환한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 매트 = memberRepository.save(매트());
+
+        // when
+        boolean actual = subscriptionRepository.existsByMemberIdAndCategoryId(매트.getId(), 공통_일정.getId());
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @DisplayName("이미 존재하는 카테고리를 확인할 경우 true를 반환한다.")
+    @Test
+    void 이미_존재하는_카테고리를_확인할_경우_true를_반환한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 매트 = memberRepository.save(매트());
+        subscriptionRepository.save(빨간색_구독(매트, 공통_일정));
+
+        // when
+        boolean actual = subscriptionRepository.existsByMemberIdAndCategoryId(매트.getId(), 공통_일정.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
 
     @DisplayName("회원 정보를 기반으로 구독 정보를 조회한다.")
     @Test
@@ -95,12 +129,34 @@ class SubscriptionRepositoryTest {
     @Test
     void 회원의_존재하지_않는_구독_정보_여부를_확인한다() {
         // given
-        Member member = memberRepository.save(관리자());
+        Member 관리자 = memberRepository.save(관리자());
 
         // when
-        boolean actual = subscriptionRepository.existsByIdAndMemberId(0L, member.getId());
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(0L, 관리자.getId());
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @DisplayName("구독 id와 member id를 활용하여 구독 정보를 삭제한다.")
+    @Test
+    void 구독_id와_member_id를_활용하여_구독_정보를_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        Category BE_일정 = categoryRepository.save(BE_일정(관리자));
+        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
+
+        Member 매트 = memberRepository.save(매트());
+        Subscription 빨간색_구독 = subscriptionRepository.save(빨간색_구독(매트, 공통_일정));
+        subscriptionRepository.save(파란색_구독(매트, BE_일정));
+        subscriptionRepository.save(노란색_구독(매트, FE_일정));
+
+        // when
+        subscriptionRepository.deleteByIdAndMemberId(빨간색_구독.getId(), 매트.getId());
+
+        // then
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(매트.getId());
+        assertThat(subscriptions).hasSize(2);
     }
 }

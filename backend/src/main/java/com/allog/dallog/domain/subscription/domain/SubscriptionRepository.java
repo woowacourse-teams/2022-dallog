@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
+    boolean existsByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
+
     List<Subscription> findByMemberId(final Long memberId);
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
