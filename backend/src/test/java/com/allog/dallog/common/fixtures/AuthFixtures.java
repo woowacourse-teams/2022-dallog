@@ -12,4 +12,6 @@ public class AuthFixtures {
 
     public static final String 더미_엑세스_토큰 = "aaaaa.bbbbb.ccccc";
     public static final String 토큰_정보 = "Bearer " + 더미_엑세스_토큰;
+
+    public static final String OAuth_로그인_링크 = "https://accounts.google.com/o/oauth2/v2/auth";
 }

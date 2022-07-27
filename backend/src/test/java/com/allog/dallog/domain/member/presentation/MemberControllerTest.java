@@ -70,7 +70,7 @@ class MemberControllerTest {
     @DisplayName("존재하지 않는 회원의 정보를 조회하려고 하면 예외를 발생한다.")
     @Test
     void 존재하지_않는_회원의_정보를_조회하려고_하면_예외를_발생한다() throws Exception {
-        //given
+        // given
         given(memberService.findById(0L)).willThrow(new NoSuchMemberException());
 
         // when & then
