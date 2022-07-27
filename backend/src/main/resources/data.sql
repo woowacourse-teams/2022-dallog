@@ -7,7 +7,10 @@ VALUES ('admin@email.com',
         '귀요미 나인', 'GOOGLE', NOW(), NOW()),
        ('508yeah@gmail.com',
         'https://file.namu.moe/file/8bc9e381797334eb33da66e3ba501be13bacd109d2d9b5f117ad0bb781574b9cb612e8226803fc6831128bc2945e5f7d2231ed68ff43ae17d3aeb6bb6947b668',
-        '티거', 'GOOGLE', NOW(), NOW());
+        '티거', 'GOOGLE', NOW(), NOW()),
+       ('dev.hyeonic@gmail.com',
+        'https://file.namu.moe/file/8bc9e381797334eb33da66e3ba501be13bacd109d2d9b5f117ad0bb781574b9cb612e8226803fc6831128bc2945e5f7d2231ed68ff43ae17d3aeb6bb6947b668',
+        '매트', 'GOOGLE', NOW(), NOW());
 
 INSERT INTO categories (name, members_id, created_at, updated_at)
 VALUES ('공통 일정', 1, NOW(), NOW()),
@@ -23,4 +26,6 @@ INSERT INTO subscriptions (members_id, categories_id, color, created_at, updated
 VALUES (2, 1, '#868e96', NOW(), NOW()),
        (2, 3, '#ffdeeb', NOW(), NOW()),
        (3, 1, '#d0bfff', NOW(), NOW()),
-       (3, 3, '#4263eb', NOW(), NOW());
+       (3, 3, '#4263eb', NOW(), NOW()),
+       (4, 1, '#ffffff', NOW(), NOW()),
+       (4, 2, '#000000', NOW(), NOW());
