@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +66,29 @@ class MemberControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰"))
+                                headerWithName("Authorization").description("JWT 토큰")
+                        )
                 ))
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("존재하지 않는 회원의 정보를 조회하려고 하면 예외를 발생한다.")
+    @Test
+    void 존재하지_않는_회원의_정보를_조회하려고_하면_예외를_발생한다() throws Exception {
+        //given
+        given(memberService.findById(0L)).willThrow(new NoSuchMemberException());
+
+        // when & then
+        mockMvc.perform(get("/api/members/me")
+                        .header("Authorization", 토큰_정보)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("member/exception/notfound",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNotFound());
     }
 }
