@@ -23,6 +23,7 @@ import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import javax.transaction.Transactional;
@@ -61,6 +62,19 @@ class SubscriptionServiceTest {
             assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
             assertThat(response.getColor()).isEqualTo(빨간색);
         });
+    }
+
+    @DisplayName("이미 존재하는 구독 정보를 저장할 경우 예외를 던진다.")
+    @Test
+    void 이미_존재하는_구독_정보를_저장할_경우_예외를_던진다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청))
+                .isInstanceOf(ExistSubscriptionException.class);
     }
 
     @DisplayName("색 정보 형식이 잘못된 경우 예외를 던진다.")
@@ -134,13 +148,12 @@ class SubscriptionServiceTest {
         CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse 후디 = memberService.save(후디());
-        SubscriptionResponse subscriptionResponse = subscriptionService.save(후디.getId(), 공통_일정.getId(),
-                빨간색_구독_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
         subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
         subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
 
         // when
-        subscriptionService.deleteByIdAndMemberId(subscriptionResponse.getId(), 후디.getId());
+        subscriptionService.deleteByIdAndMemberId(response.getId(), 후디.getId());
 
         // then
         assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(2);

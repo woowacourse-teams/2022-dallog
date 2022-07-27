@@ -6,11 +6,12 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
-import com.allog.dallog.domain.subscription.repository.SubscriptionRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,10 @@ public class SubscriptionService {
     @Transactional
     public SubscriptionResponse save(final Long memberId, final Long categoryId,
                                      final SubscriptionCreateRequest request) {
+        if (subscriptionRepository.existsByMemberIdAndCategoryId(memberId, categoryId)) {
+            throw new ExistSubscriptionException();
+        }
+
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
 
@@ -59,6 +64,7 @@ public class SubscriptionService {
         return new SubscriptionResponse(subscription);
     }
 
+    @Transactional
     public void deleteByIdAndMemberId(final Long id, final Long memberId) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
