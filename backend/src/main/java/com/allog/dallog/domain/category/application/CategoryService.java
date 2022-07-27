@@ -57,7 +57,6 @@ public class CategoryService {
 
     @Transactional
     public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
-        memberService.getMember(memberId);
         Category category = getCategory(categoryId);
 
         validatePermission(memberId, categoryId);
@@ -67,8 +66,6 @@ public class CategoryService {
 
     @Transactional
     public void delete(final Long memberId, final Long categoryId) {
-        memberService.getMember(memberId);
-
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 
