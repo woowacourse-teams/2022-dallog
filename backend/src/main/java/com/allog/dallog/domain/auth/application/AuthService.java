@@ -49,7 +49,7 @@ public class AuthService {
     }
 
     private Member generateMemberBy(final OAuthMember oAuthMember) {
-        return new Member(oAuthMember.getEmail(), oAuthMember.getProfileImageUrl(), oAuthMember.getDisplayName(),
+        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
                 SocialType.GOOGLE);
     }
 

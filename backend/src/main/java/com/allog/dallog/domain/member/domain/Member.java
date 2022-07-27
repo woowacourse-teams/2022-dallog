@@ -28,11 +28,11 @@ public class Member extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "profile_image_url", nullable = false)
-    private String profileImageUrl;
-
     @Column(name = "display_name", nullable = false)
     private String displayName;
+
+    @Column(name = "profile_image_url", nullable = false)
+    private String profileImageUrl;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "social_type", nullable = false)
@@ -41,14 +41,14 @@ public class Member extends BaseEntity {
     protected Member() {
     }
 
-    public Member(final String email, final String profileImageUrl, final String displayName,
+    public Member(final String email, final String displayName, final String profileImageUrl,
                   final SocialType socialType) {
         validateEmail(email);
         validateDisplayName(displayName);
 
         this.email = email;
-        this.profileImageUrl = profileImageUrl;
         this.displayName = displayName;
+        this.profileImageUrl = profileImageUrl;
         this.socialType = socialType;
     }
 
@@ -73,12 +73,12 @@ public class Member extends BaseEntity {
         return email;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
     }
 
     public SocialType getSocialType() {

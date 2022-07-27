@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.global.config.properties.GoogleProperties;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
+import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
@@ -14,9 +15,11 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -40,12 +43,7 @@ public class GoogleOAuthClient implements OAuthClient {
         GoogleTokenResponse googleTokenResponse = requestGoogleToken(code);
         String payload = getPayloadFrom(googleTokenResponse.getIdToken());
         String decodedPayload = decodeJwtPayload(payload);
-
-        try {
-            return generateOAuthMemberBy(decodedPayload);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException();
-        }
+        return generateOAuthMemberBy(decodedPayload);
     }
 
     private GoogleTokenResponse requestGoogleToken(final String code) {
@@ -54,7 +52,15 @@ public class GoogleOAuthClient implements OAuthClient {
         MultiValueMap<String, String> params = generateRequestParams(code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return restTemplate.postForEntity(googleProperties.getTokenUri(), request, GoogleTokenResponse.class).getBody();
+        return post(request).getBody();
+    }
+
+    private ResponseEntity<GoogleTokenResponse> post(final HttpEntity<MultiValueMap<String, String>> request) {
+        try {
+            return restTemplate.postForEntity(googleProperties.getTokenUri(), request, GoogleTokenResponse.class);
+        } catch (RestClientException e) {
+            throw new OAuthException();
+        }
     }
 
     private MultiValueMap<String, String> generateRequestParams(final String code) {
@@ -75,12 +81,19 @@ public class GoogleOAuthClient implements OAuthClient {
         return new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
     }
 
-    private OAuthMember generateOAuthMemberBy(final String decodedIdToken) throws JsonProcessingException {
-        Map<String, String> userInfo = objectMapper.readValue(decodedIdToken, HashMap.class);
+    private OAuthMember generateOAuthMemberBy(final String decodedPayload) {
+        Map<String, String> userInfo = readIdToken(decodedPayload);
         String email = userInfo.get("email");
         String displayName = userInfo.get("name");
         String profileImageUrl = userInfo.get("picture");
-
         return new OAuthMember(email, displayName, profileImageUrl);
+    }
+
+    private Map<String, String> readIdToken(final String decodedPayload) {
+        try {
+            return objectMapper.readValue(decodedPayload, HashMap.class);
+        } catch (JsonProcessingException e) {
+            throw new OAuthException("id 토큰을 읽을 수 없습니다.");
+        }
     }
 }
