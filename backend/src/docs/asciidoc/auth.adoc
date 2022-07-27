@@ -1,0 +1,37 @@
+== Auth(인증)
+
+=== OAuth 로그인 링크 생성
+
+==== Request
+
+include::{snippets}/auth/link/http-request.adoc[]
+
+==== pathParameters
+
+include::{snippets}/auth/link/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/auth/link/http-response.adoc[]
+
+==== ResponseFields
+
+include::{snippets}/auth/link/response-fields.adoc[]
+
+=== OAuth 로그인 : Resource Server 에러
+
+==== Request
+
+include::{snippets}/auth/exception/token/http-request.adoc[]
+
+==== RequestFields
+
+include::{snippets}/auth/exception/token/path-parameters.adoc[]
+
+==== RequestFields
+
+include::{snippets}/auth/exception/token/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/auth/exception/token/http-response.adoc[]

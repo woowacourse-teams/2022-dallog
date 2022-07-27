@@ -3,6 +3,7 @@ package com.allog.dallog.common.fixtures;
 public class AuthFixtures {
 
     public static final String GOOGLE_PROVIDER = "google";
+    public static final String OAUTH_PROVIDER = "oauthProvider";
 
     public static final String 인증_코드 = "authorization code";
 

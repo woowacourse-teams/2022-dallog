@@ -5,5 +5,6 @@
 :toc: left
 :toclevels: 3
 
+include::auth.adoc[]
 include::member.adoc[]
 include::schedule.adoc[]
