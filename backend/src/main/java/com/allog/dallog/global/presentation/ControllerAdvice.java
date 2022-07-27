@@ -20,16 +20,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleUnexpectedException() {
-        ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
-        return ResponseEntity.internalServerError().body(errorResponse);
-    }
-
-    @ExceptionHandler(OAuthException.class)
-    public ResponseEntity<ErrorResponse> handleOAuthException() {
-        ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
-        return ResponseEntity.internalServerError().body(errorResponse);
+    @ExceptionHandler({
+            InvalidCategoryException.class,
+            InvalidMemberException.class,
+            InvalidScheduleException.class,
+            InvalidSubscriptionException.class
+    })
+    public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler({
@@ -43,17 +42,6 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            InvalidCategoryException.class,
-            InvalidMemberException.class,
-            InvalidScheduleException.class,
-            InvalidSubscriptionException.class
-    })
-    public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
-
-    @ExceptionHandler({
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class
@@ -61,5 +49,17 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(OAuthException.class)
+    public ResponseEntity<ErrorResponse> handleOAuthException() {
+        ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnexpectedException() {
+        ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
+        return ResponseEntity.internalServerError().body(errorResponse);
     }
 }
