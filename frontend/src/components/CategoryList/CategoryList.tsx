@@ -1,46 +1,62 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { FetchNextPageOptions, InfiniteQueryObserverResult, useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useIntersect from '@/hooks/useIntersect';
 
-import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
+import { CategoriesGetResponseType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
-import CategoryItem from '@/components/CategoryItem/CategoryItem';
+import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
+import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
 
-import { CACHE_KEY } from '@/constants';
+import { API, CACHE_KEY } from '@/constants';
 
+import categoryApi from '@/api/category';
 import subscriptionApi from '@/api/subscription';
 
 import { categoryTable, categoryTableHeader, intersectTarget, item } from './CategoryList.styles';
 
-interface CategoryListProps {
-  categoryList: CategoryType[];
-  getMoreCategories: (
-    options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<AxiosResponse<CategoriesGetResponseType>, AxiosError>>;
-  hasNextPage: boolean | undefined;
-}
-
-function CategoryList({ categoryList, getMoreCategories, hasNextPage }: CategoryListProps) {
+function CategoryList() {
   const { accessToken } = useRecoilValue(userState);
 
-  const { data: subscriptionsGetResponse } = useQuery<
+  const {
+    isLoading: isCategoriesLoading,
+    data: categoriesGetResponse,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<AxiosResponse<CategoriesGetResponseType>, AxiosError>(
+    CACHE_KEY.CATEGORIES,
+    ({ pageParam = 0 }) => categoryApi.get(pageParam, API.CATEGORY_GET_SIZE),
+    {
+      getNextPageParam: ({ data }) => {
+        if (data.categories.length > 0) {
+          return data.page + 1;
+        }
+      },
+    }
+  );
+
+  const { isLoading: isSubscriptionsLoading, data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
   >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
 
   const ref = useIntersect(() => {
-    hasNextPage && getMoreCategories();
+    hasNextPage && fetchNextPage();
   });
 
-  if (subscriptionsGetResponse === undefined) {
-    return <div></div>;
+  if (isCategoriesLoading || categoriesGetResponse === undefined) {
+    return <div>Loading</div>;
   }
 
+  if (isSubscriptionsLoading || subscriptionsGetResponse === undefined) {
+    return <div>구독 Loading</div>;
+  }
+
+  const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.categories);
   const subscriptionList = subscriptionsGetResponse.data.map((el) => {
     return {
       subscriptionId: el.id,
@@ -57,17 +73,23 @@ function CategoryList({ categoryList, getMoreCategories, hasNextPage }: Category
       </div>
       <div css={categoryTable}>
         {categoryList.map((category) => {
-          const { subscriptionId } = subscriptionList.find(
+          const subscribedCategoryInfo = subscriptionList.find(
             (el) => el.categoryId === category.id
-          ) ?? {
-            subscriptionId: -1,
-          };
+          );
+
+          if (subscribedCategoryInfo === undefined) {
+            return <UnsubscribedCategoryItem key={category.id} category={category} />;
+          }
 
           return (
-            <CategoryItem key={category.id} category={category} subscriptionId={subscriptionId} />
+            <SubscribedCategoryItem
+              key={category.id}
+              category={category}
+              subscriptionId={subscribedCategoryInfo.subscriptionId}
+            />
           );
         })}
-        <div ref={ref} css={intersectTarget}></div>
+        <div ref={ref} css={intersectTarget} />
       </div>
     </>
   );
