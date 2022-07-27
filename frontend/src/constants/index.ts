@@ -5,6 +5,7 @@ const API = {
 const API_URL = process.env.API_URL;
 
 const ATOM_KEY = {
+  SNACK_BAR: 'snackBarState',
   SIDE_BAR: 'sideBarState',
   USER: 'userState',
 };
