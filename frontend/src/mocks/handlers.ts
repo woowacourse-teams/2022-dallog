@@ -11,7 +11,7 @@ import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
 import subscriptionApi from '@/api/subscription';
 
-import { categoryDB, profileDB, scheduleDB, subscriptionDB } from './data';
+import { categoryDB, myCategoryDB, profileDB, scheduleDB, subscriptionDB } from './data';
 
 const handlers = [
   rest.get(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
@@ -35,8 +35,18 @@ const handlers = [
       createdAt: new Date().toISOString().slice(0, -5),
       creator: profileDB,
     });
+    myCategoryDB.categories.push({
+      ...req.body,
+      id: myCategoryDB.categories.length + 1,
+      createdAt: new Date().toISOString().slice(0, -5),
+      creator: profileDB,
+    });
 
     return res(ctx.status(201));
+  }),
+
+  rest.get(API_URL + categoryApi.endpoint.my, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(myCategoryDB));
   }),
 
   rest.get(API_URL + profileApi.endpoint, (req, res, ctx) => {
