@@ -15,6 +15,7 @@ import com.allog.dallog.global.dto.ErrorResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -57,6 +58,12 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleOAuthException() {
         ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
