@@ -1,14 +1,11 @@
+import { ProfileType } from './profile';
+
 interface SubscriptionType {
   id: number;
   category: {
     id: number;
     name: string;
-    creator: {
-      displayName: string;
-      email: string;
-      id: number;
-      profileImageUri: string;
-    };
+    creator: ProfileType;
     createdAt: string;
   };
   color: string;
