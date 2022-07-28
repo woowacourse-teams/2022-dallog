@@ -262,6 +262,37 @@ class CategoryControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+
+    @DisplayName("카테고리 수정 시 존재하지 않으면 404 Not Found가 발생한다.")
+    @Test
+    void 카테고리_수정_시_존재하지_않으면_404_Not_Found를_반환한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        willThrow(NoSuchCategoryException.class)
+                .willDoNothing()
+                .given(categoryService)
+                .update(any(), any(), any());
+        CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(BE_일정_이름);
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .content(objectMapper.writeValueAsString(카테고리_수정_요청))
+                )
+                .andDo(print())
+                .andDo(document("categories/update/notFound",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNotFound());
+    }
+
     @DisplayName("카테고리를 제거한다.")
     @Test
     void 카테고리를_제거한다() throws Exception {
@@ -287,5 +318,34 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isNoContent());
+    }
+
+
+    @DisplayName("카테고리 제거 시 존재하지 않으면 404 Not Found가 발생한다")
+    @Test
+    void 카테고리_제거_시_존재하지_않으면_404_Not_Found가_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        willThrow(new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다."))
+                .willDoNothing()
+                .given(categoryService)
+                .delete(any(), any());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("categories/delete/notFound",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNotFound());
     }
 }

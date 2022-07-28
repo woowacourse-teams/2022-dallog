@@ -76,15 +76,25 @@ include::{snippets}/categories/findById/notFound/http-response.adoc[]
 
 ==== Request
 
-include::{snippets}/categories/updates/http-request.adoc[]
+include::{snippets}/categories/update/http-request.adoc[]
 
 ==== PathParameters
 
-include::{snippets}/categories/updates/path-parameters.adoc[]
+include::{snippets}/categories/update/path-parameters.adoc[]
 
 ==== Response
 
-include::{snippets}/categories/updates/http-response.adoc[]
+include::{snippets}/categories/update/http-response.adoc[]
+
+=== 카테고리 수정 (존재하지 않는 경우)
+
+==== Request
+
+include::{snippets}/categories/update/notFound/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/update/notFound/http-response.adoc[]
 
 === 카테고리 삭제
 
@@ -99,3 +109,13 @@ include::{snippets}/categories/delete/path-parameters.adoc[]
 ==== Response
 
 include::{snippets}/categories/delete/http-response.adoc[]
+
+=== 카테고리 삭제 (존재하지 않는 경우)
+
+==== Request
+
+include::{snippets}/categories/delete/notFound/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/delete/notFound/http-response.adoc[]
