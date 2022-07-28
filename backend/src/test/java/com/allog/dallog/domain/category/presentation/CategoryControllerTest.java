@@ -15,6 +15,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -32,9 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -90,6 +93,34 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("잘못된 이름 형식으로 카테고리를 생성하면 400 Bad Request가 발생한다.")
+    @Test
+    void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
+        // given
+        willThrow(new InvalidCategoryException("카테고리 이름의 길이는 20을 초과할 수 없습니다."))
+                .given(categoryService)
+                .save(any(), any());
+
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest("20글자를 초과하는 유효하지 않은 카테고리 이름");
+
+        // when & then
+        mockMvc.perform(post("/api/categories")
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(잘못된_카테고리_생성_요청))
+                )
+                .andDo(print())
+                .andDo(document("categories/save/badRequest",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("JWT 토큰"))
+                        )
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("생성된 카테고리를 전부 조회한다.")

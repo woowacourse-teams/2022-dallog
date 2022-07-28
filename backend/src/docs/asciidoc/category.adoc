@@ -10,6 +10,16 @@ include::{snippets}/categories/save/http-request.adoc[]
 
 include::{snippets}/categories/save/http-response.adoc[]
 
+=== 카테고리 생성 (유효하지 않은 카테고리 이름)
+
+==== Request
+
+include::{snippets}/categories/save/badRequest/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/save/badRequest/http-response.adoc[]
+
 === 전체 카테고리 조회
 
 ==== Request
