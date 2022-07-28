@@ -114,4 +114,33 @@ class CategoryControllerTest {
                 )
                 .andExpect(status().isOk());
     }
+
+    @DisplayName("멤버 자신이 생성한 카테고리를 전부 조회한다.")
+    @Test
+    void 멤버_자신이_생성한_카테고리를_전부_조회한다() throws Exception {
+        // given
+        int page = 0;
+        int size = 10;
+
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
+        given(categoryService.findMine(any(), any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories/me?page={page}&size={size}", page, size)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", DUMMY_BEARER_JWT)
+                ).andDo(print())
+                .andDo(document("categories/findMine",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestParameters(
+                                        parameterWithName("page").description("페이지 번호"),
+                                        parameterWithName("size").description("페이지 크기")
+                                )
+                        )
+                )
+                .andExpect(status().isOk());
+    }
 }

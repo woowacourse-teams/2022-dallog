@@ -23,3 +23,17 @@ include::{snippets}/categories/findAll/request-parameters.adoc[]
 ==== Response
 
 include::{snippets}/categories/findAll/http-response.adoc[]
+
+=== 자신이 생성한 카테고리 조회
+
+==== Request
+
+include::{snippets}/categories/findMine/http-request.adoc[]
+
+==== RequestParameters
+
+include::{snippets}/categories/findMine/request-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/categories/findMine/response-body.adoc[]
