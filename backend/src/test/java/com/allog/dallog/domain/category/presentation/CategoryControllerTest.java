@@ -58,6 +58,8 @@ class CategoryControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
+    private static final String INVALID_CATEGORY_NAME = "20글자를 초과하는 유효하지 않은 카테고리 이름";
+    private static final String CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE = "카테고리 이름의 길이는 20을 초과할 수 없습니다.";
 
     @Autowired
     private MockMvc mockMvc;
@@ -100,11 +102,11 @@ class CategoryControllerTest {
     @Test
     void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
         // given
-        willThrow(new InvalidCategoryException("카테고리 이름의 길이는 20을 초과할 수 없습니다."))
+        willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
                 .given(categoryService)
                 .save(any(), any());
 
-        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest("20글자를 초과하는 유효하지 않은 카테고리 이름");
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -262,7 +264,6 @@ class CategoryControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-
     @DisplayName("카테고리 수정 시 존재하지 않으면 404 Not Found가 발생한다.")
     @Test
     void 카테고리_수정_시_존재하지_않으면_404_Not_Found를_반환한다() throws Exception {
@@ -291,6 +292,36 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("잘못된 이름 형식으로 카테고리를 수정하면 400 Bad Request가 발생한다.")
+    @Test
+    void 잘못된_이름_형식으로_카테고리를_수정하면_400_Bad_Request가_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
+                .willDoNothing()
+                .given(categoryService)
+                .update(any(), any(), any());
+        CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(INVALID_CATEGORY_NAME);
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .content(objectMapper.writeValueAsString(카테고리_수정_요청))
+                )
+                .andDo(print())
+                .andDo(document("categories/update/badRequest",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("카테고리를 제거한다.")
