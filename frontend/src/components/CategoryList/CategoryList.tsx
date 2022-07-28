@@ -29,7 +29,7 @@ function CategoryList() {
     hasNextPage,
   } = useInfiniteQuery<AxiosResponse<CategoriesGetResponseType>, AxiosError>(
     CACHE_KEY.CATEGORIES,
-    ({ pageParam = 0 }) => categoryApi.get(pageParam, API.CATEGORY_GET_SIZE),
+    ({ pageParam = 0 }) => categoryApi.getEntire(pageParam, API.CATEGORY_GET_SIZE),
     {
       getNextPageParam: ({ data }) => {
         if (data.categories.length > 0) {

@@ -4,7 +4,7 @@ import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { API_URL } from '@/constants';
+import { API, API_URL } from '@/constants';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
@@ -14,9 +14,9 @@ import subscriptionApi from '@/api/subscription';
 import { categoryDB, profileDB, scheduleDB, subscriptionDB } from './data';
 
 const handlers = [
-  rest.get(API_URL + categoryApi.endpoint, (req, res, ctx) => {
+  rest.get(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
     const page = parseInt(req.url.searchParams.get('page') as string);
-    const size = parseInt(req.url.searchParams.get('size') as string);
+    const size = API.CATEGORY_GET_SIZE;
     const slicedCategories = categoryDB.categories.slice(page * size, page * size + size);
 
     return res(
@@ -28,7 +28,7 @@ const handlers = [
     );
   }),
 
-  rest.post<Pick<CategoryType, 'name'>>(API_URL + categoryApi.endpoint, (req, res, ctx) => {
+  rest.post<Pick<CategoryType, 'name'>>(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
     categoryDB.categories.push({
       ...req.body,
       id: categoryDB.categories.length + 1,
