@@ -12,6 +12,7 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_�
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -29,10 +30,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +78,7 @@ class SubscriptionControllerTest {
         given(subscriptionService.save(any(), any(), any())).willReturn(빨간색_구독_응답);
 
         // when & then
-        mockMvc.perform(post("/api/members/me/categories/{categoryId}/subscriptions", 1L)
+        mockMvc.perform(post("/api/members/me/categories/{categoryId}/subscriptions", 빨간색_구독_응답.getId())
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(빨간색_구독_생성_요청)))
@@ -93,6 +96,34 @@ class SubscriptionControllerTest {
                                 fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 장보")
                         )))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("회원이 이미 카테고리를 구독한 경우 예외를 던진다.")
+    @Test
+    void 회원이_이미_카테고리를_구독한_경우_예외를_던진다() throws Exception {
+        // given
+        given(authService.extractMemberId(any())).willReturn(매트_응답.getId());
+        given(subscriptionService.save(any(), any(), any())).willThrow(new ExistSubscriptionException());
+
+        // when & then
+        mockMvc.perform(post("/api/members/me/categories/{categoryId}/subscriptions", 1L)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(빨간색_구독_생성_요청)))
+                .andDo(print())
+                .andDo(document("subscription/exist",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("categoryId").description("카테고리 id")
+                        ),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 장보")
+                        )))
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("자신의 구독 정보를 조회한다.")
@@ -135,7 +166,8 @@ class SubscriptionControllerTest {
         SubscriptionResponse 빨간색_구독_응답 = 빨간색_구독_응답(공통_일정_응답);
 
         given(authService.extractMemberId(any())).willReturn(매트_응답.getId());
-        willDoNothing().given(subscriptionService).deleteByIdAndMemberId(빨간색_구독_응답.getId(), 매트_응답.getId());
+        willDoNothing().given(subscriptionService)
+                .deleteByIdAndMemberId(빨간색_구독_응답.getId(), 매트_응답.getId());
 
         // when & then
         mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 빨간색_구독_응답.getId())
@@ -153,5 +185,33 @@ class SubscriptionControllerTest {
                                 headerWithName("Authorization").description("JWT 토큰")
                         )))
                 .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("자신이 가지고 있지 않은 구독 정보인 경우 예외를 던진다.")
+    @Test
+    void 자신이_가지고_있지_않은_구독_정보인_경우_예외를_던진다() throws Exception {
+        // given
+        given(authService.extractMemberId(any())).willReturn(매트_응답.getId());
+        willThrow(new NoPermissionException())
+                .willDoNothing()
+                .given(subscriptionService)
+                .deleteByIdAndMemberId(any(), any());
+
+        // when & then
+        mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 1L)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("subscription/permission",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("subscriptionId").description("구독 id")
+                        ),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰")
+                        )))
+                .andExpect(status().isUnauthorized());
     }
 }

@@ -39,9 +39,9 @@ public class ControllerAdvice {
             InvalidTokenException.class,
             NoPermissionException.class
     })
-    public ResponseEntity<ErrorResponse> handleInvalidAuthorization() {
-        ErrorResponse errorResponse = new ErrorResponse("사용자 인증에 실패하였습니다.");
-        return ResponseEntity.internalServerError().body(errorResponse);
+    public ResponseEntity<ErrorResponse> handleInvalidAuthorization(final RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler({

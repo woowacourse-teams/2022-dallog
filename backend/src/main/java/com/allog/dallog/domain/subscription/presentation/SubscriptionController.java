@@ -32,7 +32,8 @@ public class SubscriptionController {
                                                      @RequestBody final SubscriptionCreateRequest request) {
         SubscriptionResponse response = subscriptionService.save(loginMember.getId(), categoryId, request);
         return ResponseEntity.created(
-                URI.create("/api/members/me/" + categoryId + "/subscriptions/" + response.getId())).body(response);
+                        URI.create("/api/members/me/categories/" + categoryId + "/subscriptions/" + response.getId()))
+                .body(response);
     }
 
     @GetMapping("/subscriptions")
