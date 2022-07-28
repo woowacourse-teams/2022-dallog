@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +41,7 @@ class ScheduleControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper ObjectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
     private AuthService authService;
@@ -61,7 +61,7 @@ class ScheduleControllerTest {
         mockMvc.perform(post("/api/schedules")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(ObjectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andDo(document("schedule/save",
                         preprocessRequest(prettyPrint()),

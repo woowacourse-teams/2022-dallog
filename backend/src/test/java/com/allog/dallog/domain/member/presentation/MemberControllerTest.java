@@ -2,10 +2,7 @@ package com.allog.dallog.domain.member.presentation;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.더미_엑세스_토큰;
 import static com.allog.dallog.common.fixtures.AuthFixtures.토큰_정보;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이름;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_프로필;
-import static com.allog.dallog.domain.member.domain.SocialType.GOOGLE;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_응답;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -19,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ class MemberControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private com.fasterxml.jackson.databind.ObjectMapper ObjectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
     private AuthService authService;
@@ -50,10 +47,8 @@ class MemberControllerTest {
     @Test
     void 자신의_회원_정보를_조회한다() throws Exception {
         //given
-        MemberResponse response = new MemberResponse(1L, 파랑_이메일, 파랑_이름, 파랑_프로필, GOOGLE);
-
-        given(memberService.findById(response.getId())).willReturn(response);
-        given(authService.extractMemberId(더미_엑세스_토큰)).willReturn(response.getId());
+        given(memberService.findById(파랑_응답.getId())).willReturn(파랑_응답);
+        given(authService.extractMemberId(더미_엑세스_토큰)).willReturn(파랑_응답.getId());
 
         // when & then
         mockMvc.perform(get("/api/members/me")
