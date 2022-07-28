@@ -49,7 +49,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(CategoryController.class)
 class CategoryControllerTest {
 
-    private static final String DUMMY_BEARER_JWT = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +74,7 @@ class CategoryControllerTest {
 
         // when & then
         mockMvc.perform(post("/api/categories")
-                        .header("Authorization", DUMMY_BEARER_JWT)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BE_일정_생성_요청))
@@ -133,7 +134,7 @@ class CategoryControllerTest {
         mockMvc.perform(get("/api/categories/me?page={page}&size={size}", page, size)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", DUMMY_BEARER_JWT)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
                 .andDo(document("categories/findMine",
