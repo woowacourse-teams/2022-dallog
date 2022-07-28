@@ -65,3 +65,17 @@ include::{snippets}/categories/updates/path-parameters.adoc[]
 ==== Response
 
 include::{snippets}/categories/updates/http-response.adoc[]
+
+=== 카테고리 삭제
+
+==== Request
+
+include::{snippets}/categories/delete/http-request.adoc[]
+
+==== PathParameters
+
+include::{snippets}/categories/delete/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/categories/delete/http-response.adoc[]

@@ -194,7 +194,34 @@ class CategoryControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/updates",
+                .andDo(document("categories/update",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("카테고리를 제거한다.")
+    @Test
+    void 카테고리를_제거한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        willDoNothing()
+                .given(categoryService)
+                .update(any(), any(), any());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("categories/delete",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
