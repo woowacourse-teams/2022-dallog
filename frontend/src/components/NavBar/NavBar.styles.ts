@@ -45,7 +45,9 @@ const menu = ({ colors, flex }: Theme) => css`
   &:hover {
     border-radius: 50%;
 
-    background: ${colors.GRAY_300};
+    background: ${colors.GRAY_100};
+
+    filter: none;
   }
 
   &:hover span {
