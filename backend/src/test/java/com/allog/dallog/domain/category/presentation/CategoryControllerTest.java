@@ -38,6 +38,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -205,6 +206,31 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("카테고리 ID로 카테고리를 단건 조회시 존재하지 않으면 404 Not Found가 발생한다.")
+    @Test
+    void 카테고리_ID로_카테고리를_단건_조회시_존재하지_않으면_404_Not_Found를_반환한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        given(categoryService.findById(any()))
+                .willThrow(new NoSuchCategoryException());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("categories/findById/notFound",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNotFound());
     }
 
     @DisplayName("카테고리를 수정한다.")

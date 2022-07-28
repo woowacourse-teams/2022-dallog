@@ -62,6 +62,16 @@ include::{snippets}/categories/findById/path-parameters.adoc[]
 
 include::{snippets}/categories/findById/http-response.adoc[]
 
+=== ID를 통한 카테고리 단건 조회 (존재하지 않는 경우)
+
+==== Request
+
+include::{snippets}/categories/findById/notFound/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/findById/notFound/http-response.adoc[]
+
 === 카테고리 수정
 
 ==== Request
