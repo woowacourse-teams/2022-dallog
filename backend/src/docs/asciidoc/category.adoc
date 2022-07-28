@@ -37,3 +37,17 @@ include::{snippets}/categories/findMine/request-parameters.adoc[]
 ==== Response
 
 include::{snippets}/categories/findMine/response-body.adoc[]
+
+=== ID를 통한 카테고리 단건 조회
+
+==== Request
+
+include::{snippets}/categories/findById/http-request.adoc[]
+
+==== PathParameters
+
+include::{snippets}/categories/findById/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/categories/findById/http-response.adoc[]
