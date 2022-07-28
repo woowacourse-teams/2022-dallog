@@ -1,0 +1,25 @@
+== Member(회원)
+
+=== 내 정보 조회
+
+==== Request
+
+include::{snippets}/member/me/http-request.adoc[]
+
+==== RequestHeaders
+
+include::{snippets}/member/me/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/member/me/http-response.adoc[]
+
+=== 삭제된 회원 정보 조회
+
+==== Request
+
+include::{snippets}/member/exception/notfound/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member/exception/notfound/http-response.adoc[]

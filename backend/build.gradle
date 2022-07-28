@@ -48,8 +48,13 @@ test {
 
 asciidoctor {
     configurations 'asciidoctorExtensions'
+    baseDirFollowsSourceFile()
     inputs.dir snippetsDir
     dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
 }
 
 task copyDocument(type: Copy) {

@@ -5,54 +5,5 @@
 :toc: left
 :toclevels: 3
 
-== Schedule(일정)
-
-=== 일정 등록
-
-==== Request
-
-include::{snippets}/schedule/save/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/schedule/save/http-response.adoc[]
-
-=== 월별 일정 조회
-
-==== Request
-
-include::{snippets}/schedule/find/http-request.adoc[]
-
-==== RequestParameters
-
-include::{snippets}/schedule/find/request-parameters.adoc[]
-
-==== Response
-
-include::{snippets}/schedule/find/http-response.adoc[]
-
-== Member(회원)
-
-=== 내 정보 조회
-
-==== Request
-
-include::{snippets}/member/me/http-request.adoc[]
-
-==== RequestHeaders
-
-include::{snippets}/member/me/request-headers.adoc[]
-
-==== Response
-
-include::{snippets}/member/me/http-response.adoc[]
-
-=== 삭제된 회원 정보 조회
-
-==== Request
-
-include::{snippets}/member/exception/notfound/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/member/exception/notfound/http-response.adoc[]
+include::member.adoc[]
+include::schedule.adoc[]
