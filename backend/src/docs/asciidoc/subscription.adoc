@@ -1,0 +1,55 @@
+== Subscription(구독)
+
+=== 구독 등록
+
+==== Request
+
+include::{snippets}/subscription/save/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/save/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/save/request-headers.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/subscription/save/request-body.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/save/http-response.adoc[]
+
+=== 내 구독 정보 조회
+
+==== Request
+
+include::{snippets}/subscription/me/http-request.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/me/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/me/http-response.adoc[]
+
+=== 내 구독 정보 삭제
+
+==== Request
+
+include::{snippets}/subscription/delete/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/delete/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/delete/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/delete/http-response.adoc[]

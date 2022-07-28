@@ -8,3 +8,4 @@
 include::auth.adoc[]
 include::member.adoc[]
 include::schedule.adoc[]
+include::subscription.adoc[]
