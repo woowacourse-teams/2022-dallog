@@ -14,6 +14,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -172,5 +174,34 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("카테고리를 수정한다.")
+    @Test
+    void 카테고리를_수정한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        willDoNothing()
+                .given(categoryService)
+                .update(any(), any(), any());
+        CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(BE_일정_이름);
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .content(objectMapper.writeValueAsString(카테고리_수정_요청))
+                )
+                .andDo(print())
+                .andDo(document("categories/updates",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNoContent());
     }
 }
