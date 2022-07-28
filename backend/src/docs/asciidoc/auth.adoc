@@ -18,13 +18,31 @@ include::{snippets}/auth/link/http-response.adoc[]
 
 include::{snippets}/auth/link/response-fields.adoc[]
 
+=== OAuth 로그인
+
+==== Request
+
+include::{snippets}/auth/token/http-request.adoc[]
+
+==== PathParameters
+
+include::{snippets}/auth/token/path-parameters.adoc[]
+
+==== RequestFields
+
+include::{snippets}/auth/token/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/auth/token/http-response.adoc[]
+
 === OAuth 로그인 : Resource Server 에러
 
 ==== Request
 
 include::{snippets}/auth/exception/token/http-request.adoc[]
 
-==== RequestFields
+==== PathParameters
 
 include::{snippets}/auth/exception/token/path-parameters.adoc[]
 

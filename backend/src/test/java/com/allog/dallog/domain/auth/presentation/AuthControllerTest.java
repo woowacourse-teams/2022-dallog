@@ -3,6 +3,8 @@ package com.allog.dallog.domain.auth.presentation;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAuth_로그인_링크;
 import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드_토큰_응답;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -15,12 +17,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.auth.dto.TokenRequest;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +52,7 @@ class AuthControllerTest {
         // given
         given(authService.generateGoogleLink()).willReturn(OAuth_로그인_링크);
 
-        // when & than
+        // when & then
         mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri", OAUTH_PROVIDER))
                 .andDo(print())
                 .andDo(document("auth/link",
@@ -68,21 +68,42 @@ class AuthControllerTest {
                 .andExpect(status().isOk());
     }
 
-    //TODO : OAuth로그인 시 토큰 발급 테스트 만들어야함.
-
-    @DisplayName("OAuth 로그인을 할 떄 Resource Server 에러시 상태코드 500을 반환한다.")
+    @DisplayName("OAuth 로그인을 하면 token과 상태코드 200을 반환한다.")
     @Test
-    void OAuth_로그인을_할_때_Resource_Server_에러시_상태코드_500을_반환한다() throws Exception {
+    void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateTokenWithCode(인증_코드)).willThrow(new OAuthException());
+        given(authService.generateTokenWithCode(인증_코드)).willReturn(인증_코드_토큰_응답());
 
-        TokenRequest request = new TokenRequest(인증_코드);
-
-        // when & than
+        // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(인증_코드_토큰_요청())))
+                .andDo(print())
+                .andDo(document("auth/token",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("oauthProvider").description("OAuth 로그인 제공자")
+                        ),
+                        requestFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드")
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("OAuth 로그인 과정에서 Resource Server 에러가 발생하면 상태코드 500을 반환한다.")
+    @Test
+    void OAuth_로그인_과정에서_Resource_Server_에러가_발생하면_상태코드_500을_반환한다() throws Exception {
+        // given
+        given(authService.generateTokenWithCode(인증_코드)).willThrow(new OAuthException());
+
+        // when & then
+        mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(인증_코드_토큰_요청())))
                 .andDo(print())
                 .andDo(document("auth/exception/token",
                         preprocessRequest(prettyPrint()),
