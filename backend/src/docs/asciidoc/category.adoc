@@ -1,0 +1,11 @@
+== Category(카테고리)
+
+=== 카테고리 생성
+
+==== Request
+
+include::{snippets}/categories/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/http-response.adoc[]
