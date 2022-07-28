@@ -5,6 +5,9 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import { Schedule } from '@/@types';
 
+import Button from '@/components/@common/Button/Button';
+import FieldSet from '@/components/@common/FieldSet/FieldSet';
+
 import { CACHE_KEY } from '@/constants';
 
 import { createPostBody } from '@/utils';
@@ -12,8 +15,6 @@ import { getDate, getDateTime } from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
 
-import Button from '../@common/Button/Button';
-import FieldSet from '../@common/FieldSet/FieldSet';
 import {
   allDayButton,
   arrow,
