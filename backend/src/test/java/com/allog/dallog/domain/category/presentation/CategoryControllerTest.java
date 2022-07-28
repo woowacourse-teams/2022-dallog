@@ -1,7 +1,14 @@
 package com.allog.dallog.domain.category.presentation;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,16 +18,20 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +74,7 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(BE_일정_생성_요청))
                 ).andDo(print())
-                .andDo(document("categories",
+                .andDo(document("categories/save",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -71,5 +82,26 @@ class CategoryControllerTest {
                         )
                 )
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("생성된 카테고리를 전부 조회한다.")
+    @Test
+    void 생성된_카테고리를_전부_조회한다() throws Exception {
+        // given
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(0, 일정_목록);
+        given(categoryService.findAll(any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("categories/findAll",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()))
+                )
+                .andExpect(status().isOk());
     }
 }

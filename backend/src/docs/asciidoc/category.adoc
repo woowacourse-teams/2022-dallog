@@ -4,8 +4,18 @@
 
 ==== Request
 
-include::{snippets}/categories/http-request.adoc[]
+include::{snippets}/categories/save/http-request.adoc[]
 
 ==== Response
 
-include::{snippets}/categories/http-response.adoc[]
+include::{snippets}/categories/save/http-response.adoc[]
+
+=== 전체 카테고리 조회
+
+==== Request
+
+include::{snippets}/categories/findAll/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/categories/findAll/http-response.adoc[]
