@@ -16,6 +16,10 @@ include::{snippets}/categories/save/http-response.adoc[]
 
 include::{snippets}/categories/findAll/http-request.adoc[]
 
+==== RequestParameters
+
+include::{snippets}/categories/findAll/request-parameters.adoc[]
+
 ==== Response
 
 include::{snippets}/categories/findAll/http-response.adoc[]

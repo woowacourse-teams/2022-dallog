@@ -18,6 +18,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -88,19 +90,27 @@ class CategoryControllerTest {
     @Test
     void 생성된_카테고리를_전부_조회한다() throws Exception {
         // given
+        int page = 0;
+        int size = 10;
+
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(0, 일정_목록);
+        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
         given(categoryService.findAll(any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories")
+        mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andDo(document("categories/findAll",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()))
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestParameters(
+                                        parameterWithName("page").description("페이지 번호"),
+                                        parameterWithName("size").description("페이지 크기")
+                                )
+                        )
                 )
                 .andExpect(status().isOk());
     }
