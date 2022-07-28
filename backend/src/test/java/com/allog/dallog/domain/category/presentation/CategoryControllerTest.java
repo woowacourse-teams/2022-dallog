@@ -2,6 +2,7 @@ package com.allog.dallog.domain.category.presentation;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_응답;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
@@ -10,6 +11,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스�
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -31,7 +33,6 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -68,8 +69,7 @@ class CategoryControllerTest {
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
-        MemberResponse 후디 = new MemberResponse(후디());
-        CategoryResponse 카테고리 = new CategoryResponse(1L, BE_일정_이름, 후디, LocalDateTime.now());
+        CategoryResponse 카테고리 = new CategoryResponse(1L, BE_일정_이름, 후디_응답, LocalDateTime.now());
         given(categoryService.save(any(), any())).willReturn(카테고리);
 
         // when & then
@@ -154,9 +154,8 @@ class CategoryControllerTest {
     void 카테고리_ID로_카테고리를_단건_조회한다() throws Exception {
         // given
         Long categoryId = 1L;
-
-        CategoryResponse BE_일정 = new CategoryResponse(BE_일정(후디()));
-        given(categoryService.findById(any())).willReturn(BE_일정);
+        CategoryResponse BE_일정_응답 = BE_일정_응답(후디_응답);
+        given(categoryService.findById(any())).willReturn(BE_일정_응답);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}", categoryId)
