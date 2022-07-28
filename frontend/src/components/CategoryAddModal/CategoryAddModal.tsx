@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
@@ -10,6 +10,8 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import FieldSet from '@/components/@common/FieldSet/FieldSet';
+
+import { CACHE_KEY } from '@/constants';
 
 import { createPostBody } from '@/utils';
 
@@ -34,6 +36,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
 
   const { accessToken } = useRecoilValue(userState);
 
+  const queryClient = useQueryClient();
   const { mutate: postCategory } = useMutation<
     AxiosResponse<Pick<CategoryType, 'name'>>,
     AxiosError,
@@ -62,6 +65,8 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   };
 
   const onSuccessPostCategory = () => {
+    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
+    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
     closeModal();
   };
 
