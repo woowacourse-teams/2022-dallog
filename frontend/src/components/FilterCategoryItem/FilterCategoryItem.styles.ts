@@ -43,6 +43,11 @@ const colorStyle = (color: string) => css`
   border-radius: 50%;
 
   background: ${color};
+
+  &:hover {
+    filter: none;
+    transform: scale(1.2);
+  }
 `;
 
 const headerStyle = css`

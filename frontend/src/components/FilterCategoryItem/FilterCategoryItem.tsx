@@ -25,7 +25,7 @@ interface FilterItemProps {
 }
 
 function FilterCategoryItem({ category }: FilterItemProps) {
-  const { state, toggleState } = useToggle();
+  const { state: isPaletteOpen, toggleState: togglePaletteOpen } = useToggle();
 
   return (
     <div css={itemStyle} key={category.id}>
@@ -34,15 +34,15 @@ function FilterCategoryItem({ category }: FilterItemProps) {
         <span css={nameStyle}>{category.name}</span>
       </div>
       <div css={paletteLayoutStyle}>
-        <Button cssProp={iconStyle} onClick={toggleState}>
+        <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
           <BiPalette size={20} />
         </Button>
-        {state && (
+        {isPaletteOpen && (
           <>
-            <div css={outerStyle} onClick={toggleState} />
+            <div css={outerStyle} onClick={togglePaletteOpen} />
             <div css={paletteStyle}>
               {PALETTE.map((color) => {
-                return <div key={color} css={colorStyle(color)}></div>;
+                return <Button key={color} cssProp={colorStyle(color)}></Button>;
               })}
             </div>
           </>
