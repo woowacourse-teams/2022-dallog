@@ -21,6 +21,7 @@ const CACHE_KEY = {
 };
 
 const CONFIRM_MESSAGE = {
+  DELETE_CATEGORY: '정말 삭제하시겠습니까?',
   UNSUBSCRIBE: '구독을 해제하시겠습니까?',
 };
 

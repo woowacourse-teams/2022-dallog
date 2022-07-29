@@ -37,6 +37,14 @@ const categoryApi = {
 
     return response;
   },
+
+  delete: async (accessToken: string | null, categoryId: number) => {
+    const response = await dallogApi.delete(`${categoryApi.endpoint.entire}/${categoryId}`, {
+      headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
+    });
+
+    return response;
+  },
 };
 
 export default categoryApi;
