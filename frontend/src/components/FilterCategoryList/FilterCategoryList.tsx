@@ -1,20 +1,24 @@
+import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { SubscriptionType } from '@/@types/subscription';
 
-import { userState } from '@/recoil/atoms';
+import { sideBarState, userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants';
 
 import subscriptionApi from '@/api/subscription';
 
 import FilterCategoryItem from '../FilterCategoryItem/FilterCategoryItem';
-import { headerStyle } from './MyFilterCategoryList.styles';
+import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
 
 function MyFilterCategoryList() {
+  const isSideBarOpen = useRecoilValue(sideBarState);
   const { accessToken } = useRecoilValue(userState);
+
+  const theme = useTheme();
 
   const { data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
@@ -30,11 +34,13 @@ function MyFilterCategoryList() {
   });
 
   return (
-    <div>
+    <div css={listStyle(theme, isSideBarOpen)}>
       <span css={headerStyle}> 구독 카테고리</span>
-      {categoryList.map((category) => {
-        return <FilterCategoryItem key={category.id} category={category} />;
-      })}
+      <div css={contentStyle}>
+        {categoryList.map((category) => {
+          return <FilterCategoryItem key={category.id} category={category} />;
+        })}
+      </div>
     </div>
   );
 }
