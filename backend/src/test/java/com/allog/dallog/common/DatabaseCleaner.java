@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class DatabaseCleanup {
+public class DatabaseCleaner {
 
     private final EntityManager entityManager;
     private final List<String> tableNames;
 
-    public DatabaseCleanup(final EntityManager entityManager) {
+    public DatabaseCleaner(final EntityManager entityManager) {
         this.entityManager = entityManager;
         this.tableNames = entityManager.getMetamodel()
                 .getEntities()

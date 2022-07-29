@@ -1,6 +1,6 @@
 package com.allog.dallog.acceptance;
 
-import com.allog.dallog.common.DatabaseCleanup;
+import com.allog.dallog.common.DatabaseCleaner;
 import com.allog.dallog.common.config.TestConfig;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +17,11 @@ class AcceptanceTest {
     private int port;
 
     @Autowired
-    private DatabaseCleanup databaseCleanup;
+    private DatabaseCleaner databaseCleaner;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-        databaseCleanup.execute();
+        databaseCleaner.execute();
     }
 }
