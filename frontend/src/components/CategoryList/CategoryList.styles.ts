@@ -1,7 +1,10 @@
 import { css, Theme } from '@emotion/react';
 
 const categoryTable = css`
+  overflow-y: overlay;
+
   width: 100%;
+  height: 72vh;
 `;
 
 const categoryTableHeader = ({ flex, colors }: Theme) => css`

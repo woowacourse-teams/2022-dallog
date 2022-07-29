@@ -7,6 +7,7 @@ const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
   justify-content: flex-start;
 
   width: 54rem;
+  margin-top: 5rem;
 
   font-size: 4rem;
 `;
@@ -17,6 +18,7 @@ const headerStyle = ({ flex }: Theme) => css`
   justify-content: space-between;
 
   width: 100%;
+  height: 8rem;
   margin-bottom: 2rem;
 
   font-weight: bold;
@@ -53,6 +55,7 @@ const itemStyle = ({ flex }: Theme) => css`
   justify-content: space-between;
 
   width: 100%;
+  height: 8rem;
 `;
 
 const nameStyle = css`

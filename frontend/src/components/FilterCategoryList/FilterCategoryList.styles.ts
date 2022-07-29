@@ -14,6 +14,7 @@ const headerStyle = ({ flex }: Theme) => css`
   justify-content: space-between;
 
   width: 100%;
+  height: 8rem;
   margin-bottom: 2rem;
 
   font-weight: bold;

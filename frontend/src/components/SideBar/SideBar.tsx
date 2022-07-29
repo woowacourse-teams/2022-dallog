@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 
 import { sideBarState } from '@/recoil/atoms';
 
-import MyFilterCategoryList from '@/components/FilterCategoryList/FilterCategoryList';
+import FilterCategoryList from '@/components/FilterCategoryList/FilterCategoryList';
 import MyCategoryList from '@/components/MyCategoryList/MyCategoryList';
 
 import { sideBar } from './SideBar.styles';
@@ -14,7 +14,7 @@ function SideBar() {
 
   return (
     <div css={sideBar(theme, isSideBarOpen)}>
-      <MyFilterCategoryList />
+      <FilterCategoryList />
       <MyCategoryList />
     </div>
   );
