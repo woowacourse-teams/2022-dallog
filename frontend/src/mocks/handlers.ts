@@ -11,7 +11,7 @@ import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
 import subscriptionApi from '@/api/subscription';
 
-import { categoryDB, myCategoryDB, profileDB, scheduleDB, subscriptionDB } from './data';
+import { categoryDB, myCategoryDB, scheduleDB, subscriptionDB, tigerProfileDB } from './data';
 
 const handlers = [
   rest.get(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
@@ -33,13 +33,13 @@ const handlers = [
       ...req.body,
       id: categoryDB.categories.length + 1,
       createdAt: new Date().toISOString().slice(0, -5),
-      creator: profileDB,
+      creator: tigerProfileDB,
     });
     myCategoryDB.categories.push({
       ...req.body,
-      id: myCategoryDB.categories.length + 1,
+      id: categoryDB.categories.length + 1,
       createdAt: new Date().toISOString().slice(0, -5),
-      creator: profileDB,
+      creator: tigerProfileDB,
     });
 
     return res(ctx.status(201));
@@ -50,7 +50,7 @@ const handlers = [
   }),
 
   rest.get(API_URL + profileApi.endpoint, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(profileDB));
+    return res(ctx.status(200), ctx.json(tigerProfileDB));
   }),
 
   rest.get(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
@@ -77,7 +77,7 @@ const handlers = [
         category: {
           id: categoryDB.categories[categoryId - 1].id,
           name: categoryDB.categories[categoryId - 1].name,
-          creator: profileDB,
+          creator: tigerProfileDB,
           createdAt: categoryDB.categories[categoryId - 1].createdAt,
         },
         color: req.body.color,
