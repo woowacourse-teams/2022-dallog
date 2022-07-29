@@ -3,7 +3,8 @@ import { css, Theme } from '@emotion/react';
 const sideBar = ({ colors, flex }: Theme, isSideBarOpen: boolean) => css`
   ${flex.row}
 
-  overflow: hidden;
+  align-items: flex-start;
+  overflow: overlay;
   position: fixed;
   z-index: 10;
 
