@@ -38,3 +38,6 @@ out/
 
 ### resources ###
 /src/main/resources/static/docs
+
+### logs ###
+logs/
