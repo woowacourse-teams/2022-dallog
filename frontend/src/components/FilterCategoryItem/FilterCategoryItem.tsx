@@ -28,7 +28,7 @@ function FilterCategoryItem({ category }: FilterItemProps) {
   const { state: isPaletteOpen, toggleState: togglePaletteOpen } = useToggle();
 
   return (
-    <div css={itemStyle} key={category.id}>
+    <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
         <RiCheckboxFill size={20} />
         <span css={nameStyle}>{category.name}</span>

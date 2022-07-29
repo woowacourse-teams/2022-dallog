@@ -7,11 +7,12 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
+import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
+
 import { CACHE_KEY } from '@/constants';
 
 import subscriptionApi from '@/api/subscription';
 
-import FilterCategoryItem from '../FilterCategoryItem/FilterCategoryItem';
 import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
 
 function FilterCategoryList() {
@@ -20,16 +21,16 @@ function FilterCategoryList() {
 
   const theme = useTheme();
 
-  const { data: subscriptionsGetResponse } = useQuery<
-    AxiosResponse<SubscriptionType[]>,
-    AxiosError
-  >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
+  const { data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
+    CACHE_KEY.SUBSCRIPTIONS,
+    () => subscriptionApi.get(accessToken)
+  );
 
-  if (subscriptionsGetResponse === undefined) {
+  if (data === undefined) {
     return <div>Loading</div>;
   }
 
-  const categoryList = subscriptionsGetResponse.data.map((el) => {
+  const categoryList = data.data.map((el) => {
     return el.category;
   });
 
