@@ -12,23 +12,15 @@ import { sideBarState, userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
+import MyCategoryItem from '@/components/MyCategoryItem/MyCategoryItem';
 
 import { CACHE_KEY } from '@/constants';
 
 import categoryApi from '@/api/category';
 
-import { FiEdit3, FiPlus } from 'react-icons/fi';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import { FiPlus } from 'react-icons/fi';
 
-import {
-  buttonStyle,
-  contentStyle,
-  controlButtonsStyle,
-  headerStyle,
-  itemStyle,
-  listStyle,
-  nameStyle,
-} from './MyCategoryList.styles';
+import { buttonStyle, contentStyle, headerStyle, listStyle } from './MyCategoryList.styles';
 
 function MyCategoryList() {
   const theme = useTheme();
@@ -61,17 +53,7 @@ function MyCategoryList() {
       </div>
       <div css={contentStyle}>
         {data.data.map((category) => (
-          <div key={category.id} css={itemStyle}>
-            <span css={nameStyle}>{category.name}</span>
-            <div css={controlButtonsStyle}>
-              <Button cssProp={buttonStyle}>
-                <FiEdit3 size={20} />
-              </Button>
-              <Button cssProp={buttonStyle}>
-                <RiDeleteBin6Line size={20} />
-              </Button>
-            </div>
-          </div>
+          <MyCategoryItem key={category.id} category={category} />
         ))}
       </div>
     </div>

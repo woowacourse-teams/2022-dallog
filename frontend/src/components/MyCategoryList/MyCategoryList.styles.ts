@@ -49,39 +49,4 @@ const contentStyle = css`
   width: 100%;
 `;
 
-const itemStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-
-  justify-content: space-between;
-
-  width: 100%;
-  height: 8rem;
-`;
-
-const nameStyle = css`
-  overflow: hidden;
-  position: relative;
-
-  width: 32rem;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const controlButtonsStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-`;
-
-export {
-  buttonStyle,
-  contentStyle,
-  controlButtonsStyle,
-  headerStyle,
-  itemStyle,
-  listStyle,
-  nameStyle,
-};
+export { buttonStyle, contentStyle, headerStyle, listStyle };
