@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 const categoryTable = css`
-  overflow-y: scroll;
+  overflow-y: overlay;
 
   width: 100%;
   height: 72vh;
