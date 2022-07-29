@@ -28,7 +28,14 @@ spring:
 
 logging:
   level:
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: ${LOGGING_LEVEL}
+  file:
+    name: "./logs/dallog.log"
+  logback:
+    rollingpolicy:
+      file-name-pattern: "./logs/dallog-%d{yyyy-MM-dd}-%i.log"
+      max-file-size: 5MB
+      total-size-cap: 100MB
 
 oauth:
   google:
