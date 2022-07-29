@@ -31,7 +31,7 @@ const categoryDB = {
     },
     {
       id: 3,
-      name: '공원조',
+      name: '레벨 1 공원조',
       createdAt: '2022-07-05T13:00:00',
       creator: tigerProfileDB,
     },
