@@ -50,6 +50,10 @@ oauth:
     token-uri: ${GOOGLE_TOKEN_URI}
     grant-type: authorization_code
 
+report:
+  webhook:
+    discord: ${DISCORD_WEBHOOK_URI}
+
 security:
   jwt:
     token:

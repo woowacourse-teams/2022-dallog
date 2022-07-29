@@ -1,4 +1,4 @@
-package com.allog.dallog.global.dto;
+package com.allog.dallog.global.error.dto;
 
 public class ErrorResponse {
 
