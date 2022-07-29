@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 const sideBar = ({ colors, flex }: Theme, isSideBarOpen: boolean) => css`
-  ${flex.row}
+  ${flex.col}
 
   align-items: flex-start;
   overflow: overlay;

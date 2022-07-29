@@ -1,12 +1,11 @@
 import { css, Theme } from '@emotion/react';
 
-const categoryItemStyle = ({ colors, flex }: Theme) => css`
+const itemStyle = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
   justify-content: space-between;
 
-  width: 64rem;
-  padding: 2rem 3rem;
+  width: 100%;
 
   &:hover {
     background-color: ${colors.GRAY_100};
@@ -23,8 +22,18 @@ const checkBoxNameStyle = ({ flex }: Theme) => css`
   gap: 1rem;
 `;
 
-const categoryNameStyle = css`
-  font-size: 3.5rem;
+const nameStyle = css`
+  overflow: hidden;
+  position: relative;
+
+  width: 32rem;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const colorStyle = (color: string) => css`
@@ -47,7 +56,9 @@ const iconStyle = css`
 
 const paletteStyle = ({ colors }: Theme) => css`
   position: absolute;
+  right: 0;
   z-index: 30;
+
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
@@ -69,6 +80,7 @@ const outerStyle = css`
   position: fixed;
   left: 0;
   top: 16rem;
+  z-index: 20;
 
   width: 100%;
   height: 100%;
@@ -77,10 +89,10 @@ const outerStyle = css`
 `;
 
 export {
-  categoryItemStyle,
+  itemStyle,
   colorStyle,
   checkBoxNameStyle,
-  categoryNameStyle,
+  nameStyle,
   headerStyle,
   outerStyle,
   iconStyle,

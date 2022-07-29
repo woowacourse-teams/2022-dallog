@@ -10,11 +10,11 @@ import { BiPalette } from 'react-icons/bi';
 import { RiCheckboxFill } from 'react-icons/ri';
 
 import {
-  categoryItemStyle,
-  categoryNameStyle,
   checkBoxNameStyle,
   colorStyle,
   iconStyle,
+  itemStyle,
+  nameStyle,
   outerStyle,
   paletteLayoutStyle,
   paletteStyle,
@@ -28,14 +28,14 @@ function FilterCategoryItem({ category }: FilterItemProps) {
   const { state, toggleState } = useToggle();
 
   return (
-    <div css={categoryItemStyle} key={category.id}>
+    <div css={itemStyle} key={category.id}>
       <div css={checkBoxNameStyle}>
-        <RiCheckboxFill size="5rem" />
-        <span css={categoryNameStyle}>{category.name}</span>
+        <RiCheckboxFill size={20} />
+        <span css={nameStyle}>{category.name}</span>
       </div>
       <div css={paletteLayoutStyle}>
         <Button cssProp={iconStyle} onClick={toggleState}>
-          <BiPalette size="3.5rem" />
+          <BiPalette size={20} />
         </Button>
         {state && (
           <>
