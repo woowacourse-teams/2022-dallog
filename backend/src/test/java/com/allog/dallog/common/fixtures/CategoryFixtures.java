@@ -2,7 +2,10 @@ package com.allog.dallog.common.fixtures;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.dto.MemberResponse;
+import java.time.LocalDateTime;
 
 public class CategoryFixtures {
 
@@ -44,5 +47,25 @@ public class CategoryFixtures {
 
     public static Category 후디_JPA_스터디(final Member creator) {
         return new Category(후디_JPA_스터디_이름, creator);
+    }
+
+    public static CategoryResponse 공통_일정_응답(final MemberResponse creatorResponse) {
+        return new CategoryResponse(1L, 공통_일정_이름, creatorResponse, LocalDateTime.now());
+    }
+
+    public static CategoryResponse BE_일정_응답(final MemberResponse creatorResponse) {
+        return new CategoryResponse(2L, BE_일정_이름, creatorResponse, LocalDateTime.now());
+    }
+
+    public static CategoryResponse FE_일정_응답(final MemberResponse creatorResponse) {
+        return new CategoryResponse(3L, FE_일정_이름, creatorResponse, LocalDateTime.now());
+    }
+
+    public static CategoryResponse 매트_아고라_응답(final MemberResponse creatorResponse) {
+        return new CategoryResponse(4L, 매트_아고라_이름, creatorResponse, LocalDateTime.now());
+    }
+
+    public static CategoryResponse 후디_JPA_스터디_응답(final MemberResponse creatorResponse) {
+        return new CategoryResponse(5L, 후디_JPA_스터디_이름, creatorResponse, LocalDateTime.now());
     }
 }

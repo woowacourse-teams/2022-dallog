@@ -1,9 +1,11 @@
 package com.allog.dallog.common.fixtures;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 
 public class SubscriptionFixtures {
 
@@ -23,11 +25,23 @@ public class SubscriptionFixtures {
         return new Subscription(member, category, 빨간색);
     }
 
+    public static SubscriptionResponse 빨간색_구독_응답(final CategoryResponse categoryResponse) {
+        return new SubscriptionResponse(1L, categoryResponse, 빨간색);
+    }
+
     public static Subscription 파란색_구독(final Member member, final Category category) {
         return new Subscription(member, category, 파란색);
     }
 
+    public static SubscriptionResponse 파란색_구독_응답(final CategoryResponse categoryResponse) {
+        return new SubscriptionResponse(2L, categoryResponse, 파란색);
+    }
+
     public static Subscription 노란색_구독(final Member member, final Category category) {
         return new Subscription(member, category, 노란색);
+    }
+
+    public static SubscriptionResponse 노란색_구독_응답(final CategoryResponse categoryResponse) {
+        return new SubscriptionResponse(3L, categoryResponse, 노란색);
     }
 }
