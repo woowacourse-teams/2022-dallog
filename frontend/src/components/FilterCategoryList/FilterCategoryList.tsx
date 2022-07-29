@@ -14,7 +14,7 @@ import subscriptionApi from '@/api/subscription';
 import FilterCategoryItem from '../FilterCategoryItem/FilterCategoryItem';
 import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
 
-function MyFilterCategoryList() {
+function FilterCategoryList() {
   const isSideBarOpen = useRecoilValue(sideBarState);
   const { accessToken } = useRecoilValue(userState);
 
@@ -45,4 +45,4 @@ function MyFilterCategoryList() {
   );
 }
 
-export default MyFilterCategoryList;
+export default FilterCategoryList;
