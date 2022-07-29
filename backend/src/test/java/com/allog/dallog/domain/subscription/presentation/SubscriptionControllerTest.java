@@ -93,7 +93,7 @@ class SubscriptionControllerTest {
                                 headerWithName("Authorization").description("JWT 토큰")
                         ),
                         requestFields(
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 장보")
+                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 정보")
                         )))
                 .andExpect(status().isCreated());
     }
@@ -121,7 +121,7 @@ class SubscriptionControllerTest {
                                 headerWithName("Authorization").description("JWT 토큰")
                         ),
                         requestFields(
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 장보")
+                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 정보")
                         )))
                 .andExpect(status().isBadRequest());
     }
