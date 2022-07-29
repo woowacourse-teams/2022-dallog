@@ -10,7 +10,7 @@ const sideBar = ({ colors, flex }: Theme, isSideBarOpen: boolean) => css`
 
   width: ${isSideBarOpen ? '64rem' : '0'};
   height: calc(100vh - 16rem);
-  padding: ${isSideBarOpen ? '5rem' : '0'};
+  padding: ${isSideBarOpen ? '4rem' : '0'};
   border: 1px solid ${colors.GRAY_400};
 
   background: ${colors.WHITE};
