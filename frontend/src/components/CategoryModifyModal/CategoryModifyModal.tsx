@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
@@ -73,12 +73,21 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     closeModal();
   };
 
+  useEffect(() => {
+    inputRef.name.current?.select();
+  }, []);
+
   return (
     <div css={modal} onClick={handleClickModal}>
-      <h1 css={title}>카테고리 수정</h1>
+      <h1 css={title}>카테고리 이름 수정</h1>
       <form css={form} onSubmit={handleSubmitCategoryModifyForm}>
         <div css={content}>
-          <FieldSet placeholder={category.name} autoFocus={true} refProp={inputRef.name} />
+          <FieldSet
+            placeholder={category.name}
+            defaultValue={category.name}
+            autoFocus={true}
+            refProp={inputRef.name}
+          />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
