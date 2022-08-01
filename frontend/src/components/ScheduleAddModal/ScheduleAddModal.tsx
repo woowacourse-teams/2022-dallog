@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { Schedule } from '@/@types';
+import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 import FieldSet from '@/components/@common/FieldSet/FieldSet';
@@ -40,9 +40,9 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
     error,
     mutate: postSchedule,
   } = useMutation<
-    AxiosResponse<{ schedules: Schedule[] }>,
+    AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError,
-    Omit<Schedule, 'id'>,
+    Omit<ScheduleType, 'id'>,
     unknown
   >(scheduleApi.post, {
     onSuccess: () => {

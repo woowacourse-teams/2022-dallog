@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import { Schedule } from '@/@types';
+import { ScheduleType } from '@/@types/schedule';
 import { CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
 
@@ -101,7 +101,7 @@ const handlers = [
     return res(ctx.status(200), ctx.json({ schedules: scheduleDB }));
   }),
 
-  rest.post<Omit<Schedule, 'id'>>(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
+  rest.post<Omit<ScheduleType, 'id'>>(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
     scheduleDB.push({ id: scheduleDB.length + 1, ...req.body });
 
     return res(ctx.status(201));

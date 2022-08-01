@@ -1,4 +1,4 @@
-import { Schedule } from '@/@types';
+import { ScheduleType } from '@/@types/schedule';
 
 import dallogApi from './';
 
@@ -10,7 +10,7 @@ const scheduleApi = {
   },
 
   get: async (year: number, month: number) => {
-    const response = await dallogApi.get<{ schedules: Schedule[] }>(
+    const response = await dallogApi.get<{ schedules: ScheduleType[] }>(
       `${scheduleApi.endpoint}?year=${year}&month=${month}`,
       {
         headers: scheduleApi.headers,
@@ -20,7 +20,7 @@ const scheduleApi = {
     return response;
   },
 
-  post: async (body: Omit<Schedule, 'id'>) => {
+  post: async (body: Omit<ScheduleType, 'id'>) => {
     const response = await dallogApi.post(scheduleApi.endpoint, body, {
       headers: scheduleApi.headers,
     });

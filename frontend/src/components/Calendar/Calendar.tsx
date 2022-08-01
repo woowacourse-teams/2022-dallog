@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 
 import useCalendar from '@/hooks/useCalendar';
 
-import { Schedule } from '@/@types';
+import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -34,7 +34,7 @@ function Calendar() {
   const { calendarMonth, current, moveToBeforeMonth, moveToToday, moveToNextMonth } = useCalendar();
 
   const { isLoading, error, data, refetch } = useQuery<
-    AxiosResponse<{ schedules: Schedule[] }>,
+    AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError
   >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(current.year, current.month));
 

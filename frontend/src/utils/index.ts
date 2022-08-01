@@ -1,4 +1,4 @@
-import { InputRef } from '@/@types';
+import { InputRef } from '@/@types/schedule';
 
 import { STORAGE_KEY } from '@/constants';
 
