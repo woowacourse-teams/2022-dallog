@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
@@ -19,19 +19,20 @@ import categoryApi from '@/api/category';
 
 import {
   cancelButton,
-  categoryAddModal,
   content,
   controlButtons,
   form,
+  modal,
   saveButton,
   title,
-} from './CategoryAddModal.styles';
+} from './CategoryModifyModal.styles';
 
-interface CategoryAddModalProps {
+interface CategoryModifyModalProps {
+  category: CategoryType;
   closeModal: () => void;
 }
 
-function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
+function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps) {
   const theme = useTheme();
 
   const { accessToken } = useRecoilValue(userState);
@@ -42,17 +43,19 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     AxiosError,
     Pick<CategoryType, 'name'>,
     unknown
-  >((body) => categoryApi.post(accessToken, body), { onSuccess: () => onSuccessPostCategory() });
+  >((body) => categoryApi.patch(accessToken, category.id, body), {
+    onSuccess: () => onSuccessPatchCategory(),
+  });
 
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
   };
 
-  const handleClickLoginModal = (e: React.MouseEvent) => {
+  const handleClickModal = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
-  const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const body = createPostBody(inputRef);
@@ -64,18 +67,27 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     mutate(body);
   };
 
-  const onSuccessPostCategory = () => {
+  const onSuccessPatchCategory = () => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
     closeModal();
   };
 
+  useEffect(() => {
+    inputRef.name.current?.select();
+  }, []);
+
   return (
-    <div css={categoryAddModal} onClick={handleClickLoginModal}>
-      <h1 css={title}>새 카테고리 만들기</h1>
-      <form css={form} onSubmit={handleSubmitCategoryAddForm}>
+    <div css={modal} onClick={handleClickModal}>
+      <h1 css={title}>카테고리 이름 수정</h1>
+      <form css={form} onSubmit={handleSubmitCategoryModifyForm}>
         <div css={content}>
-          <FieldSet placeholder="이름" autoFocus={true} refProp={inputRef.name} />
+          <FieldSet
+            placeholder={category.name}
+            defaultValue={category.name}
+            autoFocus={true}
+            refProp={inputRef.name}
+          />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
@@ -90,4 +102,4 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   );
 }
 
-export default CategoryAddModal;
+export default CategoryModifyModal;

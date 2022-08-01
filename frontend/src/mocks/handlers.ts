@@ -45,6 +45,31 @@ const handlers = [
     return res(ctx.status(201));
   }),
 
+  rest.patch<Pick<CategoryType, 'name'>>(
+    `${API_URL}${categoryApi.endpoint.entire}/:id`,
+    (req, res, ctx) => {
+      const { id } = req.params;
+      const categoryId = parseInt(id as string);
+      const categoryIndex = categoryDB.categories.findIndex((el) => el.id === categoryId);
+      const myCategoryIndex = myCategoryDB.categories.findIndex((el) => el.id === categoryId);
+
+      if (categoryIndex < 0 || myCategoryIndex < 0) {
+        return res(ctx.status(404));
+      }
+
+      categoryDB.categories[categoryIndex] = {
+        ...categoryDB.categories[categoryIndex],
+        ...req.body,
+      };
+      myCategoryDB.categories[myCategoryIndex] = {
+        ...myCategoryDB.categories[myCategoryIndex],
+        ...req.body,
+      };
+
+      return res(ctx.status(201));
+    }
+  ),
+
   rest.delete<Pick<CategoryType, 'name'>>(
     `${API_URL}${categoryApi.endpoint.entire}/:id`,
     (req, res, ctx) => {
