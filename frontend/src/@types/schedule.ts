@@ -1,7 +1,3 @@
-interface InputRef {
-  [index: string]: React.RefObject<HTMLInputElement>;
-}
-
 interface ScheduleType {
   id: number;
   title: string;
@@ -10,4 +6,4 @@ interface ScheduleType {
   memo: string;
 }
 
-export { InputRef, ScheduleType };
+export { ScheduleType };

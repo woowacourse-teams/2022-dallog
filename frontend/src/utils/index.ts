@@ -1,8 +1,8 @@
-import { InputRef } from '@/@types/schedule';
+import { InputRefType } from '@/@types';
 
 import { STORAGE_KEY } from '@/constants';
 
-const createPostBody = (inputRef: InputRef) => {
+const createPostBody = (inputRef: InputRefType) => {
   const inputElements = Object.values(inputRef).map((el) => el.current);
   const isValidInputRefs = inputElements.every((el) => el instanceof HTMLInputElement);
 
