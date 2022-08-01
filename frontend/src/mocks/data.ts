@@ -237,7 +237,7 @@ const subscriptionDB = {
         },
         createdAt: '2022-07-19T16:42',
       },
-      color: '#ffffff',
+      color: '#123efa',
     },
     {
       id: 2,
