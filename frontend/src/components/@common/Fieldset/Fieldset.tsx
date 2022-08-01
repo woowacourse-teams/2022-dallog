@@ -1,11 +1,13 @@
-import { SerializedStyles, useTheme } from '@emotion/react';
+import { useTheme } from '@emotion/react';
 import { forwardRef } from 'react';
+
+import { FieldsetCssPropType } from '@/@types';
 
 import { fieldset, input, label } from './Fieldset.styles';
 
 interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
-  cssProp?: SerializedStyles;
+  cssProp?: FieldsetCssPropType;
   labelText?: string;
   defaultValue?: string;
   autoFocus?: boolean;
@@ -25,16 +27,16 @@ function Fieldset({
   const theme = useTheme();
 
   return (
-    <div css={[fieldset(theme), cssProp]}>
+    <div css={[fieldset(theme), cssProp?.div]}>
       {labelText && (
-        <label htmlFor={id} css={label}>
+        <label htmlFor={id} css={[label, cssProp?.label]}>
           {labelText}
         </label>
       )}
       <input
         type={type}
         id={id}
-        css={input(theme)}
+        css={[input(theme), cssProp?.input]}
         placeholder={placeholder}
         defaultValue={defaultValue}
         autoFocus={autoFocus}
