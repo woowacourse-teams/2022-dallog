@@ -1,7 +1,9 @@
 package com.allog.dallog.common.config;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
+import com.allog.dallog.global.error.Reporter;
 import com.allog.dallog.infrastructure.oauth.client.StubOAuthClient;
+import com.allog.dallog.infrastructure.oauth.report.DummyReporter;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -12,5 +14,10 @@ public class TestConfig {
     @Bean
     public OAuthClient oAuthClient() {
         return new StubOAuthClient();
+    }
+
+    @Bean
+    public Reporter reporter() {
+        return new DummyReporter();
     }
 }
