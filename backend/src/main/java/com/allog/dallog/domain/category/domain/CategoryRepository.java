@@ -12,9 +12,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c "
             + "FROM Category c "
             + "WHERE c.name LIKE %:name%")
-    Slice<Category> findAllLikeCategoryName(final Pageable pageable, final String name);
+    Slice<Category> findAllLikeCategoryName(final String name, final Pageable pageable);
 
-    Slice<Category> findSliceByMemberId(final Pageable pageable, final Long memberId);
+    Slice<Category> findSliceByMemberId(final Long memberId, final Pageable pageable);
 
     boolean existsByIdAndMemberId(Long id, Long memberId);
 }

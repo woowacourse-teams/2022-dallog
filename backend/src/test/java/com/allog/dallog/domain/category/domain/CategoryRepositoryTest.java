@@ -79,7 +79,7 @@ class CategoryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryName(pageRequest, "일");
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryName("일", pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(3)
@@ -101,7 +101,7 @@ class CategoryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryName(pageRequest, "파랑");
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryName("파랑", pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(0);
@@ -135,7 +135,7 @@ class CategoryRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 8);
 
         // when
-        Slice<Category> categories = categoryRepository.findSliceByMemberId(pageRequest, 관리자.getId());
+        Slice<Category> categories = categoryRepository.findSliceByMemberId(관리자.getId(), pageRequest);
 
         // then
         assertAll(() -> {
