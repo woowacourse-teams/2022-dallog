@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.schedule.domain;
 
+import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
-import com.allog.dallog.global.domain.BaseEntity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
