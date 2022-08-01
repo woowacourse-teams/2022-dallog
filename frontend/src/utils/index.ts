@@ -29,4 +29,8 @@ const setAccessToken = (accessToken: string) => {
   localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
 };
 
-export { createPostBody, getAccessToken, setAccessToken };
+const clearAccessToken = () => {
+  localStorage.removeItem(STORAGE_KEY.ACCESS_TOKEN);
+};
+
+export { clearAccessToken, createPostBody, getAccessToken, setAccessToken };

@@ -1,11 +1,13 @@
 import { css, Theme } from '@emotion/react';
 
-const myPage = ({ colors }: Theme) => css`
+const myPage = css`
+  position: relative;
+  top: 50%;
+  transform: translateY(-40%);
+
   width: 100%;
   height: 100%;
   padding: 2rem;
-
-  background: ${colors.GRAY_100};
 `;
 
 const infoTable = ({ colors }: Theme) => css`
@@ -13,11 +15,13 @@ const infoTable = ({ colors }: Theme) => css`
   padding: 4rem;
   margin: 0 auto;
   border: 1px solid ${colors.GRAY_500};
-
-  background: ${colors.WHITE};
 `;
 
-const infoTableHeader = ({ colors }: Theme) => css`
+const infoTableHeader = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
+  justify-content: space-between;
+
   width: 100%;
   margin: 0 auto;
   padding: 4rem;
@@ -58,4 +62,15 @@ const imageSize = css`
   height: 40rem;
 `;
 
-export { myPage, infoTable, infoTableHeader, textInfo, imageInfo, imageSize };
+const logoutButtonStyle = ({ colors }: Theme) => css`
+  padding: 2rem;
+  border-radius: 8px;
+  filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
+
+  background: ${colors.YELLOW_500};
+
+  font-size: 3rem;
+  color: ${colors.WHITE};
+`;
+
+export { myPage, infoTable, infoTableHeader, logoutButtonStyle, textInfo, imageInfo, imageSize };
