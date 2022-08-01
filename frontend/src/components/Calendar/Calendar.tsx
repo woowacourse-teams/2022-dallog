@@ -47,7 +47,7 @@ function Calendar() {
   } = useCalendar();
 
   const { isLoading, error, data, refetch } = useQuery<
-    AxiosResponse<ScheduleResponseType[]>,
+    AxiosResponse<ScheduleResponseType>,
     AxiosError
   >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(accessToken, startDate, endDate));
 
