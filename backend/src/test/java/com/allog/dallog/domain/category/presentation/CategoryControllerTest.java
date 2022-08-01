@@ -178,7 +178,7 @@ class CategoryControllerTest {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
-                                        parameterWithName("name").description("카테고리 제목 일부"),
+                                        parameterWithName("name").description("카테고리 검색어"),
                                         parameterWithName("page").description("페이지 번호"),
                                         parameterWithName("size").description("페이지 크기")
                                 )

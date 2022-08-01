@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Slice<Category> findSliceBy(final Pageable pageable);
-
     @Query("SELECT c "
             + "FROM Category c "
             + "WHERE c.name LIKE %:name%")

@@ -69,30 +69,6 @@ class CategoryServiceTest {
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
-    @DisplayName("페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
-    @Test
-    void 페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
-
-        PageRequest request = PageRequest.of(1, 2);
-
-        // when
-        CategoriesResponse response = categoryService.findAll(request);
-
-        // then
-        assertThat(response.getCategories())
-                .hasSize(2)
-                .extracting(CategoryResponse::getName)
-                .contains(FE_일정_이름, 매트_아고라_이름);
-    }
-
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
     @Test
     void 페이지와_제목을_받아_해당하는_구간의_카테고리를_가져온다() {

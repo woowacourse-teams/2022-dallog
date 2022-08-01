@@ -34,12 +34,6 @@ public class CategoryService {
         return new CategoryResponse(category);
     }
 
-    public CategoriesResponse findAll(final Pageable pageable) {
-        List<Category> categories = categoryRepository.findSliceBy(pageable).getContent();
-
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
-    }
-
     public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
         List<Category> categories = categoryRepository.findAllLikeCategoryName(name, pageable).getContent();
 
