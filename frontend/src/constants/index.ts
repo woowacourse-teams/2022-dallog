@@ -23,6 +23,7 @@ const CACHE_KEY = {
 const CONFIRM_MESSAGE = {
   DELETE_CATEGORY: '정말 삭제하시겠습니까?',
   UNSUBSCRIBE: '구독을 해제하시겠습니까?',
+  LOGOUT: '로그아웃하시겠습니까?',
 };
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
