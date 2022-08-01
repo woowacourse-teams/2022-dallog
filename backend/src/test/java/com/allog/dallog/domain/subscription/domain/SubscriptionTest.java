@@ -1,13 +1,15 @@
 package com.allog.dallog.domain.subscription.domain;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,5 +41,20 @@ class SubscriptionTest {
         // when & then
         assertThatThrownBy(() -> new Subscription(후디, 후디_JPA_스터디, color))
                 .isInstanceOf(InvalidSubscriptionException.class);
+    }
+
+    @DisplayName("구독이 생성되면 기본적으로 체크된다.")
+    @Test
+    void 구독이_생성되면_기본적으로_체크된다() {
+        // given
+        Member 매트 = 매트();
+        Category 매트_아고라 = 매트_아고라(매트);
+        String color = "#c9ad2e";
+
+        // when
+        Subscription actual = new Subscription(매트, 매트_아고라, color);
+
+        // then
+        assertThat(actual.isChecked()).isTrue();
     }
 }
