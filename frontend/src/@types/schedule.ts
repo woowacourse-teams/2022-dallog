@@ -6,4 +6,12 @@ interface ScheduleType {
   memo: string;
 }
 
-export { ScheduleType };
+interface ScheduleResponseType {
+  longTerms: Array<{ categoryId: number; color: string } & ScheduleType>;
+
+  allDays: Array<{ categoryId: number; color: string } & ScheduleType>;
+
+  fewHours: Array<{ categoryId: number; color: string } & ScheduleType>;
+}
+
+export { ScheduleResponseType, ScheduleType };
