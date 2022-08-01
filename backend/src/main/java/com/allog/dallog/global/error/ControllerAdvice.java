@@ -31,8 +31,8 @@ public class ControllerAdvice {
 
     private final Reporter reporter;
 
-    public ControllerAdvice(final Reporter discordReporter) {
-        this.reporter = discordReporter;
+    public ControllerAdvice(final Reporter reporter) {
+        this.reporter = reporter;
     }
 
     @ExceptionHandler({

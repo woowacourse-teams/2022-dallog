@@ -27,6 +27,14 @@ public class CategoryAcceptanceFixtures {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 카테고리를_제목과_페이징을_통해_조회한다(final String name, final int page,
+                                                                       final int size) {
+        return RestAssured.given().log().all()
+                .when().get("/api/categories?name={name}&page={page}&size={size}", name, page, size)
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 내가_등록한_카테고리를_페이징을_통해_조회한다(final String accessToken, final int page,
                                                                           final int size) {
         return RestAssured.given().log().all()
