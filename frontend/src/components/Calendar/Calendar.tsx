@@ -2,10 +2,13 @@ import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
 import useCalendar from '@/hooks/useCalendar';
 
-import { ScheduleType } from '@/@types/schedule';
+import { ScheduleResponseType } from '@/@types/schedule';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -31,12 +34,22 @@ import {
 function Calendar() {
   const theme = useTheme();
 
-  const { calendarMonth, current, moveToBeforeMonth, moveToToday, moveToNextMonth } = useCalendar();
+  const { accessToken } = useRecoilValue(userState);
+
+  const {
+    calendarMonth,
+    current,
+    moveToBeforeMonth,
+    moveToToday,
+    moveToNextMonth,
+    startDate,
+    endDate,
+  } = useCalendar();
 
   const { isLoading, error, data, refetch } = useQuery<
-    AxiosResponse<{ schedules: ScheduleType[] }>,
+    AxiosResponse<ScheduleResponseType[]>,
     AxiosError
-  >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(current.year, current.month));
+  >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(accessToken, startDate, endDate));
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
 

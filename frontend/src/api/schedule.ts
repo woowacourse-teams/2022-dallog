@@ -1,19 +1,19 @@
-import { ScheduleType } from '@/@types/schedule';
+import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
 import dallogApi from './';
 
 const scheduleApi = {
-  endpoint: '/api/schedules',
+  endpoint: '/api/members/me/schedules',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 
-  get: async (year: number, month: number) => {
-    const response = await dallogApi.get<{ schedules: ScheduleType[] }>(
-      `${scheduleApi.endpoint}?year=${year}&month=${month}`,
+  get: async (accessToken: string | null, startDate: string, endDate: string) => {
+    const response = await dallogApi.get<ScheduleResponseType[]>(
+      `${scheduleApi.endpoint}?startDate=${startDate}&endDate=${endDate}`,
       {
-        headers: scheduleApi.headers,
+        headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
       }
     );
 
