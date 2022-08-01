@@ -33,4 +33,8 @@ const clearAccessToken = () => {
   localStorage.removeItem(STORAGE_KEY.ACCESS_TOKEN);
 };
 
-export { clearAccessToken, createPostBody, getAccessToken, setAccessToken };
+const getRandomNumber = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min) + min);
+};
+
+export { clearAccessToken, createPostBody, getAccessToken, getRandomNumber, setAccessToken };
