@@ -37,7 +37,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const queryClient = useQueryClient();
-  const { mutate: postCategory } = useMutation<
+  const { mutate } = useMutation<
     AxiosResponse<Pick<CategoryType, 'name'>>,
     AxiosError,
     Pick<CategoryType, 'name'>,
@@ -61,7 +61,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
       return;
     }
 
-    postCategory(body);
+    mutate(body);
   };
 
   const onSuccessPostCategory = () => {
