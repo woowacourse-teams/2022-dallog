@@ -5,7 +5,7 @@ const colors = {
   YELLOW_100: '#fff3bf',
   YELLOW_200: '#ffec99',
   YELLOW_300: '#ffe066',
-  YELLOW_400: '#ffd43b',
+  YELLOW_400: '#fee500',
   YELLOW_500: '#fcc419',
   YELLOW_600: '#fab005',
   YELLOW_700: '#f59f00',
