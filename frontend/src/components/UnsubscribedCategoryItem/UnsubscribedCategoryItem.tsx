@@ -10,7 +10,9 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, PALETTE } from '@/constants';
+
+import { getRandomNumber } from '@/utils';
 
 import subscriptionApi from '@/api/subscription';
 
@@ -26,7 +28,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const body = {
-    color: '#ffffff',
+    color: PALETTE[getRandomNumber(0, PALETTE.length - 1)],
   };
 
   const queryClient = useQueryClient();
