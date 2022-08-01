@@ -220,7 +220,82 @@ const scheduleDB = [
     endDateTime: '2022-07-10T20:00',
     memo: '레벨3 첫 테코톡',
   },
+  {
+    id: 3,
+    title: '후디 테코톡',
+    startDateTime: '2022-07-17T00:00',
+    endDateTime: '2022-07-18T00:00',
+    memo: '후디 OAuth 테코톡',
+  },
+  {
+    id: 4,
+    title: '알록달록 회의2',
+    startDateTime: '2022-07-17T13:00',
+    endDateTime: '2022-07-21T07:00',
+    memo: '알록달록 회의가 있어요',
+  },
+  {
+    id: 5,
+    title: '알록달록 회의',
+    startDateTime: '2022-07-04T13:00',
+    endDateTime: '2022-07-06T07:00',
+    memo: '알록달록 회의가 있어요',
+  },
+  {
+    id: 6,
+    title: '달록 스프린트 회의',
+    startDateTime: '2022-07-23T13:00',
+    endDateTime: '2022-07-23T15:00',
+    memo: '3차 스프린트 회의',
+  },
 ];
+
+const getScheduleDB = {
+  longTerms: [
+    {
+      id: 1,
+      title: '알록달록 회의',
+      startDateTime: '2022-07-04T13:00',
+      endDateTime: '2022-07-06T07:00',
+      memo: '알록달록 회의가 있어요',
+      categoryId: 1,
+      color: '#123456',
+    },
+    {
+      id: 2,
+      title: '알록달록 회의2',
+      startDateTime: '2022-07-17T13:00',
+      endDateTime: '2022-07-21T07:00',
+      memo: '알록달록 회의가 있어요',
+      categoryId: 1,
+      color: '#691210',
+    },
+  ],
+
+  allDays: [
+    {
+      id: 3,
+      title: '테코톡',
+      startDateTime: '2022-07-17T00:00',
+      endDateTime: '2022-07-18T00:00',
+      memo: '후디 OAuth 테코톡',
+      categoryId: 1,
+      color: '#fcc419',
+    },
+  ],
+
+  fewHours: [
+    {
+      id: 4,
+      title: '달록 스프린트 회의',
+      startDateTime: '2022-07-23T13:00',
+      endDateTime: '2022-07-23T15:00',
+      memo: '3차 스프린트 회의',
+      categoryId: 1,
+      color: '#ffff13',
+    },
+  ],
+};
 
 const subscriptionDB = {
   subscriptions: [
@@ -272,4 +347,12 @@ const subscriptionDB = {
   ],
 };
 
-export { categoryDB, matProfileDB, myCategoryDB, scheduleDB, subscriptionDB, tigerProfileDB };
+export {
+  categoryDB,
+  getScheduleDB,
+  matProfileDB,
+  myCategoryDB,
+  scheduleDB,
+  subscriptionDB,
+  tigerProfileDB,
+};
