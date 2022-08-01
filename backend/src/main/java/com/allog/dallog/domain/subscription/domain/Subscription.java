@@ -38,6 +38,9 @@ public class Subscription extends BaseEntity {
     @Column(name = "color", nullable = false)
     private String color;
 
+    @Column(name = "checked", nullable = false)
+    private boolean checked;
+
     protected Subscription() {
     }
 
@@ -47,6 +50,7 @@ public class Subscription extends BaseEntity {
         this.member = member;
         this.category = category;
         this.color = color;
+        this.checked = true;
     }
 
     private void validateColor(final String color) {
@@ -70,5 +74,9 @@ public class Subscription extends BaseEntity {
 
     public String getColor() {
         return color;
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 }

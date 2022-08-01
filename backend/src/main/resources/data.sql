@@ -22,10 +22,10 @@ VALUES ('공통 일정', 1, NOW(), NOW()),
        ('내 일정', 3, NOW(), NOW()),
        ('운동', 2, NOW(), NOW());
 
-INSERT INTO subscriptions (members_id, categories_id, color, created_at, updated_at)
-VALUES (2, 1, '#868e96', NOW(), NOW()),
-       (2, 3, '#ffdeeb', NOW(), NOW()),
-       (3, 1, '#d0bfff', NOW(), NOW()),
-       (3, 3, '#4263eb', NOW(), NOW()),
-       (4, 1, '#ffffff', NOW(), NOW()),
-       (4, 2, '#000000', NOW(), NOW());
+INSERT INTO subscriptions (members_id, categories_id, color, checked, created_at, updated_at)
+VALUES (2, 1, '#868e96', true, NOW(), NOW()),
+       (2, 3, '#ffdeeb', true, NOW(), NOW()),
+       (3, 1, '#d0bfff', true, NOW(), NOW()),
+       (3, 3, '#4263eb', true, NOW(), NOW()),
+       (4, 1, '#ffffff', true, NOW(), NOW()),
+       (4, 2, '#000000', true, NOW(), NOW());

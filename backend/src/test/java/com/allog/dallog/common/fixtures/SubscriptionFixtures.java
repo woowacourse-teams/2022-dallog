@@ -26,7 +26,7 @@ public class SubscriptionFixtures {
     }
 
     public static SubscriptionResponse 빨간색_구독_응답(final CategoryResponse categoryResponse) {
-        return new SubscriptionResponse(1L, categoryResponse, 빨간색);
+        return new SubscriptionResponse(1L, categoryResponse, 빨간색, true);
     }
 
     public static Subscription 파란색_구독(final Member member, final Category category) {
@@ -34,7 +34,7 @@ public class SubscriptionFixtures {
     }
 
     public static SubscriptionResponse 파란색_구독_응답(final CategoryResponse categoryResponse) {
-        return new SubscriptionResponse(2L, categoryResponse, 파란색);
+        return new SubscriptionResponse(2L, categoryResponse, 파란색, true);
     }
 
     public static Subscription 노란색_구독(final Member member, final Category category) {
@@ -42,6 +42,6 @@ public class SubscriptionFixtures {
     }
 
     public static SubscriptionResponse 노란색_구독_응답(final CategoryResponse categoryResponse) {
-        return new SubscriptionResponse(3L, categoryResponse, 노란색);
+        return new SubscriptionResponse(3L, categoryResponse, 노란색, true);
     }
 }
