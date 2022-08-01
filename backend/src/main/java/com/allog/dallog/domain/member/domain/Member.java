@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.member.domain;
 
+import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
-import com.allog.dallog.global.domain.BaseEntity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;

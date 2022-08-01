@@ -1,4 +1,4 @@
-package com.allog.dallog.global.domain;
+package com.allog.dallog.domain.common;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -17,7 +17,7 @@ public abstract class BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public LocalDateTime getCreatedAt() {

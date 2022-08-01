@@ -1,9 +1,9 @@
 package com.allog.dallog.domain.subscription.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
-import com.allog.dallog.global.domain.BaseEntity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;

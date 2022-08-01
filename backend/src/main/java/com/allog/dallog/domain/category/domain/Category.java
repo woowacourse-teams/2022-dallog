@@ -1,8 +1,8 @@
 package com.allog.dallog.domain.category.domain;
 
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.global.domain.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
