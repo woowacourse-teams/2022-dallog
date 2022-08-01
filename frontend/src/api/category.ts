@@ -38,6 +38,18 @@ const categoryApi = {
     return response;
   },
 
+  patch: async (
+    accessToken: string | null,
+    categoryId: number,
+    body: Pick<CategoryType, 'name'>
+  ) => {
+    const response = await dallogApi.patch(`${categoryApi.endpoint.entire}/${categoryId}`, body, {
+      headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
+    });
+
+    return response;
+  },
+
   delete: async (accessToken: string | null, categoryId: number) => {
     const response = await dallogApi.delete(`${categoryApi.endpoint.entire}/${categoryId}`, {
       headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
