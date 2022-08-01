@@ -1,13 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import FieldSet from './FieldSet';
+import Fieldset from './Fieldset';
 
 export default {
-  title: 'Components/@Common/FieldSet',
-  component: FieldSet,
-} as ComponentMeta<typeof FieldSet>;
+  title: 'Components/@Common/Fieldset',
+  component: Fieldset,
+} as ComponentMeta<typeof Fieldset>;
 
-const Template: ComponentStory<typeof FieldSet> = (args) => <FieldSet {...args} />;
+const Template: ComponentStory<typeof Fieldset> = (args) => <Fieldset {...args} />;
 
 const Primary = Template.bind({});
 Primary.args = {

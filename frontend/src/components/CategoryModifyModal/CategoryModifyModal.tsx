@@ -9,7 +9,7 @@ import { CategoryType } from '@/@types/category';
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
+import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -82,7 +82,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
       <h1 css={title}>카테고리 이름 수정</h1>
       <form css={form} onSubmit={handleSubmitCategoryModifyForm}>
         <div css={content}>
-          <FieldSet
+          <Fieldset
             placeholder={category.name}
             defaultValue={category.name}
             autoFocus={true}

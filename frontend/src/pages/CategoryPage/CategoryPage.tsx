@@ -1,4 +1,4 @@
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
+import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import CategoryList from '@/components/CategoryList/CategoryList';
 
@@ -9,7 +9,7 @@ function CategoryPage() {
     <PageLayout>
       <div css={categoryPage}>
         <div css={categoryNav}>
-          <FieldSet placeholder="카테고리 검색" cssProp={categorySearch} />
+          <Fieldset placeholder="카테고리 검색" cssProp={categorySearch} />
         </div>
         <CategoryList />
       </div>

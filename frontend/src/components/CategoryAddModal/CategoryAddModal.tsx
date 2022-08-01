@@ -9,7 +9,7 @@ import { CategoryType } from '@/@types/category';
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
+import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -75,7 +75,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
       <h1 css={title}>새 카테고리 만들기</h1>
       <form css={form} onSubmit={handleSubmitCategoryAddForm}>
         <div css={content}>
-          <FieldSet placeholder="이름" autoFocus={true} refProp={inputRef.name} />
+          <Fieldset placeholder="이름" autoFocus={true} refProp={inputRef.name} />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>

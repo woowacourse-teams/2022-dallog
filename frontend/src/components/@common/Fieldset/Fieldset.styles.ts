@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
-const fieldSet = ({ flex }: Theme) => css`
+const fieldset = ({ flex }: Theme) => css`
   ${flex.column}
 
   width: 100%;
@@ -28,4 +28,4 @@ const input = ({ colors }: Theme) => css`
   font-size: inherit;
 `;
 
-export { fieldSet, label, input };
+export { fieldset, label, input };
