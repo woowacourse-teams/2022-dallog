@@ -1,8 +1,16 @@
 import { css, Theme } from '@emotion/react';
 
 const colors = {
-  YELLOW_400: '#fee500',
+  YELLOW_000: '#fff9db',
+  YELLOW_100: '#fff3bf',
+  YELLOW_200: '#ffec99',
+  YELLOW_300: '#ffe066',
+  YELLOW_400: '#ffd43b',
   YELLOW_500: '#fcc419',
+  YELLOW_600: '#fab005',
+  YELLOW_700: '#f59f00',
+  YELLOW_800: '#f08c00',
+  YELLOW_900: '#e67700',
   GREEN_500: '#03c75a',
   WHITE: '#ffffff',
   GRAY_000: '#f8f9fa',
