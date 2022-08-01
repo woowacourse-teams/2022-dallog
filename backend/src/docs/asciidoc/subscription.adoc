@@ -44,8 +44,6 @@ include::{snippets}/subscription/exist/request-body.adoc[]
 
 include::{snippets}/subscription/exist/http-response.adoc[]
 
-=== 내 구독 정보 조회
-
 ==== Request
 
 include::{snippets}/subscription/me/http-request.adoc[]
