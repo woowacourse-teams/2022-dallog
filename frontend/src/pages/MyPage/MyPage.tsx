@@ -48,7 +48,7 @@ function MyPage() {
   }
 
   const handleClickLogoutButton = () => {
-    if (window.confirm(CONFIRM_MESSAGE.LOG_OUT)) {
+    if (window.confirm(CONFIRM_MESSAGE.LOGOUT)) {
       clearAccessToken();
       navigate(PATH.MAIN);
       location.reload();
