@@ -40,7 +40,6 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,7 +76,7 @@ class CategoryControllerTest {
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
-        CategoryResponse 카테고리 = new CategoryResponse(1L, BE_일정_이름, 후디_응답, LocalDateTime.now());
+        CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
         given(categoryService.save(any(), any())).willReturn(카테고리);
 
         // when & then
