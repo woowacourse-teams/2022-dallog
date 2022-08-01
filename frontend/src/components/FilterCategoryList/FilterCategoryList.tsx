@@ -30,16 +30,12 @@ function FilterCategoryList() {
     return <div>Loading</div>;
   }
 
-  const categoryList = data.data.map((el) => {
-    return el.category;
-  });
-
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <span css={headerStyle}> 구독 카테고리</span>
       <div css={contentStyle}>
-        {categoryList.map((category) => {
-          return <FilterCategoryItem key={category.id} category={category} />;
+        {data.data.map((el) => {
+          return <FilterCategoryItem key={el.category.id} subscription={el} />;
         })}
       </div>
     </div>

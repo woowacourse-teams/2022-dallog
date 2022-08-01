@@ -1,6 +1,6 @@
 import useToggle from '@/hooks/useToggle';
 
-import { CategoryType } from '@/@types/category';
+import { SubscriptionType } from '@/@types/subscription';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -21,17 +21,17 @@ import {
 } from './FilterCategoryItem.styles';
 
 interface FilterItemProps {
-  category: CategoryType;
+  subscription: SubscriptionType;
 }
 
-function FilterCategoryItem({ category }: FilterItemProps) {
+function FilterCategoryItem({ subscription }: FilterItemProps) {
   const { state: isPaletteOpen, toggleState: togglePaletteOpen } = useToggle();
 
   return (
     <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
-        <RiCheckboxFill size={20} />
-        <span css={nameStyle}>{category.name}</span>
+        <RiCheckboxFill size={20} color={subscription.color} />
+        <span css={nameStyle}>{subscription.category.name}</span>
       </div>
       <div css={paletteLayoutStyle}>
         <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
