@@ -28,7 +28,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const body = {
-    color: PALETTE[getRandomNumber(0, PALETTE.length - 1)],
+    color: PALETTE[getRandomNumber(0, PALETTE.length)],
   };
 
   const queryClient = useQueryClient();
