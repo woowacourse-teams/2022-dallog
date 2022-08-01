@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { zeroFill } from '@/utils';
 import {
   getBeforeYearMonth,
   getCalendarMonth,
@@ -40,12 +41,22 @@ function useCalendar() {
     setCalendarMonth(getCalendarMonth(year, month));
   };
 
+  const startDate = `${calendarMonth[0].year}-${zeroFill(calendarMonth[0].month)}-${zeroFill(
+    calendarMonth[0].date
+  )}`;
+
+  const endDate = `${calendarMonth[calendarMonth.length - 1].year}-${zeroFill(
+    calendarMonth[calendarMonth.length - 1].month
+  )}-${zeroFill(calendarMonth[calendarMonth.length - 1].date)}`;
+
   return {
     calendarMonth,
     current,
+    endDate,
     moveToBeforeMonth,
     moveToNextMonth,
     moveToToday,
+    startDate,
   };
 }
 

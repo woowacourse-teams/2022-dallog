@@ -1,8 +1,8 @@
-import { InputRef } from '@/@types';
+import { InputRefType } from '@/@types';
 
 import { STORAGE_KEY } from '@/constants';
 
-const createPostBody = (inputRef: InputRef) => {
+const createPostBody = (inputRef: InputRefType) => {
   const inputElements = Object.values(inputRef).map((el) => el.current);
   const isValidInputRefs = inputElements.every((el) => el instanceof HTMLInputElement);
 
@@ -37,4 +37,15 @@ const getRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-export { clearAccessToken, createPostBody, getAccessToken, getRandomNumber, setAccessToken };
+const zeroFill = (str: string | number) => {
+  return str.toString().padStart(2, '0');
+};
+
+export {
+  clearAccessToken,
+  createPostBody,
+  getAccessToken,
+  getRandomNumber,
+  setAccessToken,
+  zeroFill,
+};

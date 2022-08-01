@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
-import { Schedule } from '@/@types';
 import { CategoryType } from '@/@types/category';
+import { ScheduleType } from '@/@types/schedule';
 import { SubscriptionType } from '@/@types/subscription';
 
 import { API, API_URL } from '@/constants';
@@ -11,7 +11,14 @@ import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
 import subscriptionApi from '@/api/subscription';
 
-import { categoryDB, myCategoryDB, scheduleDB, subscriptionDB, tigerProfileDB } from './data';
+import {
+  categoryDB,
+  getScheduleDB,
+  myCategoryDB,
+  scheduleDB,
+  subscriptionDB,
+  tigerProfileDB,
+} from './data';
 
 const handlers = [
   rest.get(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
@@ -98,10 +105,10 @@ const handlers = [
   }),
 
   rest.get(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ schedules: scheduleDB }));
+    return res(ctx.status(200), ctx.json(getScheduleDB));
   }),
 
-  rest.post<Omit<Schedule, 'id'>>(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
+  rest.post<Omit<ScheduleType, 'id'>>(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
     scheduleDB.push({ id: scheduleDB.length + 1, ...req.body });
 
     return res(ctx.status(201));
