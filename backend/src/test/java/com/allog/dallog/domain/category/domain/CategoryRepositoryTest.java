@@ -14,11 +14,9 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.global.config.JpaConfig;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.global.config.JpaConfig;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,6 +63,48 @@ class CategoryRepositoryTest {
                             .allMatch(Objects::nonNull))
                     .isTrue();
         });
+    }
+
+    @DisplayName("페이지와 사이즈와 카테고리 이름을 활용하여 해당하는 카테고리를 조회한다.")
+    @Test
+    void 페이지와_사이즈와_카테고리_이름을_활용하여_해당하는_카테고리를_조회한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+        categoryRepository.save(FE_일정(관리자));
+        categoryRepository.save(매트_아고라(관리자));
+        categoryRepository.save(후디_JPA_스터디(관리자));
+
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        // when
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryName(pageRequest, "일");
+
+        // then
+        assertThat(actual.getContent()).hasSize(3)
+                .extracting(Category::getName)
+                .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
+    }
+
+    @DisplayName("카테고리 이름 검색 결과가 존재하지 않는 경우 아무것도 조회 하지 않는다.")
+    @Test
+    void 카테고리_이름_검색_결과가_존재하지_않는_경우_아무것도_조회_하지_않는다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+        categoryRepository.save(FE_일정(관리자));
+        categoryRepository.save(매트_아고라(관리자));
+        categoryRepository.save(후디_JPA_스터디(관리자));
+
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        // when
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryName(pageRequest, "파랑");
+
+        // then
+        assertThat(actual.getContent()).hasSize(0);
     }
 
     @DisplayName("조회 시 데이터가 존재하지 않는 경우 빈 슬라이스가 반환된다.")
