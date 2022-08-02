@@ -13,6 +13,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,6 +37,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureRestDocs
@@ -176,12 +179,15 @@ class ScheduleControllerTest {
                 .deleteById(any(), any());
 
         // when & then
-        mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
                 .andDo(document("schedules/delete",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("scheduleId").description("일정 ID")
+                        )
                 ))
                 .andExpect(status().isNoContent());
     }
@@ -191,7 +197,7 @@ class ScheduleControllerTest {
     void 일정을_제거하는데_해당_일정의_카테고리에_대한_권한이_없다면_403을_반환한다() throws Exception {
         // given
         Long scheduleId = 1L;
-        willThrow(NoPermissionException.class)
+        willThrow(new NoPermissionException())
                 .given(scheduleService)
                 .deleteById(any(), any());
 
@@ -211,7 +217,7 @@ class ScheduleControllerTest {
     void 일정을_제거하는데_일정이_존재하지_않는_경우_404를_반환한다() throws Exception {
         // given
         Long scheduleId = 1L;
-        willThrow(NoSuchScheduleException.class)
+        willThrow(new NoSuchScheduleException())
                 .given(scheduleService)
                 .deleteById(any(), any());
 
