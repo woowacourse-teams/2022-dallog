@@ -55,6 +55,7 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
+    @Transactional
     public void deleteById(final Long id, final Long memberId) {
         Category category = scheduleRepository.findById(id)
                 .orElseThrow(NoSuchScheduleException::new)
