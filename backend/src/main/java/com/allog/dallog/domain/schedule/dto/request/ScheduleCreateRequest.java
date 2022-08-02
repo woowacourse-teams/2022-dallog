@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.schedule.dto.request;
 
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
@@ -30,8 +31,8 @@ public class ScheduleCreateRequest {
         this.memo = memo;
     }
 
-    public Schedule toEntity() {
-        return new Schedule(title, startDateTime, endDateTime, memo);
+    public Schedule toEntity(final Category category) {
+        return new Schedule(title, startDateTime, endDateTime, memo, category);
     }
 
     public String getTitle() {

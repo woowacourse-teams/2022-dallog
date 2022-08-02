@@ -1,26 +1,22 @@
 package com.allog.dallog.acceptance.fixtures;
 
+import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.http.MediaType;
 
 public class ScheduleAcceptanceFixtures {
 
-    public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String title, final String startDateTime,
-                                                             final String endDateTime, final String memo) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("title", title);
-        params.put("startDateTime", startDateTime);
-        params.put("endDateTime", endDateTime);
-        params.put("memo", memo);
+    public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String accessToken,
+                                                             final ScheduleCreateRequest request,
+                                                             final Long categoryId) {
 
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
-                .when().post("/api/schedules")
+                .auth().oauth2(accessToken)
+                .body(request)
+                .when().post("/api/categories/{categoryId}/schedules", categoryId)
                 .then().log().all()
                 .extract();
     }

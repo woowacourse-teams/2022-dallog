@@ -1,15 +1,16 @@
 package com.allog.dallog.domain.schedule.domain;
 
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.domain.schedule.domain.Schedule;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,27 +22,21 @@ public class ScheduleTest {
     @Test
     void 일정을_생성한다() {
         // given
-        String title = TITLE;
-        LocalDateTime startDateTime = START_DATE_TIME;
-        LocalDateTime endDateTime = END_DATE_TIME;
-        String memo = MEMO;
+        Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertDoesNotThrow(() -> new Schedule(title, startDateTime, endDateTime, memo));
+        assertDoesNotThrow(() -> new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, BE_일정_카테고리));
     }
 
     @DisplayName("일정 제목의 길이가 20을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 회의"})
-    void 일정_제목의_길이가_20을_초과하는_경우_예외를_던진다(final String title) {
+    void 일정_제목의_길이가_20을_초과하는_경우_예외를_던진다(final String 잘못된_일정_제목) {
         //given
-        String titleForSave = title;
-        LocalDateTime startDateTime = START_DATE_TIME;
-        LocalDateTime endDateTime = END_DATE_TIME;
-        String memo = MEMO;
+        Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertThatThrownBy(() -> new Schedule(titleForSave, startDateTime, endDateTime, memo))
+        assertThatThrownBy(() -> new Schedule(잘못된_일정_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, BE_일정_카테고리))
                 .isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -49,13 +44,11 @@ public class ScheduleTest {
     @Test
     void 일정_메모의_길이가_255를_초과하는_경우_예외를_던진다() {
         // given
-        String title = TITLE;
-        LocalDateTime startDateTime = START_DATE_TIME;
-        LocalDateTime endDateTime = END_DATE_TIME;
-        String memo = "1".repeat(256);
+        String 잘못된_메모 = "1".repeat(256);
+        Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertThatThrownBy(() -> new Schedule(title, startDateTime, endDateTime, memo))
+        assertThatThrownBy(() -> new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 잘못된_메모, BE_일정_카테고리))
                 .isInstanceOf(InvalidScheduleException.class);
     }
 }

@@ -1,26 +1,23 @@
-
 == Schedule(일정)
 
 === 일정 등록
 
 ==== Request
 
-include::{snippets}/schedule/save/http-request.adoc[]
+include::{snippets}/schedules/save/http-request.adoc[]
 
 ==== Response
 
-include::{snippets}/schedule/save/http-response.adoc[]
+include::{snippets}/schedules/save/http-response.adoc[]
 
-=== 월별 일정 조회
-
-==== Request
-
-include::{snippets}/schedule/find/http-request.adoc[]
-
-==== RequestParameters
-
-include::{snippets}/schedule/find/request-parameters.adoc[]
+=== 일정 생성 (카테고리 권한 없음)
 
 ==== Response
 
-include::{snippets}/schedule/find/http-response.adoc[]
+include::{snippets}/schedules/save/forbidden/http-response.adoc[]
+
+=== 일정 생성 (카테고리가 존재하지 않음)
+
+==== Response
+
+include::{snippets}/schedules/save/notfound/http-response.adoc[]

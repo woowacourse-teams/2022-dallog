@@ -1,30 +1,26 @@
 package com.allog.dallog.domain.schedule.presentation;
 
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
-import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +36,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(TestConfig.class)
 class ScheduleControllerTest {
 
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,46 +51,72 @@ class ScheduleControllerTest {
     @MockBean
     private ScheduleService scheduleService;
 
-    @DisplayName("일정 정보를 등록한다.")
+    @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
-    void 일정_정보를_등록한다() throws Exception {
+    void 일정_정보를_등록하면_상태코드_201을_반환한다() throws Exception {
         // given
-        ScheduleCreateRequest request = new ScheduleCreateRequest(TITLE, START_DATE_TIME, END_DATE_TIME, MEMO);
+        Long categoryId = 1L;
+        ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
 
-        given(scheduleService.save(request)).willReturn(1L);
+        given(scheduleService.save(any(), any(), any())).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/api/schedules")
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedule/save",
+                .andDo(document("schedules/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
                 .andExpect(status().isCreated());
     }
 
-    @DisplayName("월별 일정 정보를 조회한다.")
+    @DisplayName("일정 정보를 등록할때 해당 카테고리에 권한이 없으면 403을 반환한다.")
     @Test
-    void 월별_일정_정보를_조회한다() throws Exception {
-        //given
-        given(scheduleService.findByYearAndMonth(YEAR, MONTH))
-                .willReturn(List.of(new ScheduleResponse(1L, TITLE, START_DATE_TIME, END_DATE_TIME, MEMO)));
+    void 일정_정보를_등록할때_해당_카테고리에_권한이_없으면_403을_반환한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
+
+        given(scheduleService.save(any(), any(), any())).willThrow(new NoPermissionException());
 
         // when & then
-        mockMvc.perform(get("/api/schedules?year=2022&month=7")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedule/find",
+                .andDo(document("schedules/save/forbidden",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("year").description("년도"),
-                                parameterWithName("month").description("월")
-                        )
+                        preprocessResponse(prettyPrint())
                 ))
-                .andExpect(status().isOk());
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("일정 생성시 전달한 카테고리가 존재하지 않는다면 404를 반환한다.")
+    @Test
+    void 일정_생성시_전달한_카테고리가_존재하지_않는다면_404를_반환한다() throws Exception {
+        // given
+        Long categoryId = 999L;
+        ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
+
+        given(scheduleService.save(any(), any(), any())).willThrow(new NoSuchCategoryException());
+
+        // when & then
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("schedules/save/notfound",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNotFound());
     }
 }

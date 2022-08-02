@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -48,12 +49,17 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             EmptyAuthorizationHeaderException.class,
-            InvalidTokenException.class,
-            NoPermissionException.class
+            InvalidTokenException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidAuthorization(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<ErrorResponse> handleNoPermission(final NoPermissionException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     @ExceptionHandler({
@@ -75,6 +81,12 @@ public class ControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
         ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 데이터 타입입니다.");
         return ResponseEntity.badRequest().body(errorResponse);
     }
 

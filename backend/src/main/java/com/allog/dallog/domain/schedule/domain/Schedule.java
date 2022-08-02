@@ -1,14 +1,18 @@
 package com.allog.dallog.domain.schedule.domain;
 
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Table(name = "schedules")
@@ -32,16 +36,21 @@ public class Schedule extends BaseEntity {
     @Column(name = "memo", nullable = false)
     private String memo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categories_id", nullable = false)
+    private Category category;
+
     protected Schedule() {
     }
 
     public Schedule(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
-                    final String memo) {
+                    final String memo, final Category category) {
         validateTitleLength(title);
         validateMemoLength(memo);
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
+        this.category = category;
     }
 
     private void validateTitleLength(final String title) {
@@ -74,5 +83,9 @@ public class Schedule extends BaseEntity {
 
     public String getMemo() {
         return memo;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

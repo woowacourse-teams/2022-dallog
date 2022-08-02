@@ -215,6 +215,6 @@ class SubscriptionControllerTest {
                         requestHeaders(
                                 headerWithName("Authorization").description("JWT 토큰")
                         )))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }

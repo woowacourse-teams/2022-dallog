@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.schedule.presentation;
 
+import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
@@ -9,13 +11,14 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/schedules")
+@RequestMapping("/api")
 @RestController
 public class ScheduleController {
 
@@ -25,9 +28,11 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> save(@Valid @RequestBody final ScheduleCreateRequest request) {
-        Long id = scheduleService.save(request);
+    @PostMapping("/categories/{categoryId}/schedules")
+    public ResponseEntity<Void> save(@AuthenticationPrincipal final LoginMember loginMember,
+                                     @PathVariable final Long categoryId,
+                                     @Valid @RequestBody final ScheduleCreateRequest request) {
+        Long id = scheduleService.save(loginMember.getId(), categoryId, request);
         return ResponseEntity.created(URI.create("/api/schedules/" + id)).build();
     }
 
