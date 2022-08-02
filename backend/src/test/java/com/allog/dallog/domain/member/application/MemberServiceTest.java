@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.member.application;
 
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이메일;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,6 +57,23 @@ class MemberServiceTest {
         assertThat(memberService.findById(파랑.getId()))
                 .usingRecursiveComparison()
                 .isEqualTo(파랑);
+    }
+
+    @DisplayName("회원의 이름을 수정한다.")
+    @Test
+    void 회원의_이름을_수정한다() {
+        // given
+        MemberResponse 매트 = memberService.save(매트());
+
+        String 패트_이름 = "패트";
+        MemberUpdateRequest 매트_수정_요청 = new MemberUpdateRequest(패트_이름);
+
+        // when
+        memberService.update(매트.getId(), 매트_수정_요청);
+
+        // then
+        MemberResponse actual = memberService.findById(매트.getId());
+        assertThat(actual.getDisplayName()).isEqualTo(패트_이름);
     }
 
     @DisplayName("주어진 이메일로 가입된 회원이 있으면 true를 반환한다.")

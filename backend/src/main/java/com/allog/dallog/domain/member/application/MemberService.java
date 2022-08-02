@@ -3,6 +3,7 @@ package com.allog.dallog.domain.member.application;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,12 @@ public class MemberService {
 
     public MemberResponse findById(final Long id) {
         return new MemberResponse(getMember(id));
+    }
+
+    @Transactional
+    public void update(final Long id, final MemberUpdateRequest request) {
+        Member member = getMember(id);
+        member.change(request.getDisplayName());
     }
 
     public Member getMember(final Long id) {
