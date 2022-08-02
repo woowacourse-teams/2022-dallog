@@ -4,7 +4,7 @@ const categoryTable = css`
   overflow-y: overlay;
 
   width: 100%;
-  height: 72vh;
+  height: 100%;
 `;
 
 const categoryTableHeader = ({ flex, colors }: Theme) => css`
@@ -23,7 +23,7 @@ const categoryTableHeader = ({ flex, colors }: Theme) => css`
 `;
 
 const intersectTarget = css`
-  height: 10rem;
+  height: 1rem;
 `;
 
 const item = css`
