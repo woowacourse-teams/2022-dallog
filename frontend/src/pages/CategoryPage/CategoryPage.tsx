@@ -8,11 +8,11 @@ import CategoryList from '@/components/CategoryList/CategoryList';
 import { GoSearch } from 'react-icons/go';
 
 import {
-  categoryPage,
-  searchButton,
-  searchFieldset,
-  searchForm,
-  searchInput,
+  categoryPageStyle,
+  searchButtonStyle,
+  searchFieldsetStyle,
+  searchFormStyle,
+  searchInputStyle,
 } from './CategoryPage.styles';
 
 function CategoryPage() {
@@ -31,14 +31,14 @@ function CategoryPage() {
 
   return (
     <PageLayout>
-      <div css={categoryPage}>
-        <form css={searchForm} onSubmit={handleSubmitCategorySearchForm}>
-          <Button type="submit" cssProp={searchButton}>
+      <div css={categoryPageStyle}>
+        <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
+          <Button type="submit" cssProp={searchButtonStyle}>
             <GoSearch size={16} />
           </Button>
           <Fieldset
             placeholder="카테고리 이름 검색"
-            cssProp={{ div: searchFieldset, input: searchInput }}
+            cssProp={{ div: searchFieldsetStyle, input: searchInputStyle }}
             refProp={keywordRef}
           />
         </form>

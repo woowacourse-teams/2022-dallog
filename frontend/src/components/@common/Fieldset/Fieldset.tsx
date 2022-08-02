@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { FieldsetCssPropType } from '@/@types';
 
-import { fieldset, input, label } from './Fieldset.styles';
+import { fieldsetStyle, inputStyle, labelStyle } from './Fieldset.styles';
 
 interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
@@ -27,16 +27,16 @@ function Fieldset({
   const theme = useTheme();
 
   return (
-    <div css={[fieldset(theme), cssProp?.div]}>
+    <div css={[fieldsetStyle(theme), cssProp?.div]}>
       {labelText && (
-        <label htmlFor={id} css={[label, cssProp?.label]}>
+        <label htmlFor={id} css={[labelStyle, cssProp?.label]}>
           {labelText}
         </label>
       )}
       <input
         type={type}
         id={id}
-        css={[input(theme), cssProp?.input]}
+        css={[inputStyle(theme), cssProp?.input]}
         placeholder={placeholder}
         defaultValue={defaultValue}
         autoFocus={autoFocus}

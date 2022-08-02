@@ -1,13 +1,13 @@
 import { css, Theme } from '@emotion/react';
 
-const categoryTable = css`
+const categoryTableStyle = css`
   overflow-y: overlay;
 
   width: 100%;
   height: 100%;
 `;
 
-const categoryTableHeader = ({ flex, colors }: Theme) => css`
+const categoryTableHeaderStyle = ({ flex, colors }: Theme) => css`
   ${flex.row}
 
   justify-content: space-around;
@@ -22,13 +22,13 @@ const categoryTableHeader = ({ flex, colors }: Theme) => css`
   font-weight: 700;
 `;
 
-const intersectTarget = css`
+const intersectTargetStyle = css`
   height: 1rem;
 `;
 
-const item = css`
+const itemStyle = css`
   flex: 1 1 0;
   text-align: center;
 `;
 
-export { categoryTable, categoryTableHeader, intersectTarget, item };
+export { categoryTableHeaderStyle, categoryTableStyle, intersectTargetStyle, itemStyle };
