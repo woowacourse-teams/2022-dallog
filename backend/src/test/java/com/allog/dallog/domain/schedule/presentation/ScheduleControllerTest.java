@@ -67,7 +67,7 @@ class ScheduleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedule/save",
+                .andDo(document("schedules/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -90,7 +90,7 @@ class ScheduleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedule/exception/save",
+                .andDo(document("schedules/save/forbidden",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -113,7 +113,7 @@ class ScheduleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedule/exception/save",
+                .andDo(document("schedules/save/notfound",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
