@@ -181,7 +181,10 @@ class ScheduleServiceTest {
 
         // when
         scheduleService.deleteById(알록달록_회의_ID, 후디.getId());
-        // TODO: 단건 조회 기능 추가시 assert 추가
+
+        // then
+        assertThatThrownBy(() -> scheduleService.findById(알록달록_회의_ID))
+                .isInstanceOf(NoSuchScheduleException.class);
     }
 
     @DisplayName("일정 삭제 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
