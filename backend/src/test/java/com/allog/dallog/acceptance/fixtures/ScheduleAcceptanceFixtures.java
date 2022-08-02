@@ -27,4 +27,13 @@ public class ScheduleAcceptanceFixtures {
                 .then().log().all()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> 일정_아이디로_일정을_단건_조회한다(final String accessToken, final Long scheduleId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .when().get("/api/schedules/{scheduleId}", scheduleId)
+                .then().log().all()
+                .extract();
+    }
 }
