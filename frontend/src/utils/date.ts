@@ -1,3 +1,5 @@
+import { zeroFill } from '.';
+
 const getNextYearMonth = (targetYear: number, targetMonth: number) => {
   if (targetMonth === 12) {
     return { year: targetYear + 1, month: 1 };
@@ -75,14 +77,19 @@ const getCalendarMonth = (year: number, month: number) => {
   });
 };
 
+const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
+  return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
+};
+
 export {
-  getNextYearMonth,
+  getBeforeDate,
   getBeforeYearMonth,
-  getThisYear,
-  getThisMonth,
+  getCalendarMonth,
   getDate,
   getDateTime,
-  getCalendarMonth,
-  getBeforeDate,
+  getFormattedDate,
+  getThisYear,
+  getThisMonth,
   getNextDate,
+  getNextYearMonth,
 };

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { zeroFill } from '@/utils';
 import {
   getBeforeYearMonth,
   getCalendarMonth,
+  getFormattedDate,
   getNextYearMonth,
   getThisMonth,
   getThisYear,
@@ -41,13 +41,17 @@ function useCalendar() {
     setCalendarMonth(getCalendarMonth(year, month));
   };
 
-  const startDate = `${calendarMonth[0].year}-${zeroFill(calendarMonth[0].month)}-${zeroFill(
+  const startDate = getFormattedDate(
+    calendarMonth[0].year,
+    calendarMonth[0].month,
     calendarMonth[0].date
-  )}`;
+  );
 
-  const endDate = `${calendarMonth[calendarMonth.length - 1].year}-${zeroFill(
-    calendarMonth[calendarMonth.length - 1].month
-  )}-${zeroFill(calendarMonth[calendarMonth.length - 1].date)}`;
+  const endDate = getFormattedDate(
+    calendarMonth[calendarMonth.length - 1].year,
+    calendarMonth[calendarMonth.length - 1].month,
+    calendarMonth[calendarMonth.length - 1].date
+  );
 
   return {
     calendarMonth,
