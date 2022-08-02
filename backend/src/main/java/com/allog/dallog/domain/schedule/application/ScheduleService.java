@@ -7,6 +7,7 @@ import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -54,7 +55,9 @@ public class ScheduleService {
     }
 
     public ScheduleResponse findById(final Long id) {
-        Schedule schedule = scheduleRepository.findById(id).get();
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
+
         return new ScheduleResponse(schedule);
     }
 }
