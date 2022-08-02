@@ -88,4 +88,8 @@ public class Schedule extends BaseEntity {
     public Category getCategory() {
         return category;
     }
+
+    public Long getCategoryId() {
+        return category.getId();
+    }
 }
