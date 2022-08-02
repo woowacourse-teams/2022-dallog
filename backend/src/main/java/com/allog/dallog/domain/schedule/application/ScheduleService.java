@@ -36,12 +36,6 @@ public class ScheduleService {
         return schedule.getId();
     }
 
-    private void validateCategoryPermission(final Long memberId, final Category category) {
-        if (!category.isCreator(memberId)) {
-            throw new NoPermissionException();
-        }
-    }
-
     public List<ScheduleResponse> findByYearAndMonth(final int year, final int month) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusDays(startDate.lengthOfMonth());
@@ -59,5 +53,20 @@ public class ScheduleService {
                 .orElseThrow(NoSuchScheduleException::new);
 
         return new ScheduleResponse(schedule);
+    }
+
+    public void deleteById(final Long id, final Long memberId) {
+        Category category = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new)
+                .getCategory();
+
+        validateCategoryPermission(memberId, category);
+        scheduleRepository.deleteById(id);
+    }
+
+    private void validateCategoryPermission(final Long memberId, final Category category) {
+        if (!category.isCreator(memberId)) {
+            throw new NoPermissionException();
+        }
     }
 }
