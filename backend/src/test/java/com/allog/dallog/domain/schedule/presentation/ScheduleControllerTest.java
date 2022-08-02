@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -94,5 +95,28 @@ class ScheduleControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("일정 생성시 전달한 카테고리가 존재하지 않는다면 404를 반환한다.")
+    @Test
+    void 일정_생성시_전달한_카테고리가_존재하지_않는다면_404를_반환한다() throws Exception {
+        // given
+        Long categoryId = 999L;
+        ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
+
+        given(scheduleService.save(any(), any(), any())).willThrow(new NoSuchCategoryException());
+
+        // when & then
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("schedule/exception/save",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNotFound());
     }
 }

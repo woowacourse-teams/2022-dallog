@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
@@ -116,5 +117,20 @@ class ScheduleServiceTest {
         // when & then
         assertThatThrownBy(() -> scheduleService.save(리버.getId(), BE_일정.getId(), 일정_생성_요청)).
                 isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("일정 생성시 전달한 카테고리가 존재하지 않는다면 예외를 던진다.")
+    @Test
+    void 일정_생성시_전달한_카테고리가_존재하지_않는다면_예외를_던진다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+
+        LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
+        LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
+        ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 999L, 일정_생성_요청)).
+                isInstanceOf(NoSuchCategoryException.class);
     }
 }
