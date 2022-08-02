@@ -1,16 +1,15 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.새로운_일정을_등록한다;
-import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.월별_일정을_조회한다;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.END_DATE_TIME_STRING;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.MEMO;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.MONTH;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.START_DATE_TIME_STRING;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.TITLE;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.YEAR;
+import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 
+import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -23,24 +22,12 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_일정정보를_등록하면_상태코드_201을_반환한다() {
         // given & when
-        ExtractableResponse<Response> response = 새로운_일정을_등록한다(TITLE, START_DATE_TIME_STRING, END_DATE_TIME_STRING,
-                MEMO);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+        CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
+
+        ExtractableResponse<Response> response = 새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId());
 
         // then
         상태코드_201이_반환된다(response);
-    }
-
-    @DisplayName("월별 일정정보를 조회하면 상태코드 200을 반환한다.")
-    @Test
-    void 월별_일정정보를_조회하면_상태코드_200을_반환한다() {
-        // given
-        새로운_일정을_등록한다(TITLE, START_DATE_TIME_STRING, END_DATE_TIME_STRING, MEMO);
-        새로운_일정을_등록한다(TITLE, START_DATE_TIME_STRING, END_DATE_TIME_STRING, MEMO);
-
-        // when
-        ExtractableResponse<Response> response = 월별_일정을_조회한다(YEAR, MONTH);
-
-        // then
-        상태코드_200이_반환된다(response);
     }
 }
