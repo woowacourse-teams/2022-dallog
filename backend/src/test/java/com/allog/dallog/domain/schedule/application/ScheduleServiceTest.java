@@ -1,9 +1,11 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
@@ -12,6 +14,7 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.application.MemberService;
@@ -44,7 +47,7 @@ class ScheduleServiceTest {
         // given & when
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long id = scheduleService.save(BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long id = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // then
         assertThat(id).isNotNull();
@@ -62,7 +65,7 @@ class ScheduleServiceTest {
                 알록달록_회의_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(BE_일정.getId(), 잘못된_일정_생성_요청)).
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), BE_일정.getId(), 잘못된_일정_생성_요청)).
                 isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -78,7 +81,7 @@ class ScheduleServiceTest {
                 잘못된_일정_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(BE_일정.getId(), 잘못된_일정_생성_요청)).
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), BE_일정.getId(), 잘못된_일정_생성_요청)).
                 isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -94,7 +97,24 @@ class ScheduleServiceTest {
         ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(BE_일정.getId(), 일정_생성_요청)).
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), BE_일정.getId(), 일정_생성_요청)).
                 isInstanceOf(InvalidScheduleException.class);
+    }
+
+    @DisplayName("일정 생성 요청자가 카테고리의 생성자가 아닌경우 예외를 던진다")
+    @Test
+    void 일정_생성_요청자가_카테고리의_생성자가_아닌경우_예외를_던진다() {
+        // given
+        MemberResponse 리버 = memberService.save(리버());
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+
+        LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
+        LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
+        ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.save(리버.getId(), BE_일정.getId(), 일정_생성_요청)).
+                isInstanceOf(NoPermissionException.class);
     }
 }

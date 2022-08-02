@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +35,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(TestConfig.class)
 class ScheduleControllerTest {
 
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -46,17 +50,18 @@ class ScheduleControllerTest {
     @MockBean
     private ScheduleService scheduleService;
 
-    @DisplayName("일정 정보를 등록한다.")
+    @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
-    void 일정_정보를_등록한다() throws Exception {
+    void 일정_정보를_등록하면_상태코드_201을_반환한다() throws Exception {
         // given
         Long categoryId = 1L;
         ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
 
-        given(scheduleService.save(any(), any())).willReturn(1L);
+        given(scheduleService.save(any(), any(), any())).willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -66,5 +71,28 @@ class ScheduleControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("일정 정보를 등록할때 해당 카테고리에 권한이 없으면 403을 반환한다.")
+    @Test
+    void 일정_정보를_등록할때_해당_카테고리에_권한이_없으면_403을_반환한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
+
+        given(scheduleService.save(any(), any(), any())).willThrow(new NoPermissionException());
+
+        // when & then
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("schedule/exception/save",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isForbidden());
     }
 }

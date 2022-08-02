@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.schedule.presentation;
 
+import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
@@ -27,9 +29,10 @@ public class ScheduleController {
     }
 
     @PostMapping("/categories/{categoryId}/schedules")
-    public ResponseEntity<Void> save(@Valid @RequestBody final ScheduleCreateRequest request,
-                                     @PathVariable Long categoryId) {
-        Long id = scheduleService.save(categoryId, request);
+    public ResponseEntity<Void> save(@AuthenticationPrincipal final LoginMember loginMember,
+                                     @PathVariable final Long categoryId,
+                                     @Valid @RequestBody final ScheduleCreateRequest request) {
+        Long id = scheduleService.save(loginMember.getId(), categoryId, request);
         return ResponseEntity.created(URI.create("/api/schedules/" + id)).build();
     }
 

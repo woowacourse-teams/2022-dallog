@@ -49,12 +49,17 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             EmptyAuthorizationHeaderException.class,
-            InvalidTokenException.class,
-            NoPermissionException.class
+            InvalidTokenException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidAuthorization(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(NoPermissionException.class)
+    public ResponseEntity<ErrorResponse> handleNoPermission(final NoPermissionException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     @ExceptionHandler({
