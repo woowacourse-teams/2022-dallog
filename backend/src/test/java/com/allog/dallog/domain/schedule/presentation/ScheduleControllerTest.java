@@ -7,10 +7,13 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -157,6 +160,66 @@ class ScheduleControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("schedules/findone/notfound",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("일정을 제거하는데 성공하면 204를 반환한다.")
+    @Test
+    void 일정을_제거하는데_성공하면_204를_반환한다() throws Exception {
+        // given
+        Long scheduleId = 1L;
+        willDoNothing()
+                .given(scheduleService)
+                .deleteById(any(), any());
+
+        // when & then
+        mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("일정을 제거하는데 해당 일정의 카테고리에 대한 권한이 없다면 403을 반환한다.")
+    @Test
+    void 일정을_제거하는데_해당_일정의_카테고리에_대한_권한이_없다면_403을_반환한다() throws Exception {
+        // given
+        Long scheduleId = 1L;
+        willThrow(NoPermissionException.class)
+                .given(scheduleService)
+                .deleteById(any(), any());
+
+        // when & then
+        mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/delete/forbidden",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("일정을 제거하는데 일정이 존재하지 않는 경우 404를 반환한다")
+    @Test
+    void 일정을_제거하는데_일정이_존재하지_않는_경우_404를_반환한다() throws Exception {
+        // given
+        Long scheduleId = 1L;
+        willThrow(NoSuchScheduleException.class)
+                .given(scheduleService)
+                .deleteById(any(), any());
+
+        // when & then
+        mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/delete/notfound",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))

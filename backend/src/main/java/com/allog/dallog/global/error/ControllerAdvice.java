@@ -67,7 +67,8 @@ public class ControllerAdvice {
             NoSuchScheduleException.class,
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
-            NoSuchSubscriptionException.class
+            NoSuchSubscriptionException.class,
+            NoSuchScheduleException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
