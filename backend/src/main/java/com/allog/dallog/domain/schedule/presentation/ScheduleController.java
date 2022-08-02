@@ -10,6 +10,7 @@ import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +48,12 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long scheduleId) {
         ScheduleResponse response = scheduleService.findById(scheduleId);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/schedules/{scheduleId}")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long scheduleId) {
+        scheduleService.deleteById(scheduleId, loginMember.getId());
+        return ResponseEntity.noContent().build();
     }
 }

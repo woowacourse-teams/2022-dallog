@@ -61,6 +61,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId())
                 .header("Location")
                 .split("/api/schedules/")[1]);
+        // TODO:scheduleService.save()가 DTO를 반환하게 되면 수정
 
         // when
         ExtractableResponse<Response> response = 일정을_삭제한다(accessToken, 알록달록_회의_ID);
