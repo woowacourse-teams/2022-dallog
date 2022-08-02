@@ -25,6 +25,7 @@ public class ScheduleAcceptanceFixtures {
     public static ExtractableResponse<Response> 일정을_수정한다(final String accessToken, final Long scheduleId, final
     ScheduleUpdateRequest request) {
         return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
                 .body(request)
                 .when().patch("/api/schedules/{scheduleId}", scheduleId)
