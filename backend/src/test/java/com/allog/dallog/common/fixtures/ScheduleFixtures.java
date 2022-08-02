@@ -3,6 +3,7 @@ package com.allog.dallog.common.fixtures;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import java.time.LocalDateTime;
 
 public class ScheduleFixtures {
@@ -39,5 +40,9 @@ public class ScheduleFixtures {
 
     public static Schedule 알록달록_회식(final Category category) {
         return new Schedule(알록달록_회식_제목, 알록달록_회식_시작일시, 알록달록_회식_종료일시, 알록달록_회식_메모, category);
+    }
+
+    public static ScheduleResponse 알록달록_회의_응답() {
+        return new ScheduleResponse(1L, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, 1L);
     }
 }
