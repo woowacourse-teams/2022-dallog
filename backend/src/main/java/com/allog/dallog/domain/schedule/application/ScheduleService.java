@@ -52,4 +52,9 @@ public class ScheduleService {
                 .map(ScheduleResponse::new)
                 .collect(Collectors.toList());
     }
+
+    public ScheduleResponse findById(final Long id) {
+        Schedule schedule = scheduleRepository.findById(id).get();
+        return new ScheduleResponse(schedule);
+    }
 }

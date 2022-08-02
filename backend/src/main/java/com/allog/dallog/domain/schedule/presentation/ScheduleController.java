@@ -42,4 +42,10 @@ public class ScheduleController {
         List<ScheduleResponse> responses = scheduleService.findByYearAndMonth(year, month);
         return ResponseEntity.ok(new SchedulesResponse(responses));
     }
+
+    @GetMapping("/schedules/{scheduleId}")
+    public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long id) {
+        ScheduleResponse response = scheduleService.findById(id);
+        return ResponseEntity.ok(response);
+    }
 }
