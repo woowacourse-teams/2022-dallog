@@ -12,11 +12,19 @@ const categoryApi = {
     Accept: 'application/json',
   },
 
-  getEntire: async (page: number, size: number) => {
-    const response = await dallogApi.get<CategoriesGetResponseType>(categoryApi.endpoint.entire, {
-      params: { page, size },
-      headers: categoryApi.headers,
-    });
+  getEntire: async (name: string, page: number, size: number) => {
+    const response = await dallogApi.get<CategoriesGetResponseType>(
+      categoryApi.endpoint.entire,
+      name === ''
+        ? {
+            params: { page, size },
+            headers: categoryApi.headers,
+          }
+        : {
+            params: { name, page, size },
+            headers: categoryApi.headers,
+          }
+    );
 
     return response;
   },
