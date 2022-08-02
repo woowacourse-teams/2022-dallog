@@ -24,6 +24,7 @@ import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -155,5 +156,19 @@ class ScheduleServiceTest {
             assertThat(response.getEndDateTime()).isEqualTo(알록달록_회의_종료일시);
             assertThat(response.getMemo()).isEqualTo(알록달록_회의_메모);
         });
+    }
+
+    @DisplayName("존재하지 않는 일정 ID로 단건 일정을 조회하면 예외를 던진다.")
+    @Test
+    void 존재하지_않는_일정_ID로_단건_일정을_조회하면_예외를_던진다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long 잘못된_아이디 = 999L;
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디))
+                .isInstanceOf(NoSuchScheduleException.class);
     }
 }
