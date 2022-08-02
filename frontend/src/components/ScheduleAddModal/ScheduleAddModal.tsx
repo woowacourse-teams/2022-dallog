@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
-import FieldSet from '@/components/@common/FieldSet/FieldSet';
+import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -86,7 +86,7 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
 
   if (error) return <>Error</>;
 
-  const dateFieldSet = isAllDay
+  const dateFieldset = isAllDay
     ? {
         type: 'date',
         defaultValue: getDate(),
@@ -99,24 +99,24 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
-        <FieldSet placeholder="제목을 입력하세요." refProp={inputRef.title} />
+        <Fieldset placeholder="제목을 입력하세요." refProp={inputRef.title} />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
         </Button>
-        <div css={dateTime} key={dateFieldSet.type}>
-          <FieldSet
-            type={dateFieldSet.type}
-            defaultValue={dateFieldSet.defaultValue}
+        <div css={dateTime} key={dateFieldset.type}>
+          <Fieldset
+            type={dateFieldset.type}
+            defaultValue={dateFieldset.defaultValue}
             refProp={inputRef.startDateTime}
           />
           <p css={arrow}>↓</p>
-          <FieldSet
-            type={dateFieldSet.type}
-            defaultValue={dateFieldSet.defaultValue}
+          <Fieldset
+            type={dateFieldset.type}
+            defaultValue={dateFieldset.defaultValue}
             refProp={inputRef.endDateTime}
           />
         </div>
-        <FieldSet placeholder="메모를 추가하세요." refProp={inputRef.memo} />
+        <Fieldset placeholder="메모를 추가하세요." refProp={inputRef.memo} />
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소

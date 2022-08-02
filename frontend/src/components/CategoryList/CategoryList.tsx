@@ -17,9 +17,18 @@ import { API, CACHE_KEY } from '@/constants';
 import categoryApi from '@/api/category';
 import subscriptionApi from '@/api/subscription';
 
-import { categoryTable, categoryTableHeader, intersectTarget, item } from './CategoryList.styles';
+import {
+  categoryTableHeaderStyle,
+  categoryTableStyle,
+  intersectTargetStyle,
+  itemStyle,
+} from './CategoryList.styles';
 
-function CategoryList() {
+interface CategoryListProps {
+  keyword: string;
+}
+
+function CategoryList({ keyword }: CategoryListProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const {
@@ -28,8 +37,8 @@ function CategoryList() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery<AxiosResponse<CategoriesGetResponseType>, AxiosError>(
-    CACHE_KEY.CATEGORIES,
-    ({ pageParam = 0 }) => categoryApi.getEntire(pageParam, API.CATEGORY_GET_SIZE),
+    [CACHE_KEY.CATEGORIES, keyword],
+    ({ pageParam = 0 }) => categoryApi.getEntire(keyword, pageParam, API.CATEGORY_GET_SIZE),
     {
       getNextPageParam: ({ data }) => {
         if (data.categories.length > 0) {
@@ -66,12 +75,12 @@ function CategoryList() {
 
   return (
     <>
-      <div css={categoryTableHeader}>
-        <span css={item}> 생성 날짜 </span>
-        <span css={item}> 카테고리 이름 </span>
-        <span css={item}> 구독 상태 </span>
+      <div css={categoryTableHeaderStyle}>
+        <span css={itemStyle}>생성 날짜</span>
+        <span css={itemStyle}>카테고리 이름</span>
+        <span css={itemStyle}>구독 상태</span>
       </div>
-      <div css={categoryTable}>
+      <div css={categoryTableStyle}>
         {categoryList.map((category) => {
           const subscribedCategoryInfo = subscriptionList.find(
             (el) => el.categoryId === category.id
@@ -89,7 +98,7 @@ function CategoryList() {
             />
           );
         })}
-        <div ref={ref} css={intersectTarget} />
+        <div ref={ref} css={intersectTargetStyle} />
       </div>
     </>
   );
