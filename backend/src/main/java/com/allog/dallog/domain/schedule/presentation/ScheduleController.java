@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.dto.response.SchedulesResponse;
 import java.net.URI;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +50,14 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long scheduleId) {
         ScheduleResponse response = scheduleService.findById(scheduleId);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/schedules/{scheduleId}")
+    public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long scheduleId,
+                                       @Valid @RequestBody final ScheduleUpdateRequest request) {
+        scheduleService.update(scheduleId, loginMember.getId(), request);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/schedules/{scheduleId}")

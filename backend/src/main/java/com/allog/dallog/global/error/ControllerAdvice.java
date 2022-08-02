@@ -96,6 +96,7 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,
                                                                    final HttpServletRequest request) {
+        e.printStackTrace();
         ErrorReportRequest errorReport = new ErrorReportRequest(request.getRequestURI(), request.getMethod(),
                 e.getMessage());
 
