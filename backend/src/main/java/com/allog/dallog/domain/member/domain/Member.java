@@ -65,6 +65,11 @@ public class Member extends BaseEntity {
         }
     }
 
+    public void change(final String displayName) {
+        validateDisplayName(displayName);
+        this.displayName = displayName;
+    }
+
     public Long getId() {
         return id;
     }
