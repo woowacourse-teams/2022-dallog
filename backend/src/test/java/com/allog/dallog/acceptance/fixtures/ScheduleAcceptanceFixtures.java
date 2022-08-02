@@ -21,9 +21,10 @@ public class ScheduleAcceptanceFixtures {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 월별_일정을_조회한다(final int year, final int month) {
+    public static ExtractableResponse<Response> 일정을_삭제한다(final String accessToken, final Long scheduleId) {
         return RestAssured.given().log().all()
-                .when().get("/api/schedules?year={year}&month={month}", year, month)
+                .auth().oauth2(accessToken)
+                .when().delete("/api/schedules/{scheduleId}", scheduleId)
                 .then().log().all()
                 .extract();
     }
