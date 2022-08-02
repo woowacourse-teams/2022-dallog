@@ -44,8 +44,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long id) {
-        ScheduleResponse response = scheduleService.findById(id);
+    public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long scheduleId) {
+        ScheduleResponse response = scheduleService.findById(scheduleId);
         return ResponseEntity.ok(response);
     }
 }
