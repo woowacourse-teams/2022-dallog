@@ -1,6 +1,7 @@
 package com.allog.dallog.acceptance.fixtures;
 
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -17,6 +18,16 @@ public class ScheduleAcceptanceFixtures {
                 .auth().oauth2(accessToken)
                 .body(request)
                 .when().post("/api/categories/{categoryId}/schedules", categoryId)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 일정을_수정한다(final String accessToken, final Long scheduleId, final
+    ScheduleUpdateRequest request) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .body(request)
+                .when().patch("/api/schedules/{scheduleId}", scheduleId)
                 .then().log().all()
                 .extract();
     }
