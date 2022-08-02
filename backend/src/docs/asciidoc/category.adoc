@@ -34,6 +34,20 @@ include::{snippets}/categories/findAll/request-parameters.adoc[]
 
 include::{snippets}/categories/findAll/http-response.adoc[]
 
+=== 카테고리 제목 조회
+
+==== Request
+
+include::{snippets}/categories/findAllLikeName/http-request.adoc[]
+
+==== RequestParameters
+
+include::{snippets}/categories/findAllLikeName/request-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/categories/findAllLikeName/http-response.adoc[]
+
 === 자신이 생성한 카테고리 조회
 
 ==== Request

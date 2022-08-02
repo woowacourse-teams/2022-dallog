@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/categories")
@@ -38,8 +39,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesResponse> findAll(final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findAll(pageable));
+    public ResponseEntity<CategoriesResponse> findAllByName(@RequestParam(defaultValue = "") final String name,
+                                                            final Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findAllByName(name, pageable));
     }
 
     @GetMapping("/me")

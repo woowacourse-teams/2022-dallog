@@ -34,14 +34,14 @@ public class CategoryService {
         return new CategoryResponse(category);
     }
 
-    public CategoriesResponse findAll(final Pageable pageable) {
-        List<Category> categories = categoryRepository.findSliceBy(pageable).getContent();
+    public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
+        List<Category> categories = categoryRepository.findAllLikeCategoryName(name, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoriesResponse findMine(final Long memberId, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findSliceByMemberId(pageable, memberId).getContent();
+        List<Category> categories = categoryRepository.findSliceByMemberId(memberId, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }

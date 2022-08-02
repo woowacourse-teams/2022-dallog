@@ -137,7 +137,7 @@ class CategoryControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findAll(any())).willReturn(categoriesResponse);
+        given(categoryService.findAllByName(any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
@@ -149,6 +149,36 @@ class CategoryControllerTest {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
+                                        parameterWithName("page").description("페이지 번호"),
+                                        parameterWithName("size").description("페이지 크기")
+                                )
+                        )
+                )
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("카테고리 제목을 활용하여 조회한다.")
+    @Test
+    void 카테고리_제목을_활용하여_조회한다() throws Exception {
+        // given
+        int page = 0;
+        int size = 10;
+
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
+        given(categoryService.findAllByName(any(), any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andDo(document("categories/findAllLikeName",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestParameters(
+                                        parameterWithName("name").description("카테고리 검색어"),
                                         parameterWithName("page").description("페이지 번호"),
                                         parameterWithName("size").description("페이지 크기")
                                 )
