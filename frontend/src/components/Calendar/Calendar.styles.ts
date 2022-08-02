@@ -102,7 +102,6 @@ const dateBorder = ({ colors }: Theme, day: number) => css`
   position: relative;
 
   height: 100%;
-  padding: 1rem;
   border-bottom: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};
   border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
@@ -127,12 +126,65 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean) => css`
     : `${colors.GRAY_700}80`};
 `;
 
+const itemWithBackgroundStyle = (priority: number, color: string, isHovering: boolean) => css`
+  position: absolute;
+  top: ${priority * 7}rem;
+
+  display: ${priority >= 4 ? 'none' : 'block'};
+  width: 100%;
+  height: 6rem;
+  padding: 1rem;
+
+  background: ${color};
+
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 4rem;
+  white-space: nowrap;
+  color: white;
+
+  cursor: pointer;
+  filter: ${isHovering && 'brightness(80%)'};
+`;
+
+const itemWithoutBackgroundStyle = (
+  { colors }: Theme,
+  priority: number,
+  color: string,
+  isHovering: boolean
+) => css`
+  ${itemWithBackgroundStyle(priority, color, isHovering)}
+
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+
+  background: ${isHovering ? colors.GRAY_100 : 'transparent'};
+
+  color: black;
+
+  cursor: pointer;
+  filter: none;
+`;
+
+const circleStyle = (color: string) => css`
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+
+  background: ${color};
+`;
+
 export {
   calendarGrid,
   calendarHeader,
+  circleStyle,
   dayBar,
   dateBorder,
   dateText,
+  itemWithoutBackgroundStyle,
+  itemWithBackgroundStyle,
   monthPicker,
   navBarGrid,
   navButton,
