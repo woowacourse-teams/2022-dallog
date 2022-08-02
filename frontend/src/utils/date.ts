@@ -32,6 +32,12 @@ const getDateTime = () => {
   return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
 };
 
+const getDayFromFormattedDate = (date: string) => {
+  const newDate = new Date(`${date}T00:00:00Z`);
+
+  return newDate.getDay();
+};
+
 const getBeforeDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() - offset));
 
@@ -87,6 +93,7 @@ export {
   getCalendarMonth,
   getDate,
   getDateTime,
+  getDayFromFormattedDate,
   getFormattedDate,
   getThisYear,
   getThisMonth,
