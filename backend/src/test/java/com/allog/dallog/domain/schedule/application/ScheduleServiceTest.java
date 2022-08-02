@@ -168,7 +168,46 @@ class ScheduleServiceTest {
         Long 잘못된_아이디 = 999L;
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디))
+        assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디));
+    }
+
+    @DisplayName("일정을 삭제한다.")
+    @Test
+    void 일정을_삭제한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        // when
+        scheduleService.deleteById(알록달록_회의_ID, 후디.getId());
+        // TODO: 단건 조회 기능 추가시 assert 추가
+    }
+
+    @DisplayName("일정 삭제 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
+    @Test
+    void 일정_삭제_시_일정의_카테고리에_대한_권한이_없을_경우_예외가_발생한다() {
+        // given
+        MemberResponse 리버 = memberService.save(리버());
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의_ID, 리버.getId()))
+                .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("일정 삭제 시 존재하지 않은 일정일 경우 예외가 발생한다.")
+    @Test
+    void 일정_삭제_시_존재하지_않은_일정일_경우_예외가_발생한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의_ID + 1, 후디.getId()))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 }
