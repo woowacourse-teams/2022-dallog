@@ -22,7 +22,6 @@ import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.global.config.JpaConfig;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,21 +41,16 @@ class ScheduleRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Category BE_일정;
-
-    @BeforeEach
-    void setUp() {
-        Member 관리자 = 관리자();
-        memberRepository.save(관리자);
-
-        BE_일정 = BE_일정(관리자);
-        categoryRepository.save(BE_일정);
-    }
-
     @DisplayName("시작일시와 종료일시를 전달하면 그 사이에 해당하는 일정을 조회한다.")
     @Test
     void 시작일시와_종료일시를_전달하면_그_사이에_해당하는_일정을_조회한다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
@@ -74,6 +68,12 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_시작일시와_같으면_조회된다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
@@ -91,6 +91,12 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_종료일시와_같으면_조회된다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
@@ -108,6 +114,12 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_시작날짜가_종료일시_이후이면_조회되지_않는다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
@@ -125,6 +137,12 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_종료날짜가_시작일시와_같으면_조회된다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
@@ -142,6 +160,12 @@ class ScheduleRepositoryTest {
     @Test
     void 시작일시와_종료일시를_전달할_때_일정의_종료날짜가_시작일시_이전이면_조회되지_않는다() {
         // given
+        Member 관리자 = 관리자();
+        memberRepository.save(관리자);
+
+        Category BE_일정 = BE_일정(관리자);
+        categoryRepository.save(BE_일정);
+
         Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
         Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
 
