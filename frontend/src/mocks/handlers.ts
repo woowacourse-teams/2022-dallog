@@ -24,15 +24,19 @@ const handlers = [
   rest.get(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
     const page = parseInt(req.url.searchParams.get('page') as string);
     const size = API.CATEGORY_GET_SIZE;
-    const slicedCategories = categoryDB.categories.slice(page * size, page * size + size);
+    const name = req.url.searchParams.get('name');
 
-    return res(
-      ctx.status(200),
-      ctx.json({
-        page,
-        categories: slicedCategories,
-      })
-    );
+    if (name === null || name === '') {
+      const entireCategories = categoryDB.categories.slice(page * size, page * size + size);
+
+      return res(ctx.status(200), ctx.json({ page, categories: entireCategories }));
+    }
+
+    const filteredCategories = categoryDB.categories
+      .filter((category) => category.name.includes(name))
+      .slice(page * size, page * size + size);
+
+    return res(ctx.status(200), ctx.json({ page, categories: filteredCategories }));
   }),
 
   rest.post<Pick<CategoryType, 'name'>>(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
