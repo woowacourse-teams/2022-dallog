@@ -34,12 +34,25 @@ public class ScheduleFixtures {
     public static final ScheduleCreateRequest 알록달록_회식_생성_요청 = new ScheduleCreateRequest(알록달록_회식_제목, 알록달록_회식_시작일시,
             알록달록_회식_종료일시, 알록달록_회식_메모);
 
+    /* 레벨 인터뷰 */
+    public static final String 레벨_인터뷰_제목 = "레벨 인터뷰";
+    public static final LocalDateTime 레벨_인터뷰_시작일시 = LocalDateTime.of(2022, 8, 7, 13, 0);
+    public static final LocalDateTime 레벨_인터뷰_종료일시 = LocalDateTime.of(2022, 8, 7, 15, 0);
+    public static final String 레벨_인터뷰_메모 = "레벨 인터뷰가 예정되어 있습니다.";
+    public static final ScheduleCreateRequest 레벨_인터뷰_생성_요청 = new ScheduleCreateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시,
+            레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+
+
     public static Schedule 알록달록_회의(final Category category) {
         return new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, category);
     }
 
     public static Schedule 알록달록_회식(final Category category) {
         return new Schedule(알록달록_회식_제목, 알록달록_회식_시작일시, 알록달록_회식_종료일시, 알록달록_회식_메모, category);
+    }
+
+    public static Schedule 레벨_인터뷰(final Category category) {
+        return new Schedule(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모, category);
     }
 
     public static ScheduleResponse 알록달록_회의_응답() {

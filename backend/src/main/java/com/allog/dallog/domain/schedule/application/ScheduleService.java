@@ -6,6 +6,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDate;
@@ -53,6 +54,18 @@ public class ScheduleService {
                 .orElseThrow(NoSuchScheduleException::new);
 
         return new ScheduleResponse(schedule);
+    }
+
+    @Transactional
+    public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
+
+        validateCategoryPermission(memberId, schedule.getCategory());
+
+        schedule.changeTitle(request.getTitle());
+        schedule.changePeriod(request.getStartDateTime(), request.getEndDateTime());
+        schedule.changeMemo(request.getMemo());
     }
 
     @Transactional
