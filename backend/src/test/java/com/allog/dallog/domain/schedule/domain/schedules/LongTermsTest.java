@@ -13,7 +13,7 @@ class LongTermsTest {
 
     // 1. 겹치는 일정이 하나도 없을 때
     // 2. 시작 일정이 겹치는데, 일정 길이는 다를 때
-    // 3. 시작 일정이 겹치고, 일정 길이도 같을 때
+    // 3. 시작 일정이 겹치고, 일정 길이가 같을 때
 
     @DisplayName("겹치는 일정이 하나도 없을 때, 일정 시작일시가 빠른 순서대로 정렬된다.")
     @Test
@@ -32,6 +32,31 @@ class LongTermsTest {
         LongTerms longTerms = new LongTerms();
         longTerms.add(세번째로_정렬되어야_하는_일정);
         longTerms.add(두번째로_정렬되어야_하는_일정);
+        longTerms.add(첫번째로_정렬되어야_하는_일정);
+
+        // then
+        assertThat(longTerms.getSchedules())
+                .extracting(Schedule::getTitle)
+                .containsExactly("일정1", "일정2", "일정3");
+    }
+
+    @DisplayName("겹치는 일정이 있을 때, 일정 종료일시가 느린 순서대로 정렬된다.")
+    @Test
+    void 겹치는_일정이_있을_때_일정_종료일시가_느린_순서대로_정렬된다() {
+        // given
+        Schedule 첫번째로_정렬되어야_하는_일정 = new Schedule("일정1", LocalDateTime.of(2022, 3, 1, 0, 0),
+                LocalDateTime.of(2022, 3, 10, 0, 0), "일정1", 공통_일정(관리자()));
+
+        Schedule 두번째로_정렬되어야_하는_일정 = new Schedule("일정2", LocalDateTime.of(2022, 3, 1, 0, 0),
+                LocalDateTime.of(2022, 3, 7, 0, 0), "일정2", 공통_일정(관리자()));
+
+        Schedule 세번째로_정렬되어야_하는_일정 = new Schedule("일정3", LocalDateTime.of(2022, 3, 1, 0, 0),
+                LocalDateTime.of(2022, 3, 5, 0, 0), "일정3", 공통_일정(관리자()));
+
+        // when
+        LongTerms longTerms = new LongTerms();
+        longTerms.add(두번째로_정렬되어야_하는_일정);
+        longTerms.add(세번째로_정렬되어야_하는_일정);
         longTerms.add(첫번째로_정렬되어야_하는_일정);
 
         // then
