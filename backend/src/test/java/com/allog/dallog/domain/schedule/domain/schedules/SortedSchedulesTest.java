@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class LongTermsTest {
+class SortedSchedulesTest {
 
     @DisplayName("겹치는 일정이 하나도 없을 때, 일정 시작일시가 빠른 순서대로 정렬된다.")
     @Test
@@ -25,13 +25,13 @@ class LongTermsTest {
                 LocalDateTime.of(2022, 3, 7, 0, 0), "일정3", 공통_일정(관리자()));
 
         // when
-        LongTerms longTerms = new LongTerms();
-        longTerms.add(세번째로_정렬되어야_하는_일정);
-        longTerms.add(두번째로_정렬되어야_하는_일정);
-        longTerms.add(첫번째로_정렬되어야_하는_일정);
+        SortedSchedules sortedSchedules = new SortedSchedules();
+        sortedSchedules.add(세번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(두번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(longTerms.getSchedules())
+        assertThat(sortedSchedules.getSchedules())
                 .extracting(Schedule::getTitle)
                 .containsExactly("일정1", "일정2", "일정3");
     }
@@ -50,13 +50,13 @@ class LongTermsTest {
                 LocalDateTime.of(2022, 3, 5, 0, 0), "일정3", 공통_일정(관리자()));
 
         // when
-        LongTerms longTerms = new LongTerms();
-        longTerms.add(두번째로_정렬되어야_하는_일정);
-        longTerms.add(세번째로_정렬되어야_하는_일정);
-        longTerms.add(첫번째로_정렬되어야_하는_일정);
+        SortedSchedules sortedSchedules = new SortedSchedules();
+        sortedSchedules.add(두번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(세번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(longTerms.getSchedules())
+        assertThat(sortedSchedules.getSchedules())
                 .extracting(Schedule::getTitle)
                 .containsExactly("일정1", "일정2", "일정3");
     }
@@ -75,13 +75,13 @@ class LongTermsTest {
                 LocalDateTime.of(2022, 3, 10, 0, 0), "일정3", 공통_일정(관리자()));
 
         // when
-        LongTerms longTerms = new LongTerms();
-        longTerms.add(세번째로_정렬되어야_하는_일정);
-        longTerms.add(두번째로_정렬되어야_하는_일정);
-        longTerms.add(첫번째로_정렬되어야_하는_일정);
+        SortedSchedules sortedSchedules = new SortedSchedules();
+        sortedSchedules.add(세번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(두번째로_정렬되어야_하는_일정);
+        sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(longTerms.getSchedules())
+        assertThat(sortedSchedules.getSchedules())
                 .extracting(Schedule::getTitle)
                 .containsExactly("가", "나", "다");
     }

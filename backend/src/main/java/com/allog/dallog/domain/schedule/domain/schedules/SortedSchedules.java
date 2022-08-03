@@ -5,7 +5,7 @@ import com.allog.dallog.domain.schedule.domain.schedules.comparator.LongTermComp
 import java.util.ArrayList;
 import java.util.List;
 
-public class LongTerms {
+public class SortedSchedules {
 
     private final List<Schedule> schedules = new ArrayList<>();
 
