@@ -138,13 +138,12 @@ const itemWithBackgroundStyle = (priority: number, color: string, isHovering: bo
   background: ${color};
 
   font-size: 3rem;
-  font-weight: 700;
   line-height: 4rem;
   white-space: nowrap;
   color: white;
 
   cursor: pointer;
-  filter: ${isHovering && 'brightness(80%)'};
+  filter: ${isHovering && 'brightness(0.95)'};
 `;
 
 const itemWithoutBackgroundStyle = (
