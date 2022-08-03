@@ -10,7 +10,7 @@ const scheduleApi = {
   },
 
   get: async (accessToken: string | null, startDate: string, endDate: string) => {
-    const response = await dallogApi.get<ScheduleResponseType[]>(
+    const response = await dallogApi.get<ScheduleResponseType>(
       `${scheduleApi.endpoint}?startDate=${startDate}&endDate=${endDate}`,
       {
         headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },

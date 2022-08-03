@@ -1,3 +1,5 @@
+import { zeroFill } from '.';
+
 const getNextYearMonth = (targetYear: number, targetMonth: number) => {
   if (targetMonth === 12) {
     return { year: targetYear + 1, month: 1 };
@@ -28,6 +30,12 @@ const getDate = () => {
 
 const getDateTime = () => {
   return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
+};
+
+const getDayFromFormattedDate = (date: string) => {
+  const newDate = new Date(`${date}T00:00:00Z`);
+
+  return newDate.getDay();
 };
 
 const getBeforeDate = (targetDay: Date, offset: number) =>
@@ -75,14 +83,20 @@ const getCalendarMonth = (year: number, month: number) => {
   });
 };
 
+const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
+  return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
+};
+
 export {
-  getNextYearMonth,
+  getBeforeDate,
   getBeforeYearMonth,
-  getThisYear,
-  getThisMonth,
+  getCalendarMonth,
   getDate,
   getDateTime,
-  getCalendarMonth,
-  getBeforeDate,
+  getDayFromFormattedDate,
+  getFormattedDate,
+  getThisYear,
+  getThisMonth,
   getNextDate,
+  getNextYearMonth,
 };
