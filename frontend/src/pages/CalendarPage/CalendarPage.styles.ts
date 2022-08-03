@@ -23,7 +23,6 @@ const monthPicker = ({ flex }: Theme) => css`
   ${flex.row}
 
   justify-content: space-around;
-  align-items: center;
 `;
 
 const todayButton = ({ colors }: Theme) => css`

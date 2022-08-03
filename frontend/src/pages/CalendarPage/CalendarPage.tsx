@@ -64,16 +64,12 @@ function CalendarPage() {
 
   const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
 
-  const { isLoading, error, data, refetch } = useQuery<
-    AxiosResponse<ScheduleResponseType>,
-    AxiosError
-  >(CACHE_KEY.SCHEDULES, () => scheduleApi.get(accessToken, startDate, endDate));
+  const { isLoading, error, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
+    [CACHE_KEY.SCHEDULES, current],
+    () => scheduleApi.get(accessToken, startDate, endDate)
+  );
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
-
-  useEffect(() => {
-    refetch();
-  }, [current]);
 
   if (isLoading || data === undefined) {
     return <>Loading</>;
@@ -98,7 +94,7 @@ function CalendarPage() {
   return (
     <PageLayout>
       <div css={calendarPage}>
-        <div css={calendarHeader(theme)}>
+        <div css={calendarHeader}>
           <span>
             {current.year}년 {current.month}월
           </span>
