@@ -114,28 +114,29 @@ function MyPage() {
             <span>이름(닉네임)</span>
             <div css={nameButtonStyle}>
               {isEditingName ? (
-                <Fieldset
-                  cssProp={inputStyle}
-                  defaultValue={displayName}
-                  placeholder={displayName}
-                  refProp={inputRef.displayName}
-                />
+                <div css={nameButtonStyle}>
+                  <Fieldset
+                    cssProp={inputStyle}
+                    defaultValue={displayName}
+                    placeholder={displayName}
+                    refProp={inputRef.displayName}
+                  />
+                  <Button
+                    cssProp={menu(theme)}
+                    onClick={() => handleClickCompleteButton(displayName)}
+                  >
+                    <AiOutlineCheck size={14} />
+                    <span css={menuTitle}>완료</span>
+                  </Button>
+                </div>
               ) : (
-                <span>{displayName}</span>
-              )}
-              {isEditingName ? (
-                <Button
-                  cssProp={menu(theme)}
-                  onClick={() => handleClickCompleteButton(displayName)}
-                >
-                  <AiOutlineCheck size={14} />
-                  <span css={menuTitle}>완료</span>
-                </Button>
-              ) : (
-                <Button cssProp={menu(theme)} onClick={handleClickModifyButton}>
-                  <FiEdit3 size={14} />
-                  <span css={menuTitle}>수정</span>
-                </Button>
+                <div css={nameButtonStyle}>
+                  <span>{displayName}</span>
+                  <Button cssProp={menu(theme)} onClick={handleClickModifyButton}>
+                    <FiEdit3 size={14} />
+                    <span css={menuTitle}>수정</span>
+                  </Button>
+                </div>
               )}
             </div>
           </div>
