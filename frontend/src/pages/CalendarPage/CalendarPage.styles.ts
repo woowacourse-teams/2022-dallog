@@ -132,17 +132,17 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean) => css`
 
 const itemWithBackgroundStyle = (priority: number, color: string, isHovering: boolean) => css`
   position: absolute;
-  top: ${priority * 5}rem;
+  top: ${priority * 5.5 + 1}rem;
 
   display: ${priority >= 4 ? 'none' : 'block'};
   width: 100%;
-  height: 4.5rem;
+  height: 5rem;
   padding: 1rem;
 
   background: ${color};
 
-  font-size: 2.5rem;
-  line-height: 2.5rem;
+  font-size: 2.75rem;
+  line-height: 2.75rem;
   white-space: nowrap;
   color: white;
 
@@ -158,7 +158,7 @@ const itemWithoutBackgroundStyle = (
 ) => css`
   ${itemWithBackgroundStyle(priority, color, isHovering)}
 
-  display: flex;
+  display: ${priority >= 4 ? 'none' : 'flex'};
   align-items: center;
 
   background: ${isHovering ? colors.GRAY_100 : 'transparent'};
