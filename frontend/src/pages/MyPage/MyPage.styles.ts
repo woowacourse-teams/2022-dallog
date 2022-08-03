@@ -30,6 +30,23 @@ const infoTableHeader = ({ colors, flex }: Theme) => css`
   font-size: 5rem;
 `;
 
+const inputStyle = {
+  div: css`
+    width: 30rem;
+    height: 3.5rem;
+
+    font-size: 3.5rem;
+  `,
+  label: css`
+    height: 0%;
+  `,
+  input: css`
+    height: 3.5rem;
+
+    font-size: 3.5rem;
+  `,
+};
+
 const textInfo = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
@@ -62,15 +79,59 @@ const imageSize = css`
   height: 40rem;
 `;
 
-const logoutButtonStyle = ({ colors }: Theme) => css`
-  padding: 2rem;
-  border-radius: 8px;
-  filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
+const menu = ({ colors }: Theme) => css`
+  position: relative;
 
-  background: ${colors.YELLOW_500};
+  width: 9rem;
+  height: 9rem;
 
-  font-size: 3rem;
-  color: ${colors.WHITE};
+  &:hover {
+    border-radius: 50%;
+
+    background: ${colors.GRAY_100};
+
+    filter: none;
+  }
+
+  &:hover span {
+    visibility: visible;
+  }
 `;
 
-export { myPage, infoTable, infoTableHeader, logoutButtonStyle, textInfo, imageInfo, imageSize };
+const menuTitle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
+`;
+
+const nameButtonStyle = ({ flex }: Theme) => css`
+  ${flex.row};
+
+  justify-content: flex-end;
+
+  gap: 2rem;
+`;
+
+export {
+  myPage,
+  infoTable,
+  infoTableHeader,
+  textInfo,
+  imageInfo,
+  imageSize,
+  inputStyle,
+  menu,
+  menuTitle,
+  nameButtonStyle,
+};
