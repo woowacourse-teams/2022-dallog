@@ -18,27 +18,29 @@ public class LongTermComparator implements Comparator<Schedule> {
         if (firstScheduleStartDateTime.isBefore(secondScheduleStartDateTime)) {
             return BEFORE;
         }
-
         if (firstScheduleStartDateTime.isAfter(secondScheduleStartDateTime)) {
             return AFTER;
         }
-
         if (firstScheduleStartDateTime.isEqual(secondScheduleStartDateTime)) {
-            LocalDateTime firstScheduleEndDateTime = firstSchedule.getEndDateTime();
-            LocalDateTime secondScheduleEndDateTime = secondSchedule.getEndDateTime();
-
-            if (firstScheduleEndDateTime.isBefore(secondScheduleEndDateTime)) {
-                return AFTER;
-            }
-            if (firstScheduleEndDateTime.isAfter(secondScheduleEndDateTime)) {
-                return BEFORE;
-            }
-
-            if (firstScheduleEndDateTime.isEqual(secondScheduleEndDateTime)) {
-                return firstSchedule.getTitle().compareTo(secondSchedule.getTitle());
-            }
+            return compareEndDateTime(firstSchedule, secondSchedule);
         }
-
         return SAME;
+    }
+
+    private int compareEndDateTime(Schedule firstSchedule, Schedule secondSchedule) {
+        LocalDateTime firstScheduleEndDateTime = firstSchedule.getEndDateTime();
+        LocalDateTime secondScheduleEndDateTime = secondSchedule.getEndDateTime();
+
+        if (firstScheduleEndDateTime.isBefore(secondScheduleEndDateTime)) {
+            return AFTER;
+        }
+        if (firstScheduleEndDateTime.isAfter(secondScheduleEndDateTime)) {
+            return BEFORE;
+        }
+        return compareByTitle(firstSchedule, secondSchedule);
+    }
+
+    private int compareByTitle(Schedule firstSchedule, Schedule secondSchedule) {
+        return firstSchedule.getTitle().compareTo(secondSchedule.getTitle());
     }
 }
