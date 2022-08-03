@@ -1,7 +1,6 @@
 package com.allog.dallog.domain.schedule.domain.schedules;
 
 import com.allog.dallog.domain.schedule.domain.Schedule;
-import com.allog.dallog.domain.schedule.domain.schedules.comparator.LongTermComparator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class SortedSchedules {
 
     public void add(final Schedule schedule) {
         schedules.add(schedule);
-        schedules.sort(new LongTermComparator());
+        schedules.sort(new ScheduleComparator());
     }
 
     public List<Schedule> getSchedules() {

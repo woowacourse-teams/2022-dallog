@@ -1,10 +1,10 @@
-package com.allog.dallog.domain.schedule.domain.schedules.comparator;
+package com.allog.dallog.domain.schedule.domain.schedules;
 
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
-public class LongTermComparator implements Comparator<Schedule> {
+public class ScheduleComparator implements Comparator<Schedule> {
 
     private static final int BEFORE = -1;
     private static final int AFTER = 1;
