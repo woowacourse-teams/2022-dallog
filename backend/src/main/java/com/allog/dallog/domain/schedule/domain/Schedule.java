@@ -3,7 +3,9 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -21,6 +23,9 @@ public class Schedule extends BaseEntity {
 
     private static final int MAX_TITLE_LENGTH = 20;
     private static final int MAX_MEMO_LENGTH = 255;
+    private static final int ONE_DAY = 1;
+    private static final int MID_NIGHT_HOUR = 0;
+    private static final int MID_NIGHT_MINUTE = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +66,20 @@ public class Schedule extends BaseEntity {
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
+    }
+
+    public long calculateHourDifference() {
+        return ChronoUnit.HOURS.between(getStartDateTime(), getEndDateTime());
+    }
+
+    public boolean isDayDifferent() {
+        long dayDifference = ChronoUnit.DAYS.between(LocalDate.from(getStartDateTime()),
+                LocalDate.from(getEndDateTime()));
+        return dayDifference >= ONE_DAY;
+    }
+
+    public boolean isMidNight() {
+        return getStartDateTime().getHour() == MID_NIGHT_HOUR && getStartDateTime().getMinute() == MID_NIGHT_MINUTE;
     }
 
     public Long getId() {
