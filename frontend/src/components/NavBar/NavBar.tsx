@@ -45,12 +45,14 @@ function NavBar() {
   return (
     <div css={navBar}>
       <div css={menus}>
-        <Button cssProp={menu(theme)} onClick={handleClickSideBarButton}>
-          {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
-          <span css={menuTitle}>메뉴</span>
-        </Button>
+        {accessToken && (
+          <Button cssProp={menu(theme)} onClick={handleClickSideBarButton}>
+            {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
+            <span css={menuTitle}>메뉴</span>
+          </Button>
+        )}
         <Button cssProp={logo(theme)} onClick={handleClickMainButton}>
-          🌙&nbsp;&nbsp;달록
+          🌙 달록
         </Button>
       </div>
       <div css={menus}>
