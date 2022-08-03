@@ -104,8 +104,18 @@ const handlers = [
     return res(ctx.status(200), ctx.json(myCategoryDB));
   }),
 
-  rest.get(API_URL + profileApi.endpoint, (req, res, ctx) => {
+  rest.get(API_URL + profileApi.endpoint.get, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(tigerProfileDB));
+  }),
+
+  rest.patch(API_URL + profileApi.endpoint.patch, (req, res, ctx) => {
+    if (!req.body) {
+      return res(ctx.status(404));
+    }
+
+    tigerProfileDB.displayName = (req.body as { displayName: string }).displayName;
+
+    return res(ctx.status(204));
   }),
 
   rest.get(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
