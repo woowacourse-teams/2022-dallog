@@ -26,11 +26,16 @@ public class LongTermComparator implements Comparator<Schedule> {
         if (firstScheduleStartDateTime.isEqual(secondScheduleStartDateTime)) {
             LocalDateTime firstScheduleEndDateTime = firstSchedule.getEndDateTime();
             LocalDateTime secondScheduleEndDateTime = secondSchedule.getEndDateTime();
+
             if (firstScheduleEndDateTime.isBefore(secondScheduleEndDateTime)) {
                 return AFTER;
             }
             if (firstScheduleEndDateTime.isAfter(secondScheduleEndDateTime)) {
                 return BEFORE;
+            }
+
+            if (firstScheduleEndDateTime.isEqual(secondScheduleEndDateTime)) {
+                return firstSchedule.getTitle().compareTo(secondSchedule.getTitle());
             }
         }
 
