@@ -20,8 +20,8 @@ const profileApi = {
     return response;
   },
 
-  patch: async (accessToken: string | null, body: { displayName: string }) => {
-    const response = await dallogApi.patch<ProfileType>(profileApi.endpoint.patch, body, {
+  patch: async (accessToken: string | null, body: Pick<ProfileType, 'displayName'>) => {
+    const response = await dallogApi.patch(profileApi.endpoint.patch, body, {
       headers: { ...profileApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 

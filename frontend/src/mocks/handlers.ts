@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
 import { CategoryType } from '@/@types/category';
+import { ProfileType } from '@/@types/profile';
 import { ScheduleType } from '@/@types/schedule';
 import { SubscriptionType } from '@/@types/subscription';
 
@@ -113,7 +114,7 @@ const handlers = [
       return res(ctx.status(404));
     }
 
-    tigerProfileDB.displayName = (req.body as { displayName: string }).displayName;
+    tigerProfileDB.displayName = (req.body as Pick<ProfileType, 'displayName'>).displayName;
 
     return res(ctx.status(204));
   }),
