@@ -6,14 +6,18 @@ import java.util.List;
 
 public class SortedSchedules {
 
-    private final List<Schedule> schedules = new ArrayList<>();
+    private final List<Schedule> values;
 
-    public void add(final Schedule schedule) {
-        schedules.add(schedule);
-        schedules.sort(new ScheduleComparator());
+    public SortedSchedules() {
+        this.values = new ArrayList<>();
     }
 
-    public List<Schedule> getSchedules() {
-        return new ArrayList<>(schedules);
+    public void add(final Schedule schedule) {
+        values.add(schedule);
+        values.sort(new ScheduleComparator());
+    }
+
+    public List<Schedule> getValues() {
+        return List.copyOf(values);
     }
 }

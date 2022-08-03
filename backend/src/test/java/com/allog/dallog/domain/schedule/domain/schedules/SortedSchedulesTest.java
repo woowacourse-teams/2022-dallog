@@ -31,7 +31,7 @@ class SortedSchedulesTest {
         sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(sortedSchedules.getSchedules())
+        assertThat(sortedSchedules.getValues())
                 .extracting(Schedule::getTitle)
                 .containsExactly("일정1", "일정2", "일정3");
     }
@@ -56,7 +56,7 @@ class SortedSchedulesTest {
         sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(sortedSchedules.getSchedules())
+        assertThat(sortedSchedules.getValues())
                 .extracting(Schedule::getTitle)
                 .containsExactly("일정1", "일정2", "일정3");
     }
@@ -81,7 +81,7 @@ class SortedSchedulesTest {
         sortedSchedules.add(첫번째로_정렬되어야_하는_일정);
 
         // then
-        assertThat(sortedSchedules.getSchedules())
+        assertThat(sortedSchedules.getValues())
                 .extracting(Schedule::getTitle)
                 .containsExactly("가", "나", "다");
     }
