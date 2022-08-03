@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -28,12 +29,15 @@ import {
   infoTable,
   infoTableHeader,
   inputStyle,
+  menu,
+  menuTitle,
   myPage,
   nameButtonStyle,
   textInfo,
 } from './MyPage.styles';
 
 function MyPage() {
+  const theme = useTheme();
   const [isEditingName, setEditingName] = useState(false);
 
   const inputRef = {
@@ -101,8 +105,9 @@ function MyPage() {
         <div css={infoTable}>
           <div css={infoTableHeader}>
             <span>프로필</span>
-            <Button onClick={handleClickLogoutButton}>
+            <Button cssProp={menu(theme)} onClick={handleClickLogoutButton}>
               <RiLogoutBoxRLine size={20} />
+              <span css={menuTitle}>로그아웃</span>
             </Button>
           </div>
           <div css={textInfo}>
@@ -119,12 +124,17 @@ function MyPage() {
                 <span>{displayName}</span>
               )}
               {isEditingName ? (
-                <Button onClick={() => handleClickCompleteButton(displayName)}>
+                <Button
+                  cssProp={menu(theme)}
+                  onClick={() => handleClickCompleteButton(displayName)}
+                >
                   <AiOutlineCheck size={14} />
+                  <span css={menuTitle}>완료</span>
                 </Button>
               ) : (
-                <Button onClick={handleClickModifyButton}>
+                <Button cssProp={menu(theme)} onClick={handleClickModifyButton}>
                   <FiEdit3 size={14} />
+                  <span css={menuTitle}>수정</span>
                 </Button>
               )}
             </div>

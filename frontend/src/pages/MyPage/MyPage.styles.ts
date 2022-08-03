@@ -79,6 +79,42 @@ const imageSize = css`
   height: 40rem;
 `;
 
+const menu = ({ colors }: Theme) => css`
+  position: relative;
+
+  width: 9rem;
+  height: 9rem;
+
+  &:hover {
+    border-radius: 50%;
+
+    background: ${colors.GRAY_100};
+
+    filter: none;
+  }
+
+  &:hover span {
+    visibility: visible;
+  }
+`;
+
+const menuTitle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
+`;
+
 const nameButtonStyle = ({ flex }: Theme) => css`
   ${flex.row};
 
@@ -95,5 +131,7 @@ export {
   imageInfo,
   imageSize,
   inputStyle,
+  menu,
+  menuTitle,
   nameButtonStyle,
 };
