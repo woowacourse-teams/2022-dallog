@@ -2,6 +2,8 @@ import { ScheduleType } from '@/@types/schedule';
 
 import { getFormattedDate } from '@/utils/date';
 
+import useCalendar from './useCalendar';
+
 interface DateType {
   year: number;
   month: number;
@@ -9,7 +11,9 @@ interface DateType {
   day: number;
 }
 
-function useSchedulePriority(calendarMonth: Array<DateType>) {
+function useSchedulePriority() {
+  const { calendarMonth } = useCalendar();
+
   const calendarInfoWithPriority = calendarMonth.reduce(
     (
       acc: {
@@ -166,4 +170,5 @@ function useSchedulePriority(calendarMonth: Array<DateType>) {
     getFewHoursPriority,
   };
 }
+
 export default useSchedulePriority;

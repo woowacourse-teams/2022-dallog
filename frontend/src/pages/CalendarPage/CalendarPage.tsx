@@ -44,11 +44,12 @@ import {
 } from './CalendarPage.styles';
 
 function CalendarPage() {
-  const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
-
   const theme = useTheme();
+
   const { accessToken } = useRecoilValue(userState);
+
   const [hoveringId, setHoveringId] = useState(0);
+
   const {
     calendarMonth,
     current,
@@ -58,8 +59,10 @@ function CalendarPage() {
     startDate,
     endDate,
   } = useCalendar();
-  const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } =
-    useSchedulePriority(calendarMonth);
+
+  const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } = useSchedulePriority();
+
+  const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
 
   const { isLoading, error, data, refetch } = useQuery<
     AxiosResponse<ScheduleResponseType>,
