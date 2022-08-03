@@ -30,6 +30,23 @@ const infoTableHeader = ({ colors, flex }: Theme) => css`
   font-size: 5rem;
 `;
 
+const inputStyle = {
+  div: css`
+    width: 30rem;
+    height: 3.5rem;
+
+    font-size: 3.5rem;
+  `,
+  label: css`
+    height: 0%;
+  `,
+  input: css`
+    height: 3.5rem;
+
+    font-size: 3.5rem;
+  `,
+};
+
 const textInfo = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
@@ -62,15 +79,21 @@ const imageSize = css`
   height: 40rem;
 `;
 
-const logoutButtonStyle = ({ colors }: Theme) => css`
-  padding: 2rem;
-  border-radius: 8px;
-  filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
+const nameButtonStyle = ({ flex }: Theme) => css`
+  ${flex.row};
 
-  background: ${colors.YELLOW_500};
+  justify-content: flex-end;
 
-  font-size: 3rem;
-  color: ${colors.WHITE};
+  gap: 2rem;
 `;
 
-export { myPage, infoTable, infoTableHeader, logoutButtonStyle, textInfo, imageInfo, imageSize };
+export {
+  myPage,
+  infoTable,
+  infoTableHeader,
+  textInfo,
+  imageInfo,
+  imageSize,
+  inputStyle,
+  nameButtonStyle,
+};
