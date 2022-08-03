@@ -36,9 +36,7 @@ function useSchedulePriority(calendarMonth: Array<DateType>) {
       const scheduleRange = calendarMonth
         .filter((el) => {
           const date = getFormattedDate(el.year, el.month, el.date);
-          if (startDate <= date && date <= endDate) {
-            return true;
-          }
+          return startDate <= date && date <= endDate;
         })
         .map((el) => getFormattedDate(el.year, el.month, el.date));
 
