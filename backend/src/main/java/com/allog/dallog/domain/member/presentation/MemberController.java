@@ -4,8 +4,11 @@ import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +26,12 @@ public class MemberController {
     public ResponseEntity<MemberResponse> findMe(@AuthenticationPrincipal LoginMember loginMember) {
         MemberResponse response = memberService.findById(loginMember.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping
+    public ResponseEntity<Void> update(@AuthenticationPrincipal LoginMember loginMember,
+                                       @RequestBody final MemberUpdateRequest request) {
+        memberService.update(loginMember.getId(), request);
+        return ResponseEntity.noContent().build();
     }
 }

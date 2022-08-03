@@ -19,6 +19,8 @@ import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -278,7 +280,7 @@ class CategoryControllerTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(BE_일정_이름);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+        mockMvc.perform(patch("/api/categories/{categoryId}", categoryId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -308,7 +310,7 @@ class CategoryControllerTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(BE_일정_이름);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+        mockMvc.perform(patch("/api/categories/{categoryId}", categoryId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -338,7 +340,7 @@ class CategoryControllerTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest(INVALID_CATEGORY_NAME);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.patch("/api/categories/{categoryId}", categoryId)
+        mockMvc.perform(patch("/api/categories/{categoryId}", categoryId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -366,7 +368,7 @@ class CategoryControllerTest {
                 .update(any(), any(), any());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/categories/{categoryId}", categoryId)
+        mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -395,7 +397,7 @@ class CategoryControllerTest {
                 .delete(any(), any());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/categories/{categoryId}", categoryId)
+        mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
