@@ -12,6 +12,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
+import Spinner from '@/components/@common/Spinner/Spinner';
 
 import { CACHE_KEY, CONFIRM_MESSAGE, PATH } from '@/constants';
 
@@ -33,6 +34,7 @@ import {
   menuTitle,
   myPage,
   nameButtonStyle,
+  spinnerStyle,
   textInfo,
 } from './MyPage.styles';
 
@@ -67,7 +69,13 @@ function MyPage() {
   );
 
   if (isLoading || profileGetResponse === undefined) {
-    return <div>Loading</div>;
+    return (
+      <PageLayout>
+        <div css={spinnerStyle}>
+          <Spinner size={30} />
+        </div>
+      </PageLayout>
+    );
   }
 
   if (error) {

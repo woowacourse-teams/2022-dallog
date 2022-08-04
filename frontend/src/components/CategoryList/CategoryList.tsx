@@ -9,6 +9,7 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
+import Spinner from '@/components/@common/Spinner/Spinner';
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
 
@@ -58,11 +59,11 @@ function CategoryList({ keyword }: CategoryListProps) {
   });
 
   if (isCategoriesLoading || categoriesGetResponse === undefined) {
-    return <div>Loading</div>;
+    return <Spinner size={30} />;
   }
 
   if (isSubscriptionsLoading || subscriptionsGetResponse === undefined) {
-    return <div>구독 Loading</div>;
+    return <Spinner size={30} />;
   }
 
   const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.categories);

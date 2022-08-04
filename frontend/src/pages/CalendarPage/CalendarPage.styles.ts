@@ -177,6 +177,13 @@ const circleStyle = (color: string) => css`
   background: ${color};
 `;
 
+const spinnerStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  width: 100%;
+  height: 100%;
+`;
+
 export {
   calendarGrid,
   calendarHeader,
@@ -191,5 +198,6 @@ export {
   navBarGrid,
   navButton,
   navButtonTitle,
+  spinnerStyle,
   todayButton,
 };

@@ -11,6 +11,7 @@ import { sideBarState, userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import Spinner from '@/components/@common/Spinner/Spinner';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import MyCategoryItem from '@/components/MyCategoryItem/MyCategoryItem';
 
@@ -20,7 +21,13 @@ import categoryApi from '@/api/category';
 
 import { FiPlus } from 'react-icons/fi';
 
-import { buttonStyle, contentStyle, headerStyle, listStyle } from './MyCategoryList.styles';
+import {
+  buttonStyle,
+  contentStyle,
+  headerStyle,
+  listStyle,
+  spinnerStyle,
+} from './MyCategoryList.styles';
 
 function MyCategoryList() {
   const theme = useTheme();
@@ -29,13 +36,17 @@ function MyCategoryList() {
 
   const { state: isCategoryAddModalOpen, toggleState: toggleCategoryAddModalOpen } = useToggle();
 
-  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+  const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
     () => categoryApi.getMy(accessToken)
   );
 
-  if (data === undefined) {
-    return <div>Loading</div>;
+  if (isLoading || data === undefined) {
+    return (
+      <div css={spinnerStyle}>
+        <Spinner size={10} />
+      </div>
+    );
   }
 
   return (

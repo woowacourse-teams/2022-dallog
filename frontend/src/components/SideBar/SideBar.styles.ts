@@ -1,7 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
 const sideBar = ({ colors }: Theme, isSideBarOpen: boolean) => css`
-  overflow: overlay;
+  overflow-y: overlay;
+  overflow-x: hidden;
   position: fixed;
   z-index: 10;
 

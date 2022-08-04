@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
@@ -15,6 +15,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
+import Spinner from '@/components/@common/Spinner/Spinner';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
@@ -40,6 +41,7 @@ import {
   navBarGrid,
   navButton,
   navButtonTitle,
+  spinnerStyle,
   todayButton,
 } from './CalendarPage.styles';
 
@@ -72,7 +74,13 @@ function CalendarPage() {
   const rowNum = Math.ceil(calendarMonth.length / 7);
 
   if (isLoading || data === undefined) {
-    return <>Loading</>;
+    return (
+      <PageLayout>
+        <div css={spinnerStyle}>
+          <Spinner size={30} />
+        </div>
+      </PageLayout>
+    );
   }
 
   if (error) {
