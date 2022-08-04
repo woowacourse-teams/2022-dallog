@@ -41,20 +41,17 @@ const handlers = [
   }),
 
   rest.post<Pick<CategoryType, 'name'>>(API_URL + categoryApi.endpoint.entire, (req, res, ctx) => {
-    categoryDB.categories.push({
+    const newCategory: CategoryType = {
       ...req.body,
       id: categoryDB.categories.length + 1,
       createdAt: new Date().toISOString().slice(0, -5),
       creator: tigerProfileDB,
-    });
-    myCategoryDB.categories.push({
-      ...req.body,
-      id: categoryDB.categories.length + 1,
-      createdAt: new Date().toISOString().slice(0, -5),
-      creator: tigerProfileDB,
-    });
+    };
 
-    return res(ctx.status(201));
+    categoryDB.categories.push(newCategory);
+    myCategoryDB.categories.push(newCategory);
+
+    return res(ctx.status(201), ctx.json(newCategory));
   }),
 
   rest.patch<Pick<CategoryType, 'name'>>(
