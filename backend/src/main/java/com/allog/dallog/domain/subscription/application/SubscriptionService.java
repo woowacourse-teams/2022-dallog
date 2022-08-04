@@ -65,7 +65,11 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public void update(final Long id, final SubscriptionUpdateRequest request) {
+    public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
+        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
+            throw new NoPermissionException();
+        }
+
         Subscription subscription = getSubscription(id);
         subscription.change(request.getColor(), request.isChecked());
     }

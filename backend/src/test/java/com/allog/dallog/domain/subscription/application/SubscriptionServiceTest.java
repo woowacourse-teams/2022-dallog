@@ -149,7 +149,7 @@ class SubscriptionServiceTest {
 
         // when
         SubscriptionUpdateRequest request = new SubscriptionUpdateRequest("#FF0000", true);
-        subscriptionService.update(response.getId(), request);
+        subscriptionService.update(response.getId(), 후디.getId(), request);
 
         // then
         assertAll(() -> {
