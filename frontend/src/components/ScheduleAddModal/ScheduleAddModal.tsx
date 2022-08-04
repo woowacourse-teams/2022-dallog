@@ -39,6 +39,7 @@ interface ScheduleAddModalProps {
 }
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
+  const [categoryId, setCategoryId] = useState(0);
   const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
@@ -60,7 +61,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     AxiosError,
     Omit<ScheduleType, 'id'>,
     unknown
-  >(scheduleApi.post, {
+  >((body) => scheduleApi.post(categoryId, body), {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
@@ -93,6 +94,12 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     postSchedule(body);
   };
 
+  const handleChangeMyCategorySelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = Number(target.value);
+
+    setCategoryId(categoryId);
+  };
+
   const onSuccessPostSchedule = () => {
     queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
     closeModal();
@@ -115,12 +122,12 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
-        <select id="myCategories" css={categorySelect}>
+        <select id="myCategories" css={categorySelect} onChange={handleChangeMyCategorySelect}>
           <option value="" disabled>
             카테고리
           </option>
           {myCategoriesGetResponse?.data.map((category) => (
-            <option key={category.id} value={category.name}>
+            <option key={category.id} value={category.id}>
               {category.name}
             </option>
           ))}
