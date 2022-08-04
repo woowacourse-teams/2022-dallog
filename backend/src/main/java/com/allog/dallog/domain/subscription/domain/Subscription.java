@@ -60,6 +60,12 @@ public class Subscription extends BaseEntity {
         }
     }
 
+    public void change(final String color, final boolean checked) {
+        validateColor(color);
+        this.color = color;
+        this.checked = checked;
+    }
+
     public Long getId() {
         return id;
     }
