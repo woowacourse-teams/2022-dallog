@@ -147,6 +147,7 @@ const handlers = [
           createdAt: categoryDB.categories[categoryId - 1].createdAt,
         },
         color: req.body.color,
+        checked: true,
       };
 
       subscriptionDB.subscriptions.push(newSubscription);

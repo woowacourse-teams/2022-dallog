@@ -9,6 +9,7 @@ interface SubscriptionType {
     createdAt: string;
   };
   color: string;
+  checked: string;
 }
 
 export { SubscriptionType };

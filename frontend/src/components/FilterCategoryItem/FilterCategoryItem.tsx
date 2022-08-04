@@ -7,7 +7,7 @@ import Button from '@/components/@common/Button/Button';
 import { PALETTE } from '@/constants';
 
 import { BiPalette } from 'react-icons/bi';
-import { RiCheckboxFill } from 'react-icons/ri';
+import { RiCheckboxBlankLine, RiCheckboxFill } from 'react-icons/ri';
 
 import {
   checkBoxNameStyle,
@@ -30,7 +30,15 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
   return (
     <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
-        <RiCheckboxFill size={20} color={subscription.color} />
+        {subscription.checked ? (
+          <Button>
+            <RiCheckboxFill size={20} color={subscription.color} />
+          </Button>
+        ) : (
+          <Button>
+            <RiCheckboxBlankLine size={20} color={subscription.color} />
+          </Button>
+        )}
         <span css={nameStyle}>{subscription.category.name}</span>
       </div>
       <div css={paletteLayoutStyle}>

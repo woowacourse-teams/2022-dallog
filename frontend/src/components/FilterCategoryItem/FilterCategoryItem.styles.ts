@@ -31,10 +31,6 @@ const nameStyle = css`
 
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const colorStyle = (color: string) => css`
