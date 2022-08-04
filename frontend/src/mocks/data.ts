@@ -322,6 +322,7 @@ const subscriptionDB = {
         createdAt: '2022-07-19T16:42',
       },
       color: '#123efa',
+      checked: true,
     },
     {
       id: 2,
@@ -337,6 +338,7 @@ const subscriptionDB = {
         createdAt: '2022-07-19T16:42',
       },
       color: '#123423',
+      checked: true,
     },
     {
       id: 3,
@@ -352,6 +354,7 @@ const subscriptionDB = {
         createdAt: '2022-07-19T16:42',
       },
       color: '#876453',
+      checked: false,
     },
   ],
 };

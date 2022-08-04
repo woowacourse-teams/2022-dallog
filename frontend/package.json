@@ -1,6 +1,6 @@
 {
   "name": "dallog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "share calendar dallog",
   "main": "index.js",
   "scripts": {
