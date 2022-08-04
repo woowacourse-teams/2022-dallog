@@ -8,6 +8,7 @@ const subscriptionApi = {
   endpoint: {
     get: '/api/members/me/subscriptions',
     post: (categoryId: number) => `/api/members/me/categories/${categoryId}/subscriptions`,
+    patch: (subscriptionId: number) => `/api/members/me/subscriptions/${subscriptionId}`,
     delete: (subscriptionId: number) => `/api/members/me/subscriptions/${subscriptionId}`,
   },
 
@@ -33,6 +34,18 @@ const subscriptionApi = {
     body: Pick<SubscriptionType, 'color'>
   ) => {
     const response = await dallogApi.post(subscriptionApi.endpoint.post(categoryId), body, {
+      headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
+    });
+
+    return response;
+  },
+
+  patch: async (
+    accessToken: string | null,
+    subscriptionId: number,
+    body: Pick<SubscriptionType, 'color'> | Pick<SubscriptionType, 'checked'>
+  ) => {
+    const response = await dallogApi.patch(subscriptionApi.endpoint.patch(subscriptionId), body, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });
 
