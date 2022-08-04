@@ -133,7 +133,7 @@ class ScheduleServiceTest {
         ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 999L, 일정_생성_요청)).
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 0L, 일정_생성_요청)).
                 isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -165,7 +165,7 @@ class ScheduleServiceTest {
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
         scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
-        Long 잘못된_아이디 = 999L;
+        Long 잘못된_아이디 = 0L;
 
         // when & then
         assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디))

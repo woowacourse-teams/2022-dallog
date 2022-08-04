@@ -104,7 +104,7 @@ class ScheduleControllerTest {
     @Test
     void 일정_생성시_전달한_카테고리가_존재하지_않는다면_404를_반환한다() throws Exception {
         // given
-        Long categoryId = 999L;
+        Long categoryId = 0L;
         ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
 
         given(scheduleService.save(any(), any(), any())).willThrow(new NoSuchCategoryException());

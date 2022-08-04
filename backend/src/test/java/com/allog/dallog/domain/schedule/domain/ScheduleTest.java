@@ -25,7 +25,7 @@ public class ScheduleTest {
         Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertDoesNotThrow(() -> new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, BE_일정_카테고리));
+        assertDoesNotThrow(() -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모));
     }
 
     @DisplayName("일정 제목의 길이가 20을 초과하는 경우 예외를 던진다.")
@@ -36,7 +36,7 @@ public class ScheduleTest {
         Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertThatThrownBy(() -> new Schedule(잘못된_일정_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, BE_일정_카테고리))
+        assertThatThrownBy(() -> new Schedule(BE_일정_카테고리, 잘못된_일정_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모))
                 .isInstanceOf(InvalidScheduleException.class);
     }
 
@@ -48,7 +48,7 @@ public class ScheduleTest {
         Category BE_일정_카테고리 = BE_일정(관리자());
 
         // when & then
-        assertThatThrownBy(() -> new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 잘못된_메모, BE_일정_카테고리))
+        assertThatThrownBy(() -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 잘못된_메모))
                 .isInstanceOf(InvalidScheduleException.class);
     }
 }

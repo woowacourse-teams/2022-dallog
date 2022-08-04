@@ -27,6 +27,10 @@ public class Schedule extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categories_id", nullable = false)
+    private Category category;
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -36,21 +40,18 @@ public class Schedule extends BaseEntity {
     @Column(name = "memo", nullable = false)
     private String memo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categories_id", nullable = false)
-    private Category category;
 
     protected Schedule() {
     }
 
-    public Schedule(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
-                    final String memo, final Category category) {
+    public Schedule(final Category category, final String title, final LocalDateTime startDateTime,
+                    final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
         validateMemoLength(memo);
+        this.category = category;
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
-        this.category = category;
     }
 
     private void validateTitleLength(final String title) {
@@ -67,6 +68,10 @@ public class Schedule extends BaseEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getCategoryId() {
+        return category.getId();
     }
 
     public String getTitle() {
@@ -87,9 +92,5 @@ public class Schedule extends BaseEntity {
 
     public Category getCategory() {
         return category;
-    }
-
-    public Long getCategoryId() {
-        return category.getId();
     }
 }

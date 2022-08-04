@@ -32,7 +32,7 @@ public class ScheduleCreateRequest {
     }
 
     public Schedule toEntity(final Category category) {
-        return new Schedule(title, startDateTime, endDateTime, memo, category);
+        return new Schedule(category, title, startDateTime, endDateTime, memo);
     }
 
     public String getTitle() {

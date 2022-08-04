@@ -35,11 +35,11 @@ public class ScheduleFixtures {
             알록달록_회식_종료일시, 알록달록_회식_메모);
 
     public static Schedule 알록달록_회의(final Category category) {
-        return new Schedule(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, category);
+        return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
     }
 
     public static Schedule 알록달록_회식(final Category category) {
-        return new Schedule(알록달록_회식_제목, 알록달록_회식_시작일시, 알록달록_회식_종료일시, 알록달록_회식_메모, category);
+        return new Schedule(category, 알록달록_회식_제목, 알록달록_회식_시작일시, 알록달록_회식_종료일시, 알록달록_회식_메모);
     }
 
     public static ScheduleResponse 알록달록_회의_응답() {
