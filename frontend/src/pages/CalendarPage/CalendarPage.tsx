@@ -147,6 +147,7 @@ function CalendarPage() {
                     startDate <= nowDate &&
                     nowDate <= endDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.color,
@@ -168,6 +169,7 @@ function CalendarPage() {
                   return (
                     startDate === nowDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.color,
@@ -189,6 +191,7 @@ function CalendarPage() {
                   return (
                     startDate === nowDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithoutBackgroundStyle(
                           theme,
                           el.priority,
