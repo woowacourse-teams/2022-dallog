@@ -16,6 +16,17 @@ const form = ({ flex }: Theme) => css`
   justify-content: space-between;
 `;
 
+const categorySelect = ({ colors }: Theme) => css`
+  padding: 3rem;
+
+  width: 100%;
+  height: 13rem;
+  border-radius: 8px;
+  border: 1px solid ${colors.GRAY_400};
+
+  font-size: 5rem;
+`;
+
 const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
   width: 100%;
   height: 9rem;
@@ -78,6 +89,7 @@ const saveButton = ({ colors }: Theme) => css`
 export {
   allDayButton,
   arrow,
+  categorySelect,
   cancelButton,
   controlButtons,
   dateTime,

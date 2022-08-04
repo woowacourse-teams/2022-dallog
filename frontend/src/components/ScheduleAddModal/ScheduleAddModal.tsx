@@ -1,9 +1,13 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
+import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -13,12 +17,14 @@ import { CACHE_KEY } from '@/constants';
 import { createPostBody } from '@/utils';
 import { getDate, getDateTime } from '@/utils/date';
 
+import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
 
 import {
   allDayButton,
   arrow,
   cancelButton,
+  categorySelect,
   controlButtons,
   dateTime,
   form,
@@ -34,7 +40,15 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
+  const { accessToken } = useRecoilValue(userState);
+
   const queryClient = useQueryClient();
+
+  const { data: myCategoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+    CACHE_KEY.MY_CATEGORIES,
+    () => categoryApi.getMy(accessToken)
+  );
+
   const {
     isLoading,
     error,
@@ -99,6 +113,16 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
+        <select id="myCategories" css={categorySelect}>
+          <option value="" disabled>
+            카테고리
+          </option>
+          {myCategoriesGetResponse?.data.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <Fieldset placeholder="제목을 입력하세요." refProp={inputRef.title} />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
