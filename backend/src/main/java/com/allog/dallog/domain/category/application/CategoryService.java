@@ -83,4 +83,10 @@ public class CategoryService {
             throw new NoPermissionException();
         }
     }
+
+    public void validateCreatorBy(final Long memberId, final Category category) {
+        if (!category.isCreator(memberId)) {
+            throw new NoPermissionException();
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.schedule.application;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
@@ -32,7 +31,7 @@ public class ScheduleService {
     @Transactional
     public Long save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
-        validateCategoryCreatorBy(memberId, category);
+        categoryService.validateCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return schedule.getId();
     }
@@ -61,7 +60,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(NoSuchScheduleException::new);
 
-        validateCategoryCreatorBy(memberId, schedule.getCategory());
+        categoryService.validateCreatorBy(memberId, schedule.getCategory());
 
         schedule.changeTitle(request.getTitle());
         schedule.changePeriod(request.getStartDateTime(), request.getEndDateTime());
@@ -73,13 +72,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(NoSuchScheduleException::new);
 
-        validateCategoryCreatorBy(memberId, schedule.getCategory());
+        categoryService.validateCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);
-    }
-
-    private void validateCategoryCreatorBy(final Long memberId, final Category category) {
-        if (!category.isCreator(memberId)) {
-            throw new NoPermissionException();
-        }
     }
 }
