@@ -3,6 +3,7 @@ package com.allog.dallog.acceptance;
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
+import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.구독_목록을_조회한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
@@ -22,6 +23,7 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
@@ -84,9 +86,9 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
         SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(accessToken, 공통_일정.getId(), 빨간색_구독_생성_요청);
+        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest("#FF0000", true);
 
         // when
-        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest("#FF0000", true);
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -96,8 +98,20 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.NO_CONTENT.value())
                 .extract();
 
+        SubscriptionsResponse subscriptionsResponse = 구독_목록을_조회한다(accessToken).as(SubscriptionsResponse.class);
+
         // then
-        상태코드_204가_반환된다(response);
+        List<SubscriptionResponse> subscriptions = subscriptionsResponse.getSubscriptions();
+        SubscriptionResponse foundSubscriptionResponse = subscriptions.stream()
+                .filter(subscription -> subscriptionResponse.getId().equals(subscription.getId()))
+                .findAny()
+                .get();
+
+        assertAll(() -> {
+            상태코드_204가_반환된다(response);
+            assertThat(foundSubscriptionResponse.getColor()).isEqualTo(request.getColor());
+            assertThat(foundSubscriptionResponse.isChecked()).isTrue();
+        });
     }
 
     @DisplayName("구독을 취소할 경우 204를 반환한다.")
@@ -148,15 +162,5 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.CREATED.value())
                 .extract()
                 .as(SubscriptionResponse.class);
-    }
-
-    private ExtractableResponse<Response> 구독_목록을_조회한다(final String accessToken) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/members/me/subscriptions")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract();
     }
 }

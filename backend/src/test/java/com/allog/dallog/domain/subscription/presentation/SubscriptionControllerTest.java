@@ -181,7 +181,6 @@ class SubscriptionControllerTest {
         // when & then
         mockMvc.perform(patch("/api/members/me/subscriptions/{subscriptionId}", 빨간색_구독_응답.getId())
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
@@ -215,7 +214,6 @@ class SubscriptionControllerTest {
         // when & then
         mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 빨간색_구독_응답.getId())
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("subscription/delete",
@@ -243,7 +241,6 @@ class SubscriptionControllerTest {
         // when & then
         mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 1L)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                        .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("subscription/permission",
