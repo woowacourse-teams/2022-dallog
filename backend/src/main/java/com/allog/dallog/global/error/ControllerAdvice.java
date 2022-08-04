@@ -64,7 +64,6 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchScheduleException.class,
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class,
