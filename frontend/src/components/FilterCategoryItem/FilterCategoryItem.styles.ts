@@ -21,6 +21,10 @@ const checkBoxNameStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
   gap: 1rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const nameStyle = css`
