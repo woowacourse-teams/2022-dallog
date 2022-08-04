@@ -6,7 +6,7 @@ const myPage = css`
   transform: translateY(-40%);
 
   width: 100%;
-  height: 100%;
+  height: 80%;
   padding: 2rem;
 `;
 
@@ -123,6 +123,13 @@ const nameButtonStyle = ({ flex }: Theme) => css`
   gap: 2rem;
 `;
 
+const spinnerStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  width: 100%;
+  height: 100%;
+`;
+
 export {
   myPage,
   infoTable,
@@ -134,4 +141,5 @@ export {
   menu,
   menuTitle,
   nameButtonStyle,
+  spinnerStyle,
 };

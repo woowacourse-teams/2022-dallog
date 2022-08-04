@@ -49,4 +49,13 @@ const contentStyle = css`
   width: 100%;
 `;
 
-export { buttonStyle, contentStyle, headerStyle, listStyle };
+const spinnerStyle = ({ flex }: Theme) => css`
+  ${flex.column}
+
+  gap:5rem;
+
+  width: 100%;
+  height: 50%;
+`;
+
+export { buttonStyle, contentStyle, headerStyle, listStyle, spinnerStyle };

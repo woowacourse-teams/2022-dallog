@@ -31,4 +31,13 @@ const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
   font-size: 4rem;
 `;
 
-export { contentStyle, headerStyle, listStyle };
+const spinnerStyle = ({ flex }: Theme) => css`
+  ${flex.column}
+
+  gap:5rem;
+
+  width: 100%;
+  height: 50%;
+`;
+
+export { contentStyle, headerStyle, listStyle, spinnerStyle };

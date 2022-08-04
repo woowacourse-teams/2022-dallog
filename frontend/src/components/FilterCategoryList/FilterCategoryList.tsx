@@ -7,13 +7,14 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
+import Spinner from '@/components/@common/Spinner/Spinner';
 import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
 
 import { CACHE_KEY } from '@/constants';
 
 import subscriptionApi from '@/api/subscription';
 
-import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
+import { contentStyle, headerStyle, listStyle, spinnerStyle } from './FilterCategoryList.styles';
 
 function FilterCategoryList() {
   const isSideBarOpen = useRecoilValue(sideBarState);
@@ -21,13 +22,17 @@ function FilterCategoryList() {
 
   const theme = useTheme();
 
-  const { data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
+  const { isLoading, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
     CACHE_KEY.SUBSCRIPTIONS,
     () => subscriptionApi.get(accessToken)
   );
 
-  if (data === undefined) {
-    return <div>Loading</div>;
+  if (isLoading || data === undefined) {
+    return (
+      <div css={spinnerStyle}>
+        <Spinner size={10} />
+      </div>
+    );
   }
 
   return (
