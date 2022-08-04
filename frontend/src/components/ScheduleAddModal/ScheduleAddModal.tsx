@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import { CalendarType } from '@/@types/calendar';
 import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
 
@@ -33,10 +34,11 @@ import {
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
+  dateInfo: CalendarType | null;
   closeModal: () => void;
 }
 
-function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
+function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
@@ -103,11 +105,11 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   const dateFieldset = isAllDay
     ? {
         type: 'date',
-        defaultValue: getDate(),
+        defaultValue: getDate(dateInfo),
       }
     : {
         type: 'datetime-local',
-        defaultValue: getDateTime(),
+        defaultValue: getDateTime(dateInfo),
       };
 
   return (
