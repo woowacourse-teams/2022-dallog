@@ -20,6 +20,7 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.subscription.dto.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -136,6 +137,25 @@ class SubscriptionServiceTest {
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
+    }
+
+    @DisplayName("구독 정보를 수정한다.")
+    @Test
+    void 구독_정보를_수정한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+
+        // when
+        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest("#FF0000", true);
+        subscriptionService.update(response.getId(), request);
+
+        // then
+        assertAll(() -> {
+            assertThat(request.getColor()).isEqualTo("#FF0000");
+            assertThat(request.isChecked()).isTrue();
+        });
     }
 
     @DisplayName("구독 정보를 삭제한다.")

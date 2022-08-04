@@ -7,6 +7,7 @@ import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
+import com.allog.dallog.domain.subscription.dto.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -58,10 +59,20 @@ public class SubscriptionService {
     }
 
     public SubscriptionResponse findById(final Long id) {
-        Subscription subscription = subscriptionRepository.findById(id)
-                .orElseThrow(NoSuchSubscriptionException::new);
+        Subscription subscription = getSubscription(id);
 
         return new SubscriptionResponse(subscription);
+    }
+
+    @Transactional
+    public void update(final Long id, final SubscriptionUpdateRequest request) {
+        Subscription subscription = getSubscription(id);
+        subscription.change(request.getColor(), request.isChecked());
+    }
+
+    private Subscription getSubscription(final Long id) {
+        return subscriptionRepository.findById(id)
+                .orElseThrow(NoSuchSubscriptionException::new);
     }
 
     @Transactional
