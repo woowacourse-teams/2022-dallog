@@ -1,3 +1,5 @@
+import { CalendarType } from '@/@types/calendar';
+
 import { zeroFill } from '.';
 
 const getNextYearMonth = (targetYear: number, targetMonth: number) => {
@@ -24,12 +26,27 @@ const getThisMonth = () => {
   return new Date().getMonth() + 1;
 };
 
-const getDate = () => {
-  return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
+const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
+  if (dateInfo === null) {
+    return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
+  }
+
+  const { year, month, date } = dateInfo;
+
+  return new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString().split('T')[0];
 };
 
-const getDateTime = () => {
-  return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
+const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
+  if (dateInfo === null) {
+    return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
+  }
+
+  const { year, month, date } = dateInfo;
+
+  return new Date(+new Date(year, month - 1, date) + 3240 * 10000)
+    .toISOString()
+    .replace(/\..*/, '')
+    .slice(0, -3);
 };
 
 const getDayFromFormattedDate = (date: string) => {

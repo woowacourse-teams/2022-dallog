@@ -8,6 +8,7 @@ import useCalendar from '@/hooks/useCalendar';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
+import { CalendarType } from '@/@types/calendar';
 import { ScheduleResponseType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
@@ -51,6 +52,7 @@ function CalendarPage() {
   const { accessToken } = useRecoilValue(userState);
 
   const [hoveringId, setHoveringId] = useState(0);
+  const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
 
   const {
     calendarMonth,
@@ -72,6 +74,11 @@ function CalendarPage() {
   );
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
+
+  const handleClickDate = (info: CalendarType) => {
+    setDateInfo(info);
+    toggleCalendarAddModalOpen();
+  };
 
   if (isLoading || data === undefined) {
     return (
@@ -132,7 +139,11 @@ function CalendarPage() {
             const key = getFormattedDate(info.year, info.month, info.date);
 
             return (
-              <div key={key} css={dateBorder(theme, info.day)}>
+              <div
+                key={key}
+                css={dateBorder(theme, info.day)}
+                onClick={() => handleClickDate(info)}
+              >
                 <span css={dateText(theme, info.day, current.month === info.month)}>
                   {info.date}
                 </span>
@@ -147,6 +158,7 @@ function CalendarPage() {
                     startDate <= nowDate &&
                     nowDate <= endDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.color,
@@ -168,6 +180,7 @@ function CalendarPage() {
                   return (
                     startDate === nowDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.color,
@@ -189,6 +202,7 @@ function CalendarPage() {
                   return (
                     startDate === nowDate && (
                       <div
+                        key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithoutBackgroundStyle(
                           theme,
                           el.priority,
@@ -209,7 +223,7 @@ function CalendarPage() {
           })}
         </div>
         <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
-          <ScheduleAddModal closeModal={toggleCalendarAddModalOpen} />
+          <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleCalendarAddModalOpen} />
         </ModalPortal>
         <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
       </div>

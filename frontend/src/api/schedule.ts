@@ -3,7 +3,10 @@ import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 import dallogApi from './';
 
 const scheduleApi = {
-  endpoint: '/api/members/me/schedules',
+  endpoint: {
+    get: '/api/members/me/schedules',
+    post: (categoryId: number) => `/api/categories/${categoryId}/schedules`,
+  },
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -11,7 +14,7 @@ const scheduleApi = {
 
   get: async (accessToken: string | null, startDate: string, endDate: string) => {
     const response = await dallogApi.get<ScheduleResponseType>(
-      `${scheduleApi.endpoint}?startDate=${startDate}&endDate=${endDate}`,
+      `${scheduleApi.endpoint.get}?startDate=${startDate}&endDate=${endDate}`,
       {
         headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
       }
@@ -20,8 +23,9 @@ const scheduleApi = {
     return response;
   },
 
-  post: async (body: Omit<ScheduleType, 'id'>) => {
-    const response = await dallogApi.post(scheduleApi.endpoint, body, {
+  post: async (categoryId: number, body: Omit<ScheduleType, 'id'>) => {
+    console.log(categoryId, body);
+    const response = await dallogApi.post(scheduleApi.endpoint.post(categoryId), body, {
       headers: scheduleApi.headers,
     });
 

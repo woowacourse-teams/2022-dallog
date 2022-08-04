@@ -119,15 +119,22 @@ const handlers = [
     return res(ctx.status(204));
   }),
 
-  rest.get(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
+  rest.get(API_URL + scheduleApi.endpoint.get, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(getScheduleDB));
   }),
 
-  rest.post<Omit<ScheduleType, 'id'>>(API_URL + scheduleApi.endpoint, (req, res, ctx) => {
-    scheduleDB.push({ id: scheduleDB.length + 1, ...req.body });
+  rest.post<Omit<ScheduleType, 'id'>>(
+    `${API_URL}/api/categories/:categoryId/schedules`,
+    (req, res, ctx) => {
+      const { id } = req.params;
+      const categoryId = parseInt(id as string);
+      const newSchedule = { id: scheduleDB.length + 1, categoryId, ...req.body };
 
-    return res(ctx.status(201));
-  }),
+      scheduleDB.push(newSchedule);
+
+      return res(ctx.status(201));
+    }
+  ),
 
   rest.get(API_URL + subscriptionApi.endpoint.get, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(subscriptionDB));

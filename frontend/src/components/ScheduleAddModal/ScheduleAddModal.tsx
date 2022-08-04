@@ -1,9 +1,14 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
+import { CalendarType } from '@/@types/calendar';
+import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -13,12 +18,14 @@ import { CACHE_KEY } from '@/constants';
 import { createPostBody } from '@/utils';
 import { getDate, getDateTime } from '@/utils/date';
 
+import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
 
 import {
   allDayButton,
   arrow,
   cancelButton,
+  categorySelect,
   controlButtons,
   dateTime,
   form,
@@ -27,14 +34,24 @@ import {
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
+  dateInfo: CalendarType | null;
   closeModal: () => void;
 }
 
-function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
+function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
+  const [categoryId, setCategoryId] = useState(0);
   const [isAllDay, setAllDay] = useState(true);
   const theme = useTheme();
 
+  const { accessToken } = useRecoilValue(userState);
+
   const queryClient = useQueryClient();
+
+  const { data: myCategoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+    CACHE_KEY.MY_CATEGORIES,
+    () => categoryApi.getMy(accessToken)
+  );
+
   const {
     isLoading,
     error,
@@ -44,7 +61,7 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
     AxiosError,
     Omit<ScheduleType, 'id'>,
     unknown
-  >(scheduleApi.post, {
+  >((body) => scheduleApi.post(categoryId, body), {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
@@ -77,6 +94,12 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
     postSchedule(body);
   };
 
+  const handleChangeMyCategorySelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = Number(target.value);
+
+    setCategoryId(categoryId);
+  };
+
   const onSuccessPostSchedule = () => {
     queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
     closeModal();
@@ -89,16 +112,26 @@ function ScheduleAddModal({ closeModal }: ScheduleAddModalProps) {
   const dateFieldset = isAllDay
     ? {
         type: 'date',
-        defaultValue: getDate(),
+        defaultValue: getDate(dateInfo),
       }
     : {
         type: 'datetime-local',
-        defaultValue: getDateTime(),
+        defaultValue: getDateTime(dateInfo),
       };
 
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
+        <select id="myCategories" css={categorySelect} onChange={handleChangeMyCategorySelect}>
+          <option value="" disabled>
+            카테고리
+          </option>
+          {myCategoriesGetResponse?.data.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <Fieldset placeholder="제목을 입력하세요." refProp={inputRef.title} />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
