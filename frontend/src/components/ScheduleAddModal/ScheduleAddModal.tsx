@@ -61,7 +61,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     AxiosError,
     Omit<ScheduleType, 'id'>,
     unknown
-  >((body) => scheduleApi.post(categoryId, body), {
+  >((body) => scheduleApi.post(accessToken, categoryId, body), {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
