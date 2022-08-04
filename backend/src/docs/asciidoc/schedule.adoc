@@ -37,3 +37,55 @@ include::{snippets}/schedules/findone/http-response.adoc[]
 ==== Response
 
 include::{snippets}/schedules/findone/notfound/http-response.adoc[]
+
+=== 일정 수정
+
+==== Request
+
+include::{snippets}/schedules/update/http-request.adoc[]
+
+==== Path Variable
+
+include::{snippets}/schedules/update/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/schedules/update/http-response.adoc[]
+
+=== 일정 수정 (카테고리 권한 없음)
+
+==== Response
+
+include::{snippets}/schedules/update/forbidden/http-response.adoc[]
+
+=== 일정 수정 (카테고리가 존재하지 않음)
+
+==== Response
+
+include::{snippets}/schedules/update/notfound/http-response.adoc[]
+
+=== 일정 제거
+
+==== Request
+
+include::{snippets}/schedules/delete/http-request.adoc[]
+
+==== Path Variable
+
+include::{snippets}/schedules/delete/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/schedules/delete/http-response.adoc[]
+
+=== 일정 제거 (카테고리 권한 없음)
+
+==== Response
+
+include::{snippets}/schedules/delete/forbidden/http-response.adoc[]
+
+=== 일정 제거 (카테고리가 존재하지 않음)
+
+==== Response
+
+include::{snippets}/schedules/delete/notfound/http-response.adoc[]

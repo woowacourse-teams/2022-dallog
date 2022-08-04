@@ -64,10 +64,10 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchScheduleException.class,
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
-            NoSuchSubscriptionException.class
+            NoSuchSubscriptionException.class,
+            NoSuchScheduleException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
@@ -95,6 +95,7 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,
                                                                    final HttpServletRequest request) {
+        e.printStackTrace();
         ErrorReportRequest errorReport = new ErrorReportRequest(request.getRequestURI(), request.getMethod(),
                 e.getMessage());
 

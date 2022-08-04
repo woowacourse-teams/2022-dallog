@@ -54,18 +54,6 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
-    private void validateTitleLength(final String title) {
-        if (title.length() > MAX_TITLE_LENGTH) {
-            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
-        }
-    }
-
-    private void validateMemoLength(final String memo) {
-        if (memo.length() > MAX_MEMO_LENGTH) {
-            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
-        }
-    }
-
     public Long getId() {
         return id;
     }
@@ -92,5 +80,32 @@ public class Schedule extends BaseEntity {
 
     public Category getCategory() {
         return category;
+    }
+
+
+    public void changeTitle(final String title) {
+        validateTitleLength(title);
+        this.title = title;
+    }
+
+    public void changePeriod(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        this.period = new Period(startDateTime, endDateTime);
+    }
+
+    public void changeMemo(final String memo) {
+        validateMemoLength(memo);
+        this.memo = memo;
+    }
+
+    private void validateTitleLength(final String title) {
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
+        }
+    }
+
+    private void validateMemoLength(final String memo) {
+        if (memo.length() > MAX_MEMO_LENGTH) {
+            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
+        }
     }
 }

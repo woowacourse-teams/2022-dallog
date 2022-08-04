@@ -1,11 +1,11 @@
 package com.allog.dallog.domain.schedule.application;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDate;
@@ -31,15 +31,9 @@ public class ScheduleService {
     @Transactional
     public Long save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
-        validateCategoryPermission(memberId, category);
+        categoryService.validateCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return schedule.getId();
-    }
-
-    private void validateCategoryPermission(final Long memberId, final Category category) {
-        if (!category.isCreator(memberId)) {
-            throw new NoPermissionException();
-        }
     }
 
     public List<ScheduleResponse> findByYearAndMonth(final int year, final int month) {
@@ -59,5 +53,26 @@ public class ScheduleService {
                 .orElseThrow(NoSuchScheduleException::new);
 
         return new ScheduleResponse(schedule);
+    }
+
+    @Transactional
+    public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
+
+        categoryService.validateCreatorBy(memberId, schedule.getCategory());
+
+        schedule.changeTitle(request.getTitle());
+        schedule.changePeriod(request.getStartDateTime(), request.getEndDateTime());
+        schedule.changeMemo(request.getMemo());
+    }
+
+    @Transactional
+    public void deleteById(final Long id, final Long memberId) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
+
+        categoryService.validateCreatorBy(memberId, schedule.getCategory());
+        scheduleRepository.deleteById(id);
     }
 }
