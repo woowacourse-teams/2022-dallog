@@ -58,8 +58,8 @@ public class Schedule extends BaseEntity {
         return id;
     }
 
-    public Category getCategory() {
-        return category;
+    public Long getCategoryId() {
+        return category.getId();
     }
 
     public String getTitle() {
@@ -78,9 +78,10 @@ public class Schedule extends BaseEntity {
         return memo;
     }
 
-    public Long getCategoryId() {
-        return category.getId();
+    public Category getCategory() {
+        return category;
     }
+
 
     public void changeTitle(final String title) {
         validateTitleLength(title);

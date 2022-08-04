@@ -32,7 +32,7 @@ public class ScheduleService {
     @Transactional
     public Long save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
-        validateCategoryPermission(memberId, category);
+        validateCategoryCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return schedule.getId();
     }
@@ -61,7 +61,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(NoSuchScheduleException::new);
 
-        validateCategoryPermission(memberId, schedule.getCategory());
+        validateCategoryCreatorBy(memberId, schedule.getCategory());
 
         schedule.changeTitle(request.getTitle());
         schedule.changePeriod(request.getStartDateTime(), request.getEndDateTime());
@@ -70,15 +70,14 @@ public class ScheduleService {
 
     @Transactional
     public void deleteById(final Long id, final Long memberId) {
-        Category category = scheduleRepository.findById(id)
-                .orElseThrow(NoSuchScheduleException::new)
-                .getCategory();
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
 
-        validateCategoryPermission(memberId, category);
+        validateCategoryCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);
     }
 
-    private void validateCategoryPermission(final Long memberId, final Category category) {
+    private void validateCategoryCreatorBy(final Long memberId, final Category category) {
         if (!category.isCreator(memberId)) {
             throw new NoPermissionException();
         }
