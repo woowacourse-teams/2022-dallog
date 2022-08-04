@@ -44,6 +44,7 @@ import {
   navButtonTitle,
   spinnerStyle,
   todayButton,
+  waitingNavStyle,
 } from './CalendarPage.styles';
 
 function CalendarPage() {
@@ -83,15 +84,70 @@ function CalendarPage() {
   if (isLoading || data === undefined) {
     return (
       <PageLayout>
-        <div css={spinnerStyle}>
-          <Spinner size={30} />
+        <div css={calendarPage}>
+          <div css={calendarHeader}>
+            <span>
+              {current.year}년 {current.month}월
+            </span>
+            <div css={waitingNavStyle}>
+              <div css={spinnerStyle}>
+                <Spinner size={4} />
+                <span>일정을 가져오고 있습니다.</span>
+              </div>
+              <div css={monthPicker}>
+                <Button cssProp={navButton} onClick={moveToBeforeMonth}>
+                  <AiOutlineLeft />
+                  <span css={navButtonTitle}>전 달</span>
+                </Button>
+                <Button cssProp={todayButton} onClick={moveToToday}>
+                  오늘
+                </Button>
+                <Button cssProp={navButton} onClick={moveToNextMonth}>
+                  <AiOutlineRight />
+                  <span css={navButtonTitle}>다음 달</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div css={navBarGrid}>
+            {DAYS.map((day) => (
+              <span key={day} css={dayBar(theme, day)}>
+                {day}
+              </span>
+            ))}
+          </div>
+          <div css={calendarGrid(rowNum)}>
+            {calendarMonth.map((info) => {
+              const key = getFormattedDate(info.year, info.month, info.date);
+
+              return (
+                <div
+                  key={key}
+                  css={dateBorder(theme, info.day)}
+                  onClick={() => handleClickDate(info)}
+                >
+                  <span css={dateText(theme, info.day, current.month === info.month)}>
+                    {info.date}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
+            <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleCalendarAddModalOpen} />
+          </ModalPortal>
+          <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
         </div>
       </PageLayout>
     );
   }
 
   if (error) {
-    return <>Error</>;
+    return (
+      <PageLayout>
+        <span>Error가 발생했습니다.</span>
+      </PageLayout>
+    );
   }
 
   const longTermsWithPriority = getLongTermsPriority(data.data.longTerms);

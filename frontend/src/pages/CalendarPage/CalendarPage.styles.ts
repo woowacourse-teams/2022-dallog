@@ -180,8 +180,18 @@ const circleStyle = (color: string) => css`
 const spinnerStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
+  gap: 2rem;
+
   width: 100%;
   height: 100%;
+
+  font-size: 2rem;
+`;
+
+const waitingNavStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  gap:4rem;
 `;
 
 export {
@@ -200,4 +210,5 @@ export {
   navButtonTitle,
   spinnerStyle,
   todayButton,
+  waitingNavStyle,
 };
