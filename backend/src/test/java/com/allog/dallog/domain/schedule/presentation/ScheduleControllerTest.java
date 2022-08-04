@@ -2,6 +2,7 @@ package com.allog.dallog.domain.schedule.presentation;
 
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_응답;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,6 +11,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +22,7 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,7 +104,7 @@ class ScheduleControllerTest {
     @Test
     void 일정_생성시_전달한_카테고리가_존재하지_않는다면_404를_반환한다() throws Exception {
         // given
-        Long categoryId = 999L;
+        Long categoryId = 0L;
         ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
 
         given(scheduleService.save(any(), any(), any())).willThrow(new NoSuchCategoryException());
@@ -114,6 +117,46 @@ class ScheduleControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andDo(document("schedules/save/notfound",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("일정을 단건 조회 하면 상태코드 200을 반환한다")
+    @Test
+    void 일정을_단건_조회_하면_상태코드_200을_반환한다() throws Exception {
+        // given
+        Long scheduleId = 1L;
+
+        given(scheduleService.findById(scheduleId)).willReturn(알록달록_회의_응답());
+
+        // when & then
+        mockMvc.perform(get("/api/schedules/{scheduleId}", scheduleId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("schedules/findone",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("일정을 단건 조회 할 때 일정이 존재하지 않으면 상태코드 404를 반환한다.")
+    @Test
+    void 일정을_단건_조회_할_때_일정이_존재하지_않으면_상태코드_404를_반환한다() throws Exception {
+        // given
+        Long scheduleId = 1L;
+
+        given(scheduleService.findById(scheduleId)).willThrow(new NoSuchScheduleException());
+
+        // when & then
+        mockMvc.perform(get("/api/schedules/{scheduleId}", scheduleId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("schedules/findone/notfound",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))

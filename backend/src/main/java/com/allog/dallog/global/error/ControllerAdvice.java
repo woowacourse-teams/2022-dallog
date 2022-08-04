@@ -8,6 +8,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
@@ -63,6 +64,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
+            NoSuchScheduleException.class,
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class

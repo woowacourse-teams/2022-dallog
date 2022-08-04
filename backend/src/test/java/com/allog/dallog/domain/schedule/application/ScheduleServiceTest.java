@@ -13,6 +13,7 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
@@ -21,7 +22,9 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -130,7 +133,42 @@ class ScheduleServiceTest {
         ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 999L, 일정_생성_요청)).
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 0L, 일정_생성_요청)).
                 isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("일정의 ID로 단건 일정을 조회한다.")
+    @Test
+    void 일정의_ID로_단건_일정을_조회한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long id = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        // when
+        ScheduleResponse response = scheduleService.findById(id);
+
+        // then
+        assertAll(() -> {
+            assertThat(response.getId()).isEqualTo(id);
+            assertThat(response.getTitle()).isEqualTo(알록달록_회의_제목);
+            assertThat(response.getStartDateTime()).isEqualTo(알록달록_회의_시작일시);
+            assertThat(response.getEndDateTime()).isEqualTo(알록달록_회의_종료일시);
+            assertThat(response.getMemo()).isEqualTo(알록달록_회의_메모);
+        });
+    }
+
+    @DisplayName("존재하지 않는 일정 ID로 단건 일정을 조회하면 예외를 던진다.")
+    @Test
+    void 존재하지_않는_일정_ID로_단건_일정을_조회하면_예외를_던진다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long 잘못된_아이디 = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디))
+                .isInstanceOf(NoSuchScheduleException.class);
     }
 }

@@ -51,8 +51,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
@@ -74,8 +74,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
@@ -97,8 +97,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
@@ -120,8 +120,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
@@ -143,8 +143,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
@@ -166,8 +166,8 @@ class ScheduleRepositoryTest {
         Category BE_일정 = BE_일정(관리자);
         categoryRepository.save(BE_일정);
 
-        Schedule 알록달록_회의 = new Schedule(알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모, BE_일정);
-        Schedule 알록달록_회식 = new Schedule(알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모, BE_일정);
+        Schedule 알록달록_회의 = new Schedule(BE_일정, 알록달록_회의_제목, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분, 알록달록_회의_메모);
+        Schedule 알록달록_회식 = new Schedule(BE_일정, 알록달록_회식_제목, 날짜_2022년_8월_15일_14시_0분, 날짜_2022년_8월_15일_17시_0분, 알록달록_회식_메모);
 
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);

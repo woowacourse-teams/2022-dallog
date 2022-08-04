@@ -21,3 +21,19 @@ include::{snippets}/schedules/save/forbidden/http-response.adoc[]
 ==== Response
 
 include::{snippets}/schedules/save/notfound/http-response.adoc[]
+
+=== 일정 단건 조회
+
+==== Request
+
+include::{snippets}/schedules/findone/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/schedules/findone/http-response.adoc[]
+
+=== 일정 단건 조회 (일정이 존재하지 않음)
+
+==== Response
+
+include::{snippets}/schedules/findone/notfound/http-response.adoc[]

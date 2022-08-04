@@ -6,19 +6,21 @@ import java.time.LocalDateTime;
 public class ScheduleResponse {
 
     private final Long id;
+    private final Long categoryId;
     private final String title;
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
     private final String memo;
 
     public ScheduleResponse(final Schedule schedule) {
-        this(schedule.getId(), schedule.getTitle(), schedule.getStartDateTime(),
+        this(schedule.getId(), schedule.getCategoryId(), schedule.getTitle(), schedule.getStartDateTime(),
                 schedule.getEndDateTime(), schedule.getMemo());
     }
 
-    public ScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
+    public ScheduleResponse(final Long id, final Long categoryId, final String title, final LocalDateTime startDateTime,
                             final LocalDateTime endDateTime, final String memo) {
         this.id = id;
+        this.categoryId = categoryId;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -27,6 +29,10 @@ public class ScheduleResponse {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public String getTitle() {
