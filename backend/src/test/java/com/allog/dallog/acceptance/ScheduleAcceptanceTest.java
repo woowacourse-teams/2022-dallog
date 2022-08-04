@@ -16,7 +16,6 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_종료일시;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -36,7 +35,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
 
         // when
-        ExtractableResponse<Response> response = 새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId());
+        ExtractableResponse<Response> response = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId());
 
         // then
         상태코드_201이_반환된다(response);
@@ -48,7 +47,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
-        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId())
+        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId())
                 .header("Location")
                 .split("/api/schedules/")[1]);
         // when
@@ -64,7 +63,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
-        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId())
+        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId())
                 .header("Location")
                 .split("/api/schedules/")[1]);
         // TODO:scheduleService.save()가 DTO를 반환하게 되면 수정
@@ -84,7 +83,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         // given
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
-        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 알록달록_회의_생성_요청, 공통_일정_응답.getId())
+        Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId())
                 .header("Location")
                 .split("/api/schedules/")[1]);
         // TODO:scheduleService.save()가 DTO를 반환하게 되면 수정
