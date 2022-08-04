@@ -43,6 +43,6 @@ public class ScheduleFixtures {
     }
 
     public static ScheduleResponse 알록달록_회의_응답() {
-        return new ScheduleResponse(1L, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모, 1L);
+        return new ScheduleResponse(1L, 1L, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
     }
 }
