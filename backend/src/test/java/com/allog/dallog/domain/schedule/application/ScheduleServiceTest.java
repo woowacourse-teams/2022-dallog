@@ -6,6 +6,10 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_종료일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
@@ -22,6 +26,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
@@ -169,6 +174,63 @@ class ScheduleServiceTest {
 
         // when & then
         assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디));
+    }
+
+    @DisplayName("일정을 수정한다.")
+    @Test
+    void 일정을_수정한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+
+        // when
+        scheduleService.update(기존_일정_ID, 후디.getId(), 일정_수정_요청);
+
+        // then
+        ScheduleResponse actual = scheduleService.findById(기존_일정_ID);
+        assertAll(
+                () -> {
+                    assertThat(actual.getId()).isEqualTo(기존_일정_ID);
+                    assertThat(actual.getTitle()).isEqualTo(레벨_인터뷰_제목);
+                    assertThat(actual.getStartDateTime()).isEqualTo(레벨_인터뷰_시작일시);
+                    assertThat(actual.getEndDateTime()).isEqualTo(레벨_인터뷰_종료일시);
+                    assertThat(actual.getMemo()).isEqualTo(레벨_인터뷰_메모);
+                }
+        );
+    }
+
+    @DisplayName("일정 수정 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
+    @Test
+    void 일정_수정_시_일정의_카테고리에_대한_권한이_없을_경우_예외가_발생한다() {
+        // given
+        MemberResponse 리버 = memberService.save(리버());
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.update(기존_일정_ID, 리버.getId(), 일정_수정_요청))
+                .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("일정 수정 시 존재하지 않은 일정일 경우 예외가 발생한다.")
+    @Test
+    void 일정_수정_시_존재하지_않은_일정일_경우_예외가_발생한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.update(기존_일정_ID + 1, 후디.getId(), 일정_수정_요청))
+                .isInstanceOf(NoSuchScheduleException.class);
     }
 
     @DisplayName("일정을 삭제한다.")
