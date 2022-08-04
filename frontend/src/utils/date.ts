@@ -2,6 +2,10 @@ import { CalendarType } from '@/@types/calendar';
 
 import { zeroFill } from '.';
 
+const getKoreaISOString = (time: number) => {
+  return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
+};
+
 const getNextYearMonth = (targetYear: number, targetMonth: number) => {
   if (targetMonth === 12) {
     return { year: targetYear + 1, month: 1 };
@@ -112,6 +116,7 @@ export {
   getDateTime,
   getDayFromFormattedDate,
   getFormattedDate,
+  getKoreaISOString,
   getThisYear,
   getThisMonth,
   getNextDate,
