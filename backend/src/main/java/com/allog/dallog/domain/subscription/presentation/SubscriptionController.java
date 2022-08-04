@@ -3,6 +3,7 @@ package com.allog.dallog.domain.subscription.presentation;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.dto.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -10,6 +11,7 @@ import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +42,14 @@ public class SubscriptionController {
     public ResponseEntity<SubscriptionsResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember) {
         SubscriptionsResponse response = subscriptionService.findByMemberId(loginMember.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/subscriptions/{subscriptionId}")
+    public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long subscriptionId,
+                                       @RequestBody final SubscriptionUpdateRequest request) {
+        subscriptionService.update(subscriptionId, loginMember.getId(), request);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/subscriptions/{subscriptionId}")
