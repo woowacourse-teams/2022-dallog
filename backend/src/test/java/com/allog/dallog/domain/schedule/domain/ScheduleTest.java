@@ -96,29 +96,29 @@ public class ScheduleTest {
         assertThat(actual).isFalse();
     }
 
-    @DisplayName("일정의 시작일시가 자정(0시 0분)일 경우 true를 반환한다.")
+    @DisplayName("일정의 시작일시와 종료일시가 둘다 자정(0시 0분)일 경우 true를 반환한다.")
     @Test
-    void 일정의_시작일시가_자정일_경우_true를_반환한다() {
+    void 일정의_시작일시와_종료일시가_둘다_자정일_경우_true를_반환한다() {
         // given
         Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 1, 0), 알록달록_회의_메모);
+                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모);
 
         // when
-        boolean actual = schedule.isMidNight();
+        boolean actual = schedule.isMidNightToMidNight();
 
         // then
         assertThat(actual).isTrue();
     }
 
-    @DisplayName("일정의 시작일시가 자정(0시 0분)일 경우 false를 반환한다.")
+    @DisplayName("일정의 시작일시와 종료일시가 둘다 자정(0시 0분)이 아닐 경우 false를 반환한다.")
     @Test
-    void 일정의_시작일시가_자정일_경우_false를_반환한다() {
+    void 일정의_시작일시와_종료일시가_둘다_자정이_아닐_경우_false를_반환한다() {
         // given
         Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 1, 0),
-                LocalDateTime.of(2022, 7, 1, 2, 0), 알록달록_회의_메모);
+                LocalDateTime.of(2022, 7, 2, 2, 0), 알록달록_회의_메모);
 
         // when
-        boolean actual = schedule.isMidNight();
+        boolean actual = schedule.isMidNightToMidNight();
 
         // then
         assertThat(actual).isFalse();

@@ -4,13 +4,16 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
+import com.allog.dallog.domain.schedule.domain.schedules.TypedSchedules;
+import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
+import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,13 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CategoryService categoryService;
+    private final SubscriptionService subscriptionService;
 
-    public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryService categoryService) {
+    public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryService categoryService,
+                           final SubscriptionService subscriptionService) {
         this.scheduleRepository = scheduleRepository;
         this.categoryService = categoryService;
+        this.subscriptionService = subscriptionService;
     }
 
     @Transactional
@@ -34,18 +40,6 @@ public class ScheduleService {
         categoryService.validateCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return schedule.getId();
-    }
-
-    public List<ScheduleResponse> findByYearAndMonth(final int year, final int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.plusDays(startDate.lengthOfMonth());
-
-        List<Schedule> schedules = scheduleRepository.findByBetween(LocalDateTime.of(startDate, LocalTime.MIN),
-                LocalDateTime.of(endDate, LocalTime.MIN));
-
-        return schedules.stream()
-                .map(ScheduleResponse::new)
-                .collect(Collectors.toList());
     }
 
     public ScheduleResponse findById(final Long id) {
@@ -72,5 +66,27 @@ public class ScheduleService {
 
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);
+    }
+
+    public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
+                                                           final DateRangeRequest dateRangeRequest) {
+        // TODO: 리팩토링 및 성능개선
+        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
+        List<Schedule> schedules = getSchedulesFrom(subscriptions, dateRangeRequest);
+        TypedSchedules typedSchedules = new TypedSchedules(schedules);
+        return new MemberScheduleResponses(subscriptions, typedSchedules);
+    }
+
+    private List<Schedule> getSchedulesFrom(final List<Subscription> subscriptions,
+                                            final DateRangeRequest dateRangeRequest) {
+        LocalDate startDate = dateRangeRequest.getStartDate();
+        LocalDate endDate = dateRangeRequest.getEndDate();
+
+        return subscriptions.stream()
+                .filter(Subscription::isChecked) // 체크된 구독 필터
+                .map(Subscription::getCategory)
+                .flatMap(category -> category.getSchedules().stream())
+                .filter(schedule -> schedule.isBetween(startDate, endDate))
+                .collect(Collectors.toList());
     }
 }

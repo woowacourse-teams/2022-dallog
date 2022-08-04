@@ -64,6 +64,10 @@ public class SubscriptionService {
         return new SubscriptionResponse(subscription);
     }
 
+    public List<Subscription> getAllByMemberId(final Long memberId) {
+        return subscriptionRepository.findByMemberId(memberId);
+    }
+
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {

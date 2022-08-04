@@ -3,6 +3,9 @@ package com.allog.dallog.domain.category.domain;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.schedule.domain.Schedule;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "categories")
@@ -31,6 +35,9 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
+
+    @OneToMany(mappedBy = "category")
+    private List<Schedule> schedules = new ArrayList<>();
 
     protected Category() {
     }
@@ -69,5 +76,9 @@ public class Category extends BaseEntity {
 
     public Member getMember() {
         return member;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 }

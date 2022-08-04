@@ -3,9 +3,12 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -53,6 +56,7 @@ public class Schedule extends BaseEntity {
                     final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
         validateMemoLength(memo);
+        addScheduleToCategory(category); // 연관관계 편의 메소드
         this.category = category;
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
@@ -68,8 +72,22 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
+    private void addScheduleToCategory(final Category category) {
+        if (!category.getSchedules().contains(this)) {
+            category.getSchedules().add(this);
+        }
+    }
+
     public long calculateHourDifference() {
         return ChronoUnit.HOURS.between(getStartDateTime(), getEndDateTime());
+    }
+
+    public boolean isBetween(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
+
+        return (getStartDateTime().isBefore(endDateTime) || getStartDateTime().isEqual(endDateTime))
+                && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
     }
 
     public boolean isDayDifferent() {
@@ -78,8 +96,17 @@ public class Schedule extends BaseEntity {
         return dayDifference >= ONE_DAY;
     }
 
-    public boolean isMidNight() {
-        return getStartDateTime().getHour() == MID_NIGHT_HOUR && getStartDateTime().getMinute() == MID_NIGHT_MINUTE;
+    public boolean isMidNightToMidNight() {
+        return getStartDateTime().getHour() == MID_NIGHT_HOUR && getStartDateTime().getMinute() == MID_NIGHT_MINUTE &&
+                getEndDateTime().getHour() == MID_NIGHT_HOUR && getEndDateTime().getMinute() == MID_NIGHT_MINUTE;
+    }
+
+    public String getSubscriptionColor(List<Subscription> subscriptions) {
+        return subscriptions.stream()
+                .filter(subscription -> subscription.getCategory().equals(category))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new) // 구독 목록의 카테고리에서 일정을 찾을 수 없음
+                .getColor();
     }
 
     public Long getId() {

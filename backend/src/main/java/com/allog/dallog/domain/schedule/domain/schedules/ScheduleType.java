@@ -7,9 +7,10 @@ import java.util.function.Predicate;
 public enum ScheduleType {
 
     LONG_TERMS("longTerms", schedule ->
-            schedule.calculateHourDifference() >= 24 || (schedule.isDayDifferent() && schedule.isMidNight())
+            (schedule.calculateHourDifference() > 24) ||
+                    (schedule.calculateHourDifference() < 24 && schedule.isDayDifferent())
     ),
-    ALL_DAYS("allDays", schedule -> schedule.calculateHourDifference() == 24 && schedule.isMidNight()),
+    ALL_DAYS("allDays", schedule -> schedule.calculateHourDifference() == 24 && schedule.isMidNightToMidNight()),
     FEW_HOURS("fewHours", schedule -> schedule.calculateHourDifference() < 24 && !schedule.isDayDifferent());
 
     private final String name;
@@ -20,7 +21,7 @@ public enum ScheduleType {
         this.isMatch = isMatch;
     }
 
-    public static ScheduleType getScheduleType(final Schedule schedule) {
+    public static ScheduleType from(final Schedule schedule) {
         return Arrays.stream(values())
                 .filter(type -> type.isMatch.test(schedule))
                 .findAny()
