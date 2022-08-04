@@ -1,21 +1,23 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
+import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, PALETTE } from '@/constants';
 
-import { createPostBody } from '@/utils';
+import { createPostBody, getRandomNumber } from '@/utils';
 
 import categoryApi from '@/api/category';
+import subscriptionApi from '@/api/subscription';
 
 import {
   cancelButton,
@@ -32,17 +34,33 @@ interface CategoryAddModalProps {
 }
 
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
+  const [myCategoryId, setMyCategoryId] = useState(0);
   const theme = useTheme();
 
   const { accessToken } = useRecoilValue(userState);
 
+  const subscriptionPostBody = {
+    color: PALETTE[getRandomNumber(0, PALETTE.length)],
+  };
+
   const queryClient = useQueryClient();
-  const { mutate } = useMutation<
-    AxiosResponse<Pick<CategoryType, 'name'>>,
+  const { mutate: postCategory } = useMutation<
+    AxiosResponse<CategoryType>,
     AxiosError,
     Pick<CategoryType, 'name'>,
     unknown
-  >((body) => categoryApi.post(accessToken, body), { onSuccess: () => onSuccessPostCategory() });
+  >((body) => categoryApi.post(accessToken, body), {
+    onSuccess: (data) => onSuccessPostCategory(data),
+  });
+
+  const { mutate: postSubscription } = useMutation<
+    AxiosResponse<Pick<SubscriptionType, 'color'>>,
+    AxiosError,
+    Pick<SubscriptionType, 'color'>,
+    unknown
+  >(() => subscriptionApi.post(accessToken, myCategoryId, subscriptionPostBody), {
+    onSuccess: () => onSuccessPostSubscription(),
+  });
 
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
@@ -61,13 +79,21 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
       return;
     }
 
-    mutate(body);
+    postCategory(body);
   };
 
-  const onSuccessPostCategory = () => {
+  const onSuccessPostCategory = ({ data }: AxiosResponse<CategoryType>) => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+
+    setMyCategoryId(data.id);
+    postSubscription(subscriptionPostBody);
+
     closeModal();
+  };
+
+  const onSuccessPostSubscription = () => {
+    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
   };
 
   return (
