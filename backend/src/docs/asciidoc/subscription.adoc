@@ -56,6 +56,28 @@ include::{snippets}/subscription/me/request-headers.adoc[]
 
 include::{snippets}/subscription/me/http-response.adoc[]
 
+=== 내 구독 정보 수정
+
+==== Request
+
+include::{snippets}/subscription/update/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/update/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/update/request-headers.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/subscription/update/request-body.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/update/http-response.adoc[]
+
 === 내 구독 정보 삭제
 
 ==== Request
