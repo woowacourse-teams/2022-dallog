@@ -16,7 +16,7 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import { CACHE_KEY } from '@/constants';
 
 import { createPostBody } from '@/utils';
-import { getDate, getDateTime } from '@/utils/date';
+import { getDate, getDateTime, getKoreaISOString } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -61,7 +61,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     AxiosError,
     Omit<ScheduleType, 'id'>,
     unknown
-  >((body) => scheduleApi.post(categoryId, body), {
+  >((body) => scheduleApi.post(accessToken, categoryId, body), {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
@@ -91,7 +91,24 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       return;
     }
 
-    postSchedule(body);
+    if (!isAllDay) {
+      postSchedule(body);
+
+      return;
+    }
+
+    const allDayStartDateTime = body.startDateTime.split('-');
+    const allDayEndDateTime = getKoreaISOString(
+      new Date(allDayStartDateTime).setDate(Number(allDayStartDateTime[2]) + 1)
+    ).split('T')[0];
+
+    const allDayBody = {
+      ...body,
+      startDateTime: `${body.startDateTime}T00:00`,
+      endDateTime: `${allDayEndDateTime}T00:00`,
+    };
+
+    postSchedule(allDayBody);
   };
 
   const handleChangeMyCategorySelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,7 +139,12 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
-        <select id="myCategories" css={categorySelect} onChange={handleChangeMyCategorySelect}>
+        <select
+          id="myCategories"
+          defaultValue=""
+          css={categorySelect}
+          onChange={handleChangeMyCategorySelect}
+        >
           <option value="" disabled>
             카테고리
           </option>
