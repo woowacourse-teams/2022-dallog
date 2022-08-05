@@ -10,3 +10,11 @@ export default {
 const Template: ComponentStory<typeof ScheduleAddModal> = (args) => <ScheduleAddModal {...args} />;
 
 export const Primary = Template.bind({});
+Primary.args = {
+  dateInfo: {
+    year: 2022,
+    month: 8,
+    date: 5,
+    day: 5,
+  },
+};

@@ -3,8 +3,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
-import GlobalStyle from '@/styles/GlobalStyle';
-import theme from '@/styles/theme';
+import GlobalStyle from '../src/styles/GlobalStyle';
+import theme from '../src/styles/theme';
 
 const queryClient = new QueryClient();
 
