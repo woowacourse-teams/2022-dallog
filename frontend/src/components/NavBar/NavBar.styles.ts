@@ -36,6 +36,15 @@ const logo = ({ colors, flex }: Theme) => css`
   color: ${colors.GRAY_700};
 `;
 
+const logoImg = css`
+  width: 6rem;
+  height: 6rem;
+`;
+
+const logoText = css`
+  margin-left: 2rem;
+`;
+
 const menu = ({ colors, flex }: Theme) => css`
   ${logo({ colors, flex })}
 
@@ -82,4 +91,4 @@ const menuTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-export { loginButton, logo, menu, menus, menuTitle, navBar };
+export { loginButton, logo, logoImg, logoText, menu, menus, menuTitle, navBar };

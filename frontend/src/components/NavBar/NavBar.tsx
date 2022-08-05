@@ -14,7 +14,17 @@ import { FaUserCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
-import { loginButton, logo, menu, menus, menuTitle, navBar } from './NavBar.styles';
+import BlackLogo from '../../assets/dallog_black.png';
+import {
+  loginButton,
+  logo,
+  logoImg,
+  logoText,
+  menu,
+  menus,
+  menuTitle,
+  navBar,
+} from './NavBar.styles';
 
 function NavBar() {
   const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
@@ -52,7 +62,8 @@ function NavBar() {
           </Button>
         )}
         <Button cssProp={logo(theme)} onClick={handleClickMainButton}>
-          🌙 달록
+          <img src={BlackLogo} alt="logo" css={logoImg} />
+          <span css={logoText}>달록</span>
         </Button>
       </div>
       <div css={menus}>
