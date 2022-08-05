@@ -70,6 +70,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
   const onSuccessPatchCategory = () => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
     closeModal();
   };
 
