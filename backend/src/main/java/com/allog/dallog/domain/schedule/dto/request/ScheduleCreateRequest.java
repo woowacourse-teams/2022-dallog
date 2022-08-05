@@ -17,7 +17,6 @@ public class ScheduleCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDateTime;
 
-    @NotBlank
     private String memo;
 
     private ScheduleCreateRequest() {
