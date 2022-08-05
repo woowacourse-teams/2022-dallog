@@ -97,15 +97,15 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       return;
     }
 
-    const allDayStartDateTime = body.startDateTime.split('-');
-    const allDayEndDateTime = getKoreaISOString(
-      new Date(allDayStartDateTime).setDate(Number(allDayStartDateTime[2]) + 1)
+    const allDayEndDateTime = body.endDateTime.split('-');
+    const newAllDayEndDateTime = getKoreaISOString(
+      new Date(allDayEndDateTime).setDate(Number(allDayEndDateTime[2]) + 1)
     ).split('T')[0];
 
     const allDayBody = {
       ...body,
       startDateTime: `${body.startDateTime}T00:00`,
-      endDateTime: `${allDayEndDateTime}T00:00`,
+      endDateTime: `${newAllDayEndDateTime}T00:00`,
     };
 
     postSchedule(allDayBody);
