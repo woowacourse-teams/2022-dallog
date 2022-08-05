@@ -49,28 +49,26 @@ public class ScheduleService {
     }
 
     public ScheduleResponse findById(final Long id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(NoSuchScheduleException::new);
+        Schedule schedule = getSchedule(id);
 
         return new ScheduleResponse(schedule);
     }
 
+    private Schedule getSchedule(Long id) {
+        return scheduleRepository.findById(id)
+                .orElseThrow(NoSuchScheduleException::new);
+    }
+
     @Transactional
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(NoSuchScheduleException::new);
-
+        Schedule schedule = getSchedule(id);
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
-
-        schedule.changeTitle(request.getTitle());
-        schedule.changePeriod(request.getStartDateTime(), request.getEndDateTime());
-        schedule.changeMemo(request.getMemo());
+        schedule.change(request.getTitle(), request.getStartDateTime(), request.getEndDateTime(), request.getMemo());
     }
 
     @Transactional
     public void deleteById(final Long id, final Long memberId) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(NoSuchScheduleException::new);
+        Schedule schedule = getSchedule(id);
 
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);

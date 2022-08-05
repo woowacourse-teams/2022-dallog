@@ -54,6 +54,15 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
+    public void change(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
+                       final String memo) {
+        validateTitleLength(title);
+        validateMemoLength(memo);
+        this.title = title;
+        this.period = new Period(startDateTime, endDateTime);
+        this.memo = memo;
+    }
+
     public Long getId() {
         return id;
     }
@@ -80,21 +89,6 @@ public class Schedule extends BaseEntity {
 
     public Category getCategory() {
         return category;
-    }
-
-
-    public void changeTitle(final String title) {
-        validateTitleLength(title);
-        this.title = title;
-    }
-
-    public void changePeriod(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        this.period = new Period(startDateTime, endDateTime);
-    }
-
-    public void changeMemo(final String memo) {
-        validateMemoLength(memo);
-        this.memo = memo;
     }
 
     private void validateTitleLength(final String title) {
