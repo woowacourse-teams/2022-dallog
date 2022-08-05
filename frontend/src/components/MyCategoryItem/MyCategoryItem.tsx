@@ -44,6 +44,7 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
   const onSuccessDeleteCategory = () => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
   };
 
   return (

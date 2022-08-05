@@ -61,8 +61,11 @@ const handlers = [
       const categoryId = parseInt(id as string);
       const categoryIndex = categoryDB.categories.findIndex((el) => el.id === categoryId);
       const myCategoryIndex = myCategoryDB.categories.findIndex((el) => el.id === categoryId);
+      const subscriptionIndex = subscriptionDB.subscriptions.findIndex(
+        (el) => el.category.id === categoryId
+      );
 
-      if (categoryIndex < 0 || myCategoryIndex < 0) {
+      if (categoryIndex < 0 || myCategoryIndex < 0 || subscriptionIndex < 0) {
         return res(ctx.status(404));
       }
 
@@ -72,6 +75,10 @@ const handlers = [
       };
       myCategoryDB.categories[myCategoryIndex] = {
         ...myCategoryDB.categories[myCategoryIndex],
+        ...req.body,
+      };
+      subscriptionDB.subscriptions[subscriptionIndex].category = {
+        ...subscriptionDB.subscriptions[subscriptionIndex].category,
         ...req.body,
       };
 
@@ -86,13 +93,17 @@ const handlers = [
       const categoryId = parseInt(id as string);
       const categoryIndex = categoryDB.categories.findIndex((el) => el.id === categoryId);
       const myCategoryIndex = myCategoryDB.categories.findIndex((el) => el.id === categoryId);
+      const subscriptionIndex = subscriptionDB.subscriptions.findIndex(
+        (el) => el.category.id === categoryId
+      );
 
-      if (categoryIndex < 0 || myCategoryIndex < 0) {
+      if (categoryIndex < 0 || myCategoryIndex < 0 || subscriptionIndex < 0) {
         return res(ctx.status(400));
       }
 
       categoryDB.categories.splice(categoryIndex, 1);
       myCategoryDB.categories.splice(myCategoryIndex, 1);
+      subscriptionDB.subscriptions.splice(subscriptionIndex, 1);
 
       return res(ctx.status(204));
     }
