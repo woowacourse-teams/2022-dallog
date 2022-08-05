@@ -12,5 +12,5 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Primary = Template.bind({});
 
 Primary.args = {
-  children: 'Primary',
+  children: '기본 버튼입니다.',
 };
