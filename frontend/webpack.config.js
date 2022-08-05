@@ -49,6 +49,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      favicon: './src/assets/dallog_color.png',
     }),
     new CleanWebpackPlugin(),
     new Dotenv(),
