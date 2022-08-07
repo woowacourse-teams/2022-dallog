@@ -1,0 +1,27 @@
+pipeline {
+   agent any
+   stages {
+       stage('Github') {
+           steps {
+               git branch: 'main', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+           }
+       }
+       stage('Build') {
+           steps {
+               dir('backend') {
+                   sh "./gradlew bootJar"
+               }
+           }
+       }
+       stage('Deploy') {
+           steps {
+               dir('backend/build/libs') {
+                   sshagent(credentials: ['key-dallog']) {
+                        sh "scp -o StrictHostKeyChecking=no backend-0.0.1-SNAPSHOT.jar ubuntu@${env.BACKEND_PROD_IP}:/home/ubuntu"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.BACKEND_PROD_IP} 'sh run.sh' &"
+                   }
+               }
+           }
+       }
+   }
+}
