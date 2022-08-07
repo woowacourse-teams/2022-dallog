@@ -1,0 +1,36 @@
+pipeline {
+   agent any
+   
+   environment {
+       API_URL = "https://api.dallog.me"
+   }
+   
+   stages {
+       stage('Github') {
+           steps {
+               git branch: 'develop', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+           }
+       }
+       stage('Build') {
+           steps {
+               dir('frontend') {
+                   nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
+                        sh 'npm install && npm run build'
+                    }
+               }
+           }
+       }
+       stage('Deploy') {
+           steps {
+               dir('frontend/dist') {
+                   sshagent(credentials: ['key-dallog']) {
+                        sh 'ls'
+                        sh "scp -o StrictHostKeyChecking=no ./index.html ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
+                        sh "scp -o StrictHostKeyChecking=no ./bundle.js ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.FRONTEND_PROD_IP} 'sudo mv ./index.html ./html && sudo mv ./bundle.js ./html'"
+                   }
+               }
+           }
+       }
+   }
+}
