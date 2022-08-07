@@ -11,6 +11,8 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -24,6 +26,10 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,7 +47,13 @@ class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Autowired
+    private SubscriptionService subscriptionService;
+
+    @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @DisplayName("새로운 카테고리를 생성한다.")
     @Test
@@ -227,5 +239,24 @@ class CategoryServiceTest {
         assertThatThrownBy(
                 () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("카테고리 삭제 시 연관된 구독 엔티티도 모두 제거된다.")
+    @Test
+    void 카테고리_삭제_시_연관된_구독_엔티티도_모두_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 후디 = memberRepository.save(후디());
+        SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
+
+        // when
+        entityManager.clear();
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
+
+        // then
+        assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
+                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 }
