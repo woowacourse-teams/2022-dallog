@@ -1,31 +1,32 @@
 package com.allog.dallog.global.error.dto;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class ErrorReportRequest {
 
-    private String requestUri;
-    private String requestMethod;
-    private String message;
+    private static final String ERROR_REPORT_FORMAT = "[%s] %s - %s";
 
-    public ErrorReportRequest(final String requestUri, final String requestMethod, final String message) {
-        this.requestUri = requestUri;
-        this.requestMethod = requestMethod;
-        this.message = message;
+    private final HttpServletRequest request;
+    private final Exception exception;
+
+    public ErrorReportRequest(final HttpServletRequest request, final Exception exception) {
+        this.request = request;
+        this.exception = exception;
     }
 
     public String getLogMessage() {
-        return String.format("[%s] %s - %s", requestMethod, requestUri, message);
+        String requestUri = request.getRequestURI();
+        String requestMethod = request.getMethod();
+        String exceptionMessage = exception.getMessage();
+
+        return String.format(ERROR_REPORT_FORMAT, requestMethod, requestUri, exceptionMessage);
     }
 
-    public String getRequestUri() {
-        return requestUri;
+    public HttpServletRequest getRequest() {
+        return request;
     }
 
-    public String getRequestMethod() {
-        return requestMethod;
+    public Exception getException() {
+        return exception;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
 }

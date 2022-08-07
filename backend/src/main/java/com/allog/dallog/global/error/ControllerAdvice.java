@@ -95,11 +95,9 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,
                                                                    final HttpServletRequest request) {
-        ErrorReportRequest errorReport = new ErrorReportRequest(request.getRequestURI(), request.getMethod(),
-                e.getMessage());
-
+        ErrorReportRequest errorReport = new ErrorReportRequest(request, e);
         reporter.report(errorReport);
-        log.error(errorReport.getLogMessage());
+        log.error(errorReport.getLogMessage(), errorReport.getException());
 
         ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
