@@ -24,7 +24,6 @@ pipeline {
            steps {
                dir('frontend/dist') {
                    sshagent(credentials: ['key-dallog']) {
-                        sh 'ls'
                         sh "scp -o StrictHostKeyChecking=no ./index.html ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
                         sh "scp -o StrictHostKeyChecking=no ./bundle.js ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.FRONTEND_PROD_IP} 'sudo mv ./index.html ./html && sudo mv ./bundle.js ./html'"
