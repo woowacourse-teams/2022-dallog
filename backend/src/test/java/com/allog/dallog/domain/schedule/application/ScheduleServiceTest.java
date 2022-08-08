@@ -83,14 +83,14 @@ class ScheduleServiceTest {
         assertThat(id).isNotNull();
     }
 
-    @DisplayName("새로운 일정을 생성 할 떄 일정 제목의 길이가 20을 초과하는 경우 예외를 던진다.")
+    @DisplayName("새로운 일정을 생성 할 떄 일정 제목의 길이가 50을 초과하는 경우 예외를 던진다.")
     @Test
-    void 새로운_일정을_생성_할_때_일정_제목의_길이가_20을_초과하는_경우_예외를_던진다() {
+    void 새로운_일정을_생성_할_때_일정_제목의_길이가_50을_초과하는_경우_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
-        String 잘못된_일정_제목 = "일이삼사오육칠팔구십일이삼사오육칠팔구십일";
+        String 잘못된_일정_제목 = "일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일";
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(잘못된_일정_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시,
                 알록달록_회의_메모);
 
