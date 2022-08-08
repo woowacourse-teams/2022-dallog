@@ -70,9 +70,7 @@ public class SubscriptionService {
 
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
-        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
-            throw new NoPermissionException();
-        }
+        validateSubscriptionPermission(id, memberId);
 
         Subscription subscription = getSubscription(id);
         subscription.change(request.getColor(), request.isChecked());
@@ -85,10 +83,14 @@ public class SubscriptionService {
 
     @Transactional
     public void deleteByIdAndMemberId(final Long id, final Long memberId) {
+        validateSubscriptionPermission(id, memberId);
+
+        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
+    }
+
+    private void validateSubscriptionPermission(final Long id, final Long memberId) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
         }
-
-        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
     }
 }
