@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.subscription.dto;
+package com.allog.dallog.domain.subscription.dto.request;
 
 public class SubscriptionUpdateRequest {
 
