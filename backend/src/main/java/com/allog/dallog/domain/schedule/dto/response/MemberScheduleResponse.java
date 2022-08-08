@@ -13,6 +13,18 @@ public class MemberScheduleResponse {
     private final Long categoryId;
     private final String color;
 
+    public MemberScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
+                                  final LocalDateTime endDateTime,
+                                  final String memo, final Long categoryId, final String color) {
+        this.id = id;
+        this.title = title;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.memo = memo;
+        this.categoryId = categoryId;
+        this.color = color;
+    }
+
     public MemberScheduleResponse(final Schedule schedule, final String color) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();

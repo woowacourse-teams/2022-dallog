@@ -13,6 +13,14 @@ public class MemberScheduleResponses {
     private final List<MemberScheduleResponse> allDays;
     private final List<MemberScheduleResponse> fewHours;
 
+    public MemberScheduleResponses(final List<MemberScheduleResponse> longTerms,
+                                   final List<MemberScheduleResponse> allDays,
+                                   final List<MemberScheduleResponse> fewHours) {
+        this.longTerms = longTerms;
+        this.allDays = allDays;
+        this.fewHours = fewHours;
+    }
+
     public MemberScheduleResponses(final List<Subscription> subscriptions, final TypedSchedules typedSchedules) {
         this.longTerms = getColoredScheduleResponses(ScheduleType.LONG_TERMS, subscriptions, typedSchedules);
         this.allDays = getColoredScheduleResponses(ScheduleType.ALL_DAYS, subscriptions, typedSchedules);
