@@ -19,6 +19,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -33,8 +34,12 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
+import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -309,5 +314,48 @@ class ScheduleControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("회원의 일정 목록을 정상적으로 조회하면 200을 반환한다.")
+    @Test
+    void 회원의_일정_목록을_정상적으로_조회하면_200을_반환한다() throws Exception {
+        // given
+        String startDate = "2022-07-31";
+        String endDate = "2022-09-03";
+
+        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse(1L, "장기간 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, "#E43D40");
+        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse(1L, "장기간 일정 2", LocalDateTime.of(2022, 8, 3, 0, 0),
+                LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, "#59981A");
+
+        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse(1L, "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 2, 0, 0), "종일 일정 1의 메모", 1L, "#E43D40");
+        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse(1L, "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
+                LocalDateTime.of(2022, 8, 6, 0, 0), "종일 일정 2의 메모", 3L, "#59981A");
+
+        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse(1L, "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, "#E43D40");
+        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse(1L, "짧은 일정 2", LocalDateTime.of(2022, 8, 5, 17, 0),
+                LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, "#59981A");
+
+        MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
+                List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
+
+        given(scheduleService.findSchedulesByMemberId(any(), any()))
+                .willReturn(memberScheduleResponses);
+
+        // when & then
+        mockMvc.perform(get("/api/members/me/schedules?startDate={startDate}&endDate={endDate}", startDate, endDate)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/findAllByMember",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("startDate").description("일정 조회 시작 범위 (yyyy-mm-dd)"),
+                                parameterWithName("endDate").description("일정 조회 마지막 범위 (yyyy-mm-dd)")
+                        )
+                ))
+                .andExpect(status().isOk());
     }
 }
