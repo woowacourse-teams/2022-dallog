@@ -1,35 +1,53 @@
 pipeline {
-   agent any
-   
-   environment {
-       API_URL = "https://api.dallog.me"
-   }
-   
-   stages {
-       stage('Github') {
-           steps {
-               git branch: 'develop', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
-           }
-       }
-       stage('Build') {
-           steps {
-               dir('frontend') {
-                   nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
+    agent any
+
+    environment {
+        API_URL = "https://api.dallog.me"
+    }
+
+    stages {
+        stage('Github') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
                         sh 'npm install && npm run build'
                     }
-               }
-           }
-       }
-       stage('Deploy') {
-           steps {
-               dir('frontend/dist') {
-                   sshagent(credentials: ['key-dallog']) {
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                dir('frontend/dist') {
+                    sshagent(credentials: ['key-dallog']) {
                         sh "scp -o StrictHostKeyChecking=no ./index.html ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
                         sh "scp -o StrictHostKeyChecking=no ./bundle.js ubuntu@${env.FRONTEND_PROD_IP}:/home/ubuntu/"
                         sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.FRONTEND_PROD_IP} 'sudo mv ./index.html ./html && sudo mv ./bundle.js ./html'"
-                   }
-               }
-           }
-       }
-   }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            discordSend title: "프론트엔드 프로덕션 서버 빌드에 성공하였습니다 ✨", 
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_FRONTEND_PROD_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+        failure {
+            discordSend title: "프론트엔드 프로덕션 서버 빌드에 실패하였습니다 ❌", 
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_FRONTEND_PROD_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+    }
 }
