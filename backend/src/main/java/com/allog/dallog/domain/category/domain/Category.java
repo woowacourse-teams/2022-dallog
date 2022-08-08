@@ -4,6 +4,7 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.schedule.domain.Schedule;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,9 @@ public class Category extends BaseEntity {
 
     @OneToMany(mappedBy = "category")
     private List<Schedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
 
     protected Category() {
     }
