@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ErrorReportRequest {
 
-    private static final String ERROR_REPORT_FORMAT = "[%s] %s - %s";
+    private static final String ERROR_REPORT_FORMAT = "[%s] %s";
 
     private final HttpServletRequest request;
     private final Exception exception;
@@ -17,9 +17,8 @@ public class ErrorReportRequest {
     public String getLogMessage() {
         String requestUri = request.getRequestURI();
         String requestMethod = request.getMethod();
-        String exceptionMessage = exception.getMessage();
 
-        return String.format(ERROR_REPORT_FORMAT, requestMethod, requestUri, exceptionMessage);
+        return String.format(ERROR_REPORT_FORMAT, requestMethod, requestUri);
     }
 
     public HttpServletRequest getRequest() {
