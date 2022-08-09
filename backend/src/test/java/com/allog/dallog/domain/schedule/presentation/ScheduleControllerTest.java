@@ -9,6 +9,7 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_응답;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.테코톡_생성_요청;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -17,6 +18,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -33,12 +36,14 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleRepeatCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -50,6 +55,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureRestDocs
@@ -93,6 +99,67 @@ class ScheduleControllerTest {
                         preprocessResponse(prettyPrint())
                 ))
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("반복 일정을 등록하고 성공하면 상태코드 200을 반환한다.")
+    @Test
+    void 반복_일정을_등록하고_성공하면_상태코드_200을_반환한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        ScheduleRepeatCreateRequest request = new ScheduleRepeatCreateRequest(테코톡_생성_요청, "everyWeek",
+                LocalDate.of(2022, 8, 31));
+
+        given(scheduleService.createRepeat(any(), any(), any())).willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/api/categories/{categoryId}/schedules/repeat", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("schedules/save-repeat",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("schedule").type(JsonFieldType.OBJECT).description("반복 일정의 최초 일정"),
+                                fieldWithPath("schedule.title").type(JsonFieldType.STRING).description("최초 일정의 제목"),
+                                fieldWithPath("schedule.startDateTime").type(JsonFieldType.STRING)
+                                        .description("최초 일정의 시작일시"),
+                                fieldWithPath("schedule.endDateTime").type(JsonFieldType.STRING)
+                                        .description("최초 일정의 종료일시"),
+                                fieldWithPath("schedule.memo").type(JsonFieldType.STRING).description("최초 일정의 메모"),
+                                fieldWithPath("endDate").type(JsonFieldType.STRING).description("반복이 끝나는 날짜"),
+                                fieldWithPath("repeatType").type(JsonFieldType.STRING)
+                                        .description("반복 유형 (everyDay | everyWeek | everyMonth)")
+                        )
+
+                ))
+                .andExpect(status().isCreated());
+    }
+
+    @DisplayName("반복 일정 중 중간 일정 이후를 모두 제거한다.")
+    @Test
+    void 반복_일정_중_중간_일정_이후를_모두_제거한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        ScheduleRepeatCreateRequest request = new ScheduleRepeatCreateRequest(테코톡_생성_요청, "everyWeek",
+                LocalDate.of(2022, 8, 31));
+
+        willDoNothing()
+                .given(scheduleService)
+                .deleteByIdWithAfterAllSchedules(any(), any());
+
+        // when & then
+        mockMvc.perform(delete("/api/schedules/{scheduleId}?afterAll=true", categoryId)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("schedules/delete/after-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isNoContent());
     }
 
     @DisplayName("일정 정보를 등록할때 해당 카테고리에 권한이 없으면 403을 반환한다.")

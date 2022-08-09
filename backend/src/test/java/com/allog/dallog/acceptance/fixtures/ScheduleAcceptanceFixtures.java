@@ -73,6 +73,15 @@ public class ScheduleAcceptanceFixtures {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 반복_일정에서_중간_일정_이후_모든_일정을_삭제한다(final String accessToken,
+                                                                             final Long scheduleId) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().delete("/api/schedules/{scheduleId}?afterAll=true", scheduleId)
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 일정_아이디로_일정을_단건_조회한다(final String accessToken, final Long scheduleId) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

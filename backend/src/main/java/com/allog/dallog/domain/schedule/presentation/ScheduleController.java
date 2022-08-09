@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api")
@@ -48,7 +49,6 @@ public class ScheduleController {
         return ResponseEntity.created(URI.create("/api/schedules/repeat/" + id)).build(); // 실제로는 Location에 접근 불가능
     }
 
-
     @GetMapping("/members/me/schedules")
     public ResponseEntity<MemberScheduleResponses> findSchedulesByMemberId(
             @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
@@ -72,7 +72,12 @@ public class ScheduleController {
 
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
-                                       @PathVariable final Long scheduleId) {
+                                       @PathVariable final Long scheduleId,
+                                       @RequestParam(required = false) final boolean afterAll) {
+        if (afterAll) {
+            scheduleService.deleteByIdWithAfterAllSchedules(scheduleId, loginMember.getId());
+            return ResponseEntity.noContent().build();
+        }
         scheduleService.deleteById(scheduleId, loginMember.getId());
         return ResponseEntity.noContent().build();
     }

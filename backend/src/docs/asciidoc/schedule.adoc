@@ -103,3 +103,29 @@ include::{snippets}/schedules/delete/forbidden/http-response.adoc[]
 ==== Response
 
 include::{snippets}/schedules/delete/notfound/http-response.adoc[]
+
+=== 반복 일정 추가
+
+==== Request
+
+include::{snippets}/schedules/save-repeat/http-request.adoc[]
+
+==== Request Body
+
+include::{snippets}/schedules/save-repeat/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/schedules/save-repeat/http-response.adoc[]
+
+=== 반복 일정 중간 일정 이후 모두 삭제
+
+==== Request
+
+include::{snippets}/schedules/delete/after-all/http-request.adoc[]
+
+쿼리 스트링 **afterAll**를 `true` 로 전달하면, 반복 일정 내의 특정 일정을 포함한 이후 모든 일정을 제거할 수 있습니다.
+
+==== Response
+
+include::{snippets}/schedules/delete/after-all/http-response.adoc[]

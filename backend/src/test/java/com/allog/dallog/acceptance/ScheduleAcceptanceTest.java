@@ -65,6 +65,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         Long 알록달록_회의_ID = Long.parseLong(새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId())
                 .header("Location")
                 .split("/api/schedules/")[1]);
+
         // when
         ExtractableResponse<Response> response = 일정_아이디로_일정을_단건_조회한다(accessToken, 알록달록_회의_ID);
 
