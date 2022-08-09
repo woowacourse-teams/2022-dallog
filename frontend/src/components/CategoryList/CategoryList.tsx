@@ -79,6 +79,7 @@ function CategoryList({ keyword }: CategoryListProps) {
       <div css={categoryTableHeaderStyle}>
         <span css={itemStyle}>생성 날짜</span>
         <span css={itemStyle}>카테고리 이름</span>
+        <span css={itemStyle}>생성자</span>
         <span css={itemStyle}>구독 상태</span>
       </div>
       <div css={categoryTableStyle}>
