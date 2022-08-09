@@ -46,11 +46,17 @@ public class SubscriptionService {
 
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
+        validatePermission(memberId, category);
+
         Color color = Color.pickAny(PICK_RANDOM_STRATEGY);
-
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
-
         return new SubscriptionResponse(subscription);
+    }
+
+    private void validatePermission(final Long memberId, final Category category) {
+        if (category.isPrivate() && !category.isCreator(memberId)) {
+            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
+        }
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {

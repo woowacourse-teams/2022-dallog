@@ -5,7 +5,9 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,6 +58,21 @@ class SubscriptionServiceTest {
 
         // then
         assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
+    }
+
+    @DisplayName("자신이 생성하지 않은 개인 카테고리를 구독시 예외가 발생한다.")
+    @Test
+    void 자신이_생성하지_않은_개인_카테고리를_구독시_예외가_발생한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+
+        MemberResponse 매트 = memberService.save(매트());
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.save(매트.getId(), 후디_개인_학습_일정.getId()))
+                .isInstanceOf(NoPermissionException.class)
+                .hasMessage("구독 권한이 없는 카테고리입니다.");
     }
 
     @DisplayName("이미 존재하는 구독 정보를 저장할 경우 예외를 던진다.")
