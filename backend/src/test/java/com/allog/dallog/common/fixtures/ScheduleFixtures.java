@@ -50,6 +50,8 @@ public class ScheduleFixtures {
     public static final ScheduleCreateRequest 레벨_인터뷰_생성_요청 = new ScheduleCreateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시,
             레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
+    public static final String 매고라_제목 = "매고라";
+    public static final String 매고라_메모 = "매고라가 예정되어 있습니다.";
 
     public static Schedule 알록달록_회의(final Category category) {
         return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
