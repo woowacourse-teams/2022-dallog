@@ -4,9 +4,13 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이메일;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
@@ -15,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -23,6 +28,9 @@ class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @DisplayName("회원을 저장한다.")
     @Test
@@ -111,5 +119,21 @@ class MemberServiceTest {
         // when & then
         assertThatThrownBy(() -> memberService.validateExistsMember(id))
                 .isInstanceOf(NoSuchMemberException.class);
+    }
+
+    @DisplayName("유저 생성 시 개인 카테고리가 자동으로 생성된다.")
+    @Test
+    void 유저_생성_시_개인_카테고리가_자동으로_생성된다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+
+        // when
+        CategoriesResponse categoriesResponse = categoryService.findMine(후디.getId(), Pageable.ofSize(10));
+
+        // then
+        assertAll(() -> {
+            assertThat(categoriesResponse.getCategories()).hasSize(1);
+            assertThat(categoriesResponse.getCategories().get(0).getName()).isEqualTo("개인 일정");
+        });
     }
 }
