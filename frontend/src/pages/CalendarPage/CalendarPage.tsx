@@ -298,5 +298,5 @@ function CalendarPage() {
     </PageLayout>
   );
 }
-  
+
 export default CalendarPage;

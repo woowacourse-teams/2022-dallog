@@ -164,6 +164,7 @@ const itemWithoutBackgroundStyle = (
   isHovering: boolean
 ) => css`
   ${itemWithBackgroundStyle(priority, color, isHovering)};
+
   overflow: hidden;
 
   border-left: 3px solid ${color};
