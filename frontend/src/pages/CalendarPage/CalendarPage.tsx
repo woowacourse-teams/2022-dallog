@@ -22,7 +22,7 @@ import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
 import { CACHE_KEY, DAYS } from '@/constants';
 
-import { getDayFromFormattedDate, getFormattedDate } from '@/utils/date';
+import { getDayFromFormattedDate, getFormattedDate, getThisDate, getThisMonth } from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
 
@@ -126,7 +126,14 @@ function CalendarPage() {
                   css={dateBorder(theme, info.day)}
                   onClick={() => handleClickDate(info)}
                 >
-                  <span css={dateText(theme, info.day, current.month === info.month)}>
+                  <span
+                    css={dateText(
+                      theme,
+                      info.day,
+                      current.month === info.month,
+                      getThisMonth() === info.month && getThisDate() === info.date
+                    )}
+                  >
                     {info.date}
                   </span>
                 </div>
@@ -200,7 +207,14 @@ function CalendarPage() {
                 css={dateBorder(theme, info.day)}
                 onClick={() => handleClickDate(info)}
               >
-                <span css={dateText(theme, info.day, current.month === info.month)}>
+                <span
+                  css={dateText(
+                    theme,
+                    info.day,
+                    current.month === info.month,
+                    getThisMonth() === info.month && getThisDate() === info.date
+                  )}
+                >
                   {info.date}
                 </span>
 
