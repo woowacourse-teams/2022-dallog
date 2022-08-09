@@ -52,6 +52,16 @@ public class Schedule extends BaseEntity {
     protected Schedule() {
     }
 
+    public Schedule(final Category category, final String title, final Period period, final String memo) {
+        validateTitleLength(title);
+        validateMemoLength(memo);
+        addScheduleToCategory(category); // 연관관계 편의 메소드
+        this.category = category;
+        this.title = title;
+        this.period = period;
+        this.memo = memo;
+    }
+
     public Schedule(final Category category, final String title, final LocalDateTime startDateTime,
                     final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
@@ -99,6 +109,10 @@ public class Schedule extends BaseEntity {
 
         return (getStartDateTime().isBefore(endDateTime) || getStartDateTime().isEqual(endDateTime))
                 && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
+    }
+
+    public Schedule plusDays(final int days) {
+        return new Schedule(category, title, period.plusDays(days), memo);
     }
 
     public Color getSubscriptionColor(List<Subscription> subscriptions) {

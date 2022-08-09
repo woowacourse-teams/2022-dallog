@@ -53,6 +53,12 @@ public class Period {
         return ChronoUnit.MINUTES.between(startTime, endTime) % ONE_HOUR;
     }
 
+    public Period plusDays(final int days) {
+        LocalDateTime startDateTime = this.startDateTime.plusDays(days);
+        LocalDateTime endDateTime = this.endDateTime.plusDays(days);
+        return new Period(startDateTime, endDateTime);
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }

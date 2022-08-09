@@ -2,6 +2,7 @@ package com.allog.dallog.domain.schedule.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
@@ -68,5 +69,23 @@ class PeriodTest {
 
         // then
         assertThat(minuteDifference).isEqualTo(2);
+    }
+
+    @DisplayName("시작일시와 종료일시에 일을 더해 반환한다.")
+    @Test
+    void 시작일시와_종료일시에_일을_더해_반환한다() {
+        // given
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 1, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 2, 6, 0);
+        Period period = new Period(startDateTime, endDateTime);
+
+        // when
+        Period actual = period.plusDays(5);
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.getStartDateTime()).isEqualTo(LocalDateTime.of(2022, 1, 6, 0, 0));
+            assertThat(actual.getEndDateTime()).isEqualTo(LocalDateTime.of(2022, 1, 7, 6, 0));
+        });
     }
 }

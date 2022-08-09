@@ -50,6 +50,13 @@ public class ScheduleFixtures {
     public static final ScheduleCreateRequest 레벨_인터뷰_생성_요청 = new ScheduleCreateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시,
             레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
+    /* 테코톡 */
+    public static final String 테코톡_제목 = "테코톡";
+    public static final LocalDateTime 테코톡_시작일시 = LocalDateTime.of(2022, 8, 4, 14, 0);
+    public static final LocalDateTime 테코톡_종료일시 = LocalDateTime.of(2022, 8, 4, 15, 0);
+    public static final String 테코톡_메모 = "매주 목요일 테코톡";
+    public static final ScheduleCreateRequest 테코톡_생성_요청 = new ScheduleCreateRequest(테코톡_제목, 테코톡_시작일시,
+            테코톡_종료일시, 테코톡_메모);
 
     public static Schedule 알록달록_회의(final Category category) {
         return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
@@ -61,6 +68,10 @@ public class ScheduleFixtures {
 
     public static Schedule 레벨_인터뷰(final Category category) {
         return new Schedule(category, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+    }
+
+    public static Schedule 테코톡(final Category category) {
+        return new Schedule(category, 테코톡_제목, 테코톡_시작일시, 테코톡_종료일시, 테코톡_메모);
     }
 
     public static ScheduleResponse 알록달록_회의_응답() {
