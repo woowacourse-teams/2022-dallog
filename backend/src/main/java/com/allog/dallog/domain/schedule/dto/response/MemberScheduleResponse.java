@@ -15,12 +15,19 @@ public class MemberScheduleResponse {
     private final String colorCode;
 
     public MemberScheduleResponse(final Schedule schedule, final Color color) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.startDateTime = schedule.getStartDateTime();
-        this.endDateTime = schedule.getEndDateTime();
-        this.memo = schedule.getMemo();
-        this.categoryId = schedule.getCategoryId();
+        this(schedule.getId(), schedule.getTitle(), schedule.getStartDateTime(), schedule.getEndDateTime(),
+                schedule.getMemo(), schedule.getCategoryId(), color);
+    }
+
+    public MemberScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
+                                  final LocalDateTime endDateTime,
+                                  final String memo, final Long categoryId, final Color color) {
+        this.id = id;
+        this.title = title;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.memo = memo;
+        this.categoryId = categoryId;
         this.colorCode = color.getColorCode();
     }
 
