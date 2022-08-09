@@ -4,7 +4,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_11일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_1분;
@@ -12,9 +12,9 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_20시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_21일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_28일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
@@ -318,11 +318,11 @@ class ScheduleServiceTest {
 
         /* 종일 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_11일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_21일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_28일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
 
         /* 몇시간 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
@@ -371,11 +371,11 @@ class ScheduleServiceTest {
 
         /* 종일 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_11일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_21일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_28일_0시_0분, ""));
+                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
 
         /* 몇시간 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),

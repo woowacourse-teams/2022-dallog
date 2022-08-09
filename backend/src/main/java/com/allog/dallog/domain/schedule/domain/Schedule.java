@@ -8,7 +8,6 @@ import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -25,11 +24,15 @@ import javax.persistence.Table;
 @Entity
 public class Schedule extends BaseEntity {
 
+<<<<<<< HEAD
     private static final int MAX_TITLE_LENGTH = 50;
-    private static final int MAX_MEMO_LENGTH = 255;
+=======
     private static final int ONE_DAY = 1;
-    private static final int MID_NIGHT_HOUR = 0;
-    private static final int MID_NIGHT_MINUTE = 0;
+    private static final int MIDNIGHT_HOUR = 23;
+    private static final int MIDNIGHT_MINUTE = 59;
+    private static final int MAX_TITLE_LENGTH = 20;
+>>>>>>> a4273e0 (refactor: ScheduleType의 일정 월별 조회 로직을 Period로 이동한다)
+    private static final int MAX_MEMO_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,8 +82,21 @@ public class Schedule extends BaseEntity {
         }
     }
 
-    public long calculateHourDifference() {
-        return ChronoUnit.HOURS.between(getStartDateTime(), getEndDateTime());
+    public boolean isLongTerms() {
+        return (period.calculateDayDifference() >= ONE_DAY && period.calculateHourDifference() < 24)
+                || period.calculateHourDifference() >= 24;
+    }
+
+    public boolean isAllDays() {
+        return period.calculateDayDifference() < ONE_DAY
+                && period.calculateHourDifference() == MIDNIGHT_HOUR
+                && period.calculateMinuteDifference() == MIDNIGHT_MINUTE;
+    }
+
+    public boolean isFewHours() {
+        return !isAllDays()
+                && period.calculateDayDifference() < ONE_DAY
+                && period.calculateHourDifference() < 24;
     }
 
     public boolean isBetween(LocalDate startDate, LocalDate endDate) {
@@ -91,6 +107,7 @@ public class Schedule extends BaseEntity {
                 && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
     }
 
+<<<<<<< HEAD
     public boolean isDayDifferent() {
         long dayDifference = ChronoUnit.DAYS.between(LocalDate.from(getStartDateTime()),
                 LocalDate.from(getEndDateTime()));
@@ -103,6 +120,9 @@ public class Schedule extends BaseEntity {
     }
 
     public Color getSubscriptionColor(List<Subscription> subscriptions) {
+=======
+    public String getSubscriptionColor(List<Subscription> subscriptions) {
+>>>>>>> a4273e0 (refactor: ScheduleType의 일정 월별 조회 로직을 Period로 이동한다)
         return subscriptions.stream()
                 .filter(subscription -> subscription.getCategory().equals(category))
                 .findAny()
