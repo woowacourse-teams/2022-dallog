@@ -1,9 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
-const categoryPageStyle = ({ flex }: Theme) => css`
-  ${flex.column}
-
-  height: 100%;
+const categoryPageStyle = css`
+  height: 80%;
   padding: 5rem;
 `;
 
@@ -15,6 +13,8 @@ const searchFormStyle = css`
 
 const searchButtonStyle = css`
   position: absolute;
+
+  top: 0.5rem;
 
   width: 12rem;
   height: calc(100% - 5rem);
@@ -32,8 +32,47 @@ const searchInputStyle = css`
   font-size: 4rem;
 `;
 
+const buttonStyle = ({ colors }: Theme) => css`
+  width: 30rem;
+  height: 10rem;
+  border-radius: 3px;
+
+  background: ${colors.YELLOW_500};
+
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+  color: ${colors.WHITE};
+`;
+
+const controlStyle = ({ flex }: Theme) => css`
+  ${flex.row};
+
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4rem;
+
+  width: 100%;
+`;
+
+const filteringButtonStyle = ({ colors }: Theme) => css`
+  width: 40rem;
+  height: 10rem;
+  border-radius: 3px;
+
+  border: 1px solid ${colors.YELLOW_500};
+
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+  color: ${colors.YELLOW_500};
+`;
+
 export {
+  buttonStyle,
   categoryPageStyle,
+  controlStyle,
+  filteringButtonStyle,
   searchButtonStyle,
   searchFieldsetStyle,
   searchFormStyle,
