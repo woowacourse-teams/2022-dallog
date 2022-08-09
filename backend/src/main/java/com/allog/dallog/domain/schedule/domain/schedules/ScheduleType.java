@@ -22,7 +22,7 @@ public enum ScheduleType {
         return Arrays.stream(values())
                 .filter(type -> type.isMatch.test(schedule))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("일치하는 일정 종류가 존재하지 않습니다."));
     }
 
     public String getName() {
