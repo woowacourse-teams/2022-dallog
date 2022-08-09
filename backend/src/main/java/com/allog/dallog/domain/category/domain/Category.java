@@ -33,9 +33,13 @@ public class Category extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
+
+    @Column(name = "is_private")
+    private boolean isPrivate;
 
     @OneToMany(mappedBy = "category")
     private List<Schedule> schedules = new ArrayList<>();
@@ -50,6 +54,13 @@ public class Category extends BaseEntity {
         validateNameLength(name);
         this.name = name;
         this.member = member;
+        this.isPrivate = false;
+    }
+
+    public Category(final String name, final Member member, final boolean isPrivate) {
+        this.name = name;
+        this.member = member;
+        this.isPrivate = isPrivate;
     }
 
     public void changeName(final String name) {
@@ -80,6 +91,10 @@ public class Category extends BaseEntity {
 
     public Member getMember() {
         return member;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
     }
 
     public List<Schedule> getSchedules() {
