@@ -303,6 +303,4 @@ class CategoryServiceTest {
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
     }
-
-
 }
