@@ -30,6 +30,10 @@ const getThisMonth = () => {
   return new Date().getMonth() + 1;
 };
 
+const getThisDate = () => {
+  return new Date().getDate();
+};
+
 const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
   if (dateInfo === null) {
     return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
@@ -119,6 +123,7 @@ export {
   getKoreaISOString,
   getThisYear,
   getThisMonth,
+  getThisDate,
   getNextDate,
   getNextYearMonth,
 };
