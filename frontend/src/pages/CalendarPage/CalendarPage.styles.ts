@@ -163,10 +163,10 @@ const itemWithoutBackgroundStyle = (
   color: string,
   isHovering: boolean
 ) => css`
-  ${itemWithBackgroundStyle(priority, color, isHovering)}
+  ${itemWithBackgroundStyle(priority, color, isHovering)};
+  overflow: hidden;
 
-  display: ${priority >= 4 ? 'none' : 'flex'};
-  align-items: center;
+  border-left: 3px solid ${color};
 
   background: ${isHovering ? colors.GRAY_100 : 'transparent'};
 
@@ -174,15 +174,6 @@ const itemWithoutBackgroundStyle = (
 
   cursor: pointer;
   filter: none;
-`;
-
-const circleStyle = (color: string) => css`
-  width: 2.5rem;
-  height: 2.5rem;
-  margin-right: 1rem;
-  border-radius: 50%;
-
-  background: ${color};
 `;
 
 const spinnerStyle = ({ flex }: Theme) => css`
@@ -206,7 +197,6 @@ export {
   calendarGrid,
   calendarHeader,
   calendarPage,
-  circleStyle,
   dayBar,
   dateBorder,
   dateText,

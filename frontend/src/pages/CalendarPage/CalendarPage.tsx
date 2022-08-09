@@ -32,7 +32,6 @@ import {
   calendarGrid,
   calendarHeader,
   calendarPage,
-  circleStyle,
   dateBorder,
   dateText,
   dayBar,
@@ -282,7 +281,6 @@ function CalendarPage() {
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
                         onMouseLeave={onMouseLeave}
                       >
-                        <div css={circleStyle(el.schedule.color)} />
                         {el.schedule.title}
                       </div>
                     )
@@ -300,5 +298,5 @@ function CalendarPage() {
     </PageLayout>
   );
 }
-
+  
 export default CalendarPage;
