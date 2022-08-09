@@ -59,6 +59,12 @@ public class Period {
         return new Period(startDateTime, endDateTime);
     }
 
+    public Period plusWeeks(final int weeks) {
+        LocalDateTime startDateTime = this.startDateTime.plusWeeks(weeks);
+        LocalDateTime endDateTime = this.endDateTime.plusWeeks(weeks);
+        return new Period(startDateTime, endDateTime);
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }

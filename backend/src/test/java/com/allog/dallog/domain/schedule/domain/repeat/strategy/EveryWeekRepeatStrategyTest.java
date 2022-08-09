@@ -13,18 +13,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class EveryDayRepeatStrategyTest {
+class EveryWeekRepeatStrategyTest {
 
     private RepeatStrategy repeatStrategy;
 
     @BeforeEach
     void setUp() {
-        repeatStrategy = new EveryDayRepeatStrategy();
+        repeatStrategy = new EveryWeekRepeatStrategy();
     }
 
-    @DisplayName("최초 일정과 종료 일자를 전달받아 매일 반복되는 일정 리스트를 반환한다.")
+    @DisplayName("최초 일정과 종료 일자를 전달받아 매주 반복되는 일정 리스트를 반환한다.")
     @Test
-    void 최초_일정과_종료_일자를_전달받아_매일_반복되는_일정_리스트를_반환한다() {
+    void 최초_일정과_종료_일자를_전달받아_매주_반복되는_일정_리스트를_반환한다() {
         // given
         Schedule initialSchedule = new Schedule(공통_일정(관리자()), "공부", LocalDateTime.of(2022, 8, 1, 10, 0),
                 LocalDateTime.of(2022, 8, 1, 18, 0), "학습하는 날");
@@ -35,7 +35,7 @@ class EveryDayRepeatStrategyTest {
 
         // then
         assertAll(() -> {
-            assertThat(actual).hasSize(31);
+            assertThat(actual).hasSize(5);
         });
     }
 }

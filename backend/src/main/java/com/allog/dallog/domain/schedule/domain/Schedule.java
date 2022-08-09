@@ -115,6 +115,10 @@ public class Schedule extends BaseEntity {
         return new Schedule(category, title, period.plusDays(days), memo);
     }
 
+    public Schedule plusWeeks(final int weeks) {
+        return new Schedule(category, title, period.plusWeeks(weeks), memo);
+    }
+
     public Color getSubscriptionColor(List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .filter(subscription -> subscription.getCategory().equals(category))
