@@ -110,16 +110,22 @@ const dateBorder = ({ colors }: Theme, day: number) => css`
   border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
 `;
 
-const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean) => css`
+const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday: boolean) => css`
   position: absolute;
   top: 1rem;
   right: 1rem;
 
+  width: 5rem;
+  height: 5rem;
   padding: 1rem;
+  border-radius: 50%;
 
-  font-size: 3rem;
+  background: ${isToday && colors.YELLOW_500};
+
+  font-size: 2.5rem;
+  text-align: center;
+  line-height: 3rem;
   font-weight: 500;
-
   color: ${day === 0
     ? isThisMonth
       ? colors.RED_400
