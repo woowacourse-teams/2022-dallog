@@ -65,6 +65,12 @@ public class Period {
         return new Period(startDateTime, endDateTime);
     }
 
+    public Period plusMonths(final int months) {
+        LocalDateTime startDateTime = this.startDateTime.plusMonths(months);
+        LocalDateTime endDateTime = this.endDateTime.plusMonths(months);
+        return new Period(startDateTime, endDateTime);
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }

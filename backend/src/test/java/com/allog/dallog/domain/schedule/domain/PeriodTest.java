@@ -106,4 +106,22 @@ class PeriodTest {
             assertThat(actual.getEndDateTime()).isEqualTo(LocalDateTime.of(2022, 1, 16, 6, 0));
         });
     }
+
+    @DisplayName("시작일시와 종료일시에 월을 더해 반환한다.")
+    @Test
+    void 시작일시와_종료일시에_월을_더해_반환한다() {
+        // given
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 1, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 2, 6, 0);
+        Period period = new Period(startDateTime, endDateTime);
+
+        // when
+        Period actual = period.plusMonths(2);
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.getStartDateTime()).isEqualTo(LocalDateTime.of(2022, 3, 1, 0, 0));
+            assertThat(actual.getEndDateTime()).isEqualTo(LocalDateTime.of(2022, 3, 2, 6, 0));
+        });
+    }
 }
