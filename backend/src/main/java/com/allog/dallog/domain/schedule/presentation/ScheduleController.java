@@ -5,6 +5,7 @@ import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleRepeatCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
@@ -38,6 +39,15 @@ public class ScheduleController {
         Long id = scheduleService.save(loginMember.getId(), categoryId, request);
         return ResponseEntity.created(URI.create("/api/schedules/" + id)).build();
     }
+
+    @PostMapping("/categories/{categoryId}/schedules/repeat")
+    public ResponseEntity<Void> saveRepeat(@AuthenticationPrincipal final LoginMember loginMember,
+                                           @PathVariable final Long categoryId,
+                                           @Valid @RequestBody final ScheduleRepeatCreateRequest request) {
+        Long id = scheduleService.createRepeat(loginMember.getId(), categoryId, request);
+        return ResponseEntity.created(URI.create("/api/schedules/repeat/" + id)).build(); // 실제로는 Location에 접근 불가능
+    }
+
 
     @GetMapping("/members/me/schedules")
     public ResponseEntity<MemberScheduleResponses> findSchedulesByMemberId(

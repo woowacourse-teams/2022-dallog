@@ -50,14 +50,16 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void createRepeat(final Long memberId, final Long categoryId,
+    public Long createRepeat(final Long memberId, final Long categoryId,
                              final ScheduleRepeatCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
         categoryService.validateCreatorBy(memberId, category);
 
         Schedule initialSchedule = request.toScheduleEntity(category);
         RepeatType repeatType = RepeatType.from(request.getRepeatType());
-        scheduleRepeatGroupRepository.save(new ScheduleRepeatGroup(initialSchedule, request.getEndDate(), repeatType));
+        ScheduleRepeatGroup scheduleRepeatGroup = scheduleRepeatGroupRepository.save(
+                new ScheduleRepeatGroup(initialSchedule, request.getEndDate(), repeatType));
+        return scheduleRepeatGroup.getId();
     }
 
     public ScheduleResponse findById(final Long id) {

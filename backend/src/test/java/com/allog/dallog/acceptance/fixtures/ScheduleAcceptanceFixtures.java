@@ -2,6 +2,8 @@ package com.allog.dallog.acceptance.fixtures;
 
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.테코톡_메모;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.테코톡_제목;
 
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import io.restassured.RestAssured;
@@ -26,6 +28,28 @@ public class ScheduleAcceptanceFixtures {
                 .auth().oauth2(accessToken)
                 .body(params)
                 .when().post("/api/categories/{categoryId}/schedules", categoryId)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 반복_일정을_등록한다(final String accessToken, final Long categoryId) {
+
+        Map<String, String> scheduleParams = new HashMap();
+        scheduleParams.put("title", 테코톡_제목);
+        scheduleParams.put("startDateTime", "2022-08-04T14:00");
+        scheduleParams.put("endDateTime", "2022-08-04T15:00");
+        scheduleParams.put("memo", 테코톡_메모);
+
+        Map<String, Object> scheduleRepeatParams = new HashMap<>();
+        scheduleRepeatParams.put("schedule", scheduleParams);
+        scheduleRepeatParams.put("endDate", "2022-08-31");
+        scheduleRepeatParams.put("repeatType", "everyWeek");
+
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .body(scheduleRepeatParams)
+                .when().post("/api/categories/{categoryId}/schedules/repeat", categoryId)
                 .then().log().all()
                 .extract();
     }

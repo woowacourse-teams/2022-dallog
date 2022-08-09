@@ -5,6 +5,7 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
+import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.반복_일정을_등록한다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.새로운_일정을_등록한다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.일정_아이디로_일정을_단건_조회한다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.일정을_삭제한다;
@@ -36,6 +37,20 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId());
+
+        // then
+        상태코드_201이_반환된다(response);
+    }
+
+    @DisplayName("반복 일정을 추가하면 201을 반환한다.")
+    @Test
+    void 반복_일정을_추가하면_201을_반환한다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+        CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
+
+        // when
+        ExtractableResponse<Response> response = 반복_일정을_등록한다(accessToken, 공통_일정_응답.getId());
 
         // then
         상태코드_201이_반환된다(response);
