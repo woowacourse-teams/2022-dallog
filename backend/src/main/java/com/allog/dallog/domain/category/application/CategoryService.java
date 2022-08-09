@@ -9,9 +9,14 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
+<<<<<<< HEAD
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+=======
+import com.allog.dallog.domain.subscription.domain.Subscription;
+>>>>>>> c0e61c9 (refactor: 월별 일정 조회시 특정 범위의 일정만 가져오도록 로직 변경)
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +65,13 @@ public class CategoryService {
     public Category getCategory(final Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(NoSuchCategoryException::new);
+    }
+
+    public List<Category> getCategoriesBy(final List<Subscription> subscriptions) {
+        return subscriptions.stream()
+                .filter(Subscription::isChecked)
+                .map(Subscription::getCategory)
+                .collect(Collectors.toList());
     }
 
     @Transactional

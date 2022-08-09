@@ -13,7 +13,7 @@ import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -72,21 +72,20 @@ public class ScheduleService {
                                                            final DateRangeRequest dateRangeRequest) {
         // TODO: 리팩토링 및 성능개선
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<Schedule> schedules = getSchedulesFrom(subscriptions, dateRangeRequest);
+        List<Category> categories = categoryService.getCategoriesBy(subscriptions);
+        List<Schedule> schedules = findSchedulesBy(categories, dateRangeRequest);
         TypedSchedules typedSchedules = new TypedSchedules(schedules);
         return new MemberScheduleResponses(subscriptions, typedSchedules);
     }
 
-    private List<Schedule> getSchedulesFrom(final List<Subscription> subscriptions,
-                                            final DateRangeRequest dateRangeRequest) {
-        LocalDate startDate = dateRangeRequest.getStartDate();
-        LocalDate endDate = dateRangeRequest.getEndDate();
+    private List<Schedule> findSchedulesBy(final List<Category> categories,
+                                           final DateRangeRequest dateRangeRequest) {
+        LocalDateTime startDate = dateRangeRequest.getStartDateTime();
+        LocalDateTime endDate = dateRangeRequest.getEndDateTime();
 
-        return subscriptions.stream()
-                .filter(Subscription::isChecked) // 체크된 구독 필터
-                .map(Subscription::getCategory)
-                .flatMap(category -> category.getSchedules().stream())
-                .filter(schedule -> schedule.isBetween(startDate, endDate))
+        return categories.stream()
+                .flatMap(category ->
+                        scheduleRepository.findByCategoryIdAndBetween(category, startDate, endDate).stream())
                 .collect(Collectors.toList());
     }
 }
