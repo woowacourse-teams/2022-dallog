@@ -128,16 +128,14 @@ class SubscriptionControllerTest {
     @Test
     void 타인의_개인_카테고리_구독_요청시_403_Forbidden을_반환한다() throws Exception {
         // given
-        given(subscriptionService.save(any(), any(), any()))
+        given(subscriptionService.save(any(), any()))
                 .willThrow(new NoPermissionException("구독 권한이 없는 카테고리입니다."));
 
         // when & then
         mockMvc.perform(
                         post("/api/members/me/categories/{categoryId}/subscriptions", 1L)
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(빨간색_구독_생성_요청)))
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("subscription/private-category",
                         preprocessRequest(prettyPrint()),
@@ -147,9 +145,6 @@ class SubscriptionControllerTest {
                         ),
                         requestHeaders(
                                 headerWithName("Authorization").description("JWT 토큰")
-                        ),
-                        requestFields(
-                                fieldWithPath("color").type(JsonFieldType.STRING).description("구독 색 정보")
                         )))
                 .andExpect(status().isForbidden());
     }
