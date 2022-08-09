@@ -37,7 +37,7 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
 
-    @Column(name = "personal")
+    @Column(name = "personal", nullable = false)
     private boolean personal;
 
     @OneToMany(mappedBy = "category")
