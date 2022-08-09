@@ -37,6 +37,9 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
 
+    @Column(name = "personal", nullable = false)
+    private boolean personal;
+
     @OneToMany(mappedBy = "category")
     private List<Schedule> schedules = new ArrayList<>();
 
@@ -50,6 +53,14 @@ public class Category extends BaseEntity {
         validateNameLength(name);
         this.name = name;
         this.member = member;
+        this.personal = false;
+    }
+
+    public Category(final String name, final Member member, final boolean personal) {
+        validateNameLength(name);
+        this.name = name;
+        this.member = member;
+        this.personal = personal;
     }
 
     public void changeName(final String name) {
@@ -80,6 +91,10 @@ public class Category extends BaseEntity {
 
     public Member getMember() {
         return member;
+    }
+
+    public boolean isPersonal() {
+        return personal;
     }
 
     public List<Schedule> getSchedules() {

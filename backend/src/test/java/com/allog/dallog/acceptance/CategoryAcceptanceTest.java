@@ -18,6 +18,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -39,6 +40,19 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 매트_아고라_생성_요청);
+
+        // then
+        상태코드_201이_반환된다(response);
+    }
+
+    @DisplayName("개인 카테고리를 생성하면 201을 반환한다.")
+    @Test
+    void 개인_카테고리를_생성하면_201을_반환한다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+
+        // when
+        ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 후디_개인_학습_일정_생성_요청);
 
         // then
         상태코드_201이_반환된다(response);
@@ -86,6 +100,29 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             상태코드_200이_반환된다(response);
             assertThat(categoriesResponse.getPage()).isEqualTo(0);
+            assertThat(categoriesResponse.getCategories()).hasSize(3);
+        });
+    }
+
+    @DisplayName("등록된 개인 카테고리는 카테고리 목록에서 조회할 수 없다.")
+    @Test
+    void 등록된_개인_카테고리는_카테고리_목록에서_조회할_수_없다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+        /* 공개 카테고리 */
+        새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
+        /* 개인 카테고리 */
+        새로운_카테고리를_등록한다(accessToken, 후디_개인_학습_일정_생성_요청);
+
+        // when
+        ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("", 0, 10);
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+
+        // then
+        assertAll(() -> {
+            상태코드_200이_반환된다(response);
             assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }

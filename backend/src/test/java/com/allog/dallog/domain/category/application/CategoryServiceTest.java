@@ -9,22 +9,29 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
@@ -46,7 +53,13 @@ class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -67,12 +80,29 @@ class CategoryServiceTest {
         assertThat(response.getName()).isEqualTo(공통_일정_이름);
     }
 
+    @DisplayName("새로운 개인 카테고리를 생성한다.")
+    @Test
+    void 새로운_개인_카테고리를_생성한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        // when
+        CategoryResponse 후디_개인_학습_일정_응답 = categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+        Category 후디_개인_학습_일정 = categoryRepository.findById(후디_개인_학습_일정_응답.getId()).get();
+
+        // then
+        assertAll(() -> {
+            assertThat(후디_개인_학습_일정.getName()).isEqualTo(후디_개인_학습_일정_이름);
+            assertThat(후디_개인_학습_일정.isPersonal()).isTrue();
+        });
+    }
+
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
-        CategoryCreateRequest request = new CategoryCreateRequest(name);
+        CategoryCreateRequest request = new CategoryCreateRequest(name, false);
         Member 관리자 = memberRepository.save(관리자());
 
         // when & then
@@ -126,6 +156,21 @@ class CategoryServiceTest {
                 .hasSize(2)
                 .extracting(CategoryResponse::getName)
                 .contains(FE_일정_이름, 매트_아고라_이름);
+    }
+
+    @DisplayName("개인 카테고리는 전체 조회 대상에서 제외된다.")
+    @Test
+    void 개인_카테고리는_전체_조회_대상에서_제외된다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());// 후디의 개인 카테고리가 생성된다
+        MemberResponse 리버 = memberService.save(리버());// 리버의 개인 카테고리가 생성된다
+        categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+
+        // when
+        CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
+
+        // then
+        assertThat(response.getCategories()).hasSize(0);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")

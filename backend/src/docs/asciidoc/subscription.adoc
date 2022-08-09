@@ -48,6 +48,12 @@ include::{snippets}/subscription/me/request-headers.adoc[]
 
 include::{snippets}/subscription/me/http-response.adoc[]
 
+=== 3자의 개인 카테고리 구독 요청시
+
+==== Response
+
+include::{snippets}/subscription/private-category/http-response.adoc[]
+
 === 내 구독 정보 수정
 
 ==== Request
