@@ -16,8 +16,11 @@ class ColorTest {
     @DisplayName("랜덤으로 색상을 가져온다.")
     @Test
     void 랜덤으로_색상을_가져온다() {
-        // given & when & then
-        assertThat(Color.pickAny()).isNotNull();
+        // given
+        ColorPickerStrategy testStrategy = () -> 0;
+
+        // when & then
+        assertThat(Color.pickAny(testStrategy)).isEqualTo(Color.COLOR_1);
     }
 
     @DisplayName("color code에 맞는 색상을 가져온다.")

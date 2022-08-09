@@ -2,7 +2,6 @@ package com.allog.dallog.domain.subscription.domain;
 
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import java.util.Arrays;
-import java.util.Random;
 
 public enum Color {
 
@@ -37,10 +36,8 @@ public enum Color {
         this.colorCode = colorCode;
     }
 
-    public static Color pickAny() {
-        Color[] values = Color.values();
-        int randomNumber = new Random().nextInt(values.length);
-        return values[randomNumber];
+    public static Color pickAny(ColorPickerStrategy strategy) {
+        return Color.values()[strategy.pickNumber()];
     }
 
     public static Color from(final String colorCode) {

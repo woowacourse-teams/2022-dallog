@@ -6,6 +6,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
@@ -14,6 +15,7 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Service
 public class SubscriptionService {
+
+    private static final ColorPickerStrategy PICK_RANDOM_STRATEGY
+            = () -> ThreadLocalRandom.current().nextInt(Color.values().length);
 
     private final SubscriptionRepository subscriptionRepository;
     private final MemberService memberService;
@@ -41,7 +46,7 @@ public class SubscriptionService {
 
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
-        Color color = Color.pickAny();
+        Color color = Color.pickAny(PICK_RANDOM_STRATEGY);
 
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
 
