@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
@@ -28,18 +29,22 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.학습_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleRepeatCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
@@ -47,7 +52,11 @@ import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,10 +74,16 @@ class ScheduleServiceTest {
     private CategoryService categoryService;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private MemberService memberService;
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @DisplayName("새로운 일정을 생성한다.")
     @Test
@@ -400,5 +415,62 @@ class ScheduleServiceTest {
             assertThat(memberScheduleResponses.getFewHours()).extracting(MemberScheduleResponse::getTitle)
                     .containsExactly("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
         });
+    }
+
+    @DisplayName("매일 반복 일정을 생성한다.")
+    @Test
+    void 매일_반복_일정을_생성한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 공통_일정 = categoryService.save(후디.getId(), 공통_일정_생성_요청);
+        String 반복_유형 = "everyDay";
+        ScheduleRepeatCreateRequest 반복_일정_생성_요청 = new ScheduleRepeatCreateRequest(학습_생성_요청, 반복_유형,
+                LocalDate.of(2022, 8, 31));
+
+        // when
+        scheduleService.createRepeat(후디.getId(), 공통_일정.getId(), 반복_일정_생성_요청);
+        entityManager.clear();
+
+        // then
+        List<Schedule> schedules = categoryRepository.findById(공통_일정.getId()).get().getSchedules();
+        assertThat(schedules).hasSize(31);
+    }
+
+    @DisplayName("매주 반복 일정을 생성한다.")
+    @Test
+    void 매주_반복_일정을_생성한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 공통_일정 = categoryService.save(후디.getId(), 공통_일정_생성_요청);
+        String 반복_유형 = "everyWeek";
+        ScheduleRepeatCreateRequest 반복_일정_생성_요청 = new ScheduleRepeatCreateRequest(학습_생성_요청, 반복_유형,
+                LocalDate.of(2022, 8, 31));
+
+        // when
+        scheduleService.createRepeat(후디.getId(), 공통_일정.getId(), 반복_일정_생성_요청);
+        entityManager.clear();
+
+        // then
+        List<Schedule> schedules = categoryRepository.findById(공통_일정.getId()).get().getSchedules();
+        assertThat(schedules).hasSize(5);
+    }
+
+    @DisplayName("매월 반복 일정을 생성한다.")
+    @Test
+    void 매월_반복_일정을_생성한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 공통_일정 = categoryService.save(후디.getId(), 공통_일정_생성_요청);
+        String 반복_유형 = "everyMonth";
+        ScheduleRepeatCreateRequest 반복_일정_생성_요청 = new ScheduleRepeatCreateRequest(학습_생성_요청, 반복_유형,
+                LocalDate.of(2022, 9, 30));
+
+        // when
+        scheduleService.createRepeat(후디.getId(), 공통_일정.getId(), 반복_일정_생성_요청);
+        entityManager.clear();
+
+        // then
+        List<Schedule> schedules = categoryRepository.findById(공통_일정.getId()).get().getSchedules();
+        assertThat(schedules).hasSize(2);
     }
 }

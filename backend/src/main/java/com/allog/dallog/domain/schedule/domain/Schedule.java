@@ -2,6 +2,7 @@ package com.allog.dallog.domain.schedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
+import com.allog.dallog.domain.schedule.domain.repeat.ScheduleRepeatGroup;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -39,6 +40,10 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "categories_id", nullable = false)
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_repeat_groups_id")
+    private ScheduleRepeatGroup scheduleRepeatGroup;
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -48,8 +53,16 @@ public class Schedule extends BaseEntity {
     @Column(name = "memo", nullable = false)
     private String memo;
 
-
     protected Schedule() {
+    }
+
+    public Schedule(final Schedule schedule, final ScheduleRepeatGroup scheduleRepeatGroup) { // 반복 일정으로 생성된 경우 사용됨
+        addScheduleToCategory(schedule.category);
+        this.category = schedule.category;
+        this.title = schedule.title;
+        this.period = schedule.period;
+        this.memo = schedule.memo;
+        this.scheduleRepeatGroup = scheduleRepeatGroup;
     }
 
     public Schedule(final Category category, final String title, final Period period, final String memo) {
@@ -66,7 +79,7 @@ public class Schedule extends BaseEntity {
                     final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
         validateMemoLength(memo);
-        addScheduleToCategory(category); // 연관관계 편의 메소드
+        addScheduleToCategory(category);
         this.category = category;
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
@@ -80,6 +93,18 @@ public class Schedule extends BaseEntity {
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
+    }
+
+    private void validateTitleLength(final String title) {
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
+        }
+    }
+
+    private void validateMemoLength(final String memo) {
+        if (memo.length() > MAX_MEMO_LENGTH) {
+            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
+        }
     }
 
     private void addScheduleToCategory(final Category category) {
@@ -157,17 +182,5 @@ public class Schedule extends BaseEntity {
 
     public Category getCategory() {
         return category;
-    }
-
-    private void validateTitleLength(final String title) {
-        if (title.length() > MAX_TITLE_LENGTH) {
-            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
-        }
-    }
-
-    private void validateMemoLength(final String memo) {
-        if (memo.length() > MAX_MEMO_LENGTH) {
-            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
-        }
     }
 }

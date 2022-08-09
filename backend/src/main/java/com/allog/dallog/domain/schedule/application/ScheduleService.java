@@ -4,9 +4,13 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
+import com.allog.dallog.domain.schedule.domain.repeat.ScheduleRepeatGroup;
+import com.allog.dallog.domain.schedule.domain.repeat.ScheduleRepeatGroupRepository;
+import com.allog.dallog.domain.schedule.domain.repeat.strategy.RepeatType;
 import com.allog.dallog.domain.schedule.domain.schedules.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.domain.schedule.dto.request.ScheduleRepeatCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
@@ -24,12 +28,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleRepeatGroupRepository scheduleRepeatGroupRepository;
     private final CategoryService categoryService;
     private final SubscriptionService subscriptionService;
 
-    public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryService categoryService,
-                           final SubscriptionService subscriptionService) {
+    public ScheduleService(final ScheduleRepository scheduleRepository,
+                           final ScheduleRepeatGroupRepository scheduleRepeatGroupRepository,
+                           final CategoryService categoryService, final SubscriptionService subscriptionService) {
         this.scheduleRepository = scheduleRepository;
+        this.scheduleRepeatGroupRepository = scheduleRepeatGroupRepository;
         this.categoryService = categoryService;
         this.subscriptionService = subscriptionService;
     }
@@ -40,6 +47,16 @@ public class ScheduleService {
         categoryService.validateCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return schedule.getId();
+    }
+
+    public void createRepeat(final Long memberId, final Long categoryId,
+                             final ScheduleRepeatCreateRequest request) {
+        Category category = categoryService.getCategory(categoryId);
+        categoryService.validateCreatorBy(memberId, category);
+
+        Schedule initialSchedule = request.toScheduleEntity(category);
+        RepeatType repeatType = RepeatType.from(request.getRepeatType());
+        scheduleRepeatGroupRepository.save(new ScheduleRepeatGroup(initialSchedule, request.getEndDate(), repeatType));
     }
 
     public ScheduleResponse findById(final Long id) {

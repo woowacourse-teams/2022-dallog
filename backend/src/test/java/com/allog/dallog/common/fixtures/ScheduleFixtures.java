@@ -58,6 +58,13 @@ public class ScheduleFixtures {
     public static final ScheduleCreateRequest 테코톡_생성_요청 = new ScheduleCreateRequest(테코톡_제목, 테코톡_시작일시,
             테코톡_종료일시, 테코톡_메모);
 
+    /* 학습 */
+    public static final String 학습_제목 = "학습";
+    public static final LocalDateTime 학습_시작일시 = LocalDateTime.of(2022, 8, 1, 10, 0);
+    public static final LocalDateTime 학습_종료일시 = LocalDateTime.of(2022, 8, 1, 18, 0);
+    public static final String 학습_메모 = "프로그래밍 학습";
+    public static final ScheduleCreateRequest 학습_생성_요청 = new ScheduleCreateRequest(학습_제목, 학습_시작일시, 학습_종료일시, 학습_메모);
+
     public static Schedule 알록달록_회의(final Category category) {
         return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
     }
@@ -72,6 +79,10 @@ public class ScheduleFixtures {
 
     public static Schedule 테코톡(final Category category) {
         return new Schedule(category, 테코톡_제목, 테코톡_시작일시, 테코톡_종료일시, 테코톡_메모);
+    }
+
+    public static Schedule 학습(final Category category) {
+        return new Schedule(category, 학습_제목, 학습_시작일시, 학습_종료일시, 학습_메모);
     }
 
     public static ScheduleResponse 알록달록_회의_응답() {
