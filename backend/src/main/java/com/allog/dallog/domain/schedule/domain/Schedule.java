@@ -79,8 +79,7 @@ public class Schedule extends BaseEntity {
     }
 
     public boolean isLongTerms() {
-        return (period.calculateDayDifference() >= ONE_DAY && period.calculateHourDifference() < 24)
-                || period.calculateHourDifference() >= 24;
+        return period.calculateDayDifference() >= ONE_DAY;
     }
 
     public boolean isAllDays() {

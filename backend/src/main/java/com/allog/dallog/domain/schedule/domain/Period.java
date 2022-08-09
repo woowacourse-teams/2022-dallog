@@ -35,6 +35,12 @@ public class Period {
         }
     }
 
+    public long calculateDayDifference() {
+        LocalDate startDate = LocalDate.from(startDateTime);
+        LocalDate endDate = LocalDate.from(endDateTime);
+        return ChronoUnit.DAYS.between(startDate, endDate);
+    }
+
     public long calculateHourDifference() {
         LocalTime startTime = LocalTime.from(startDateTime);
         LocalTime endTime = LocalTime.from(endDateTime);
@@ -45,12 +51,6 @@ public class Period {
         LocalTime startTime = LocalTime.from(startDateTime);
         LocalTime endTime = LocalTime.from(endDateTime);
         return ChronoUnit.MINUTES.between(startTime, endTime) % ONE_HOUR;
-    }
-
-    public long calculateDayDifference() {
-        LocalDate startDate = LocalDate.from(startDateTime);
-        LocalDate endDate = LocalDate.from(endDateTime);
-        return ChronoUnit.DAYS.between(startDate, endDate);
     }
 
     public LocalDateTime getStartDateTime() {
