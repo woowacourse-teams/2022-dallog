@@ -474,6 +474,33 @@ class ScheduleServiceTest {
         assertThat(schedules).hasSize(2);
     }
 
+    @DisplayName("반복 일정의 중간 일정 하나를 삭제한다.")
+    @Test
+    void 반복_일정의_중간_일정_하나를_삭제한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 공통_일정 = categoryService.save(후디.getId(), 공통_일정_생성_요청);
+        String 반복_유형 = "everyDay";
+        ScheduleRepeatCreateRequest 반복_일정_생성_요청 = new ScheduleRepeatCreateRequest(학습_생성_요청, 반복_유형,
+                LocalDate.of(2022, 8, 31));
+        scheduleService.createRepeat(후디.getId(), 공통_일정.getId(), 반복_일정_생성_요청);
+
+        entityManager.flush();
+        entityManager.clear(); // 공통_일정의 ID를 얻기 위함
+
+        Schedule 중간_일정 = categoryRepository.findById(공통_일정.getId()).get().getSchedules().get(10);
+
+        // when
+        scheduleService.deleteById(중간_일정.getId(), 후디.getId());
+
+        entityManager.flush();
+        entityManager.clear(); // 스케줄 제거가 반영되기 위함
+
+        // then
+        List<Schedule> schedules = categoryRepository.findById(공통_일정.getId()).get().getSchedules();
+        assertThat(schedules).hasSize(30);
+    }
+
     @DisplayName("반복 일정 중 중간 일정 이후의 모든 연관 일정을 삭제한다.")
     @Test
     void 반복_일정_중_중간_일정_이후의_모든_연관_일정을_삭제한다() {
