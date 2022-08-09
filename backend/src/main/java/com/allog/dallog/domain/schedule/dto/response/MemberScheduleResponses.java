@@ -37,6 +37,7 @@ public class MemberScheduleResponses {
                 .collect(Collectors.toList());
     }
 
+
     public List<MemberScheduleResponse> getLongTerms() {
         return longTerms;
     }

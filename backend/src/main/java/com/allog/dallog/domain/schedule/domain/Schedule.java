@@ -24,14 +24,10 @@ import javax.persistence.Table;
 @Entity
 public class Schedule extends BaseEntity {
 
-<<<<<<< HEAD
-    private static final int MAX_TITLE_LENGTH = 50;
-=======
     private static final int ONE_DAY = 1;
     private static final int MIDNIGHT_HOUR = 23;
     private static final int MIDNIGHT_MINUTE = 59;
     private static final int MAX_TITLE_LENGTH = 20;
->>>>>>> a4273e0 (refactor: ScheduleType의 일정 월별 조회 로직을 Period로 이동한다)
     private static final int MAX_MEMO_LENGTH = 255;
 
     @Id
@@ -99,7 +95,7 @@ public class Schedule extends BaseEntity {
                 && period.calculateHourDifference() < 24;
     }
 
-    public boolean isBetween(LocalDate startDate, LocalDate endDate) {
+    public boolean isBetween(final LocalDate startDate, final LocalDate endDate) {
         LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
 
@@ -107,22 +103,7 @@ public class Schedule extends BaseEntity {
                 && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
     }
 
-<<<<<<< HEAD
-    public boolean isDayDifferent() {
-        long dayDifference = ChronoUnit.DAYS.between(LocalDate.from(getStartDateTime()),
-                LocalDate.from(getEndDateTime()));
-        return dayDifference >= ONE_DAY;
-    }
-
-    public boolean isMidNightToMidNight() {
-        return getStartDateTime().getHour() == MID_NIGHT_HOUR && getStartDateTime().getMinute() == MID_NIGHT_MINUTE &&
-                getEndDateTime().getHour() == MID_NIGHT_HOUR && getEndDateTime().getMinute() == MID_NIGHT_MINUTE;
-    }
-
     public Color getSubscriptionColor(List<Subscription> subscriptions) {
-=======
-    public String getSubscriptionColor(List<Subscription> subscriptions) {
->>>>>>> a4273e0 (refactor: ScheduleType의 일정 월별 조회 로직을 Period로 이동한다)
         return subscriptions.stream()
                 .filter(subscription -> subscription.getCategory().equals(category))
                 .findAny()
