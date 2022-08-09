@@ -64,9 +64,10 @@ function CategoryPage() {
               <GoSearch size={16} />
             </Button>
             <Fieldset
-              placeholder="카테고리 이름 검색"
+              placeholder={mode === 'MY' ? '검색 불가능' : '카테고리 이름 검색'}
               cssProp={{ div: searchFieldsetStyle, input: searchInputStyle }}
               refProp={keywordRef}
+              disabled={mode === 'MY'}
             />
           </form>
           <Button cssProp={filteringButtonStyle(theme)} onClick={handleClickFilteringButton}>
