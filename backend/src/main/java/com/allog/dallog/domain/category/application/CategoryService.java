@@ -8,8 +8,9 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
-    public CategoryService(final CategoryRepository categoryRepository, final MemberService memberService) {
+    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository) {
         this.categoryRepository = categoryRepository;
-        this.memberService = memberService;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        Member member = memberService.getMember(memberId);
+        Member member = getMember(memberId);
         Category category = categoryRepository.save(new Category(request.getName(), member));
         return new CategoryResponse(category);
+    }
+
+    private Member getMember(final Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
     }
 
     public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
