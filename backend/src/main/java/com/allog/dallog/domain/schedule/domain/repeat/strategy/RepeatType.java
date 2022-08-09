@@ -1,18 +1,20 @@
-package com.allog.dallog.domain.schedule.domain.repeat;
+package com.allog.dallog.domain.schedule.domain.repeat.strategy;
 
 import com.allog.dallog.domain.schedule.exception.InvalidRepeatTypeException;
 import java.util.Arrays;
 
 public enum RepeatType {
-    EVERY_DAY("everyDay"),
-    EVERY_WEEK("everyWeek"),
-    EVERY_MONTH("everyMonth"),
+    EVERY_DAY("everyDay", new EveryDayRepeatStrategy()),
+    EVERY_WEEK("everyWeek", new EveryWeekRepeatStrategy()),
+    EVERY_MONTH("everyMonth", new EveryMonthRepeatStrategy()),
     ;
 
     private final String name;
+    private final RepeatStrategy repeatStrategy;
 
-    RepeatType(final String name) {
+    RepeatType(final String name, final RepeatStrategy repeatStrategy) {
         this.name = name;
+        this.repeatStrategy = repeatStrategy;
     }
 
     public static RepeatType from(final String name) {
@@ -24,5 +26,9 @@ public enum RepeatType {
 
     public String getName() {
         return name;
+    }
+
+    public RepeatStrategy getRepeatStrategy() {
+        return repeatStrategy;
     }
 }

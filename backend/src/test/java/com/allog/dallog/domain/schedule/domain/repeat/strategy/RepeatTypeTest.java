@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.schedule.domain.repeat;
+package com.allog.dallog.domain.schedule.domain.repeat.strategy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
