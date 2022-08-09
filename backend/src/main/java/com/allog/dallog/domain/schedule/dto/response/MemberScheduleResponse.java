@@ -20,8 +20,8 @@ public class MemberScheduleResponse {
     }
 
     public MemberScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
-                                  final LocalDateTime endDateTime,
-                                  final String memo, final Long categoryId, final Color color) {
+                                  final LocalDateTime endDateTime, final String memo, final Long categoryId,
+                                  final Color color) {
         this.id = id;
         this.title = title;
         this.startDateTime = startDateTime;

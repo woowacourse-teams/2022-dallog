@@ -23,7 +23,7 @@ class ColorTest {
     @DisplayName("color code에 맞는 색상을 가져온다.")
     @ParameterizedTest
     @EnumSource
-    void color_code에_맞는_색생을_가져온다(final Color color) {
+    void color_code에_맞는_색상을_가져온다(final Color color) {
         // given & when & then
         assertThat(Color.from(color.getColorCode())).isEqualTo(color);
     }
