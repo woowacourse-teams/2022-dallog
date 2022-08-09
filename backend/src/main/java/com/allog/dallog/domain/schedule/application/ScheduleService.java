@@ -49,6 +49,7 @@ public class ScheduleService {
         return schedule.getId();
     }
 
+    @Transactional
     public void createRepeat(final Long memberId, final Long categoryId,
                              final ScheduleRepeatCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
@@ -83,6 +84,15 @@ public class ScheduleService {
 
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteByIdWithAfterAllSchedules(final Long id, final Long memberId) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(NoSuchScheduleException::new);
+        categoryService.validateCreatorBy(memberId, schedule.getCategory());
+
+        ScheduleRepeatGroup scheduleRepeatGroup = schedule.getScheduleRepeatGroup();
+        scheduleRepeatGroup.deleteWithAfterAllSchedules(schedule);
     }
 
     public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,

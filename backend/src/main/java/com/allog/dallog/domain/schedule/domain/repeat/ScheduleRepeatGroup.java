@@ -40,6 +40,14 @@ public class ScheduleRepeatGroup {
                 .collect(Collectors.toList());
     }
 
+    public void deleteWithAfterAllSchedules(final Schedule schedule) {
+        List<Schedule> deleteTargets = schedules.stream()
+                .filter(it -> !it.getStartDateTime().isBefore(schedule.getStartDateTime()))
+                .collect(Collectors.toList());
+
+        this.schedules.removeAll(deleteTargets);
+    }
+
     public Long getId() {
         return id;
     }

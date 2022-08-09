@@ -164,6 +164,10 @@ public class Schedule extends BaseEntity {
         return category.getId();
     }
 
+    public ScheduleRepeatGroup getScheduleRepeatGroup() {
+        return scheduleRepeatGroup;
+    }
+
     public String getTitle() {
         return title;
     }
