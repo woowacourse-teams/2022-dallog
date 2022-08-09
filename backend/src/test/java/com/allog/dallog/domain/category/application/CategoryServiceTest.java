@@ -10,15 +10,18 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
@@ -50,6 +53,9 @@ class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private SubscriptionService subscriptionService;
 
     @Autowired
@@ -72,6 +78,23 @@ class CategoryServiceTest {
 
         // then
         assertThat(response.getName()).isEqualTo(공통_일정_이름);
+    }
+
+    @DisplayName("새로운 개인 카테고리를 생성한다.")
+    @Test
+    void 새로운_개인_카테고리를_생성한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        // when
+        CategoryResponse 후디_개인_학습_일정_응답 = categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+        Category 후디_개인_학습_일정 = categoryRepository.findById(후디_개인_학습_일정_응답.getId()).get();
+
+        // then
+        assertAll(() -> {
+            assertThat(후디_개인_학습_일정.getName()).isEqualTo(후디_개인_학습_일정_이름);
+            assertThat(후디_개인_학습_일정.isPrivate()).isTrue();
+        });
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
