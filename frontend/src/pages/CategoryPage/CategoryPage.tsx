@@ -14,7 +14,7 @@ import MyCategoryList from '@/components/MyCategoryList/MyCategoryList';
 import { GoSearch } from 'react-icons/go';
 
 import {
-  buttonStyle,
+  addButtonStyle,
   categoryPageStyle,
   controlStyle,
   filteringButtonStyle,
@@ -72,11 +72,10 @@ function CategoryPage() {
           <Button cssProp={filteringButtonStyle(theme)} onClick={handleClickFilteringButton}>
             {mode === 'ALL' ? '나의 카테고리 보기 ' : '전체 카테고리 보기'}
           </Button>
-          <Button cssProp={buttonStyle(theme)} onClick={handleClickCategoryAddButton}>
+          <Button cssProp={addButtonStyle(theme)} onClick={handleClickCategoryAddButton}>
             카테고리 추가
           </Button>
         </div>
-
         {mode === 'ALL' && <CategoryList keyword={keyword} />}
         {mode === 'MY' && <MyCategoryList />}
       </div>

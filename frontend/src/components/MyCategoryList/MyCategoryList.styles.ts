@@ -1,27 +1,23 @@
 import { css, Theme } from '@emotion/react';
 
-const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
-  ${flex.column}
-
-  display: ${isSideBarOpen ? 'flex' : 'none'};
-  justify-content: flex-start;
-
-  width: 54rem;
-  margin-top: 5rem;
-
-  font-size: 4rem;
+const itemStyle = css`
+  flex: 1 1 0;
+  text-align: center;
 `;
 
-const headerStyle = ({ flex }: Theme) => css`
+const headerStyle = ({ flex, colors }: Theme) => css`
   ${flex.row}
 
-  justify-content: space-between;
+  justify-content: space-around;
 
   width: 100%;
-  height: 8rem;
-  margin-bottom: 2rem;
+  height: 12rem;
+  border-bottom: 2px solid ${colors.GRAY_400};
 
-  font-weight: bold;
+  background: ${colors.GRAY_100};
+
+  font-size: 4rem;
+  font-weight: 700;
 `;
 
 const buttonStyle = ({ colors }: Theme) => css`
@@ -41,12 +37,11 @@ const buttonStyle = ({ colors }: Theme) => css`
   }
 `;
 
-const contentStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
+const listStyle = css`
   width: 100%;
+  height: 100%;
+
+  overflow-y: overlay;
 `;
 
 const spinnerStyle = ({ flex }: Theme) => css`
@@ -58,4 +53,4 @@ const spinnerStyle = ({ flex }: Theme) => css`
   height: 50%;
 `;
 
-export { buttonStyle, contentStyle, headerStyle, listStyle, spinnerStyle };
+export { buttonStyle, listStyle, headerStyle, itemStyle, spinnerStyle };

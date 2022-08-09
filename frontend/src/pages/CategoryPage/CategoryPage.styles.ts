@@ -32,7 +32,7 @@ const searchInputStyle = css`
   font-size: 4rem;
 `;
 
-const buttonStyle = ({ colors }: Theme) => css`
+const addButtonStyle = ({ colors }: Theme) => css`
   width: 30rem;
   height: 10rem;
   border-radius: 3px;
@@ -69,7 +69,7 @@ const filteringButtonStyle = ({ colors }: Theme) => css`
 `;
 
 export {
-  buttonStyle,
+  addButtonStyle,
   categoryPageStyle,
   controlStyle,
   filteringButtonStyle,
