@@ -36,7 +36,7 @@ const global = ({ colors }: Theme) => css`
       border-radius: 10px;
       box-shadow: inset 0px 0px 5px white;
 
-      background: ${colors.YELLOW_100};
+      background: ${colors.GRAY_200};
     }
   }
 `;

@@ -6,7 +6,7 @@ const colors = {
   YELLOW_200: '#ffec99',
   YELLOW_300: '#ffe066',
   YELLOW_400: '#fee500',
-  YELLOW_500: '#fcc419',
+  YELLOW_500: '#F4BD68',
   YELLOW_600: '#fab005',
   YELLOW_700: '#f59f00',
   YELLOW_800: '#f08c00',
@@ -34,6 +34,8 @@ const colors = {
   RED_700: '#f03e3e',
   RED_800: '#e03131',
   RED_900: '#c92a2a',
+  ORANGE_500: '#EE6C4C',
+  BLUE_500: '#88B6B9',
 };
 
 const flex = {
