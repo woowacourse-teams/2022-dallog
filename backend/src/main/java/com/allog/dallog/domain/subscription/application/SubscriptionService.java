@@ -58,7 +58,7 @@ public class SubscriptionService {
     }
 
     private void validatePermission(final Long memberId, final Category category) {
-        if (category.isPrivate() && !category.isCreator(memberId)) {
+        if (category.isPersonal() && !category.isCreator(memberId)) {
             throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
         }
     }

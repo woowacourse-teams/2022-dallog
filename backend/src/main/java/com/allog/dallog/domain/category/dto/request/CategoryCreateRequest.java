@@ -7,21 +7,21 @@ public class CategoryCreateRequest {
     @NotBlank
     private String name;
 
-    private boolean isPrivate;
+    private boolean personal;
 
     private CategoryCreateRequest() {
     }
 
-    public CategoryCreateRequest(final String name, final boolean isPrivate) {
+    public CategoryCreateRequest(final String name, final boolean personal) {
         this.name = name;
-        this.isPrivate = isPrivate;
+        this.personal = personal;
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean getIsPrivate() {
-        return isPrivate;
+    public boolean isPersonal() {
+        return personal;
     }
 }

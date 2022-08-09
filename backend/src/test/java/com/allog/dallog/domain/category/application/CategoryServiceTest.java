@@ -93,7 +93,7 @@ class CategoryServiceTest {
         // then
         assertAll(() -> {
             assertThat(후디_개인_학습_일정.getName()).isEqualTo(후디_개인_학습_일정_이름);
-            assertThat(후디_개인_학습_일정.isPrivate()).isTrue();
+            assertThat(후디_개인_학습_일정.isPersonal()).isTrue();
         });
     }
 
