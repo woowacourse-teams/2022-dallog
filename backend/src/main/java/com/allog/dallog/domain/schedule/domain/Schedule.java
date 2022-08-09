@@ -90,8 +90,7 @@ public class Schedule extends BaseEntity {
 
     public boolean isFewHours() {
         return !isAllDays()
-                && period.calculateDayDifference() < ONE_DAY
-                && period.calculateHourDifference() < 24;
+                && period.calculateDayDifference() < ONE_DAY;
     }
 
     public boolean isBetween(final LocalDate startDate, final LocalDate endDate) {
