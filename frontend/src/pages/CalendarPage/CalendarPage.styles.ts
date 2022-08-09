@@ -126,7 +126,9 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
   text-align: center;
   line-height: 3rem;
   font-weight: 500;
-  color: ${day === 0
+  color: ${isToday
+    ? colors.WHITE
+    : day === 0
     ? isThisMonth
       ? colors.RED_400
       : `${colors.RED_400}80`
