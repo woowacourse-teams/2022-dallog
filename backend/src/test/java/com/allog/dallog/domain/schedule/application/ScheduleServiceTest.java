@@ -28,7 +28,6 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -303,7 +302,7 @@ class ScheduleServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId());
 
         /* 장기간 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
@@ -356,7 +355,7 @@ class ScheduleServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId());
 
         /* 장기간 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),

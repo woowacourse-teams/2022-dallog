@@ -14,10 +14,6 @@ include::{snippets}/subscription/save/path-parameters.adoc[]
 
 include::{snippets}/subscription/save/request-headers.adoc[]
 
-==== Request Parameters
-
-include::{snippets}/subscription/save/request-body.adoc[]
-
 ==== Response
 
 include::{snippets}/subscription/save/http-response.adoc[]
@@ -35,10 +31,6 @@ include::{snippets}/subscription/exist/path-parameters.adoc[]
 ==== Request Headers
 
 include::{snippets}/subscription/exist/request-headers.adoc[]
-
-==== Request Parameters
-
-include::{snippets}/subscription/exist/request-body.adoc[]
 
 ==== Response
 

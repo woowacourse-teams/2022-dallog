@@ -3,7 +3,6 @@ package com.allog.dallog.domain.subscription.presentation;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -30,9 +29,8 @@ public class SubscriptionController {
 
     @PostMapping("/categories/{categoryId}/subscriptions")
     public ResponseEntity<SubscriptionResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
-                                                     @PathVariable final Long categoryId,
-                                                     @RequestBody final SubscriptionCreateRequest request) {
-        SubscriptionResponse response = subscriptionService.save(loginMember.getId(), categoryId, request);
+                                                     @PathVariable final Long categoryId) {
+        SubscriptionResponse response = subscriptionService.save(loginMember.getId(), categoryId);
         return ResponseEntity.created(
                         URI.create("/api/members/me/categories/" + categoryId + "/subscriptions/" + response.getId()))
                 .body(response);

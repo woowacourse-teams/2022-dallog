@@ -5,9 +5,9 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -34,16 +34,16 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public SubscriptionResponse save(final Long memberId, final Long categoryId,
-                                     final SubscriptionCreateRequest request) {
+    public SubscriptionResponse save(final Long memberId, final Long categoryId) {
         if (subscriptionRepository.existsByMemberIdAndCategoryId(memberId, categoryId)) {
             throw new ExistSubscriptionException();
         }
 
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
+        Color color = Color.pickAny();
 
-        Subscription subscription = subscriptionRepository.save(new Subscription(member, category, request.getColor()));
+        Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
 
         return new SubscriptionResponse(subscription);
     }

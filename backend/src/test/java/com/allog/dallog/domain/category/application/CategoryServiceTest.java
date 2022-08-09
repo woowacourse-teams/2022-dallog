@@ -12,7 +12,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스�
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -249,7 +248,7 @@ class CategoryServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         Member 후디 = memberRepository.save(후디());
-        SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
+        SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
         entityManager.clear();

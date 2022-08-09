@@ -6,9 +6,9 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상2_구독;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상3_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.domain.category.domain.Category;
@@ -60,7 +60,7 @@ class SubscriptionRepositoryTest {
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
         Member 매트 = memberRepository.save(매트());
-        subscriptionRepository.save(빨간색_구독(매트, 공통_일정));
+        subscriptionRepository.save(색상1_구독(매트, 공통_일정));
 
         // when
         boolean actual = subscriptionRepository.existsByMemberIdAndCategoryId(매트.getId(), 공통_일정.getId());
@@ -79,13 +79,9 @@ class SubscriptionRepositoryTest {
         Category FE_일정 = categoryRepository.save(FE_일정(관리자));
 
         Member 후디 = memberRepository.save(후디());
-        Subscription 빨간색_구독 = 빨간색_구독(후디, 공통_일정);
-        Subscription 파란색_구독 = 파란색_구독(후디, BE_일정);
-        Subscription 노란색_구독 = 노란색_구독(후디, FE_일정);
-
-        subscriptionRepository.save(빨간색_구독);
-        subscriptionRepository.save(파란색_구독);
-        subscriptionRepository.save(노란색_구독);
+        subscriptionRepository.save(색상1_구독(후디, 공통_일정));
+        subscriptionRepository.save(색상2_구독(후디, BE_일정));
+        subscriptionRepository.save(색상3_구독(후디, FE_일정));
 
         // when
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(후디.getId());
@@ -115,11 +111,11 @@ class SubscriptionRepositoryTest {
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
         Member 후디 = memberRepository.save(후디());
-        Subscription 빨간색_구독 = 빨간색_구독(후디, 공통_일정);
-        subscriptionRepository.save(빨간색_구독);
+        Subscription 색상1_구독 = 색상1_구독(후디, 공통_일정);
+        subscriptionRepository.save(색상1_구독);
 
         // when
-        boolean actual = subscriptionRepository.existsByIdAndMemberId(빨간색_구독.getId(), 후디.getId());
+        boolean actual = subscriptionRepository.existsByIdAndMemberId(색상1_구독.getId(), 후디.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -148,12 +144,12 @@ class SubscriptionRepositoryTest {
         Category FE_일정 = categoryRepository.save(FE_일정(관리자));
 
         Member 매트 = memberRepository.save(매트());
-        Subscription 빨간색_구독 = subscriptionRepository.save(빨간색_구독(매트, 공통_일정));
-        subscriptionRepository.save(파란색_구독(매트, BE_일정));
-        subscriptionRepository.save(노란색_구독(매트, FE_일정));
+        Subscription 색상1_구독 = subscriptionRepository.save(색상1_구독(매트, 공통_일정));
+        subscriptionRepository.save(색상2_구독(매트, BE_일정));
+        subscriptionRepository.save(색상3_구독(매트, FE_일정));
 
         // when
-        subscriptionRepository.deleteByIdAndMemberId(빨간색_구독.getId(), 매트.getId());
+        subscriptionRepository.deleteByIdAndMemberId(색상1_구독.getId(), 매트.getId());
 
         // then
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(매트.getId());

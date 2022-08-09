@@ -7,10 +7,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.노란색_구독_생성_요청;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.빨간색_구독_생성_요청;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.파란색_구독_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,7 +16,7 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
-import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -56,13 +52,10 @@ class SubscriptionServiceTest {
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
 
         // when
-        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
-            assertThat(response.getColor()).isEqualTo(빨간색);
-        });
+        assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
     }
 
     @DisplayName("이미 존재하는 구독 정보를 저장할 경우 예외를 던진다.")
@@ -71,24 +64,11 @@ class SubscriptionServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청))
+        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), BE_일정.getId()))
                 .isInstanceOf(ExistSubscriptionException.class);
-    }
-
-    @DisplayName("색 정보 형식이 잘못된 경우 예외를 던진다.")
-    @ParameterizedTest
-    @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#"})
-    void 색_정보_형식이_잘못된_경우_예외를_던진다(final String color) {
-        // given
-        MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse categoryResponse = categoryService.save(후디.getId(), BE_일정_생성_요청);
-
-        // when & then
-        assertThatThrownBy(() -> subscriptionService.save(후디.getId(), categoryResponse.getId(),
-                new SubscriptionCreateRequest(color))).isInstanceOf(InvalidSubscriptionException.class);
     }
 
     @DisplayName("구독 id를 기반으로 단건 조회한다.")
@@ -97,7 +77,7 @@ class SubscriptionServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when
         SubscriptionResponse foundResponse = subscriptionService.findById(빨간색_구독.getId());
@@ -106,7 +86,6 @@ class SubscriptionServiceTest {
         assertAll(() -> {
             assertThat(foundResponse.getId()).isEqualTo(빨간색_구독.getId());
             assertThat(foundResponse.getCategory().getId()).isEqualTo(BE_일정.getId());
-            assertThat(foundResponse.getColor()).isEqualTo(빨간색);
         });
     }
 
@@ -128,9 +107,9 @@ class SubscriptionServiceTest {
         CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse 후디 = memberService.save(후디());
-        subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
-        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
+        subscriptionService.save(후디.getId(), 공통_일정.getId());
+        subscriptionService.save(후디.getId(), BE_일정.getId());
+        subscriptionService.save(후디.getId(), FE_일정.getId());
 
         // when
         SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디.getId());
@@ -145,17 +124,35 @@ class SubscriptionServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId(), 빨간색_구독_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
+        Color color = Color.COLOR_1;
 
         // when
-        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest("#FF0000", true);
+        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(color, true);
         subscriptionService.update(response.getId(), 후디.getId(), request);
 
         // then
         assertAll(() -> {
-            assertThat(request.getColor()).isEqualTo("#FF0000");
+            assertThat(request.getColor()).isEqualTo(color);
             assertThat(request.isChecked()).isTrue();
         });
+    }
+
+    @DisplayName("구독 정보 수정 시 존재하지 않는 색상인 경우 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#", "#00FF00"})
+    void 구독_정보_수정_시_존재하지_않는_색상인_경우_예외를_던진다(final String colorCode) {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
+
+        // when
+        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(colorCode, true);
+
+        // then
+        assertThatThrownBy(() -> subscriptionService.update(response.getId(), 후디.getId(), request))
+                .isInstanceOf(InvalidSubscriptionException.class);
     }
 
     @DisplayName("구독 정보를 삭제한다.")
@@ -168,9 +165,9 @@ class SubscriptionServiceTest {
         CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse 후디 = memberService.save(후디());
-        SubscriptionResponse response = subscriptionService.save(후디.getId(), 공통_일정.getId(), 빨간색_구독_생성_요청);
-        subscriptionService.save(후디.getId(), BE_일정.getId(), 파란색_구독_생성_요청);
-        subscriptionService.save(후디.getId(), FE_일정.getId(), 노란색_구독_생성_요청);
+        SubscriptionResponse response = subscriptionService.save(후디.getId(), 공통_일정.getId());
+        subscriptionService.save(후디.getId(), BE_일정.getId());
+        subscriptionService.save(후디.getId(), FE_일정.getId());
 
         // when
         subscriptionService.deleteByIdAndMemberId(response.getId(), 후디.getId());

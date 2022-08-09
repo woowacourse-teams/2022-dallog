@@ -1,13 +1,14 @@
 package com.allog.dallog.domain.subscription.dto.response;
 
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 
 public class SubscriptionResponse {
 
     private Long id;
     private CategoryResponse category;
-    private String color;
+    private String colorCode;
 
     private boolean checked;
 
@@ -19,11 +20,11 @@ public class SubscriptionResponse {
                 subscription.isChecked());
     }
 
-    public SubscriptionResponse(final Long id, final CategoryResponse category, final String color,
+    public SubscriptionResponse(final Long id, final CategoryResponse category, final Color color,
                                 final boolean checked) {
         this.id = id;
         this.category = category;
-        this.color = color;
+        this.colorCode = color.getColorCode();
         this.checked = checked;
     }
 
@@ -35,8 +36,8 @@ public class SubscriptionResponse {
         return category;
     }
 
-    public String getColor() {
-        return color;
+    public String getColorCode() {
+        return colorCode;
     }
 
     public boolean isChecked() {
