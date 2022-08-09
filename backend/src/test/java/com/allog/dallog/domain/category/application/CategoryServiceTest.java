@@ -9,6 +9,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
@@ -27,6 +28,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
@@ -77,7 +79,7 @@ class CategoryServiceTest {
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
-        CategoryCreateRequest request = new CategoryCreateRequest(name);
+        CategoryCreateRequest request = new CategoryCreateRequest(name, false);
         Member 관리자 = memberRepository.save(관리자());
 
         // when & then
@@ -137,8 +139,9 @@ class CategoryServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
-        memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
+        MemberResponse 후디 = memberService.save(후디());// 후디의 개인 카테고리가 생성된다
+        MemberResponse 리버 = memberService.save(리버());// 리버의 개인 카테고리가 생성된다
+        categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
 
         // when
         CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));

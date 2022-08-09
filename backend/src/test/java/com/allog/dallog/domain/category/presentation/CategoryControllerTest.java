@@ -110,7 +110,7 @@ class CategoryControllerTest {
                 .given(categoryService)
                 .save(any(), any());
 
-        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME);
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, false);
 
         // when & then
         mockMvc.perform(post("/api/categories")

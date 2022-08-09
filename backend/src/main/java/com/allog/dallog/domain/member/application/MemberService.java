@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.member.application;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -17,20 +17,25 @@ public class MemberService {
     private static final String PERSONAL_CATEGORY_NAME = "개인 일정";
 
     private final MemberRepository memberRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository) {
+    public MemberService(final MemberRepository memberRepository, final CategoryService categoryService) {
         this.memberRepository = memberRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     @Transactional
     public MemberResponse save(final Member member) {
         Member newMember = memberRepository.save(member);
-        Category personalCategory = new Category(PERSONAL_CATEGORY_NAME, newMember, true);
-        categoryRepository.save(personalCategory);
+        createPersonalCategory(member);
 
         return new MemberResponse(newMember);
+    }
+
+    private void createPersonalCategory(final Member member) {
+        Long memberId = member.getId();
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, true);
+        categoryService.save(memberId, categoryCreateRequest);
     }
 
     public MemberResponse findById(final Long id) {

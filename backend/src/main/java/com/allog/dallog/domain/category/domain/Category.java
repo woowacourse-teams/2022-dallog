@@ -33,7 +33,6 @@ public class Category extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
@@ -58,6 +57,7 @@ public class Category extends BaseEntity {
     }
 
     public Category(final String name, final Member member, final boolean isPrivate) {
+        validateNameLength(name);
         this.name = name;
         this.member = member;
         this.isPrivate = isPrivate;

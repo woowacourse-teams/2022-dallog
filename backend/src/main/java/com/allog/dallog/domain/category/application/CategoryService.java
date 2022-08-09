@@ -31,8 +31,9 @@ public class CategoryService {
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
         Member member = getMember(memberId);
-        Category category = categoryRepository.save(new Category(request.getName(), member));
-        return new CategoryResponse(category);
+        Category newCategory = new Category(request.getName(), member, request.getIsPrivate());
+        categoryRepository.save(newCategory);
+        return new CategoryResponse(newCategory);
     }
 
     private Member getMember(final Long memberId) {
