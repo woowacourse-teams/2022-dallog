@@ -3,6 +3,7 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -101,7 +102,7 @@ public class Schedule extends BaseEntity {
                 getEndDateTime().getHour() == MID_NIGHT_HOUR && getEndDateTime().getMinute() == MID_NIGHT_MINUTE;
     }
 
-    public String getSubscriptionColor(List<Subscription> subscriptions) {
+    public Color getSubscriptionColor(List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .filter(subscription -> subscription.getCategory().equals(category))
                 .findAny()

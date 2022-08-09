@@ -5,15 +5,17 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import com.allog.dallog.domain.subscription.dto.SubscriptionUpdateRequest;
-import com.allog.dallog.domain.subscription.dto.request.SubscriptionCreateRequest;
+import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Service
 public class SubscriptionService {
+
+    private static final ColorPickerStrategy PICK_RANDOM_STRATEGY
+            = () -> ThreadLocalRandom.current().nextInt(Color.values().length);
 
     private final SubscriptionRepository subscriptionRepository;
     private final MemberService memberService;
@@ -34,16 +39,16 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public SubscriptionResponse save(final Long memberId, final Long categoryId,
-                                     final SubscriptionCreateRequest request) {
+    public SubscriptionResponse save(final Long memberId, final Long categoryId) {
         if (subscriptionRepository.existsByMemberIdAndCategoryId(memberId, categoryId)) {
             throw new ExistSubscriptionException();
         }
 
         Member member = memberService.getMember(memberId);
         Category category = categoryService.getCategory(categoryId);
+        Color color = Color.pickAny(PICK_RANDOM_STRATEGY);
 
-        Subscription subscription = subscriptionRepository.save(new Subscription(member, category, request.getColor()));
+        Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
 
         return new SubscriptionResponse(subscription);
     }
@@ -70,9 +75,7 @@ public class SubscriptionService {
 
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
-        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
-            throw new NoPermissionException();
-        }
+        validateSubscriptionPermission(id, memberId);
 
         Subscription subscription = getSubscription(id);
         subscription.change(request.getColor(), request.isChecked());
@@ -85,10 +88,14 @@ public class SubscriptionService {
 
     @Transactional
     public void deleteByIdAndMemberId(final Long id, final Long memberId) {
+        validateSubscriptionPermission(id, memberId);
+
+        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
+    }
+
+    private void validateSubscriptionPermission(final Long id, final Long memberId) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
         }
-
-        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
     }
 }
