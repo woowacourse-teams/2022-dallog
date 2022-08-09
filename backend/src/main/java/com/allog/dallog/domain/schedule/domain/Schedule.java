@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -101,11 +102,11 @@ public class Schedule extends BaseEntity {
                 && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
     }
 
-    public Color getSubscriptionColor(List<Subscription> subscriptions) {
+    public Color findSubscriptionColor(final List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .filter(subscription -> subscription.getCategory().equals(category))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new) // 구독 목록의 카테고리에서 일정을 찾을 수 없음
+                .orElseThrow(() -> new NoSuchCategoryException("구독하지 않은 카테고리 입니다."))
                 .getColor();
     }
 

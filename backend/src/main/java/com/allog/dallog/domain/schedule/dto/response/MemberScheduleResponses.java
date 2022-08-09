@@ -33,7 +33,7 @@ public class MemberScheduleResponses {
         return typedSchedules.getSortedSchedules(scheduleType)
                 .getSortedValues()
                 .stream()
-                .map(schedule -> new MemberScheduleResponse(schedule, schedule.getSubscriptionColor(subscriptions)))
+                .map(schedule -> new MemberScheduleResponse(schedule, schedule.findSubscriptionColor(subscriptions)))
                 .collect(Collectors.toList());
     }
 
