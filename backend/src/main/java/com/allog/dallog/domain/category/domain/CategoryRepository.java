@@ -9,7 +9,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c "
             + "FROM Category c "
-            + "WHERE c.name LIKE %:name%")
+            + "WHERE c.name LIKE %:name% AND c.isPrivate = FALSE")
     Slice<Category> findAllLikeCategoryName(final String name, final Pageable pageable);
 
     Slice<Category> findSliceByMemberId(final Long memberId, final Pageable pageable);

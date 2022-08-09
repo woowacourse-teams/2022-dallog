@@ -10,6 +10,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,7 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
@@ -47,6 +49,9 @@ class CategoryServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -126,6 +131,20 @@ class CategoryServiceTest {
                 .hasSize(2)
                 .extracting(CategoryResponse::getName)
                 .contains(FE_일정_이름, 매트_아고라_이름);
+    }
+
+    @DisplayName("개인 카테고리는 전체 조회 대상에서 제외된다.")
+    @Test
+    void 개인_카테고리는_전체_조회_대상에서_제외된다() {
+        // given
+        memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
+        memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
+
+        // when
+        CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
+
+        // then
+        assertThat(response.getCategories()).hasSize(0);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")
@@ -258,4 +277,6 @@ class CategoryServiceTest {
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
     }
+
+
 }
