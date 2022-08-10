@@ -91,4 +91,10 @@ const menuTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-export { loginButton, logo, logoImg, logoText, menu, menus, menuTitle, navBar };
+const profileModalStyle = css`
+  position: absolute;
+  top: 15rem;
+  right: 2rem;
+`;
+
+export { loginButton, logo, logoImg, logoText, menu, menus, menuTitle, navBar, profileModalStyle };
