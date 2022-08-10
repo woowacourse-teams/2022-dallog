@@ -70,7 +70,6 @@ public class ScheduleService {
 
     public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
                                                            final DateRangeRequest dateRangeRequest) {
-        // TODO: 리팩토링 및 성능개선
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
         List<Category> categories = categoryService.getCategoriesBy(subscriptions);
         List<Schedule> schedules = findSchedulesBy(categories, dateRangeRequest);
