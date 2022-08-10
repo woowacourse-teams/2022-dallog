@@ -6,7 +6,6 @@ import SideBar from '@/components/SideBar/SideBar';
 import SnackBar from '@/components/SnackBar/SnackBar';
 import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
-import LoginPage from '@/pages/LoginPage/LoginPage';
 import MainPage from '@/pages/MainPage/MainPage';
 
 import { PATH } from '@/constants';
@@ -19,7 +18,6 @@ function App() {
       <Routes>
         <Route path={PATH.MAIN} element={<MainPage />} />
         <Route path={PATH.AUTH} element={<AuthPage />} />
-        <Route path={PATH.LOGIN} element={<LoginPage />} />
         <Route element={<ProtectRoute />}>
           <Route path={PATH.CATEGORY} element={<CategoryPage />} />
         </Route>

@@ -19,16 +19,7 @@ import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
 import BlackLogo from '../../assets/dallog_black.png';
-import {
-  loginButton,
-  logo,
-  logoImg,
-  logoText,
-  menu,
-  menus,
-  menuTitle,
-  navBar,
-} from './NavBar.styles';
+import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
 function NavBar() {
   const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
@@ -54,10 +45,6 @@ function NavBar() {
     toggleProfileModalOpen();
   };
 
-  const handleClickLoginButton = () => {
-    navigate(PATH.LOGIN);
-  };
-
   return (
     <div css={navBar}>
       <div css={menus}>
@@ -73,11 +60,6 @@ function NavBar() {
         </Button>
       </div>
       <div css={menus}>
-        {!accessToken && (
-          <Button cssProp={loginButton(theme)} onClick={handleClickLoginButton}>
-            로그인
-          </Button>
-        )}
         {accessToken && (
           <>
             <Button cssProp={menu(theme)} onClick={handleClickMainButton}>

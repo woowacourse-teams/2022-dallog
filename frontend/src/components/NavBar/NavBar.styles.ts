@@ -64,16 +64,6 @@ const menu = ({ colors, flex }: Theme) => css`
   }
 `;
 
-const loginButton = ({ colors }: Theme) => css`
-  border-radius: 1rem;
-
-  background: ${colors.YELLOW_500};
-  padding: 2rem 4rem;
-
-  font-size: 4rem;
-  color: ${colors.WHITE};
-`;
-
 const menuTitle = ({ colors }: Theme) => css`
   visibility: hidden;
   position: absolute;
@@ -91,4 +81,4 @@ const menuTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-export { loginButton, logo, logoImg, logoText, menu, menus, menuTitle, navBar };
+export { logo, logoImg, logoText, menu, menus, menuTitle, navBar };
