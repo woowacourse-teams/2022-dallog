@@ -28,7 +28,6 @@ import {
   menus,
   menuTitle,
   navBar,
-  profileModalStyle,
 } from './NavBar.styles';
 
 function NavBar() {
