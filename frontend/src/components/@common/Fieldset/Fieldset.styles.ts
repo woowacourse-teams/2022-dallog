@@ -25,6 +25,12 @@ const inputStyle = ({ colors }: Theme) => css`
 
   font-family: inherit;
   font-size: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: ${colors.YELLOW_500};
+    box-shadow: 0 0 2px ${colors.YELLOW_500};
+  }
 `;
 
 export { fieldsetStyle, labelStyle, inputStyle };
