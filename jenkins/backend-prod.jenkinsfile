@@ -4,6 +4,9 @@ pipeline {
         stage('Github') {
             steps {
                 git branch: 'main', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+                withCredentials([GitUsernamePassword(credentialsId: 'github-access-token', gitToolName: 'Default')]) {
+                    sh 'git submodule update --init --recursive'
+                }
             }
         }
         stage('Build') {
