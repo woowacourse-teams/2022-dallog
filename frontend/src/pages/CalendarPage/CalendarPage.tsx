@@ -22,7 +22,13 @@ import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 
 import { CACHE_KEY, DAYS } from '@/constants';
 
-import { getDayFromFormattedDate, getFormattedDate, getThisDate, getThisMonth } from '@/utils/date';
+import {
+  getDayFromFormattedDate,
+  getFormattedDate,
+  getISODateString,
+  getThisDate,
+  getThisMonth,
+} from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
 
@@ -218,8 +224,8 @@ function CalendarPage() {
                 </span>
 
                 {longTermsWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
-                  const endDate = el.schedule.endDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
+                  const endDate = getISODateString(el.schedule.endDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
                   const nowDay = getDayFromFormattedDate(nowDate);
 
@@ -243,7 +249,7 @@ function CalendarPage() {
                 })}
 
                 {allDaysWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
                   return (
@@ -265,7 +271,7 @@ function CalendarPage() {
                 })}
 
                 {fewHoursWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
                   return (

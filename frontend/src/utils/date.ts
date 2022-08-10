@@ -54,12 +54,12 @@ const getCalendarMonth = (year: number, month: number) => {
 
 const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
   if (dateInfo === null) {
-    return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
+    return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
   }
 
   const { year, month, date } = dateInfo;
 
-  return new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString().split('T')[0];
+  return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
 };
 
 const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
@@ -81,6 +81,10 @@ const getDayFromFormattedDate = (date: string) => {
 
 const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
   return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
+};
+
+const getISODateString = (ISOString: string) => {
+  return ISOString.split('T')[0];
 };
 
 const getKoreaISOString = (time: number) => {
@@ -118,6 +122,7 @@ export {
   getDateTime,
   getDayFromFormattedDate,
   getFormattedDate,
+  getISODateString,
   getKoreaISOString,
   getNextDate,
   getNextYearMonth,

@@ -1,6 +1,6 @@
 import { ScheduleType } from '@/@types/schedule';
 
-import { getFormattedDate } from '@/utils/date';
+import { getFormattedDate, getISODateString } from '@/utils/date';
 
 import useCalendar from './useCalendar';
 
@@ -32,8 +32,8 @@ function useSchedulePriority() {
 
   const getLongTermsPriority = (longTerms: Array<ScheduleType>) =>
     longTerms.map((el) => {
-      const startDate = el.startDateTime.split('T')[0];
-      const endDate = el.endDateTime.split('T')[0];
+      const startDate = getISODateString(el.startDateTime);
+      const endDate = getISODateString(el.endDateTime);
 
       const scheduleRange = calendarMonth
         .filter((el) => {
@@ -84,7 +84,7 @@ function useSchedulePriority() {
 
   const getAllDaysPriority = (allDays: Array<ScheduleType>) =>
     allDays.map((el) => {
-      const startDate = el.startDateTime.split('T')[0];
+      const startDate = getISODateString(el.startDateTime);
 
       if (calendarInfoWithPriority[startDate][0] === false) {
         calendarInfoWithPriority[startDate][0] = true;
@@ -121,7 +121,7 @@ function useSchedulePriority() {
 
   const getFewHoursPriority = (fewHours: Array<ScheduleType>) =>
     fewHours.map((el) => {
-      const startDate = el.startDateTime.split('T')[0];
+      const startDate = getISODateString(el.startDateTime);
 
       if (calendarInfoWithPriority[startDate][0] === false) {
         calendarInfoWithPriority[startDate][0] = true;
