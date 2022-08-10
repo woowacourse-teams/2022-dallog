@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.category.presentation;
+package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
@@ -32,9 +32,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.common.config.TestConfig;
-import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;

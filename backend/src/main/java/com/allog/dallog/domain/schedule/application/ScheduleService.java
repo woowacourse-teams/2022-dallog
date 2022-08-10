@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.schedule.application;
 
+import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
@@ -11,7 +12,6 @@ import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
 import java.util.List;

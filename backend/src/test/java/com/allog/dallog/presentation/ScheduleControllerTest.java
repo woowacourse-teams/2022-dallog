@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.schedule.presentation;
+package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
@@ -27,11 +27,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.common.config.TestConfig;
+import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;

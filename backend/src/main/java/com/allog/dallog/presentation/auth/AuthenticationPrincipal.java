@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.auth.presentation;
+package com.allog.dallog.presentation.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;

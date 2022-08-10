@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.member.presentation;
+package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.더미_엑세스_토큰;
 import static com.allog.dallog.common.fixtures.AuthFixtures.토큰_정보;
@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.common.config.TestConfig;
-import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.member.application.MemberService;
+import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.fasterxml.jackson.databind.ObjectMapper;
