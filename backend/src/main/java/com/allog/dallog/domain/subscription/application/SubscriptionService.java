@@ -1,10 +1,12 @@
 package com.allog.dallog.domain.subscription.application;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
-import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.member.application.MemberService;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -28,22 +30,25 @@ public class SubscriptionService {
             = () -> ThreadLocalRandom.current().nextInt(Color.values().length);
 
     private final SubscriptionRepository subscriptionRepository;
-    private final MemberService memberService;
-    private final CategoryService categoryService;
+    private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
 
-    public SubscriptionService(final SubscriptionRepository subscriptionRepository, final MemberService memberService,
-                               final CategoryService categoryService) {
+    public SubscriptionService(final SubscriptionRepository subscriptionRepository,
+                               final MemberRepository memberRepository,
+                               final CategoryRepository categoryRepository) {
         this.subscriptionRepository = subscriptionRepository;
-        this.memberService = memberService;
-        this.categoryService = categoryService;
+        this.memberRepository = memberRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
     public SubscriptionResponse save(final Long memberId, final Long categoryId) {
         validateAlreadyExists(memberId, categoryId);
 
-        Member member = memberService.getMember(memberId);
-        Category category = categoryService.getCategory(categoryId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(NoSuchCategoryException::new);
         validatePermission(memberId, category);
 
         Color color = Color.pickAny(PICK_RANDOM_STRATEGY);
