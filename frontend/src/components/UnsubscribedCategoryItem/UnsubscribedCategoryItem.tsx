@@ -51,6 +51,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
     <div css={categoryItem}>
       <span css={item}>{category.createdAt.split('T')[0]}</span>
       <span css={item}>{category.name}</span>
+      <span css={item}>{category.creator.displayName}</span>
       <div css={item}>
         <Button cssProp={subscribeButton(theme)} onClick={handleClickSubscribeButton}>
           구독

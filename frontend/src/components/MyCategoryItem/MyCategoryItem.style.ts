@@ -1,31 +1,5 @@
 import { css, Theme } from '@emotion/react';
 
-const itemStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-
-  justify-content: space-between;
-
-  width: 100%;
-`;
-
-const nameStyle = css`
-  overflow: hidden;
-  position: relative;
-
-  width: 32rem;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const controlButtonsStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-`;
-
 const buttonStyle = ({ colors }: Theme) => css`
   width: 8rem;
   height: 8rem;
@@ -43,4 +17,20 @@ const buttonStyle = ({ colors }: Theme) => css`
   }
 `;
 
-export { buttonStyle, controlButtonsStyle, itemStyle, nameStyle };
+const categoryItemStyle = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
+  justify-content: space-around;
+
+  height: 20rem;
+  border-bottom: 1px solid ${colors.GRAY_400};
+
+  font-size: 4rem;
+`;
+
+const itemStyle = css`
+  flex: 1 1 0;
+  text-align: center;
+`;
+
+export { buttonStyle, categoryItemStyle, itemStyle };

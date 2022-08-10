@@ -18,7 +18,7 @@ import categoryApi from '@/api/category';
 import { FiEdit3 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
-import { buttonStyle, controlButtonsStyle, itemStyle, nameStyle } from './MyCategoryItem.style';
+import { buttonStyle, categoryItemStyle, itemStyle } from './MyCategoryItem.style';
 
 interface MyCategoryItemProps {
   category: CategoryType;
@@ -48,9 +48,10 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
   };
 
   return (
-    <div css={itemStyle}>
-      <span css={nameStyle}>{category.name}</span>
-      <div css={controlButtonsStyle}>
+    <div css={categoryItemStyle}>
+      <span css={itemStyle}>{category.createdAt.split('T')[0]}</span>
+      <span css={itemStyle}>{category.name}</span>
+      <div css={itemStyle}>
         <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
           <CategoryModifyModal category={category} closeModal={toggleCategoryModifyModalOpen} />
         </ModalPortal>

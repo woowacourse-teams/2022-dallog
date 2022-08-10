@@ -12,6 +12,7 @@ interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   defaultValue?: string;
   autoFocus?: boolean;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
+  disabled?: boolean;
 }
 
 function Fieldset({
@@ -23,6 +24,7 @@ function Fieldset({
   defaultValue,
   autoFocus,
   refProp,
+  disabled,
 }: FieldsetProps) {
   const theme = useTheme();
 
@@ -41,6 +43,7 @@ function Fieldset({
         defaultValue={defaultValue}
         autoFocus={autoFocus}
         ref={refProp}
+        disabled={disabled}
       />
     </div>
   );
