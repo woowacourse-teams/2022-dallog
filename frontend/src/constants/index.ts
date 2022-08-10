@@ -68,7 +68,6 @@ const PATH = {
   AUTH: '/oauth',
   CATEGORY: '/category',
   LOGIN: '/login',
-  PROFILE: '/profile',
 };
 
 export {
