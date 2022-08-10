@@ -41,10 +41,6 @@ oauth:
     token-uri: https://oauth2.googleapis.com/token
     grant-type: authorization_code
 
-report:
-  webhook:
-    discord: http://localhost:8080
-
 cors:
   allow-origin:
     urls: http://localhost:3000

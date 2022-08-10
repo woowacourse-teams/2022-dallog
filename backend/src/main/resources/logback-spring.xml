@@ -19,6 +19,23 @@
         </rollingPolicy>
     </appender>
 
+    <springProperty name="USERNAME" source="report.discord.username"/>
+    <springProperty name="WEBHOOK_URI" source="report.discord.webhook-uri"/>
+
+    <appender name="DISCORD" class="com.allog.dallog.infrastructure.log.DiscordAppender">
+        <username>${USERNAME}</username>
+        <embedsColor>15744574</embedsColor>
+        <stackTraceMaxSize>5</stackTraceMaxSize>
+        <webhookUri>${WEBHOOK_URI}</webhookUri>
+    </appender>
+
+    <appender name="ASYNC_DISCORD" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="DISCORD"/>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
     <springProfile name="local">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -29,11 +46,17 @@
         <root level="INFO">
             <appender-ref ref="FILE"/>
         </root>
+        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
+            <appender-ref ref="ASYNC_DISCORD"/>
+        </logger>
     </springProfile>
 
     <springProfile name="prod">
         <root level="WARN">
             <appender-ref ref="FILE"/>
         </root>
+        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
+            <appender-ref ref="ASYNC_DISCORD"/>
+        </logger>
     </springProfile>
 </configuration>

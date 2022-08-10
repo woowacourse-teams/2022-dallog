@@ -30,12 +30,6 @@ public class ControllerAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
 
-    private final Reporter reporter;
-
-    public ControllerAdvice(final Reporter reporter) {
-        this.reporter = reporter;
-    }
-
     @ExceptionHandler({
             InvalidCategoryException.class,
             InvalidMemberException.class,
@@ -96,8 +90,7 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,
                                                                    final HttpServletRequest request) {
         ErrorReportRequest errorReport = new ErrorReportRequest(request, e);
-        reporter.report(errorReport);
-        log.error(errorReport.getLogMessage(), errorReport.getException());
+        log.error(errorReport.getLogMessage(), e);
 
         ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
