@@ -39,11 +39,11 @@ interface ScheduleAddModalProps {
 }
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
-  const [categoryId, setCategoryId] = useState(0);
-  const [isAllDay, setAllDay] = useState(true);
+  const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
 
-  const { accessToken } = useRecoilValue(userState);
+  const [categoryId, setCategoryId] = useState(0);
+  const [isAllDay, setAllDay] = useState(true);
 
   const queryClient = useQueryClient();
 
