@@ -16,7 +16,7 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import { CACHE_KEY } from '@/constants';
 
 import { createPostBody } from '@/utils';
-import { getDate, getDateTime, getKoreaISOString } from '@/utils/date';
+import { getDate, getDateTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -97,15 +97,10 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       return;
     }
 
-    const allDayEndDateTime = body.endDateTime.split('-');
-    const newAllDayEndDateTime = getKoreaISOString(
-      new Date(allDayEndDateTime).setDate(Number(allDayEndDateTime[2]) + 1)
-    ).split('T')[0];
-
     const allDayBody = {
       ...body,
       startDateTime: `${body.startDateTime}T00:00`,
-      endDateTime: `${newAllDayEndDateTime}T00:00`,
+      endDateTime: `${body.endDateTime}T23:59`,
     };
 
     postSchedule(allDayBody);
