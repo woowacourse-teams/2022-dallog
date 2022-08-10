@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.auth.application;
 
-import com.allog.dallog.domain.application.RegisterService;
+import com.allog.dallog.application.RegisterService;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
 import com.allog.dallog.domain.member.application.MemberService;

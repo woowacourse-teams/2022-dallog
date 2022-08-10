@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.application;
+package com.allog.dallog.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
