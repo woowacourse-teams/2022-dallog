@@ -37,8 +37,10 @@ const layoutStyle = ({ flex, colors }: Theme) => css`
   ${flex.column};
 
   justify-content: space-around;
-
   gap: 5rem;
+  position: absolute;
+  top: 15rem;
+  right: 2rem;
 
   width: 60rem;
   padding: 5rem;
@@ -110,10 +112,11 @@ const nameStyle = css`
 `;
 
 const spinnerStyle = ({ flex }: Theme) => css`
-  ${flex.row}
+  ${flex.row};
 
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 15rem;
+  right: 2rem;
 `;
 
 export {

@@ -7,17 +7,10 @@ interface ModalPortalProps {
   isOpen: boolean;
   closeModal: () => void;
   children: JSX.Element | JSX.Element[];
-  cssProp?: SerializedStyles;
   dimmerBackground?: string;
 }
 
-function ModalPortal({
-  isOpen,
-  closeModal,
-  children,
-  cssProp,
-  dimmerBackground,
-}: ModalPortalProps) {
+function ModalPortal({ isOpen, closeModal, children, dimmerBackground }: ModalPortalProps) {
   const modalElement = document.getElementById('modal');
 
   const theme = useTheme();
@@ -28,7 +21,7 @@ function ModalPortal({
 
   const element = isOpen && (
     <div css={dimmer(theme, isOpen, dimmerBackground)} onClick={closeModal}>
-      <div css={cssProp}>{children}</div>
+      {children}
     </div>
   );
 

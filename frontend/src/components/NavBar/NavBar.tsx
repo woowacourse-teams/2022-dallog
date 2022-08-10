@@ -96,7 +96,6 @@ function NavBar() {
             <ModalPortal
               isOpen={isProfileModalOpen}
               closeModal={toggleProfileModalOpen}
-              cssProp={profileModalStyle}
               dimmerBackground="transparent"
             >
               <Profile />
