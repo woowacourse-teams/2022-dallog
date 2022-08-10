@@ -8,7 +8,6 @@ import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -25,11 +24,11 @@ import javax.persistence.Table;
 @Entity
 public class Schedule extends BaseEntity {
 
-    private static final int MAX_TITLE_LENGTH = 50;
-    private static final int MAX_MEMO_LENGTH = 255;
     private static final int ONE_DAY = 1;
-    private static final int MID_NIGHT_HOUR = 0;
-    private static final int MID_NIGHT_MINUTE = 0;
+    private static final int MIDNIGHT_HOUR = 23;
+    private static final int MIDNIGHT_MINUTE = 59;
+    private static final int MAX_TITLE_LENGTH = 20;
+    private static final int MAX_MEMO_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,27 +78,27 @@ public class Schedule extends BaseEntity {
         }
     }
 
-    public long calculateHourDifference() {
-        return ChronoUnit.HOURS.between(getStartDateTime(), getEndDateTime());
+    public boolean isLongTerms() {
+        return period.calculateDayDifference() >= ONE_DAY;
     }
 
-    public boolean isBetween(LocalDate startDate, LocalDate endDate) {
+    public boolean isAllDays() {
+        return period.calculateDayDifference() < ONE_DAY
+                && period.calculateHourDifference() == MIDNIGHT_HOUR
+                && period.calculateMinuteDifference() == MIDNIGHT_MINUTE;
+    }
+
+    public boolean isFewHours() {
+        return !isAllDays()
+                && period.calculateDayDifference() < ONE_DAY;
+    }
+
+    public boolean isBetween(final LocalDate startDate, final LocalDate endDate) {
         LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
 
         return (getStartDateTime().isBefore(endDateTime) || getStartDateTime().isEqual(endDateTime))
                 && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
-    }
-
-    public boolean isDayDifferent() {
-        long dayDifference = ChronoUnit.DAYS.between(LocalDate.from(getStartDateTime()),
-                LocalDate.from(getEndDateTime()));
-        return dayDifference >= ONE_DAY;
-    }
-
-    public boolean isMidNightToMidNight() {
-        return getStartDateTime().getHour() == MID_NIGHT_HOUR && getStartDateTime().getMinute() == MID_NIGHT_MINUTE &&
-                getEndDateTime().getHour() == MID_NIGHT_HOUR && getEndDateTime().getMinute() == MID_NIGHT_MINUTE;
     }
 
     public Color getSubscriptionColor(List<Subscription> subscriptions) {

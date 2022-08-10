@@ -6,12 +6,9 @@ import java.util.function.Predicate;
 
 public enum ScheduleType {
 
-    LONG_TERMS("longTerms", schedule ->
-            (schedule.calculateHourDifference() > 24) ||
-                    (schedule.calculateHourDifference() < 24 && schedule.isDayDifferent())
-    ),
-    ALL_DAYS("allDays", schedule -> schedule.calculateHourDifference() == 24 && schedule.isMidNightToMidNight()),
-    FEW_HOURS("fewHours", schedule -> schedule.calculateHourDifference() < 24 && !schedule.isDayDifferent());
+    LONG_TERMS("longTerms", Schedule::isLongTerms),
+    ALL_DAYS("allDays", Schedule::isAllDays),
+    FEW_HOURS("fewHours", Schedule::isFewHours);
 
     private final String name;
     private final Predicate<Schedule> isMatch;
