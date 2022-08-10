@@ -1,6 +1,6 @@
 package com.allog.dallog.global.config;
 
-import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipalArgumentResolver;
+import com.allog.dallog.presentation.auth.AuthenticationPrincipalArgumentResolver;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.auth.presentation;
+package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.exception.EmptyAuthorizationHeaderException;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;

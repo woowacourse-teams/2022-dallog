@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
+import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;

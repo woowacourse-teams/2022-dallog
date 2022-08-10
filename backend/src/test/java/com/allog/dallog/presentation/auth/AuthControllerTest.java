@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.auth.presentation;
+package com.allog.dallog.presentation.auth;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAuth_로그인_링크;
@@ -20,8 +20,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
