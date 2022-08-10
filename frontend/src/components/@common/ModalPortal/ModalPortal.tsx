@@ -1,4 +1,4 @@
-import { SerializedStyles, useTheme } from '@emotion/react';
+import { useTheme } from '@emotion/react';
 import ReactDOM from 'react-dom';
 
 import { dimmer } from './ModalPortal.styles';
@@ -19,8 +19,16 @@ function ModalPortal({ isOpen, closeModal, children, dimmerBackground }: ModalPo
     return <></>;
   }
 
+  const handleClickDimmer = (e: React.MouseEvent) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    closeModal();
+  };
+
   const element = isOpen && (
-    <div css={dimmer(theme, isOpen, dimmerBackground)} onClick={closeModal}>
+    <div css={dimmer(theme, isOpen, dimmerBackground)} onClick={handleClickDimmer}>
       {children}
     </div>
   );

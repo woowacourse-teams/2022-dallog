@@ -78,10 +78,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     memo: useRef<HTMLInputElement>(null),
   };
 
-  const handleClickScheduleAddModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   const handleSubmitScheduleAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -132,7 +128,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       };
 
   return (
-    <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
+    <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
         <select
           id="myCategories"

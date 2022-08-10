@@ -77,10 +77,6 @@ function Profile() {
     setEditingName(true);
   };
 
-  const handleClickProfileModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   const handleClickCompleteButton = (defaultName: string) => {
     const body = createPostBody(inputRef);
 
@@ -101,7 +97,7 @@ function Profile() {
   };
 
   return (
-    <div css={layoutStyle} onClick={handleClickProfileModal}>
+    <div css={layoutStyle}>
       <img src={data.data.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
       <div css={contentStyle}>
         {isEditingName ? (
