@@ -1,7 +1,5 @@
 package com.allog.dallog.domain.member.application;
 
-import com.allog.dallog.domain.category.application.CategoryService;
-import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -14,28 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
-    private static final String PERSONAL_CATEGORY_NAME = "개인 일정";
-
     private final MemberRepository memberRepository;
-    private final CategoryService categoryService;
 
-    public MemberService(final MemberRepository memberRepository, final CategoryService categoryService) {
+    public MemberService(final MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.categoryService = categoryService;
     }
 
     @Transactional
     public MemberResponse save(final Member member) {
         Member newMember = memberRepository.save(member);
-        createPersonalCategory(member);
-
         return new MemberResponse(newMember);
-    }
-
-    private void createPersonalCategory(final Member member) {
-        Long memberId = member.getId();
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, true);
-        categoryService.save(memberId, categoryCreateRequest);
     }
 
     public MemberResponse findById(final Long id) {

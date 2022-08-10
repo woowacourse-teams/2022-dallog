@@ -73,7 +73,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(() -> {
             assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
+            assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4); // 개인 카테고리 1 + given에서 등록한 카테고리 3
         });
     }
 

@@ -1,5 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenRequest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
 
@@ -21,6 +22,7 @@ public class AuthFixtures {
     public static final String STUB_이메일 = "stub@email.com";
     public static final String STUB_이름 = "stub";
     public static final String STUB_프로필 = "/image.png";
+    public static final OAuthMember STUB_OAUTH_회원 = new OAuthMember(STUB_이메일, STUB_이름, STUB_프로필);
 
     public static final String 더미_엑세스_토큰 = "aaaaa.bbbbb.ccccc";
     public static final String 토큰_정보 = "Bearer " + 더미_엑세스_토큰;
