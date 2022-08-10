@@ -12,15 +12,15 @@ VALUES ('admin@email.com',
         'https://file.namu.moe/file/8bc9e381797334eb33da66e3ba501be13bacd109d2d9b5f117ad0bb781574b9cb612e8226803fc6831128bc2945e5f7d2231ed68ff43ae17d3aeb6bb6947b668',
         '매트', 'GOOGLE', NOW(), NOW());
 
-INSERT INTO categories (name, members_id, created_at, updated_at)
-VALUES ('공통 일정', 1, NOW(), NOW()),
-       ('BE 일정', 1, NOW(), NOW()),
-       ('FE 일정', 1, NOW(), NOW()),
-       ('안드로이드 일정', 1, NOW(), NOW()),
-       ('DevOps 일정', 1, NOW(), NOW()),
-       ('내 일정', 2, NOW(), NOW()),
-       ('내 일정', 3, NOW(), NOW()),
-       ('운동', 2, NOW(), NOW());
+INSERT INTO categories (name, members_id, created_at, updated_at, personal)
+VALUES ('공통 일정', 1, NOW(), NOW(), false),
+       ('BE 일정', 1, NOW(), NOW(), false),
+       ('FE 일정', 1, NOW(), NOW(), false),
+       ('안드로이드 일정', 1, NOW(), NOW(), false),
+       ('DevOps 일정', 1, NOW(), NOW(), false),
+       ('내 일정', 2, NOW(), NOW(), true),
+       ('내 일정', 3, NOW(), NOW(), true),
+       ('운동', 2, NOW(), NOW(), true);
 
 INSERT INTO subscriptions (members_id, categories_id, color, checked, created_at, updated_at)
 VALUES (2, 1, '#868e96', true, NOW(), NOW()),
