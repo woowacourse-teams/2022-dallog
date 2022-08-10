@@ -30,9 +30,7 @@ function useSchedulePriority() {
     {}
   );
 
-  const getLongTermsPriority = (
-    longTerms: Array<{ categoryId: number; color: string } & ScheduleType>
-  ) =>
+  const getLongTermsPriority = (longTerms: Array<ScheduleType>) =>
     longTerms.map((el) => {
       const startDate = el.startDateTime.split('T')[0];
       const endDate = el.endDateTime.split('T')[0];
@@ -84,9 +82,7 @@ function useSchedulePriority() {
       };
     });
 
-  const getAllDaysPriority = (
-    allDays: Array<{ categoryId: number; color: string } & ScheduleType>
-  ) =>
+  const getAllDaysPriority = (allDays: Array<ScheduleType>) =>
     allDays.map((el) => {
       const startDate = el.startDateTime.split('T')[0];
 
@@ -123,9 +119,7 @@ function useSchedulePriority() {
       };
     });
 
-  const getFewHoursPriority = (
-    fewHours: Array<{ categoryId: number; color: string } & ScheduleType>
-  ) =>
+  const getFewHoursPriority = (fewHours: Array<ScheduleType>) =>
     fewHours.map((el) => {
       const startDate = el.startDateTime.split('T')[0];
 

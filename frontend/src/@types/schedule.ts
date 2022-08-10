@@ -1,17 +1,17 @@
 interface ScheduleType {
   id: number;
+  categoryId: number;
   title: string;
   startDateTime: string;
   endDateTime: string;
   memo: string;
+  color: string;
 }
 
 interface ScheduleResponseType {
-  longTerms: Array<{ categoryId: number; color: string } & ScheduleType>;
-
-  allDays: Array<{ categoryId: number; color: string } & ScheduleType>;
-
-  fewHours: Array<{ categoryId: number; color: string } & ScheduleType>;
+  longTerms: Array<ScheduleType>;
+  allDays: Array<ScheduleType>;
+  fewHours: Array<ScheduleType>;
 }
 
 export { ScheduleResponseType, ScheduleType };
