@@ -2,10 +2,14 @@ import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
+import useToggle from '@/hooks/useToggle';
+
 import { userState } from '@/recoil/atoms';
 import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
+import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import Profile from '@/components/Profile/Profile';
 
 import { PATH } from '@/constants';
 
@@ -32,6 +36,8 @@ function NavBar() {
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const { state: isProfileModalOpen, toggleState: toggleProfileModalOpen } = useToggle();
+
   const handleClickSideBarButton = () => {
     toggleSideBarOpen(isSideBarOpen);
   };
@@ -45,7 +51,7 @@ function NavBar() {
   };
 
   const handleClickProfileMenuButton = () => {
-    navigate(PATH.PROFILE);
+    toggleProfileModalOpen();
   };
 
   const handleClickLoginButton = () => {
@@ -86,6 +92,13 @@ function NavBar() {
               <FaUserCircle size={28} />
               <span css={menuTitle}>프로필</span>
             </Button>
+            <ModalPortal
+              isOpen={isProfileModalOpen}
+              closeModal={toggleProfileModalOpen}
+              dimmerBackground="transparent"
+            >
+              <Profile />
+            </ModalPortal>
           </>
         )}
       </div>

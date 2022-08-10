@@ -1,4 +1,4 @@
-import { useTheme } from '@emotion/react';
+import { SerializedStyles, useTheme } from '@emotion/react';
 import ReactDOM from 'react-dom';
 
 import { dimmer } from './ModalPortal.styles';
@@ -7,9 +7,10 @@ interface ModalPortalProps {
   isOpen: boolean;
   closeModal: () => void;
   children: JSX.Element | JSX.Element[];
+  dimmerBackground?: string;
 }
 
-function ModalPortal({ isOpen, closeModal, children }: ModalPortalProps) {
+function ModalPortal({ isOpen, closeModal, children, dimmerBackground }: ModalPortalProps) {
   const modalElement = document.getElementById('modal');
 
   const theme = useTheme();
@@ -19,7 +20,7 @@ function ModalPortal({ isOpen, closeModal, children }: ModalPortalProps) {
   }
 
   const element = isOpen && (
-    <div css={dimmer(theme, isOpen)} onClick={closeModal}>
+    <div css={dimmer(theme, isOpen, dimmerBackground)} onClick={closeModal}>
       {children}
     </div>
   );

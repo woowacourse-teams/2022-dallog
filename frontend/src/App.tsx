@@ -8,7 +8,6 @@ import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 import MainPage from '@/pages/MainPage/MainPage';
-import MyPage from '@/pages/MyPage/MyPage';
 
 import { PATH } from '@/constants';
 
@@ -23,7 +22,6 @@ function App() {
         <Route path={PATH.LOGIN} element={<LoginPage />} />
         <Route element={<ProtectRoute />}>
           <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-          <Route path={PATH.PROFILE} element={<MyPage />} />
         </Route>
       </Routes>
       <SnackBar />
