@@ -1,32 +1,35 @@
 import { css, Theme } from '@emotion/react';
 
-const hrStyle = ({ colors }: Theme) => css`
-  width: 85%;
-  height: 1rem;
+const contentStyle = css`
+  width: 100%;
 
-  border-top: 1px solid ${colors.GRAY_100};
+  text-align: center;
+`;
+
+const emailStyle = ({ colors }: Theme) => css`
+  font-size: 3rem;
+  color: ${colors.GRAY_500};
 `;
 
 const imageStyle = css`
-  width: 38.5rem;
-  height: 38.5rem;
+  width: 35rem;
+  height: 35rem;
   border-radius: 50%;
 `;
 
 const inputStyle = {
   div: css`
-    width: 30rem;
-    height: 3.5rem;
+    height: 3rem;
 
-    font-size: 3.5rem;
+    font-size: 3rem;
   `,
   label: css`
     height: 0%;
   `,
   input: css`
-    height: 3.5rem;
+    height: 3rem;
 
-    font-size: 3.5rem;
+    font-size: 3rem;
   `,
 };
 
@@ -35,8 +38,10 @@ const layoutStyle = ({ flex, colors }: Theme) => css`
 
   justify-content: space-around;
 
-  width: 80rem;
-  height: 100rem;
+  gap: 5rem;
+
+  width: 60rem;
+  padding: 5rem;
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 
@@ -93,8 +98,15 @@ const nameButtonStyle = ({ flex }: Theme) => css`
   ${flex.row};
 
   justify-content: flex-end;
-
   gap: 2rem;
+
+  font-size: 3rem;
+`;
+
+const nameStyle = css`
+  margin-left: 7rem;
+
+  font-size: 3.5rem;
 `;
 
 const spinnerStyle = ({ flex }: Theme) => css`
@@ -105,13 +117,15 @@ const spinnerStyle = ({ flex }: Theme) => css`
 `;
 
 export {
-  hrStyle,
+  contentStyle,
+  emailStyle,
   imageStyle,
   inputStyle,
   layoutStyle,
   logoutButtonStyle,
   menu,
   menuTitle,
+  nameStyle,
   nameButtonStyle,
   spinnerStyle,
 };

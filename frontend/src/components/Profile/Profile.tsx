@@ -22,7 +22,8 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import { FiEdit3 } from 'react-icons/fi';
 
 import {
-  hrStyle,
+  contentStyle,
+  emailStyle,
   imageStyle,
   inputStyle,
   layoutStyle,
@@ -30,6 +31,7 @@ import {
   menu,
   menuTitle,
   nameButtonStyle,
+  nameStyle,
   spinnerStyle,
 } from './Profile.styles';
 
@@ -101,8 +103,7 @@ function Profile() {
   return (
     <div css={layoutStyle} onClick={handleClickProfileModal}>
       <img src={data.data.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
-      <div css={hrStyle} />
-      <div>
+      <div css={contentStyle}>
         {isEditingName ? (
           <form css={nameButtonStyle}>
             <Fieldset
@@ -110,6 +111,7 @@ function Profile() {
               placeholder={data.data.displayName}
               refProp={inputRef.displayName}
               cssProp={inputStyle}
+              autoFocus={true}
             />
             <Button
               type="submit"
@@ -122,17 +124,15 @@ function Profile() {
           </form>
         ) : (
           <div>
-            <span>{data.data.displayName}</span>
+            <span css={nameStyle}>{data.data.displayName}</span>
             <Button cssProp={menu} onClick={handleClickModifyButton}>
               <FiEdit3 size={14} />
               <span css={menuTitle}>수정</span>
             </Button>
           </div>
         )}
+        <span css={emailStyle}>{data.data.email}</span>
       </div>
-      <div css={hrStyle} />
-      <span>{data.data.email}</span>
-      <div css={hrStyle} />
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
       </Button>
