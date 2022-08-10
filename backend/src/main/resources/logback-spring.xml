@@ -40,9 +40,6 @@
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>
-        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
-            <appender-ref ref="ASYNC_DISCORD"/>
-        </logger>
     </springProfile>
 
     <springProfile name="dev">
