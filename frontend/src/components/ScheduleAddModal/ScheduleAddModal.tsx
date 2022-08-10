@@ -14,6 +14,7 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
+import { DATE_TIME } from '@/constants/date';
 
 import { createPostBody } from '@/utils';
 import { getDate, getDateTime } from '@/utils/date';
@@ -95,8 +96,8 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
     const allDayBody = {
       ...body,
-      startDateTime: `${body.startDateTime}T00:00`,
-      endDateTime: `${body.endDateTime}T23:59`,
+      startDateTime: `${body.startDateTime}T${DATE_TIME.START}`,
+      endDateTime: `${body.endDateTime}T${DATE_TIME.END}`,
     };
 
     postSchedule(allDayBody);

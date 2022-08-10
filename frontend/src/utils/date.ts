@@ -1,6 +1,16 @@
 import { CalendarType } from '@/@types/calendar';
 
+import { DATE_TIME } from '@/constants/date';
+
 import { zeroFill } from '.';
+
+const checkAllDay = (startDateTime: string | undefined, endDateTime: string | undefined) => {
+  if (startDateTime === undefined || endDateTime === undefined) {
+    return null;
+  }
+
+  return startDateTime.includes(DATE_TIME.START) && endDateTime.includes(DATE_TIME.END);
+};
 
 const getBeforeDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() - offset));
@@ -115,6 +125,7 @@ const getThisYear = () => {
 };
 
 export {
+  checkAllDay,
   getBeforeDate,
   getBeforeYearMonth,
   getCalendarMonth,
