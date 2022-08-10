@@ -1,7 +1,7 @@
 package com.allog.dallog.presentation;
 
-import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;

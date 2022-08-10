@@ -1,7 +1,7 @@
 package com.allog.dallog.presentation;
 
-import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
