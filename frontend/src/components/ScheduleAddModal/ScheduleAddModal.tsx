@@ -48,7 +48,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const queryClient = useQueryClient();
 
-  const { data: myCategoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
     () => categoryApi.getMy(accessToken)
   );
@@ -140,7 +140,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           <option value="" disabled>
             카테고리
           </option>
-          {myCategoriesGetResponse?.data.map((category) => (
+          {data?.data.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
