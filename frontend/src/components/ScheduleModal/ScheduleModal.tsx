@@ -1,15 +1,20 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
+import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
+import { ProfileType } from '@/@types/profile';
 import { ScheduleModalPosType, ScheduleType } from '@/@types/schedule';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY } from '@/constants';
 
 import categoryApi from '@/api/category';
+import profileApi from '@/api/profile';
 
 import { FiCalendar, FiEdit3 } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
@@ -41,10 +46,17 @@ function ScheduleModal({
   toggleScheduleModifyModalOpen,
   closeModal,
 }: ScheduleModalProps) {
+  const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
 
-  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
-    categoryApi.getSingle(scheduleInfo?.categoryId)
+  const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
+    CACHE_KEY.CATEGORY,
+    () => categoryApi.getSingle(scheduleInfo?.categoryId)
+  );
+
+  const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
+    CACHE_KEY.PROFILE,
+    () => profileApi.get(accessToken)
   );
 
   const handleClickModifyButton = () => {
@@ -67,14 +79,18 @@ function ScheduleModal({
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>
       <div css={headerStyle}>
-        <Button cssProp={buttonStyle} onClick={handleClickModifyButton}>
-          <FiEdit3 />
-          <span css={buttonTitleStyle}>일정 수정</span>
-        </Button>
-        <Button cssProp={buttonStyle} onClick={handleClickDeleteButton}>
-          <RiDeleteBin6Line />
-          <span css={buttonTitleStyle}>일정 삭제</span>
-        </Button>
+        {profileGetResponse?.data.id === categoryGetResponse?.data.creator.id && (
+          <>
+            <Button cssProp={buttonStyle} onClick={handleClickModifyButton}>
+              <FiEdit3 />
+              <span css={buttonTitleStyle}>일정 수정</span>
+            </Button>
+            <Button cssProp={buttonStyle} onClick={handleClickDeleteButton}>
+              <RiDeleteBin6Line />
+              <span css={buttonTitleStyle}>일정 삭제</span>
+            </Button>
+          </>
+        )}
         <Button cssProp={buttonStyle} onClick={closeModal}>
           <GrClose />
           <span css={buttonTitleStyle}>닫기</span>
@@ -95,7 +111,7 @@ function ScheduleModal({
         </div>
         <div css={contentBlockStyle}>
           <div css={colorStyle(scheduleInfo?.colorCode)} />
-          <p>{data?.data.name}</p>
+          <p>{categoryGetResponse?.data.name}</p>
         </div>
       </div>
     </div>
