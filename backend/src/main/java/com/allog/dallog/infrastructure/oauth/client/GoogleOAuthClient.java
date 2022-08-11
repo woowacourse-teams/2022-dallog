@@ -4,13 +4,12 @@ import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.global.config.properties.GoogleProperties;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
+import com.allog.dallog.infrastructure.oauth.dto.UserInfo;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,9 +40,11 @@ public class GoogleOAuthClient implements OAuthClient {
     @Override
     public OAuthMember getOAuthMember(final String code) {
         GoogleTokenResponse googleTokenResponse = requestGoogleToken(code);
-        String payload = getPayloadFrom(googleTokenResponse.getIdToken());
-        String decodedPayload = decodeJwtPayload(payload);
-        return generateOAuthMemberBy(decodedPayload);
+        String payload = getPayload(googleTokenResponse.getIdToken());
+        UserInfo userInfo = parseUserInfo(payload);
+
+        String refreshToken = googleTokenResponse.getRefreshToken();
+        return new OAuthMember(userInfo.getEmail(), userInfo.getName(), userInfo.getPicture(), refreshToken);
     }
 
     private GoogleTokenResponse requestGoogleToken(final String code) {
@@ -73,27 +74,20 @@ public class GoogleOAuthClient implements OAuthClient {
         return params;
     }
 
-    private String getPayloadFrom(final String jwt) {
+    private String getPayload(final String jwt) {
         return jwt.split(JWT_DELIMITER)[1];
+    }
+
+    private UserInfo parseUserInfo(final String payload) {
+        String decodedPayload = decodeJwtPayload(payload);
+        try {
+            return objectMapper.readValue(decodedPayload, UserInfo.class);
+        } catch (JsonProcessingException e) {
+            throw new OAuthException("id 토큰을 읽을 수 없습니다.");
+        }
     }
 
     private String decodeJwtPayload(final String payload) {
         return new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
-    }
-
-    private OAuthMember generateOAuthMemberBy(final String decodedPayload) {
-        Map<String, String> userInfo = readIdToken(decodedPayload);
-        String email = userInfo.get("email");
-        String displayName = userInfo.get("name");
-        String profileImageUrl = userInfo.get("picture");
-        return new OAuthMember(email, displayName, profileImageUrl);
-    }
-
-    private Map<String, String> readIdToken(final String decodedPayload) {
-        try {
-            return objectMapper.readValue(decodedPayload, HashMap.class);
-        } catch (JsonProcessingException e) {
-            throw new OAuthException("id 토큰을 읽을 수 없습니다.");
-        }
     }
 }
