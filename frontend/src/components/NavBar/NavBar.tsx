@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import React, { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -9,7 +10,6 @@ import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
-import Profile from '@/components/Profile/Profile';
 
 import { PATH } from '@/constants';
 
@@ -19,7 +19,10 @@ import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
 import BlackLogo from '../../assets/dallog_black.png';
+import ProfileFallback from '../Profile/Profile.fallback';
 import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBar.styles';
+
+const Profile = React.lazy(() => import('@/components/Profile/Profile'));
 
 function NavBar() {
   const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
@@ -79,7 +82,9 @@ function NavBar() {
               closeModal={toggleProfileModalOpen}
               dimmerBackground="transparent"
             >
-              <Profile />
+              <Suspense fallback={<ProfileFallback />}>
+                <Profile />
+              </Suspense>
             </ModalPortal>
           </>
         )}
