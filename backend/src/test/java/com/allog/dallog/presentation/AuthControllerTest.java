@@ -71,7 +71,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateTokenWithCode(STUB_MEMBER_인증_코드)).willReturn(MEMBER_인증_코드_토큰_응답());
+        given(authService.generateToken(STUB_MEMBER_인증_코드)).willReturn(MEMBER_인증_코드_토큰_응답());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
@@ -96,7 +96,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인_과정에서_Resource_Server_에러가_발생하면_상태코드_500을_반환한다() throws Exception {
         // given
-        given(authService.generateTokenWithCode(STUB_MEMBER_인증_코드)).willThrow(new OAuthException());
+        given(authService.generateToken(STUB_MEMBER_인증_코드)).willThrow(new OAuthException());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
