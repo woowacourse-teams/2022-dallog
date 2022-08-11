@@ -1,5 +1,6 @@
 package com.allog.dallog.presentation;
 
+import com.allog.dallog.application.CategorySubscriptionService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
@@ -26,15 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategorySubscriptionService categorySubscriptionService;
 
-    public CategoryController(final CategoryService categoryService) {
+    public CategoryController(final CategoryService categoryService,
+                              final CategorySubscriptionService categorySubscriptionService) {
         this.categoryService = categoryService;
+        this.categorySubscriptionService = categorySubscriptionService;
     }
 
     @PostMapping
     public ResponseEntity<CategoryResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
                                                  @Valid @RequestBody final CategoryCreateRequest request) {
-        CategoryResponse categoryResponse = categoryService.save(loginMember.getId(), request);
+        CategoryResponse categoryResponse = categorySubscriptionService.save(loginMember.getId(), request);
         return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
     }
 

@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-class CategoryAndSubscriptionServiceTest {
+class CategorySubscriptionServiceTest {
 
     @Autowired
-    private CategoryAndSubscriptionService categoryAndSubscriptionService;
+    private CategorySubscriptionService categoryAndSubscriptionService;
 
     @Autowired
     private MemberService memberService;

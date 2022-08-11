@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Service
-public class CategoryAndSubscriptionService {
+public class CategorySubscriptionService {
 
     private final CategoryService categoryService;
     private final SubscriptionService subscriptionService;
 
-    public CategoryAndSubscriptionService(final CategoryService categoryService,
-                                          final SubscriptionService subscriptionService) {
+    public CategorySubscriptionService(final CategoryService categoryService,
+                                       final SubscriptionService subscriptionService) {
         this.categoryService = categoryService;
         this.subscriptionService = subscriptionService;
     }
