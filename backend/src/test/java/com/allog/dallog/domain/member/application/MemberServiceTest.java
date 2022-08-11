@@ -117,20 +117,4 @@ class MemberServiceTest extends ServiceTest {
         assertThatThrownBy(() -> memberService.validateExistsMember(id))
                 .isInstanceOf(NoSuchMemberException.class);
     }
-
-    @DisplayName("유저 생성 시 개인 카테고리가 자동으로 생성된다.")
-    @Test
-    void 유저_생성_시_개인_카테고리가_자동으로_생성된다() {
-        // given
-        MemberResponse 후디 = memberService.save(후디());
-
-        // when
-        CategoriesResponse categoriesResponse = categoryService.findMine(후디.getId(), Pageable.ofSize(10));
-
-        // then
-        assertAll(() -> {
-            assertThat(categoriesResponse.getCategories()).hasSize(1);
-            assertThat(categoriesResponse.getCategories().get(0).getName()).isEqualTo("개인 일정");
-        });
-    }
 }

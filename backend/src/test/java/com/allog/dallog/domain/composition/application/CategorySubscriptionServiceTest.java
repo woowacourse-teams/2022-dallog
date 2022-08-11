@@ -6,6 +6,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
@@ -14,12 +15,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-class CategorySubscriptionServiceTest {
+class CategorySubscriptionServiceTest extends ServiceTest {
 
     @Autowired
     private CategorySubscriptionService categoryAndSubscriptionService;
