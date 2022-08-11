@@ -73,4 +73,15 @@ public class Subscription extends BaseEntity {
     public boolean isChecked() {
         return checked;
     }
+
+    @Override
+    public String toString() {
+        return "Subscription{" +
+                "id=" + id +
+                ", member=" + member +
+                ", category=" + category.getId() +
+                ", color=" + color +
+                ", checked=" + checked +
+                '}';
+    }
 }

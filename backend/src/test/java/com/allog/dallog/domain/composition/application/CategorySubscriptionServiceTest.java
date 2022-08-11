@@ -41,7 +41,6 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         // then
         assertAll(() -> {
             assertThat(subscriptions).hasSize(1);
-            assertThat(subscriptions.get(0).getCategory().getName()).isEqualTo(공통_일정_이름);
         });
     }
 }

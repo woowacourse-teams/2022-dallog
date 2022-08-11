@@ -100,4 +100,16 @@ public class Category extends BaseEntity {
     public List<Schedule> getSchedules() {
         return schedules;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", member=" + member +
+                ", personal=" + personal +
+                ", schedules=" + schedules +
+                ", subscriptions=" + subscriptions +
+                '}';
+    }
 }
