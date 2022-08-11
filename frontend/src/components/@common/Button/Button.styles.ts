@@ -13,6 +13,11 @@ const button = css`
   &:hover {
     filter: brightness(1.1);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    filter: grayscale(1);
+  }
 `;
 
 export { button };
