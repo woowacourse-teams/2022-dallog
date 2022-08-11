@@ -13,6 +13,7 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import ProfileFallback from '@/components/Profile/Profile.fallback';
 
 import { PATH } from '@/constants';
+import { TRANSPARENT } from '@/constants/style';
 
 import { BiCategory } from 'react-icons/bi';
 import { FaUserCircle } from 'react-icons/fa';
@@ -80,7 +81,7 @@ function NavBar() {
             <ModalPortal
               isOpen={isProfileModalOpen}
               closeModal={toggleProfileModalOpen}
-              dimmerBackground="transparent"
+              dimmerBackground={TRANSPARENT}
             >
               <Suspense fallback={<ProfileFallback />}>
                 <Profile />

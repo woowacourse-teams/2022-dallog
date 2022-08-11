@@ -25,4 +25,6 @@ const PALETTE = [
   '#7E7C73',
 ];
 
-export { PALETTE };
+const TRANSPARENT = 'transparent';
+
+export { PALETTE, TRANSPARENT };

@@ -1,13 +1,15 @@
 import { useTheme } from '@emotion/react';
 import ReactDOM from 'react-dom';
 
+import { TRANSPARENT } from '@/constants/style';
+
 import { dimmer } from './ModalPortal.styles';
 
 interface ModalPortalProps {
   isOpen: boolean;
   closeModal: () => void;
   children: JSX.Element | JSX.Element[];
-  dimmerBackground?: string;
+  dimmerBackground?: typeof TRANSPARENT;
 }
 
 function ModalPortal({ isOpen, closeModal, children, dimmerBackground }: ModalPortalProps) {
