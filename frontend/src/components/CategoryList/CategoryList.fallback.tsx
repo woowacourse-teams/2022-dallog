@@ -18,10 +18,10 @@ function CategoryListFallback() {
       <div css={categoryTableStyle}>
         {new Array(6).fill(0).map((el, index) => (
           <div css={categoryItem} key={index}>
-            <Skeleton cssProp={item} width="30rem" height="8rem" />
-            <Skeleton cssProp={item} width="30rem" height="8rem" />
-            <Skeleton cssProp={item} width="30rem" height="8rem" />
-            <Skeleton cssProp={item} width="30rem" height="8rem" />
+            <Skeleton cssProp={item} width="25rem" height="5rem" />
+            <Skeleton cssProp={item} width="35rem" height="5rem" />
+            <Skeleton cssProp={item} width="20rem" height="5rem" />
+            <Skeleton cssProp={item} width="15rem" height="5rem" />
           </div>
         ))}
       </div>

@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
-import Fallback from '@/components/FilterCategoryList/FilterCategoryList.fallback';
+import FilterCategoryFallback from '@/components/FilterCategoryList/FilterCategoryList.fallback';
 
 import { sideBar } from './SideBar.styles';
 
@@ -24,7 +24,7 @@ function SideBar() {
 
   return (
     <div css={sideBar(theme, isSideBarOpen)}>
-      <Suspense fallback={<Fallback />}>
+      <Suspense fallback={<FilterCategoryFallback />}>
         <FilterCategoryList />
       </Suspense>
     </div>

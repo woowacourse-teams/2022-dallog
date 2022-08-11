@@ -4,24 +4,23 @@ import { useRecoilValue } from 'recoil';
 import { sideBarState } from '@/recoil/atoms';
 
 import Skeleton from '@/components/@common/Skeleton/Skeleton';
-import { itemStyle } from '@/components/FilterCategoryItem/FilterCategoryItem.styles';
 
-import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
+import { headerStyle, listStyle, skeletonStyle } from './FilterCategoryList.styles';
 
-function Fallback() {
+function FilterCategoryFallback() {
   const isSideBarOpen = useRecoilValue(sideBarState);
   const theme = useTheme();
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <span css={headerStyle}> 구독 카테고리</span>
-      <div css={contentStyle}>
+      <div css={skeletonStyle}>
         {new Array(10).fill(0).map((el, index) => (
-          <Skeleton cssProp={itemStyle(theme)} key={index} />
+          <Skeleton height="5rem" width="54rem" key={index} />
         ))}
       </div>
     </div>
   );
 }
 
-export default Fallback;
+export default FilterCategoryFallback;

@@ -31,11 +31,10 @@ const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
   font-size: 4rem;
 `;
 
-const skeletonStyle = ({ colors }: Theme) => css`
-  width: 100%;
-  height: 8rem;
+const skeletonStyle = ({ flex }: Theme) => css`
+  ${flex.column};
 
-  background: ${colors.GRAY_300};
+  gap: 5rem;
 `;
 
 export { contentStyle, headerStyle, listStyle, skeletonStyle };
