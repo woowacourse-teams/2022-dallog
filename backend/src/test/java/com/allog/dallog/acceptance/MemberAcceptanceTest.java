@@ -5,10 +5,10 @@ import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이름;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_프로필;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이름;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_프로필;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -40,9 +40,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(memberResponse.getEmail()).isEqualTo(파랑_이메일);
-            assertThat(memberResponse.getDisplayName()).isEqualTo(파랑_이름);
-            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(파랑_프로필);
+            assertThat(memberResponse.getEmail()).isEqualTo(MEMBER_이메일);
+            assertThat(memberResponse.getDisplayName()).isEqualTo(MEMBER_이름);
+            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(MEMBER_프로필);
         });
     }
 

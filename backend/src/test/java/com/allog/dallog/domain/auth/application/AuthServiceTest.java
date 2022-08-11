@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.auth.application;
 
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.config.TestConfig;
@@ -52,7 +52,7 @@ class AuthServiceTest {
         authService.generateTokenWithCode(STUB_MEMBER_인증_코드);
 
         // when & then
-        assertThat(memberRepository.existsByEmail(파랑_이메일)).isTrue();
+        assertThat(memberRepository.existsByEmail(MEMBER_이메일)).isTrue();
         // SutbOAuthClient가 반환하는 OAuthMember의 이메일
     }
 

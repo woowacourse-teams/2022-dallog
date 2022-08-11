@@ -1,12 +1,5 @@
 package com.allog.dallog.common.fixtures;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이름;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이메일;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버_프로필;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이름;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_프로필;
-
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenRequest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
@@ -19,6 +12,14 @@ public class AuthFixtures {
     public static final String STUB_MEMBER_인증_코드 = "member authorization code";
     public static final String STUB_CREATOR_인증_코드 = "creator authorization code";
 
+    public static final String MEMBER_이메일 = "member@email.com";
+    public static final String MEMBER_이름 = "member";
+    public static final String MEMBER_프로필 = "/member.png";
+
+    public static final String CREATOR_이메일 = "creator@email.com";
+    public static final String CREATOR_이름 = "creator";
+    public static final String CREATOR_프로필 = "/creator.png";
+
     public static TokenRequest MEMBER_인증_코드_토큰_요청() {
         return new TokenRequest(STUB_MEMBER_인증_코드);
     }
@@ -27,12 +28,12 @@ public class AuthFixtures {
         return new TokenResponse(STUB_MEMBER_인증_코드);
     }
 
-    public static OAuthMember STUB_OAUTH_MEMBER_파랑() {
-        return new OAuthMember(파랑_이메일, 파랑_이름, 파랑_프로필);
+    public static OAuthMember STUB_OAUTH_MEMBER() {
+        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필);
     }
 
-    public static OAuthMember STUB_OAUTH_CREATOR_리버() {
-        return new OAuthMember(리버_이메일, 리버_이름, 리버_프로필);
+    public static OAuthMember STUB_OAUTH_CREATOR() {
+        return new OAuthMember(CREATOR_이메일, CREATOR_이름, CREATOR_프로필);
     }
 
     public static final String 더미_엑세스_토큰 = "aaaaa.bbbbb.ccccc";
