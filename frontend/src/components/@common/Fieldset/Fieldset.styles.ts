@@ -16,21 +16,34 @@ const labelStyle = css`
   padding: 0 1rem;
 `;
 
-const inputStyle = ({ colors }: Theme) => css`
+const inputStyle = ({ colors }: Theme, isValid: boolean | undefined) => css`
   padding: 3rem;
 
   width: 100%;
   border-radius: 8px;
-  border: 1px solid ${colors.GRAY_400};
+  border: 1px solid
+    ${isValid === undefined
+      ? colors.GRAY_400
+      : isValid === true
+      ? colors.YELLOW_500
+      : colors.RED_400};
 
   font-family: inherit;
   font-size: inherit;
 
   &:focus {
     outline: none;
-    border-color: ${colors.YELLOW_500};
-    box-shadow: 0 0 2px ${colors.YELLOW_500};
+    border-color: ${isValid === undefined || isValid === true ? colors.YELLOW_500 : colors.RED_400};
+    box-shadow: 0 0 2px
+      ${isValid === undefined || isValid === true ? colors.YELLOW_500 : colors.RED_400};
   }
 `;
 
-export { fieldsetStyle, labelStyle, inputStyle };
+const errorMessageStyle = ({ colors }: Theme, isValid: boolean | undefined) => css`
+  visibility: ${isValid ? 'hidden' : 'visible'};
+
+  font-size: 3rem;
+  color: ${colors.RED_400};
+`;
+
+export { errorMessageStyle, fieldsetStyle, labelStyle, inputStyle };
