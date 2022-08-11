@@ -1,4 +1,4 @@
-package com.allog.dallog.common.application;
+package com.allog.dallog.common.annotation;
 
 import com.allog.dallog.common.config.TestConfig;
 import org.springframework.boot.test.context.SpringBootTest;

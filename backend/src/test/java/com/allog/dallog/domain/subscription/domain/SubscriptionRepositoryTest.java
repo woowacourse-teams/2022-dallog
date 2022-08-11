@@ -11,7 +11,7 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상2_구�
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상3_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.common.domain.RepositoryTest;
+import com.allog.dallog.common.annotation.RepositoryTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
