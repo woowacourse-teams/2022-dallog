@@ -337,7 +337,7 @@ class ScheduleServiceTest {
 
         // when
         MemberScheduleResponses memberScheduleResponses = scheduleService.findSchedulesByMemberId(후디.getId(),
-                new DateRangeRequest("2022-07-01", "2022-08-15"));
+                new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then
         assertAll(() -> {
@@ -390,7 +390,7 @@ class ScheduleServiceTest {
 
         // when
         MemberScheduleResponses memberScheduleResponses = scheduleService.findSchedulesByMemberId(후디.getId(),
-                new DateRangeRequest("2022-07-01", "2022-07-17"));
+                new DateRangeRequest("2022-07-01T00:00", "2022-07-17T23:59"));
 
         // then
         assertAll(() -> {

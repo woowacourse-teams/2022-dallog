@@ -6,9 +6,7 @@ import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -92,14 +90,6 @@ public class Schedule extends BaseEntity {
     public boolean isFewHours() {
         return !isAllDays()
                 && period.calculateDayDifference() < ONE_DAY;
-    }
-
-    public boolean isBetween(final LocalDate startDate, final LocalDate endDate) {
-        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
-
-        return (getStartDateTime().isBefore(endDateTime) || getStartDateTime().isEqual(endDateTime))
-                && (getEndDateTime().isAfter(startDateTime) || getEndDateTime().isEqual(startDateTime));
     }
 
     public Color findSubscriptionColor(final List<Subscription> subscriptions) {

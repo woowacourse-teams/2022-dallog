@@ -321,8 +321,8 @@ class ScheduleControllerTest {
     @Test
     void 회원의_일정_목록을_정상적으로_조회하면_200을_반환한다() throws Exception {
         // given
-        String startDate = "2022-07-31";
-        String endDate = "2022-09-03";
+        String startDate = "2022-07-31T00:00";
+        String endDate = "2022-09-03T00:00";
 
         MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse(1L, "장기간 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1);
@@ -330,9 +330,9 @@ class ScheduleControllerTest {
                 LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2);
 
         MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse(1L, "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
-                LocalDateTime.of(2022, 8, 2, 0, 0), "종일 일정 1의 메모", 1L, Color.COLOR_3);
+                LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3);
         MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse(1L, "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
-                LocalDateTime.of(2022, 8, 6, 0, 0), "종일 일정 2의 메모", 3L, Color.COLOR_4);
+                LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4);
 
         MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse(1L, "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5);
@@ -346,15 +346,15 @@ class ScheduleControllerTest {
                 .willReturn(memberScheduleResponses);
 
         // when & then
-        mockMvc.perform(get("/api/members/me/schedules?startDate={startDate}&endDate={endDate}", startDate, endDate)
+        mockMvc.perform(get("/api/members/me/schedules?startDateTime={startDate}&endDateTime={endDate}", startDate, endDate)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
                 .andDo(document("schedules/findAllByMember",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
-                                parameterWithName("startDate").description("일정 조회 시작 범위 (yyyy-mm-dd)"),
-                                parameterWithName("endDate").description("일정 조회 마지막 범위 (yyyy-mm-dd)")
+                                parameterWithName("startDateTime").description("일정 조회 시작 범위 (yyyy-mm-dd'T'HH:mm)"),
+                                parameterWithName("endDateTime").description("일정 조회 마지막 범위 (yyyy-mm-dd'T'HH:mm)")
                         )
                 ))
                 .andExpect(status().isOk());
