@@ -8,7 +8,7 @@ interface SkeletonProps {
   height: string;
 }
 
-function Skeleton({ cssProp, width, height }: SkeletonProps) {
+function Skeleton({ cssProp, width = '100%', height = '100%' }: SkeletonProps) {
   const theme = useTheme();
 
   return (
@@ -17,10 +17,5 @@ function Skeleton({ cssProp, width, height }: SkeletonProps) {
     </div>
   );
 }
-
-Skeleton.defaultProps = {
-  width: '100%',
-  height: '100%',
-};
 
 export default Skeleton;
