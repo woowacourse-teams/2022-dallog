@@ -5,8 +5,8 @@ import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.구독_목록을_조회한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_리버_인증_코드;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_파랑_인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_CREATOR_인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
@@ -38,13 +38,13 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_카테고리를_구독하면_201을_반환한다() {
         // given
-        String 파랑토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
-        String 리버토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_리버_인증_코드);
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(파랑토큰, 공통_일정_생성_요청);
+        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(리버토큰)
+                .auth().oauth2(memberToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/api/members/me/categories/{categoryId}/subscriptions", 공통_일정.getId())
                 .then().log().all()
@@ -59,19 +59,19 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_구독_목록을_조회하면_200을_반환한다() {
         // given
-        String 파랑토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
-        String 리버토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_리버_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(파랑토큰, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(파랑토큰, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(파랑토큰, FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(creatorToken, FE_일정_생성_요청);
 
-        카테고리를_구독한다(리버토큰, 공통_일정.getId());
-        카테고리를_구독한다(리버토큰, BE_일정.getId());
-        카테고리를_구독한다(리버토큰, FE_일정.getId());
+        카테고리를_구독한다(memberToken, 공통_일정.getId());
+        카테고리를_구독한다(memberToken, BE_일정.getId());
+        카테고리를_구독한다(memberToken, FE_일정.getId());
 
         // when
-        ExtractableResponse<Response> response = 구독_목록을_조회한다(리버토큰);
+        ExtractableResponse<Response> response = 구독_목록을_조회한다(memberToken);
         SubscriptionsResponse subscriptionsResponse = response.as(SubscriptionsResponse.class);
 
         // then
@@ -85,17 +85,17 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_자신의_구독_정보를_수정할_경우_204를_반환한다() {
         // given
-        String 파랑토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
-        String 리버토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_리버_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(파랑토큰, 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
 
-        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(리버토큰, 공통_일정.getId());
+        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(memberToken, 공통_일정.getId());
         SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(Color.COLOR_1, true);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(리버토큰)
+                .auth().oauth2(memberToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
                 .when().patch("/api/members/me/subscriptions/{subscriptionId}", subscriptionResponse.getId())
@@ -103,7 +103,7 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.NO_CONTENT.value())
                 .extract();
 
-        SubscriptionsResponse subscriptionsResponse = 구독_목록을_조회한다(리버토큰).as(SubscriptionsResponse.class);
+        SubscriptionsResponse subscriptionsResponse = 구독_목록을_조회한다(memberToken).as(SubscriptionsResponse.class);
 
         // then
         List<SubscriptionResponse> subscriptions = subscriptionsResponse.getSubscriptions();
@@ -123,20 +123,20 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 구독을_취소할_경우_204를_반환한다() {
         // given
-        String 파랑토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
-        String 리버토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_리버_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(파랑토큰, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(파랑토큰, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(파랑토큰, FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(creatorToken, FE_일정_생성_요청);
 
-        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(리버토큰, 공통_일정.getId());
-        카테고리를_구독한다(리버토큰, BE_일정.getId());
-        카테고리를_구독한다(리버토큰, FE_일정.getId());
+        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(memberToken, 공통_일정.getId());
+        카테고리를_구독한다(memberToken, BE_일정.getId());
+        카테고리를_구독한다(memberToken, FE_일정.getId());
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(리버토큰)
+                .auth().oauth2(memberToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().delete("/api/members/me/subscriptions/{subscriptionId}", subscriptionResponse.getId())
                 .then().log().all()

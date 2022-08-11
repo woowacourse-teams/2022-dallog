@@ -16,22 +16,22 @@ public class AuthFixtures {
     public static final String GOOGLE_PROVIDER = "google";
     public static final String OAUTH_PROVIDER = "oauthProvider";
 
-    public static final String STUB_파랑_인증_코드 = "파랑 authorization code";
-    public static final String STUB_리버_인증_코드 = "리버 authorization code";
+    public static final String STUB_MEMBER_인증_코드 = "member authorization code";
+    public static final String STUB_CREATOR_인증_코드 = "creator authorization code";
 
-    public static TokenRequest 파랑_인증_코드_토큰_요청() {
-        return new TokenRequest(STUB_파랑_인증_코드);
+    public static TokenRequest MEMBER_인증_코드_토큰_요청() {
+        return new TokenRequest(STUB_MEMBER_인증_코드);
     }
 
-    public static TokenResponse 파랑_인증_코드_토큰_응답() {
-        return new TokenResponse(STUB_파랑_인증_코드);
+    public static TokenResponse MEMBER_인증_코드_토큰_응답() {
+        return new TokenResponse(STUB_MEMBER_인증_코드);
     }
 
-    public static OAuthMember STUB_OAUTH_파랑() {
+    public static OAuthMember STUB_OAUTH_MEMBER_파랑() {
         return new OAuthMember(파랑_이메일, 파랑_이름, 파랑_프로필);
     }
 
-    public static OAuthMember STUB_OAUTH_리버() {
+    public static OAuthMember STUB_OAUTH_CREATOR_리버() {
         return new OAuthMember(리버_이메일, 리버_이름, 리버_프로필);
     }
 

@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.composition.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_파랑;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_MEMBER_파랑;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -29,7 +29,7 @@ class RegisterServiceTest {
     @Test
     void 유저_생성_시_개인_카테고리를_자동으로_생성하고_구독한다() {
         // given & when
-        OAuthMember 파랑 = STUB_OAUTH_파랑();
+        OAuthMember 파랑 = STUB_OAUTH_MEMBER_파랑();
         MemberResponse memberResponse = registerService.register(파랑);
 
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberResponse.getId());

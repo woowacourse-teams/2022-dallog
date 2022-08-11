@@ -12,7 +12,7 @@ import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_파랑_인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
@@ -36,7 +36,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_카테고리_정보를_등록하면_상태코드_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
         ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 매트_아고라_생성_요청);
@@ -49,7 +49,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 개인_카테고리를_생성하면_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
         ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 후디_개인_학습_일정_생성_요청);
@@ -62,7 +62,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_페이징을_통해_나누어_조회한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
@@ -85,7 +85,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_카테고리_제목과_페이징을_통해_나누어_조회한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
@@ -108,7 +108,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_개인_카테고리는_카테고리_목록에서_조회할_수_없다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         /* 공개 카테고리 */
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
@@ -131,7 +131,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
@@ -152,7 +152,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_수정하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
         String newCategoryName = "우테코 공통 일정";
 
@@ -171,7 +171,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리를_등록하고_내가_등록한_카테고리를_삭제하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse savedCategory = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
 
         // when

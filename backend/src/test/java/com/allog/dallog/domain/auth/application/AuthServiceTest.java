@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.auth.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_파랑_인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +39,7 @@ class AuthServiceTest {
     @Test
     void 토큰_생성을_하면_OAuth_서버에서_인증_후_토큰을_반환한다() {
         // given & when
-        TokenResponse actual = authService.generateTokenWithCode(STUB_파랑_인증_코드);
+        TokenResponse actual = authService.generateTokenWithCode(STUB_MEMBER_인증_코드);
 
         // then
         assertThat(actual.getAccessToken()).isNotEmpty();
@@ -49,7 +49,7 @@ class AuthServiceTest {
     @Test
     void Authorization_Code를_받으면_회원이_데이터베이스에_저장된다() {
         // given
-        authService.generateTokenWithCode(STUB_파랑_인증_코드);
+        authService.generateTokenWithCode(STUB_MEMBER_인증_코드);
 
         // when & then
         assertThat(memberRepository.existsByEmail(파랑_이메일)).isTrue();
@@ -62,10 +62,10 @@ class AuthServiceTest {
         // 이미 가입된 유저가 소셜 로그인 버튼을 클릭했을 경우엔 회원가입 과정이 생략되고, 곧바로 access token이 발급되어야 한다.
 
         // given
-        authService.generateTokenWithCode(STUB_파랑_인증_코드);
+        authService.generateTokenWithCode(STUB_MEMBER_인증_코드);
 
         // when & then
-        authService.generateTokenWithCode(STUB_파랑_인증_코드);
+        authService.generateTokenWithCode(STUB_MEMBER_인증_코드);
         List<Member> actual = memberRepository.findAll();
 
         // then
