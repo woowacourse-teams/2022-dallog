@@ -105,7 +105,11 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소
           </Button>
-          <Button type="submit" cssProp={saveButton(theme)}>
+          <Button
+            type="submit"
+            cssProp={saveButton(theme)}
+            disabled={!validateLength(inputValue, 1, 20)}
+          >
             완료
           </Button>
         </div>
