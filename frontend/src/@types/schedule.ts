@@ -5,7 +5,7 @@ interface ScheduleType {
   startDateTime: string;
   endDateTime: string;
   memo: string;
-  color: string;
+  colorCode: string;
 }
 
 interface ScheduleResponseType {
