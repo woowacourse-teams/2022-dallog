@@ -3,13 +3,20 @@ import { css, Theme } from '@emotion/react';
 const skeletonStyle = ({ colors }: Theme, width: string, height: string) => css`
   @keyframes skeleton {
     0% {
-      background-color: ${colors.GRAY_300};
+      background-color: transparent;
+    }
+    25% {
+      background-color: ${colors.GRAY_100};
     }
     50% {
-      background-color: ${colors.GRAY_400};
+      background-color: ${colors.GRAY_200};
+    }
+
+    75% {
+      background-color: ${colors.GRAY_300};
     }
     100% {
-      background-color: ${colors.GRAY_300};
+      background-color: transparent;
     }
   }
 
@@ -19,7 +26,7 @@ const skeletonStyle = ({ colors }: Theme, width: string, height: string) => css`
   height: ${height};
   border-radius: 4px;
 
-  animation: skeleton 1s infinite ease-out;
+  animation: skeleton 2s infinite ease-out;
 `;
 
 export { skeletonStyle };
