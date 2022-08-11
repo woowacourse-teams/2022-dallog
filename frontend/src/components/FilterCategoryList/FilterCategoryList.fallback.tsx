@@ -13,7 +13,7 @@ function FilterCategoryFallback() {
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
-      <span css={headerStyle}> 구독 카테고리</span>
+      <span css={headerStyle}>구독 카테고리</span>
       <div css={skeletonStyle}>
         {new Array(10).fill(0).map((el, index) => (
           <Skeleton height="5rem" width="54rem" key={index} />
