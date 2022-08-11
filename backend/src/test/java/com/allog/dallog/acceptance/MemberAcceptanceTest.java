@@ -4,6 +4,7 @@ import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
+import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.회원_탈퇴_한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이름;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
@@ -71,11 +72,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .when().delete("/api/members")
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response = 회원_탈퇴_한다(accessToken);
 
         // then
         상태코드_204가_반환된다(response);
