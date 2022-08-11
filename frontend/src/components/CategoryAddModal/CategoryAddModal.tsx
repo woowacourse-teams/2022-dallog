@@ -12,7 +12,8 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY, PALETTE } from '@/constants';
+import { CACHE_KEY } from '@/constants';
+import { PALETTE } from '@/constants/style';
 
 import { createPostBody, getRandomNumber } from '@/utils';
 
