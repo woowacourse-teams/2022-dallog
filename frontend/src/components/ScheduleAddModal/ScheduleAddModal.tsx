@@ -14,9 +14,10 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
+import { DATE_TIME } from '@/constants/date';
 
 import { createPostBody } from '@/utils';
-import { getDate, getDateTime, getKoreaISOString } from '@/utils/date';
+import { getDate, getDateTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -39,15 +40,15 @@ interface ScheduleAddModalProps {
 }
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
-  const [categoryId, setCategoryId] = useState(0);
-  const [isAllDay, setAllDay] = useState(true);
+  const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
 
-  const { accessToken } = useRecoilValue(userState);
+  const [categoryId, setCategoryId] = useState(0);
+  const [isAllDay, setAllDay] = useState(true);
 
   const queryClient = useQueryClient();
 
-  const { data: myCategoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
     () => categoryApi.getMy(accessToken)
   );
@@ -78,10 +79,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     memo: useRef<HTMLInputElement>(null),
   };
 
-  const handleClickScheduleAddModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   const handleSubmitScheduleAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -97,15 +94,10 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       return;
     }
 
-    const allDayEndDateTime = body.endDateTime.split('-');
-    const newAllDayEndDateTime = getKoreaISOString(
-      new Date(allDayEndDateTime).setDate(Number(allDayEndDateTime[2]) + 1)
-    ).split('T')[0];
-
     const allDayBody = {
       ...body,
-      startDateTime: `${body.startDateTime}T00:00`,
-      endDateTime: `${newAllDayEndDateTime}T00:00`,
+      startDateTime: `${body.startDateTime}T${DATE_TIME.START}`,
+      endDateTime: `${body.endDateTime}T${DATE_TIME.END}`,
     };
 
     postSchedule(allDayBody);
@@ -137,7 +129,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       };
 
   return (
-    <div css={scheduleAddModal} onClick={handleClickScheduleAddModal}>
+    <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
         <select
           id="myCategories"
@@ -148,7 +140,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           <option value="" disabled>
             카테고리
           </option>
-          {myCategoriesGetResponse?.data.map((category) => (
+          {data?.data.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>

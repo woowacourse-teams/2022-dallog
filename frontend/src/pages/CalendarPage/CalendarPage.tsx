@@ -9,7 +9,7 @@ import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
 import { CalendarType } from '@/@types/calendar';
-import { ScheduleResponseType } from '@/@types/schedule';
+import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
@@ -19,10 +19,17 @@ import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
+import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
 import { CACHE_KEY, DAYS } from '@/constants';
 
-import { getDayFromFormattedDate, getFormattedDate, getThisDate, getThisMonth } from '@/utils/date';
+import {
+  getDayFromFormattedDate,
+  getFormattedDate,
+  getISODateString,
+  getThisDate,
+  getThisMonth,
+} from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
 
@@ -53,6 +60,7 @@ function CalendarPage() {
 
   const [hoveringId, setHoveringId] = useState(0);
   const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
+  const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
 
   const {
     calendarMonth,
@@ -66,7 +74,9 @@ function CalendarPage() {
 
   const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } = useSchedulePriority();
 
-  const { state: isCalendarAddModalOpen, toggleState: toggleCalendarAddModalOpen } = useToggle();
+  const { state: isScheduleAddModalOpen, toggleState: toggleScheduleAddModalOpen } = useToggle();
+  const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
+    useToggle();
 
   const { isLoading, error, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
     [CACHE_KEY.SCHEDULES, current],
@@ -75,9 +85,22 @@ function CalendarPage() {
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
 
-  const handleClickDate = (info: CalendarType) => {
+  const handleClickDate = (e: React.MouseEvent, info: CalendarType) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
     setDateInfo(info);
-    toggleCalendarAddModalOpen();
+    toggleScheduleAddModalOpen();
+  };
+
+  const handleClickSchedule = (e: React.MouseEvent, info: ScheduleType) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    setScheduleInfo(info);
+    toggleScheduleModifyModalOpen();
   };
 
   if (isLoading || data === undefined) {
@@ -123,7 +146,7 @@ function CalendarPage() {
                 <div
                   key={key}
                   css={dateBorder(theme, info.day)}
-                  onClick={() => handleClickDate(info)}
+                  onClick={(e) => handleClickDate(e, info)}
                 >
                   <span
                     css={dateText(
@@ -139,10 +162,10 @@ function CalendarPage() {
               );
             })}
           </div>
-          <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
-            <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleCalendarAddModalOpen} />
+          <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
+            <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
           </ModalPortal>
-          <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
+          <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
         </div>
       </PageLayout>
     );
@@ -204,7 +227,7 @@ function CalendarPage() {
               <div
                 key={key}
                 css={dateBorder(theme, info.day)}
-                onClick={() => handleClickDate(info)}
+                onClick={(e) => handleClickDate(e, info)}
               >
                 <span
                   css={dateText(
@@ -218,8 +241,8 @@ function CalendarPage() {
                 </span>
 
                 {longTermsWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
-                  const endDate = el.schedule.endDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
+                  const endDate = getISODateString(el.schedule.endDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
                   const nowDay = getDayFromFormattedDate(nowDate);
 
@@ -234,6 +257,7 @@ function CalendarPage() {
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                        onClick={(e) => handleClickSchedule(e, el.schedule)}
                         onMouseLeave={onMouseLeave}
                       >
                         {(startDate === nowDate || nowDay === 0) && el.schedule.title}
@@ -243,7 +267,7 @@ function CalendarPage() {
                 })}
 
                 {allDaysWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
                   return (
@@ -256,6 +280,7 @@ function CalendarPage() {
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                        onClick={(e) => handleClickSchedule(e, el.schedule)}
                         onMouseLeave={onMouseLeave}
                       >
                         {el.schedule.title}
@@ -265,7 +290,7 @@ function CalendarPage() {
                 })}
 
                 {fewHoursWithPriority.map((el) => {
-                  const startDate = el.schedule.startDateTime.split('T')[0];
+                  const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
                   return (
@@ -279,6 +304,7 @@ function CalendarPage() {
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                        onClick={(e) => handleClickSchedule(e, el.schedule)}
                         onMouseLeave={onMouseLeave}
                       >
                         {el.schedule.title}
@@ -290,10 +316,16 @@ function CalendarPage() {
             );
           })}
         </div>
-        <ModalPortal isOpen={isCalendarAddModalOpen} closeModal={toggleCalendarAddModalOpen}>
-          <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleCalendarAddModalOpen} />
+        <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
+          <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
         </ModalPortal>
-        <ScheduleAddButton onClick={toggleCalendarAddModalOpen} />
+        <ModalPortal isOpen={isScheduleModifyModalOpen} closeModal={toggleScheduleModifyModalOpen}>
+          <ScheduleModifyModal
+            scheduleInfo={scheduleInfo}
+            closeModal={toggleScheduleModifyModalOpen}
+          />
+        </ModalPortal>
+        <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
       </div>
     </PageLayout>
   );

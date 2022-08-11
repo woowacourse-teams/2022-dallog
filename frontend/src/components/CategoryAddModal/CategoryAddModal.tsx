@@ -66,10 +66,6 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     name: useRef<HTMLInputElement>(null),
   };
 
-  const handleClickLoginModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -97,7 +93,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   };
 
   return (
-    <div css={categoryAddModal} onClick={handleClickLoginModal}>
+    <div css={categoryAddModal}>
       <h1 css={title}>새 카테고리 만들기</h1>
       <form css={form} onSubmit={handleSubmitCategoryAddForm}>
         <div css={content}>

@@ -51,10 +51,6 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     name: useRef<HTMLInputElement>(null),
   };
 
-  const handleClickModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -79,7 +75,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
   }, []);
 
   return (
-    <div css={modal} onClick={handleClickModal}>
+    <div css={modal}>
       <h1 css={title}>카테고리 이름 수정</h1>
       <form css={form} onSubmit={handleSubmitCategoryModifyForm}>
         <div css={content}>

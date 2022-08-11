@@ -23,7 +23,11 @@ const scheduleApi = {
     return response;
   },
 
-  post: async (accessToken: string | null, categoryId: number, body: Omit<ScheduleType, 'id'>) => {
+  post: async (
+    accessToken: string | null,
+    categoryId: number,
+    body: Omit<ScheduleType, 'id' | 'categoryId'>
+  ) => {
     const response = await dallogApi.post(scheduleApi.endpoint.post(categoryId), body, {
       headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
     });

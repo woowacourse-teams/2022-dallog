@@ -13,6 +13,7 @@ import Button from '@/components/@common/Button/Button';
 import { CACHE_KEY, PALETTE } from '@/constants';
 
 import { getRandomNumber } from '@/utils';
+import { getISODateString } from '@/utils/date';
 
 import subscriptionApi from '@/api/subscription';
 
@@ -49,7 +50,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
 
   return (
     <div css={categoryItem}>
-      <span css={item}>{category.createdAt.split('T')[0]}</span>
+      <span css={item}>{getISODateString(category.createdAt)}</span>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

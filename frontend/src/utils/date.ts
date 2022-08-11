@@ -1,18 +1,19 @@
 import { CalendarType } from '@/@types/calendar';
 
+import { DATE_TIME } from '@/constants/date';
+
 import { zeroFill } from '.';
 
-const getKoreaISOString = (time: number) => {
-  return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
-};
-
-const getNextYearMonth = (targetYear: number, targetMonth: number) => {
-  if (targetMonth === 12) {
-    return { year: targetYear + 1, month: 1 };
+const checkAllDay = (startDateTime: string | undefined, endDateTime: string | undefined) => {
+  if (startDateTime === undefined || endDateTime === undefined) {
+    return null;
   }
 
-  return { year: targetYear, month: targetMonth + 1 };
+  return startDateTime.includes(DATE_TIME.START) && endDateTime.includes(DATE_TIME.END);
 };
+
+const getBeforeDate = (targetDay: Date, offset: number) =>
+  new Date(targetDay.setDate(targetDay.getDate() - offset));
 
 const getBeforeYearMonth = (targetYear: number, targetMonth: number) => {
   if (targetMonth === 1) {
@@ -21,53 +22,6 @@ const getBeforeYearMonth = (targetYear: number, targetMonth: number) => {
 
   return { year: targetYear, month: targetMonth - 1 };
 };
-
-const getThisYear = () => {
-  return new Date().getFullYear();
-};
-
-const getThisMonth = () => {
-  return new Date().getMonth() + 1;
-};
-
-const getThisDate = () => {
-  return new Date().getDate();
-};
-
-const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
-    return new Date(+new Date() + 3240 * 10000).toISOString().split('T')[0];
-  }
-
-  const { year, month, date } = dateInfo;
-
-  return new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString().split('T')[0];
-};
-
-const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
-    return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
-  }
-
-  const { year, month, date } = dateInfo;
-
-  return new Date(+new Date(year, month - 1, date) + 3240 * 10000)
-    .toISOString()
-    .replace(/\..*/, '')
-    .slice(0, -3);
-};
-
-const getDayFromFormattedDate = (date: string) => {
-  const newDate = new Date(`${date}T00:00:00Z`);
-
-  return newDate.getDay();
-};
-
-const getBeforeDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() - offset));
-
-const getNextDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() + offset));
 
 const getCalendarMonth = (year: number, month: number) => {
   const firstDate = new Date(year, month - 1, 1);
@@ -108,11 +62,70 @@ const getCalendarMonth = (year: number, month: number) => {
   });
 };
 
+const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
+  if (dateInfo === null) {
+    return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
+  }
+
+  const { year, month, date } = dateInfo;
+
+  return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
+};
+
+const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
+  if (dateInfo === null) {
+    return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
+  }
+
+  const { year, month, date } = dateInfo;
+
+  return new Date(+new Date(year, month - 1, date) + 3240 * 10000)
+    .toISOString()
+    .replace(/\..*/, '')
+    .slice(0, -3);
+};
+
+const getDayFromFormattedDate = (date: string) => {
+  return new Date(date).getDay();
+};
+
 const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
   return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
 };
 
+const getISODateString = (ISOString: string) => {
+  return ISOString.split('T')[0];
+};
+
+const getKoreaISOString = (time: number) => {
+  return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
+};
+
+const getNextDate = (targetDay: Date, offset: number) =>
+  new Date(targetDay.setDate(targetDay.getDate() + offset));
+
+const getNextYearMonth = (targetYear: number, targetMonth: number) => {
+  if (targetMonth === 12) {
+    return { year: targetYear + 1, month: 1 };
+  }
+
+  return { year: targetYear, month: targetMonth + 1 };
+};
+
+const getThisDate = () => {
+  return new Date().getDate();
+};
+
+const getThisMonth = () => {
+  return new Date().getMonth() + 1;
+};
+
+const getThisYear = () => {
+  return new Date().getFullYear();
+};
+
 export {
+  checkAllDay,
   getBeforeDate,
   getBeforeYearMonth,
   getCalendarMonth,
@@ -120,10 +133,11 @@ export {
   getDateTime,
   getDayFromFormattedDate,
   getFormattedDate,
+  getISODateString,
   getKoreaISOString,
-  getThisYear,
-  getThisMonth,
-  getThisDate,
   getNextDate,
   getNextYearMonth,
+  getThisDate,
+  getThisMonth,
+  getThisYear,
 };

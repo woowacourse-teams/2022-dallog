@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
-const scheduleAddModal = ({ colors }: Theme) => css`
+const scheduleModifyModal = ({ colors }: Theme) => css`
   width: 120rem;
   height: 160rem;
   padding: 12.5rem;
@@ -95,5 +95,5 @@ export {
   dateTime,
   form,
   saveButton,
-  scheduleAddModal,
+  scheduleModifyModal,
 };

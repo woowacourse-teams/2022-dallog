@@ -10,6 +10,8 @@ import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY, CONFIRM_MESSAGE } from '@/constants';
 
+import { getISODateString } from '@/utils/date';
+
 import subscriptionApi from '@/api/subscription';
 
 import { categoryItem, item, unsubscribeButton } from './SubscribedCategoryItem.styles';
@@ -39,7 +41,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
 
   return (
     <div css={categoryItem}>
-      <span css={item}>{category.createdAt.split('T')[0]}</span>
+      <span css={item}>{getISODateString(category.createdAt)}</span>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

@@ -13,6 +13,8 @@ import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModify
 
 import { CACHE_KEY, CONFIRM_MESSAGE } from '@/constants';
 
+import { getISODateString } from '@/utils/date';
+
 import categoryApi from '@/api/category';
 
 import { FiEdit3 } from 'react-icons/fi';
@@ -49,7 +51,7 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
 
   return (
     <div css={categoryItemStyle}>
-      <span css={itemStyle}>{category.createdAt.split('T')[0]}</span>
+      <span css={itemStyle}>{getISODateString(category.createdAt)}</span>
       <span css={itemStyle}>{category.name}</span>
       <div css={itemStyle}>
         <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
