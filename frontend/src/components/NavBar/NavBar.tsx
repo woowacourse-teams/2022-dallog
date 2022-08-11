@@ -10,6 +10,7 @@ import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import ProfileFallback from '@/components/Profile/Profile.fallback';
 
 import { PATH } from '@/constants';
 
@@ -19,7 +20,6 @@ import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
 
 import BlackLogo from '../../assets/dallog_black.png';
-import ProfileFallback from '../Profile/Profile.fallback';
 import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBar.styles';
 
 const Profile = React.lazy(() => import('@/components/Profile/Profile'));
