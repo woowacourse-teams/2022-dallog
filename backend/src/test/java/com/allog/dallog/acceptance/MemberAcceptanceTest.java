@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @DisplayName("회원 관련 기능")
-@Import(TestConfig.class)
 public class MemberAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("등록된 회원이 자신의 정보를 조회하면 상태코드 200을 반환한다.")

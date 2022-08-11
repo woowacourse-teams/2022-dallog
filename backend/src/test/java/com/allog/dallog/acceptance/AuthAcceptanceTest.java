@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
 
 @DisplayName("인증 관련 기능")
-@Import(TestConfig.class)
 public class AuthAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("구글 OAuth 인증 URI를 생성하여 반환한다.")

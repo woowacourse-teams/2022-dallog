@@ -30,7 +30,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @DisplayName("구독 관련 기능")
-@Import(TestConfig.class)
 public class SubscriptionAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("인증된 회원이 카테고리를 구독하면 201을 반환한다.")
