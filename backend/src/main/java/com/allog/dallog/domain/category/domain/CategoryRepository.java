@@ -16,5 +16,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     boolean existsByIdAndMemberId(Long id, Long memberId);
 
-    void deleteAllByMemberId(Long memberId);
+    void deleteByMemberId(Long memberId);
 }

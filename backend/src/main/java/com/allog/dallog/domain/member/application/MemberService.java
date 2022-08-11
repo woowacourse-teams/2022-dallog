@@ -46,8 +46,8 @@ public class MemberService {
 
     @Transactional
     public void delete(final Long id) {
-        subscriptionRepository.deleteAllByMemberId(id);
-        categoryRepository.deleteAllByMemberId(id);
+        subscriptionRepository.deleteByMemberId(id);
+        categoryRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
     }
 
