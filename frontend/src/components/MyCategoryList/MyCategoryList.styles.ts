@@ -44,13 +44,4 @@ const listStyle = css`
   overflow-y: overlay;
 `;
 
-const spinnerStyle = ({ flex }: Theme) => css`
-  ${flex.column}
-
-  gap:5rem;
-
-  width: 100%;
-  height: 50%;
-`;
-
-export { buttonStyle, listStyle, headerStyle, itemStyle, spinnerStyle };
+export { buttonStyle, listStyle, headerStyle, itemStyle };

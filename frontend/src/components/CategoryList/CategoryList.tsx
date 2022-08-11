@@ -9,7 +9,6 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
-import Spinner from '@/components/@common/Spinner/Spinner';
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
 
@@ -33,7 +32,7 @@ function CategoryList({ keyword }: CategoryListProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const {
-    isLoading: isCategoriesLoading,
+    error: categoriesError,
     data: categoriesGetResponse,
     fetchNextPage,
     hasNextPage,
@@ -49,7 +48,7 @@ function CategoryList({ keyword }: CategoryListProps) {
     }
   );
 
-  const { isLoading: isSubscriptionsLoading, data: subscriptionsGetResponse } = useQuery<
+  const { error: subscriptionsError, data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
   >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
@@ -58,16 +57,12 @@ function CategoryList({ keyword }: CategoryListProps) {
     hasNextPage && fetchNextPage();
   });
 
-  if (isCategoriesLoading || categoriesGetResponse === undefined) {
-    return <Spinner size={30} />;
+  if (categoriesError || subscriptionsError) {
+    return <>Error</>;
   }
 
-  if (isSubscriptionsLoading || subscriptionsGetResponse === undefined) {
-    return <Spinner size={30} />;
-  }
-
-  const categoryList = categoriesGetResponse.pages.flatMap(({ data }) => data.categories);
-  const subscriptionList = subscriptionsGetResponse.data.map((el) => {
+  const categoryList = categoriesGetResponse?.pages.flatMap(({ data }) => data.categories);
+  const subscriptionList = subscriptionsGetResponse?.data.map((el) => {
     return {
       subscriptionId: el.id,
       categoryId: el.category.id,
@@ -83,8 +78,8 @@ function CategoryList({ keyword }: CategoryListProps) {
         <span css={itemStyle}>구독 상태</span>
       </div>
       <div css={categoryTableStyle}>
-        {categoryList.map((category) => {
-          const subscribedCategoryInfo = subscriptionList.find(
+        {categoryList?.map((category) => {
+          const subscribedCategoryInfo = subscriptionList?.find(
             (el) => el.categoryId === category.id
           );
 
