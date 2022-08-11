@@ -4,7 +4,7 @@ import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.OAuth_
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
-import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_파랑_인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -39,7 +39,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void 최초_사용자거나_기존에_존재하는_회원인_경우_200을_발급한다() {
         // given & when
-        ExtractableResponse<Response> response = 자체_토큰을_생성한다(GOOGLE_PROVIDER, 인증_코드);
+        ExtractableResponse<Response> response = 자체_토큰을_생성한다(GOOGLE_PROVIDER, STUB_파랑_인증_코드);
         TokenResponse tokenResponse = response.as(TokenResponse.class);
 
         // then

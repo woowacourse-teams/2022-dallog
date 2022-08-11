@@ -2,9 +2,9 @@ package com.allog.dallog.presentation.auth;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAuth_로그인_링크;
-import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
-import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드_토큰_요청;
-import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드_토큰_응답;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_파랑_인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.파랑_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.파랑_인증_코드_토큰_응답;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -20,8 +20,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.common.config.TestConfig;
+import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -75,13 +75,13 @@ class AuthControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateTokenWithCode(인증_코드)).willReturn(인증_코드_토큰_응답());
+        given(authService.generateTokenWithCode(STUB_파랑_인증_코드)).willReturn(파랑_인증_코드_토큰_응답());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(인증_코드_토큰_요청())))
+                        .content(objectMapper.writeValueAsString(파랑_인증_코드_토큰_요청())))
                 .andDo(print())
                 .andDo(document("auth/token",
                         preprocessRequest(prettyPrint()),
@@ -100,13 +100,13 @@ class AuthControllerTest {
     @Test
     void OAuth_로그인_과정에서_Resource_Server_에러가_발생하면_상태코드_500을_반환한다() throws Exception {
         // given
-        given(authService.generateTokenWithCode(인증_코드)).willThrow(new OAuthException());
+        given(authService.generateTokenWithCode(STUB_파랑_인증_코드)).willThrow(new OAuthException());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(인증_코드_토큰_요청())))
+                        .content(objectMapper.writeValueAsString(파랑_인증_코드_토큰_요청())))
                 .andDo(print())
                 .andDo(document("auth/exception/token",
                         preprocessRequest(prettyPrint()),

@@ -1,9 +1,10 @@
 package com.allog.dallog.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_회원;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_파랑;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -28,13 +29,14 @@ class RegisterServiceTest {
     @Test
     void 유저_생성_시_개인_카테고리를_자동으로_생성하고_구독한다() {
         // given & when
-        MemberResponse memberResponse = registerService.register(STUB_OAUTH_회원);
+        OAuthMember 파랑 = STUB_OAUTH_파랑();
+        MemberResponse memberResponse = registerService.register(파랑);
 
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberResponse.getId());
 
         // then
         assertAll(() -> {
-            assertThat(memberResponse.getEmail()).isEqualTo(STUB_OAUTH_회원.getEmail());
+            assertThat(memberResponse.getEmail()).isEqualTo(파랑.getEmail());
             assertThat(subscriptions).hasSize(1);
             assertThat(subscriptions.get(0).getCategory().getName()).isEqualTo("개인 일정");
             assertThat(subscriptions.get(0).getCategory().isPersonal()).isTrue();
