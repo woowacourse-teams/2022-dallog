@@ -12,17 +12,17 @@ const scheduleAddModal = ({ colors }: Theme) => css`
 const form = ({ flex }: Theme) => css`
   ${flex.column};
 
-  height: 100%;
   justify-content: space-between;
+
+  height: 100%;
 `;
 
 const categorySelect = ({ colors }: Theme) => css`
-  padding: 3rem;
-
   width: 100%;
   height: 13rem;
-  border-radius: 8px;
+  padding: 3rem;
   border: 1px solid ${colors.GRAY_400};
+  border-radius: 8px;
 
   font-size: 5rem;
 `;
@@ -43,9 +43,9 @@ const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
 const dateTime = ({ flex }: Theme) => css`
   ${flex.column}
 
-  width: 100%;
-
   gap: 2.5rem;
+
+  width: 100%;
 `;
 
 const arrow = ({ colors }: Theme) => css`
