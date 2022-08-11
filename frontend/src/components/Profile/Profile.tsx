@@ -10,7 +10,6 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
-import Spinner from '@/components/@common/Spinner/Spinner';
 
 import { CACHE_KEY, CONFIRM_MESSAGE, PATH } from '@/constants';
 
@@ -32,7 +31,6 @@ import {
   menuTitle,
   nameButtonStyle,
   nameStyle,
-  spinnerStyle,
 } from './Profile.styles';
 
 function Profile() {
@@ -47,9 +45,8 @@ function Profile() {
   const { accessToken } = useRecoilValue(userState);
 
   const queryClient = useQueryClient();
-  const { isLoading, error, data, isSuccess } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
-    CACHE_KEY.PROFILE,
-    () => profileApi.get(accessToken)
+  const { error, data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
+    profileApi.get(accessToken)
   );
 
   const { mutate } = useMutation(
@@ -61,15 +58,7 @@ function Profile() {
     }
   );
 
-  if (isLoading) {
-    return (
-      <div css={spinnerStyle}>
-        <Spinner size={30} />
-      </div>
-    );
-  }
-
-  if (error || !isSuccess) {
+  if (error) {
     return <div>Error</div>;
   }
 
@@ -77,7 +66,11 @@ function Profile() {
     setEditingName(true);
   };
 
-  const handleClickCompleteButton = (defaultName: string) => {
+  const handleClickCompleteButton = (defaultName: string | undefined) => {
+    if (defaultName === undefined) {
+      return;
+    }
+
     const body = createPostBody(inputRef);
 
     if (body.displayName === '') {
@@ -98,13 +91,13 @@ function Profile() {
 
   return (
     <div css={layoutStyle}>
-      <img src={data.data.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
+      <img src={data?.data.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
       <div css={contentStyle}>
         {isEditingName ? (
           <form css={nameButtonStyle}>
             <Fieldset
-              defaultValue={data.data.displayName}
-              placeholder={data.data.displayName}
+              defaultValue={data?.data.displayName}
+              placeholder={data?.data.displayName}
               refProp={inputRef.displayName}
               cssProp={inputStyle}
               autoFocus={true}
@@ -112,7 +105,7 @@ function Profile() {
             <Button
               type="submit"
               cssProp={menu}
-              onClick={() => handleClickCompleteButton(data.data.displayName)}
+              onClick={() => handleClickCompleteButton(data?.data.displayName)}
             >
               <AiOutlineCheck size={14} />
               <span css={menuTitle}>완료</span>
@@ -120,14 +113,14 @@ function Profile() {
           </form>
         ) : (
           <div>
-            <span css={nameStyle}>{data.data.displayName}</span>
+            <span css={nameStyle}>{data?.data.displayName}</span>
             <Button cssProp={menu} onClick={handleClickModifyButton}>
               <FiEdit3 size={14} />
               <span css={menuTitle}>수정</span>
             </Button>
           </div>
         )}
-        <span css={emailStyle}>{data.data.email}</span>
+        <span css={emailStyle}>{data?.data.email}</span>
       </div>
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
