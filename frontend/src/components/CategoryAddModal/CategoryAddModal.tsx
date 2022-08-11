@@ -1,8 +1,11 @@
+import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
+
+import useControlledInput from '@/hooks/useControlledInput';
 
 import { CategoryType } from '@/@types/category';
 import { SubscriptionType } from '@/@types/subscription';
@@ -12,9 +15,9 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY, PALETTE } from '@/constants';
+import { CACHE_KEY, PALETTE, VALIDATION_MESSAGE } from '@/constants';
 
-import { createPostBody, getRandomNumber } from '@/utils';
+import { getRandomNumber } from '@/utils';
 
 import categoryApi from '@/api/category';
 import subscriptionApi from '@/api/subscription';
@@ -36,6 +39,8 @@ interface CategoryAddModalProps {
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const [myCategoryId, setMyCategoryId] = useState(0);
   const theme = useTheme();
+
+  const { inputValue, onChange } = useControlledInput();
 
   const { accessToken } = useRecoilValue(userState);
 
@@ -62,20 +67,10 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     onSuccess: () => onSuccessPostSubscription(),
   });
 
-  const inputRef = {
-    name: useRef<HTMLInputElement>(null),
-  };
-
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const body = createPostBody(inputRef);
-
-    if (!body) {
-      return;
-    }
-
-    postCategory(body);
+    postCategory({ name: inputValue });
   };
 
   const onSuccessPostCategory = ({ data }: AxiosResponse<CategoryType>) => {
@@ -97,7 +92,13 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
       <h1 css={title}>새 카테고리 만들기</h1>
       <form css={form} onSubmit={handleSubmitCategoryAddForm}>
         <div css={content}>
-          <Fieldset placeholder="이름" autoFocus={true} refProp={inputRef.name} />
+          <Fieldset
+            placeholder="이름"
+            autoFocus={true}
+            onChange={onChange}
+            errorMessage={VALIDATION_MESSAGE.ONE_TO_TWENTY_LENGTH}
+            isValid={validateLength(inputValue, 1, 20)}
+          />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
