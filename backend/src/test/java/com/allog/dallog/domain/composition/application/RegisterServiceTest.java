@@ -13,8 +13,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 class RegisterServiceTest extends ServiceTest {
 
@@ -37,8 +35,6 @@ class RegisterServiceTest extends ServiceTest {
         assertAll(() -> {
             assertThat(memberResponse.getEmail()).isEqualTo(member.getEmail());
             assertThat(subscriptions).hasSize(1);
-            assertThat(subscriptions.get(0).getCategory().getName()).isEqualTo("개인 일정");
-            assertThat(subscriptions.get(0).getCategory().isPersonal()).isTrue();
         });
     }
 }
