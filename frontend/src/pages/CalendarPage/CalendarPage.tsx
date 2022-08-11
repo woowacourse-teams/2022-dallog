@@ -253,7 +253,7 @@ function CalendarPage() {
                         key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
-                          el.schedule.color,
+                          el.schedule.colorCode,
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
@@ -276,7 +276,7 @@ function CalendarPage() {
                         key={`${nowDate}#${el.schedule.id}`}
                         css={itemWithBackgroundStyle(
                           el.priority,
-                          el.schedule.color,
+                          el.schedule.colorCode,
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
@@ -300,7 +300,7 @@ function CalendarPage() {
                         css={itemWithoutBackgroundStyle(
                           theme,
                           el.priority,
-                          el.schedule.color,
+                          el.schedule.colorCode,
                           hoveringId === el.schedule.id
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}

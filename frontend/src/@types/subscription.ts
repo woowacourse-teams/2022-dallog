@@ -8,7 +8,7 @@ interface SubscriptionType {
     creator: ProfileType;
     createdAt: string;
   };
-  color: string;
+  colorCode: string;
   checked: boolean;
 }
 

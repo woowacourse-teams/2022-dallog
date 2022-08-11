@@ -29,14 +29,14 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const body = {
-    color: PALETTE[getRandomNumber(0, PALETTE.length)],
+    colorCode: PALETTE[getRandomNumber(0, PALETTE.length)],
   };
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation<
-    AxiosResponse<Pick<SubscriptionType, 'color'>>,
+    AxiosResponse<Pick<SubscriptionType, 'colorCode'>>,
     AxiosError,
-    Pick<SubscriptionType, 'color'>,
+    Pick<SubscriptionType, 'colorCode'>,
     unknown
   >(() => subscriptionApi.post(accessToken, category.id, body), {
     onSuccess: () => {
