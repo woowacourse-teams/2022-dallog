@@ -29,6 +29,14 @@ const categoryApi = {
     return response;
   },
 
+  getSingle: async (categoryId: number | undefined) => {
+    const response = await dallogApi.get(`${categoryApi.endpoint.entire}/${categoryId}`, {
+      headers: { ...categoryApi.headers },
+    });
+
+    return response;
+  },
+
   getMy: async (accessToken: string | null) => {
     const response = await dallogApi.get<CategoryType[]>(categoryApi.endpoint.my, {
       headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },

@@ -13,6 +13,7 @@ const ATOM_KEY = {
 const CACHE_KEY = {
   AUTH: 'auth',
   CATEGORIES: 'categories',
+  CATEGORY: 'category',
   ENTER: 'enter',
   MY_CATEGORIES: 'myCategories',
   PROFILE: 'profile',
