@@ -189,6 +189,7 @@ const pageStyle = ({ flex }: Theme) => css`
 
   overflow-x: hidden;
 `;
+
 const methodHeaderStyle = ({ colors }: Theme) => css`
   margin-top: 10rem;
 
@@ -203,9 +204,9 @@ const methodTextStyle = ({ colors }: Theme) => css`
 `;
 
 const methodItemStyle = ({ flex }: Theme, isShowing: boolean, direction: 'left' | 'right') => css`
-  ${flex.row}
+  ${flex.row};
 
-  position:relative;
+  position: relative;
   gap: 20rem;
 
   width: 70%;

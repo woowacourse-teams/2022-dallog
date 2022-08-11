@@ -77,7 +77,6 @@ function StartPage() {
     return <>Error</>;
   }
 
-  console.log(firstMethod, secondMethod);
   return (
     <PageLayout>
       <div css={pageStyle}>
@@ -110,7 +109,7 @@ function StartPage() {
               </span>
               <Button cssProp={googleLoginButton(theme)} onClick={handleClickGoogleLoginButton}>
                 <FcGoogle size={20} />
-                <p css={loginText}>Google 계정으로 계속하기</p>
+                <p css={loginText}>Google 계정으로 로그인하기</p>
               </Button>
             </div>
           </div>
