@@ -71,13 +71,13 @@ public class ScheduleService {
     public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
                                                            final DateRangeRequest dateRangeRequest) {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<Category> categories = findCategoriesBy(subscriptions);
+        List<Category> categories = findCheckedCategoriesBy(subscriptions);
         List<Schedule> schedules = findSchedulesBy(categories, dateRangeRequest);
         TypedSchedules typedSchedules = new TypedSchedules(schedules);
         return new MemberScheduleResponses(subscriptions, typedSchedules);
     }
 
-    private List<Category> findCategoriesBy(final List<Subscription> subscriptions) {
+    private List<Category> findCheckedCategoriesBy(final List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .filter(Subscription::isChecked)
                 .map(Subscription::getCategory)
