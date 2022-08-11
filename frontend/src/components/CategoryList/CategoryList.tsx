@@ -32,7 +32,7 @@ function CategoryList({ keyword }: CategoryListProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const {
-    error: categoriesError,
+    error: categoriesGetError,
     data: categoriesGetResponse,
     fetchNextPage,
     hasNextPage,
@@ -48,7 +48,7 @@ function CategoryList({ keyword }: CategoryListProps) {
     }
   );
 
-  const { error: subscriptionsError, data: subscriptionsGetResponse } = useQuery<
+  const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
   >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
@@ -57,7 +57,7 @@ function CategoryList({ keyword }: CategoryListProps) {
     hasNextPage && fetchNextPage();
   });
 
-  if (categoriesError || subscriptionsError) {
+  if (categoriesGetError || subscriptionsGetError) {
     return <>Error</>;
   }
 
