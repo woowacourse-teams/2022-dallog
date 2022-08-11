@@ -1,4 +1,4 @@
-package com.allog.dallog.application;
+package com.allog.dallog.domain.composition.application;
 
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;

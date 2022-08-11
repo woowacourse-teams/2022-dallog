@@ -1,12 +1,12 @@
 package com.allog.dallog.presentation;
 
-import com.allog.dallog.application.CategorySubscriptionService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;

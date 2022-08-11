@@ -1,4 +1,4 @@
-package com.allog.dallog.application;
+package com.allog.dallog.domain.composition.application;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_파랑;
 import static org.assertj.core.api.Assertions.assertThat;

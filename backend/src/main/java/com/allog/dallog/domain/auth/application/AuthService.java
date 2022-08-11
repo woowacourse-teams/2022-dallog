@@ -1,8 +1,8 @@
 package com.allog.dallog.domain.auth.application;
 
-import com.allog.dallog.application.RegisterService;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import org.springframework.stereotype.Service;
