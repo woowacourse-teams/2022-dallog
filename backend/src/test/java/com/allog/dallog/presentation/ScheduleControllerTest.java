@@ -74,7 +74,7 @@ class ScheduleControllerTest extends ControllerTest {
         Long categoryId = 1L;
         ScheduleCreateRequest request = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
 
-        given(scheduleService.save(any(), any(), any())).willReturn(1L);
+        given(scheduleService.save(any(), any(), any())).willReturn(알록달록_회의_응답);
 
         // when & then
         mockMvc.perform(post("/api/categories/{categoryId}/schedules", categoryId)
@@ -142,7 +142,7 @@ class ScheduleControllerTest extends ControllerTest {
         // given
         Long scheduleId = 1L;
 
-        given(scheduleService.findById(scheduleId)).willReturn(알록달록_회의_응답());
+        given(scheduleService.findById(scheduleId)).willReturn(알록달록_회의_응답);
 
         // when & then
         mockMvc.perform(get("/api/schedules/{scheduleId}", scheduleId)

@@ -73,10 +73,10 @@ class ScheduleServiceTest extends ServiceTest {
         // given & when
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long id = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // then
-        assertThat(id).isNotNull();
+        assertThat(알록달록_회의.getTitle()).isEqualTo(알록달록_회의_제목);
     }
 
     @DisplayName("새로운 일정을 생성 할 떄 일정 제목의 길이가 50을 초과하는 경우 예외를 던진다.")
@@ -165,14 +165,14 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long id = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when
-        ScheduleResponse response = scheduleService.findById(id);
+        ScheduleResponse response = scheduleService.findById(알록달록_회의.getId());
 
         // then
         assertAll(() -> {
-            assertThat(response.getId()).isEqualTo(id);
+            assertThat(response.getId()).isEqualTo(알록달록_회의.getId());
             assertThat(response.getTitle()).isEqualTo(알록달록_회의_제목);
             assertThat(response.getStartDateTime()).isEqualTo(알록달록_회의_시작일시);
             assertThat(response.getEndDateTime()).isEqualTo(알록달록_회의_종료일시);
@@ -199,18 +199,18 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
         // when
-        scheduleService.update(기존_일정_ID, 후디.getId(), 일정_수정_요청);
+        scheduleService.update(기존_일정.getId(), 후디.getId(), 일정_수정_요청);
 
         // then
-        ScheduleResponse actual = scheduleService.findById(기존_일정_ID);
+        ScheduleResponse actual = scheduleService.findById(기존_일정.getId());
         assertAll(
                 () -> {
-                    assertThat(actual.getId()).isEqualTo(기존_일정_ID);
+                    assertThat(actual.getId()).isEqualTo(기존_일정.getId());
                     assertThat(actual.getTitle()).isEqualTo(레벨_인터뷰_제목);
                     assertThat(actual.getStartDateTime()).isEqualTo(레벨_인터뷰_시작일시);
                     assertThat(actual.getEndDateTime()).isEqualTo(레벨_인터뷰_종료일시);
@@ -226,12 +226,12 @@ class ScheduleServiceTest extends ServiceTest {
         MemberResponse 리버 = memberService.save(리버());
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.update(기존_일정_ID, 리버.getId(), 일정_수정_요청))
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 리버.getId(), 일정_수정_요청))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -241,12 +241,12 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 기존_일정_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.update(기존_일정_ID + 1, 후디.getId(), 일정_수정_요청))
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId() + 1, 후디.getId(), 일정_수정_요청))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
@@ -256,13 +256,13 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when
-        scheduleService.deleteById(알록달록_회의_ID, 후디.getId());
+        scheduleService.deleteById(알록달록_회의.getId(), 후디.getId());
 
         // then
-        assertThatThrownBy(() -> scheduleService.findById(알록달록_회의_ID))
+        assertThatThrownBy(() -> scheduleService.findById(알록달록_회의.getId()))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
@@ -273,10 +273,10 @@ class ScheduleServiceTest extends ServiceTest {
         MemberResponse 리버 = memberService.save(리버());
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의_ID, 리버.getId()))
+        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의.getId(), 리버.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -286,10 +286,10 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디());
         CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
-        Long 알록달록_회의_ID = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의_ID + 1, 후디.getId()))
+        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의.getId() + 1, 후디.getId()))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
