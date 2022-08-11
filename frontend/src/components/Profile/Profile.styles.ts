@@ -111,12 +111,10 @@ const nameStyle = css`
   font-size: 3.5rem;
 `;
 
-const spinnerStyle = ({ flex }: Theme) => css`
-  ${flex.row};
+const skeletonStyle = ({ flex }: Theme) => css`
+  ${flex.column};
 
-  position: absolute;
-  top: 15rem;
-  right: 2rem;
+  gap: 3rem;
 `;
 
 export {
@@ -130,5 +128,5 @@ export {
   menuTitle,
   nameStyle,
   nameButtonStyle,
-  spinnerStyle,
+  skeletonStyle,
 };

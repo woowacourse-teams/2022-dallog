@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 
 import useToggle from '@/hooks/useToggle';
 
@@ -8,8 +8,8 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
-import CategoryList from '@/components/CategoryList/CategoryList';
-import MyCategoryList from '@/components/MyCategoryList/MyCategoryList';
+import CategoryListFallback from '@/components/CategoryList/CategoryList.fallback';
+import MyCategoryListFallback from '@/components/MyCategoryList/MyCategoryList.fallback';
 
 import { GoSearch } from 'react-icons/go';
 
@@ -23,6 +23,9 @@ import {
   searchFormStyle,
   searchInputStyle,
 } from './CategoryPage.styles';
+
+const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList'));
+const MyCategoryList = lazy(() => import('@/components/MyCategoryList/MyCategoryList'));
 
 function CategoryPage() {
   const theme = useTheme();
@@ -77,8 +80,16 @@ function CategoryPage() {
             카테고리 추가
           </Button>
         </div>
-        {mode === 'ALL' && <CategoryList keyword={keyword} />}
-        {mode === 'MY' && <MyCategoryList />}
+        {mode === 'ALL' && (
+          <Suspense fallback={<CategoryListFallback />}>
+            <CategoryList keyword={keyword} />
+          </Suspense>
+        )}
+        {mode === 'MY' && (
+          <Suspense fallback={<MyCategoryListFallback />}>
+            <MyCategoryList />
+          </Suspense>
+        )}
       </div>
     </PageLayout>
   );
