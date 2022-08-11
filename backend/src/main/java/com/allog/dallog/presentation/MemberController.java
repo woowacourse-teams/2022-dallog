@@ -24,7 +24,7 @@ public class MemberController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MemberResponse> findMe(@AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<MemberResponse> findMe(@AuthenticationPrincipal final LoginMember loginMember) {
         MemberResponse response = memberService.findById(loginMember.getId());
         return ResponseEntity.ok(response);
     }
@@ -37,7 +37,7 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> delete(@AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember) {
         memberService.delete(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
