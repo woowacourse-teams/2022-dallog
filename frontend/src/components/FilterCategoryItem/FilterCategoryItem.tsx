@@ -38,7 +38,7 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (body: Pick<SubscriptionType, 'color'> | Pick<SubscriptionType, 'checked'>) =>
+    (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
       subscriptionApi.patch(accessToken, subscription.id, body),
     {
       onSuccess: () => {
@@ -48,22 +48,22 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
     }
   );
 
-  const handleClickFilledCheckBox = (color: string) => {
+  const handleClickFilledCheckBox = (colorCode: string) => {
     mutate({
       checked: false,
-      color,
+      colorCode,
     });
   };
 
-  const handleClickBlankCheckBox = (color: string) => {
+  const handleClickBlankCheckBox = (colorCode: string) => {
     mutate({
       checked: true,
-      color,
+      colorCode,
     });
   };
 
-  const handleClickPalette = (checked: boolean, color: string) => {
-    mutate({ checked, color });
+  const handleClickPalette = (checked: boolean, colorCode: string) => {
+    mutate({ checked, colorCode });
     togglePaletteOpen();
   };
 
@@ -73,18 +73,18 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
         {subscription.checked ? (
           <Button
             onClick={() => {
-              handleClickFilledCheckBox(subscription.color);
+              handleClickFilledCheckBox(subscription.colorCode);
             }}
           >
-            <RiCheckboxFill size={20} color={subscription.color} />
+            <RiCheckboxFill size={20} color={subscription.colorCode} />
           </Button>
         ) : (
           <Button
             onClick={() => {
-              handleClickBlankCheckBox(subscription.color);
+              handleClickBlankCheckBox(subscription.colorCode);
             }}
           >
-            <RiCheckboxBlankLine size={20} color={subscription.color} />
+            <RiCheckboxBlankLine size={20} color={subscription.colorCode} />
           </Button>
         )}
         <span css={nameStyle}>{subscription.category.name}</span>

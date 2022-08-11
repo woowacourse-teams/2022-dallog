@@ -265,7 +265,7 @@ const getScheduleDB = {
       endDateTime: '2022-08-06T07:00',
       memo: '잠실역',
       categoryId: 3,
-      color: '#F37970',
+      colorCode: '#F37970',
     },
     {
       id: 2,
@@ -274,7 +274,7 @@ const getScheduleDB = {
       endDateTime: '2022-08-21T07:00',
       memo: '',
       categoryId: 7,
-      color: '#FEDA15',
+      colorCode: '#FEDA15',
     },
     {
       id: 3,
@@ -283,7 +283,7 @@ const getScheduleDB = {
       endDateTime: '2022-08-22T07:00',
       memo: '✈️',
       categoryId: 20,
-      color: '#0C2D48',
+      colorCode: '#0C2D48',
     },
   ],
 
@@ -295,7 +295,7 @@ const getScheduleDB = {
       endDateTime: '2022-08-17T23:59',
       memo: '',
       categoryId: 19,
-      color: '#695E93',
+      colorCode: '#695E93',
     },
   ],
 
@@ -307,7 +307,7 @@ const getScheduleDB = {
       endDateTime: '2022-08-23T15:00',
       memo: '실행 컨텍스트',
       categoryId: 10,
-      color: '#81B622',
+      colorCode: '#81B622',
     },
   ],
 };
@@ -322,7 +322,7 @@ const subscriptionDB = {
         createdAt: '2022-07-05T13:00:00',
         creator: tigerProfileDB,
       },
-      color: '#F37970',
+      colorCode: '#F37970',
       checked: true,
     },
     {
@@ -333,7 +333,7 @@ const subscriptionDB = {
         createdAt: '2022-07-08T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#FEDA15',
+      colorCode: '#FEDA15',
       checked: true,
     },
     {
@@ -344,7 +344,7 @@ const subscriptionDB = {
         createdAt: '2022-07-05T13:00:00',
         creator: tigerProfileDB,
       },
-      color: '#81B622',
+      colorCode: '#81B622',
       checked: true,
     },
     {
@@ -355,7 +355,7 @@ const subscriptionDB = {
         createdAt: '2022-07-03T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#145DA0',
+      colorCode: '#145DA0',
       checked: true,
     },
     {
@@ -366,7 +366,7 @@ const subscriptionDB = {
         createdAt: '2022-07-16T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#464033',
+      colorCode: '#464033',
       checked: true,
     },
     {
@@ -377,7 +377,7 @@ const subscriptionDB = {
         createdAt: '2022-07-01T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#7E7C73',
+      colorCode: '#7E7C73',
       checked: false,
     },
     {
@@ -388,7 +388,7 @@ const subscriptionDB = {
         createdAt: '2022-07-11T13:00:00',
         creator: tigerProfileDB,
       },
-      color: '#7E7C73',
+      colorCode: '#7E7C73',
       checked: false,
     },
     {
@@ -399,7 +399,7 @@ const subscriptionDB = {
         createdAt: '2022-07-12T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#7E7C73',
+      colorCode: '#7E7C73',
       checked: false,
     },
     {
@@ -410,7 +410,7 @@ const subscriptionDB = {
         createdAt: '2022-07-13T13:00:00',
         creator: tigerProfileDB,
       },
-      color: '#695E93',
+      colorCode: '#695E93',
       checked: true,
     },
     {
@@ -421,7 +421,7 @@ const subscriptionDB = {
         createdAt: '2022-07-14T15:00:00',
         creator: tigerProfileDB,
       },
-      color: '#0C2D48',
+      colorCode: '#0C2D48',
       checked: true,
     },
   ],

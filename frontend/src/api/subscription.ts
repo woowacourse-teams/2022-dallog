@@ -31,7 +31,7 @@ const subscriptionApi = {
   post: async (
     accessToken: string | null,
     categoryId: number,
-    body: Pick<SubscriptionType, 'color'>
+    body: Pick<SubscriptionType, 'colorCode'>
   ) => {
     const response = await dallogApi.post(subscriptionApi.endpoint.post(categoryId), body, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
@@ -43,7 +43,7 @@ const subscriptionApi = {
   patch: async (
     accessToken: string | null,
     subscriptionId: number,
-    body: Pick<SubscriptionType, 'color'> | Pick<SubscriptionType, 'checked'>
+    body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>
   ) => {
     const response = await dallogApi.patch(subscriptionApi.endpoint.patch(subscriptionId), body, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },

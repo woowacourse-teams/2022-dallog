@@ -148,7 +148,7 @@ const handlers = [
     return res(ctx.status(200), ctx.json(subscriptionDB));
   }),
 
-  rest.post<Pick<SubscriptionType, 'color'>>(
+  rest.post<Pick<SubscriptionType, 'colorCode'>>(
     `${API_URL}/api/members/me/categories/:id/subscriptions`,
     (req, res, ctx) => {
       const { id } = req.params;
@@ -161,7 +161,7 @@ const handlers = [
           creator: tigerProfileDB,
           createdAt: categoryDB.categories[categoryId - 1].createdAt,
         },
-        color: req.body.color,
+        colorCode: req.body.colorCode,
         checked: true,
       };
 
