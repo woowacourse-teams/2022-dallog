@@ -109,6 +109,18 @@ const handlers = [
     }
   ),
 
+  rest.get(`${API_URL}${categoryApi.endpoint.entire}/:id`, (req, res, ctx) => {
+    const { id } = req.params;
+    const categoryId = parseInt(id as string);
+    const category = categoryDB.categories.find((el) => el.id === categoryId);
+
+    if (!category) {
+      return res(ctx.status(404));
+    }
+
+    return res(ctx.status(201), ctx.json(category));
+  }),
+
   rest.get(API_URL + categoryApi.endpoint.my, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(myCategoryDB));
   }),
