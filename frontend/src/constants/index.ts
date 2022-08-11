@@ -69,6 +69,10 @@ const PATH = {
   CATEGORY: '/category',
 };
 
+const VALIDATION_MESSAGE = {
+  ONE_TO_TWENTY_LENGTH: '1자 ~ 20자로 입력해주세요.',
+};
+
 export {
   API,
   API_URL,
@@ -80,4 +84,5 @@ export {
   STORAGE_KEY,
   PALETTE,
   PATH,
+  VALIDATION_MESSAGE,
 };
