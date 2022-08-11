@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import React, { Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 
 import useToggle from '@/hooks/useToggle';
 
@@ -24,8 +24,8 @@ import {
   searchInputStyle,
 } from './CategoryPage.styles';
 
-const CategoryList = React.lazy(() => import('@/components/CategoryList/CategoryList'));
-const MyCategoryList = React.lazy(() => import('@/components/MyCategoryList/MyCategoryList'));
+const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList'));
+const MyCategoryList = lazy(() => import('@/components/MyCategoryList/MyCategoryList'));
 
 function CategoryPage() {
   const theme = useTheme();

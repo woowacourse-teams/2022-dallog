@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import React, { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { sideBarState, userState } from '@/recoil/atoms';
@@ -8,9 +8,7 @@ import FilterCategoryFallback from '@/components/FilterCategoryList/FilterCatego
 
 import { sideBar } from './SideBar.styles';
 
-const FilterCategoryList = React.lazy(
-  () => import('@/components/FilterCategoryList/FilterCategoryList')
-);
+const FilterCategoryList = lazy(() => import('@/components/FilterCategoryList/FilterCategoryList'));
 
 function SideBar() {
   const theme = useTheme();
