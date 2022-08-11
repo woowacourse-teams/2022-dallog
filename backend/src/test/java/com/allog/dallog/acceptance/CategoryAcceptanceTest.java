@@ -180,6 +180,4 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         // then
         상태코드_204가_반환된다(response);
     }
-
-    // todo: ExceptionHandler 구현 이후 카테고리 단건 조회 응답 상태코드 404인지 확인
 }
