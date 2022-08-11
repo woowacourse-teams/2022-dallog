@@ -1,4 +1,4 @@
-package com.allog.dallog.domain;
+package com.allog.dallog.common.domain;
 
 import com.allog.dallog.global.config.JpaConfig;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

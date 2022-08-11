@@ -4,7 +4,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.domain.ServiceTest;
+import com.allog.dallog.common.application.ServiceTest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
