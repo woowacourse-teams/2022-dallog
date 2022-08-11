@@ -2,9 +2,9 @@ package com.allog.dallog.domain.auth.application;
 
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.SocialType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +15,15 @@ public class AuthService {
     private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final MemberService memberService;
+    private final RegisterService registerService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient,
-                       final MemberService memberService, final JwtTokenProvider jwtTokenProvider) {
+    public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient, final MemberService memberService,
+                       final RegisterService registerService, final JwtTokenProvider jwtTokenProvider) {
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.memberService = memberService;
+        this.registerService = registerService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -44,13 +46,8 @@ public class AuthService {
 
     private void saveMemberIfNotExists(final OAuthMember oAuthMember, final String email) {
         if (!memberService.existsByEmail(email)) {
-            memberService.save(generateMemberBy(oAuthMember));
+            registerService.register(oAuthMember);
         }
-    }
-
-    private Member generateMemberBy(final OAuthMember oAuthMember) {
-        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
-                SocialType.GOOGLE);
     }
 
     public Long extractMemberId(final String accessToken) {

@@ -5,10 +5,10 @@ import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이름;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이메일;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_프로필;
-import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이름;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_프로필;
+import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -31,7 +31,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_정보를_조회하면_상태코드_200_을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
         ExtractableResponse<Response> response = 자신의_정보를_조회한다(accessToken);
@@ -40,9 +40,9 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(memberResponse.getEmail()).isEqualTo(STUB_이메일);
-            assertThat(memberResponse.getDisplayName()).isEqualTo(STUB_이름);
-            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(STUB_프로필);
+            assertThat(memberResponse.getEmail()).isEqualTo(MEMBER_이메일);
+            assertThat(memberResponse.getDisplayName()).isEqualTo(MEMBER_이름);
+            assertThat(memberResponse.getProfileImageUrl()).isEqualTo(MEMBER_프로필);
         });
     }
 
@@ -50,7 +50,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
     @Test
     void 등록된_회원이_자신의_이름을_변경하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, 인증_코드);
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         String 패트_이름 = "패트";
         MemberUpdateRequest request = new MemberUpdateRequest(패트_이름);
 

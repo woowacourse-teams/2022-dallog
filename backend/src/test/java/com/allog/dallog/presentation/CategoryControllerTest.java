@@ -32,9 +32,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.category.application.CategoryService;
-import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.common.config.TestConfig;
+import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
@@ -42,6 +42,7 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -77,12 +78,15 @@ class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
+    @MockBean
+    private CategorySubscriptionService categoryAndSubscriptionService;
+
     @DisplayName("카테고리를 생성한다.")
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
         CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
-        given(categoryService.save(any(), any())).willReturn(카테고리);
+        given(categoryAndSubscriptionService.save(any(), any())).willReturn(카테고리);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -107,7 +111,7 @@ class CategoryControllerTest {
     void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
         // given
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
-                .given(categoryService)
+                .given(categoryAndSubscriptionService)
                 .save(any(), any());
 
         CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, false);

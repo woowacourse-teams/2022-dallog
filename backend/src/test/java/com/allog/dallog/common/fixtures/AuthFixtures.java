@@ -1,5 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.TokenRequest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
 
@@ -8,19 +9,32 @@ public class AuthFixtures {
     public static final String GOOGLE_PROVIDER = "google";
     public static final String OAUTH_PROVIDER = "oauthProvider";
 
-    public static final String 인증_코드 = "authorization code";
+    public static final String STUB_MEMBER_인증_코드 = "member authorization code";
+    public static final String STUB_CREATOR_인증_코드 = "creator authorization code";
 
-    public static TokenRequest 인증_코드_토큰_요청() {
-        return new TokenRequest(인증_코드);
+    public static final String MEMBER_이메일 = "member@email.com";
+    public static final String MEMBER_이름 = "member";
+    public static final String MEMBER_프로필 = "/member.png";
+
+    public static final String CREATOR_이메일 = "creator@email.com";
+    public static final String CREATOR_이름 = "creator";
+    public static final String CREATOR_프로필 = "/creator.png";
+
+    public static TokenRequest MEMBER_인증_코드_토큰_요청() {
+        return new TokenRequest(STUB_MEMBER_인증_코드);
     }
 
-    public static TokenResponse 인증_코드_토큰_응답() {
-        return new TokenResponse(인증_코드);
+    public static TokenResponse MEMBER_인증_코드_토큰_응답() {
+        return new TokenResponse(STUB_MEMBER_인증_코드);
     }
 
-    public static final String STUB_이메일 = "stub@email.com";
-    public static final String STUB_이름 = "stub";
-    public static final String STUB_프로필 = "/image.png";
+    public static OAuthMember STUB_OAUTH_MEMBER() {
+        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필);
+    }
+
+    public static OAuthMember STUB_OAUTH_CREATOR() {
+        return new OAuthMember(CREATOR_이메일, CREATOR_이름, CREATOR_프로필);
+    }
 
     public static final String 더미_엑세스_토큰 = "aaaaa.bbbbb.ccccc";
     public static final String 토큰_정보 = "Bearer " + 더미_엑세스_토큰;
