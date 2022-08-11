@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class CategoryCreateRequest {
 
-    @NotBlank
+    @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
     private boolean personal;
