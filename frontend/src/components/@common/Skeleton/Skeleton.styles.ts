@@ -11,7 +11,6 @@ const skeletonStyle = ({ colors }: Theme, width: string, height: string) => css`
     50% {
       background-color: ${colors.GRAY_200};
     }
-
     75% {
       background-color: ${colors.GRAY_300};
     }
