@@ -11,10 +11,5 @@ export default {
 const Template: ComponentStory<typeof ProfileFallback> = () => <ProfileFallback />;
 
 const Primary = Template.bind({});
-Primary.args = {
-  cssProp: css`
-    width: 100rem;
-    height: 20rem;
-  `,
-};
+
 export { Primary };
