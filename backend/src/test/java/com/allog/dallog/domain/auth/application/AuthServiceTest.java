@@ -3,22 +3,17 @@ package com.allog.dallog.domain.auth.application;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.domain.ServiceTest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
-import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest(classes = TestConfig.class)
-class AuthServiceTest {
+class AuthServiceTest extends ServiceTest {
 
     @Autowired
     private AuthService authService;
