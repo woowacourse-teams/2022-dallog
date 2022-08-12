@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class ScheduleCreateRequest {
 
-    @NotBlank
+    @NotBlank(message = "공백일 수 없습니다.")
     private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")

@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class ScheduleUpdateRequest {
 
-    @NotBlank
+    @NotBlank(message = "공백일 수 없습니다.")
     private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -15,7 +15,6 @@ public class ScheduleUpdateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDateTime;
 
-    @NotBlank
     private String memo;
 
     private ScheduleUpdateRequest() {
