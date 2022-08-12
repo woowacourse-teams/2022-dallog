@@ -22,7 +22,8 @@ import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
 import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
-import { CACHE_KEY, DAYS } from '@/constants';
+import { CACHE_KEY } from '@/constants';
+import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
 import {

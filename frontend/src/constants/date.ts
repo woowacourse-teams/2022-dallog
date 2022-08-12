@@ -3,4 +3,6 @@ const DATE_TIME = {
   END: '23:59',
 };
 
-export { DATE_TIME };
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+export { DATE_TIME, DAYS };

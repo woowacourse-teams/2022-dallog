@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
-import { DAYS } from '@/constants';
+import { DAYS } from '@/constants/date';
 
 const calendarPage = css`
   padding: 0 5rem;
