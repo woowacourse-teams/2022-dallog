@@ -48,7 +48,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     onSuccess: () => onSuccessPatchCategory(),
   });
 
-  const { inputValue, onChange } = useControlledInput(category?.name);
+  const { inputValue, onChange } = useControlledInput(category.name);
 
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
