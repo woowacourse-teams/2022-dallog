@@ -81,6 +81,20 @@ class MemberServiceTest extends ServiceTest {
         assertThat(actual.getDisplayName()).isEqualTo(패트_이름);
     }
 
+    @DisplayName("회원을 제거한다.")
+    @Test
+    void 회원을_제거한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+
+        // when
+        memberService.delete(후디.getId());
+
+        // then
+        assertThatThrownBy(() -> memberService.findById(후디.getId()))
+                .isInstanceOf(NoSuchMemberException.class);
+    }
+
     @DisplayName("주어진 이메일로 가입된 회원이 있으면 true를 반환한다.")
     @Test
     void 주어진_이메일로_가입된_회원이_있으면_true를_반환한다() {

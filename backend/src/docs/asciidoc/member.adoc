@@ -41,3 +41,13 @@ include::{snippets}/members/update/request-body.adoc[]
 ==== Response
 
 include::{snippets}/members/update/http-response.adoc[]
+
+=== 회원 탈퇴
+
+==== Request
+
+include::{snippets}/members/delete/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/members/delete/http-response.adoc[]

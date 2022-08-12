@@ -15,6 +15,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -108,7 +109,7 @@ class MemberControllerTest extends ControllerTest {
         MemberUpdateRequest 회원_수정_요청 = new MemberUpdateRequest("패트");
 
         // when & then
-        mockMvc.perform(patch("/api/members")
+        mockMvc.perform(patch("/api/members/me")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -123,6 +124,29 @@ class MemberControllerTest extends ControllerTest {
                         ),
                         requestFields(
                                 fieldWithPath("displayName").type(JsonFieldType.STRING).description("수정할 이름")
+                        )))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("등록된 회원이 회원탈퇴 한다.")
+    @Test
+    void 등록된_회원이_회원탈퇴_한다() throws Exception {
+        // given
+        willDoNothing()
+                .given(memberService)
+                .delete(any());
+
+        // when & then
+        mockMvc.perform(delete("/api/members/me")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("members/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰")
                         )))
                 .andExpect(status().isNoContent());
     }

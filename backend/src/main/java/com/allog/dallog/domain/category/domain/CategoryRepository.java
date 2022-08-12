@@ -15,4 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Slice<Category> findSliceByMemberId(final Long memberId, final Pageable pageable);
 
     boolean existsByIdAndMemberId(Long id, Long memberId);
+
+    void deleteByMemberId(Long memberId);
 }
