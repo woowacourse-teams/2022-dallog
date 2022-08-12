@@ -21,14 +21,6 @@ const CACHE_KEY = {
   SUBSCRIPTIONS: 'subscriptions',
 };
 
-const CONFIRM_MESSAGE = {
-  DELETE_CATEGORY: '정말 삭제하시겠습니까?',
-  UNSUBSCRIBE: '구독을 해제하시겠습니까?',
-  LOGOUT: '로그아웃하시겠습니까?',
-};
-
-const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
-
 const SELECTOR_KEY = {
   SIDE_BAR: 'sideBarSelector',
 };
@@ -43,14 +35,11 @@ const PATH = {
   CATEGORY: '/category',
 };
 
-export {
-  API,
-  API_URL,
-  ATOM_KEY,
-  CACHE_KEY,
-  CONFIRM_MESSAGE,
-  DAYS,
-  SELECTOR_KEY,
-  STORAGE_KEY,
-  PATH,
+const VALIDATION_SIZE = {
+  MIN_LENGTH: 1,
+  SCHEDULE_MEMO_MAX_LENGTH: 255,
+  SCHEDULE_TITLE_MAX_LENGTH: 50,
+  CATEGORY_NAME_MAX_LENGTH: 20,
 };
+
+export { API, API_URL, ATOM_KEY, CACHE_KEY, SELECTOR_KEY, STORAGE_KEY, PATH, VALIDATION_SIZE };

@@ -11,7 +11,8 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY, CONFIRM_MESSAGE, PATH } from '@/constants';
+import { CACHE_KEY, PATH } from '@/constants';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { clearAccessToken, createPostBody } from '@/utils';
 

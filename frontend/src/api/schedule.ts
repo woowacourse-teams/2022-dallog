@@ -15,11 +15,8 @@ const scheduleApi = {
   },
 
   get: async (accessToken: string | null, startDate: string, endDate: string) => {
-    console.log(
-      `${scheduleApi.endpoint.get}?startDate=${startDate}T${DATE_TIME.START}&endDate=${endDate}T${DATE_TIME.END}`
-    );
     const response = await dallogApi.get<ScheduleResponseType>(
-      `${scheduleApi.endpoint.get}?startDate=${startDate}T${DATE_TIME.START}&endDate=${endDate}T${DATE_TIME.END}`,
+      `${scheduleApi.endpoint.get}?startDateTime=${startDate}T${DATE_TIME.START}&endDateTime=${endDate}T${DATE_TIME.END}`,
       {
         headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
       }
@@ -31,7 +28,7 @@ const scheduleApi = {
   post: async (
     accessToken: string | null,
     categoryId: number,
-    body: Omit<ScheduleType, 'id' | 'categoryId'>
+    body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
   ) => {
     const response = await dallogApi.post(scheduleApi.endpoint.post(categoryId), body, {
       headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },

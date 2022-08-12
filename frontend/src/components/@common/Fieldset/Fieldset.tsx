@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 import { FieldsetCssPropType } from '@/@types';
 
-import { fieldsetStyle, inputStyle, labelStyle } from './Fieldset.styles';
+import { errorMessageStyle, fieldsetStyle, inputStyle, labelStyle } from './Fieldset.styles';
 
 interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
@@ -13,6 +13,9 @@ interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   autoFocus?: boolean;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errorMessage?: string;
+  isValid?: boolean;
 }
 
 function Fieldset({
@@ -25,6 +28,9 @@ function Fieldset({
   autoFocus,
   refProp,
   disabled,
+  onChange,
+  errorMessage,
+  isValid,
 }: FieldsetProps) {
   const theme = useTheme();
 
@@ -38,13 +44,15 @@ function Fieldset({
       <input
         type={type}
         id={id}
-        css={[inputStyle(theme), cssProp?.input]}
+        css={[inputStyle(theme, isValid), cssProp?.input]}
         placeholder={placeholder}
         defaultValue={defaultValue}
         autoFocus={autoFocus}
         ref={refProp}
         disabled={disabled}
+        onChange={onChange}
       />
+      <span css={errorMessageStyle(theme, isValid)}>{errorMessage}</span>
     </div>
   );
 }

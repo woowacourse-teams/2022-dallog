@@ -11,7 +11,8 @@ import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModifyModal';
 
-import { CACHE_KEY, CONFIRM_MESSAGE } from '@/constants';
+import { CACHE_KEY } from '@/constants';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 

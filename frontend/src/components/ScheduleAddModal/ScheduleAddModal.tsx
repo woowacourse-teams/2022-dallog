@@ -1,8 +1,11 @@
+import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
+
+import useValidateSchedule from '@/hooks/useValidateSchedule';
 
 import { CalendarType } from '@/@types/calendar';
 import { CategoryType } from '@/@types/category';
@@ -13,10 +16,10 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
+import { VALIDATION_MESSAGE } from '@/constants/message';
 
-import { createPostBody } from '@/utils';
 import { getDate, getDateTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
@@ -60,7 +63,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError,
-    Omit<ScheduleType, 'id'>,
+    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>,
     unknown
   >((body) => scheduleApi.post(accessToken, categoryId, body), {
     onSuccess: () => {
@@ -68,25 +71,34 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     },
   });
 
+  const dateFieldset = isAllDay
+    ? {
+        type: 'date',
+        defaultValue: getDate(dateInfo),
+      }
+    : {
+        type: 'datetime-local',
+        defaultValue: getDateTime(dateInfo),
+      };
+
+  const validationSchedule = useValidateSchedule({
+    defaultStartDateTime: dateFieldset.defaultValue,
+    defaultEndDateTime: dateFieldset.defaultValue,
+  });
+
   const handleClickAllDayButton = () => {
     setAllDay((prev) => !prev);
-  };
-
-  const inputRef = {
-    title: useRef<HTMLInputElement>(null),
-    startDateTime: useRef<HTMLInputElement>(null),
-    endDateTime: useRef<HTMLInputElement>(null),
-    memo: useRef<HTMLInputElement>(null),
   };
 
   const handleSubmitScheduleAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const body = createPostBody(inputRef);
-
-    if (!body) {
-      return;
-    }
+    const body = {
+      title: validationSchedule.title.inputValue,
+      startDateTime: validationSchedule.startDateTime.inputValue,
+      endDateTime: validationSchedule.endDateTime.inputValue,
+      memo: validationSchedule.memo.inputValue,
+    };
 
     if (!isAllDay) {
       postSchedule(body);
@@ -118,16 +130,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   if (error) return <>Error</>;
 
-  const dateFieldset = isAllDay
-    ? {
-        type: 'date',
-        defaultValue: getDate(dateInfo),
-      }
-    : {
-        type: 'datetime-local',
-        defaultValue: getDateTime(dateInfo),
-      };
-
   return (
     <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
@@ -146,7 +148,20 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             </option>
           ))}
         </select>
-        <Fieldset placeholder="제목을 입력하세요." refProp={inputRef.title} />
+        <Fieldset
+          placeholder="제목을 입력하세요."
+          onChange={validationSchedule.title.onChangeValue}
+          isValid={validateLength(
+            validationSchedule.title.inputValue,
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
+          )}
+          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
+          )}
+          autoFocus
+        />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
         </Button>
@@ -154,21 +169,37 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           <Fieldset
             type={dateFieldset.type}
             defaultValue={dateFieldset.defaultValue}
-            refProp={inputRef.startDateTime}
+            onChange={validationSchedule.startDateTime.onChangeValue}
           />
           <p css={arrow}>↓</p>
           <Fieldset
             type={dateFieldset.type}
             defaultValue={dateFieldset.defaultValue}
-            refProp={inputRef.endDateTime}
+            onChange={validationSchedule.endDateTime.onChangeValue}
           />
         </div>
-        <Fieldset placeholder="메모를 추가하세요." refProp={inputRef.memo} />
+        <Fieldset
+          placeholder="메모를 추가하세요."
+          onChange={validationSchedule.memo.onChangeValue}
+          isValid={validateLength(
+            validationSchedule.memo.inputValue,
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
+          )}
+          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
+          )}
+        />
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소
           </Button>
-          <Button type="submit" cssProp={saveButton(theme)}>
+          <Button
+            type="submit"
+            cssProp={saveButton(theme)}
+            disabled={!validationSchedule.isValidSchedule}
+          >
             저장
           </Button>
         </div>
