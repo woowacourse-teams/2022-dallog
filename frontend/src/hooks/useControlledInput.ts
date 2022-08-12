@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 function useControlledInput(defaultInputValue?: string) {
   const [inputValue, setInputValue] = useState<string>(defaultInputValue ?? '');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target instanceof HTMLInputElement) {
       setInputValue(e.target.value);
     }
@@ -13,7 +13,7 @@ function useControlledInput(defaultInputValue?: string) {
     setInputValue(defaultInputValue ?? '');
   }, [defaultInputValue]);
 
-  return { inputValue, onChange };
+  return { inputValue, onChangeValue };
 }
 
 export default useControlledInput;

@@ -42,7 +42,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const [myCategoryId, setMyCategoryId] = useState(0);
   const theme = useTheme();
 
-  const { inputValue, onChange } = useControlledInput();
+  const { inputValue, onChangeValue } = useControlledInput();
 
   const { accessToken } = useRecoilValue(userState);
 
@@ -97,7 +97,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
           <Fieldset
             placeholder="이름"
             autoFocus={true}
-            onChange={onChange}
+            onChange={onChangeValue}
             errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH

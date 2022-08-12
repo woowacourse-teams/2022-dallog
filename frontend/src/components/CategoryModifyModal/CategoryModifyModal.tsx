@@ -48,7 +48,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     onSuccess: () => onSuccessPatchCategory(),
   });
 
-  const { inputValue, onChange } = useControlledInput(category.name);
+  const { inputValue, onChangeValue } = useControlledInput(category.name);
 
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,7 +72,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
             placeholder={category.name}
             defaultValue={category.name}
             autoFocus
-            onChange={onChange}
+            onChange={onChangeValue}
             isValid={validateLength(
               inputValue,
               VALIDATION_SIZE.MIN_LENGTH,

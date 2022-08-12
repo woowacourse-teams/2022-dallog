@@ -150,7 +150,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         </select>
         <Fieldset
           placeholder="제목을 입력하세요."
-          onChange={validationSchedule.title.onChange}
+          onChange={validationSchedule.title.onChangeValue}
           isValid={validateLength(
             validationSchedule.title.inputValue,
             VALIDATION_SIZE.MIN_LENGTH,
@@ -169,18 +169,18 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           <Fieldset
             type={dateFieldset.type}
             defaultValue={dateFieldset.defaultValue}
-            onChange={validationSchedule.startDateTime.onChange}
+            onChange={validationSchedule.startDateTime.onChangeValue}
           />
           <p css={arrow}>↓</p>
           <Fieldset
             type={dateFieldset.type}
             defaultValue={dateFieldset.defaultValue}
-            onChange={validationSchedule.endDateTime.onChange}
+            onChange={validationSchedule.endDateTime.onChangeValue}
           />
         </div>
         <Fieldset
           placeholder="메모를 추가하세요."
-          onChange={validationSchedule.memo.onChange}
+          onChange={validationSchedule.memo.onChangeValue}
           isValid={validateLength(
             validationSchedule.memo.inputValue,
             VALIDATION_SIZE.MIN_LENGTH,

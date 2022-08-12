@@ -101,7 +101,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
         <Fieldset
           placeholder="제목을 입력하세요."
           defaultValue={scheduleInfo.title}
-          onChange={validationSchedule.title.onChange}
+          onChange={validationSchedule.title.onChangeValue}
           isValid={validateLength(
             validationSchedule.title.inputValue,
             VALIDATION_SIZE.MIN_LENGTH,
@@ -119,19 +119,19 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
           <Fieldset
             type={startDateFieldsetProps.type}
             defaultValue={startDateFieldsetProps.defaultValue}
-            onChange={validationSchedule.startDateTime.onChange}
+            onChange={validationSchedule.startDateTime.onChangeValue}
           />
           <p css={arrow}>↓</p>
           <Fieldset
             type={endDateFieldsetProps.type}
             defaultValue={endDateFieldsetProps.defaultValue}
-            onChange={validationSchedule.endDateTime.onChange}
+            onChange={validationSchedule.endDateTime.onChangeValue}
           />
         </div>
         <Fieldset
           placeholder="메모를 추가하세요."
           defaultValue={scheduleInfo.memo}
-          onChange={validationSchedule.memo.onChange}
+          onChange={validationSchedule.memo.onChangeValue}
           isValid={validateLength(
             validationSchedule.memo.inputValue,
             VALIDATION_SIZE.MIN_LENGTH,
