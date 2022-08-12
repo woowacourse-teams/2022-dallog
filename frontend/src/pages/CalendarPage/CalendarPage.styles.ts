@@ -108,6 +108,10 @@ const dateBorder = ({ colors }: Theme, day: number) => css`
   border-bottom: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};
   border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
+
+  &:hover {
+    background: ${colors.GRAY_000};
+  }
 `;
 
 const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday: boolean) => css`
@@ -169,7 +173,7 @@ const itemWithoutBackgroundStyle = (
 
   border-left: 3px solid ${color};
 
-  background: ${isHovering ? colors.GRAY_100 : 'transparent'};
+  background: ${isHovering ? colors.GRAY_000 : colors.WHITE};
 
   color: black;
 
