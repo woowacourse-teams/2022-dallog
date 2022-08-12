@@ -9,7 +9,7 @@ import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
 import { CalendarType } from '@/@types/calendar';
-import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
+import { ScheduleModalPosType, ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
@@ -19,9 +19,11 @@ import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
+import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
 import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
 import { CACHE_KEY, DAYS } from '@/constants';
+import { TRANSPARENT } from '@/constants/style';
 
 import {
   getDayFromFormattedDate,
@@ -60,6 +62,7 @@ function CalendarPage() {
 
   const [hoveringId, setHoveringId] = useState(0);
   const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
+  const [scheduleModalPos, setScheduleModalPos] = useState<ScheduleModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
 
   const {
@@ -75,6 +78,7 @@ function CalendarPage() {
   const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } = useSchedulePriority();
 
   const { state: isScheduleAddModalOpen, toggleState: toggleScheduleAddModalOpen } = useToggle();
+  const { state: isScheduleModalOpen, toggleState: toggleScheduleModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
 
@@ -99,8 +103,25 @@ function CalendarPage() {
       return;
     }
 
+    setScheduleModalPos(calculateScheduleModalPos(e.clientX, e.clientY));
     setScheduleInfo(info);
-    toggleScheduleModifyModalOpen();
+    toggleScheduleModalOpen();
+  };
+
+  const calculateScheduleModalPos = (clickX: number, clickY: number) => {
+    const position = { top: clickY, right: 0, bottom: 0, left: clickX };
+
+    if (clickX > innerWidth / 2) {
+      position.right = innerWidth - clickX;
+      position.left = 0;
+    }
+
+    if (clickY > innerHeight / 2) {
+      position.bottom = innerHeight - clickY;
+      position.top = 0;
+    }
+
+    return position;
   };
 
   if (isLoading || data === undefined) {
@@ -316,17 +337,30 @@ function CalendarPage() {
             );
           })}
         </div>
-        <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
-          <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
-        </ModalPortal>
-        <ModalPortal isOpen={isScheduleModifyModalOpen} closeModal={toggleScheduleModifyModalOpen}>
-          <ScheduleModifyModal
-            scheduleInfo={scheduleInfo}
-            closeModal={toggleScheduleModifyModalOpen}
-          />
-        </ModalPortal>
-        <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
       </div>
+      <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
+        <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
+      </ModalPortal>
+      <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
+
+      <ModalPortal
+        isOpen={isScheduleModalOpen}
+        closeModal={toggleScheduleModalOpen}
+        dimmerBackground={TRANSPARENT}
+      >
+        <ScheduleModal
+          scheduleModalPos={scheduleModalPos}
+          scheduleInfo={scheduleInfo}
+          toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
+          closeModal={toggleScheduleModalOpen}
+        />
+      </ModalPortal>
+      <ModalPortal isOpen={isScheduleModifyModalOpen} closeModal={toggleScheduleModifyModalOpen}>
+        <ScheduleModifyModal
+          scheduleInfo={scheduleInfo}
+          closeModal={toggleScheduleModifyModalOpen}
+        />
+      </ModalPortal>
     </PageLayout>
   );
 }

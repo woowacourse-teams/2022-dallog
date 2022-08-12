@@ -10,7 +10,8 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY, PALETTE } from '@/constants';
+import { CACHE_KEY } from '@/constants';
+import { PALETTE } from '@/constants/style';
 
 import { getRandomNumber } from '@/utils';
 import { getISODateString } from '@/utils/date';

@@ -1,9 +1,11 @@
 import { css, Theme } from '@emotion/react';
 
+import { TRANSPARENT } from '@/constants/style';
+
 const dimmer = (
   { colors, flex }: Theme,
   isOpen: boolean,
-  dimmerBackground: string | undefined
+  dimmerBackground?: typeof TRANSPARENT
 ) => css`
   ${flex.row};
 
