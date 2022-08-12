@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-function useControlledInput() {
-  const [inputValue, setInputValue] = useState('');
+function useControlledInput(defaultInputValue?: string) {
+  const [inputValue, setInputValue] = useState<string>(defaultInputValue ?? '');
 
   const onChange = (e: KeyboardEvent) => {
     if (e.target instanceof HTMLInputElement) {
