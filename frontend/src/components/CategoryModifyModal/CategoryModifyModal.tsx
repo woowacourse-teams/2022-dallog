@@ -13,7 +13,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { VALIDATION_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
@@ -73,8 +73,15 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
             defaultValue={category.name}
             autoFocus
             onChange={onChange}
-            isValid={validateLength(inputValue, 1, 20)}
-            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 20)}
+            isValid={validateLength(
+              inputValue,
+              VALIDATION_SIZE.MIN_LENGTH,
+              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
+            )}
+            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+              VALIDATION_SIZE.MIN_LENGTH,
+              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
+            )}
           />
         </div>
         <div css={controlButtons}>
@@ -84,7 +91,13 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
           <Button
             type="submit"
             cssProp={saveButton(theme)}
-            disabled={!validateLength(inputValue, 1, 20)}
+            disabled={
+              !validateLength(
+                inputValue,
+                VALIDATION_SIZE.MIN_LENGTH,
+                VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
+              )
+            }
           >
             완료
           </Button>

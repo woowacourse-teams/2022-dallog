@@ -5,7 +5,7 @@ const CONFIRM_MESSAGE = {
 };
 
 const VALIDATION_MESSAGE = {
-  STRING_LENGTH: (min: number, max: number) => `${min}자 ~ ${max}자로 입력해주세요`,
+  STRING_LENGTH: (min: number, max: number) => `${min}자 ~ ${max}자로 입력해주세요.`,
   EARLY_END_DATE_TIME: '시작날짜보다 이후로 설정해주세요.',
 };
 

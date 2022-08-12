@@ -16,7 +16,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
 import { VALIDATION_MESSAGE } from '@/constants/message';
 
@@ -151,8 +151,15 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         <Fieldset
           placeholder="제목을 입력하세요."
           onChange={validationSchedule.title.onChange}
-          isValid={validateLength(validationSchedule.title.inputValue, 1, 50)}
-          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 50)}
+          isValid={validateLength(
+            validationSchedule.title.inputValue,
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
+          )}
+          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
+          )}
           autoFocus
         />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
@@ -174,8 +181,15 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         <Fieldset
           placeholder="메모를 추가하세요."
           onChange={validationSchedule.memo.onChange}
-          isValid={validateLength(validationSchedule.memo.inputValue, 1, 255)}
-          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 255)}
+          isValid={validateLength(
+            validationSchedule.memo.inputValue,
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
+          )}
+          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            VALIDATION_SIZE.MIN_LENGTH,
+            VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
+          )}
         />
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>

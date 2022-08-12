@@ -1,5 +1,7 @@
 import { validateLength, validateNotEmpty, validateStartEndDateTime } from '@/validation';
 
+import { VALIDATION_SIZE } from '@/constants';
+
 import useControlledInput from './useControlledInput';
 
 interface useValidationParameterType {
@@ -21,9 +23,17 @@ function useValidateSchedule({
   const memo = useControlledInput(defaultMemo);
 
   const isValidSchedule =
-    validateLength(title.inputValue, 1, 20) &&
+    validateLength(
+      title.inputValue,
+      VALIDATION_SIZE.MIN_LENGTH,
+      VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
+    ) &&
     validateStartEndDateTime(startDateTime.inputValue, endDateTime.inputValue) &&
-    validateLength(memo.inputValue, 1, 255) &&
+    validateLength(
+      memo.inputValue,
+      VALIDATION_SIZE.MIN_LENGTH,
+      VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
+    ) &&
     validateNotEmpty(startDateTime.inputValue) &&
     validateNotEmpty(endDateTime.inputValue);
 
