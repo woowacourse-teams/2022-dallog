@@ -13,7 +13,7 @@ interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   autoFocus?: boolean;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
   disabled?: boolean;
-  onChange?: any;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   errorMessage?: string;
   isValid?: boolean;
 }
