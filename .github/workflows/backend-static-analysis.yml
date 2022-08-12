@@ -1,0 +1,35 @@
+name: Backend Analysis
+
+on: pull_request_target
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: gradlew permission change
+        run: sudo chmod 755 gradlew
+
+      - name: Sonarqube
+        run: ./gradlew test sonarqube
+          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
+          -Dsonar.host.url=${{ secrets.SONARQUBE_URL }}
+          -Dsonar.projectKey=dallog-backend
+          -Dsonar.projectName=dallog-backend-${{ github.event.pull_request.number }}
+      - name: Comment
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { SONARQUBE_PROJECT_KEY, SONARQUBE_URL, PR_NUMBER } = process.env
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `📊 [${ backend }-${ PR_NUMBER } 당신의 코드 냄새는? 💩(${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_KEY }-${ PR_NUMBER })`
+            })
