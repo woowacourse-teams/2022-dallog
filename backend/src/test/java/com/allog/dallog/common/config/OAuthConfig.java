@@ -1,11 +1,7 @@
 package com.allog.dallog.common.config;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.더미_시크릿_키;
-
 import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.application.TokenProvider;
 import com.allog.dallog.infrastructure.oauth.client.StubOAuthClient;
-import com.allog.dallog.infrastructure.oauth.client.StubTokenProvider;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
