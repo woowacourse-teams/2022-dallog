@@ -1,4 +1,4 @@
-package com.allog.dallog.infrastructure.oauth.client;
+package com.allog.dallog.domain.auth.application;
 
 import com.allog.dallog.domain.auth.application.TokenProvider;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
