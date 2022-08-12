@@ -178,9 +178,12 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThat(categoryService.findById(공통_일정.getId()))
-                .usingRecursiveComparison()
-                .isEqualTo(공통_일정);
+        CategoryResponse 조회한_공통_일정 = categoryService.findById(공통_일정.getId());
+
+        assertAll(() -> {
+            assertThat(조회한_공통_일정.getId()).isEqualTo(공통_일정.getId());
+            assertThat(조회한_공통_일정.getName()).isEqualTo(공통_일정.getName());
+        });
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회할 때 카테고리가 존재하지 않다면 예외가 발생한다.")

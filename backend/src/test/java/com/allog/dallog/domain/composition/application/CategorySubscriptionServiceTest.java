@@ -1,10 +1,8 @@
 package com.allog.dallog.domain.composition.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.member.application.MemberService;
@@ -39,9 +37,6 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(subscriptions).hasSize(1);
-            assertThat(subscriptions.get(0).getCategory().getName()).isEqualTo(공통_일정_이름);
-        });
+        assertThat(subscriptions).hasSize(1);
     }
 }
