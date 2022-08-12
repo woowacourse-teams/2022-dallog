@@ -15,9 +15,6 @@ const scheduleApi = {
   },
 
   get: async (accessToken: string | null, startDate: string, endDate: string) => {
-    console.log(
-      `${scheduleApi.endpoint.get}?startDate=${startDate}T${DATE_TIME.START}&endDate=${endDate}T${DATE_TIME.END}`
-    );
     const response = await dallogApi.get<ScheduleResponseType>(
       `${scheduleApi.endpoint.get}?startDate=${startDate}T${DATE_TIME.START}&endDate=${endDate}T${DATE_TIME.END}`,
       {
