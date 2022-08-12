@@ -1,8 +1,10 @@
+import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useEffect, useRef } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
+
+import useControlledInput from '@/hooks/useControlledInput';
 
 import { CategoryType } from '@/@types/category';
 
@@ -11,9 +13,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants';
-
-import { createPostBody } from '@/utils';
+import { CACHE_KEY, VALIDATION_MESSAGE } from '@/constants';
 
 import categoryApi from '@/api/category';
 
@@ -47,20 +47,12 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     onSuccess: () => onSuccessPatchCategory(),
   });
 
-  const inputRef = {
-    name: useRef<HTMLInputElement>(null),
-  };
+  const { inputValue, onChange } = useControlledInput(category?.name);
 
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const body = createPostBody(inputRef);
-
-    if (!body) {
-      return;
-    }
-
-    mutate(body);
+    mutate({ name: inputValue });
   };
 
   const onSuccessPatchCategory = () => {
@@ -70,10 +62,6 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     closeModal();
   };
 
-  useEffect(() => {
-    inputRef.name.current?.select();
-  }, []);
-
   return (
     <div css={modal}>
       <h1 css={title}>카테고리 이름 수정</h1>
@@ -82,15 +70,21 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
           <Fieldset
             placeholder={category.name}
             defaultValue={category.name}
-            autoFocus={true}
-            refProp={inputRef.name}
+            autoFocus
+            onChange={onChange}
+            isValid={validateLength(inputValue, 1, 20)}
+            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 20)}
           />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소
           </Button>
-          <Button type="submit" cssProp={saveButton(theme)}>
+          <Button
+            type="submit"
+            cssProp={saveButton(theme)}
+            disabled={!validateLength(inputValue, 1, 20)}
+          >
             완료
           </Button>
         </div>
