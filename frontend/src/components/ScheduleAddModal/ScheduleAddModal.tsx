@@ -150,8 +150,8 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         <Fieldset
           placeholder="제목을 입력하세요."
           onChange={validationSchedule.title.onChange}
-          isValid={validateLength(validationSchedule.title.inputValue, 1, 20)}
-          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 20)}
+          isValid={validateLength(validationSchedule.title.inputValue, 1, 50)}
+          errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 50)}
           autoFocus
         />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
