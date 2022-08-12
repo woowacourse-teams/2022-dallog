@@ -7,18 +7,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class GoogleOAuthUri implements OAuthUri {
 
-    private final GoogleProperties googleProperties;
+    private final GoogleProperties properties;
 
-    public GoogleOAuthUri(final GoogleProperties googleProperties) {
-        this.googleProperties = googleProperties;
+    public GoogleOAuthUri(final GoogleProperties properties) {
+        this.properties = properties;
     }
 
     @Override
     public String generate() {
-        return googleProperties.getoAuthEndPoint() + "?"
-                + "client_id=" + googleProperties.getClientId() + "&"
-                + "redirect_uri=" + googleProperties.getRedirectUri() + "&"
+        return properties.getOAuthEndPoint() + "?"
+                + "client_id=" + properties.getClientId() + "&"
+                + "redirect_uri=" + properties.getRedirectUri() + "&"
                 + "response_type=code&"
-                + "scope=" + String.join(" ", googleProperties.getScopes());
+                + "scope=" + String.join(" ", properties.getScopes()) + "&"
+                + "access_type=" + properties.getAccessType() + "&"
+                + "prompt=" + properties.getPrompt();
     }
 }
