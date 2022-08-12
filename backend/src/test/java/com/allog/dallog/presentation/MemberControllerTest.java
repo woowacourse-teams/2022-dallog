@@ -109,7 +109,7 @@ class MemberControllerTest extends ControllerTest {
         MemberUpdateRequest 회원_수정_요청 = new MemberUpdateRequest("패트");
 
         // when & then
-        mockMvc.perform(patch("/api/members")
+        mockMvc.perform(patch("/api/members/me")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -137,7 +137,7 @@ class MemberControllerTest extends ControllerTest {
                 .delete(any());
 
         // when & then
-        mockMvc.perform(delete("/api/members")
+        mockMvc.perform(delete("/api/members/me")
                         .accept(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )

@@ -29,14 +29,14 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping
+    @PatchMapping("/me")
     public ResponseEntity<Void> update(@AuthenticationPrincipal LoginMember loginMember,
                                        @RequestBody final MemberUpdateRequest request) {
         memberService.update(loginMember.getId(), request);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/me")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember) {
         memberService.delete(loginMember.getId());
         return ResponseEntity.noContent().build();

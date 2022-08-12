@@ -57,7 +57,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
                 .auth().oauth2(accessToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
-                .when().patch("/api/members")
+                .when().patch("/api/members/me")
                 .then().log().all()
                 .extract();
 
