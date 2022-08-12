@@ -9,8 +9,8 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_SCOPE;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_TOKEN_TYPE;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.dto.OAuthAccessTokenResponse;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 
 public class StubOAuthClient implements OAuthClient {
 

@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.auth.application;
 
-import com.allog.dallog.domain.auth.dto.OAuthAccessTokenResponse;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 
 public interface OAuthClient {
 

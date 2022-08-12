@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.auth.dto;
+package com.allog.dallog.domain.auth.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

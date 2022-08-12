@@ -1,8 +1,8 @@
 package com.allog.dallog.common.fixtures;
 
 import com.allog.dallog.domain.auth.dto.OAuthMember;
-import com.allog.dallog.domain.auth.dto.TokenRequest;
-import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 
 public class AuthFixtures {
 

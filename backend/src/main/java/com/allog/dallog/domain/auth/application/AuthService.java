@@ -3,7 +3,7 @@ package com.allog.dallog.domain.auth.application;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
-import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
