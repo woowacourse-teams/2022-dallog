@@ -21,12 +21,7 @@ const inputStyle = ({ colors }: Theme, isValid: boolean | undefined) => css`
 
   width: 100%;
   border-radius: 8px;
-  border: 1px solid
-    ${isValid === undefined
-      ? colors.GRAY_400
-      : isValid === true
-      ? colors.YELLOW_500
-      : colors.RED_400};
+  border: 1px solid ${isValid === undefined || isValid === true ? colors.GRAY_400 : colors.RED_400};
 
   font-family: inherit;
   font-size: inherit;
