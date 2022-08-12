@@ -5,7 +5,7 @@ import { TRANSPARENT } from '@/constants/style';
 const dimmer = (
   { colors, flex }: Theme,
   isOpen: boolean,
-  dimmerBackground: typeof TRANSPARENT | undefined
+  dimmerBackground?: typeof TRANSPARENT
 ) => css`
   ${flex.row};
 
