@@ -4,7 +4,7 @@ import { VALIDATION_SIZE } from '@/constants';
 
 import useControlledInput from './useControlledInput';
 
-interface useValidationParameterType {
+interface useValidateScheduleParametersType {
   defaultTitle?: string;
   defaultStartDateTime?: string;
   defaultEndDateTime?: string;
@@ -16,7 +16,7 @@ function useValidateSchedule({
   defaultStartDateTime,
   defaultEndDateTime,
   defaultMemo,
-}: useValidationParameterType) {
+}: useValidateScheduleParametersType) {
   const title = useControlledInput(defaultTitle);
   const startDateTime = useControlledInput(defaultStartDateTime);
   const endDateTime = useControlledInput(defaultEndDateTime);
