@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function useControlledInput(defaultInputValue?: string) {
   const [inputValue, setInputValue] = useState<string>(defaultInputValue ?? '');
@@ -8,6 +8,10 @@ function useControlledInput(defaultInputValue?: string) {
       setInputValue(e.target.value);
     }
   };
+
+  useEffect(() => {
+    setInputValue(defaultInputValue ?? '');
+  }, [defaultInputValue]);
 
   return { inputValue, onChange };
 }
