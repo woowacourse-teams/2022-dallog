@@ -96,7 +96,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
             placeholder="이름"
             autoFocus={true}
             onChange={onChange}
-            errorMessage={VALIDATION_MESSAGE.ONE_TO_TWENTY_LENGTH}
+            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(1, 20)}
             isValid={validateLength(inputValue, 1, 20)}
           />
         </div>
