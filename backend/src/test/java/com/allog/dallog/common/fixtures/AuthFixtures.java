@@ -28,6 +28,11 @@ public class AuthFixtures {
 
     public static final String 더미_시크릿_키 = "asdfasarspofjkosdfasdjkflikasndflkasndsdfjkadsnfkjasdn";
 
+    public static final String STUB_OAUTH_ACCESS_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
+    public static final String STUB_OAUTH_EXPIRES_IN = "3599";
+    public static final String STUB_OAUTH_SCOPE = "openid";
+    public static final String STUB_OAUTH_TOKEN_TYPE = "Bearer";
+
     public static TokenRequest MEMBER_인증_코드_토큰_요청() {
         return new TokenRequest(STUB_MEMBER_인증_코드);
     }

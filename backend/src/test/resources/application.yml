@@ -39,7 +39,6 @@ oauth:
       - https://www.googleapis.com/auth/userinfo.profile
       - https://www.googleapis.com/auth/userinfo.email
     token-uri: https://oauth2.googleapis.com/token
-    grant-type: authorization_code
 
 cors:
   allow-origin:
