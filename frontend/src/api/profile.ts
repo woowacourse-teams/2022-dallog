@@ -5,7 +5,7 @@ import dallogApi from './';
 const profileApi = {
   endpoint: {
     get: '/api/members/me',
-    patch: '/api/members',
+    patch: '/api/members/me',
   },
   headers: {
     'Content-Type': 'application/json',
