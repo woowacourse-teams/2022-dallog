@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.member.application;
 
-import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -17,15 +17,16 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final OAuthTokenRepository oAuthTokenRepository;
     private final SubscriptionRepository subscriptionRepository;
-    private final CategoryService categoryService;
 
     public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-                         final SubscriptionRepository subscriptionRepository, final CategoryService categoryService) {
+                         final OAuthTokenRepository oAuthTokenRepository,
+                         final SubscriptionRepository subscriptionRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.oAuthTokenRepository = oAuthTokenRepository;
         this.subscriptionRepository = subscriptionRepository;
-        this.categoryService = categoryService;
     }
 
     @Transactional
@@ -46,6 +47,7 @@ public class MemberService {
 
     @Transactional
     public void delete(final Long id) {
+        oAuthTokenRepository.deleteByMemberId(id);
         subscriptionRepository.deleteByMemberId(id);
         categoryRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);

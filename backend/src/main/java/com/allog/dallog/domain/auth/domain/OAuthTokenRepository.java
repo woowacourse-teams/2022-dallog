@@ -8,4 +8,6 @@ public interface OAuthTokenRepository extends JpaRepository<OAuthToken, Long> {
     boolean existsByMemberId(final Long memberId);
 
     Optional<OAuthToken> findByMemberId(final Long memberId);
+
+    void deleteByMemberId(final Long memberId);
 }
