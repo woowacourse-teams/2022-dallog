@@ -35,11 +35,11 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Long save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
+    public ScheduleResponse save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
         categoryService.validateCreatorBy(memberId, category);
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
-        return schedule.getId();
+        return new ScheduleResponse(schedule);
     }
 
     public ScheduleResponse findById(final Long id) {

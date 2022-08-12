@@ -33,6 +33,8 @@ public class ScheduleFixtures {
     public static final String 알록달록_회의_메모 = "알록달록 회의가 있어요";
     public static final ScheduleCreateRequest 알록달록_회의_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시,
             알록달록_회의_종료일시, 알록달록_회의_메모);
+    public static final ScheduleResponse 알록달록_회의_응답 = new ScheduleResponse(1L, 1L, 알록달록_회의_제목, 알록달록_회의_시작일시,
+            알록달록_회의_종료일시, 알록달록_회의_메모);
 
     /* 알록달록 회식 */
     public static final String 알록달록_회식_제목 = "알록달록 회식";
@@ -63,9 +65,5 @@ public class ScheduleFixtures {
 
     public static Schedule 레벨_인터뷰(final Category category) {
         return new Schedule(category, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
-    }
-
-    public static ScheduleResponse 알록달록_회의_응답() {
-        return new ScheduleResponse(1L, 1L, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
     }
 }

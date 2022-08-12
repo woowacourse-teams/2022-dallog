@@ -32,11 +32,11 @@ public class ScheduleController {
     }
 
     @PostMapping("/categories/{categoryId}/schedules")
-    public ResponseEntity<Void> save(@AuthenticationPrincipal final LoginMember loginMember,
-                                     @PathVariable final Long categoryId,
-                                     @Valid @RequestBody final ScheduleCreateRequest request) {
-        Long id = scheduleService.save(loginMember.getId(), categoryId, request);
-        return ResponseEntity.created(URI.create("/api/schedules/" + id)).build();
+    public ResponseEntity<ScheduleResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
+                                                 @PathVariable final Long categoryId,
+                                                 @Valid @RequestBody final ScheduleCreateRequest request) {
+        ScheduleResponse response = scheduleService.save(loginMember.getId(), categoryId, request);
+        return ResponseEntity.created(URI.create("/api/schedules/" + response.getId())).body(response);
     }
 
     @GetMapping("/members/me/schedules")
