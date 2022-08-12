@@ -31,7 +31,6 @@ public class StubTokenProvider implements TokenProvider {
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
     @Override
