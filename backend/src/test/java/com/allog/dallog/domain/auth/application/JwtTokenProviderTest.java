@@ -42,7 +42,7 @@ class JwtTokenProviderTest {
     @Test
     void validateToken_메서드는_만료된_토큰을_전달하면_예외를_던진다() {
         // given
-        JwtTokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0);
+        TokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0);
         String expiredToken = expiredJwtTokenProvider.createToken(PAYLOAD);
 
         // when & then

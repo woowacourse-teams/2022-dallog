@@ -10,19 +10,14 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
-public class JwtTokenProvider implements TokenProvider {
+public class StubTokenProvider implements TokenProvider {
 
     private final SecretKey key;
-    private final long validityInMilliseconds;
+    private final long validityInMilliseconds = 0;
 
-    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") final String secretKey,
-                            @Value("${security.jwt.token.expire-length}") final long validityInMilliseconds) {
+    public StubTokenProvider(final String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.validityInMilliseconds = validityInMilliseconds;
     }
 
     @Override

@@ -19,18 +19,18 @@ public class AuthService {
     private final OAuthClient oAuthClient;
     private final MemberService memberService;
     private final RegisterService registerService;
-    private final JwtTokenProvider jwtTokenProvider;
     private final OAuthTokenRepository oAuthTokenRepository;
+    private final TokenProvider tokenProvider;
 
     public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient, final MemberService memberService,
-                       final RegisterService registerService, final JwtTokenProvider jwtTokenProvider,
-                       final OAuthTokenRepository oAuthTokenRepository) {
+                       final RegisterService registerService, final OAuthTokenRepository oAuthTokenRepository,
+                       final TokenProvider tokenProvider) {
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.memberService = memberService;
         this.registerService = registerService;
-        this.jwtTokenProvider = jwtTokenProvider;
         this.oAuthTokenRepository = oAuthTokenRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public String generateGoogleLink() {
@@ -44,8 +44,8 @@ public class AuthService {
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
+        String accessToken = tokenProvider.createToken(String.valueOf(foundMember.getId()));
 
-        String accessToken = jwtTokenProvider.createToken(String.valueOf(foundMember.getId()));
         return new TokenResponse(accessToken);
     }
 
@@ -67,9 +67,8 @@ public class AuthService {
     }
 
     public Long extractMemberId(final String accessToken) {
-        jwtTokenProvider.validateToken(accessToken);
-        Long memberId = Long.valueOf(jwtTokenProvider.getPayload(accessToken));
-
+        tokenProvider.validateToken(accessToken);
+        Long memberId = Long.valueOf(tokenProvider.getPayload(accessToken));
         memberService.validateExistsMember(memberId);
         return memberId;
     }

@@ -26,6 +26,8 @@ public class AuthFixtures {
     public static final String CREATOR_프로필 = "/creator.png";
     public static final String CREATOR_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.ccccccccc";
 
+    public static final String 더미_시크릿_키 = "asdfasarspofjkosdfasdjkflikasndflkasndsdfjkadsnfkjasdn";
+
     public static TokenRequest MEMBER_인증_코드_토큰_요청() {
         return new TokenRequest(STUB_MEMBER_인증_코드);
     }

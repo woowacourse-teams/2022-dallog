@@ -23,4 +23,8 @@ public class CommonAcceptanceFixtures {
     public static void 상태코드_404가_반환된다(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
+
+    public static void 상태코드_401이_반환된다(final ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
 }

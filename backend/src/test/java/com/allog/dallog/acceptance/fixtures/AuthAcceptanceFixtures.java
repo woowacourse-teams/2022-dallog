@@ -41,4 +41,12 @@ public class AuthAcceptanceFixtures {
 
         return tokenResponse.getAccessToken();
     }
+
+    public static ExtractableResponse<Response> 토큰이_유효한지_검증한다(final String accessToken) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .when().get("/api/auth/validate/token")
+                .then().log().all()
+                .extract();
+    }
 }

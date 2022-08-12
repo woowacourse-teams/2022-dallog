@@ -1,6 +1,7 @@
 package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.dto.OAuthUriResponse;
 import com.allog.dallog.domain.auth.dto.TokenRequest;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
@@ -33,5 +34,10 @@ public class AuthController {
                                                        @RequestBody final TokenRequest tokenRequest) {
         TokenResponse tokenResponse = authService.generateToken(tokenRequest.getCode());
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    @GetMapping("/validate/token")
+    public ResponseEntity<Void> validateToken(@AuthenticationPrincipal final LoginMember loginMember) {
+        return ResponseEntity.ok().build();
     }
 }
