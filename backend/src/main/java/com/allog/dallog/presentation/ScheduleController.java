@@ -1,6 +1,7 @@
 package com.allog.dallog.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.composition.application.CalendarService;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
@@ -26,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final CalendarService calendarService;
 
-    public ScheduleController(final ScheduleService scheduleService) {
+    public ScheduleController(final ScheduleService scheduleService, final CalendarService calendarService) {
         this.scheduleService = scheduleService;
+        this.calendarService = calendarService;
     }
 
     @PostMapping("/categories/{categoryId}/schedules")
@@ -42,7 +45,7 @@ public class ScheduleController {
     @GetMapping("/members/me/schedules")
     public ResponseEntity<MemberScheduleResponses> findSchedulesByMemberId(
             @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
-        MemberScheduleResponses response = scheduleService.findSchedulesByMemberId(loginMember.getId(), request);
+        MemberScheduleResponses response = calendarService.findSchedulesByMemberId(loginMember.getId(), request);
         return ResponseEntity.ok(response);
     }
 

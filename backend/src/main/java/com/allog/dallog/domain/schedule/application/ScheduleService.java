@@ -4,15 +4,11 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
-import com.allog.dallog.domain.schedule.domain.schedules.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,13 +21,10 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CategoryService categoryService;
-    private final SubscriptionService subscriptionService;
 
-    public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryService categoryService,
-                           final SubscriptionService subscriptionService) {
+    public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryService categoryService) {
         this.scheduleRepository = scheduleRepository;
         this.categoryService = categoryService;
-        this.subscriptionService = subscriptionService;
     }
 
     @Transactional
@@ -68,24 +61,7 @@ public class ScheduleService {
         scheduleRepository.deleteById(id);
     }
 
-    public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
-                                                           final DateRangeRequest dateRangeRequest) {
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<Category> categories = findCheckedCategoriesBy(subscriptions);
-        List<Schedule> schedules = findSchedulesBy(categories, dateRangeRequest);
-        TypedSchedules typedSchedules = new TypedSchedules(schedules);
-        return new MemberScheduleResponses(subscriptions, typedSchedules);
-    }
-
-    private List<Category> findCheckedCategoriesBy(final List<Subscription> subscriptions) {
-        return subscriptions.stream()
-                .filter(Subscription::isChecked)
-                .map(Subscription::getCategory)
-                .collect(Collectors.toList());
-    }
-
-    private List<Schedule> findSchedulesBy(final List<Category> categories,
-                                           final DateRangeRequest dateRangeRequest) {
+    public List<Schedule> findBy(final List<Category> categories, final DateRangeRequest dateRangeRequest) {
         LocalDateTime startDate = dateRangeRequest.getStartDateTime();
         LocalDateTime endDate = dateRangeRequest.getEndDateTime();
 

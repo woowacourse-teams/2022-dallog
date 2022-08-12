@@ -30,15 +30,11 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        Member member = getMember(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
         Category newCategory = new Category(request.getName(), member, request.isPersonal());
         categoryRepository.save(newCategory);
         return new CategoryResponse(newCategory);
-    }
-
-    private Member getMember(final Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(NoSuchMemberException::new);
     }
 
     public CategoriesResponse findAllByName(final String name, final Pageable pageable) {

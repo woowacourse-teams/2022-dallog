@@ -1,6 +1,8 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
@@ -16,7 +18,6 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_17시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
@@ -35,20 +36,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,109 +295,103 @@ class ScheduleServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
-    @DisplayName("시작일시와 종료일시로 유저의 캘린더를 일정 유형에 따라 분류하고 정렬하여 반환한다.")
+    @DisplayName("시작일시와 종료일시로 특정 카테고리의 일정을 조회한다.")
     @Test
-    void 시작일시와_종료일시로_유저의_캘린더를_일정_유형에_따라_분류하고_정렬하여_반환한다() {
+    void 시작일시와_종료일시로_특정_카테고리의_일정을_조회한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+
+        CategoryResponse categoryResponse1 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Category BE_일정 = categoryService.getCategory(categoryResponse1.getId());
+
+        CategoryResponse categoryResponse2 = categoryService.save(후디.getId(), FE_일정_생성_요청);
+        Category FE_일정 = categoryService.getCategory(categoryResponse2.getId());
+
+        CategoryResponse categoryResponse3 = categoryService.save(후디.getId(), 공통_일정_생성_요청);
+        Category 공통_일정 = categoryService.getCategory(categoryResponse3.getId());
+
         subscriptionService.save(후디.getId(), BE_일정.getId());
 
-        /* 장기간 일정 */
+        /* BE 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 첫번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
+                new ScheduleCreateRequest("BE 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 두번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+                new ScheduleCreateRequest("BE 2", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 세번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 네번째", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_15일_16시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 다섯번째", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, ""));
+                new ScheduleCreateRequest("BE 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
 
-        /* 종일 일정 */
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
+        /* FE 일정 */
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 2", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
 
-        /* 몇시간 일정 */
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 첫번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 두번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 세번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
+
+        /* 공통 일정 */
+        scheduleService.save(후디.getId(), 공통_일정.getId(),
+                new ScheduleCreateRequest("공통 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
+        scheduleService.save(후디.getId(), 공통_일정.getId(),
+                new ScheduleCreateRequest("공통 2", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
+        scheduleService.save(후디.getId(), 공통_일정.getId(),
+                new ScheduleCreateRequest("공통 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
 
         // when
-        MemberScheduleResponses memberScheduleResponses = scheduleService.findSchedulesByMemberId(후디.getId(),
+        List<Schedule> schedules = scheduleService.findBy(List.of(BE_일정, FE_일정),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then
         assertAll(() -> {
-            assertThat(memberScheduleResponses.getLongTerms()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("장기간 첫번째", "장기간 두번째", "장기간 세번째", "장기간 네번째", "장기간 다섯번째");
-            assertThat(memberScheduleResponses.getAllDays()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("종일 첫번째", "종일 두번째", "종일 세번째");
-            assertThat(memberScheduleResponses.getFewHours()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
+            assertThat(schedules).extracting(Schedule::getCategory).extracting(Category::getName)
+                    .containsOnly("BE 일정", "FE 일정");
+            assertThat(schedules).extracting(Schedule::getTitle)
+                    .containsOnly("BE 1", "BE 2", "BE 3", "FE 1", "FE 2", "FE 3");
         });
     }
 
-    @DisplayName("시작일시와 종료일시로 유저의 캘린더를 일정 유형에 따라 분류하고 정렬하여 반환할때 범위 밖의 일정은 제외된다.")
+    @DisplayName("시작일시와 종료일시로 특정 카테고리의 일정을 조회할 때 범위 밖의 일정은 제외된다.")
     @Test
-    void 시작일시와_종료일시로_유저의_캘린더를_일정_유형에_따라_분류하고_정렬하여_반환할때_범위_밖의_일정은_제외된다() {
+    void 시작일시와_종료일시로_특정_카테고리의_일정을_조회할_때_범위_밖의_일정은_제외된다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+
+        CategoryResponse categoryResponse1 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        Category BE_일정 = categoryService.getCategory(categoryResponse1.getId());
+
+        CategoryResponse categoryResponse2 = categoryService.save(후디.getId(), FE_일정_생성_요청);
+        Category FE_일정 = categoryService.getCategory(categoryResponse2.getId());
+
         subscriptionService.save(후디.getId(), BE_일정.getId());
 
-        /* 장기간 일정 */
+        /* BE 일정 */
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 첫번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
+                new ScheduleCreateRequest("BE 1 포함", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 두번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+                new ScheduleCreateRequest("BE 2 포함", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 세번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
+                new ScheduleCreateRequest("BE 3 포함", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
         scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 네번째", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_15일_16시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 다섯번째", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, ""));
+                new ScheduleCreateRequest("BE 3 미포함", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, ""));
 
-        /* 종일 일정 */
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
-
-        /* 몇시간 일정 */
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 첫번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 두번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 세번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(후디.getId(), BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_20시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
+        /* FE 일정 */
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 1 포함", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 2 포함", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
+        scheduleService.save(후디.getId(), FE_일정.getId(),
+                new ScheduleCreateRequest("FE 3 미포함", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
 
         // when
-        MemberScheduleResponses memberScheduleResponses = scheduleService.findSchedulesByMemberId(후디.getId(),
+        List<Schedule> schedules = scheduleService.findBy(List.of(BE_일정, FE_일정),
                 new DateRangeRequest("2022-07-01T00:00", "2022-07-17T23:59"));
 
         // then
         assertAll(() -> {
-            assertThat(memberScheduleResponses.getLongTerms()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("장기간 첫번째", "장기간 두번째", "장기간 세번째", "장기간 네번째");
-            assertThat(memberScheduleResponses.getAllDays()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("종일 첫번째");
-            assertThat(memberScheduleResponses.getFewHours()).extracting(MemberScheduleResponse::getTitle)
-                    .containsExactly("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
+            assertThat(schedules).extracting(Schedule::getCategory).extracting(Category::getName)
+                    .containsOnly("BE 일정", "FE 일정");
+            assertThat(schedules).extracting(Schedule::getTitle)
+                    .containsOnly("BE 1 포함", "BE 2 포함", "BE 3 포함", "FE 1 포함", "FE 2 포함");
         });
     }
 }
