@@ -8,14 +8,12 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.config.TestConfig;
 import com.allog.dallog.domain.auth.dto.OAuthUriResponse;
 import com.allog.dallog.domain.auth.dto.TokenResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Import;
 
 @DisplayName("인증 관련 기능")
 public class AuthAcceptanceTest extends AcceptanceTest {

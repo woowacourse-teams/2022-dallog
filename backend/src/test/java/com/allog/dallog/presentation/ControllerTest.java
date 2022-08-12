@@ -1,10 +1,10 @@
 package com.allog.dallog.presentation;
 
-import com.allog.dallog.common.config.TestConfig;
+import com.allog.dallog.common.config.OAuthConfig;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.context.annotation.Import;
 
 @AutoConfigureRestDocs
-@Import(TestConfig.class)
+@Import(OAuthConfig.class)
 public class ControllerTest {
 }
