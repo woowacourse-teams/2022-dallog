@@ -23,14 +23,14 @@ public class AuthService {
     private final TokenProvider tokenProvider;
 
     public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient, final MemberService memberService,
-                       final RegisterService registerService, final TokenProvider tokenProvider,
-                       final OAuthTokenRepository oAuthTokenRepository) {
+                       final RegisterService registerService, final OAuthTokenRepository oAuthTokenRepository,
+                       final TokenProvider tokenProvider) {
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.memberService = memberService;
         this.registerService = registerService;
-        this.tokenProvider = tokenProvider;
         this.oAuthTokenRepository = oAuthTokenRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public String generateGoogleLink() {
