@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.calendar.dto;
+package com.allog.dallog.domain.externalcalendar.dto;
 
 public class ExternalCalendar {
 
