@@ -2,7 +2,7 @@ import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useValidateSchedule from '@/hooks/useValidateSchedule';
@@ -21,12 +21,13 @@ import { VALIDATION_MESSAGE } from '@/constants/message';
 import { checkAllDay, getISODateString } from '@/utils/date';
 
 import categoryApi from '@/api/category';
+import scheduleApi from '@/api/schedule';
 
 import {
   allDayButton,
   arrow,
   cancelButton,
-  categorySelect,
+  categoryStyle,
   controlButtons,
   dateTime,
   form,
@@ -47,10 +48,25 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
-  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken)
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
+    categoryApi.getSingle(scheduleInfo.categoryId)
   );
+
+  const { mutate } = useMutation<
+    AxiosResponse,
+    AxiosError,
+    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>,
+    unknown
+  >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
+    onSuccess: () => onSuccessPatchSchedule(),
+  });
+
+  const onSuccessPatchSchedule = () => {
+    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+    closeModal();
+  };
 
   const validationSchedule = useValidateSchedule({
     defaultTitle: scheduleInfo.title,
@@ -65,6 +81,15 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
 
   const handleSubmitScheduleModifyForm = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const body = {
+      title: validationSchedule.title.inputValue,
+      startDateTime: validationSchedule.startDateTime.inputValue,
+      endDateTime: validationSchedule.endDateTime.inputValue,
+      memo: validationSchedule.memo.inputValue,
+    };
+
+    mutate(body);
   };
 
   const handleClickAllDayButton = () => {
@@ -88,16 +113,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   return (
     <div css={scheduleModifyModal}>
       <form css={form} onSubmit={handleSubmitScheduleModifyForm}>
-        <select id="myCategories" defaultValue={scheduleInfo.categoryId} css={categorySelect}>
-          <option value="" disabled>
-            카테고리
-          </option>
-          {data?.data.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <div css={categoryStyle(theme, scheduleInfo.colorCode)}>{data?.data.name}</div>
         <Fieldset
           placeholder="제목을 입력하세요."
           defaultValue={scheduleInfo.title}

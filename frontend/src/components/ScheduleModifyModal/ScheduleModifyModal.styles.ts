@@ -17,14 +17,23 @@ const form = ({ flex }: Theme) => css`
   height: 100%;
 `;
 
-const categorySelect = ({ colors }: Theme) => css`
+const categoryStyle = ({ colors }: Theme, colorCode: string) => css`
+  padding: 0 3rem;
+
   width: 100%;
-  height: 13rem;
-  padding: 3rem;
-  border: 1px solid ${colors.GRAY_400};
+  height: 12rem;
+  border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
 
+  background: ${colorCode};
+
   font-size: 5rem;
+  color: ${colors.WHITE};
+  line-height: 12rem;
+
+  &:hover {
+    cursor: default;
+  }
 `;
 
 const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
@@ -89,8 +98,8 @@ const saveButton = ({ colors }: Theme) => css`
 export {
   allDayButton,
   arrow,
-  categorySelect,
   cancelButton,
+  categoryStyle,
   controlButtons,
   dateTime,
   form,
