@@ -1,6 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.domain.externalcalendar.application.CalendarClient;
+import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
@@ -16,14 +16,14 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class GoogleCalendarClient implements CalendarClient {
+public class GoogleExternalCalendarClient implements ExternalCalendarClient {
 
     private static final String CALENDAR_LIST_REQUEST_URI = "https://www.googleapis.com/calendar/v3/users/me/calendarList";
     private static final String ACCEPT_HEADER_NAME = "Accept";
 
     private final RestTemplate restTemplate;
 
-    public GoogleCalendarClient(final RestTemplateBuilder restTemplateBuilder) {
+    public GoogleExternalCalendarClient(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

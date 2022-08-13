@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExternalCalendarService {
 
     private final OAuthClient oAuthClient;
-    private final CalendarClient calendarClient;
+    private final ExternalCalendarClient externalCalendarClient;
     private final OAuthTokenRepository oAuthTokenRepository;
 
-    public ExternalCalendarService(final OAuthClient oAuthClient, final CalendarClient calendarClient,
+    public ExternalCalendarService(final OAuthClient oAuthClient, final ExternalCalendarClient externalCalendarClient,
                                    final OAuthTokenRepository oAuthTokenRepository) {
         this.oAuthClient = oAuthClient;
-        this.calendarClient = calendarClient;
+        this.externalCalendarClient = externalCalendarClient;
         this.oAuthTokenRepository = oAuthTokenRepository;
     }
 
@@ -30,6 +30,6 @@ public class ExternalCalendarService {
                 .orElseThrow(NoSuchOAuthTokenException::new);
 
         OAuthAccessTokenResponse oAuthAccessTokenResponse = oAuthClient.geAccessToken(oAuthToken.getRefreshToken());
-        return calendarClient.getExternalCalendar(oAuthAccessTokenResponse.getAccessToken());
+        return externalCalendarClient.getExternalCalendar(oAuthAccessTokenResponse.getAccessToken());
     }
 }
