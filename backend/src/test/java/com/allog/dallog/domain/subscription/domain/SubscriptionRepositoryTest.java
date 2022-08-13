@@ -129,26 +129,4 @@ class SubscriptionRepositoryTest extends RepositoryTest {
         // then
         assertThat(actual).isFalse();
     }
-
-    @DisplayName("구독 id와 member id를 활용하여 구독 정보를 삭제한다.")
-    @Test
-    void 구독_id와_member_id를_활용하여_구독_정보를_삭제한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-        Category BE_일정 = categoryRepository.save(BE_일정(관리자));
-        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
-
-        Member 매트 = memberRepository.save(매트());
-        Subscription 색상1_구독 = subscriptionRepository.save(색상1_구독(매트, 공통_일정));
-        subscriptionRepository.save(색상2_구독(매트, BE_일정));
-        subscriptionRepository.save(색상3_구독(매트, FE_일정));
-
-        // when
-        subscriptionRepository.deleteByIdAndMemberId(색상1_구독.getId(), 매트.getId());
-
-        // then
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(매트.getId());
-        assertThat(subscriptions).hasSize(2);
-    }
 }

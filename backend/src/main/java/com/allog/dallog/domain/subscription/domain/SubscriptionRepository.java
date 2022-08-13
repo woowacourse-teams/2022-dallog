@@ -11,7 +11,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
 
-    void deleteByIdAndMemberId(final Long id, final Long memberId);
-
     void deleteByMemberId(final Long memberId);
 }

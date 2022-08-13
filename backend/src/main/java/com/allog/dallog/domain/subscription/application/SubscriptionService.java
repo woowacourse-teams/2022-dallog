@@ -102,10 +102,10 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public void deleteByIdAndMemberId(final Long id, final Long memberId) {
+    public void delete(final Long id, final Long memberId) {
         validateSubscriptionPermission(id, memberId);
 
-        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
+        subscriptionRepository.deleteById(id);
     }
 
     private void validateSubscriptionPermission(final Long id, final Long memberId) {
