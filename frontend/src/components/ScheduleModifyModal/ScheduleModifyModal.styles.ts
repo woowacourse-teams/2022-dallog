@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
-const scheduleModifyModal = ({ colors }: Theme) => css`
+const modalStyle = ({ colors }: Theme) => css`
   width: 120rem;
   height: 160rem;
   padding: 12.5rem;
@@ -9,7 +9,7 @@ const scheduleModifyModal = ({ colors }: Theme) => css`
   background: ${colors.WHITE};
 `;
 
-const form = ({ flex }: Theme) => css`
+const formStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
   justify-content: space-between;
@@ -36,7 +36,7 @@ const categoryStyle = ({ colors }: Theme, colorCode: string) => css`
   }
 `;
 
-const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
+const allDayButtonStyle = ({ colors }: Theme, isAllDay: boolean) => css`
   width: 100%;
   height: 9rem;
   border: 1px solid ${colors.GRAY_500};
@@ -49,7 +49,7 @@ const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
   color: ${isAllDay ? colors.WHITE : colors.GRAY_600};
 `;
 
-const dateTime = ({ flex }: Theme) => css`
+const dateTimeStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
   gap: 2.5rem;
@@ -57,20 +57,20 @@ const dateTime = ({ flex }: Theme) => css`
   width: 100%;
 `;
 
-const arrow = ({ colors }: Theme) => css`
+const arrowStyle = ({ colors }: Theme) => css`
   font-size: 6rem;
   font-weight: bold;
   color: ${colors.GRAY_500};
 `;
 
-const controlButtons = ({ flex }: Theme) => css`
+const controlButtonsStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
   align-self: flex-end;
   gap: 5rem;
 `;
 
-const cancelButton = ({ colors }: Theme) => css`
+const cancelButtonStyle = ({ colors }: Theme) => css`
   width: 22.5rem;
   height: 10rem;
   border: 2px solid ${colors.GRAY_500};
@@ -83,7 +83,7 @@ const cancelButton = ({ colors }: Theme) => css`
   color: ${colors.GRAY_600};
 `;
 
-const saveButton = ({ colors }: Theme) => css`
+const saveButtonStyle = ({ colors }: Theme) => css`
   width: 22.5rem;
   height: 10rem;
   border-radius: 8px;
@@ -96,13 +96,13 @@ const saveButton = ({ colors }: Theme) => css`
 `;
 
 export {
-  allDayButton,
-  arrow,
-  cancelButton,
+  allDayButtonStyle,
+  arrowStyle,
+  cancelButtonStyle,
   categoryStyle,
-  controlButtons,
-  dateTime,
-  form,
-  saveButton,
-  scheduleModifyModal,
+  controlButtonsStyle,
+  dateTimeStyle,
+  formStyle,
+  modalStyle,
+  saveButtonStyle,
 };

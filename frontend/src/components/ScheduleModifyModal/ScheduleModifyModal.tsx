@@ -24,15 +24,15 @@ import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
 
 import {
-  allDayButton,
-  arrow,
-  cancelButton,
+  allDayButtonStyle,
+  arrowStyle,
+  cancelButtonStyle,
   categoryStyle,
-  controlButtons,
-  dateTime,
-  form,
-  saveButton,
-  scheduleModifyModal,
+  controlButtonsStyle,
+  dateTimeStyle,
+  formStyle,
+  modalStyle,
+  saveButtonStyle,
 } from './ScheduleModifyModal.styles';
 
 interface ScheduleModifyModalProps {
@@ -111,8 +111,8 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const endDateFieldsetProps = getDateFieldsetProps(scheduleInfo.endDateTime);
 
   return (
-    <div css={scheduleModifyModal}>
-      <form css={form} onSubmit={handleSubmitScheduleModifyForm}>
+    <div css={modalStyle}>
+      <form css={formStyle} onSubmit={handleSubmitScheduleModifyForm}>
         <div css={categoryStyle(theme, scheduleInfo.colorCode)}>{data?.data.name}</div>
         <Fieldset
           placeholder="제목을 입력하세요."
@@ -128,16 +128,16 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
           )}
         />
-        <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
+        <Button cssProp={allDayButtonStyle(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
         </Button>
-        <div css={dateTime} key={startDateFieldsetProps.type}>
+        <div css={dateTimeStyle} key={startDateFieldsetProps.type}>
           <Fieldset
             type={startDateFieldsetProps.type}
             defaultValue={startDateFieldsetProps.defaultValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
           />
-          <p css={arrow}>↓</p>
+          <p css={arrowStyle}>↓</p>
           <Fieldset
             type={endDateFieldsetProps.type}
             defaultValue={endDateFieldsetProps.defaultValue}
@@ -158,13 +158,13 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
           )}
         />
-        <div css={controlButtons}>
-          <Button cssProp={cancelButton(theme)} onClick={closeModal}>
+        <div css={controlButtonsStyle}>
+          <Button cssProp={cancelButtonStyle(theme)} onClick={closeModal}>
             취소
           </Button>
           <Button
             type="submit"
-            cssProp={saveButton(theme)}
+            cssProp={saveButtonStyle(theme)}
             disabled={!validationSchedule.isValidSchedule}
           >
             저장
