@@ -14,6 +14,7 @@ const CACHE_KEY = {
   SCHEDULE: 'schedule',
   SCHEDULES: 'schedules',
   SUBSCRIPTIONS: 'subscriptions',
+  VALIDATE: 'validate',
 };
 
 const CALENDAR = {

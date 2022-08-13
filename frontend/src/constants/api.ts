@@ -4,4 +4,10 @@ const API = {
 
 const API_URL = process.env.API_URL;
 
-export { API, API_URL };
+const RESPONSE = {
+  STATUS: {
+    UNAUTHORIZED: 401,
+  },
+};
+
+export { API, API_URL, RESPONSE };

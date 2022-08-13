@@ -2,7 +2,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
 import NavBar from '@/components/NavBar/NavBar';
-import ProtectRoute from '@/components/ProtectRoute';
+import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
 import SideBar from '@/components/SideBar/SideBar';
 import SnackBar from '@/components/SnackBar/SnackBar';
 import AuthPage from '@/pages/AuthPage/AuthPage';

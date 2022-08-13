@@ -29,7 +29,7 @@ const setAccessToken = (accessToken: string) => {
   localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
 };
 
-const clearAccessToken = () => {
+const removeAccessToken = () => {
   localStorage.removeItem(STORAGE_KEY.ACCESS_TOKEN);
 };
 
@@ -42,10 +42,10 @@ const zeroFill = (str: string | number) => {
 };
 
 export {
-  clearAccessToken,
   createPostBody,
   getAccessToken,
   getRandomNumber,
+  removeAccessToken,
   setAccessToken,
   zeroFill,
 };

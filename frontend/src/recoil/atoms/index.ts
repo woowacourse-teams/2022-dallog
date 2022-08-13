@@ -12,7 +12,7 @@ const sideBarState = atom({
 const userState = atom({
   key: ATOM_KEY.USER,
   default: {
-    accessToken: getAccessToken(),
+    accessToken: getAccessToken() ?? '',
   },
 });
 
