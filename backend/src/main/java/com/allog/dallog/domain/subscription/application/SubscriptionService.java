@@ -113,4 +113,9 @@ public class SubscriptionService {
             throw new NoPermissionException();
         }
     }
+
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        subscriptionRepository.deleteByMemberId(memberId);
+    }
 }

@@ -1,6 +1,7 @@
 package com.allog.dallog.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RegisterService registerService;
 
-    public MemberController(final MemberService memberService) {
+    public MemberController(final MemberService memberService, final RegisterService registerService) {
         this.memberService = memberService;
+        this.registerService = registerService;
     }
 
     @GetMapping("/me")
@@ -38,7 +41,7 @@ public class MemberController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember) {
-        memberService.delete(loginMember.getId());
+        registerService.delete(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }

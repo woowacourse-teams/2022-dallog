@@ -87,6 +87,11 @@ public class CategoryService {
         }
     }
 
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        categoryRepository.deleteByMemberId(memberId);
+    }
+
     public void validateCreatorBy(final Long memberId, final Category category) {
         if (!category.isCreator(memberId)) {
             throw new NoPermissionException();

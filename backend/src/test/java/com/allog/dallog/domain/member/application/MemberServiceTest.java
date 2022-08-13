@@ -7,11 +7,8 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.category.application.CategoryService;
-import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
@@ -19,15 +16,11 @@ import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 
 class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private CategoryService categoryService;
 
     @DisplayName("회원을 저장한다.")
     @Test

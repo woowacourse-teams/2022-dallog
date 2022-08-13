@@ -342,12 +342,8 @@ class ScheduleServiceTest extends ServiceTest {
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then
-        assertAll(() -> {
-            assertThat(schedules).extracting(Schedule::getCategory).extracting(Category::getName)
-                    .containsOnly("BE 일정", "FE 일정");
-            assertThat(schedules).extracting(Schedule::getTitle)
-                    .containsOnly("BE 1", "BE 2", "BE 3", "FE 1", "FE 2", "FE 3");
-        });
+        assertThat(schedules).extracting(Schedule::getTitle)
+                .containsOnly("BE 1", "BE 2", "BE 3", "FE 1", "FE 2", "FE 3");
     }
 
     @DisplayName("시작일시와 종료일시로 특정 카테고리의 일정을 조회할 때 범위 밖의 일정은 제외된다.")
@@ -387,11 +383,7 @@ class ScheduleServiceTest extends ServiceTest {
                 new DateRangeRequest("2022-07-01T00:00", "2022-07-17T23:59"));
 
         // then
-        assertAll(() -> {
-            assertThat(schedules).extracting(Schedule::getCategory).extracting(Category::getName)
-                    .containsOnly("BE 일정", "FE 일정");
-            assertThat(schedules).extracting(Schedule::getTitle)
-                    .containsOnly("BE 1 포함", "BE 2 포함", "BE 3 포함", "FE 1 포함", "FE 2 포함");
-        });
+        assertThat(schedules).extracting(Schedule::getTitle)
+                .containsOnly("BE 1 포함", "BE 2 포함", "BE 3 포함", "FE 1 포함", "FE 2 포함");
     }
 }
