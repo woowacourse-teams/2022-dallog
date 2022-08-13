@@ -1,6 +1,10 @@
 name: Backend Analysis
 
-on: pull_request_target
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   static-analysis:
@@ -10,6 +14,13 @@ jobs:
       run:
         working-directory: ./backend
 
+    env:
+      SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      SONARQUBE_URL: ${{ secrets.SONARQUBE_URL }}
+      SONARQUBE_PROJECT_KEY: dallog-backend
+      SONARQUBE_PROJECT_NAME: dallog-backend-${{ github.event.pull_request.number }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -18,18 +29,19 @@ jobs:
 
       - name: Sonarqube
         run: ./gradlew test sonarqube
-          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
-          -Dsonar.host.url=${{ secrets.SONARQUBE_URL }}
-          -Dsonar.projectKey=dallog-backend
-          -Dsonar.projectName=dallog-backend-${{ github.event.pull_request.number }}
+          -Dsonar.login=${{ env.SONARQUBE_TOKEN }}
+          -Dsonar.host.url=${{ env.SONARQUBE_URL }}
+          -Dsonar.projectKey=${{ env.SONARQUBE_PROJECT_KEY }}
+          -Dsonar.projectName=dallog-backend-${{ PR_NUMBER }}
+
       - name: Comment
         uses: actions/github-script@v4
         with:
           script: |
-            const { SONARQUBE_PROJECT_KEY, SONARQUBE_URL, PR_NUMBER } = process.env
+            const { SONARQUBE_PROJECT_NAME, SONARQUBE_URL, PR_NUMBER } = process.env
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `📊 [${ backend }-${ PR_NUMBER } 당신의 코드 냄새는? 💩(${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_KEY }-${ PR_NUMBER })`
+              body: `📊 [${ SONARQUBE_PROJECT_KEY }-${ PR_NUMBER } 당신의 코드 냄새는? 💩(${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_NAME })`
             })
