@@ -1,3 +1,5 @@
+import { ScheduleType } from '@/@types/schedule';
+
 const matProfileDB = {
   id: 1,
   email: 'example@email.com',
@@ -256,7 +258,7 @@ const scheduleDB = [
   },
 ];
 
-const getScheduleDB = {
+const getScheduleDB: { [key: string]: ScheduleType[] } = {
   longTerms: [
     {
       id: 1,

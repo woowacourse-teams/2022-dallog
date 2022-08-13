@@ -35,7 +35,7 @@ import {
 
 interface ScheduleModalProps {
   scheduleModalPos: ScheduleModalPosType;
-  scheduleInfo: ScheduleType | null;
+  scheduleInfo: ScheduleType;
   toggleScheduleModifyModalOpen: () => void;
   closeModal: () => void;
 }
@@ -51,7 +51,7 @@ function ScheduleModal({
 
   const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
     CACHE_KEY.CATEGORY,
-    () => categoryApi.getSingle(scheduleInfo?.categoryId)
+    () => categoryApi.getSingle(scheduleInfo.categoryId)
   );
 
   const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
@@ -100,17 +100,17 @@ function ScheduleModal({
         <div css={contentBlockStyle}>
           <FiCalendar css={scheduleIconStyle} />
           <div css={scheduleInfoStyle}>
-            <p css={scheduleTitleStyle}>{scheduleInfo?.title}</p>
+            <p css={scheduleTitleStyle}>{scheduleInfo.title}</p>
             <p>
-              <span>{formatDateTime(scheduleInfo?.startDateTime)}</span>
+              <span>{formatDateTime(scheduleInfo.startDateTime)}</span>
               &nbsp;&nbsp;→&nbsp;&nbsp;
-              <span>{formatDateTime(scheduleInfo?.endDateTime)}</span>
+              <span>{formatDateTime(scheduleInfo.endDateTime)}</span>
             </p>
-            {scheduleInfo?.memo && <p>{scheduleInfo?.memo}</p>}
+            {scheduleInfo.memo && <p>{scheduleInfo.memo}</p>}
           </div>
         </div>
         <div css={contentBlockStyle}>
-          <div css={colorStyle(scheduleInfo?.colorCode)} />
+          <div css={colorStyle(scheduleInfo.colorCode)} />
           <p>{categoryGetResponse?.data.name}</p>
         </div>
       </div>

@@ -339,29 +339,39 @@ function CalendarPage() {
           })}
         </div>
       </div>
+
       <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
         <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
       </ModalPortal>
       <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
 
-      <ModalPortal
-        isOpen={isScheduleModalOpen}
-        closeModal={toggleScheduleModalOpen}
-        dimmerBackground={TRANSPARENT}
-      >
-        <ScheduleModal
-          scheduleModalPos={scheduleModalPos}
-          scheduleInfo={scheduleInfo}
-          toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
-          closeModal={toggleScheduleModalOpen}
-        />
-      </ModalPortal>
-      <ModalPortal isOpen={isScheduleModifyModalOpen} closeModal={toggleScheduleModifyModalOpen}>
-        <ScheduleModifyModal
-          scheduleInfo={scheduleInfo}
-          closeModal={toggleScheduleModifyModalOpen}
-        />
-      </ModalPortal>
+      {scheduleInfo ? (
+        <>
+          <ModalPortal
+            isOpen={isScheduleModalOpen}
+            closeModal={toggleScheduleModalOpen}
+            dimmerBackground={TRANSPARENT}
+          >
+            <ScheduleModal
+              scheduleModalPos={scheduleModalPos}
+              scheduleInfo={scheduleInfo}
+              toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
+              closeModal={toggleScheduleModalOpen}
+            />
+          </ModalPortal>
+          <ModalPortal
+            isOpen={isScheduleModifyModalOpen}
+            closeModal={toggleScheduleModifyModalOpen}
+          >
+            <ScheduleModifyModal
+              scheduleInfo={scheduleInfo}
+              closeModal={toggleScheduleModifyModalOpen}
+            />
+          </ModalPortal>
+        </>
+      ) : (
+        <></>
+      )}
     </PageLayout>
   );
 }
