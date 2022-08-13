@@ -57,15 +57,6 @@ public class GoogleOAuthClient implements OAuthClient {
         return fetchGoogleToken(request).getBody();
     }
 
-    private ResponseEntity<GoogleTokenResponse> fetchGoogleToken(
-            final HttpEntity<MultiValueMap<String, String>> request) {
-        try {
-            return restTemplate.postForEntity(properties.getTokenUri(), request, GoogleTokenResponse.class);
-        } catch (RestClientException e) {
-            throw new OAuthException();
-        }
-    }
-
     private MultiValueMap<String, String> generateTokenParams(final String code) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", properties.getClientId());
@@ -74,6 +65,15 @@ public class GoogleOAuthClient implements OAuthClient {
         params.add("grant_type", "authorization_code");
         params.add("redirect_uri", properties.getRedirectUri());
         return params;
+    }
+
+    private ResponseEntity<GoogleTokenResponse> fetchGoogleToken(
+            final HttpEntity<MultiValueMap<String, String>> request) {
+        try {
+            return restTemplate.postForEntity(properties.getTokenUri(), request, GoogleTokenResponse.class);
+        } catch (RestClientException e) {
+            throw new OAuthException();
+        }
     }
 
     private String getPayload(final String jwt) {
