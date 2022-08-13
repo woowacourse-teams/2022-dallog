@@ -9,7 +9,7 @@ on:
       - backend
 
 jobs:
-  static-analysis:
+  sonarqube:
     runs-on: ubuntu-latest
 
     defaults:
