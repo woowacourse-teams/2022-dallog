@@ -72,7 +72,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(final Long memberId, final Long categoryId) {
+    public void deleteById(final Long memberId, final Long categoryId) {
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 

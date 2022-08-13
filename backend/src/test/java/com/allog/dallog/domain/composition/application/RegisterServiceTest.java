@@ -63,7 +63,7 @@ class RegisterServiceTest extends ServiceTest {
         subscriptionService.save(memberId, categoryResponse.getId());
 
         // when
-        registerService.delete(memberId);
+        registerService.deleteByMemberId(memberId);
 
         // then
         assertAll(() -> {

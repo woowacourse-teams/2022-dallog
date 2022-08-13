@@ -49,9 +49,9 @@ public class RegisterService {
     }
 
     @Transactional
-    public void delete(final Long memberId) {
+    public void deleteByMemberId(final Long memberId) {
         subscriptionService.deleteByMemberId(memberId);
         categoryService.deleteByMemberId(memberId);
-        memberService.delete(memberId);
+        memberService.deleteById(memberId);
     }
 }

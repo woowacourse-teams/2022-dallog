@@ -41,7 +41,7 @@ public class MemberController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember) {
-        registerService.delete(loginMember.getId());
+        registerService.deleteByMemberId(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }

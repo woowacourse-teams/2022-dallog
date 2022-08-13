@@ -184,7 +184,7 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.save(후디.getId(), FE_일정.getId());
 
         // when
-        subscriptionService.delete(response.getId(), 후디.getId());
+        subscriptionService.deleteById(response.getId(), 후디.getId());
 
         // then
         assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(2);
@@ -197,7 +197,7 @@ class SubscriptionServiceTest extends ServiceTest {
         MemberResponse 관리자 = memberService.save(관리자());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(0L, 관리자.getId()))
+        assertThatThrownBy(() -> subscriptionService.deleteById(0L, 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 

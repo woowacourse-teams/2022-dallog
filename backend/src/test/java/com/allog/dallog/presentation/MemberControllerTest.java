@@ -138,7 +138,7 @@ class MemberControllerTest extends ControllerTest {
         // given
         willDoNothing()
                 .given(registerService)
-                .delete(any());
+                .deleteByMemberId(any());
 
         // when & then
         mockMvc.perform(delete("/api/members/me")

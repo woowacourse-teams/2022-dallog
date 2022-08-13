@@ -364,7 +364,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         willDoNothing()
                 .given(categoryService)
-                .delete(any(), any());
+                .deleteById(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
@@ -393,7 +393,7 @@ class CategoryControllerTest extends ControllerTest {
         willThrow(new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다."))
                 .willDoNothing()
                 .given(categoryService)
-                .delete(any(), any());
+                .deleteById(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)

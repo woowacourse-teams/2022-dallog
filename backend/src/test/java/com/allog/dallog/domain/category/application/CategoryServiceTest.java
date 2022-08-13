@@ -248,7 +248,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when
-        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
 
         //then
         assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
@@ -263,7 +263,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
+        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -277,7 +277,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(
-                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
+                () -> categoryService.deleteById(매트.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -292,7 +292,7 @@ class CategoryServiceTest extends ServiceTest {
         SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
-        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
 
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))

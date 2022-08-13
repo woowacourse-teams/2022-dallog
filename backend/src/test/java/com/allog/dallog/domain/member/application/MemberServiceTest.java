@@ -81,7 +81,7 @@ class MemberServiceTest extends ServiceTest {
         MemberResponse 후디 = memberService.save(후디());
 
         // when
-        memberService.delete(후디.getId());
+        memberService.deleteById(후디.getId());
 
         // then
         assertThatThrownBy(() -> memberService.findById(후디.getId()))

@@ -38,7 +38,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(final Long id) {
+    public void deleteById(final Long id) {
         oAuthTokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
     }

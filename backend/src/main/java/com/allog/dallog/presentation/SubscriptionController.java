@@ -53,7 +53,7 @@ public class SubscriptionController {
     @DeleteMapping("/subscriptions/{subscriptionId}")
     public ResponseEntity<Void> deleteById(@AuthenticationPrincipal final LoginMember loginMember,
                                            @PathVariable final Long subscriptionId) {
-        subscriptionService.delete(subscriptionId, loginMember.getId());
+        subscriptionService.deleteById(subscriptionId, loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }
