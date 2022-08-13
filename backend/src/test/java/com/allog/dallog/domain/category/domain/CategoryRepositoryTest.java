@@ -130,4 +130,22 @@ class CategoryRepositoryTest extends RepositoryTest {
         // then
         assertThat(actual).isFalse();
     }
+
+    @DisplayName("특정 회원이 만든 카테고리를 모두 삭제한다")
+    @Test
+    void 특정_회원이_만든_카테고리를_모두_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+
+        PageRequest pageRequest = PageRequest.of(0, 2);
+
+        // when
+        categoryRepository.deleteByMemberId(관리자.getId());
+
+        // then
+        assertThat(categoryRepository.findSliceByMemberId(관리자.getId(), pageRequest))
+                .hasSize(0);
+    }
 }

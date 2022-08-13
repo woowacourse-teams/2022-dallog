@@ -102,15 +102,20 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public void deleteByIdAndMemberId(final Long id, final Long memberId) {
+    public void deleteById(final Long id, final Long memberId) {
         validateSubscriptionPermission(id, memberId);
 
-        subscriptionRepository.deleteByIdAndMemberId(id, memberId);
+        subscriptionRepository.deleteById(id);
     }
 
     private void validateSubscriptionPermission(final Long id, final Long memberId) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
         }
+    }
+
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        subscriptionRepository.deleteByMemberId(memberId);
     }
 }

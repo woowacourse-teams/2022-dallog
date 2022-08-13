@@ -36,7 +36,6 @@ import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -60,9 +59,6 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @DisplayName("새로운 카테고리를 생성한다.")
     @Test
@@ -159,8 +155,8 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        MemberResponse 후디 = memberService.save(후디());// 후디의 개인 카테고리가 생성된다
-        MemberResponse 리버 = memberService.save(리버());// 리버의 개인 카테고리가 생성된다
+        MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
+        MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
         categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
 
         // when
@@ -252,7 +248,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when
-        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
 
         //then
         assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
@@ -267,7 +263,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
+        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -281,7 +277,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(
-                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
+                () -> categoryService.deleteById(매트.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -296,11 +292,25 @@ class CategoryServiceTest extends ServiceTest {
         SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
-        entityManager.clear();
-        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
 
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
+    }
+
+    @DisplayName("특정 회원의 카테고리를 전부 삭제한다.")
+    @Test
+    void 특정_회원의_카테고리를_전부_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        // when
+        categoryService.deleteByMemberId(관리자.getId());
+
+        //then
+        assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
+                .isInstanceOf(NoSuchCategoryException.class);
     }
 }

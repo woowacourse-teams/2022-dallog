@@ -5,11 +5,13 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상2_구독;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상3_구독;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
 import com.allog.dallog.domain.category.domain.Category;
@@ -130,25 +132,48 @@ class SubscriptionRepositoryTest extends RepositoryTest {
         assertThat(actual).isFalse();
     }
 
-    @DisplayName("구독 id와 member id를 활용하여 구독 정보를 삭제한다.")
+    @DisplayName("특정 카테고리의 구독 정보를 모두 삭제한다")
     @Test
-    void 구독_id와_member_id를_활용하여_구독_정보를_삭제한다() {
+    void 특정_카테고리의_구독_정보를_모두_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
+
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
         Category BE_일정 = categoryRepository.save(BE_일정(관리자));
-        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
 
-        Member 매트 = memberRepository.save(매트());
-        Subscription 색상1_구독 = subscriptionRepository.save(색상1_구독(매트, 공통_일정));
-        subscriptionRepository.save(색상2_구독(매트, BE_일정));
-        subscriptionRepository.save(색상3_구독(매트, FE_일정));
+        subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
+        subscriptionRepository.save(색상2_구독(관리자, BE_일정));
 
         // when
-        subscriptionRepository.deleteByIdAndMemberId(색상1_구독.getId(), 매트.getId());
+        subscriptionRepository.deleteByMemberId(관리자.getId());
 
         // then
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(매트.getId());
-        assertThat(subscriptions).hasSize(2);
+        assertThat(subscriptionRepository.findByMemberId(관리자.getId()))
+                .hasSize(0);
+    }
+
+    @DisplayName("특정 회원의 구독 정보를 모두 삭제한다")
+    @Test
+    void 특정_회원의_구독_정보를_모두_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Member 파랑 = memberRepository.save(파랑());
+        Member 후디 = memberRepository.save(후디());
+
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Subscription subscription1 = subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
+        Subscription subscription2 = subscriptionRepository.save(색상1_구독(파랑, 공통_일정));
+        Subscription subscription3 = subscriptionRepository.save(색상1_구독(후디, 공통_일정));
+
+        // when
+        subscriptionRepository.deleteByCategoryId(공통_일정.getId());
+
+        // then
+        assertAll(() -> {
+            assertThat(subscriptionRepository.existsById(subscription1.getId())).isFalse();
+            assertThat(subscriptionRepository.existsById(subscription2.getId())).isFalse();
+            assertThat(subscriptionRepository.existsById(subscription3.getId())).isFalse();
+        });
     }
 }

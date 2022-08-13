@@ -11,6 +11,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,23 +23,22 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository) {
+    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository,
+                           final SubscriptionRepository subscriptionRepository) {
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        Member member = getMember(memberId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoSuchMemberException::new);
         Category newCategory = new Category(request.getName(), member, request.isPersonal());
         categoryRepository.save(newCategory);
         return new CategoryResponse(newCategory);
-    }
-
-    private Member getMember(final Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(NoSuchMemberException::new);
     }
 
     public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
@@ -72,10 +72,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(final Long memberId, final Long categoryId) {
+    public void deleteById(final Long memberId, final Long categoryId) {
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 
+        subscriptionRepository.deleteByCategoryId(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 
@@ -89,6 +90,11 @@ public class CategoryService {
         if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
             throw new NoPermissionException();
         }
+    }
+
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        categoryRepository.deleteByMemberId(memberId);
     }
 
     public void validateCreatorBy(final Long memberId, final Category category) {

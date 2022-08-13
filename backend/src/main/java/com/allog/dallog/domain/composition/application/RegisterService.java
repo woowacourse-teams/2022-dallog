@@ -47,4 +47,11 @@ public class RegisterService {
         CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, true);
         return categoryService.save(memberId, categoryCreateRequest);
     }
+
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        subscriptionService.deleteByMemberId(memberId);
+        categoryService.deleteByMemberId(memberId);
+        memberService.deleteById(memberId);
+    }
 }

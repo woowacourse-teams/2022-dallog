@@ -1,13 +1,11 @@
 package com.allog.dallog.domain.member.application;
 
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,17 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final CategoryRepository categoryRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
-    private final SubscriptionRepository subscriptionRepository;
 
-    public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-                         final OAuthTokenRepository oAuthTokenRepository,
-                         final SubscriptionRepository subscriptionRepository) {
+    public MemberService(final MemberRepository memberRepository, final OAuthTokenRepository oAuthTokenRepository) {
         this.memberRepository = memberRepository;
-        this.categoryRepository = categoryRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
-        this.subscriptionRepository = subscriptionRepository;
     }
 
     @Transactional
@@ -46,10 +38,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(final Long id) {
+    public void deleteById(final Long id) {
         oAuthTokenRepository.deleteByMemberId(id);
-        subscriptionRepository.deleteByMemberId(id);
-        categoryRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
     }
 

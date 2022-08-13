@@ -3,10 +3,6 @@ package com.allog.dallog.domain.category.domain;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.schedule.domain.Schedule;
-import com.allog.dallog.domain.subscription.domain.Subscription;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "categories")
@@ -39,12 +34,6 @@ public class Category extends BaseEntity {
 
     @Column(name = "personal", nullable = false)
     private boolean personal;
-
-    @OneToMany(mappedBy = "category")
-    private List<Schedule> schedules = new ArrayList<>();
-
-    @OneToMany(mappedBy = "category", orphanRemoval = true)
-    private List<Subscription> subscriptions = new ArrayList<>();
 
     protected Category() {
     }
@@ -95,9 +84,5 @@ public class Category extends BaseEntity {
 
     public boolean isPersonal() {
         return personal;
-    }
-
-    public List<Schedule> getSchedules() {
-        return schedules;
     }
 }

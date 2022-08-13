@@ -184,7 +184,7 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.save(후디.getId(), FE_일정.getId());
 
         // when
-        subscriptionService.deleteByIdAndMemberId(response.getId(), 후디.getId());
+        subscriptionService.deleteById(response.getId(), 후디.getId());
 
         // then
         assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(2);
@@ -197,7 +197,23 @@ class SubscriptionServiceTest extends ServiceTest {
         MemberResponse 관리자 = memberService.save(관리자());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteByIdAndMemberId(0L, 관리자.getId()))
+        assertThatThrownBy(() -> subscriptionService.deleteById(0L, 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("특정 유저의 구독을 전부 삭제한다.")
+    @Test
+    void 특정_유저의_구독을_전부_삭제한다() {
+        // given
+        MemberResponse 관리자 = memberService.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        subscriptionService.save(관리자.getId(), 공통_일정.getId());
+
+        // when
+        subscriptionService.deleteByMemberId(관리자.getId());
+
+        //then
+        assertThat(subscriptionService.getAllByMemberId(관리자.getId()))
+                .hasSize(0);
     }
 }
