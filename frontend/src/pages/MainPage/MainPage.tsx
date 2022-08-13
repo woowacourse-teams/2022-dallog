@@ -1,21 +1,39 @@
-import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useQuery } from 'react-query';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { userState } from '@/recoil/atoms';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import StartPage from '@/pages/StartPage/StartPage';
 
-import { getAccessToken } from '@/utils';
+import { CACHE_KEY } from '@/constants';
+import { RESPONSE } from '@/constants/api';
+
+import { removeAccessToken } from '@/utils';
+
+import loginApi from '@/api/login';
 
 function MainPage() {
-  const [user, setUser] = useRecoilState(userState);
+  const { accessToken } = useRecoilValue(userState);
+  const resetUserState = useResetRecoilState(userState);
 
-  useEffect(() => {
-    setUser({ ...user, accessToken: getAccessToken() });
-  }, []);
+  const { isLoading, error } = useQuery<AxiosResponse, AxiosError>(
+    CACHE_KEY.VALIDATE,
+    () => loginApi.validate(accessToken),
+    {
+      retry: false,
+    }
+  );
 
-  if (!user.accessToken) {
+  if (isLoading) {
+    return <></>;
+  }
+
+  if (error?.response?.status === RESPONSE.STATUS.UNAUTHORIZED) {
+    removeAccessToken();
+    resetUserState();
+
     return <StartPage />;
   }
 
