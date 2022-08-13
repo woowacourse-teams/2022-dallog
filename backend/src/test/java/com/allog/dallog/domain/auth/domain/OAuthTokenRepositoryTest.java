@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.auth.domain;
 
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.REFRESH_TOKEN;
+import static com.allog.dallog.common.fixtures.OAuthTokenFixtures.REFRESH_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.RepositoryTest;

@@ -3,6 +3,7 @@ package com.allog.dallog.global.error;
 import com.allog.dallog.domain.auth.exception.EmptyAuthorizationHeaderException;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
+import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
@@ -64,7 +65,8 @@ public class ControllerAdvice {
             NoSuchCategoryException.class,
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class,
-            NoSuchScheduleException.class
+            NoSuchScheduleException.class,
+            NoSuchOAuthTokenException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

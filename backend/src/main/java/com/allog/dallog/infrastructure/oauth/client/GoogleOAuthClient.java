@@ -2,6 +2,7 @@ package com.allog.dallog.infrastructure.oauth.client;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 import com.allog.dallog.global.config.properties.GoogleProperties;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
 import com.allog.dallog.infrastructure.oauth.dto.UserInfo;
@@ -26,13 +27,13 @@ public class GoogleOAuthClient implements OAuthClient {
 
     private static final String JWT_DELIMITER = "\\.";
 
-    private final GoogleProperties googleProperties;
+    private final GoogleProperties properties;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public GoogleOAuthClient(final GoogleProperties googleProperties, final RestTemplateBuilder restTemplateBuilder,
+    public GoogleOAuthClient(final GoogleProperties properties, final RestTemplateBuilder restTemplateBuilder,
                              final ObjectMapper objectMapper) {
-        this.googleProperties = googleProperties;
+        this.properties = properties;
         this.restTemplate = restTemplateBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -50,28 +51,29 @@ public class GoogleOAuthClient implements OAuthClient {
     private GoogleTokenResponse requestGoogleToken(final String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> params = generateRequestParams(code);
+        MultiValueMap<String, String> params = generateTokenParams(code);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        return post(request).getBody();
+        return fetchGoogleToken(request).getBody();
     }
 
-    private ResponseEntity<GoogleTokenResponse> post(final HttpEntity<MultiValueMap<String, String>> request) {
+    private MultiValueMap<String, String> generateTokenParams(final String code) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", properties.getClientId());
+        params.add("client_secret", properties.getClientSecret());
+        params.add("code", code);
+        params.add("grant_type", "authorization_code");
+        params.add("redirect_uri", properties.getRedirectUri());
+        return params;
+    }
+
+    private ResponseEntity<GoogleTokenResponse> fetchGoogleToken(
+            final HttpEntity<MultiValueMap<String, String>> request) {
         try {
-            return restTemplate.postForEntity(googleProperties.getTokenUri(), request, GoogleTokenResponse.class);
+            return restTemplate.postForEntity(properties.getTokenUri(), request, GoogleTokenResponse.class);
         } catch (RestClientException e) {
             throw new OAuthException();
         }
-    }
-
-    private MultiValueMap<String, String> generateRequestParams(final String code) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", googleProperties.getClientId());
-        params.add("client_secret", googleProperties.getClientSecret());
-        params.add("code", code);
-        params.add("grant_type", googleProperties.getGrantType());
-        params.add("redirect_uri", googleProperties.getRedirectUri());
-        return params;
     }
 
     private String getPayload(final String jwt) {
@@ -89,5 +91,33 @@ public class GoogleOAuthClient implements OAuthClient {
 
     private String decodeJwtPayload(final String payload) {
         return new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public OAuthAccessTokenResponse getAccessToken(final String refreshToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> params = generateAccessTokenParams(refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        return fetchGoogleAccessToken(request).getBody();
+    }
+
+    private MultiValueMap<String, String> generateAccessTokenParams(final String refreshToken) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", properties.getClientId());
+        params.add("client_secret", properties.getClientSecret());
+        params.add("refresh_token", refreshToken);
+        params.add("grant_type", "refresh_token");
+        return params;
+    }
+
+    private ResponseEntity<OAuthAccessTokenResponse> fetchGoogleAccessToken(
+            final HttpEntity<MultiValueMap<String, String>> request) {
+        try {
+            return restTemplate.postForEntity(properties.getTokenUri(), request, OAuthAccessTokenResponse.class);
+        } catch (RestClientException e) {
+            throw new OAuthException();
+        }
     }
 }

@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.config.TokenConfig;
-import com.allog.dallog.domain.auth.dto.OAuthUriResponse;
-import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;

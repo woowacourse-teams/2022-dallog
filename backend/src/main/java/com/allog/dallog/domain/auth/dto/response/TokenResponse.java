@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.auth.dto;
+package com.allog.dallog.domain.auth.dto.response;
 
 public class TokenResponse {
 

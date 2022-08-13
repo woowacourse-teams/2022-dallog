@@ -15,14 +15,12 @@ public class GoogleProperties {
     private final String responseType;
     private final List<String> scopes;
     private final String tokenUri;
-    private final String grantType;
     private final String accessType;
     private final String prompt;
 
     public GoogleProperties(final String clientId, final String clientSecret, final String redirectUri,
                             final String oAuthEndPoint, final String responseType, final List<String> scopes,
-                            final String tokenUri, final String grantType, final String accessType,
-                            final String prompt) {
+                            final String tokenUri, final String accessType, final String prompt) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
@@ -30,7 +28,6 @@ public class GoogleProperties {
         this.responseType = responseType;
         this.scopes = scopes;
         this.tokenUri = tokenUri;
-        this.grantType = grantType;
         this.accessType = accessType;
         this.prompt = prompt;
     }
@@ -61,10 +58,6 @@ public class GoogleProperties {
 
     public String getTokenUri() {
         return tokenUri;
-    }
-
-    public String getGrantType() {
-        return grantType;
     }
 
     public String getAccessType() {

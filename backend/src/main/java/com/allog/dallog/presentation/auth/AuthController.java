@@ -2,9 +2,9 @@ package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
-import com.allog.dallog.domain.auth.dto.OAuthUriResponse;
-import com.allog.dallog.domain.auth.dto.TokenRequest;
-import com.allog.dallog.domain.auth.dto.TokenResponse;
+import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
