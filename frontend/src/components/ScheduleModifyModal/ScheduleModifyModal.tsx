@@ -35,7 +35,7 @@ import {
 } from './ScheduleModifyModal.styles';
 
 interface ScheduleModifyModalProps {
-  scheduleInfo: ScheduleType | null;
+  scheduleInfo: ScheduleType;
   closeModal: () => void;
 }
 
@@ -44,7 +44,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(
-    !!checkAllDay(scheduleInfo?.startDateTime, scheduleInfo?.endDateTime)
+    !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
   const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
@@ -53,10 +53,10 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   );
 
   const validationSchedule = useValidateSchedule({
-    defaultTitle: scheduleInfo?.title,
-    defaultStartDateTime: scheduleInfo?.startDateTime,
-    defaultEndDateTime: scheduleInfo?.endDateTime,
-    defaultMemo: scheduleInfo?.memo,
+    defaultTitle: scheduleInfo.title,
+    defaultStartDateTime: scheduleInfo.startDateTime,
+    defaultEndDateTime: scheduleInfo.endDateTime,
+    defaultMemo: scheduleInfo.memo,
   });
 
   if (scheduleInfo === null) {
