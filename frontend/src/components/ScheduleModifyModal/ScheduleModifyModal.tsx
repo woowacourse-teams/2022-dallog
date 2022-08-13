@@ -75,10 +75,6 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     defaultMemo: scheduleInfo.memo,
   });
 
-  if (scheduleInfo === null) {
-    return <>Error</>;
-  }
-
   const handleSubmitScheduleModifyForm = (e: React.FormEvent) => {
     e.preventDefault();
 
