@@ -8,7 +8,7 @@ import { userState } from '@/recoil/atoms';
 import { CACHE_KEY, PATH } from '@/constants';
 import { RESPONSE } from '@/constants/api';
 
-import { removeAccessToken } from '@/utils';
+import { removeAccessToken } from '@/utils/storage';
 
 import loginApi from '@/api/login';
 

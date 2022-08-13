@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 import { ATOM_KEY } from '@/constants';
 
-import { getAccessToken } from '@/utils';
+import { getAccessToken } from '@/utils/storage';
 
 const sideBarState = atom({
   key: ATOM_KEY.SIDE_BAR,

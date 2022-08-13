@@ -1,7 +1,5 @@
 import { InputRefType } from '@/@types';
 
-import { STORAGE_KEY } from '@/constants';
-
 const createPostBody = (inputRef: InputRefType) => {
   const inputElements = Object.values(inputRef).map((el) => el.current);
   const isValidInputRefs = inputElements.every((el) => el instanceof HTMLInputElement);
@@ -21,18 +19,6 @@ const createPostBody = (inputRef: InputRefType) => {
   return body;
 };
 
-const getAccessToken = () => {
-  return localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
-};
-
-const setAccessToken = (accessToken: string) => {
-  localStorage.setItem(STORAGE_KEY.ACCESS_TOKEN, accessToken);
-};
-
-const removeAccessToken = () => {
-  localStorage.removeItem(STORAGE_KEY.ACCESS_TOKEN);
-};
-
 const getRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -41,11 +27,4 @@ const zeroFill = (str: string | number) => {
   return str.toString().padStart(2, '0');
 };
 
-export {
-  createPostBody,
-  getAccessToken,
-  getRandomNumber,
-  removeAccessToken,
-  setAccessToken,
-  zeroFill,
-};
+export { createPostBody, getRandomNumber, zeroFill };

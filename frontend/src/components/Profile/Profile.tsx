@@ -14,7 +14,8 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import { CACHE_KEY, PATH } from '@/constants';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
-import { createPostBody, removeAccessToken } from '@/utils';
+import { createPostBody } from '@/utils';
+import { removeAccessToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 

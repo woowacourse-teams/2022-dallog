@@ -10,7 +10,7 @@ import StartPage from '@/pages/StartPage/StartPage';
 import { CACHE_KEY } from '@/constants';
 import { RESPONSE } from '@/constants/api';
 
-import { removeAccessToken } from '@/utils';
+import { removeAccessToken } from '@/utils/storage';
 
 import loginApi from '@/api/login';
 

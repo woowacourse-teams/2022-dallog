@@ -6,7 +6,7 @@ import { userState } from '@/recoil/atoms';
 
 import { CACHE_KEY, PATH } from '@/constants';
 
-import { setAccessToken } from '@/utils';
+import { setAccessToken } from '@/utils/storage';
 
 import loginApi from '@/api/login';
 
