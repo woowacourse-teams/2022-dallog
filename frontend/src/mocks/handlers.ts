@@ -156,6 +156,40 @@ const handlers = [
     }
   ),
 
+  rest.patch<Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>>(
+    `${API_URL}/api/schedules/:id`,
+    (req, res, ctx) => {
+      const { id } = req.params;
+      const scheduleId = parseInt(id as string);
+      const scheduleIndex = scheduleDB.findIndex((el) => el.id === scheduleId);
+
+      if (scheduleIndex < 0) {
+        return res(ctx.status(404));
+      }
+
+      const scheduleGetIndex: { [key: string]: number } = {
+        longTerms: getScheduleDB.longTerms.findIndex((el) => el.id === scheduleId),
+        allDays: getScheduleDB.allDays.findIndex((el) => el.id === scheduleId),
+        fewHours: getScheduleDB.fewHours.findIndex((el) => el.id === scheduleId),
+      };
+      const scheduleType = Object.keys(scheduleGetIndex).find(
+        (key) => scheduleGetIndex[key] !== -1
+      );
+
+      if (scheduleType === undefined) {
+        return res(ctx.status(404));
+      }
+
+      scheduleDB[scheduleIndex] = { ...scheduleDB[scheduleIndex], ...req.body };
+      getScheduleDB[scheduleType][scheduleGetIndex[scheduleType]] = {
+        ...getScheduleDB[scheduleType][scheduleGetIndex[scheduleType]],
+        ...req.body,
+      };
+
+      return res(ctx.status(204));
+    }
+  ),
+
   rest.get(API_URL + subscriptionApi.endpoint.get, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(subscriptionDB));
   }),
