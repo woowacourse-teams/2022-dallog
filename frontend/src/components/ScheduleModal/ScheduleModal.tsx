@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
@@ -12,9 +12,11 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY } from '@/constants';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
+import scheduleApi from '@/api/schedule';
 
 import { FiCalendar, FiEdit3 } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
@@ -49,15 +51,26 @@ function ScheduleModal({
   const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
 
+  const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
+    CACHE_KEY.PROFILE,
+    () => profileApi.get(accessToken)
+  );
+
   const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
     CACHE_KEY.CATEGORY,
     () => categoryApi.getSingle(scheduleInfo.categoryId)
   );
 
-  const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
-    CACHE_KEY.PROFILE,
-    () => profileApi.get(accessToken)
+  const { mutate } = useMutation<AxiosResponse, AxiosError>(
+    () => scheduleApi.delete(accessToken, scheduleInfo.id),
+    {
+      onSuccess: () => onSuccessDeleteSchedule(),
+    }
   );
+
+  const onSuccessDeleteSchedule = () => {
+    closeModal();
+  };
 
   const handleClickModifyButton = () => {
     closeModal();
@@ -65,7 +78,9 @@ function ScheduleModal({
   };
 
   const handleClickDeleteButton = () => {
-    closeModal();
+    if (confirm(CONFIRM_MESSAGE.DELETE)) {
+      mutate();
+    }
   };
 
   const formatDateTime = (dateTime: string | undefined) => {

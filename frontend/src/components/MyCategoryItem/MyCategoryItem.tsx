@@ -39,7 +39,7 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
   });
 
   const handleClickDeleteButton = () => {
-    if (confirm(CONFIRM_MESSAGE.DELETE_CATEGORY)) {
+    if (confirm(CONFIRM_MESSAGE.DELETE)) {
       mutate();
     }
   };
