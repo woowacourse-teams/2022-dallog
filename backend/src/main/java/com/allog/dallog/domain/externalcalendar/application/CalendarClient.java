@@ -1,6 +1,6 @@
-package com.allog.dallog.domain.calendar.application;
+package com.allog.dallog.domain.externalcalendar.application;
 
-import com.allog.dallog.domain.calendar.dto.ExternalCalendar;
+import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import java.util.List;
 
 public interface CalendarClient {
