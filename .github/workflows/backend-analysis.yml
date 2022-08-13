@@ -38,7 +38,7 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const { SONARQUBE_PROJECT_NAME, SONARQUBE_URL, PR_NUMBER } = process.env
+            const { SONARQUBE_PROJECT_NAME, SONARQUBE_PROJECT_KEY, SONARQUBE_URL, PR_NUMBER } = process.env
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
