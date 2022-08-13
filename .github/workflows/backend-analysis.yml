@@ -35,7 +35,7 @@ jobs:
           -Dsonar.login=${{ env.SONARQUBE_TOKEN }}
           -Dsonar.host.url=${{ env.SONARQUBE_URL }}
           -Dsonar.projectKey=${{ env.SONARQUBE_PROJECT_KEY }}
-          -Dsonar.projectName=dallog-backend-${{ env.PR_NUMBER }}
+          -Dsonar.projectName=${{ env.SONARQUBE_PROJECT_NAME }}
 
       - name: Comment
         uses: actions/github-script@v4
@@ -46,5 +46,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `[${ SONARQUBE_PROJECT_KEY }-${ PR_NUMBER } 당신의 코드 냄새는? 💩](${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_NAME })`
+              body: `[${ SONARQUBE_PROJECT_NAME }] [당신의 코드 냄새는? 💩](${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_KEY })`
             })
