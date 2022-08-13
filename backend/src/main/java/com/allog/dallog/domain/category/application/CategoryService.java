@@ -11,6 +11,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,13 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository) {
+    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository,
+                           final SubscriptionRepository subscriptionRepository) {
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     @Transactional
@@ -72,6 +76,7 @@ public class CategoryService {
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 
+        subscriptionRepository.deleteByCategoryId(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 

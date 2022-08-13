@@ -55,7 +55,6 @@ public class Schedule extends BaseEntity {
                     final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
         validateMemoLength(memo);
-        addScheduleToCategory(category); // 연관관계 편의 메소드
         this.category = category;
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
@@ -69,12 +68,6 @@ public class Schedule extends BaseEntity {
         this.title = title;
         this.period = new Period(startDateTime, endDateTime);
         this.memo = memo;
-    }
-
-    private void addScheduleToCategory(final Category category) {
-        if (!category.getSchedules().contains(this)) {
-            category.getSchedules().add(this);
-        }
     }
 
     public boolean isLongTerms() {

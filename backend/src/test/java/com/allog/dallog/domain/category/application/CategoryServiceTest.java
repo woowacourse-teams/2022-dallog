@@ -36,7 +36,6 @@ import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -60,9 +59,6 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @DisplayName("새로운 카테고리를 생성한다.")
     @Test
@@ -296,7 +292,6 @@ class CategoryServiceTest extends ServiceTest {
         SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
-        entityManager.clear();
         categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then

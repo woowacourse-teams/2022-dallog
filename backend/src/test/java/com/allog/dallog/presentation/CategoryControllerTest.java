@@ -74,14 +74,14 @@ class CategoryControllerTest extends ControllerTest {
     private CategoryService categoryService;
 
     @MockBean
-    private CategorySubscriptionService categoryAndSubscriptionService;
+    private CategorySubscriptionService categorySubscriptionService;
 
     @DisplayName("카테고리를 생성한다.")
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
         CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
-        given(categoryAndSubscriptionService.save(any(), any())).willReturn(카테고리);
+        given(categorySubscriptionService.save(any(), any())).willReturn(카테고리);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -106,7 +106,7 @@ class CategoryControllerTest extends ControllerTest {
     void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
         // given
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
-                .given(categoryAndSubscriptionService)
+                .given(categorySubscriptionService)
                 .save(any(), any());
 
         CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, false);
@@ -364,7 +364,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         willDoNothing()
                 .given(categoryService)
-                .update(any(), any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)

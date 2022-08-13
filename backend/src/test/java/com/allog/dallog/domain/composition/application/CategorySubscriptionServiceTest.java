@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 class CategorySubscriptionServiceTest extends ServiceTest {
 
     @Autowired
-    private CategorySubscriptionService categoryAndSubscriptionService;
+    private CategorySubscriptionService categorySubscriptionService;
 
     @Autowired
     private MemberService memberService;
@@ -32,7 +32,7 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         MemberResponse 파랑 = memberService.save(파랑());
 
         // when
-        categoryAndSubscriptionService.save(파랑.getId(), 공통_일정_생성_요청);
+        categorySubscriptionService.save(파랑.getId(), 공통_일정_생성_요청);
 
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑.getId());
 
