@@ -143,8 +143,8 @@ const handlers = [
     return res(ctx.status(200), ctx.json(getScheduleDB));
   }),
 
-  rest.post<Omit<ScheduleType, 'id' | 'categoryId'>>(
-    `${API_URL}/api/categories/:categoryId/schedules`,
+  rest.post<Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>>(
+    `${API_URL}/api/categories/:id/schedules`,
     (req, res, ctx) => {
       const { id } = req.params;
       const categoryId = parseInt(id as string);
