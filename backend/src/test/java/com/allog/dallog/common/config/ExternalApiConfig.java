@@ -17,7 +17,7 @@ public class ExternalApiConfig {
     }
 
     @Bean
-    public ExternalCalendarClient calendarClient() {
+    public ExternalCalendarClient externalCalendarClient() {
         return new StubExternalCalendarClient();
     }
 }
