@@ -6,6 +6,7 @@ import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +26,14 @@ public class ExternalCalendarService {
         this.oAuthTokenRepository = oAuthTokenRepository;
     }
 
-    public List<ExternalCalendar> findByMemberId(final Long memberId) {
+    public ExternalCalendarsResponse findByMemberId(final Long memberId) {
         OAuthToken oAuthToken = oAuthTokenRepository.findByMemberId(memberId)
                 .orElseThrow(NoSuchOAuthTokenException::new);
 
         OAuthAccessTokenResponse oAuthAccessTokenResponse = oAuthClient.geAccessToken(oAuthToken.getRefreshToken());
-        return externalCalendarClient.getExternalCalendar(oAuthAccessTokenResponse.getAccessToken());
+        List<ExternalCalendar> externalCalendars = externalCalendarClient.getExternalCalendar(
+                oAuthAccessTokenResponse.getAccessToken());
+
+        return new ExternalCalendarsResponse(externalCalendars);
     }
 }

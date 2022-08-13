@@ -6,10 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.MemberFixtures;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,9 @@ class ExternalCalendarServiceTest extends ServiceTest {
         oAuthTokenRepository.save(OAUTH_TOKEN(매트));
 
         // when
-        List<ExternalCalendar> actual = externalCalendarService.findByMemberId(매트.getId());
+        ExternalCalendarsResponse actual = externalCalendarService.findByMemberId(매트.getId());
 
         // then
-        assertThat(actual).hasSize(3);
+        assertThat(actual.getExternalCalendars()).hasSize(3);
     }
 }

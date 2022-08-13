@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
+import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,9 @@ class ExternalCalendarControllerTest extends ControllerTest {
     @Test
     void 외부_캘린더의_일정을_조회하면_상태코드_200을_반환한다() throws Exception {
         // given
-        given(externalCalendarService.findByMemberId(any())).willReturn(List.of(대한민국_공휴일, 우아한테크코스, 대한민국_공휴일));
+        List<ExternalCalendar> ExternalCalendars = List.of(대한민국_공휴일, 우아한테크코스, 대한민국_공휴일);
+        given(externalCalendarService.findByMemberId(any())).willReturn(
+                new ExternalCalendarsResponse(ExternalCalendars));
 
         // when & then
         mockMvc.perform(get("/api/external-calendars/me")
