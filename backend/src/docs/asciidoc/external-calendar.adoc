@@ -1,0 +1,11 @@
+== External Calendar (외부 캘린더)
+
+=== 자신의 외부 캘린더 조회
+
+==== Request
+
+include::{snippets}/external-calendars/get/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/external-calendars/get/http-response.adoc[]
