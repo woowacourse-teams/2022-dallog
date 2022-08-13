@@ -94,7 +94,7 @@ public class GoogleOAuthClient implements OAuthClient {
     }
 
     @Override
-    public OAuthAccessTokenResponse geAccessToken(final String refreshToken) {
+    public OAuthAccessTokenResponse getAccessToken(final String refreshToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> params = generateAccessTokenParams(refreshToken);

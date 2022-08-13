@@ -7,5 +7,5 @@ public interface OAuthClient {
 
     OAuthMember getOAuthMember(final String code);
 
-    OAuthAccessTokenResponse geAccessToken(final String refreshToken);
+    OAuthAccessTokenResponse getAccessToken(final String refreshToken);
 }
