@@ -32,7 +32,7 @@ jobs:
           -Dsonar.login=${{ env.SONARQUBE_TOKEN }}
           -Dsonar.host.url=${{ env.SONARQUBE_URL }}
           -Dsonar.projectKey=${{ env.SONARQUBE_PROJECT_KEY }}
-          -Dsonar.projectName=dallog-backend-${{ PR_NUMBER }}
+          -Dsonar.projectName=dallog-backend-${{ env.PR_NUMBER }}
 
       - name: Comment
         uses: actions/github-script@v4
