@@ -80,6 +80,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const onSuccessPostCategory = ({ data }: AxiosResponse<CategoryType>) => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
     setMyCategoryId(data.id);
     postSubscription(subscriptionPostBody);
