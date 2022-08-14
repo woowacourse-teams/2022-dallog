@@ -1,5 +1,4 @@
 import { useTheme } from '@emotion/react';
-import { forwardRef } from 'react';
 
 import { FieldsetCssPropType } from '@/@types';
 
@@ -57,4 +56,4 @@ function Fieldset({
   );
 }
 
-export default forwardRef(Fieldset);
+export default Fieldset;

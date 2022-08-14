@@ -29,11 +29,7 @@ function useValidateSchedule({
       VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
     ) &&
     validateStartEndDateTime(startDateTime.inputValue, endDateTime.inputValue) &&
-    validateLength(
-      memo.inputValue,
-      VALIDATION_SIZE.MIN_LENGTH,
-      VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
-    ) &&
+    validateLength(memo.inputValue, 0, VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH) &&
     validateNotEmpty(startDateTime.inputValue) &&
     validateNotEmpty(endDateTime.inputValue);
 

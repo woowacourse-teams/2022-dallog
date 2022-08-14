@@ -13,6 +13,7 @@ function AuthPage() {
   useQuery<string>(CACHE_KEY.AUTH, loginApi.auth, {
     onError: () => onErrorAuth(),
     onSuccess: (data) => onSuccessAuth(data),
+    useErrorBoundary: true,
   });
 
   const onErrorAuth = () => {

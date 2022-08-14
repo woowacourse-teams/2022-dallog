@@ -2,8 +2,6 @@ import { ScheduleType } from '@/@types/schedule';
 
 import { getFormattedDate, getISODateString } from '@/utils/date';
 
-import useCalendar from './useCalendar';
-
 interface DateType {
   year: number;
   month: number;
@@ -11,9 +9,7 @@ interface DateType {
   day: number;
 }
 
-function useSchedulePriority() {
-  const { calendarMonth } = useCalendar();
-
+function useSchedulePriority(calendarMonth: DateType[]) {
   const calendarInfoWithPriority = calendarMonth.reduce(
     (
       acc: {
@@ -42,6 +38,13 @@ function useSchedulePriority() {
           return startDate <= date && date <= endDate;
         })
         .map((el) => getFormattedDate(el.year, el.month, el.date));
+
+      if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
+        return {
+          schedule: el,
+          priority: 4,
+        };
+      }
 
       if (calendarInfoWithPriority[startDate][0] === false) {
         scheduleRange.forEach((el) => {

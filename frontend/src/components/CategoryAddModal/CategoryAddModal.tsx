@@ -58,6 +58,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     unknown
   >((body) => categoryApi.post(accessToken, body), {
     onSuccess: (data) => onSuccessPostCategory(data),
+    useErrorBoundary: true,
   });
 
   const { mutate: postSubscription } = useMutation<
@@ -67,6 +68,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
     unknown
   >(() => subscriptionApi.post(accessToken, myCategoryId, subscriptionPostBody), {
     onSuccess: () => onSuccessPostSubscription(),
+    useErrorBoundary: true,
   });
 
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,6 +80,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const onSuccessPostCategory = ({ data }: AxiosResponse<CategoryType>) => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
     setMyCategoryId(data.id);
     postSubscription(subscriptionPostBody);

@@ -21,14 +21,13 @@ function FilterCategoryList() {
 
   const theme = useTheme();
 
-  const { error, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
+  const { data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
     CACHE_KEY.SUBSCRIPTIONS,
-    () => subscriptionApi.get(accessToken)
+    () => subscriptionApi.get(accessToken),
+    {
+      useErrorBoundary: true,
+    }
   );
-
-  if (error) {
-    return <>Error</>;
-  }
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>

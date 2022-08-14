@@ -45,13 +45,14 @@ function CategoryList({ keyword }: CategoryListProps) {
           return data.page + 1;
         }
       },
+      useErrorBoundary: true,
     }
   );
 
   const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useQuery<
     AxiosResponse<SubscriptionType[]>,
     AxiosError
-  >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
+  >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken), { useErrorBoundary: true });
 
   const ref = useIntersect(() => {
     hasNextPage && fetchNextPage();

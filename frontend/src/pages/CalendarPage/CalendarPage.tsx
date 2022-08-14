@@ -76,16 +76,18 @@ function CalendarPage() {
     endDate,
   } = useCalendar();
 
-  const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } = useSchedulePriority();
+  const { getLongTermsPriority, getAllDaysPriority, getFewHoursPriority } =
+    useSchedulePriority(calendarMonth);
 
   const { state: isScheduleAddModalOpen, toggleState: toggleScheduleAddModalOpen } = useToggle();
   const { state: isScheduleModalOpen, toggleState: toggleScheduleModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
 
-  const { isLoading, error, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
+  const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
     [CACHE_KEY.SCHEDULES, current],
-    () => scheduleApi.get(accessToken, startDate, endDate)
+    () => scheduleApi.get(accessToken, startDate, endDate),
+    { useErrorBoundary: true }
   );
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
@@ -189,14 +191,6 @@ function CalendarPage() {
           </ModalPortal>
           <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
         </div>
-      </PageLayout>
-    );
-  }
-
-  if (error) {
-    return (
-      <PageLayout>
-        <span>Error가 발생했습니다.</span>
       </PageLayout>
     );
   }

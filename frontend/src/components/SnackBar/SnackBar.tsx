@@ -20,7 +20,7 @@ function SnackBar() {
 
     const newTimer = setTimeout(() => {
       setTimer(null);
-    }, 1500);
+    }, 4000);
 
     setTimer(newTimer);
   }, [snackBarInfo]);

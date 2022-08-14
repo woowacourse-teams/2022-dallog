@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 
@@ -15,9 +15,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const queryClient = new QueryClient();
-const rootElement = document.getElementById('root');
 
-ReactDOM.render(
+const root = document.getElementById('root') as HTMLElement;
+
+const rootElement = createRoot(root);
+
+rootElement.render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
@@ -25,6 +28,5 @@ ReactDOM.render(
         <App />
       </ThemeProvider>
     </QueryClientProvider>
-  </RecoilRoot>,
-  rootElement
+  </RecoilRoot>
 );
