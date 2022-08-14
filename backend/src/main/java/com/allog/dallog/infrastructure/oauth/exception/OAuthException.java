@@ -2,6 +2,10 @@ package com.allog.dallog.infrastructure.oauth.exception;
 
 public class OAuthException extends RuntimeException {
 
+    public OAuthException(final Exception e) {
+        super(e);
+    }
+
     public OAuthException(final String message) {
         super(message);
     }

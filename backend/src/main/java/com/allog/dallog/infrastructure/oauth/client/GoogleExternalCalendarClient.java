@@ -49,7 +49,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         try {
             return restTemplate.getForEntity(CALENDAR_LIST_REQUEST_URI, GoogleCalendarListResponse.class, request);
         } catch (RestClientException e) {
-            throw new OAuthException();
+            throw new OAuthException(e);
         }
     }
 }

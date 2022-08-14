@@ -72,7 +72,7 @@ public class GoogleOAuthClient implements OAuthClient {
         try {
             return restTemplate.postForEntity(properties.getTokenUri(), request, GoogleTokenResponse.class);
         } catch (RestClientException e) {
-            throw new OAuthException();
+            throw new OAuthException(e);
         }
     }
 
@@ -117,7 +117,7 @@ public class GoogleOAuthClient implements OAuthClient {
         try {
             return restTemplate.postForEntity(properties.getTokenUri(), request, OAuthAccessTokenResponse.class);
         } catch (RestClientException e) {
-            throw new OAuthException();
+            throw new OAuthException(e);
         }
     }
 }
