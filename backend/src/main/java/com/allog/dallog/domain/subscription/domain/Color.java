@@ -42,7 +42,7 @@ public enum Color {
 
     public static Color from(final String colorCode) {
         return Arrays.stream(Color.values())
-                .filter(color -> color.getColorCode().equals(colorCode))
+                .filter(color -> color.getColorCode().equals(colorCode.toUpperCase()))
                 .findFirst()
                 .orElseThrow(() -> new InvalidSubscriptionException("(" + colorCode + ")는 사용할 수 없는 색상입니다."));
     }
