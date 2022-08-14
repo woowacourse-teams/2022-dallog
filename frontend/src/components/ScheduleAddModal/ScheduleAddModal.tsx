@@ -185,11 +185,11 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           onChange={validationSchedule.memo.onChangeValue}
           isValid={validateLength(
             validationSchedule.memo.inputValue,
-            VALIDATION_SIZE.ZERO,
+            0,
             VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
           )}
           errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
-            VALIDATION_SIZE.ZERO,
+            0,
             VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
           )}
         />
