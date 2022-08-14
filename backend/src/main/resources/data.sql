@@ -23,9 +23,9 @@ VALUES ('공통 일정', 1, NOW(), NOW(), false),
        ('운동', 2, NOW(), NOW(), true);
 
 INSERT INTO subscriptions (members_id, categories_id, color, checked, created_at, updated_at)
-VALUES (2, 1, '#AD1457', true, NOW(), NOW()),
-       (2, 3, '#D81B60', true, NOW(), NOW()),
-       (3, 1, '#D50000', true, NOW(), NOW()),
-       (3, 3, '#E67C73', true, NOW(), NOW()),
-       (4, 1, '#F4511E', true, NOW(), NOW()),
-       (4, 2, '#EF6C00', true, NOW(), NOW());
+VALUES (2, 1, 'COLOR_1', true, NOW(), NOW()),
+       (2, 3, 'COLOR_2', true, NOW(), NOW()),
+       (3, 1, 'COLOR_3', true, NOW(), NOW()),
+       (3, 3, 'COLOR_4', true, NOW(), NOW()),
+       (4, 1, 'COLOR_5', true, NOW(), NOW()),
+       (4, 2, 'COLOR_6', true, NOW(), NOW());
