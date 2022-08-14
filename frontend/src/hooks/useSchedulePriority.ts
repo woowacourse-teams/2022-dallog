@@ -26,8 +26,6 @@ function useSchedulePriority(calendarMonth: DateType[]) {
     {}
   );
 
-  console.log(calendarInfoWithPriority);
-
   const getLongTermsPriority = (longTerms: Array<ScheduleType>) =>
     longTerms.map((el) => {
       const startDate = getISODateString(el.startDateTime);
