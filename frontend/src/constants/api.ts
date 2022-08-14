@@ -1,4 +1,5 @@
 const API = {
+  AUTH_CODE_KEY: 'code',
   CATEGORY_GET_SIZE: 4,
 };
 

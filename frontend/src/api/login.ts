@@ -17,8 +17,7 @@ const loginApi = {
     return data.oAuthUri;
   },
 
-  auth: async () => {
-    const code = new URLSearchParams(location.search).get('code');
+  auth: async (code: string | null) => {
     const { data } = await dallogApi.post(loginApi.endPoint.googleToken, {
       code,
     });
