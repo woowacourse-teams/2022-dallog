@@ -58,11 +58,11 @@ import {
 } from './CalendarPage.styles';
 
 function CalendarPage() {
-  const dateRef = useRef<HTMLDivElement>(null);
+  const { accessToken } = useRecoilValue(userState);
 
   const theme = useTheme();
 
-  const { accessToken } = useRecoilValue(userState);
+  const dateRef = useRef<HTMLDivElement>(null);
 
   const [hoveringId, setHoveringId] = useState(0);
   const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);

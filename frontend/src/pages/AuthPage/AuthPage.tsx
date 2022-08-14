@@ -15,7 +15,7 @@ import { setAccessToken } from '@/utils/storage';
 import loginApi from '@/api/login';
 
 function AuthPage() {
-  const [user, setUserState] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
 
   const code = getSearchParam(API.AUTH_CODE_KEY);
@@ -31,7 +31,7 @@ function AuthPage() {
   };
 
   const onSuccessAuth = (accessToken: string) => {
-    setUserState({ ...user, accessToken });
+    setUser({ ...user, accessToken });
     setAccessToken(accessToken);
 
     navigate(PATH.MAIN);
