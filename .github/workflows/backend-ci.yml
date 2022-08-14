@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - backend/**
+      - .github/** # Github Actions 작업을 위한 포함
 
 jobs:
   build:

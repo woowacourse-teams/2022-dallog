@@ -5,9 +5,12 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - backend/**
+      - .github/** # Github Actions 작업을 위한 포함
 
 jobs:
-  static-analysis:
+  sonarqube:
     runs-on: ubuntu-latest
 
     defaults:
@@ -32,16 +35,16 @@ jobs:
           -Dsonar.login=${{ env.SONARQUBE_TOKEN }}
           -Dsonar.host.url=${{ env.SONARQUBE_URL }}
           -Dsonar.projectKey=${{ env.SONARQUBE_PROJECT_KEY }}
-          -Dsonar.projectName=dallog-backend-${{ PR_NUMBER }}
+          -Dsonar.projectName=${{ env.SONARQUBE_PROJECT_NAME }}
 
       - name: Comment
         uses: actions/github-script@v4
         with:
           script: |
-            const { SONARQUBE_PROJECT_NAME, SONARQUBE_URL, PR_NUMBER } = process.env
+            const { SONARQUBE_PROJECT_NAME, SONARQUBE_PROJECT_KEY, SONARQUBE_URL, PR_NUMBER } = process.env
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `📊 [${ SONARQUBE_PROJECT_KEY }-${ PR_NUMBER } 당신의 코드 냄새는? 💩(${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_NAME })`
+              body: `[${ SONARQUBE_PROJECT_NAME }] [당신의 코드 냄새는? 💩](${ SONARQUBE_URL }/dashboard?id=${ SONARQUBE_PROJECT_KEY })`
             })
