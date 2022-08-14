@@ -13,6 +13,8 @@ const calendarStyle = ({ flex, colors }: Theme) => css`
   box-sizing: content-box;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
 
+  opacity: 0;
+
   transform: rotate(10deg);
 
   @keyframes fadeIn {
@@ -53,6 +55,8 @@ const itemStyle = css`
   font-size: 10rem;
   font-weight: 600;
   text-align: right;
+
+  opacity: 0;
 
   @keyframes slideIn {
     from {
