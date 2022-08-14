@@ -31,6 +31,17 @@ class ColorTest {
         assertThat(Color.from(color.getColorCode())).isEqualTo(color);
     }
 
+    @DisplayName("소문자로 들어온 color code도 가져온다.")
+    @ParameterizedTest
+    @EnumSource
+    void 소문자로_들어온_color_code도_가져온다(final Color color) {
+        // given
+        String lowerColorCode = color.getColorCode().toLowerCase();
+
+        // when & then
+        assertThat(Color.from(lowerColorCode)).isEqualTo(color);
+    }
+
     @DisplayName("존재하지 않는 color code인 경우 예외가 발생한다.")
     @ParameterizedTest
     @ValueSource(strings = {"#asdfe", "#adfqwerse"})
