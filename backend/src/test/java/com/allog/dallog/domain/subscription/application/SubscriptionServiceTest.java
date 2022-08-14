@@ -8,6 +8,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -195,9 +196,27 @@ class SubscriptionServiceTest extends ServiceTest {
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
         MemberResponse 관리자 = memberService.save(관리자());
+        MemberResponse 파랑 = memberService.save(파랑());
+
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(파랑.getId(), 공통_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteById(0L, 관리자.getId()))
+        assertThatThrownBy(() -> subscriptionService.deleteById(공통_일정_구독.getId(), 관리자.getId()))
+                .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("자신이 만든 카테고리에 대한 구독을 삭제할 경우 예외를 던진다")
+    @Test
+    void 자신이_만든_카테고리에_대한_구독을_삭제할_경우_예외를_던진다() {
+        // given
+        MemberResponse 관리자 = memberService.save(관리자());
+
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(관리자.getId(), 공통_일정.getId());
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.deleteById(공통_일정_구독.getId(), 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 

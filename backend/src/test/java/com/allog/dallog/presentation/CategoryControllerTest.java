@@ -375,7 +375,6 @@ class CategoryControllerTest extends ControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-
     @DisplayName("카테고리 제거 시 존재하지 않으면 404 Not Found가 발생한다")
     @Test
     void 카테고리_제거_시_존재하지_않으면_404_Not_Found가_발생한다() throws Exception {
