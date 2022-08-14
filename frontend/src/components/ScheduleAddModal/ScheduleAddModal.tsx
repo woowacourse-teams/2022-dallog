@@ -53,7 +53,8 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken)
+    () => categoryApi.getMy(accessToken),
+    { useErrorBoundary: true }
   );
 
   const {
@@ -69,6 +70,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
+    useErrorBoundary: true,
   });
 
   const dateFieldset = isAllDay

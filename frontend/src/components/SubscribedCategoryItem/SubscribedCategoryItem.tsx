@@ -32,6 +32,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
     },
+    useErrorBoundary: true,
   });
 
   const handleClickUnsubscribeButton = () => {

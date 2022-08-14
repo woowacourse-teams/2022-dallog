@@ -36,6 +36,7 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(() => categoryApi.delete(accessToken, category.id), {
     onSuccess: () => onSuccessDeleteCategory(),
+    useErrorBoundary: true,
   });
 
   const handleClickDeleteButton = () => {

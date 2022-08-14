@@ -46,8 +46,10 @@ function Profile() {
   const { accessToken } = useRecoilValue(userState);
 
   const queryClient = useQueryClient();
-  const { error, data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
-    profileApi.get(accessToken)
+  const { data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
+    CACHE_KEY.PROFILE,
+    () => profileApi.get(accessToken),
+    { useErrorBoundary: true }
   );
 
   const { mutate } = useMutation(
@@ -56,12 +58,9 @@ function Profile() {
       onSuccess: () => {
         queryClient.invalidateQueries(CACHE_KEY.PROFILE);
       },
+      useErrorBoundary: true,
     }
   );
-
-  if (error) {
-    return <div>Error</div>;
-  }
 
   const handleClickModifyButton = () => {
     setEditingName(true);

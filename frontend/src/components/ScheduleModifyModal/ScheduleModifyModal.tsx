@@ -50,8 +50,10 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
-    categoryApi.getSingle(scheduleInfo.categoryId)
+  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
+    CACHE_KEY.CATEGORY,
+    () => categoryApi.getSingle(scheduleInfo.categoryId),
+    { useErrorBoundary: true }
   );
 
   const { mutate } = useMutation<
@@ -61,6 +63,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     unknown
   >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
     onSuccess: () => onSuccessPatchSchedule(),
+    useErrorBoundary: true,
   });
 
   const onSuccessPatchSchedule = () => {
