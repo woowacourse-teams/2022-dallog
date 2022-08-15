@@ -4,14 +4,10 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
-import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,15 +55,5 @@ public class ScheduleService {
 
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
         scheduleRepository.deleteById(id);
-    }
-
-    public List<Schedule> findBy(final List<Category> categories, final DateRangeRequest dateRangeRequest) {
-        LocalDateTime startDate = dateRangeRequest.getStartDateTime();
-        LocalDateTime endDate = dateRangeRequest.getEndDateTime();
-
-        return categories.stream()
-                .flatMap(category ->
-                        scheduleRepository.findByCategoryIdAndBetween(category, startDate, endDate).stream())
-                .collect(Collectors.toList());
     }
 }

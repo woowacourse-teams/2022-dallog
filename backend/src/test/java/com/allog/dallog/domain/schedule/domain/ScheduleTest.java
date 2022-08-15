@@ -6,13 +6,11 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,89 +51,5 @@ public class ScheduleTest {
         // when & then
         assertThatThrownBy(() -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 잘못된_메모))
                 .isInstanceOf(InvalidScheduleException.class);
-    }
-
-    @DisplayName("LongTerm인지 확인 할 떄, 일정의 시작일시와 종료일시가 다르면 true를 반환한다.")
-    @Test
-    void LongTerm인지_확인_할_떄_일정의_시작일시와_종료일시가_다르면_true를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 1),
-                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isLongTerms();
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("LongTerm인지 확인 할 떄, 일정의 시작일시와 종료일시가 같으면 false를 반환한다.")
-    @Test
-    void LongTerm인지_확인_할_때_일정의_시작일시와_종료일시가_다르면_false를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 1),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isLongTerms();
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @DisplayName("AllDays인지 확인 할 떄, 일정의 시작일시와 종료일시가 같고 자정이면 true를 반환한다.")
-    @Test
-    void AllDays인지_확인_할_때_일정의_시작일시와_종료일시가_같고_자정이면_true를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isAllDays();
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("AllDays인지 확인 할 떄, 일정의 시작일시와 종료일시가 같지만 자정이 아니면 false를 반환한다.")
-    @Test
-    void AllDays인지_확인_할_때_일정의_시작일시와_종료일시가_같지만_자정이_아니면_false를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isAllDays();
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @DisplayName("FewHours인지 확인 할 떄, 일정의 시작일시와 종료일시가 같고 자정이 아니면 true를 반환한다.")
-    @Test
-    void FewHours인지_확인_할_때_일정의_시작일시와_종료일시가_같고_자정이_아니면_true를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isFewHours();
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("FewHours인지 확인 할 떄, 일정의 시작일시와 종료일시가 같지만 자정이면 false를 반환한다.")
-    @Test
-    void FewHours인지_확인_할_때_일정의_시작일시와_종료일시가_같지만_자정이면_false를_반환한다() {
-        // given
-        Schedule schedule = new Schedule(BE_일정(관리자()), 알록달록_회의_제목, LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모);
-
-        // when
-        boolean actual = schedule.isFewHours();
-
-        // then
-        assertThat(actual).isFalse();
     }
 }

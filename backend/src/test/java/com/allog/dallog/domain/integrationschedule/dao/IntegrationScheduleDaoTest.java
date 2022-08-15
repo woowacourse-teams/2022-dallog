@@ -2,16 +2,28 @@ package com.allog.dallog.domain.integrationschedule.dao;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_1분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_18시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_20시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_17일_23시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_11시_59분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_17시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_23시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.매고라_메모;
@@ -260,11 +272,87 @@ class IntegrationScheduleDaoTest {
         scheduleRepository.save(알록달록_회의);
         scheduleRepository.save(알록달록_회식);
 
+        List<Long> categoryIds = List.of(BE_일정.getId());
+        LocalDateTime startDateTime = 날짜_2022년_7월_1일_0시_0분;
+        LocalDateTime endDateTime = 날짜_2022년_7월_7일_16시_0분;
+
         // when
-        List<Schedule> schedules = scheduleRepository.findByCategoryIdAndBetween(BE_일정, 날짜_2022년_7월_16일_16시_1분,
-                날짜_2022년_7월_31일_0시_0분);
+        List<IntegrationSchedule> actual = integrationScheduleDao.findByCategoryIdInAndBetween(categoryIds,
+                startDateTime, endDateTime);
 
         // then
-        assertThat(schedules).hasSize(0);
+        assertThat(actual).hasSize(0);
+    }
+
+    @DisplayName("시작일시와 종료일시로 특정 카테고리의 일정을 조회한다.")
+    @Test
+    void 시작일시와_종료일시로_특정_카테고리의_일정을_조회한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        Category BE_일정 = categoryRepository.save(BE_일정(후디));
+        Category FE_일정 = categoryRepository.save(FE_일정(후디));
+        Category 공통_일정 = categoryRepository.save(공통_일정(후디));
+
+        /* BE 일정 */
+        scheduleRepository.save(new Schedule(BE_일정, "BE 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
+        scheduleRepository.save(new Schedule(BE_일정, "BE 2", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
+        scheduleRepository.save(new Schedule(BE_일정, "BE 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
+
+        /* FE 일정 */
+        scheduleRepository.save(new Schedule(FE_일정, "FE 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+        scheduleRepository.save(new Schedule(FE_일정, "FE 2", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
+        scheduleRepository.save(new Schedule(FE_일정, "FE 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
+
+        /* 공통 일정 */
+        scheduleRepository.save(new Schedule(공통_일정, "공통 1", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
+        scheduleRepository.save(new Schedule(공통_일정, "공통 2", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
+        scheduleRepository.save(new Schedule(공통_일정, "공통 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
+
+        List<Long> categoryIds = List.of(BE_일정.getId(), FE_일정.getId());
+        LocalDateTime startDateTime = 날짜_2022년_7월_1일_0시_0분;
+        LocalDateTime endDateTime = 날짜_2022년_8월_15일_23시_59분;
+
+        // when
+        List<IntegrationSchedule> actual = integrationScheduleDao.findByCategoryIdInAndBetween(categoryIds,
+                startDateTime, endDateTime);
+
+        // then
+        assertThat(actual)
+                .extracting(IntegrationSchedule::getTitle)
+                .containsOnly("BE 1", "BE 2", "BE 3", "FE 1", "FE 2", "FE 3");
+    }
+
+    @DisplayName("시작일시와 종료일시로 특정 카테고리의 일정을 조회할 때 범위 밖의 일정은 제외된다.")
+    @Test
+    void 시작일시와_종료일시로_특정_카테고리의_일정을_조회할_때_범위_밖의_일정은_제외된다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        Category BE_일정 = categoryRepository.save(BE_일정(후디));
+        Category FE_일정 = categoryRepository.save(FE_일정(후디));
+
+        /* BE 일정 */
+        scheduleRepository.save(new Schedule(BE_일정, "BE 1 포함", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
+        scheduleRepository.save(new Schedule(BE_일정, "BE 2 포함", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
+        scheduleRepository.save(new Schedule(BE_일정, "BE 3 포함", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
+        scheduleRepository.save(new Schedule(BE_일정, "BE 3 미포함", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, ""));
+
+        /* FE 일정 */
+        scheduleRepository.save(new Schedule(FE_일정, "FE 1 포함", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
+        scheduleRepository.save(new Schedule(FE_일정, "FE 2 포함", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
+        scheduleRepository.save(new Schedule(FE_일정, "FE 3 미포함", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
+
+        List<Long> categoryIds = List.of(BE_일정.getId(), FE_일정.getId());
+        LocalDateTime startDateTime = 날짜_2022년_7월_1일_0시_0분;
+        LocalDateTime endDateTime = 날짜_2022년_7월_17일_23시_59분;
+
+        // when
+        List<IntegrationSchedule> actual = integrationScheduleDao.findByCategoryIdInAndBetween(categoryIds,
+                startDateTime, endDateTime);
+
+        // then
+        assertThat(actual).extracting(IntegrationSchedule::getTitle)
+                .containsOnly("BE 1 포함", "BE 2 포함", "BE 3 포함", "FE 1 포함", "FE 2 포함");
     }
 }

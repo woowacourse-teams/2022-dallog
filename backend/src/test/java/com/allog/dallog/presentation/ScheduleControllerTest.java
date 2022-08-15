@@ -314,19 +314,22 @@ class ScheduleControllerTest extends ControllerTest {
         String startDate = "2022-07-31T00:00";
         String endDate = "2022-09-03T00:00";
 
-        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse(1L, "장기간 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse("1L", "장기간 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1);
-        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse(1L, "장기간 일정 2", LocalDateTime.of(2022, 8, 3, 0, 0),
+        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse("1L", "장기간 일정 2",
+                LocalDateTime.of(2022, 8, 3, 0, 0),
                 LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2);
 
-        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse(1L, "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse("1L", "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3);
-        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse(1L, "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
+        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse("1L", "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
                 LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4);
 
-        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse(1L, "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse("1L", "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5);
-        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse(1L, "짧은 일정 2", LocalDateTime.of(2022, 8, 5, 17, 0),
+        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse("1L", "짧은 일정 2",
+                LocalDateTime.of(2022, 8, 5, 17, 0),
                 LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6);
 
         MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),

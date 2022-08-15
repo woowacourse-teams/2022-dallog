@@ -1,9 +1,9 @@
 package com.allog.dallog.domain.composition.application;
 
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
-import com.allog.dallog.domain.schedule.domain.Schedule;
-import com.allog.dallog.domain.schedule.domain.schedules.TypedSchedules;
+import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.integrationschedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
@@ -17,21 +17,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CalendarService {
 
-    private final ScheduleService scheduleService;
     private final SubscriptionService subscriptionService;
+    private final IntegrationScheduleDao integrationScheduleDao;
 
-    public CalendarService(final ScheduleService scheduleService, final SubscriptionService subscriptionService) {
-        this.scheduleService = scheduleService;
+    public CalendarService(final SubscriptionService subscriptionService,
+                           final IntegrationScheduleDao integrationScheduleDao) {
         this.subscriptionService = subscriptionService;
+        this.integrationScheduleDao = integrationScheduleDao;
     }
 
     public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
                                                            final DateRangeRequest dateRangeRequest) {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<Category> categories = findCheckedCategoriesBy(subscriptions);
-        List<Schedule> schedules = scheduleService.findBy(categories, dateRangeRequest);
+        List<Long> categoryIds = findCheckedCategoriesBy(subscriptions)
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
 
-        TypedSchedules typedSchedules = new TypedSchedules(schedules);
+        List<IntegrationSchedule> integrationSchedules = integrationScheduleDao.findByCategoryIdInAndBetween(
+                categoryIds, dateRangeRequest.getStartDateTime(), dateRangeRequest.getEndDateTime());
+
+        TypedSchedules typedSchedules = new TypedSchedules(integrationSchedules);
         return new MemberScheduleResponses(subscriptions, typedSchedules);
     }
 

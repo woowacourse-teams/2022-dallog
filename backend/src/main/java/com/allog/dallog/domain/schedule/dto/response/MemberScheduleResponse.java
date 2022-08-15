@@ -1,12 +1,12 @@
 package com.allog.dallog.domain.schedule.dto.response;
 
-import com.allog.dallog.domain.schedule.domain.Schedule;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
 
 public class MemberScheduleResponse {
 
-    private final Long id;
+    private final String id;
     private final String title;
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
@@ -14,12 +14,13 @@ public class MemberScheduleResponse {
     private final Long categoryId;
     private final String colorCode;
 
-    public MemberScheduleResponse(final Schedule schedule, final Color color) {
-        this(schedule.getId(), schedule.getTitle(), schedule.getStartDateTime(), schedule.getEndDateTime(),
-                schedule.getMemo(), schedule.getCategory().getId(), color);
+    public MemberScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
+        this(integrationSchedule.getId(), integrationSchedule.getTitle(), integrationSchedule.getStartDateTime(),
+                integrationSchedule.getEndDateTime(), integrationSchedule.getMemo(),
+                integrationSchedule.getCategoryId(), color);
     }
 
-    public MemberScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
+    public MemberScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,
                                   final LocalDateTime endDateTime, final String memo, final Long categoryId,
                                   final Color color) {
         this.id = id;
@@ -31,7 +32,7 @@ public class MemberScheduleResponse {
         this.colorCode = color.getColorCode();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

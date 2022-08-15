@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.integrationschedule.dao;
 
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.schedule.domain.Period;
+import com.allog.dallog.domain.integrationschedule.domain.Period;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
