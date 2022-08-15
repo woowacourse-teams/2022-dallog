@@ -2,6 +2,8 @@ import { useTheme } from '@emotion/react';
 
 import Button from '@/components/@common/Button/Button';
 
+import { BsCalendarPlusFill } from 'react-icons/bs';
+
 import { scheduleAddButton } from './ScheduleAddButton.styles';
 
 interface ScheduleAddButtonProps {
@@ -13,7 +15,7 @@ function ScheduleAddButton({ onClick }: ScheduleAddButtonProps) {
 
   return (
     <Button cssProp={scheduleAddButton(theme)} onClick={onClick}>
-      +
+      <BsCalendarPlusFill />
     </Button>
   );
 }
