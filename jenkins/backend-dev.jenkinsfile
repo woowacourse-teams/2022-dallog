@@ -9,6 +9,18 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarServer') {
+                    sh './gradlew sonarqube'
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
         stage('Build') {
             steps {
                 dir('backend') {
