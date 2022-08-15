@@ -211,11 +211,14 @@ const methodItemStyle = ({ flex }: Theme, isShowing: boolean, direction: 'left' 
   ${flex.row};
 
   position: relative;
+  left: ${direction === 'left' ? '-100%' : '100%'};
   gap: 20rem;
 
   width: 70%;
   height: 100%;
   padding: 20rem;
+
+  opacity: 0;
 
   @keyframes slideInFromLeft {
     from {
