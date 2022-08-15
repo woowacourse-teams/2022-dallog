@@ -39,10 +39,8 @@ public class Schedule extends BaseEntity {
     @Column(name = "end_date_time", nullable = false)
     private LocalDateTime endDateTime;
 
-
     @Column(name = "memo", nullable = false)
     private String memo;
-
 
     protected Schedule() {
     }
