@@ -32,7 +32,7 @@ const searchInputStyle = css`
   font-size: 4rem;
 `;
 
-const addButtonStyle = ({ colors }: Theme) => css`
+const buttonStyle = ({ colors }: Theme) => css`
   width: 30rem;
   height: 10rem;
   border-radius: 3px;
@@ -55,7 +55,7 @@ const controlStyle = ({ flex }: Theme) => css`
   width: 100%;
 `;
 
-const filteringButtonStyle = ({ colors }: Theme) => css`
+const outLineButtonStyle = ({ colors }: Theme) => css`
   width: 40rem;
   height: 10rem;
   border-radius: 3px;
@@ -69,10 +69,10 @@ const filteringButtonStyle = ({ colors }: Theme) => css`
 `;
 
 export {
-  addButtonStyle,
+  buttonStyle,
   categoryPageStyle,
   controlStyle,
-  filteringButtonStyle,
+  outLineButtonStyle,
   searchButtonStyle,
   searchFieldsetStyle,
   searchFormStyle,
