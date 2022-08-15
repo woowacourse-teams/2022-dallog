@@ -97,10 +97,6 @@ public class Schedule extends BaseEntity {
         return id;
     }
 
-    public Long getCategoryId() {
-        return category.getId();
-    }
-
     public String getTitle() {
         return title;
     }

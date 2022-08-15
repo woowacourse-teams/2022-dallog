@@ -16,7 +16,7 @@ public class MemberScheduleResponse {
 
     public MemberScheduleResponse(final Schedule schedule, final Color color) {
         this(schedule.getId(), schedule.getTitle(), schedule.getStartDateTime(), schedule.getEndDateTime(),
-                schedule.getMemo(), schedule.getCategoryId(), color);
+                schedule.getMemo(), schedule.getCategory().getId(), color);
     }
 
     public MemberScheduleResponse(final Long id, final String title, final LocalDateTime startDateTime,
