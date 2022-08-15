@@ -1,9 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { useEffect, useState } from 'react';
-import { useMutation } from 'react-query';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useQuery } from 'react-query';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
-import { userState } from '@/recoil/atoms';
+import { sideBarState, userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants';
 
@@ -11,41 +10,33 @@ import { removeAccessToken } from '@/utils/storage';
 
 import loginApi from '@/api/login';
 
-const defaultUserState = {
-  accessToken: '',
-};
-
 function useUserValue() {
-  const userAtom = useRecoilValue(userState);
-  const resetUserAtom = useResetRecoilState(userState);
+  const user = useRecoilValue(userState);
+  const resetUser = useResetRecoilState(userState);
 
-  const [user, setUser] = useState(defaultUserState);
+  const setSideBarOpen = useSetRecoilState(sideBarState);
 
-  const { mutate } = useMutation<AxiosResponse, AxiosError>(
+  const { isLoading } = useQuery<AxiosResponse, AxiosError>(
     CACHE_KEY.VALIDATE,
-    () => loginApi.validate(userAtom.accessToken),
+    () => loginApi.validate(user.accessToken),
     {
-      retry: false,
       onError: () => onErrorValidate(),
       onSuccess: () => onSuccessValidate(),
+      retry: false,
     }
   );
 
   const onErrorValidate = () => {
-    setUser(defaultUserState);
+    setSideBarOpen(false);
     removeAccessToken();
-    resetUserAtom();
+    resetUser();
   };
 
   const onSuccessValidate = () => {
-    setUser(userAtom);
+    setSideBarOpen(true);
   };
 
-  useEffect(() => {
-    userAtom.accessToken && mutate();
-  }, []);
-
-  return user;
+  return { isAuthenticating: isLoading, user };
 }
 
 export default useUserValue;

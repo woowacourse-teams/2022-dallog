@@ -4,9 +4,13 @@ import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import StartPage from '@/pages/StartPage/StartPage';
 
 function MainPage() {
-  const { accessToken } = useUserValue();
+  const { isAuthenticating, user } = useUserValue();
 
-  if (!accessToken) {
+  if (isAuthenticating) {
+    return <></>;
+  }
+
+  if (!user.accessToken) {
     return <StartPage />;
   }
 
