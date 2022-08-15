@@ -12,6 +12,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -100,7 +101,7 @@ class CategoryControllerTest extends ControllerTest {
                 .given(categorySubscriptionService)
                 .save(any(), any());
 
-        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, false);
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, NORMAL);
 
         // when & then
         mockMvc.perform(post("/api/categories")

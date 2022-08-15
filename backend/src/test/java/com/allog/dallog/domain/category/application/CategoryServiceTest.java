@@ -17,6 +17,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -103,7 +104,7 @@ class CategoryServiceTest extends ServiceTest {
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
-        CategoryCreateRequest request = new CategoryCreateRequest(name, false);
+        CategoryCreateRequest request = new CategoryCreateRequest(name, NORMAL);
         Member 관리자 = memberRepository.save(관리자());
 
         // when & then
