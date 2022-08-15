@@ -15,6 +15,8 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,6 +35,9 @@ import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
@@ -53,6 +58,9 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private MemberService memberService;
@@ -305,6 +313,27 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoPermissionException.class);
     }
 
+    @DisplayName("카테고리 삭제 시 연관된 일정 엔티티도 모두 제거된다.")
+    @Test
+    void 카테고리_삭제_시_연관된_일정_엔티티도_모두_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        ScheduleResponse 알록달록_회식 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 알록달록_회식_생성_요청);
+        ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
+
+        // when
+        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+
+        // then
+        assertAll(() -> {
+            assertThatThrownBy(() -> scheduleService.findById(알록달록_회식.getId()))
+                    .isInstanceOf(NoSuchScheduleException.class);
+            assertThatThrownBy(() -> scheduleService.findById(레벨_인터뷰.getId()))
+                    .isInstanceOf(NoSuchScheduleException.class);
+        });
+    }
+
     @DisplayName("카테고리 삭제 시 연관된 구독 엔티티도 모두 제거된다.")
     @Test
     void 카테고리_삭제_시_연관된_구독_엔티티도_모두_제거된다() {
@@ -336,5 +365,26 @@ class CategoryServiceTest extends ServiceTest {
         //then
         assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("특정 회원의 카테고리를 삭제할 때 연관된 일정도 삭제한다.")
+    @Test
+    void 특정_회원의_카테고리를_삭제할_때_연관된_일정도_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        ScheduleResponse 알록달록_회식 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 알록달록_회식_생성_요청);
+        ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
+
+        // when
+        categoryService.deleteByMemberId(관리자.getId());
+
+        // then
+        assertAll(() -> {
+            assertThatThrownBy(() -> scheduleService.findById(알록달록_회식.getId()))
+                    .isInstanceOf(NoSuchScheduleException.class);
+            assertThatThrownBy(() -> scheduleService.findById(레벨_인터뷰.getId()))
+                    .isInstanceOf(NoSuchScheduleException.class);
+        });
     }
 }

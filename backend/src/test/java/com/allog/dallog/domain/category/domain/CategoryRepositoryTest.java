@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.RepositoryTest;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,6 +105,35 @@ class CategoryRepositoryTest extends RepositoryTest {
                     .isTrue();
         });
     }
+
+    @DisplayName("특정 멤버가 생성한 카테고리를 조회한다.")
+    @Test
+    void 특정_멤버가_생성한_카테고리를_조회한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryRepository.save(공통_일정(관리자));
+        categoryRepository.save(BE_일정(관리자));
+        categoryRepository.save(FE_일정(관리자));
+
+        Member 후디 = memberRepository.save(후디());
+        categoryRepository.save(후디_JPA_스터디(후디));
+
+        // when
+        List<Category> categories = categoryRepository.findByMemberId(관리자.getId());
+
+        // then
+        assertAll(() -> {
+            assertThat(categories).hasSize(3)
+                    .extracting(Category::getName)
+                    .containsExactlyInAnyOrder(공통_일정_이름, BE_일정_이름, FE_일정_이름);
+            assertThat(
+                    categories.stream()
+                            .map(Category::getCreatedAt)
+                            .allMatch(Objects::nonNull))
+                    .isTrue();
+        });
+    }
+
 
     @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 있으면 true를 반환한다.")
     @Test

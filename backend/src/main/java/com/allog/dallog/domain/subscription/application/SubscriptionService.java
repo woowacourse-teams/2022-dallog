@@ -122,9 +122,4 @@ public class SubscriptionService {
             throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
         }
     }
-
-    @Transactional
-    public void deleteByMemberId(final Long memberId) {
-        subscriptionRepository.deleteByMemberId(memberId);
-    }
 }
