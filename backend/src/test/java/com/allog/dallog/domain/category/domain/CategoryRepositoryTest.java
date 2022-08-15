@@ -90,7 +90,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 8);
 
         // when
-        Slice<Category> categories = categoryRepository.findMineLikeCategoryName(관리자.getId(), "일", pageRequest);
+        Slice<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "일", pageRequest);
 
         // then
         assertAll(() -> {
@@ -147,7 +147,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRepository.deleteByMemberId(관리자.getId());
 
         // then
-        assertThat(categoryRepository.findMineLikeCategoryName(관리자.getId(), "", pageRequest))
+        assertThat(categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "", pageRequest))
                 .hasSize(0);
     }
 }

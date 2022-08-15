@@ -15,7 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c "
             + "FROM Category c "
             + "WHERE c.member.id = :memberId AND c.name LIKE %:name%")
-    Slice<Category> findMineLikeCategoryName(final Long memberId, final String name, final Pageable pageable);
+    Slice<Category> findByMemberIdLikeCategoryName(final Long memberId, final String name, final Pageable pageable);
 
     boolean existsByIdAndMemberId(Long id, Long memberId);
 
