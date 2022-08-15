@@ -103,7 +103,10 @@ public class SubscriptionService {
 
     @Transactional
     public void deleteById(final Long id, final Long memberId) {
+        Subscription subscription = getSubscription(id);
+
         validateSubscriptionPermission(id, memberId);
+        validateCategoryCreator(subscription.getCategory(), memberId);
 
         subscriptionRepository.deleteById(id);
     }
@@ -111,6 +114,12 @@ public class SubscriptionService {
     private void validateSubscriptionPermission(final Long id, final Long memberId) {
         if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
             throw new NoPermissionException();
+        }
+    }
+
+    private void validateCategoryCreator(final Category category, final Long memberId) {
+        if (category.isCreator(memberId)) {
+            throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
         }
     }
 
