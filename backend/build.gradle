@@ -54,6 +54,28 @@ test {
     finalizedBy 'jacocoTestReport'
 }
 
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from "${asciidoctor.outputDir}"
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+}
+
 jacoco {
     toolVersion = "0.8.8"
 }
@@ -128,24 +150,6 @@ sonarqube {
     }
 }
 
-asciidoctor {
-    configurations 'asciidoctorExtensions'
-    baseDirFollowsSourceFile()
-    inputs.dir snippetsDir
+tasks.named('sonarqube').configure {
     dependsOn test
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-
-    from "${asciidoctor.outputDir}"
-    into file("src/main/resources/static/docs")
-}
-
-bootJar {
-    dependsOn copyDocument
 }
