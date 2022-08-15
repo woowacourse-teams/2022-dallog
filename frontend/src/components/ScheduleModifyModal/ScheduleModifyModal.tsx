@@ -42,6 +42,7 @@ interface ScheduleModifyModalProps {
 
 function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalProps) {
   const { accessToken } = useRecoilValue(userState);
+
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(

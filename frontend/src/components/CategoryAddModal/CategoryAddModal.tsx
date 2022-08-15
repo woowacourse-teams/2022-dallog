@@ -39,12 +39,12 @@ interface CategoryAddModalProps {
 }
 
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
+  const { accessToken } = useRecoilValue(userState);
+
   const [myCategoryId, setMyCategoryId] = useState(0);
   const theme = useTheme();
 
   const { inputValue, onChangeValue } = useControlledInput();
-
-  const { accessToken } = useRecoilValue(userState);
 
   const subscriptionPostBody = {
     colorCode: PALETTE[getRandomNumber(0, PALETTE.length)],

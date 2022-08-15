@@ -34,6 +34,7 @@ interface FilterItemProps {
 
 function FilterCategoryItem({ subscription }: FilterItemProps) {
   const { accessToken } = useRecoilValue(userState);
+
   const { state: isPaletteOpen, toggleState: togglePaletteOpen } = useToggle();
 
   const queryClient = useQueryClient();

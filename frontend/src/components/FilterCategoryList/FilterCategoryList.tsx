@@ -16,8 +16,8 @@ import subscriptionApi from '@/api/subscription';
 import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
 
 function FilterCategoryList() {
-  const isSideBarOpen = useRecoilValue(sideBarState);
   const { accessToken } = useRecoilValue(userState);
+  const isSideBarOpen = useRecoilValue(sideBarState);
 
   const theme = useTheme();
 

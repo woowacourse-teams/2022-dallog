@@ -26,8 +26,9 @@ import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBa
 const Profile = lazy(() => import('@/components/Profile/Profile'));
 
 function NavBar() {
-  const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
   const { accessToken } = useRecoilValue(userState);
+  const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
+
   const theme = useTheme();
   const navigate = useNavigate();
 
