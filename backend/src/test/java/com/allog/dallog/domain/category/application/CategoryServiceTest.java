@@ -127,6 +127,21 @@ class CategoryServiceTest extends ServiceTest {
                 .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
     }
 
+    @DisplayName("개인 카테고리는 전체 조회 대상에서 제외된다.")
+    @Test
+    void 개인_카테고리는_전체_조회_대상에서_제외된다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
+        MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
+        categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+
+        // when
+        CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
+
+        // then
+        assertThat(response.getCategories()).hasSize(0);
+    }
+
     @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
     @Test
     void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
@@ -142,7 +157,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(1, 2);
 
         // when
-        CategoriesResponse response = categoryService.findMine(관리자_ID, request);
+        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "", request);
 
         // then
         assertThat(response.getCategories())
@@ -151,19 +166,28 @@ class CategoryServiceTest extends ServiceTest {
                 .contains(FE_일정_이름, 매트_아고라_이름);
     }
 
-    @DisplayName("개인 카테고리는 전체 조회 대상에서 제외된다.")
+    @DisplayName("회원 id와 제목과 페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
     @Test
-    void 개인_카테고리는_전체_조회_대상에서_제외된다() {
+    void 회원_id와_제목과_페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
         // given
-        MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
-        MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
-        categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+        Member 관리자 = memberRepository.save(관리자());
+        Long 관리자_ID = 관리자.getId();
+        categoryService.save(관리자_ID, 공통_일정_생성_요청);
+        categoryService.save(관리자_ID, BE_일정_생성_요청);
+        categoryService.save(관리자_ID, FE_일정_생성_요청);
+        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
+        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
+
+        PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
+        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "일", request);
 
         // then
-        assertThat(response.getCategories()).hasSize(0);
+        assertThat(response.getCategories())
+                .hasSize(3)
+                .extracting(CategoryResponse::getName)
+                .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")

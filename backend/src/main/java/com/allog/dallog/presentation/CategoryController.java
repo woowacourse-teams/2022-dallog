@@ -49,9 +49,10 @@ public class CategoryController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<CategoriesResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember,
-                                                       final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findMine(loginMember.getId(), pageable));
+    public ResponseEntity<CategoriesResponse> findMineByName(@AuthenticationPrincipal final LoginMember loginMember,
+                                                             @RequestParam(defaultValue = "") final String name,
+                                                             final Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findMineByName(loginMember.getId(), name, pageable));
     }
 
     @GetMapping("/{categoryId}")

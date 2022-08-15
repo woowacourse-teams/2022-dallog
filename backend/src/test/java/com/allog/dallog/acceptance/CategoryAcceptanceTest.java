@@ -4,7 +4,7 @@ import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.id를_통해_카테고리를_가져온다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_삭제한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_수정한다;
-import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_페이징을_통해_조회한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_제목과_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_제목과_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_페이징을_통해_조회한다;
@@ -137,7 +137,32 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
 
         // when
-        ExtractableResponse<Response> response = 내가_등록한_카테고리를_페이징을_통해_조회한다(accessToken, 0, 2);
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "", 0, 3);
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+
+        // then
+        assertAll(() -> {
+            상태코드_200이_반환된다(response);
+            assertThat(categoriesResponse.getPage()).isEqualTo(0);
+            assertThat(categoriesResponse.getCategories()).hasSize(3);
+        });
+    }
+
+    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 제목과 페이징을 통해 나누어 조회한다.")
+    @Test
+    void 카테고리를_등록하고_내가_등록한_카테고리를_제목과_페이징을_통해_나누어_조회한다() {
+        // given
+        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, 매트_아고라_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, 후디_JPA_스터디_생성_요청);
+
+        // when
+        ExtractableResponse<Response> response
+                = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "일", 0, 2);
         CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then

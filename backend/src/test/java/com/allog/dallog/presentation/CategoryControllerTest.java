@@ -179,19 +179,19 @@ class CategoryControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("멤버 자신이 생성한 카테고리를 전부 조회한다.")
+    @DisplayName("내 카테고리를 전부 조회한다.")
     @Test
-    void 멤버_자신이_생성한_카테고리를_전부_조회한다() throws Exception {
+    void 내_카테고리를_전부_조회한다() throws Exception {
         // given
         int page = 0;
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMine(any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories/me?page={page}&size={size}", page, size)
+        mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -201,6 +201,38 @@ class CategoryControllerTest extends ControllerTest {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
+                                        parameterWithName("name").description("카테고리 검색어"),
+                                        parameterWithName("page").description("페이지 번호"),
+                                        parameterWithName("size").description("페이지 크기")
+                                )
+                        )
+                )
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("내 카테고리를 제목을 활용하여 조회한다.")
+    @Test
+    void 내_카테고리를_제목을_활용하여_조회한다() throws Exception {
+        // given
+        int page = 0;
+        int size = 10;
+
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
+        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("categories/findMineLikeName",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestParameters(
+                                        parameterWithName("name").description("카테고리 검색어"),
                                         parameterWithName("page").description("페이지 번호"),
                                         parameterWithName("size").description("페이지 크기")
                                 )
