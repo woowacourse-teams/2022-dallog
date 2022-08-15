@@ -14,10 +14,10 @@ public class Period {
 
     private static final int ONE_HOUR = 60;
 
-    @Column(nullable = false)
+    @Column(name = "start_date_time", nullable = false)
     private LocalDateTime startDateTime;
 
-    @Column(nullable = false)
+    @Column(name = "end_date_time", nullable = false)
     private LocalDateTime endDateTime;
 
     protected Period() {
