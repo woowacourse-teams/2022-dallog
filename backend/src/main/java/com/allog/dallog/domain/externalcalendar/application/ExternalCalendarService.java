@@ -31,8 +31,9 @@ public class ExternalCalendarService {
                 .orElseThrow(NoSuchOAuthTokenException::new);
 
         OAuthAccessTokenResponse oAuthAccessTokenResponse = oAuthClient.getAccessToken(oAuthToken.getRefreshToken());
-        List<ExternalCalendar> externalCalendars = externalCalendarClient.getExternalCalendar(
-                oAuthAccessTokenResponse.getAccessToken());
+        String oAuthAccessToken = oAuthAccessTokenResponse.getAccessToken();
+        
+        List<ExternalCalendar> externalCalendars = externalCalendarClient.getExternalCalendars(oAuthAccessToken);
 
         return new ExternalCalendarsResponse(externalCalendars);
     }
