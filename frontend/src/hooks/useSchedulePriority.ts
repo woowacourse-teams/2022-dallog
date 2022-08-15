@@ -1,5 +1,7 @@
 import { ScheduleType } from '@/@types/schedule';
 
+import { CALENDAR } from '@/constants';
+
 import { getFormattedDate, getISODateString } from '@/utils/date';
 
 interface DateType {
@@ -19,7 +21,7 @@ function useSchedulePriority(calendarMonth: DateType[]) {
     ) => {
       const { year, month, date } = cur;
 
-      acc[getFormattedDate(year, month, date)] = [false, false, false];
+      acc[getFormattedDate(year, month, date)] = new Array(CALENDAR.MAX_VIEW).fill(false);
 
       return acc;
     },
@@ -42,120 +44,66 @@ function useSchedulePriority(calendarMonth: DateType[]) {
       if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
         return {
           schedule: el,
-          priority: 4,
+          priority: CALENDAR.MAX_VIEW + 1,
         };
       }
 
-      if (calendarInfoWithPriority[startDate][0] === false) {
-        scheduleRange.forEach((el) => {
-          calendarInfoWithPriority[el][0] = true;
-        });
+      const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
 
+      if (priorityPosition === -1) {
         return {
           schedule: el,
-          priority: 1,
+          priority: CALENDAR.MAX_VIEW + 1,
         };
       }
 
-      if (calendarInfoWithPriority[startDate][1] === false) {
-        scheduleRange.forEach((el) => {
-          calendarInfoWithPriority[el][1] = true;
-        });
-
-        return {
-          schedule: el,
-          priority: 2,
-        };
-      }
-
-      if (calendarInfoWithPriority[startDate][2] === false) {
-        scheduleRange.forEach((el) => {
-          calendarInfoWithPriority[el][2] = true;
-        });
-
-        return {
-          schedule: el,
-          priority: 3,
-        };
-      }
+      scheduleRange.forEach((el) => {
+        calendarInfoWithPriority[el][priorityPosition] = true;
+      });
 
       return {
         schedule: el,
-        priority: 4,
+        priority: priorityPosition + 1,
       };
     });
 
   const getAllDaysPriority = (allDays: Array<ScheduleType>) =>
     allDays.map((el) => {
       const startDate = getISODateString(el.startDateTime);
+      const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
 
-      if (calendarInfoWithPriority[startDate][0] === false) {
-        calendarInfoWithPriority[startDate][0] = true;
-
+      if (priorityPosition === -1) {
         return {
           schedule: el,
-          priority: 1,
+          priority: CALENDAR.MAX_VIEW + 1,
         };
       }
 
-      if (calendarInfoWithPriority[startDate][1] === false) {
-        calendarInfoWithPriority[startDate][1] = true;
-
-        return {
-          schedule: el,
-          priority: 2,
-        };
-      }
-
-      if (calendarInfoWithPriority[startDate][2] === false) {
-        calendarInfoWithPriority[startDate][2] = true;
-
-        return {
-          schedule: el,
-          priority: 3,
-        };
-      }
+      calendarInfoWithPriority[startDate][priorityPosition] = true;
 
       return {
         schedule: el,
-        priority: 4,
+        priority: priorityPosition + 1,
       };
     });
 
   const getFewHoursPriority = (fewHours: Array<ScheduleType>) =>
     fewHours.map((el) => {
       const startDate = getISODateString(el.startDateTime);
+      const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
 
-      if (calendarInfoWithPriority[startDate][0] === false) {
-        calendarInfoWithPriority[startDate][0] = true;
-
+      if (priorityPosition === -1) {
         return {
           schedule: el,
-          priority: 1,
+          priority: CALENDAR.MAX_VIEW + 1,
         };
       }
 
-      if (calendarInfoWithPriority[startDate][1] === false) {
-        calendarInfoWithPriority[startDate][1] = true;
-
-        return {
-          schedule: el,
-          priority: 2,
-        };
-      }
-
-      if (calendarInfoWithPriority[startDate][2] === false) {
-        calendarInfoWithPriority[startDate][2] = true;
-
-        return {
-          schedule: el,
-          priority: 3,
-        };
-      }
+      calendarInfoWithPriority[startDate][priorityPosition] = true;
 
       return {
         schedule: el,
-        priority: 4,
+        priority: priorityPosition + 1,
       };
     });
 
