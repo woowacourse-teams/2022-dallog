@@ -90,7 +90,6 @@ public class CategoryService {
     @Transactional
     public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
         Category category = getCategory(categoryId);
-
         validatePermission(memberId, categoryId);
 
         category.changeName(request.getName());

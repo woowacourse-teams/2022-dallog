@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.category.domain;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,6 +47,17 @@ class CategoryTest {
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
+    @DisplayName("개인 카테고리의 이름을 수정하는 경우 예외를 던진다.")
+    @Test
+    void 개인_카테고리의_이름을_수정하는_경우_예외를_던진다() {
+        // given
+        Category 내_일정 = 내_일정(관리자());
+
+        // when & then
+        assertThatThrownBy(() -> 내_일정.changeName("바꿀 이름"))
+                .isInstanceOf(InvalidCategoryException.class);
+    }
+
     @DisplayName("제공된 멤버의 ID와 카테고리를 생성한 멤버의 ID가 일치하지 않으면 false를 반환한다.")
     @Test
     void 제공된_멤버의_ID와_카테고리를_생성한_멤버의_ID가_일치하지_않으면_false를_반환한다() {
@@ -57,5 +69,18 @@ class CategoryTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @DisplayName("개인 카테고리면 true를 반환한다.")
+    @Test
+    void 개인_카테고리면_true를_반환한다() {
+        // given
+        Category 내_일정 = 내_일정(관리자());
+
+        // when
+        boolean actual = 내_일정.isPersonal();
+
+        // then
+        assertThat(actual).isTrue();
     }
 }

@@ -58,8 +58,15 @@ public class Category extends BaseEntity {
     }
 
     public void changeName(final String name) {
+        validatePersonal();
         validateNameLength(name);
         this.name = name;
+    }
+
+    private void validatePersonal() {
+        if (isPersonal()) {
+            throw new InvalidCategoryException("내 일정은 수정할 수 없습니다.");
+        }
     }
 
     private void validateNameLength(final String name) {
