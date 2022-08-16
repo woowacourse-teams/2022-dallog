@@ -1,5 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
@@ -105,7 +106,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         }
 
         return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
-                endDateTime, event.getDescription());
+                endDateTime, event.getDescription(), CategoryType.GOOGLE.name());
     }
 
     private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
