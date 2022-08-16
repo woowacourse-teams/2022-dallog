@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.schedule.dto.response;
 
-import com.allog.dallog.domain.schedule.domain.schedules.ScheduleType;
-import com.allog.dallog.domain.schedule.domain.schedules.TypedSchedules;
+import com.allog.dallog.domain.integrationschedule.domain.ScheduleType;
+import com.allog.dallog.domain.integrationschedule.domain.TypedSchedules;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.util.List;
 import java.util.stream.Collectors;

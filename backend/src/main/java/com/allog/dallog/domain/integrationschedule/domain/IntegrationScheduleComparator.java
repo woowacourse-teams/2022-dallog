@@ -1,17 +1,16 @@
-package com.allog.dallog.domain.schedule.domain.schedules;
+package com.allog.dallog.domain.integrationschedule.domain;
 
-import com.allog.dallog.domain.schedule.domain.Schedule;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
-public class ScheduleComparator implements Comparator<Schedule> {
+public class IntegrationScheduleComparator implements Comparator<IntegrationSchedule> {
 
     private static final int BEFORE = -1;
     private static final int AFTER = 1;
     private static final int SAME = 0;
 
     @Override
-    public int compare(final Schedule firstSchedule, final Schedule secondSchedule) {
+    public int compare(final IntegrationSchedule firstSchedule, final IntegrationSchedule secondSchedule) {
         LocalDateTime firstScheduleStartDateTime = firstSchedule.getStartDateTime();
         LocalDateTime secondScheduleStartDateTime = secondSchedule.getStartDateTime();
 
@@ -27,7 +26,7 @@ public class ScheduleComparator implements Comparator<Schedule> {
         return SAME;
     }
 
-    private int compareEndDateTime(Schedule firstSchedule, Schedule secondSchedule) {
+    private int compareEndDateTime(IntegrationSchedule firstSchedule, IntegrationSchedule secondSchedule) {
         LocalDateTime firstScheduleEndDateTime = firstSchedule.getEndDateTime();
         LocalDateTime secondScheduleEndDateTime = secondSchedule.getEndDateTime();
 
@@ -40,7 +39,7 @@ public class ScheduleComparator implements Comparator<Schedule> {
         return compareByTitle(firstSchedule, secondSchedule);
     }
 
-    private int compareByTitle(Schedule firstSchedule, Schedule secondSchedule) {
+    private int compareByTitle(IntegrationSchedule firstSchedule, IntegrationSchedule secondSchedule) {
         return firstSchedule.getTitle().compareTo(secondSchedule.getTitle());
     }
 }

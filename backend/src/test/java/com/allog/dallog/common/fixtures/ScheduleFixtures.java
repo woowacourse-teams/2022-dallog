@@ -18,6 +18,7 @@ public class ScheduleFixtures {
     public static final LocalDateTime 날짜_2022년_7월_16일_16시_1분 = LocalDateTime.of(2022, 7, 16, 16, 1);
     public static final LocalDateTime 날짜_2022년_7월_16일_18시_0분 = LocalDateTime.of(2022, 7, 16, 18, 0);
     public static final LocalDateTime 날짜_2022년_7월_16일_20시_0분 = LocalDateTime.of(2022, 7, 16, 20, 0);
+    public static final LocalDateTime 날짜_2022년_7월_17일_23시_59분 = LocalDateTime.of(2022, 7, 17, 23, 59);
     public static final LocalDateTime 날짜_2022년_7월_20일_0시_0분 = LocalDateTime.of(2022, 7, 20, 0, 0);
     public static final LocalDateTime 날짜_2022년_7월_20일_11시_59분 = LocalDateTime.of(2022, 7, 20, 23, 59);
     public static final LocalDateTime 날짜_2022년_7월_27일_0시_0분 = LocalDateTime.of(2022, 7, 27, 0, 0);
@@ -25,6 +26,7 @@ public class ScheduleFixtures {
     public static final LocalDateTime 날짜_2022년_7월_31일_0시_0분 = LocalDateTime.of(2022, 7, 31, 0, 0);
     public static final LocalDateTime 날짜_2022년_8월_15일_14시_0분 = LocalDateTime.of(2022, 8, 15, 14, 0);
     public static final LocalDateTime 날짜_2022년_8월_15일_17시_0분 = LocalDateTime.of(2022, 8, 15, 17, 0);
+    public static final LocalDateTime 날짜_2022년_8월_15일_23시_59분 = LocalDateTime.of(2022, 8, 15, 23, 59);
 
     /* 알록달록 회의 */
     public static final String 알록달록_회의_제목 = "알록달록 회의";
