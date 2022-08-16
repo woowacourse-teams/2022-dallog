@@ -2,7 +2,7 @@ package com.allog.dallog.infrastructure.oauth.client;
 
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarSchedule;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
@@ -53,10 +53,11 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     }
 
     @Override
-    public List<ExternalCalendarSchedule> getExternalCalendarSchedules(final String accessToken,
-                                                                       final String calendarId,
-                                                                       final String startDateTime,
-                                                                       final String endDateTime) {
+    public List<IntegrationSchedule> getExternalCalendarSchedules(final String accessToken,
+                                                                  final Long internalCategoryId,
+                                                                  final String calendarId,
+                                                                  final String startDateTime,
+                                                                  final String endDateTime) {
         HttpEntity<Void> request = new HttpEntity<>(generateCalendarRequestHeaders(accessToken));
 
         Map<String, String> uriVariables = generateEventsVariables(calendarId, startDateTime, endDateTime);
@@ -64,7 +65,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
 
         return response.getItems()
                 .stream()
-                .map(this::parseExternalResponse)
+                .map(event -> parseIntegrationSchedule(internalCategoryId, event))
                 .collect(Collectors.toList());
     }
 
@@ -94,8 +95,9 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         }
     }
 
-    private ExternalCalendarSchedule parseExternalResponse(final GoogleCalendarEventResponse item) {
-        return new ExternalCalendarSchedule(item.getId(), item.getSummary(), item.getDescription(),
-                item.getStartDateTime(), item.getEndDateTime());
+    private IntegrationSchedule parseIntegrationSchedule(final Long internalCategoryId,
+                                                         final GoogleCalendarEventResponse event) {
+        return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), event.getStartDateTime(),
+                event.getEndDateTime(), event.getDescription());
     }
 }
