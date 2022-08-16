@@ -54,28 +54,6 @@ test {
     finalizedBy 'jacocoTestReport'
 }
 
-asciidoctor {
-    configurations 'asciidoctorExtensions'
-    baseDirFollowsSourceFile()
-    inputs.dir snippetsDir
-    dependsOn test
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
-}
-
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-
-    from "${asciidoctor.outputDir}"
-    into file("src/main/resources/static/docs")
-}
-
-bootJar {
-    dependsOn copyDocument
-}
-
 jacoco {
     toolVersion = "0.8.8"
 }
@@ -146,10 +124,29 @@ sonarqube {
         property "sonar.profile", "Sonar way"
         property "sonar.java.binaries", "${buildDir}/classes"
         property "sonar.test.inclusions", "**/*Test.java"
+        property 'sonar.exclusions', '**/jacoco/**'
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/jacoco/index.xml"
     }
 }
 
-tasks.named('sonarqube').configure {
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
     dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from "${asciidoctor.outputDir}"
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
 }
