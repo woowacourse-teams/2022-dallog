@@ -63,7 +63,6 @@ function StartPage() {
   const { error, refetch } = useQuery<string>(CACHE_KEY.ENTER, loginApi.getUrl, {
     enabled: false,
     onSuccess: (data) => onSuccessGetLoginUrl(data),
-    useErrorBoundary: true,
   });
 
   const onSuccessGetLoginUrl = (loginUrl: string) => {

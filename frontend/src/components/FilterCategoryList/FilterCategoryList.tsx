@@ -23,10 +23,7 @@ function FilterCategoryList() {
 
   const { data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
     CACHE_KEY.SUBSCRIPTIONS,
-    () => subscriptionApi.get(accessToken),
-    {
-      useErrorBoundary: true,
-    }
+    () => subscriptionApi.get(accessToken)
   );
 
   return (

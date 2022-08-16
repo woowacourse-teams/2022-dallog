@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
@@ -11,22 +12,35 @@ import MainPage from '@/pages/MainPage/MainPage';
 
 import { PATH } from '@/constants';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      useErrorBoundary: true,
+    },
+    mutations: {
+      useErrorBoundary: true,
+    },
+  },
+});
+
 function App() {
   return (
-    <ErrorBoundary>
-      <Router>
-        <NavBar />
-        <SideBar />
-        <Routes>
-          <Route path={PATH.MAIN} element={<MainPage />} />
-          <Route path={PATH.AUTH} element={<AuthPage />} />
-          <Route element={<ProtectRoute />}>
-            <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-          </Route>
-        </Routes>
-        <SnackBar />
-      </Router>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary>
+        <Router>
+          <NavBar />
+          <SideBar />
+          <Routes>
+            <Route path={PATH.MAIN} element={<MainPage />} />
+            <Route path={PATH.AUTH} element={<AuthPage />} />
+            <Route element={<ProtectRoute />}>
+              <Route path={PATH.CATEGORY} element={<CategoryPage />} />
+            </Route>
+          </Routes>
+          <SnackBar />
+        </Router>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 

@@ -54,21 +54,18 @@ function ScheduleModal({
 
   const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
     CACHE_KEY.PROFILE,
-    () => profileApi.get(accessToken),
-    { useErrorBoundary: true }
+    () => profileApi.get(accessToken)
   );
 
   const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
     CACHE_KEY.CATEGORY,
-    () => categoryApi.getSingle(scheduleInfo.categoryId),
-    { useErrorBoundary: true }
+    () => categoryApi.getSingle(scheduleInfo.categoryId)
   );
 
   const { mutate } = useMutation<AxiosResponse, AxiosError>(
     () => scheduleApi.delete(accessToken, scheduleInfo.id),
     {
       onSuccess: () => onSuccessDeleteSchedule(),
-      useErrorBoundary: true,
     }
   );
 

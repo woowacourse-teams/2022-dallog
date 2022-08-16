@@ -43,7 +43,6 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
     },
-    useErrorBoundary: true,
   });
 
   const handleClickSubscribeButton = () => {

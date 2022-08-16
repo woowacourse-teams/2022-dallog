@@ -89,8 +89,7 @@ function CalendarPage() {
 
   const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
     [CACHE_KEY.SCHEDULES, current],
-    () => scheduleApi.get(accessToken, startDate, endDate),
-    { useErrorBoundary: true }
+    () => scheduleApi.get(accessToken, startDate, endDate)
   );
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
