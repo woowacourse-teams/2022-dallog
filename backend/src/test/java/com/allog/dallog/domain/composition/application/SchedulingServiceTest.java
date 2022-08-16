@@ -32,6 +32,7 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
@@ -109,7 +110,8 @@ class SchedulingServiceTest extends ServiceTest {
         // when
         LocalDate startDate = LocalDate.of(2022, 7, 1);
         LocalDate endDate = LocalDate.of(2022, 8, 31);
-        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(), startDate, endDate);
+        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(),
+                new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
         assertAll(() -> {
@@ -173,7 +175,8 @@ class SchedulingServiceTest extends ServiceTest {
         // when
         LocalDate startDate = LocalDate.of(2022, 7, 1);
         LocalDate endDate = LocalDate.of(2022, 8, 31);
-        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(), startDate, endDate);
+        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(),
+                new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
         assertAll(() -> {

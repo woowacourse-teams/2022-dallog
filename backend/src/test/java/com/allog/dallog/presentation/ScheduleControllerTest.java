@@ -1,5 +1,13 @@
 package com.allog.dallog.presentation;
 
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_18시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_20시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_11시_59분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
@@ -31,13 +39,16 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.composition.application.CalendarService;
+import com.allog.dallog.domain.composition.application.SchedulingService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.domain.Period;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
@@ -60,6 +71,9 @@ class ScheduleControllerTest extends ControllerTest {
 
     @MockBean
     private ScheduleService scheduleService;
+
+    @MockBean
+    private SchedulingService schedulingService;
 
     @MockBean
     private CalendarService calendarService;
@@ -354,6 +368,42 @@ class ScheduleControllerTest extends ControllerTest {
                 .andDo(document("schedules/findAllByMember",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("startDateTime").description("일정 조회 시작 범위 (yyyy-mm-dd'T'HH:mm)"),
+                                parameterWithName("endDateTime").description("일정 조회 마지막 범위 (yyyy-mm-dd'T'HH:mm)")
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("일정 조율 결과를 반환한다.")
+    @Test
+    void 일정_조율_결과를_반환한다() throws Exception {
+        // given
+        String startDate = "2022-07-01T00:00";
+        String endDate = "2022-07-31T23:59";
+
+        given(schedulingService.getAvailablePeriods(any(), any()))
+                .willReturn(List.of(
+                        new PeriodResponse(new Period(날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_10일_0시_0분)),
+                        new PeriodResponse(new Period(날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분)),
+                        new PeriodResponse(new Period(날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_20시_0분)),
+                        new PeriodResponse(new Period(날짜_2022년_7월_20일_11시_59분, 날짜_2022년_7월_27일_0시_0분))
+                ));
+
+        // when & then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get(
+                                        "/api/categories/{categoryId}/scheduling?startDateTime={startDate}&endDateTime={endDate}", 1L,
+                                        startDate, endDate)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/scheduling",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("categoryId").description("카테고리 ID")
+                        ),
                         requestParameters(
                                 parameterWithName("startDateTime").description("일정 조회 시작 범위 (yyyy-mm-dd'T'HH:mm)"),
                                 parameterWithName("endDateTime").description("일정 조회 마지막 범위 (yyyy-mm-dd'T'HH:mm)")

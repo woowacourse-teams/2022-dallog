@@ -12,9 +12,6 @@ import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -23,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Service
 public class SchedulingService {
+    // TODO: 이름 수정
 
     private final CategoryService categoryService;
     private final ScheduleService scheduleService;
@@ -37,8 +35,7 @@ public class SchedulingService {
         this.memberService = memberService;
     }
 
-    public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final LocalDate startDate,
-                                                    final LocalDate endDate) {
+    public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final DateRangeRequest dateRange) {
         // TODO: 리팩토링
         List<SubscriptionResponse> subscriptions = subscriptionService.findByCategoryId(categoryId);
         List<MemberResponse> members = subscriptions.stream()
@@ -51,11 +48,10 @@ public class SchedulingService {
                 .map(Subscription::getCategory)
                 .collect(Collectors.toList());
 
-        List<Schedule> schedules = scheduleService.findBy(categories,
-                DateRangeRequest.of(LocalDateTime.of(startDate, LocalTime.MIN),
-                        LocalDateTime.of(endDate, LocalTime.MAX)));
+        List<Schedule> schedules = scheduleService.findBy(categories, dateRange);
 
-        Scheduler scheduler = new Scheduler(schedules, startDate, endDate);
+        Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
+                dateRange.getEndDateTime().toLocalDate());
         return scheduler.getPeriods().stream().map(PeriodResponse::new).collect(Collectors.toList());
     }
 }
