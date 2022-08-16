@@ -70,7 +70,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
         <div css={content}>
           <Fieldset
             placeholder={category.name}
-            defaultValue={category.name}
+            value={inputValue}
             autoFocus
             onChange={onChangeValue}
             isValid={validateLength(

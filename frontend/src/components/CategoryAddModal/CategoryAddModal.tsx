@@ -70,14 +70,15 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
         <div css={content}>
           <Fieldset
             placeholder="이름"
+            value={inputValue}
             autoFocus={true}
             onChange={onChangeValue}
-            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            isValid={validateLength(
+              inputValue,
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}
-            isValid={validateLength(
-              inputValue,
+            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}
