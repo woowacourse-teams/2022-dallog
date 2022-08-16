@@ -21,7 +21,7 @@ public class OAuthToken extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "members_id", nullable = false)
     private Member member;
 
     @Column(name = "refresh_token", nullable = false)
