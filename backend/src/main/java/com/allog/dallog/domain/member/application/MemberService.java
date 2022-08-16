@@ -6,6 +6,7 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,13 @@ public class MemberService {
 
     public MemberResponse findById(final Long id) {
         return new MemberResponse(getMember(id));
+    }
+
+    public MemberResponse findBySubscriptionId(final Long subscriptionId) {
+        Member member = memberRepository.findBySubscriptionId(subscriptionId)
+                .orElseThrow(NoSuchSubscriptionException::new);
+
+        return new MemberResponse(member);
     }
 
     @Transactional

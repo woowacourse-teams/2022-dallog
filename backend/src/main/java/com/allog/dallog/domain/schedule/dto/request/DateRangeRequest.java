@@ -15,6 +15,14 @@ public class DateRangeRequest {
         this.endDateTime = LocalDateTime.parse(endDateTime, DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
+    // TODO: 리팩토링
+    public static DateRangeRequest of(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        String startDateTimeFormat = startDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        String endDateTimeFormat = endDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+
+        return new DateRangeRequest(startDateTimeFormat, endDateTimeFormat);
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
