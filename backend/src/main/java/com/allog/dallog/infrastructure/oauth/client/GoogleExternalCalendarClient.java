@@ -7,6 +7,7 @@ import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -97,7 +98,18 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
 
     private IntegrationSchedule parseIntegrationSchedule(final Long internalCategoryId,
                                                          final GoogleCalendarEventResponse event) {
-        return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), event.getStartDateTime(),
-                event.getEndDateTime(), event.getDescription());
+        LocalDateTime startDateTime = event.getStartDateTime();
+        LocalDateTime endDateTime = event.getEndDateTime();
+        if (isAllDay(startDateTime, endDateTime)) {
+            endDateTime = endDateTime.minusMinutes(1);
+        }
+
+        return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
+                endDateTime, event.getDescription());
+    }
+
+    private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        return startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
+                && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
     }
 }

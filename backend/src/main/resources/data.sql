@@ -13,11 +13,11 @@ VALUES ('admin@email.com',
         '매트', 'GOOGLE', NOW(), NOW());
 
 INSERT INTO categories (name, members_id, created_at, updated_at, category_type)
-VALUES ('공통 일정', 1, NOW(), NOW(), 'NOMARL'),
-       ('BE 일정', 1, NOW(), NOW(), 'NOMARL'),
-       ('FE 일정', 1, NOW(), NOW(), 'NOMARL'),
-       ('안드로이드 일정', 1, NOW(), NOW(), 'NOMARL'),
-       ('DevOps 일정', 1, NOW(), NOW(), 'NOMARL'),
+VALUES ('공통 일정', 1, NOW(), NOW(), 'NORMAL'),
+       ('BE 일정', 1, NOW(), NOW(), 'NORMAL'),
+       ('FE 일정', 1, NOW(), NOW(), 'NORMAL'),
+       ('안드로이드 일정', 1, NOW(), NOW(), 'NORMAL'),
+       ('DevOps 일정', 1, NOW(), NOW(), 'NORMAL'),
        ('내 일정', 2, NOW(), NOW(), 'PERSONAL'),
        ('내 일정', 3, NOW(), NOW(), 'PERSONAL'),
        ('운동', 2, NOW(), NOW(), 'PERSONAL');
@@ -28,4 +28,5 @@ VALUES (2, 1, 'COLOR_1', true, NOW(), NOW()),
        (3, 1, 'COLOR_3', true, NOW(), NOW()),
        (3, 3, 'COLOR_4', true, NOW(), NOW()),
        (4, 1, 'COLOR_5', true, NOW(), NOW()),
-       (4, 2, 'COLOR_6', true, NOW(), NOW());
+       (4, 2, 'COLOR_6', true, NOW(), NOW()),
+       (4, 9, 'COLOR_6', true, NOW(), NOW());
