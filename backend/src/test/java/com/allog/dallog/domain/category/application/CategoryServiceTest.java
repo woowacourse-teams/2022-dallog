@@ -11,12 +11,15 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_이름;
+import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
+import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
+import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -110,6 +113,23 @@ class CategoryServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.save(관리자.getId(), request))
                 .isInstanceOf(InvalidCategoryException.class);
+    }
+
+    @DisplayName("새로운 외부 카테고리를 생성한다.")
+    @Test
+    void 새로운_외부_카테고리를_생성한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        // when
+        CategoryResponse 후디_대한민국_공휴일_카테고리_응답 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+        Category 후디_대한민국_공휴일_카테고리 = categoryRepository.findById(후디_대한민국_공휴일_카테고리_응답.getId()).get();
+
+        // then
+        assertAll(() -> {
+            assertThat(후디_대한민국_공휴일_카테고리.getName()).isEqualTo(대한민국_공휴일_이름);
+            assertThat(후디_대한민국_공휴일_카테고리.getCategoryType()).isEqualTo(GOOGLE);
+        });
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
