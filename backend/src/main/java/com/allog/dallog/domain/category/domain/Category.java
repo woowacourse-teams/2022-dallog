@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.category.domain;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -84,6 +85,14 @@ public class Category extends BaseEntity {
 
     public boolean isPersonal() {
         return categoryType == PERSONAL;
+    }
+
+    public boolean isInternal() {
+        return categoryType != GOOGLE;
+    }
+
+    public boolean isExternal() {
+        return categoryType == GOOGLE;
     }
 
     public Long getId() {
