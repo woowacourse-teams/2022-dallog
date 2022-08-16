@@ -1,13 +1,13 @@
 /* eslint-disable react/display-name */
 import { AxiosError } from 'axios';
-import { Component, ReactNode } from 'react';
+import { Component } from 'react';
 
 import useSnackBar from '@/hooks/useSnackBar';
 
 import { ERROR_MESSAGE } from '@/constants/message';
 
 interface Props {
-  children?: ReactNode;
+  children?: JSX.Element;
   openSnackBar: (text: string) => void;
 }
 
