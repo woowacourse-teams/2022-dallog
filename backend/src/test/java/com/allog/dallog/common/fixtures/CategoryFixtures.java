@@ -1,5 +1,8 @@
 package com.allog.dallog.common.fixtures;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
+
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
@@ -11,27 +14,27 @@ public class CategoryFixtures {
 
     /* 공통 일정 카테고리 */
     public static final String 공통_일정_이름 = "공통 일정";
-    public static final CategoryCreateRequest 공통_일정_생성_요청 = new CategoryCreateRequest(공통_일정_이름, false);
+    public static final CategoryCreateRequest 공통_일정_생성_요청 = new CategoryCreateRequest(공통_일정_이름, NORMAL);
 
     /* BE 일정 카테고리 */
     public static final String BE_일정_이름 = "BE 일정";
-    public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, false);
+    public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, NORMAL);
 
     /* FE 일정 카테고리 */
     public static final String FE_일정_이름 = "FE 일정";
-    public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, false);
+    public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, NORMAL);
 
     /* 매트 아고라 카테고리 */
     public static final String 매트_아고라_이름 = "매트 아고라";
-    public static final CategoryCreateRequest 매트_아고라_생성_요청 = new CategoryCreateRequest(매트_아고라_이름, false);
+    public static final CategoryCreateRequest 매트_아고라_생성_요청 = new CategoryCreateRequest(매트_아고라_이름, NORMAL);
 
     /* 후디 JPA 스터디 카테고리 */
     public static final String 후디_JPA_스터디_이름 = "후디 JPA 스터디";
-    public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름, false);
+    public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름, NORMAL);
 
     /* 후디 개인 학습 일정 카테고리 */
     public static final String 후디_개인_학습_일정_이름 = "후디 개인 학습 일정";
-    public static final CategoryCreateRequest 후디_개인_학습_일정_생성_요청 = new CategoryCreateRequest(후디_개인_학습_일정_이름, true);
+    public static final CategoryCreateRequest 후디_개인_학습_일정_생성_요청 = new CategoryCreateRequest(후디_개인_학습_일정_이름, PERSONAL);
 
     public static Category 공통_일정(final Member creator) {
         return new Category(공통_일정_이름, creator);

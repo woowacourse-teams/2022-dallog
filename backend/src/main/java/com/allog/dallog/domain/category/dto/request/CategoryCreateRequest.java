@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.category.dto.request;
 
+import com.allog.dallog.domain.category.domain.CategoryType;
 import javax.validation.constraints.NotBlank;
 
 public class CategoryCreateRequest {
@@ -7,21 +8,21 @@ public class CategoryCreateRequest {
     @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
-    private boolean personal;
+    private String categoryType;
 
     private CategoryCreateRequest() {
     }
 
-    public CategoryCreateRequest(final String name, final boolean personal) {
+    public CategoryCreateRequest(final String name, final CategoryType categoryType) {
         this.name = name;
-        this.personal = personal;
+        this.categoryType = categoryType.name();
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean isPersonal() {
-        return personal;
+    public String getCategoryType() {
+        return categoryType;
     }
 }

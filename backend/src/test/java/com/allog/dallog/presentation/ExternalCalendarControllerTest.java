@@ -1,20 +1,28 @@
 package com.allog.dallog.presentation;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.*;
 import static com.allog.dallog.common.fixtures.ExternalCalendarFixtures.대한민국_공휴일;
 import static com.allog.dallog.common.fixtures.ExternalCalendarFixtures.우아한테크코스;
+import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.우아한테크코스_생성_요청;
+import static com.allog.dallog.common.fixtures.MemberFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
+import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
@@ -24,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(ExternalCalendarController.class)
 class ExternalCalendarControllerTest extends ControllerTest {
@@ -36,6 +45,9 @@ class ExternalCalendarControllerTest extends ControllerTest {
 
     @MockBean
     private ExternalCalendarService externalCalendarService;
+
+    @MockBean
+    private CategorySubscriptionService categorySubscriptionService;
 
     @DisplayName("외부 캘린더의 일정을 조회하면 상태코드 200을 반환한다.")
     @Test
@@ -52,12 +64,40 @@ class ExternalCalendarControllerTest extends ControllerTest {
                 )
                 .andDo(print())
                 .andDo(document("external-calendars/get",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰"))
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰")
                         )
-                )
+                ))
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("외부 캘린더를 카테고리로 저장하면 상태코드 201을 반환한다.")
+    @Test
+    void 외부_캘린더를_카테고리로_저장하면_상태코드_201을_반환한다() throws Exception {
+        // given
+        given(categorySubscriptionService.save(any(), any(ExternalCategoryCreateRequest.class))).willReturn(
+                공통_일정_응답(후디_응답));
+
+        // when & then
+        mockMvc.perform(post("/api/external-calendars/me")
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(우아한테크코스_생성_요청))
+                )
+                .andDo(print())
+                .andDo(document("external-calendars/save",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("externalId").type(JsonFieldType.STRING).description("외부 캘린더 id"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("캘린더 이름")
+                        )))
+                .andExpect(status().isCreated());
     }
 }

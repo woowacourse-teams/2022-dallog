@@ -12,6 +12,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -72,7 +73,7 @@ class CategoryControllerTest extends ControllerTest {
     void 카테고리를_생성한다() throws Exception {
         // given
         CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
-        given(categorySubscriptionService.save(any(), any())).willReturn(카테고리);
+        given(categorySubscriptionService.save(any(), any(CategoryCreateRequest.class))).willReturn(카테고리);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -96,11 +97,11 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
         // given
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, NORMAL);
+
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
                 .given(categorySubscriptionService)
-                .save(any(), any());
-
-        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, false);
+                .save(any(), any(CategoryCreateRequest.class));
 
         // when & then
         mockMvc.perform(post("/api/categories")

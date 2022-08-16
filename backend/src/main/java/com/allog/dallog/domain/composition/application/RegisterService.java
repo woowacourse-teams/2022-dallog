@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.composition.application;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
+
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
@@ -44,7 +46,7 @@ public class RegisterService {
     }
 
     private CategoryResponse createPersonalCategory(final Long memberId) {
-        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, true);
+        CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, PERSONAL);
         return categoryService.save(memberId, categoryCreateRequest);
     }
 

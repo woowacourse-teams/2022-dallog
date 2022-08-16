@@ -1,11 +1,15 @@
 package com.allog.dallog.domain.category.domain;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
+
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,8 +36,9 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "members_id", nullable = false)
     private Member member;
 
-    @Column(name = "personal", nullable = false)
-    private boolean personal;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "category_type", nullable = false)
+    private CategoryType categoryType;
 
     protected Category() {
     }
@@ -42,14 +47,14 @@ public class Category extends BaseEntity {
         validateNameLength(name);
         this.name = name;
         this.member = member;
-        this.personal = false;
+        this.categoryType = CategoryType.NORMAL;
     }
 
-    public Category(final String name, final Member member, final boolean personal) {
+    public Category(final String name, final Member member, final CategoryType categoryType) {
         validateNameLength(name);
         this.name = name;
         this.member = member;
-        this.personal = personal;
+        this.categoryType = categoryType;
     }
 
     public void changeName(final String name) {
@@ -70,6 +75,10 @@ public class Category extends BaseEntity {
         return Objects.equals(member.getId(), memberId);
     }
 
+    public boolean isPersonal() {
+        return categoryType == PERSONAL;
+    }
+
     public Long getId() {
         return id;
     }
@@ -82,7 +91,7 @@ public class Category extends BaseEntity {
         return member;
     }
 
-    public boolean isPersonal() {
-        return personal;
+    public CategoryType getCategoryType() {
+        return categoryType;
     }
 }
