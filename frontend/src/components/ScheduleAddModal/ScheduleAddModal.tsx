@@ -20,7 +20,7 @@ import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
 import { VALIDATION_MESSAGE } from '@/constants/message';
 
-import { getDate, getDateTime } from '@/utils/date';
+import { getDate, getDateTime, getOneHourLaterISOString } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -75,16 +75,16 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   const dateFieldset = isAllDay
     ? {
         type: 'date',
-        defaultValue: getDate(dateInfo),
+        initialValue: getDate(dateInfo),
       }
     : {
         type: 'datetime-local',
-        defaultValue: getDateTime(dateInfo),
+        initialValue: getDateTime(dateInfo),
       };
 
   const validationSchedule = useValidateSchedule({
-    defaultStartDateTime: dateFieldset.defaultValue,
-    defaultEndDateTime: dateFieldset.defaultValue,
+    initialStartDateTime: dateFieldset.initialValue,
+    initialEndDateTime: dateFieldset.initialValue,
   });
 
   const handleClickAllDayButton = () => {

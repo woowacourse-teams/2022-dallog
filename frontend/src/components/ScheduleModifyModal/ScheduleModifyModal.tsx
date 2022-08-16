@@ -70,10 +70,10 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   };
 
   const validationSchedule = useValidateSchedule({
-    defaultTitle: scheduleInfo.title,
-    defaultStartDateTime: scheduleInfo.startDateTime,
-    defaultEndDateTime: scheduleInfo.endDateTime,
-    defaultMemo: scheduleInfo.memo,
+    initialTitle: scheduleInfo.title,
+    initialStartDateTime: scheduleInfo.startDateTime,
+    initialEndDateTime: scheduleInfo.endDateTime,
+    initialMemo: scheduleInfo.memo,
   });
 
   const handleSubmitScheduleModifyForm = (e: React.FormEvent) => {
