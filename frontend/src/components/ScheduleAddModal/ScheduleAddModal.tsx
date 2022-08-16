@@ -20,7 +20,7 @@ import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
 import { VALIDATION_MESSAGE } from '@/constants/message';
 
-import { getDate, getDateTime } from '@/utils/date';
+import { getDate, getDateTime, getOneHourLaterISOString } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -75,16 +75,16 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   const dateFieldset = isAllDay
     ? {
         type: 'date',
-        defaultValue: getDate(dateInfo),
+        initialValue: getDate(dateInfo),
       }
     : {
         type: 'datetime-local',
-        defaultValue: getDateTime(dateInfo),
+        initialValue: getDateTime(dateInfo),
       };
 
   const validationSchedule = useValidateSchedule({
-    defaultStartDateTime: dateFieldset.defaultValue,
-    defaultEndDateTime: dateFieldset.defaultValue,
+    initialStartDateTime: dateFieldset.initialValue,
+    initialEndDateTime: dateFieldset.initialValue,
   });
 
   const handleClickAllDayButton = () => {
@@ -151,6 +151,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         </select>
         <Fieldset
           placeholder="제목을 입력하세요."
+          value={validationSchedule.title.inputValue}
           onChange={validationSchedule.title.onChangeValue}
           isValid={validateLength(
             validationSchedule.title.inputValue,
@@ -169,18 +170,19 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         <div css={dateTime} key={dateFieldset.type}>
           <Fieldset
             type={dateFieldset.type}
-            defaultValue={dateFieldset.defaultValue}
+            value={validationSchedule.startDateTime.inputValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
           />
           <p css={arrow}>↓</p>
           <Fieldset
             type={dateFieldset.type}
-            defaultValue={dateFieldset.defaultValue}
+            value={validationSchedule.endDateTime.inputValue}
             onChange={validationSchedule.endDateTime.onChangeValue}
           />
         </div>
         <Fieldset
           placeholder="메모를 추가하세요."
+          value={validationSchedule.memo.inputValue}
           onChange={validationSchedule.memo.onChangeValue}
           isValid={validateLength(
             validationSchedule.memo.inputValue,

@@ -1,14 +1,12 @@
 import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useControlledInput from '@/hooks/useControlledInput';
 
 import { CategoryType } from '@/@types/category';
-import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
@@ -17,12 +15,8 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { VALIDATION_MESSAGE } from '@/constants/message';
-import { PALETTE } from '@/constants/style';
-
-import { getRandomNumber } from '@/utils';
 
 import categoryApi from '@/api/category';
-import subscriptionApi from '@/api/subscription';
 
 import {
   cancelButton,
@@ -41,53 +35,32 @@ interface CategoryAddModalProps {
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const { accessToken } = useRecoilValue(userState);
 
-  const [myCategoryId, setMyCategoryId] = useState(0);
   const theme = useTheme();
 
   const { inputValue, onChangeValue } = useControlledInput();
 
-  const subscriptionPostBody = {
-    colorCode: PALETTE[getRandomNumber(0, PALETTE.length)],
-  };
-
   const queryClient = useQueryClient();
-  const { mutate: postCategory } = useMutation<
+  const { mutate } = useMutation<
     AxiosResponse<CategoryType>,
     AxiosError,
     Pick<CategoryType, 'name'>,
     unknown
   >((body) => categoryApi.post(accessToken, body), {
-    onSuccess: (data) => onSuccessPostCategory(data),
-  });
-
-  const { mutate: postSubscription } = useMutation<
-    AxiosResponse<Pick<SubscriptionType, 'colorCode'>>,
-    AxiosError,
-    Pick<SubscriptionType, 'colorCode'>,
-    unknown
-  >(() => subscriptionApi.post(accessToken, myCategoryId, subscriptionPostBody), {
-    onSuccess: () => onSuccessPostSubscription(),
+    onSuccess: () => onSuccessPostCategory(),
   });
 
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    postCategory({ name: inputValue });
+    mutate({ name: inputValue });
   };
 
-  const onSuccessPostCategory = ({ data }: AxiosResponse<CategoryType>) => {
+  const onSuccessPostCategory = () => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
-    setMyCategoryId(data.id);
-    postSubscription(subscriptionPostBody);
-
     closeModal();
-  };
-
-  const onSuccessPostSubscription = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
   };
 
   return (
@@ -97,14 +70,15 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
         <div css={content}>
           <Fieldset
             placeholder="이름"
+            value={inputValue}
             autoFocus={true}
             onChange={onChangeValue}
-            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
+            isValid={validateLength(
+              inputValue,
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}
-            isValid={validateLength(
-              inputValue,
+            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}

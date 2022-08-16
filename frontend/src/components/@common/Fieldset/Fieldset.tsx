@@ -6,30 +6,32 @@ import { errorMessageStyle, fieldsetStyle, inputStyle, labelStyle } from './Fiel
 
 interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string;
+  value?: string;
+  defaultValue?: string;
   cssProp?: FieldsetCssPropType;
   labelText?: string;
-  defaultValue?: string;
   autoFocus?: boolean;
   refProp?: React.MutableRefObject<null | HTMLInputElement>;
   disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  errorMessage?: string;
   isValid?: boolean;
+  errorMessage?: string;
 }
 
 function Fieldset({
   type = 'text',
   id,
   cssProp,
-  labelText,
   placeholder,
+  value,
   defaultValue,
   autoFocus,
   refProp,
   disabled,
   onChange,
-  errorMessage,
+  labelText,
   isValid,
+  errorMessage,
 }: FieldsetProps) {
   const theme = useTheme();
 
@@ -45,6 +47,7 @@ function Fieldset({
         id={id}
         css={[inputStyle(theme, isValid), cssProp?.input]}
         placeholder={placeholder}
+        value={value}
         defaultValue={defaultValue}
         autoFocus={autoFocus}
         ref={refProp}

@@ -112,6 +112,26 @@ const getNextYearMonth = (targetYear: number, targetMonth: number) => {
   return { year: targetYear, month: targetMonth + 1 };
 };
 
+const getOneHourEarlierISOString = (ISOString: string) => {
+  const hour = ISOString.split('T')[1].split(':')[0];
+
+  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) - 1))
+    .replace(/\..*/, '')
+    .slice(0, -3);
+
+  return oneHourEarlierISOString;
+};
+
+const getOneHourLaterISOString = (ISOString: string) => {
+  const hour = ISOString.split('T')[1].split(':')[0];
+
+  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) + 1))
+    .replace(/\..*/, '')
+    .slice(0, -3);
+
+  return oneHourEarlierISOString;
+};
+
 const getThisDate = () => {
   return new Date().getDate();
 };
@@ -137,6 +157,8 @@ export {
   getKoreaISOString,
   getNextDate,
   getNextYearMonth,
+  getOneHourEarlierISOString,
+  getOneHourLaterISOString,
   getThisDate,
   getThisMonth,
   getThisYear,

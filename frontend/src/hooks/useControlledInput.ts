@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 
-function useControlledInput(defaultInputValue?: string) {
-  const [inputValue, setInputValue] = useState<string>(defaultInputValue ?? '');
+function useControlledInput(initialInputValue?: string) {
+  const [inputValue, setInputValue] = useState<string>(initialInputValue ?? '');
 
-  const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target instanceof HTMLInputElement) {
-      setInputValue(e.target.value);
+  const onChangeValue = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (target instanceof HTMLInputElement) {
+      setInputValue(target.value);
     }
   };
 
   useEffect(() => {
-    setInputValue(defaultInputValue ?? '');
-  }, [defaultInputValue]);
+    setInputValue(initialInputValue ?? '');
+  }, [initialInputValue]);
 
-  return { inputValue, onChangeValue };
+  return { inputValue, setInputValue, onChangeValue };
 }
 
 export default useControlledInput;

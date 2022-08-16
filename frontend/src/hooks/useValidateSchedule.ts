@@ -1,26 +1,65 @@
 import { validateLength, validateNotEmpty, validateStartEndDateTime } from '@/validation';
+import { useEffect } from 'react';
 
 import { VALIDATION_SIZE } from '@/constants';
+
+import { getOneHourEarlierISOString, getOneHourLaterISOString } from '@/utils/date';
 
 import useControlledInput from './useControlledInput';
 
 interface useValidateScheduleParametersType {
-  defaultTitle?: string;
-  defaultStartDateTime?: string;
-  defaultEndDateTime?: string;
-  defaultMemo?: string;
+  initialTitle?: string;
+  initialStartDateTime?: string;
+  initialEndDateTime?: string;
+  initialMemo?: string;
 }
 
 function useValidateSchedule({
-  defaultTitle,
-  defaultStartDateTime,
-  defaultEndDateTime,
-  defaultMemo,
+  initialTitle,
+  initialStartDateTime,
+  initialEndDateTime,
+  initialMemo,
 }: useValidateScheduleParametersType) {
-  const title = useControlledInput(defaultTitle);
-  const startDateTime = useControlledInput(defaultStartDateTime);
-  const endDateTime = useControlledInput(defaultEndDateTime);
-  const memo = useControlledInput(defaultMemo);
+  const title = useControlledInput(initialTitle);
+  const startDateTime = useControlledInput(initialStartDateTime);
+  const endDateTime = useControlledInput(initialEndDateTime);
+  const memo = useControlledInput(initialMemo);
+
+  useEffect(() => {
+    const resetEndDateTimeValue = () => {
+      if (startDateTime.inputValue <= endDateTime.inputValue) {
+        return;
+      }
+
+      if (!startDateTime.inputValue.includes('T')) {
+        endDateTime.setInputValue(startDateTime.inputValue);
+
+        return;
+      }
+
+      endDateTime.setInputValue(getOneHourLaterISOString(startDateTime.inputValue));
+    };
+
+    resetEndDateTimeValue();
+  }, [startDateTime.inputValue]);
+
+  useEffect(() => {
+    const resetStartDateTimeValue = () => {
+      if (endDateTime.inputValue >= startDateTime.inputValue) {
+        return;
+      }
+
+      if (!endDateTime.inputValue.includes('T')) {
+        startDateTime.setInputValue(endDateTime.inputValue);
+
+        return;
+      }
+
+      startDateTime.setInputValue(getOneHourEarlierISOString(endDateTime.inputValue));
+    };
+
+    resetStartDateTimeValue();
+  }, [endDateTime.inputValue]);
 
   const isValidSchedule =
     validateLength(
