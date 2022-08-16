@@ -9,6 +9,7 @@ import SnackBar from '@/components/SnackBar/SnackBar';
 import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import MainPage from '@/pages/MainPage/MainPage';
+import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
 
 import { PATH } from '@/constants';
 
@@ -36,6 +37,7 @@ function App() {
             <Route element={<ProtectRoute />}>
               <Route path={PATH.CATEGORY} element={<CategoryPage />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <SnackBar />
         </Router>
