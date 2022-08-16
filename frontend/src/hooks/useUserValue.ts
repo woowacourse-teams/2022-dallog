@@ -23,6 +23,7 @@ function useUserValue() {
       onError: () => onErrorValidate(),
       onSuccess: () => onSuccessValidate(),
       retry: false,
+      useErrorBoundary: false,
     }
   );
 
