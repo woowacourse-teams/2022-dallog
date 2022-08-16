@@ -13,14 +13,14 @@ VALUES ('admin@email.com',
         '매트', 'GOOGLE', NOW(), NOW());
 
 INSERT INTO categories (name, members_id, created_at, updated_at, category_type)
-VALUES ('공통 일정', 1, NOW(), NOW(), NOMARL),
-       ('BE 일정', 1, NOW(), NOW(), NOMARL),
-       ('FE 일정', 1, NOW(), NOW(), NOMARL),
-       ('안드로이드 일정', 1, NOW(), NOW(), NOMARL),
-       ('DevOps 일정', 1, NOW(), NOW(), NOMARL),
-       ('내 일정', 2, NOW(), NOW(), PERSONAL),
-       ('내 일정', 3, NOW(), NOW(), PERSONAL),
-       ('운동', 2, NOW(), NOW(), PERSONAL);
+VALUES ('공통 일정', 1, NOW(), NOW(), 'NOMARL'),
+       ('BE 일정', 1, NOW(), NOW(), 'NOMARL'),
+       ('FE 일정', 1, NOW(), NOW(), 'NOMARL'),
+       ('안드로이드 일정', 1, NOW(), NOW(), 'NOMARL'),
+       ('DevOps 일정', 1, NOW(), NOW(), 'NOMARL'),
+       ('내 일정', 2, NOW(), NOW(), 'PERSONAL'),
+       ('내 일정', 3, NOW(), NOW(), 'PERSONAL'),
+       ('운동', 2, NOW(), NOW(), 'PERSONAL');
 
 INSERT INTO subscriptions (members_id, categories_id, color, checked, created_at, updated_at)
 VALUES (2, 1, 'COLOR_1', true, NOW(), NOW()),
