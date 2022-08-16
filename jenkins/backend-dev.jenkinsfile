@@ -11,14 +11,18 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('SonarServer') {
-                    sh './gradlew sonarqube'
+                dir('backend') {
+                    withSonarQubeEnv('SonarServer') {
+                        sh './gradlew test sonarqube'
+                    }
                 }
             }
         }
-        stage('Quality Gate') {
+        stage("Quality Gate") {
             steps {
-                waitForQualityGate abortPipeline: true
+                timeout(time: 1, unit: 'HOURS') {
+                   waitForQualityGate abortPipeline: true
+                }
             }
         }
         stage('Build') {
@@ -41,18 +45,18 @@ pipeline {
     }
     post {
         success {
-            discordSend title: "백엔드 개발 서버 빌드에 성공하였습니다 ✨", 
+            discordSend title: "백엔드 개발 서버 빌드에 성공하였습니다 ✨",
                 description: "빌드 번호 #${env.BUILD_NUMBER}",
                 link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
-                result: currentBuild.currentResult, 
+                result: currentBuild.currentResult,
                 webhookURL: env.DISCORD_BACKEND_DEV_WEBHOOK,
                 footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
         }
         failure {
-            discordSend title: "백엔드 개발 서버 빌드에 실패하였습니다 ❌", 
+            discordSend title: "백엔드 개발 서버 빌드에 실패하였습니다 ❌",
                 description: "빌드 번호 #${env.BUILD_NUMBER}",
                 link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
-                result: currentBuild.currentResult, 
+                result: currentBuild.currentResult,
                 webhookURL: env.DISCORD_BACKEND_DEV_WEBHOOK,
                 footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
         }
