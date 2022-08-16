@@ -7,7 +7,7 @@ import useSnackBar from '@/hooks/useSnackBar';
 import { ERROR_MESSAGE } from '@/constants/message';
 
 interface Props {
-  children?: JSX.Element;
+  children: JSX.Element;
   openSnackBar: (text: string) => void;
 }
 
