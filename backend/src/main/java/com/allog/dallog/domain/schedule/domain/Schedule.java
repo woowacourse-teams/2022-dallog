@@ -94,6 +94,10 @@ public class Schedule extends BaseEntity {
         return title;
     }
 
+    public Period getPeriod() {
+        return period;
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
