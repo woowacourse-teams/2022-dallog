@@ -82,7 +82,7 @@ public class CategoryService {
         validatePermission(memberId, categoryId);
 
         scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
-        subscriptionRepository.deleteByCategoryId(categoryId);
+        subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
         categoryRepository.deleteById(categoryId);
     }
 
@@ -106,7 +106,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
 
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
-        subscriptionRepository.deleteByMemberId(memberId);
+        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
         categoryRepository.deleteByMemberId(memberId);
     }
 
