@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 
 public class Period {
 
@@ -42,22 +41,5 @@ public class Period {
 
     public LocalDateTime getEndDateTime() {
         return endDateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Period period = (Period) o;
-        return Objects.equals(startDateTime, period.startDateTime) && Objects.equals(endDateTime, period.endDateTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startDateTime, endDateTime);
     }
 }
