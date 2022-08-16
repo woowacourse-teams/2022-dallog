@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
@@ -36,6 +37,9 @@ class ExternalCalendarControllerTest extends ControllerTest {
 
     @MockBean
     private ExternalCalendarService externalCalendarService;
+
+    @MockBean
+    private CategorySubscriptionService categorySubscriptionService;
 
     @DisplayName("외부 캘린더의 일정을 조회하면 상태코드 200을 반환한다.")
     @Test
