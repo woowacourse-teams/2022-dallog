@@ -1,9 +1,3 @@
-const API = {
-  CATEGORY_GET_SIZE: 4,
-};
-
-const API_URL = process.env.API_URL;
-
 const ATOM_KEY = {
   SNACK_BAR: 'snackBarState',
   SIDE_BAR: 'sideBarState',
@@ -20,6 +14,7 @@ const CACHE_KEY = {
   SCHEDULE: 'schedule',
   SCHEDULES: 'schedules',
   SUBSCRIPTIONS: 'subscriptions',
+  VALIDATE: 'validate',
 };
 
 const CALENDAR = {
@@ -47,14 +42,4 @@ const VALIDATION_SIZE = {
   CATEGORY_NAME_MAX_LENGTH: 20,
 };
 
-export {
-  API,
-  API_URL,
-  ATOM_KEY,
-  CACHE_KEY,
-  CALENDAR,
-  SELECTOR_KEY,
-  STORAGE_KEY,
-  PATH,
-  VALIDATION_SIZE,
-};
+export { ATOM_KEY, CACHE_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH, VALIDATION_SIZE };

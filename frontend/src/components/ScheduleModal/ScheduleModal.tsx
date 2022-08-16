@@ -49,6 +49,7 @@ function ScheduleModal({
   closeModal,
 }: ScheduleModalProps) {
   const { accessToken } = useRecoilValue(userState);
+
   const theme = useTheme();
 
   const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(

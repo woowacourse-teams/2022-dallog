@@ -4,6 +4,11 @@ const loginApi = {
   endPoint: {
     googleEntry: '/api/auth/google/oauth-uri',
     googleToken: '/api/auth/google/token',
+    validate: '/api/auth/validate/token',
+  },
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 
   getUrl: async () => {
@@ -12,13 +17,20 @@ const loginApi = {
     return data.oAuthUri;
   },
 
-  auth: async () => {
-    const code = new URLSearchParams(location.search).get('code');
+  auth: async (code: string | null) => {
     const { data } = await dallogApi.post(loginApi.endPoint.googleToken, {
       code,
     });
 
     return data.accessToken;
+  },
+
+  validate: async (accessToken: string) => {
+    const response = await dallogApi.get(loginApi.endPoint.validate, {
+      headers: { ...loginApi.headers, Authorization: `Bearer ${accessToken}` },
+    });
+
+    return response;
   },
 };
 

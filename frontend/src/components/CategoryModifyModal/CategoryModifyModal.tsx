@@ -34,9 +34,9 @@ interface CategoryModifyModalProps {
 }
 
 function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps) {
-  const theme = useTheme();
-
   const { accessToken } = useRecoilValue(userState);
+
+  const theme = useTheme();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation<

@@ -17,7 +17,7 @@ const subscriptionApi = {
     Accept: 'application/json',
   },
 
-  get: async (accessToken: string | null) => {
+  get: async (accessToken: string) => {
     const response = await dallogApi.get<SubscriptionType[]>(subscriptionApi.endpoint.get, {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
       transformResponse: (res) => {
@@ -29,7 +29,7 @@ const subscriptionApi = {
   },
 
   post: async (
-    accessToken: string | null,
+    accessToken: string,
     categoryId: number,
     body: Pick<SubscriptionType, 'colorCode'>
   ) => {
@@ -41,7 +41,7 @@ const subscriptionApi = {
   },
 
   patch: async (
-    accessToken: string | null,
+    accessToken: string,
     subscriptionId: number,
     body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>
   ) => {
@@ -52,10 +52,7 @@ const subscriptionApi = {
     return response;
   },
 
-  delete: async (
-    accessToken: string | null,
-    subscriptionId: number
-  ): Promise<AxiosResponse<null>> => {
+  delete: async (accessToken: string, subscriptionId: number): Promise<AxiosResponse<null>> => {
     const response = await dallogApi.delete<null>(subscriptionApi.endpoint.delete(subscriptionId), {
       headers: { ...subscriptionApi.headers, Authorization: `Bearer ${accessToken}` },
     });

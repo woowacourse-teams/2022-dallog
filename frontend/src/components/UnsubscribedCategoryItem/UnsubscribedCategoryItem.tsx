@@ -25,9 +25,9 @@ interface UnsubscribedCategoryItemProps {
 }
 
 function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
-  const theme = useTheme();
-
   const { accessToken } = useRecoilValue(userState);
+
+  const theme = useTheme();
 
   const body = {
     colorCode: PALETTE[getRandomNumber(0, PALETTE.length)],

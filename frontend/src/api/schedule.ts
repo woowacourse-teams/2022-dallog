@@ -16,7 +16,7 @@ const scheduleApi = {
     Accept: 'application/json',
   },
 
-  get: async (accessToken: string | null, startDate: string, endDate: string) => {
+  get: async (accessToken: string, startDate: string, endDate: string) => {
     const response = await dallogApi.get<ScheduleResponseType>(
       `${scheduleApi.endpoint.get}?startDateTime=${startDate}T${DATE_TIME.START}&endDateTime=${endDate}T${DATE_TIME.END}`,
       {
@@ -28,7 +28,7 @@ const scheduleApi = {
   },
 
   post: async (
-    accessToken: string | null,
+    accessToken: string,
     categoryId: number,
     body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
   ) => {
@@ -40,7 +40,7 @@ const scheduleApi = {
   },
 
   patch: async (
-    accessToken: string | null,
+    accessToken: string,
     scheduleId: number,
     body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
   ) => {
@@ -51,7 +51,7 @@ const scheduleApi = {
     return response;
   },
 
-  delete: async (accessToken: string | null, scheduleId: number) => {
+  delete: async (accessToken: string, scheduleId: number) => {
     const response = await dallogApi.delete(scheduleApi.endpoint.delete(scheduleId), {
       headers: { Authorization: `Bearer ${accessToken}` },
     });

@@ -12,7 +12,7 @@ const profileApi = {
     Accept: 'application/json',
   },
 
-  get: async (accessToken: string | null) => {
+  get: async (accessToken: string) => {
     const response = await dallogApi.get<ProfileType>(profileApi.endpoint.get, {
       headers: { ...profileApi.headers, Authorization: `Bearer ${accessToken}` },
     });
@@ -20,7 +20,7 @@ const profileApi = {
     return response;
   },
 
-  patch: async (accessToken: string | null, body: Pick<ProfileType, 'displayName'>) => {
+  patch: async (accessToken: string, body: Pick<ProfileType, 'displayName'>) => {
     const response = await dallogApi.patch(profileApi.endpoint.patch, body, {
       headers: { ...profileApi.headers, Authorization: `Bearer ${accessToken}` },
     });

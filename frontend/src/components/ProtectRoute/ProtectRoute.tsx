@@ -1,12 +1,15 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
-import { userState } from '@/recoil/atoms';
+import useUserValue from '@/hooks/useUserValue';
 
 import { PATH } from '@/constants';
 
 function ProtectRoute() {
-  const [user] = useRecoilState(userState);
+  const { isAuthenticating, user } = useUserValue();
+
+  if (isAuthenticating) {
+    return <></>;
+  }
 
   if (!user.accessToken) {
     return <Navigate to={PATH.MAIN} replace />;

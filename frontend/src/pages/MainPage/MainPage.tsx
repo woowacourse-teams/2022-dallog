@@ -1,19 +1,14 @@
-import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-
-import { userState } from '@/recoil/atoms';
+import useUserValue from '@/hooks/useUserValue';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import StartPage from '@/pages/StartPage/StartPage';
 
-import { getAccessToken } from '@/utils';
-
 function MainPage() {
-  const [user, setUser] = useRecoilState(userState);
+  const { isAuthenticating, user } = useUserValue();
 
-  useEffect(() => {
-    setUser({ ...user, accessToken: getAccessToken() });
-  }, []);
+  if (isAuthenticating) {
+    return <></>;
+  }
 
   if (!user.accessToken) {
     return <StartPage />;

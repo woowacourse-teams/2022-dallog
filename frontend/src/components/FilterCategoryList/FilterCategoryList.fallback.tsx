@@ -9,6 +9,7 @@ import { headerStyle, listStyle, skeletonStyle } from './FilterCategoryList.styl
 
 function FilterCategoryFallback() {
   const isSideBarOpen = useRecoilValue(sideBarState);
+
   const theme = useTheme();
 
   return (

@@ -11,10 +11,10 @@ import { sideBar } from './SideBar.styles';
 const FilterCategoryList = lazy(() => import('@/components/FilterCategoryList/FilterCategoryList'));
 
 function SideBar() {
-  const theme = useTheme();
-
   const { accessToken } = useRecoilValue(userState);
   const isSideBarOpen = useRecoilValue(sideBarState);
+
+  const theme = useTheme();
 
   if (!accessToken) {
     return <></>;

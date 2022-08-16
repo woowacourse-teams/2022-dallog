@@ -23,11 +23,11 @@ interface SubscribedCategoryItemProps {
 }
 
 function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategoryItemProps) {
+  const { accessToken } = useRecoilValue(userState);
   const theme = useTheme();
 
-  const { accessToken } = useRecoilValue(userState);
-
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation(() => subscriptionApi.delete(accessToken, subscriptionId), {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);

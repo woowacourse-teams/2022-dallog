@@ -5,7 +5,7 @@ import { ProfileType } from '@/@types/profile';
 import { ScheduleType } from '@/@types/schedule';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { API, API_URL } from '@/constants';
+import { API, API_URL } from '@/constants/api';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';

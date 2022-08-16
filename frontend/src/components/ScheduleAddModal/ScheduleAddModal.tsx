@@ -44,6 +44,7 @@ interface ScheduleAddModalProps {
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   const { accessToken } = useRecoilValue(userState);
+
   const theme = useTheme();
 
   const [categoryId, setCategoryId] = useState(0);

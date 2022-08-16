@@ -14,7 +14,8 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import { CACHE_KEY, PATH } from '@/constants';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
-import { clearAccessToken, createPostBody } from '@/utils';
+import { createPostBody } from '@/utils';
+import { removeAccessToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 
@@ -83,7 +84,7 @@ function Profile() {
 
   const handleClickLogoutButton = () => {
     if (window.confirm(CONFIRM_MESSAGE.LOGOUT)) {
-      clearAccessToken();
+      removeAccessToken();
       navigate(PATH.MAIN);
       location.reload();
     }
