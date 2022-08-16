@@ -36,7 +36,7 @@ pipeline {
                 description: "빌드 번호 #${env.BUILD_NUMBER}",
                 link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
                 result: currentBuild.currentResult, 
-                webhookURL: env.DISCORD_FRONTEND_PROD_WEBHOOK,
+                webhookURL: env.DISCORD_FRONTEND_DEV_WEBHOOK,
                 footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
         }
         failure {
@@ -44,7 +44,7 @@ pipeline {
                 description: "빌드 번호 #${env.BUILD_NUMBER}",
                 link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
                 result: currentBuild.currentResult, 
-                webhookURL: env.DISCORD_FRONTEND_PROD_WEBHOOK,
+                webhookURL: env.DISCORD_FRONTEND_DEV_WEBHOOK,
                 footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
         }
     }
