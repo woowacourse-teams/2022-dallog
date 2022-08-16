@@ -1,5 +1,9 @@
 package com.allog.dallog.presentation;
 
+import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.달록_여행;
+import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.레벨3_방학;
+import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.점심_식사;
+import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.포수타;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
@@ -31,6 +35,8 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.composition.application.CalendarService;
+import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
+import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -61,6 +67,12 @@ class ScheduleControllerTest extends ControllerTest {
 
     @MockBean
     private CalendarService calendarService;
+
+    @MockBean
+    private IntegrationScheduleDao integrationScheduleDao;
+
+    @MockBean
+    private ExternalCalendarClient externalCalendarClient;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
@@ -337,6 +349,35 @@ class ScheduleControllerTest extends ControllerTest {
 
         given(calendarService.findSchedulesByMemberId(any(), any()))
                 .willReturn(memberScheduleResponses);
+
+        // when & then
+        mockMvc.perform(
+                        get("/api/members/me/schedules?startDateTime={startDate}&endDateTime={endDate}", startDate, endDate)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
+                .andDo(print())
+                .andDo(document("schedules/findAllByMember",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("startDateTime").description("일정 조회 시작 범위 (yyyy-mm-dd'T'HH:mm)"),
+                                parameterWithName("endDateTime").description("일정 조회 마지막 범위 (yyyy-mm-dd'T'HH:mm)")
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("회원의 일정 및 외부 일정 목록을 정상적으로 조회하면 200을 반환한다.")
+    @Test
+    void 회원의_일정_및_외부_일정_목록을_정상적으로_조회하면_200을_반환한다() throws Exception {
+        // given
+        String startDate = "2022-07-31T00:00";
+        String endDate = "2022-09-03T00:00";
+
+        given(integrationScheduleDao.findByCategoryIdInAndBetween(any(), any(), any()))
+                .willReturn(List.of(점심_식사, 달록_여행));
+
+        given(externalCalendarClient.getExternalCalendarSchedules(any(), any(), any(), any(), any()))
+                .willReturn(List.of(포수타, 레벨3_방학));
 
         // when & then
         mockMvc.perform(
