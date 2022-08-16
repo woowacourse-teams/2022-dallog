@@ -18,7 +18,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -52,7 +52,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
-        ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 후디_개인_학습_일정_생성_요청);
+        ExtractableResponse<Response> response = 새로운_카테고리를_등록한다(accessToken, 내_일정_생성_요청);
 
         // then
         상태코드_201이_반환된다(response);
@@ -114,7 +114,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
         새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
         /* 개인 카테고리 */
-        새로운_카테고리를_등록한다(accessToken, 후디_개인_학습_일정_생성_요청);
+        새로운_카테고리를_등록한다(accessToken, 내_일정_생성_요청);
 
         // when
         ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("", 0, 10);

@@ -5,7 +5,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
@@ -63,7 +63,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 자신이_생성하지_않은_개인_카테고리를_구독시_예외가_발생한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+        CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디.getId(), 내_일정_생성_요청);
 
         MemberResponse 매트 = memberService.save(매트());
 
