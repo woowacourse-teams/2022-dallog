@@ -2,17 +2,14 @@ package com.allog.dallog.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.composition.application.CalendarService;
-import com.allog.dallog.domain.composition.application.SchedulingService;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
-import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,13 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final SchedulingService schedulingService;
     private final CalendarService calendarService;
 
-    public ScheduleController(final ScheduleService scheduleService, final SchedulingService schedulingService,
-                              final CalendarService calendarService) {
+    public ScheduleController(final ScheduleService scheduleService, final CalendarService calendarService) {
         this.scheduleService = scheduleService;
-        this.schedulingService = schedulingService;
         this.calendarService = calendarService;
     }
 
@@ -74,13 +68,5 @@ public class ScheduleController {
                                        @PathVariable final Long scheduleId) {
         scheduleService.deleteById(scheduleId, loginMember.getId());
         return ResponseEntity.noContent().build();
-    }
-
-    // TODO: URI 재정의
-    @GetMapping("/categories/{categoryId}/scheduling")
-    public ResponseEntity<List<PeriodResponse>> scheduleByCategory(@PathVariable final Long categoryId,
-                                                                   @ModelAttribute DateRangeRequest dateRange) {
-        List<PeriodResponse> periods = schedulingService.getAvailablePeriods(categoryId, dateRange);
-        return ResponseEntity.ok(periods);
     }
 }

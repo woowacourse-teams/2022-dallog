@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.composition.application;
 
-import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -19,17 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Service
-public class SchedulingService {
+public class SchedulerService {
     // TODO: 이름 수정
 
-    private final CategoryService categoryService;
     private final ScheduleService scheduleService;
     private final SubscriptionService subscriptionService;
     private final MemberService memberService;
 
-    public SchedulingService(final CategoryService categoryService, final ScheduleService scheduleService,
-                             final SubscriptionService subscriptionService, final MemberService memberService) {
-        this.categoryService = categoryService;
+    public SchedulerService(final ScheduleService scheduleService, final SubscriptionService subscriptionService,
+                            final MemberService memberService) {
         this.scheduleService = scheduleService;
         this.subscriptionService = subscriptionService;
         this.memberService = memberService;

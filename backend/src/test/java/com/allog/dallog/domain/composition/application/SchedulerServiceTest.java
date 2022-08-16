@@ -47,10 +47,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class SchedulingServiceTest extends ServiceTest {
+class SchedulerServiceTest extends ServiceTest {
 
     @Autowired
-    private SchedulingService schedulingService;
+    private SchedulerService schedulerService;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -110,7 +110,7 @@ class SchedulingServiceTest extends ServiceTest {
         // when
         LocalDate startDate = LocalDate.of(2022, 7, 1);
         LocalDate endDate = LocalDate.of(2022, 8, 31);
-        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(),
+        List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
@@ -175,7 +175,7 @@ class SchedulingServiceTest extends ServiceTest {
         // when
         LocalDate startDate = LocalDate.of(2022, 7, 1);
         LocalDate endDate = LocalDate.of(2022, 8, 31);
-        List<PeriodResponse> actual = schedulingService.getAvailablePeriods(공통_일정.getId(),
+        List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
