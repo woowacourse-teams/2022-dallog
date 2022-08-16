@@ -22,6 +22,10 @@ const CACHE_KEY = {
   SUBSCRIPTIONS: 'subscriptions',
 };
 
+const CALENDAR = {
+  MAX_VIEW: 10,
+};
+
 const SELECTOR_KEY = {
   SIDE_BAR: 'sideBarSelector',
 };
@@ -43,4 +47,14 @@ const VALIDATION_SIZE = {
   CATEGORY_NAME_MAX_LENGTH: 20,
 };
 
-export { API, API_URL, ATOM_KEY, CACHE_KEY, SELECTOR_KEY, STORAGE_KEY, PATH, VALIDATION_SIZE };
+export {
+  API,
+  API_URL,
+  ATOM_KEY,
+  CACHE_KEY,
+  CALENDAR,
+  SELECTOR_KEY,
+  STORAGE_KEY,
+  PATH,
+  VALIDATION_SIZE,
+};

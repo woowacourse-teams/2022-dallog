@@ -2,19 +2,19 @@ import { css, Theme } from '@emotion/react';
 
 const scheduleAddButton = ({ colors }: Theme) => css`
   position: fixed;
-  right: 13rem;
-  bottom: 13rem;
+  right: 7rem;
+  bottom: 7rem;
 
-  width: 11rem;
-  height: 11rem;
+  width: 13rem;
+  height: 13rem;
   border-radius: 50%;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
 
-  background: ${colors.YELLOW_500};
+  background: ${colors.WHITE};
 
   font-size: 7rem;
   line-height: 7rem;
-  font-weight: 700;
-  color: ${colors.WHITE};
+  color: ${colors.YELLOW_500};
 `;
 
 export { scheduleAddButton };

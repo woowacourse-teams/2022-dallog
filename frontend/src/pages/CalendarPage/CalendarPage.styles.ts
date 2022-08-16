@@ -141,11 +141,16 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
     : `${colors.GRAY_700}80`};
 `;
 
-const itemWithBackgroundStyle = (priority: number, color: string, isHovering: boolean) => css`
+const itemWithBackgroundStyle = (
+  priority: number,
+  color: string,
+  isHovering: boolean,
+  maxView: number
+) => css`
   position: absolute;
   top: ${priority * 5.5 + 1}rem;
 
-  display: ${priority >= 4 ? 'none' : 'block'};
+  display: ${priority >= maxView ? 'none' : 'block'};
   width: 100%;
   height: 5rem;
   padding: 1rem;
@@ -165,9 +170,10 @@ const itemWithoutBackgroundStyle = (
   { colors }: Theme,
   priority: number,
   color: string,
-  isHovering: boolean
+  isHovering: boolean,
+  maxView: number
 ) => css`
-  ${itemWithBackgroundStyle(priority, color, isHovering)};
+  ${itemWithBackgroundStyle(priority, color, isHovering, maxView)};
 
   overflow: hidden;
 
@@ -179,6 +185,27 @@ const itemWithoutBackgroundStyle = (
 
   cursor: pointer;
   filter: none;
+`;
+
+const moreStyle = ({ colors }: Theme) => css`
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+  height: 5rem;
+  padding: 1rem;
+
+  font-size: 2.75rem;
+  line-height: 2.75rem;
+  white-space: nowrap;
+  font-weight: 200;
+  color: ${colors.GRAY_500};
+
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.BLACK};
+  }
 `;
 
 const spinnerStyle = ({ flex }: Theme) => css`
@@ -208,6 +235,7 @@ export {
   itemWithoutBackgroundStyle,
   itemWithBackgroundStyle,
   monthPicker,
+  moreStyle,
   navBarGrid,
   navButton,
   navButtonTitle,

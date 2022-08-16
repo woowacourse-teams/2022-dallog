@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
@@ -22,7 +22,7 @@ import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
 import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY, CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
@@ -48,6 +48,7 @@ import {
   itemWithBackgroundStyle,
   itemWithoutBackgroundStyle,
   monthPicker,
+  moreStyle,
   navBarGrid,
   navButton,
   navButtonTitle,
@@ -57,6 +58,8 @@ import {
 } from './CalendarPage.styles';
 
 function CalendarPage() {
+  const dateRef = useRef<HTMLDivElement>(null);
+
   const theme = useTheme();
 
   const { accessToken } = useRecoilValue(userState);
@@ -171,6 +174,7 @@ function CalendarPage() {
                   key={key}
                   css={dateBorder(theme, info.day)}
                   onClick={(e) => handleClickDate(e, info)}
+                  ref={dateRef}
                 >
                   <span
                     css={dateText(
@@ -206,6 +210,11 @@ function CalendarPage() {
   const onMouseLeave = () => {
     setHoveringId(0);
   };
+
+  const maxView =
+    dateRef.current !== null
+      ? Math.floor((dateRef.current.clientHeight - 20) / 22)
+      : CALENDAR.MAX_VIEW;
 
   return (
     <PageLayout>
@@ -244,6 +253,7 @@ function CalendarPage() {
                 key={key}
                 css={dateBorder(theme, info.day)}
                 onClick={(e) => handleClickDate(e, info)}
+                ref={dateRef}
               >
                 <span
                   css={dateText(
@@ -262,6 +272,10 @@ function CalendarPage() {
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
                   const nowDay = getDayFromFormattedDate(nowDate);
 
+                  if (startDate === nowDate && el.priority >= maxView) {
+                    return <span css={moreStyle}>일정 더보기</span>;
+                  }
+
                   return (
                     startDate <= nowDate &&
                     nowDate <= endDate && (
@@ -270,7 +284,8 @@ function CalendarPage() {
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.colorCode,
-                          hoveringId === el.schedule.id
+                          hoveringId === el.schedule.id,
+                          maxView
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
                         onClick={(e) => handleClickSchedule(e, el.schedule)}
@@ -286,6 +301,10 @@ function CalendarPage() {
                   const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
+                  if (startDate === nowDate && el.priority >= maxView) {
+                    return <span css={moreStyle}>일정 더보기</span>;
+                  }
+
                   return (
                     startDate === nowDate && (
                       <div
@@ -293,7 +312,8 @@ function CalendarPage() {
                         css={itemWithBackgroundStyle(
                           el.priority,
                           el.schedule.colorCode,
-                          hoveringId === el.schedule.id
+                          hoveringId === el.schedule.id,
+                          maxView
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
                         onClick={(e) => handleClickSchedule(e, el.schedule)}
@@ -309,6 +329,10 @@ function CalendarPage() {
                   const startDate = getISODateString(el.schedule.startDateTime);
                   const nowDate = getFormattedDate(info.year, info.month, info.date);
 
+                  if (startDate === nowDate && el.priority >= maxView) {
+                    return <span css={moreStyle}>일정 더보기</span>;
+                  }
+
                   return (
                     startDate === nowDate && (
                       <div
@@ -317,7 +341,8 @@ function CalendarPage() {
                           theme,
                           el.priority,
                           el.schedule.colorCode,
-                          hoveringId === el.schedule.id
+                          hoveringId === el.schedule.id,
+                          maxView
                         )}
                         onMouseEnter={() => onMouseEnter(el.schedule.id)}
                         onClick={(e) => handleClickSchedule(e, el.schedule)}
