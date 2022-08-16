@@ -9,3 +9,21 @@ include::{snippets}/external-calendars/get/http-request.adoc[]
 ==== Response
 
 include::{snippets}/external-calendars/get/http-response.adoc[]
+
+=== 자신의 외부 캘린더 저장
+
+==== Request
+
+include::{snippets}/external-calendars/save/http-request.adoc[]
+
+==== Request Headers
+
+include::{snippets}/external-calendars/save/request-headers.adoc[]
+
+==== Request Body
+
+include::{snippets}/external-calendars/save/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/external-calendars/save/http-response.adoc[]
