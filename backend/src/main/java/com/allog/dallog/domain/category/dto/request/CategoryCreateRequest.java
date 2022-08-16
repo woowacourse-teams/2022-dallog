@@ -8,21 +8,21 @@ public class CategoryCreateRequest {
     @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
-    private CategoryType categoryType;
+    private String categoryType;
 
     private CategoryCreateRequest() {
     }
 
     public CategoryCreateRequest(final String name, final CategoryType categoryType) {
         this.name = name;
-        this.categoryType = categoryType;
+        this.categoryType = categoryType.name();
     }
 
     public String getName() {
         return name;
     }
 
-    public CategoryType getCategoryType() {
+    public String getCategoryType() {
         return categoryType;
     }
 }

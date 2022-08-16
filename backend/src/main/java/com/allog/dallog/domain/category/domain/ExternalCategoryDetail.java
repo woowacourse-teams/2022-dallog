@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.category.domain;
 
-import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Table(name = "external_categories")
+@Table(name = "external_category_details")
 @Entity
-public class ExternalCategory extends BaseEntity {
+public class ExternalCategoryDetail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +27,10 @@ public class ExternalCategory extends BaseEntity {
     @Column(name = "external_id", nullable = false)
     private String externalId;
 
-    protected ExternalCategory() {
-
+    protected ExternalCategoryDetail() {
     }
 
-    public ExternalCategory(final Category category, final String externalId) {
+    public ExternalCategoryDetail(final Category category, final String externalId) {
         this.category = category;
         this.externalId = externalId;
     }
