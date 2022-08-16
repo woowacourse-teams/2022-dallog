@@ -23,7 +23,6 @@ function AuthPage() {
   const { mutate } = useMutation<string, AxiosError>(CACHE_KEY.AUTH, () => loginApi.auth(code), {
     onError: () => onErrorAuth(),
     onSuccess: (data) => onSuccessAuth(data),
-    useErrorBoundary: true,
   });
 
   const onErrorAuth = () => {

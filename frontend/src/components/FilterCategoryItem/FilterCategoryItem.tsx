@@ -47,7 +47,6 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
         queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
         queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       },
-      useErrorBoundary: true,
     }
   );
 

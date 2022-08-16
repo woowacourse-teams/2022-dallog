@@ -46,7 +46,6 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     unknown
   >((body) => categoryApi.patch(accessToken, category.id, body), {
     onSuccess: () => onSuccessPatchCategory(),
-    useErrorBoundary: true,
   });
 
   const { inputValue, onChangeValue } = useControlledInput(category.name);

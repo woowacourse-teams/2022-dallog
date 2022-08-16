@@ -19,8 +19,7 @@ function MyCategoryList() {
 
   const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken),
-    { useErrorBoundary: true }
+    () => categoryApi.getMy(accessToken)
   );
 
   return (
