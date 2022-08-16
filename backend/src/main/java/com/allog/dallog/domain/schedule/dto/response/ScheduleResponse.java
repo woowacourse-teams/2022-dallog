@@ -13,7 +13,7 @@ public class ScheduleResponse {
     private final String memo;
 
     public ScheduleResponse(final Schedule schedule) {
-        this(schedule.getId(), schedule.getCategoryId(), schedule.getTitle(), schedule.getStartDateTime(),
+        this(schedule.getId(), schedule.getCategory().getId(), schedule.getTitle(), schedule.getStartDateTime(),
                 schedule.getEndDateTime(), schedule.getMemo());
     }
 

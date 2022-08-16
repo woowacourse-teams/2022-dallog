@@ -16,4 +16,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             + "AND s.period.endDateTime >= :startDate")
     List<Schedule> findByCategoryIdAndBetween(final Category category, final LocalDateTime startDate,
                                               final LocalDateTime endDate);
+
+    void deleteByCategoryIdIn(final List<Long> categoryIds);
 }

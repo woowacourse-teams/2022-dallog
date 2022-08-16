@@ -50,7 +50,6 @@ public class RegisterService {
 
     @Transactional
     public void deleteByMemberId(final Long memberId) {
-        subscriptionService.deleteByMemberId(memberId);
         categoryService.deleteByMemberId(memberId);
         memberService.deleteById(memberId);
     }

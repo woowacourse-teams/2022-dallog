@@ -11,8 +11,10 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,15 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository,
-                           final SubscriptionRepository subscriptionRepository) {
+                           final SubscriptionRepository subscriptionRepository,
+                           final ScheduleRepository scheduleRepository) {
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Transactional
@@ -76,7 +81,8 @@ public class CategoryService {
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
 
-        subscriptionRepository.deleteByCategoryId(categoryId);
+        scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
+        subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
         categoryRepository.deleteById(categoryId);
     }
 
@@ -94,6 +100,13 @@ public class CategoryService {
 
     @Transactional
     public void deleteByMemberId(final Long memberId) {
+        List<Long> categoryIds = categoryRepository.findByMemberId(memberId)
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
+
+        scheduleRepository.deleteByCategoryIdIn(categoryIds);
+        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
         categoryRepository.deleteByMemberId(memberId);
     }
 
