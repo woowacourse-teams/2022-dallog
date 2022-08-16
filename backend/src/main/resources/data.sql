@@ -28,5 +28,4 @@ VALUES (2, 1, 'COLOR_1', true, NOW(), NOW()),
        (3, 1, 'COLOR_3', true, NOW(), NOW()),
        (3, 3, 'COLOR_4', true, NOW(), NOW()),
        (4, 1, 'COLOR_5', true, NOW(), NOW()),
-       (4, 2, 'COLOR_6', true, NOW(), NOW()),
-       (4, 9, 'COLOR_6', true, NOW(), NOW());
+       (4, 2, 'COLOR_6', true, NOW(), NOW());

@@ -27,7 +27,8 @@ public class IntegrationScheduleDao {
         }
 
         String sql = "SELECT s.id as id, c.id as categoryId, s.title as title, "
-                + "s.start_date_time as startDateTime, s.end_date_time as endDateTime, s.memo as memo "
+                + "s.start_date_time as startDateTime, s.end_date_time as endDateTime, "
+                + "s.memo as memo, c.category_type as categoryType "
                 + "FROM schedules s "
                 + "JOIN categories c ON s.categories_id = c.id "
                 + "WHERE c.id IN (:categoryIds) "
@@ -50,10 +51,11 @@ public class IntegrationScheduleDao {
             LocalDateTime startDateTime = resultSet.getTimestamp("startDateTime").toLocalDateTime();
             LocalDateTime endDateTime = resultSet.getTimestamp("endDateTime").toLocalDateTime();
             String memo = resultSet.getString("memo");
+            String categoryType = resultSet.getString("categoryType");
 
             Period period = new Period(startDateTime, endDateTime);
 
-            return new IntegrationSchedule(String.valueOf(id), categoryId, title, period, memo);
+            return new IntegrationSchedule(String.valueOf(id), categoryId, title, period, memo, categoryType);
         };
     }
 }

@@ -18,19 +18,22 @@ public class IntegrationSchedule {
     private final String title;
     private final Period period;
     private final String memo;
+    private final String categoryType;
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title,
-                               final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String memo) {
-        this(id, categoryId, title, new Period(startDateTime, endDateTime), memo);
+                               final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String memo,
+                               final String categoryType) {
+        this(id, categoryId, title, new Period(startDateTime, endDateTime), memo, categoryType);
     }
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title, final Period period,
-                               final String memo) {
+                               final String memo, final String categoryType) {
         this.id = id;
         this.categoryId = categoryId;
         this.title = title;
         this.period = period;
         this.memo = memo;
+        this.categoryType = categoryType;
     }
 
     public boolean isLongTerms() {
@@ -83,5 +86,9 @@ public class IntegrationSchedule {
 
     public String getMemo() {
         return memo;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
     }
 }
