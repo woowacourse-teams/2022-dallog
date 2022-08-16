@@ -54,7 +54,7 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.8"
 }
 
 jacocoTestReport {
@@ -64,7 +64,54 @@ jacocoTestReport {
         html.enabled true
 
         xml.destination file("${buildDir}/jacoco/index.xml")
+        csv.destination file("${buildDir}/jacoco/index.csv")
         html.destination file("${buildDir}/jacoco/index.html")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                            '**/*Application*',
+                            '**/*Exception*',
+                            '**/dto/**',
+                            '**/infrastructure/**',
+                            '**/global/config/**',
+                            '**/BaseEntity*',
+                            '**/ControllerAdvice*',
+                            '**/AuthorizationExtractor*'
+                    ])
+                })
+        )
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = "CLASS"
+
+            // 모든 클래스 각각 라인 커버리지 75% 만족시 빌드 성공
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.75
+            }
+
+            excludes = [
+                    '*.*Application',
+                    '*.*Exception',
+                    '*.dto.*',
+                    '*.infrastructure.*',
+                    '*.global.config.*',
+                    '*.BaseEntity',
+                    '*.ControllerAdvice',
+                    '*.AuthorizationExtractor'
+            ]
+        }
     }
 }
 
