@@ -4,6 +4,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.domain.Period;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.scheduler.Scheduler;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Service
 public class SchedulerService {
-    // TODO: 이름 수정
 
     private final ScheduleService scheduleService;
     private final SubscriptionService subscriptionService;
@@ -33,22 +33,38 @@ public class SchedulerService {
     }
 
     public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final DateRangeRequest dateRange) {
-        // TODO: 리팩토링
+        List<MemberResponse> subscribers = getSubscribers(categoryId);
+        List<Category> categories = getCategoriesOfSubscribers(subscribers);
+        List<Schedule> schedules = getSchedulesOfCategories(categories, dateRange);
+
+        Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
+                dateRange.getEndDateTime().toLocalDate());
+
+        return convertPeriodsToPeriodResponses(scheduler.getPeriods());
+    }
+
+    private List<MemberResponse> getSubscribers(final Long categoryId) {
         List<SubscriptionResponse> subscriptions = subscriptionService.findByCategoryId(categoryId);
-        List<MemberResponse> members = subscriptions.stream()
+        return subscriptions.stream()
                 .map(subscriptionResponse -> memberService.findBySubscriptionId(subscriptionResponse.getId()))
                 .collect(Collectors.toList());
+    }
 
-        List<Category> categories = members.stream()
+    private List<Category> getCategoriesOfSubscribers(final List<MemberResponse> subscribers) {
+        return subscribers.stream()
                 .flatMap(memberResponse -> subscriptionService.getAllByMemberId(memberResponse.getId()).stream())
                 .filter(Subscription::isChecked)
                 .map(Subscription::getCategory)
                 .collect(Collectors.toList());
+    }
 
-        List<Schedule> schedules = scheduleService.findBy(categories, dateRange);
+    private List<Schedule> getSchedulesOfCategories(final List<Category> categories, final DateRangeRequest dateRange) {
+        return scheduleService.findBy(categories, dateRange);
+    }
 
-        Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
-                dateRange.getEndDateTime().toLocalDate());
-        return scheduler.getPeriods().stream().map(PeriodResponse::new).collect(Collectors.toList());
+    private List<PeriodResponse> convertPeriodsToPeriodResponses(final List<Period> periods) {
+        return periods.stream()
+                .map(PeriodResponse::new)
+                .collect(Collectors.toList());
     }
 }
