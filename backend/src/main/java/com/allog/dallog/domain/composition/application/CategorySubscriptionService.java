@@ -2,6 +2,7 @@ package com.allog.dallog.domain.composition.application;
 
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,15 @@ public class CategorySubscriptionService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        CategoryResponse categoryResponse = categoryService.save(memberId, request);
-        subscriptionService.save(memberId, categoryResponse.getId());
-        return categoryResponse;
+        CategoryResponse response = categoryService.save(memberId, request);
+        subscriptionService.save(memberId, response.getId());
+        return response;
+    }
+
+    @Transactional
+    public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
+        CategoryResponse response = categoryService.save(memberId, request);
+        subscriptionService.save(memberId, response.getId());
+        return response;
     }
 }

@@ -3,8 +3,12 @@ package com.allog.dallog.domain.category.application;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.domain.CategoryType;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
+import com.allog.dallog.domain.category.domain.ExternalCategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
@@ -24,14 +28,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ExternalCategoryRepository externalCategoryRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public CategoryService(final CategoryRepository categoryRepository, final MemberRepository memberRepository,
-                           final SubscriptionRepository subscriptionRepository,
+    public CategoryService(final CategoryRepository categoryRepository,
+                           final ExternalCategoryRepository externalCategoryRepository,
+                           final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
                            final ScheduleRepository scheduleRepository) {
         this.categoryRepository = categoryRepository;
+        this.externalCategoryRepository = externalCategoryRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.scheduleRepository = scheduleRepository;
@@ -41,9 +48,20 @@ public class CategoryService {
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
-        Category newCategory = new Category(request.getName(), member, request.getCategoryType());
+        Category newCategory = new Category(request.getName(), member, CategoryType.valueOf(request.getCategoryType()));
         categoryRepository.save(newCategory);
         return new CategoryResponse(newCategory);
+    }
+
+    @Transactional
+    public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
+        CategoryResponse categoryResponse = save(memberId,
+                new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
+
+        Category category = getCategory(categoryResponse.getId());
+        externalCategoryRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
+
+        return categoryResponse;
     }
 
     public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
@@ -53,7 +71,8 @@ public class CategoryService {
     }
 
     public CategoriesResponse findMineByName(final Long memberId, final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(memberId, name, pageable).getContent();
+        List<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(memberId, name, pageable)
+                .getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
