@@ -69,10 +69,24 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     closeModal();
   };
 
+  const getDateFieldsetProps = (dateTime: string) =>
+    isAllDay
+      ? {
+          type: 'date',
+          defaultValue: getISODateString(dateTime),
+        }
+      : {
+          type: 'datetime-local',
+          defaultValue: dateTime,
+        };
+
+  const startDateFieldsetProps = getDateFieldsetProps(scheduleInfo.startDateTime);
+  const endDateFieldsetProps = getDateFieldsetProps(scheduleInfo.endDateTime);
+
   const validationSchedule = useValidateSchedule({
     initialTitle: scheduleInfo.title,
-    initialStartDateTime: scheduleInfo.startDateTime,
-    initialEndDateTime: scheduleInfo.endDateTime,
+    initialStartDateTime: startDateFieldsetProps.defaultValue,
+    initialEndDateTime: endDateFieldsetProps.defaultValue,
     initialMemo: scheduleInfo.memo,
   });
 
@@ -92,20 +106,6 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const handleClickAllDayButton = () => {
     setAllDay((prev) => !prev);
   };
-
-  const getDateFieldsetProps = (dateTime: string) =>
-    isAllDay
-      ? {
-          type: 'date',
-          defaultValue: getISODateString(dateTime),
-        }
-      : {
-          type: 'datetime-local',
-          defaultValue: dateTime,
-        };
-
-  const startDateFieldsetProps = getDateFieldsetProps(scheduleInfo.startDateTime);
-  const endDateFieldsetProps = getDateFieldsetProps(scheduleInfo.endDateTime);
 
   return (
     <div css={modalStyle}>
