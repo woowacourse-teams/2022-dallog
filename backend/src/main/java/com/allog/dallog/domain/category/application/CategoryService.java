@@ -5,7 +5,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
-import com.allog.dallog.domain.category.domain.ExternalCategoryRepository;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
@@ -29,17 +29,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final ExternalCategoryRepository externalCategoryRepository;
+    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final ScheduleRepository scheduleRepository;
 
     public CategoryService(final CategoryRepository categoryRepository,
-                           final ExternalCategoryRepository externalCategoryRepository,
+                           final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
                            final ScheduleRepository scheduleRepository) {
         this.categoryRepository = categoryRepository;
-        this.externalCategoryRepository = externalCategoryRepository;
+        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.scheduleRepository = scheduleRepository;
@@ -60,7 +60,7 @@ public class CategoryService {
                 new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
 
         Category category = getCategory(categoryResponse.getId());
-        externalCategoryRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
+        externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
 
         return categoryResponse;
     }

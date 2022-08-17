@@ -13,23 +13,25 @@ public class MemberScheduleResponse {
     private final String memo;
     private final Long categoryId;
     private final String colorCode;
+    private final String categoryType;
 
     public MemberScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
         this(integrationSchedule.getId(), integrationSchedule.getTitle(), integrationSchedule.getStartDateTime(),
                 integrationSchedule.getEndDateTime(), integrationSchedule.getMemo(),
-                integrationSchedule.getCategoryId(), color);
+                integrationSchedule.getCategoryId(), color.getColorCode(), integrationSchedule.getCategoryType());
     }
 
     public MemberScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,
                                   final LocalDateTime endDateTime, final String memo, final Long categoryId,
-                                  final Color color) {
+                                  final String colorCode, final String categoryType) {
         this.id = id;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.memo = memo;
         this.categoryId = categoryId;
-        this.colorCode = color.getColorCode();
+        this.colorCode = colorCode;
+        this.categoryType = categoryType;
     }
 
     public String getId() {
@@ -58,5 +60,9 @@ public class MemberScheduleResponse {
 
     public String getColorCode() {
         return colorCode;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
     }
 }

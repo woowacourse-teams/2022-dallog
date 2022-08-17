@@ -1,5 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
@@ -35,6 +36,10 @@ public class CategoryFixtures {
     /* 내 일정 카테고리 */
     public static final String 내_일정_이름 = "내 일정";
     public static final CategoryCreateRequest 내_일정_생성_요청 = new CategoryCreateRequest(내_일정_이름, PERSONAL);
+
+    /* 우아한테크코스 외부 일정 카테고리 */
+    public static final String 우아한테크코스_이름 = "우아한테크코스";
+    public static final CategoryCreateRequest 우아한테크코스_외부_일정_생성_요청 = new CategoryCreateRequest(우아한테크코스_이름, GOOGLE);
 
     public static Category 공통_일정(final Member creator) {
         return new Category(공통_일정_이름, creator);

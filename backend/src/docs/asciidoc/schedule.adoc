@@ -14,6 +14,20 @@ include::{snippets}/schedules/findAllByMember/request-parameters.adoc[]
 
 include::{snippets}/schedules/findAllByMember/http-response.adoc[]
 
+=== 회원 일정 및 외부 일정 목록 조회
+
+==== Request
+
+include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-request.adoc[]
+
+==== RequestParameters
+
+include::{snippets}/schedules/findAllByMemberWithExternalSchedule/request-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-response.adoc[]
+
 === 일정 등록
 
 ==== Request

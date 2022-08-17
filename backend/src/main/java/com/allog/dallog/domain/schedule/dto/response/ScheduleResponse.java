@@ -11,20 +11,22 @@ public class ScheduleResponse {
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
     private final String memo;
+    private final String categoryType;
 
     public ScheduleResponse(final Schedule schedule) {
         this(schedule.getId(), schedule.getCategory().getId(), schedule.getTitle(), schedule.getStartDateTime(),
-                schedule.getEndDateTime(), schedule.getMemo());
+                schedule.getEndDateTime(), schedule.getMemo(), schedule.getCategory().getCategoryType().name());
     }
 
     public ScheduleResponse(final Long id, final Long categoryId, final String title, final LocalDateTime startDateTime,
-                            final LocalDateTime endDateTime, final String memo) {
+                            final LocalDateTime endDateTime, final String memo, final String categoryType) {
         this.id = id;
         this.categoryId = categoryId;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.memo = memo;
+        this.categoryType = categoryType;
     }
 
     public Long getId() {
@@ -49,5 +51,9 @@ public class ScheduleResponse {
 
     public String getMemo() {
         return memo;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
     }
 }

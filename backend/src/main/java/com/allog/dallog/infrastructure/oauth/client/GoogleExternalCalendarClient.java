@@ -1,12 +1,16 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarSchedule;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,17 +50,19 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
 
     private ResponseEntity<GoogleCalendarListResponse> fetchGoogleCalendarList(final HttpEntity<Void> request) {
         try {
-            return restTemplate.getForEntity(CALENDAR_LIST_REQUEST_URI, GoogleCalendarListResponse.class, request);
+            return restTemplate.exchange(CALENDAR_LIST_REQUEST_URI, HttpMethod.GET, request,
+                    GoogleCalendarListResponse.class);
         } catch (RestClientException e) {
             throw new OAuthException(e);
         }
     }
 
     @Override
-    public List<ExternalCalendarSchedule> getExternalCalendarSchedules(final String accessToken,
-                                                                       final String calendarId,
-                                                                       final String startDateTime,
-                                                                       final String endDateTime) {
+    public List<IntegrationSchedule> getExternalCalendarSchedules(final String accessToken,
+                                                                  final Long internalCategoryId,
+                                                                  final String calendarId,
+                                                                  final String startDateTime,
+                                                                  final String endDateTime) {
         HttpEntity<Void> request = new HttpEntity<>(generateCalendarRequestHeaders(accessToken));
 
         Map<String, String> uriVariables = generateEventsVariables(calendarId, startDateTime, endDateTime);
@@ -64,7 +70,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
 
         return response.getItems()
                 .stream()
-                .map(this::parseExternalResponse)
+                .map(event -> parseIntegrationSchedule(internalCategoryId, event))
                 .collect(Collectors.toList());
     }
 
@@ -94,8 +100,27 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         }
     }
 
-    private ExternalCalendarSchedule parseExternalResponse(final GoogleCalendarEventResponse item) {
-        return new ExternalCalendarSchedule(item.getId(), item.getSummary(), item.getDescription(),
-                item.getStartDateTime(), item.getEndDateTime());
+    private IntegrationSchedule parseIntegrationSchedule(final Long internalCategoryId,
+                                                         final GoogleCalendarEventResponse event) {
+        LocalDateTime startDateTime = event.getStartDateTime();
+        LocalDateTime endDateTime = event.getEndDateTime();
+        if (isAllDay(startDateTime, endDateTime)) {
+            endDateTime = endDateTime.minusMinutes(1);
+        }
+
+        return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
+                endDateTime, event.getDescription(), CategoryType.GOOGLE.name());
+    }
+
+    private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        return calculateDayDifference(startDateTime, endDateTime) == 1
+                && startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
+                && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
+    }
+
+    private long calculateDayDifference(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        LocalDate startDate = LocalDate.from(startDateTime);
+        LocalDate endDate = LocalDate.from(endDateTime);
+        return ChronoUnit.DAYS.between(startDate, endDate);
     }
 }

@@ -31,6 +31,8 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.composition.application.CalendarService;
+import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
+import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -61,6 +63,12 @@ class ScheduleControllerTest extends ControllerTest {
 
     @MockBean
     private CalendarService calendarService;
+
+    @MockBean
+    private IntegrationScheduleDao integrationScheduleDao;
+
+    @MockBean
+    private ExternalCalendarClient externalCalendarClient;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
@@ -316,21 +324,21 @@ class ScheduleControllerTest extends ControllerTest {
 
         MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse("1L", "장기간 일정 1",
                 LocalDateTime.of(2022, 8, 1, 0, 0),
-                LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1);
+                LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1.getColorCode(), "NORMAL");
         MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse("1L", "장기간 일정 2",
                 LocalDateTime.of(2022, 8, 3, 0, 0),
-                LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2);
+                LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2.getColorCode(), "NORMAL");
 
         MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse("1L", "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
-                LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3);
+                LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3.getColorCode(), "NORMAL");
         MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse("1L", "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
-                LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4);
+                LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4.getColorCode(), "NORMAL");
 
         MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse("1L", "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
-                LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5);
+                LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5.getColorCode(), "NORMAL");
         MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse("1L", "짧은 일정 2",
                 LocalDateTime.of(2022, 8, 5, 17, 0),
-                LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6);
+                LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6.getColorCode(), "NORMAL");
 
         MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
