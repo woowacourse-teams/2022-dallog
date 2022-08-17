@@ -5,7 +5,7 @@ const privacyPolicyStyle = ({ flex }: Theme) => css`
 
   align-items: flex-start;
 
-  margin: 15rem 10%;
+  margin: 5% 10%;
 `;
 
 const headerStyle = css`
