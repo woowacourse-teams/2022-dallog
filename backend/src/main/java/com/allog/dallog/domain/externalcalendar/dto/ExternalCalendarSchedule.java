@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class ExternalCalendarSchedule {
 
     private String id;
-    private String title = "제목 없음";
+    private String title = "";
     private String description = "";
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;

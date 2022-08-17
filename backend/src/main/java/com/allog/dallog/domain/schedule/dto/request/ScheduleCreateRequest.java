@@ -3,11 +3,13 @@ package com.allog.dallog.domain.schedule.dto.request;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ScheduleCreateRequest {
 
-    private String title = "제목 없음";
+    @NotNull(message = "Null일 수 없습니다.")
+    private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startDateTime;
