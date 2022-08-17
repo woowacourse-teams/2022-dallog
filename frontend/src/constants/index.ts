@@ -34,6 +34,7 @@ const PATH = {
   MAIN: '/',
   AUTH: '/oauth',
   CATEGORY: '/category',
+  POLICY: '/policy',
 };
 
 export { ATOM_KEY, CACHE_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };

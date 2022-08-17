@@ -1,16 +1,14 @@
-import useUserValue from '@/hooks/useUserValue';
+import { useRecoilValue } from 'recoil';
+
+import { userState } from '@/recoil/atoms';
 
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import StartPage from '@/pages/StartPage/StartPage';
 
 function MainPage() {
-  const { isAuthenticating, user } = useUserValue();
+  const { accessToken } = useRecoilValue(userState);
 
-  if (isAuthenticating) {
-    return <></>;
-  }
-
-  if (!user.accessToken) {
+  if (!accessToken) {
     return <StartPage />;
   }
 
