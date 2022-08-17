@@ -31,6 +31,7 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.composition.application.CalendarService;
+import com.allog.dallog.domain.composition.application.SchedulerService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
@@ -60,6 +61,9 @@ class ScheduleControllerTest extends ControllerTest {
 
     @MockBean
     private ScheduleService scheduleService;
+
+    @MockBean
+    private SchedulerService schedulerService;
 
     @MockBean
     private CalendarService calendarService;

@@ -84,6 +84,13 @@ public class SubscriptionService {
         return new SubscriptionResponse(subscription);
     }
 
+    public List<SubscriptionResponse> findByCategoryId(final Long categoryId) {
+        return subscriptionRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(SubscriptionResponse::new)
+                .collect(Collectors.toList());
+    }
+
     public List<Subscription> getAllByMemberId(final Long memberId) {
         return subscriptionRepository.findByMemberId(memberId);
     }

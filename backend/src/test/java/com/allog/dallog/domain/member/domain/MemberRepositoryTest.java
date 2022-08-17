@@ -5,6 +5,8 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,12 @@ class MemberRepositoryTest extends RepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @DisplayName("이메일을 통해 회원을 찾는다.")
     @Test
