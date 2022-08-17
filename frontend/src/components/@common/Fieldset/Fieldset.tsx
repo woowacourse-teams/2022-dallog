@@ -54,7 +54,7 @@ function Fieldset({
         disabled={disabled}
         onChange={onChange}
       />
-      <span css={errorMessageStyle(theme, isValid)}>{errorMessage}</span>
+      {errorMessage && <span css={errorMessageStyle(theme, isValid)}>{errorMessage}</span>}
     </div>
   );
 }
