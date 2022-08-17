@@ -52,7 +52,8 @@ public class CategoryService {
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
-        Category newCategory = new Category(request.getName(), member, CategoryType.valueOf(request.getCategoryType().toUpperCase()));
+        Category newCategory = new Category(request.getName(), member,
+                CategoryType.valueOf(request.getCategoryType().toUpperCase()));
         categoryRepository.save(newCategory);
         return new CategoryResponse(newCategory);
     }
@@ -120,6 +121,7 @@ public class CategoryService {
 
         scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
         subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
+        externalCategoryDetailRepository.deleteByCategoryId(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 
