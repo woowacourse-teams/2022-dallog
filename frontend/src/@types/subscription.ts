@@ -1,13 +1,8 @@
-import { ProfileType } from './profile';
+import { CategoryType } from './category';
 
 interface SubscriptionType {
   id: number;
-  category: {
-    id: number;
-    name: string;
-    creator: ProfileType;
-    createdAt: string;
-  };
+  category: CategoryType;
   colorCode: string;
   checked: boolean;
 }

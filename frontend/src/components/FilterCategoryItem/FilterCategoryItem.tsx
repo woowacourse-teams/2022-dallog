@@ -10,6 +10,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY } from '@/constants';
+import { CATEGORY_TYPE } from '@/constants/category';
 import { PALETTE } from '@/constants/style';
 
 import subscriptionApi from '@/api/subscription';
@@ -20,6 +21,7 @@ import { RiCheckboxBlankLine, RiCheckboxFill } from 'react-icons/ri';
 import {
   checkBoxNameStyle,
   colorStyle,
+  grayTextStyle,
   iconStyle,
   itemStyle,
   nameStyle,
@@ -89,7 +91,13 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
             <RiCheckboxBlankLine size={20} color={subscription.colorCode} />
           </Button>
         )}
-        <span css={nameStyle}>{subscription.category.name}</span>
+        <span css={nameStyle}>
+          {subscription.category.name}&nbsp;
+          <span css={grayTextStyle}>
+            {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && '(구글)'}
+            {subscription.category.categoryType === CATEGORY_TYPE.PERSONAL && '(기본)'}
+          </span>
+        </span>
       </div>
       <div css={paletteLayoutStyle}>
         <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
