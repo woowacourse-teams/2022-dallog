@@ -56,6 +56,7 @@ public class SchedulerService {
                 .flatMap(subscriberId -> subscriptionService.getAllByMemberId(subscriberId).stream())
                 .filter(Subscription::isChecked)
                 .map(Subscription::getCategory)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
