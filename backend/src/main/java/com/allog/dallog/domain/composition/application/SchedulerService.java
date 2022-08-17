@@ -64,6 +64,7 @@ public class SchedulerService {
                 .map(Category::getId)
                 .collect(Collectors.toList());
 
+        // TODO: 구글 외부 일정까지 조율 대상으로 포함해야함
         return integrationScheduleDao.findByCategoryIdInAndBetween(categoryIds, dateRange.getStartDateTime(),
                 dateRange.getEndDateTime());
     }
