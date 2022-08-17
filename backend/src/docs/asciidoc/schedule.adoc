@@ -124,14 +124,14 @@ include::{snippets}/schedules/delete/notfound/http-response.adoc[]
 
 ==== Request
 
-include::{snippets}/schedules/scheduling/http-request.adoc[]
+include::{snippets}/scheduler/category/available-periods/http-request.adoc[]
 
 ==== Parameters
 
-include::{snippets}/schedules/scheduling/path-parameters.adoc[]
+include::{snippets}/scheduler/category/available-periods/path-parameters.adoc[]
 
-include::{snippets}/schedules/scheduling/request-parameters.adoc[]
+include::{snippets}/scheduler/category/available-periods/request-parameters.adoc[]
 
 ==== Response
 
-include::{snippets}/schedules/scheduling/http-response.adoc[]
+include::{snippets}/scheduler/category/available-periods/http-response.adoc[]
