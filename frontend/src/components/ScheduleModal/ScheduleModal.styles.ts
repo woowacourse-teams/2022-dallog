@@ -1,8 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
-import { ScheduleModalPosType } from '@/@types/schedule';
+import { ModalPosType } from '@/@types';
 
-const scheduleModalStyle = ({ colors }: Theme, scheduleModalPos: ScheduleModalPosType) => css`
+const scheduleModalStyle = ({ colors }: Theme, scheduleModalPos: ModalPosType) => css`
   position: absolute;
   top: ${scheduleModalPos.top ? `${scheduleModalPos.top + 20}px` : 'none'};
   right: ${scheduleModalPos.right ? `${scheduleModalPos.right + 20}px` : 'none'};

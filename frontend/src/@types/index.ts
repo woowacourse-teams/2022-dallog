@@ -10,4 +10,11 @@ interface InputRefType {
   [index: string]: React.RefObject<HTMLInputElement>;
 }
 
-export { FieldsetCssPropType, InputRefType };
+interface ModalPosType {
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
+}
+
+export { FieldsetCssPropType, InputRefType, ModalPosType };

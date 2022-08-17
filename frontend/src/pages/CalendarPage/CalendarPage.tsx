@@ -8,8 +8,9 @@ import useCalendar from '@/hooks/useCalendar';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
+import { ModalPosType } from '@/@types';
 import { CalendarType } from '@/@types/calendar';
-import { ScheduleModalPosType, ScheduleResponseType, ScheduleType } from '@/@types/schedule';
+import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
@@ -17,6 +18,7 @@ import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
+import DateModal from '@/components/DateModal/DateModal';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
@@ -66,8 +68,9 @@ function CalendarPage() {
 
   const [hoveringId, setHoveringId] = useState(0);
   const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
-  const [scheduleModalPos, setScheduleModalPos] = useState<ScheduleModalPosType>({});
+  const [modalPos, setModalPos] = useState<ModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
+  const [moreDateInfo, setMoreDateInfo] = useState<CalendarType | null>(null);
 
   const {
     calendarMonth,
@@ -86,6 +89,7 @@ function CalendarPage() {
   const { state: isScheduleModalOpen, toggleState: toggleScheduleModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
+  const { state: isDateModalOpen, toggleState: toggleDateModalOpen } = useToggle();
 
   const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
     [CACHE_KEY.SCHEDULES, current],
@@ -108,12 +112,12 @@ function CalendarPage() {
       return;
     }
 
-    setScheduleModalPos(calculateScheduleModalPos(e.clientX, e.clientY));
+    setModalPos(calculateModalPos(e.clientX, e.clientY));
     setScheduleInfo(info);
     toggleScheduleModalOpen();
   };
 
-  const calculateScheduleModalPos = (clickX: number, clickY: number) => {
+  const calculateModalPos = (clickX: number, clickY: number) => {
     const position = { top: clickY, right: 0, bottom: 0, left: clickX };
 
     if (clickX > innerWidth / 2) {
@@ -202,6 +206,16 @@ function CalendarPage() {
   const allDaysWithPriority = getAllDaysPriority(data.data.allDays);
   const fewHoursWithPriority = getFewHoursPriority(data.data.fewHours);
 
+  const handleClickMoreButton = (e: React.MouseEvent, info: CalendarType) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    setModalPos(calculateModalPos(e.clientX, e.clientY));
+    setMoreDateInfo(info);
+    toggleDateModalOpen();
+  };
+
   const onMouseEnter = (scheduleId: number) => {
     setHoveringId(scheduleId);
   };
@@ -248,111 +262,141 @@ function CalendarPage() {
             const key = getFormattedDate(info.year, info.month, info.date);
 
             return (
-              <div
-                key={key}
-                css={dateBorder(theme, info.day)}
-                onClick={(e) => handleClickDate(e, info)}
-                ref={dateRef}
-              >
-                <span
-                  css={dateText(
-                    theme,
-                    info.day,
-                    current.month === info.month,
-                    getThisMonth() === info.month && getThisDate() === info.date
-                  )}
+              <>
+                <div
+                  key={key}
+                  css={dateBorder(theme, info.day)}
+                  onClick={(e) => handleClickDate(e, info)}
+                  ref={dateRef}
                 >
-                  {info.date}
-                </span>
+                  <span
+                    css={dateText(
+                      theme,
+                      info.day,
+                      current.month === info.month,
+                      getThisMonth() === info.month && getThisDate() === info.date
+                    )}
+                  >
+                    {info.date}
+                  </span>
 
-                {longTermsWithPriority.map((el) => {
-                  const startDate = getISODateString(el.schedule.startDateTime);
-                  const endDate = getISODateString(el.schedule.endDateTime);
-                  const nowDate = getFormattedDate(info.year, info.month, info.date);
-                  const nowDay = getDayFromFormattedDate(nowDate);
+                  {longTermsWithPriority.map((el) => {
+                    const startDate = getISODateString(el.schedule.startDateTime);
+                    const endDate = getISODateString(el.schedule.endDateTime);
+                    const nowDate = getFormattedDate(info.year, info.month, info.date);
+                    const nowDay = getDayFromFormattedDate(nowDate);
 
-                  if (startDate === nowDate && el.priority >= maxView) {
-                    return <span css={moreStyle}>일정 더보기</span>;
-                  }
+                    if (startDate === nowDate && el.priority >= maxView) {
+                      return (
+                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                          일정 더보기
+                        </span>
+                      );
+                    }
 
-                  return (
-                    startDate <= nowDate &&
-                    nowDate <= endDate && (
-                      <div
-                        key={`${nowDate}#${el.schedule.id}`}
-                        css={itemWithBackgroundStyle(
-                          el.priority,
-                          el.schedule.colorCode,
-                          hoveringId === el.schedule.id,
-                          maxView
-                        )}
-                        onMouseEnter={() => onMouseEnter(el.schedule.id)}
-                        onClick={(e) => handleClickSchedule(e, el.schedule)}
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {(startDate === nowDate || nowDay === 0) && el.schedule.title}
-                      </div>
-                    )
-                  );
-                })}
+                    return (
+                      startDate <= nowDate &&
+                      nowDate <= endDate && (
+                        <div
+                          key={`${nowDate}#${el.schedule.id}`}
+                          css={itemWithBackgroundStyle(
+                            el.priority,
+                            el.schedule.colorCode,
+                            hoveringId === el.schedule.id,
+                            maxView
+                          )}
+                          onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                          onClick={(e) => handleClickSchedule(e, el.schedule)}
+                          onMouseLeave={onMouseLeave}
+                        >
+                          {(startDate === nowDate || nowDay === 0) && el.schedule.title}
+                        </div>
+                      )
+                    );
+                  })}
 
-                {allDaysWithPriority.map((el) => {
-                  const startDate = getISODateString(el.schedule.startDateTime);
-                  const nowDate = getFormattedDate(info.year, info.month, info.date);
+                  {allDaysWithPriority.map((el) => {
+                    const startDate = getISODateString(el.schedule.startDateTime);
+                    const nowDate = getFormattedDate(info.year, info.month, info.date);
 
-                  if (startDate === nowDate && el.priority >= maxView) {
-                    return <span css={moreStyle}>일정 더보기</span>;
-                  }
+                    if (startDate === nowDate && el.priority >= maxView) {
+                      return (
+                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                          일정 더보기
+                        </span>
+                      );
+                    }
 
-                  return (
-                    startDate === nowDate && (
-                      <div
-                        key={`${nowDate}#${el.schedule.id}`}
-                        css={itemWithBackgroundStyle(
-                          el.priority,
-                          el.schedule.colorCode,
-                          hoveringId === el.schedule.id,
-                          maxView
-                        )}
-                        onMouseEnter={() => onMouseEnter(el.schedule.id)}
-                        onClick={(e) => handleClickSchedule(e, el.schedule)}
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {el.schedule.title}
-                      </div>
-                    )
-                  );
-                })}
+                    return (
+                      startDate === nowDate && (
+                        <div
+                          key={`${nowDate}#${el.schedule.id}`}
+                          css={itemWithBackgroundStyle(
+                            el.priority,
+                            el.schedule.colorCode,
+                            hoveringId === el.schedule.id,
+                            maxView
+                          )}
+                          onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                          onClick={(e) => handleClickSchedule(e, el.schedule)}
+                          onMouseLeave={onMouseLeave}
+                        >
+                          {el.schedule.title}
+                        </div>
+                      )
+                    );
+                  })}
 
-                {fewHoursWithPriority.map((el) => {
-                  const startDate = getISODateString(el.schedule.startDateTime);
-                  const nowDate = getFormattedDate(info.year, info.month, info.date);
+                  {fewHoursWithPriority.map((el) => {
+                    const startDate = getISODateString(el.schedule.startDateTime);
+                    const nowDate = getFormattedDate(info.year, info.month, info.date);
 
-                  if (startDate === nowDate && el.priority >= maxView) {
-                    return <span css={moreStyle}>일정 더보기</span>;
-                  }
+                    if (startDate === nowDate && el.priority >= maxView) {
+                      return (
+                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                          일정 더보기
+                        </span>
+                      );
+                    }
 
-                  return (
-                    startDate === nowDate && (
-                      <div
-                        key={`${nowDate}#${el.schedule.id}`}
-                        css={itemWithoutBackgroundStyle(
-                          theme,
-                          el.priority,
-                          el.schedule.colorCode,
-                          hoveringId === el.schedule.id,
-                          maxView
-                        )}
-                        onMouseEnter={() => onMouseEnter(el.schedule.id)}
-                        onClick={(e) => handleClickSchedule(e, el.schedule)}
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {el.schedule.title}
-                      </div>
-                    )
-                  );
-                })}
-              </div>
+                    return (
+                      startDate === nowDate && (
+                        <div
+                          key={`${nowDate}#${el.schedule.id}`}
+                          css={itemWithoutBackgroundStyle(
+                            theme,
+                            el.priority,
+                            el.schedule.colorCode,
+                            hoveringId === el.schedule.id,
+                            maxView
+                          )}
+                          onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                          onClick={(e) => handleClickSchedule(e, el.schedule)}
+                          onMouseLeave={onMouseLeave}
+                        >
+                          {el.schedule.title}
+                        </div>
+                      )
+                    );
+                  })}
+                </div>
+
+                {info === moreDateInfo && (
+                  <ModalPortal
+                    isOpen={isDateModalOpen}
+                    closeModal={toggleDateModalOpen}
+                    dimmerBackground={TRANSPARENT}
+                  >
+                    <DateModal
+                      dateModalPos={modalPos}
+                      moreDateInfo={moreDateInfo}
+                      longTermsWithPriority={longTermsWithPriority}
+                      allDaysWithPriority={allDaysWithPriority}
+                      fewHoursWithPriority={fewHoursWithPriority}
+                    />
+                  </ModalPortal>
+                )}
+              </>
             );
           })}
         </div>
@@ -371,7 +415,7 @@ function CalendarPage() {
             dimmerBackground={TRANSPARENT}
           >
             <ScheduleModal
-              scheduleModalPos={scheduleModalPos}
+              scheduleModalPos={modalPos}
               scheduleInfo={scheduleInfo}
               toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
               closeModal={toggleScheduleModalOpen}

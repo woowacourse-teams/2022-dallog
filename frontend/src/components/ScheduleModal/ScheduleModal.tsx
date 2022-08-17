@@ -3,9 +3,10 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import { ModalPosType } from '@/@types';
 import { CategoryType } from '@/@types/category';
 import { ProfileType } from '@/@types/profile';
-import { ScheduleModalPosType, ScheduleType } from '@/@types/schedule';
+import { ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
@@ -36,7 +37,7 @@ import {
 } from './ScheduleModal.styles';
 
 interface ScheduleModalProps {
-  scheduleModalPos: ScheduleModalPosType;
+  scheduleModalPos: ModalPosType;
   scheduleInfo: ScheduleType;
   toggleScheduleModifyModalOpen: () => void;
   closeModal: () => void;

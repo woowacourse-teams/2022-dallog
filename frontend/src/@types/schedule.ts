@@ -1,10 +1,3 @@
-interface ScheduleModalPosType {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
-
 interface ScheduleType {
   id: number;
   categoryId: number;
@@ -21,4 +14,4 @@ interface ScheduleResponseType {
   fewHours: Array<ScheduleType>;
 }
 
-export { ScheduleModalPosType, ScheduleResponseType, ScheduleType };
+export { ScheduleResponseType, ScheduleType };
