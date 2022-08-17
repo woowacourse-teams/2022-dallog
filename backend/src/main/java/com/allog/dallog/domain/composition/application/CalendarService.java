@@ -94,13 +94,13 @@ public class CalendarService {
                 .orElseThrow(NoSuchExternalCategoryDetailException::new);
     }
 
-    private List<IntegrationSchedule> getExternalSchedules(final Long memberId, final DateRangeRequest requesr,
+    private List<IntegrationSchedule> getExternalSchedules(final Long memberId, final DateRangeRequest request,
                                                            final List<ExternalCategoryDetail> externalCategories) {
         String refreshToken = getOAuthToken(memberId).getRefreshToken();
         String accessToken = oAuthClient.getAccessToken(refreshToken).getAccessToken();
 
         return externalCategories.stream()
-                .flatMap(externalCategory -> flatIntegrationSchedules(requesr, accessToken, externalCategory))
+                .flatMap(externalCategory -> flatIntegrationSchedules(request, accessToken, externalCategory))
                 .collect(Collectors.toList());
     }
 
