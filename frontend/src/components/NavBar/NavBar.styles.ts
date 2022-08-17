@@ -51,6 +51,8 @@ const menu = ({ colors, flex }: Theme) => css`
   width: 11rem;
   height: 11rem;
 
+  font-size: 7rem;
+
   &:hover {
     border-radius: 50%;
 

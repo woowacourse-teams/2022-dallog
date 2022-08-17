@@ -19,6 +19,7 @@ import { BiCategory } from 'react-icons/bi';
 import { FaUserCircle } from 'react-icons/fa';
 import { FiCalendar } from 'react-icons/fi';
 import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
+import { IoPeopleOutline } from 'react-icons/io5';
 
 import BlackLogo from '../../assets/dallog_black.png';
 import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBar.styles';
@@ -46,6 +47,10 @@ function NavBar() {
     navigate(PATH.CATEGORY);
   };
 
+  const handleClickSchedulingMenuButton = () => {
+    navigate(PATH.SCHEDULING);
+  };
+
   const handleClickProfileMenuButton = () => {
     toggleProfileModalOpen();
   };
@@ -68,15 +73,19 @@ function NavBar() {
         {accessToken && (
           <>
             <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
-              <FiCalendar size={28} />
+              <FiCalendar />
               <span css={menuTitle}>달력</span>
             </Button>
             <Button cssProp={menu(theme)} onClick={handleClickCategoryMenuButton}>
-              <BiCategory size={28} />
+              <BiCategory />
               <span css={menuTitle}>카테고리</span>
             </Button>
+            <Button cssProp={menu(theme)} onClick={handleClickSchedulingMenuButton}>
+              <IoPeopleOutline />
+              <span css={menuTitle}>일정 조율</span>
+            </Button>
             <Button cssProp={menu(theme)} onClick={handleClickProfileMenuButton}>
-              <FaUserCircle size={28} />
+              <FaUserCircle />
               <span css={menuTitle}>프로필</span>
             </Button>
             <ModalPortal
