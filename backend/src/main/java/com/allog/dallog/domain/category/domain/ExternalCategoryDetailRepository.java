@@ -11,6 +11,4 @@ public interface ExternalCategoryDetailRepository extends JpaRepository<External
     boolean existsByExternalIdAndCategoryIn(final String externalId, final List<Category> categories);
 
     void deleteByCategoryId(final Long categoryId);
-
-    boolean existsByCategoryId(final Long categoryId);
 }
