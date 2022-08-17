@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.category.domain;
 
-import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 
 public enum CategoryType {
 
@@ -10,7 +10,7 @@ public enum CategoryType {
         try {
             return CategoryType.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidCategoryException("(" + value + ")는 존재하지 않는 카테고리 타입입니다.");
+            throw new NoSuchCategoryException("(" + value + ")는 존재하지 않는 카테고리 타입입니다.");
         }
     }
 }
