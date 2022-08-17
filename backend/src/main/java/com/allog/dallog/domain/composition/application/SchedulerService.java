@@ -37,8 +37,7 @@ public class SchedulerService {
         List<Category> categories = getCategoriesOfSubscribers(subscriberIds);
         List<IntegrationSchedule> schedules = getSchedulesOfCategories(categories, dateRange);
 
-        Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
-                dateRange.getEndDateTime().toLocalDate());
+        Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime(), dateRange.getEndDateTime());
 
         return convertPeriodsToPeriodResponses(scheduler.getPeriods());
     }

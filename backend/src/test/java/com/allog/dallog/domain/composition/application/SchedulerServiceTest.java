@@ -39,9 +39,7 @@ import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,8 +106,6 @@ class SchedulerServiceTest extends ServiceTest {
         subscriptionService.save(리버.getId(), FE_일정.getId());
 
         // when
-        LocalDate startDate = LocalDate.of(2022, 7, 1);
-        LocalDate endDate = LocalDate.of(2022, 8, 31);
         List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
@@ -121,7 +117,7 @@ class SchedulerServiceTest extends ServiceTest {
                     날짜_2022년_7월_27일_0시_0분, 날짜_2022년_8월_15일_14시_0분);
             assertThat(actual.stream().map(PeriodResponse::getEndDateTime)).containsExactly(날짜_2022년_7월_7일_16시_0분,
                     날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_20일_11시_59분,
-                    날짜_2022년_7월_27일_11시_59분, LocalDateTime.of(endDate, LocalTime.MAX));
+                    날짜_2022년_7월_27일_11시_59분, LocalDateTime.of(2022, 8, 31, 0, 0));
         });
     }
 
@@ -184,7 +180,7 @@ class SchedulerServiceTest extends ServiceTest {
                     날짜_2022년_7월_27일_0시_0분);
             assertThat(actual.stream().map(PeriodResponse::getEndDateTime)).containsExactly(날짜_2022년_7월_7일_16시_0분,
                     날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_20일_11시_59분,
-                    LocalDateTime.of(LocalDate.of(2022, 8, 31), LocalTime.MAX));
+                    LocalDateTime.of(2022, 8, 31, 0, 0));
         });
     }
 }

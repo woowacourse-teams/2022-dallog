@@ -23,9 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.integrationschedule.domain.Period;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,9 +59,9 @@ class SchedulerTest {
         List<IntegrationSchedule> 일정_목록 = List.of(일정1, 일정2, 일정3, 일정4, 일정5, 일정6, 일정7, 일정8);
 
         // when
-        LocalDate startDate = LocalDate.of(2022, 7, 1);
-        LocalDate endDate = LocalDate.of(2022, 8, 31);
-        Scheduler scheduler = new Scheduler(일정_목록, startDate, endDate);
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 7, 1, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 8, 31, 0, 0);
+        Scheduler scheduler = new Scheduler(일정_목록, startDateTime, endDateTime);
         List<Period> actual = scheduler.getPeriods();
 
         // then
@@ -76,7 +74,7 @@ class SchedulerTest {
                     new Period(날짜_2022년_7월_16일_16시_1분, 날짜_2022년_7월_16일_18시_0분),
                     new Period(날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분),
                     new Period(날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분),
-                    new Period(날짜_2022년_8월_15일_14시_0분, LocalDateTime.of(endDate, LocalTime.MAX))
+                    new Period(날짜_2022년_8월_15일_14시_0분, endDateTime)
             );
         });
     }
