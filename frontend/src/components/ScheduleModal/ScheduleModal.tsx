@@ -12,7 +12,7 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 

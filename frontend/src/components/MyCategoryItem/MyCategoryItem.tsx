@@ -11,7 +11,7 @@ import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModifyModal';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 

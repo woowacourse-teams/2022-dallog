@@ -21,7 +21,7 @@ import {
   saveButton,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 
 import googleCalendarApi from '@/api/googleCalendar';
 

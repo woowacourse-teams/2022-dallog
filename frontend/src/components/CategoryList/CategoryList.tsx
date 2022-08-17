@@ -12,8 +12,7 @@ import { userState } from '@/recoil/atoms';
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
 
-import { CACHE_KEY } from '@/constants';
-import { API } from '@/constants/api';
+import { API, CACHE_KEY } from '@/constants/api';
 
 import categoryApi from '@/api/category';
 import subscriptionApi from '@/api/subscription';
