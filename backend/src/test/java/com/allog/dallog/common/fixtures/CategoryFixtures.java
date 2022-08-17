@@ -70,22 +70,22 @@ public class CategoryFixtures {
     }
 
     public static CategoryResponse 공통_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(1L, 공통_일정_이름, creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(1L, 공통_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse BE_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(2L, BE_일정_이름, creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(2L, BE_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse FE_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(3L, FE_일정_이름, creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(3L, FE_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse 매트_아고라_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(4L, 매트_아고라_이름, creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(4L, 매트_아고라_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse 후디_JPA_스터디_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(5L, 후디_JPA_스터디_이름, creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(5L, 후디_JPA_스터디_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
     }
 }
