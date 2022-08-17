@@ -85,6 +85,30 @@ class SubscriptionControllerTest extends ControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    @DisplayName("자신의 구독 목록을 가져온다.")
+    @Test
+    void 자신의_구독_목록을_가져온다() throws Exception {
+        // given
+        CategoryResponse 공통_일정_응답 = 공통_일정_응답(관리자_응답);
+
+        SubscriptionsResponse subscriptionsResponse = new SubscriptionsResponse(
+                List.of(색상1_구독_응답(공통_일정_응답), 색상2_구독_응답(공통_일정_응답), 색상3_구독_응답(공통_일정_응답)));
+
+        given(subscriptionService.findByMemberId(any()))
+                .willReturn(subscriptionsResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/members/me/subscriptions", 공통_일정_응답.getId())
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("subscription/findMine",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ))
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("회원이 이미 카테고리를 구독한 경우 예외를 던진다.")
     @Test
     void 회원이_이미_카테고리를_구독한_경우_예외를_던진다() throws Exception {
