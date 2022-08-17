@@ -14,7 +14,7 @@ pipeline {
                 dir('frontend') {
                     sh "echo 'API_URL = ${API_URL}' > .env"
                     nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
-                        sh 'rm -rf ./node_modules/.cache && npm install && npm run build'
+                        sh 'npm cache clean --force && npm install && npm run build'
                     }
                 }
             }
