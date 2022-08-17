@@ -14,7 +14,9 @@ pipeline {
                 dir('frontend') {
                     sh "echo 'API_URL = ${API_URL}' > .env"
                     nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
-                        sh 'npm cache clean --force && npm install && npm run build'
+                        sh "npm install -g yarn"
+                        sh "yarn"
+                        sh "yarn prod-build"
                     }
                 }
             }
