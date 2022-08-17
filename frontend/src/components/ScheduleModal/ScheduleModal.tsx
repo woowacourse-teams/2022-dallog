@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { ModalPosType } from '@/@types';
@@ -54,6 +54,8 @@ function ScheduleModal({
 
   const theme = useTheme();
 
+  const queryClient = useQueryClient();
+
   const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
     CACHE_KEY.PROFILE,
     () => profileApi.get(accessToken)
@@ -72,6 +74,8 @@ function ScheduleModal({
   );
 
   const onSuccessDeleteSchedule = () => {
+    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
     closeModal();
   };
 
