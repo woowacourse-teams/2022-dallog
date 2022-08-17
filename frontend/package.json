@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --mode development --open --hot",
-    "build": "webpack --mode production",
-    "prestart": "npm run build",
-    "start": "webpack --mode development",
+    "prod-build": "webpack --mode production",
+    "dev-build": "webpack --mode development",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "pretty": "prettier . --write",
