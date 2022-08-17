@@ -9,6 +9,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_외부_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
@@ -435,5 +436,20 @@ class CategoryServiceTest extends ServiceTest {
             assertThatThrownBy(() -> scheduleService.findById(레벨_인터뷰.getId()))
                     .isInstanceOf(NoSuchScheduleException.class);
         });
+    }
+
+    @DisplayName("외부 캘린더의 카테고리를 삭제한다.")
+    @Test
+    void 외부_캘린더의_카테고리를_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 우아한테크코스_외부_일정 = categoryService.save(관리자.getId(), 우아한테크코스_외부_일정_생성_요청);
+
+        // when
+        categoryService.deleteById(관리자.getId(), 우아한테크코스_외부_일정.getId());
+
+        // then
+        assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))
+                .isInstanceOf(NoSuchCategoryException.class);
     }
 }

@@ -9,4 +9,8 @@ public interface ExternalCategoryDetailRepository extends JpaRepository<External
     Optional<ExternalCategoryDetail> findByCategoryId(final Long categoryId);
 
     boolean existsByExternalIdAndCategoryIn(final String externalId, final List<Category> categories);
+
+    void deleteByCategoryId(final Long categoryId);
+
+    boolean existsByCategoryId(final Long categoryId);
 }
