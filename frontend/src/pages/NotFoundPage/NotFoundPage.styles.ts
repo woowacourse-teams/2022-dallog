@@ -4,7 +4,8 @@ const layoutStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
   gap: 15rem;
-  height: calc(100%-16rem);
+
+  height: calc(100% - 16rem);
 `;
 
 const buttonStyle = ({ colors }: Theme) => css`
