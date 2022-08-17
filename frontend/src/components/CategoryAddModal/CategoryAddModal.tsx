@@ -13,6 +13,7 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
+import { CATEGORY_TYPE } from '@/constants/category';
 
 import categoryApi from '@/api/category';
 
@@ -41,7 +42,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const { mutate } = useMutation<
     AxiosResponse<CategoryType>,
     AxiosError,
-    Pick<CategoryType, 'name'>,
+    Pick<CategoryType, 'name' | 'categoryType'>,
     unknown
   >((body) => categoryApi.post(accessToken, body), {
     onSuccess: () => onSuccessPostCategory(),
@@ -50,7 +51,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ name: categoryValue.inputValue });
+    mutate({ name: categoryValue.inputValue, categoryType: CATEGORY_TYPE.NORMAL });
   };
 
   const onSuccessPostCategory = () => {

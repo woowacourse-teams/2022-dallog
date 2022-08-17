@@ -1,10 +1,11 @@
-import { validateLength, validateNotEmpty } from '@/validation';
+import { validateNotEmpty } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useControlledInput from '@/hooks/useControlledInput';
+import useValidateCategory from '@/hooks/useValidateCategory';
 
 import { GoogleCalendarGetResponseType, GoogleCalendarPostBodyType } from '@/@types/googleCalendar';
 
@@ -21,7 +22,6 @@ import {
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
 import { CACHE_KEY } from '@/constants';
-import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
 import googleCalendarApi from '@/api/googleCalendar';
 
@@ -44,8 +44,8 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
 
   const { accessToken } = useRecoilValue(userState);
 
-  const { inputValue: categoryInputValue, onChangeValue: onChangeCategoryInputValue } =
-    useControlledInput();
+  const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory();
+
   const { inputValue: googleCalendarInputValue, onChangeValue: onChangeGoogleCalendarInputValue } =
     useControlledInput();
 
@@ -66,7 +66,7 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ externalId: googleCalendarInputValue, name: categoryInputValue });
+    mutate({ externalId: googleCalendarInputValue, name: categoryValue.inputValue });
   };
 
   const onSuccessPostCategory = () => {
@@ -107,16 +107,9 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
           <Fieldset
             placeholder="카테고리 이름"
             autoFocus={true}
-            onChange={onChangeCategoryInputValue}
-            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
-              VALIDATION_SIZE.MIN_LENGTH,
-              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-            )}
-            isValid={validateLength(
-              categoryInputValue,
-              VALIDATION_SIZE.MIN_LENGTH,
-              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-            )}
+            onChange={categoryValue.onChangeValue}
+            errorMessage={getCategoryErrorMessage()}
+            isValid={isValidCategory}
             labelText={'연동할 달록 카테고리 생성'}
             cssProp={inputStyle}
           />
@@ -128,13 +121,7 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
           <Button
             type="submit"
             cssProp={saveButton(theme)}
-            disabled={
-              !validateLength(
-                categoryInputValue,
-                VALIDATION_SIZE.MIN_LENGTH,
-                VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-              ) || !validateNotEmpty(googleCalendarInputValue)
-            }
+            disabled={!isValidCategory || !validateNotEmpty(googleCalendarInputValue)}
           >
             완료
           </Button>

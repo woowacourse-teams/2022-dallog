@@ -46,7 +46,7 @@ const categoryApi = {
     return response;
   },
 
-  post: async (accessToken: string, body: Pick<CategoryType, 'name'>) => {
+  post: async (accessToken: string, body: Pick<CategoryType, 'name' | 'categoryType'>) => {
     const response = await dallogApi.post(categoryApi.endpoint.entire, body, {
       headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
     });
