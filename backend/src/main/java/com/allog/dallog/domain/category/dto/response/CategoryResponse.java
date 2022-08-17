@@ -8,6 +8,7 @@ public class CategoryResponse {
 
     private Long id;
     private String name;
+    private String categoryType;
     private MemberResponse creator;
     private LocalDateTime createdAt;
 
@@ -15,13 +16,15 @@ public class CategoryResponse {
     }
 
     public CategoryResponse(final Category category) {
-        this(category.getId(), category.getName(), new MemberResponse(category.getMember()), category.getCreatedAt());
+        this(category.getId(), category.getName(), category.getCategoryType().name(),
+                new MemberResponse(category.getMember()), category.getCreatedAt());
     }
 
-    public CategoryResponse(final Long id, final String name, final MemberResponse creator,
+    public CategoryResponse(final Long id, final String name, final String categoryType, final MemberResponse creator,
                             final LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
+        this.categoryType = categoryType;
         this.creator = creator;
         this.createdAt = createdAt;
     }
@@ -32,6 +35,10 @@ public class CategoryResponse {
 
     public String getName() {
         return name;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
     }
 
     public MemberResponse getCreator() {
