@@ -16,6 +16,7 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
 import { CACHE_KEY } from '@/constants';
+import { DATE_TIME } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
 import { checkAllDay, getISODateString } from '@/utils/date';
@@ -100,7 +101,19 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       memo: validationSchedule.memo.inputValue,
     };
 
-    mutate(body);
+    if (!isAllDay) {
+      mutate(body);
+
+      return;
+    }
+
+    const allDayBody = {
+      ...body,
+      startDateTime: `${body.startDateTime}T${DATE_TIME.START}`,
+      endDateTime: `${body.endDateTime}T${DATE_TIME.END}`,
+    };
+
+    mutate(allDayBody);
   };
 
   const handleClickAllDayButton = () => {
