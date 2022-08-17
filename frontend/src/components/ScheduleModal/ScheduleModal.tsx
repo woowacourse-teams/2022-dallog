@@ -140,10 +140,10 @@ function ScheduleModal({
         <div css={contentBlockStyle}>
           <div css={colorStyle(scheduleInfo.colorCode)} />
           <span>
-            {categoryGetResponse?.data.name}&nbsp;
+            {categoryGetResponse?.data.name}
             <span css={grayTextStyle}>
-              {scheduleInfo.categoryType === CATEGORY_TYPE.GOOGLE && '(구글)'}
-              {scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL && '(기본)'}
+              {scheduleInfo.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
+              {scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL && ' (기본)'}
             </span>
           </span>
         </div>

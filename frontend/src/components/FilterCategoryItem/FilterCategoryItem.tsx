@@ -92,10 +92,10 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
           </Button>
         )}
         <span css={nameStyle}>
-          {subscription.category.name}&nbsp;
+          {subscription.category.name}
           <span css={grayTextStyle}>
-            {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && '(구글)'}
-            {subscription.category.categoryType === CATEGORY_TYPE.PERSONAL && '(기본)'}
+            {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
+            {subscription.category.categoryType === CATEGORY_TYPE.PERSONAL && ' (기본)'}
           </span>
         </span>
       </div>

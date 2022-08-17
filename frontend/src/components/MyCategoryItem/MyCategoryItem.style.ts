@@ -56,4 +56,8 @@ const itemStyle = css`
   text-align: center;
 `;
 
-export { buttonStyle, categoryItemStyle, itemStyle, menuTitle };
+const grayTextStyle = ({ colors }: Theme) => css`
+  color: ${colors.GRAY_600};
+`;
+
+export { buttonStyle, categoryItemStyle, grayTextStyle, itemStyle, menuTitle };
