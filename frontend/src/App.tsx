@@ -17,9 +17,13 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       useErrorBoundary: true,
+      retry: 1,
+      retryDelay: 0,
     },
     mutations: {
       useErrorBoundary: true,
+      retry: 1,
+      retryDelay: 0,
     },
   },
 });
