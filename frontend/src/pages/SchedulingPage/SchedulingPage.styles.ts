@@ -3,8 +3,6 @@ import { css, Theme } from '@emotion/react';
 const pageStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
-  gap: 8rem;
-
   padding: 9rem 10%;
 `;
 
@@ -63,9 +61,13 @@ const signStyle = css`
 const resultStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
+  overflow-y: overlay;
+  justify-content: flex-start;
   gap: 5rem;
 
-  width: 206rem;
+  width: 214rem;
+  height: 60vh;
+  padding: 0 4rem;
 `;
 
 const searchButtonStyle = ({ colors, flex }: Theme) => css`
@@ -73,8 +75,9 @@ const searchButtonStyle = ({ colors, flex }: Theme) => css`
 
   gap: 5rem;
 
-  width: 100%;
+  width: 206rem;
   padding: 5rem;
+  margin: 8rem 0 5rem;
   border-radius: 8px;
   box-shadow: 2px 2px 4px ${colors.GRAY_500};
 

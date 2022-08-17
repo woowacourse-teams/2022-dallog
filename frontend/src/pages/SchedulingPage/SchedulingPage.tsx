@@ -123,11 +123,11 @@ function SchedulingPage() {
             />
           </div>
         </form>
+        <Button cssProp={searchButtonStyle(theme)} onClick={handleClickSearchButton}>
+          <GoSearch size={20} />
+          <span>카테고리 구독자들 모두 가능한 시간 조회하기</span>
+        </Button>
         <div css={resultStyle}>
-          <Button cssProp={searchButtonStyle(theme)} onClick={handleClickSearchButton}>
-            <GoSearch size={20} />
-            <span>카테고리 구독자들 모두 가능한 시간 조회하기</span>
-          </Button>
           {schedulingGetResponse &&
             schedulingGetResponse.data.map((schedule) => (
               <div key={schedule.startDateTime} css={timeStyle}>{`${formatDateTime(
