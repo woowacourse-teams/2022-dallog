@@ -1,3 +1,5 @@
+import { CATEGORY_TYPE } from '@/constants/category';
+
 import { ProfileType } from './profile';
 
 interface CategoryType {
@@ -5,6 +7,7 @@ interface CategoryType {
   name: string;
   creator: ProfileType;
   createdAt: string;
+  categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
 }
 
 interface CategoriesGetResponseType {

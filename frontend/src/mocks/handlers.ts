@@ -6,6 +6,7 @@ import { ScheduleType } from '@/@types/schedule';
 import { SubscriptionType } from '@/@types/subscription';
 
 import { API, API_URL } from '@/constants/api';
+import { CATEGORY_TYPE } from '@/constants/category';
 
 import categoryApi from '@/api/category';
 import profileApi from '@/api/profile';
@@ -46,6 +47,7 @@ const handlers = [
       id: categoryDB.categories.length + 1,
       createdAt: new Date().toISOString().slice(0, -5),
       creator: tigerProfileDB,
+      categoryType: CATEGORY_TYPE.NORMAL,
     };
 
     categoryDB.categories.push(newCategory);
