@@ -1,8 +1,13 @@
 package com.allog.dallog.domain.category.dto.request;
 
+import javax.validation.constraints.NotBlank;
+
 public class ExternalCategoryCreateRequest {
 
+    @NotBlank(message = "공백일 수 없습니다.")
     private String externalId;
+
+    @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
     private ExternalCategoryCreateRequest() {
