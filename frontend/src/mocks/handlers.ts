@@ -150,7 +150,7 @@ const handlers = [
     (req, res, ctx) => {
       const { id } = req.params;
       const categoryId = parseInt(id as string);
-      const newSchedule = { id: scheduleDB.length + 1, categoryId, ...req.body };
+      const newSchedule = { id: `${scheduleDB.length + 1}`, categoryId, ...req.body };
 
       scheduleDB.push(newSchedule);
 
@@ -161,8 +161,8 @@ const handlers = [
   rest.patch<Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>>(
     `${API_URL}/api/schedules/:id`,
     (req, res, ctx) => {
-      const { id } = req.params;
-      const scheduleId = parseInt(id as string);
+      const { id: scheduleId } = req.params;
+
       const scheduleIndex = scheduleDB.findIndex((el) => el.id === scheduleId);
 
       if (scheduleIndex < 0) {
@@ -193,8 +193,8 @@ const handlers = [
   ),
 
   rest.delete(`${API_URL}/api/schedules/:id`, (req, res, ctx) => {
-    const { id } = req.params;
-    const scheduleId = parseInt(id as string);
+    const { id: scheduleId } = req.params;
+
     const scheduleIndex = scheduleDB.findIndex((el) => el.id === scheduleId);
 
     if (scheduleIndex < 0) {

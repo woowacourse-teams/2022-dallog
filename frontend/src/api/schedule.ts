@@ -8,8 +8,8 @@ const scheduleApi = {
   endpoint: {
     get: '/api/members/me/schedules',
     post: (categoryId: number) => `/api/categories/${categoryId}/schedules`,
-    patch: (scheduleId: number) => `/api/schedules/${scheduleId}`,
-    delete: (scheduleId: number) => `/api/schedules/${scheduleId}`,
+    patch: (scheduleId: string) => `/api/schedules/${scheduleId}`,
+    delete: (scheduleId: string) => `/api/schedules/${scheduleId}`,
   },
   headers: {
     'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const scheduleApi = {
 
   patch: async (
     accessToken: string,
-    scheduleId: number,
+    scheduleId: string,
     body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
   ) => {
     const response = await dallogApi.patch(scheduleApi.endpoint.patch(scheduleId), body, {
@@ -51,7 +51,7 @@ const scheduleApi = {
     return response;
   },
 
-  delete: async (accessToken: string, scheduleId: number) => {
+  delete: async (accessToken: string, scheduleId: string) => {
     const response = await dallogApi.delete(scheduleApi.endpoint.delete(scheduleId), {
       headers: { Authorization: `Bearer ${accessToken}` },
     });

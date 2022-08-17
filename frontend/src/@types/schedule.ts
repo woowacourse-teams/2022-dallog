@@ -1,5 +1,5 @@
 interface ScheduleType {
-  id: number;
+  id: string;
   categoryId: number;
   title: string;
   startDateTime: string;
