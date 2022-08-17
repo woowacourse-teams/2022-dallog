@@ -17,6 +17,7 @@ import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,8 +55,9 @@ public class CalendarService {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
         List<Long> internalCategoryIds = findCheckedInternalCategories(subscriptions);
 
-        List<IntegrationSchedule> integrationSchedules = integrationScheduleDao.findByCategoryIdInAndBetween(
-                internalCategoryIds, request.getStartDateTime(), request.getEndDateTime());
+        List<IntegrationSchedule> integrationSchedules = new ArrayList<>(
+                integrationScheduleDao.findByCategoryIdInAndBetween(
+                        internalCategoryIds, request.getStartDateTime(), request.getEndDateTime()));
 
         List<ExternalCategoryDetail> externalCategoryDetails = findCheckedExternalCategoryDetails(subscriptions);
         if (!externalCategoryDetails.isEmpty()) {
