@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/auth")
@@ -24,8 +25,9 @@ public class AuthController {
     }
 
     @GetMapping("/{oauthProvider}/oauth-uri")
-    public ResponseEntity<OAuthUriResponse> generateLink(@PathVariable final String oauthProvider) {
-        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(authService.generateGoogleLink());
+    public ResponseEntity<OAuthUriResponse> generateLink(@PathVariable final String oauthProvider,
+                                                         @RequestParam final String redirectUri) {
+        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(authService.generateGoogleLink(redirectUri));
         return ResponseEntity.ok(oAuthUriResponse);
     }
 

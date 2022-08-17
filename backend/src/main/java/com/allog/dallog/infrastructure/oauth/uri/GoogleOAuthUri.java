@@ -14,10 +14,10 @@ public class GoogleOAuthUri implements OAuthUri {
     }
 
     @Override
-    public String generate() {
+    public String generate(final String redirectUri) {
         return properties.getOAuthEndPoint() + "?"
                 + "client_id=" + properties.getClientId() + "&"
-                + "redirect_uri=" + properties.getRedirectUri() + "&"
+                + "redirect_uri=" + redirectUri + "&"
                 + "response_type=code&"
                 + "scope=" + String.join(" ", properties.getScopes()) + "&"
                 + "access_type=" + properties.getAccessType() + "&"

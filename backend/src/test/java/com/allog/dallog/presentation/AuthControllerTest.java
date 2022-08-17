@@ -5,6 +5,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAuth_로그인_링크;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -17,6 +18,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,16 +42,20 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_소셜_로그인을_위한_링크와_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateGoogleLink()).willReturn(OAuth_로그인_링크);
+        given(authService.generateGoogleLink(any())).willReturn(OAuth_로그인_링크);
 
         // when & then
-        mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri", OAUTH_PROVIDER))
+        mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", OAUTH_PROVIDER,
+                        "https://dallog.me/oauth"))
                 .andDo(print())
                 .andDo(document("auth/link",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("oauthProvider").description("OAuth 로그인 제공자")
+                        ),
+                        requestParameters(
+                                parameterWithName("redirectUri").description("OAuth Redirect URI")
                         ),
                         responseFields(
                                 fieldWithPath("oAuthUri").type(JsonFieldType.STRING).description("OAuth 소셜 로그인 링크")

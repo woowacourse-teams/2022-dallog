@@ -25,7 +25,8 @@ class AuthServiceTest extends ServiceTest {
     @Test
     void 구글_로그인을_위한_링크를_생성한다() {
         // given & when
-        String link = authService.generateGoogleLink();
+        String redirectUri = "https://dallog.me";
+        String link = authService.generateGoogleLink(redirectUri);
 
         // then
         assertThat(link).isNotEmpty();

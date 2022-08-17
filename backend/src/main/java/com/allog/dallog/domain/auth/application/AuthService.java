@@ -33,8 +33,8 @@ public class AuthService {
         this.tokenProvider = tokenProvider;
     }
 
-    public String generateGoogleLink() {
-        return oAuthUri.generate();
+    public String generateGoogleLink(final String redirectUri) {
+        return oAuthUri.generate(redirectUri);
     }
 
     @Transactional
