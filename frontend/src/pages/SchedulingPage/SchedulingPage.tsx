@@ -83,6 +83,10 @@ function SchedulingPage() {
     refetch();
   };
 
+  const formatDateTime = (dateTime: string) => {
+    return dateTime.replace('T', ' ').slice(0, -3);
+  };
+
   return (
     <PageLayout>
       <div css={pageStyle}>
@@ -126,10 +130,9 @@ function SchedulingPage() {
           </Button>
           {schedulingGetResponse &&
             schedulingGetResponse.data.map((schedule) => (
-              <div
-                key={schedule.startDateTime}
-                css={timeStyle}
-              >{`${schedule.startDateTime} ~ ${schedule.endDateTime}`}</div>
+              <div key={schedule.startDateTime} css={timeStyle}>{`${formatDateTime(
+                schedule.startDateTime
+              )} ~ ${formatDateTime(schedule.endDateTime)}`}</div>
             ))}
         </div>
       </div>
