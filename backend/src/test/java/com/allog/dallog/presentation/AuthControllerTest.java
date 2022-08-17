@@ -4,7 +4,6 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_응답;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAuth_로그인_링크;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -68,7 +67,8 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateToken(STUB_MEMBER_인증_코드)).willReturn(MEMBER_인증_코드_토큰_응답());
+//        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
+        given(authService.generateToken(any())).willReturn(MEMBER_인증_코드_토큰_응답());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
@@ -83,7 +83,9 @@ class AuthControllerTest extends ControllerTest {
                                 parameterWithName("oauthProvider").description("OAuth 로그인 제공자")
                         ),
                         requestFields(
-                                fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드")
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드"),
+                                fieldWithPath("redirectUri").type(JsonFieldType.STRING)
+                                        .description("OAuth Redirect URI")
                         )
                 ))
                 .andExpect(status().isOk());
@@ -93,7 +95,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인_과정에서_Resource_Server_에러가_발생하면_상태코드_500을_반환한다() throws Exception {
         // given
-        given(authService.generateToken(STUB_MEMBER_인증_코드)).willThrow(new OAuthException());
+        given(authService.generateToken(any())).willThrow(new OAuthException());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
@@ -108,7 +110,9 @@ class AuthControllerTest extends ControllerTest {
                                 parameterWithName("oauthProvider").description("OAuth 로그인 제공자")
                         ),
                         requestFields(
-                                fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드")
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드"),
+                                fieldWithPath("redirectUri").type(JsonFieldType.STRING)
+                                        .description("OAuth Redirect URI")
                         )
                 ))
                 .andExpect(status().isInternalServerError());

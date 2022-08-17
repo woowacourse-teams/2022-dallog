@@ -23,7 +23,7 @@ public class AuthAcceptanceFixtures {
     public static ExtractableResponse<Response> 자체_토큰을_생성한다(final String oauthProvider, final String code) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokenRequest(code))
+                .body(new TokenRequest(code, "https://dallog.me/oauth"))
                 .when().post("/api/auth/{oauthProvider}/token", oauthProvider)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
@@ -33,7 +33,7 @@ public class AuthAcceptanceFixtures {
     public static String 자체_토큰을_생성하고_토큰을_반환한다(final String oauthProvider, final String code) {
         TokenResponse tokenResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokenRequest(code))
+                .body(new TokenRequest(code, "https://dallog.me/oauth"))
                 .when().post("/api/auth/{oauthProvider}/token", oauthProvider)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())

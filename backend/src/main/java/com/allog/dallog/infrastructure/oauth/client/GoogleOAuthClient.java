@@ -39,8 +39,8 @@ public class GoogleOAuthClient implements OAuthClient {
     }
 
     @Override
-    public OAuthMember getOAuthMember(final String code) {
-        GoogleTokenResponse googleTokenResponse = requestGoogleToken(code);
+    public OAuthMember getOAuthMember(final String code, final String redirectUri) {
+        GoogleTokenResponse googleTokenResponse = requestGoogleToken(code, redirectUri);
         String payload = getPayload(googleTokenResponse.getIdToken());
         UserInfo userInfo = parseUserInfo(payload);
 
@@ -48,22 +48,22 @@ public class GoogleOAuthClient implements OAuthClient {
         return new OAuthMember(userInfo.getEmail(), userInfo.getName(), userInfo.getPicture(), refreshToken);
     }
 
-    private GoogleTokenResponse requestGoogleToken(final String code) {
+    private GoogleTokenResponse requestGoogleToken(final String code, final String redirectUri) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> params = generateTokenParams(code);
+        MultiValueMap<String, String> params = generateTokenParams(code, redirectUri);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         return fetchGoogleToken(request).getBody();
     }
 
-    private MultiValueMap<String, String> generateTokenParams(final String code) {
+    private MultiValueMap<String, String> generateTokenParams(final String code, final String redirectUri) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", properties.getClientId());
         params.add("client_secret", properties.getClientSecret());
         params.add("code", code);
         params.add("grant_type", "authorization_code");
-        params.add("redirect_uri", properties.getRedirectUri());
+        params.add("redirect_uri", redirectUri);
         return params;
     }
 
