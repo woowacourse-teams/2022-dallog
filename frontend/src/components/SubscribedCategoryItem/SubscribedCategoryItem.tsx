@@ -1,21 +1,24 @@
 import { useTheme } from '@emotion/react';
-import { useMutation, useQueryClient } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import { CategoryType } from '@/@types/category';
+import { ProfileType } from '@/@types/profile';
 
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY } from '@/constants';
-import { CONFIRM_MESSAGE } from '@/constants/message';
+import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 
+import profileApi from '@/api/profile';
 import subscriptionApi from '@/api/subscription';
 
-import { categoryItem, item, unsubscribeButton } from './SubscribedCategoryItem.styles';
+import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCategoryItem.styles';
 
 interface SubscribedCategoryItemProps {
   category: CategoryType;
@@ -27,6 +30,10 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
   const theme = useTheme();
 
   const queryClient = useQueryClient();
+
+  const { data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
+    profileApi.get(accessToken)
+  );
 
   const { mutate } = useMutation(() => subscriptionApi.delete(accessToken, subscriptionId), {
     onSuccess: () => {
@@ -40,14 +47,25 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
     }
   };
 
+  const canUnsubscribeCategory = category.creator.id !== data?.data.id;
+
   return (
     <div css={categoryItem}>
       <span css={item}>{getISODateString(category.createdAt)}</span>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>
-        <Button cssProp={unsubscribeButton(theme)} onClick={handleClickUnsubscribeButton}>
-          구독중
+        <Button
+          cssProp={unsubscribeButton(theme)}
+          onClick={handleClickUnsubscribeButton}
+          disabled={!canUnsubscribeCategory}
+        >
+          <p>구독중</p>
+          {!canUnsubscribeCategory ? (
+            <span css={menuTitle}>{TOOLTIP_MESSAGE.CANNOT_UNSUBSCRIBE_MINE}</span>
+          ) : (
+            <></>
+          )}
         </Button>
       </div>
     </div>

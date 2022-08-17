@@ -30,7 +30,7 @@ const scheduleApi = {
   post: async (
     accessToken: string,
     categoryId: number,
-    body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
+    body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>
   ) => {
     const response = await dallogApi.post(scheduleApi.endpoint.post(categoryId), body, {
       headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
@@ -42,7 +42,7 @@ const scheduleApi = {
   patch: async (
     accessToken: string,
     scheduleId: string,
-    body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>
+    body: Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>
   ) => {
     const response = await dallogApi.patch(scheduleApi.endpoint.patch(scheduleId), body, {
       headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },

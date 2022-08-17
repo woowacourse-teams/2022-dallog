@@ -17,6 +17,8 @@ const item = css`
 `;
 
 const unsubscribeButton = ({ colors }: Theme) => css`
+  position: relative;
+
   width: 15rem;
   height: 8rem;
   border-radius: 3px;
@@ -27,6 +29,31 @@ const unsubscribeButton = ({ colors }: Theme) => css`
   font-weight: 700;
   line-height: 3.5rem;
   color: ${colors.WHITE};
+
+  &:hover {
+    filter: none;
+  }
+
+  &:hover span {
+    visibility: visible;
+  }
 `;
 
-export { categoryItem, item, unsubscribeButton };
+const menuTitle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
+`;
+
+export { categoryItem, item, menuTitle, unsubscribeButton };
