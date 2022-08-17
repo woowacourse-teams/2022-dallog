@@ -8,6 +8,7 @@ public class CategoryCreateRequest {
     @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
+    @NotBlank(message = "공백일 수 없습니다.")
     private String categoryType;
 
     private CategoryCreateRequest() {

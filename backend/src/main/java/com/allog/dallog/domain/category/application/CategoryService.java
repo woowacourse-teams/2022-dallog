@@ -49,7 +49,7 @@ public class CategoryService {
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
-        Category newCategory = new Category(request.getName(), member, CategoryType.valueOf(request.getCategoryType()));
+        Category newCategory = new Category(request.getName(), member, CategoryType.valueOf(request.getCategoryType().toUpperCase()));
         categoryRepository.save(newCategory);
         return new CategoryResponse(newCategory);
     }
