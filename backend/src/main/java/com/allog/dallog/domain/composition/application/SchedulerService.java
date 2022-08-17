@@ -33,8 +33,8 @@ public class SchedulerService {
     }
 
     public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final DateRangeRequest dateRange) {
-        List<MemberResponse> subscribers = getSubscribers(categoryId);
-        List<Category> categories = getCategoriesOfSubscribers(subscribers);
+        List<Long> subscriberIds = getSubscriberIds(categoryId);
+        List<Category> categories = getCategoriesOfSubscribers(subscriberIds);
         List<IntegrationSchedule> schedules = getSchedulesOfCategories(categories, dateRange);
 
         Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
@@ -43,16 +43,17 @@ public class SchedulerService {
         return convertPeriodsToPeriodResponses(scheduler.getPeriods());
     }
 
-    private List<MemberResponse> getSubscribers(final Long categoryId) {
+    private List<Long> getSubscriberIds(final Long categoryId) {
         List<SubscriptionResponse> subscriptions = subscriptionService.findByCategoryId(categoryId);
         return subscriptions.stream()
                 .map(subscriptionResponse -> memberService.findBySubscriptionId(subscriptionResponse.getId()))
+                .map(MemberResponse::getId)
                 .collect(Collectors.toList());
     }
 
-    private List<Category> getCategoriesOfSubscribers(final List<MemberResponse> subscribers) {
-        return subscribers.stream()
-                .flatMap(memberResponse -> subscriptionService.getAllByMemberId(memberResponse.getId()).stream())
+    private List<Category> getCategoriesOfSubscribers(final List<Long> subscriberIds) {
+        return subscriberIds.stream()
+                .flatMap(subscriberId -> subscriptionService.getAllByMemberId(subscriberId).stream())
                 .filter(Subscription::isChecked)
                 .map(Subscription::getCategory)
                 .collect(Collectors.toList());
