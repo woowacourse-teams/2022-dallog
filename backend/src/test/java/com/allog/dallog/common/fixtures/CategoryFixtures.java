@@ -65,6 +65,10 @@ public class CategoryFixtures {
         return new Category(내_일정_이름, creator, PERSONAL);
     }
 
+    public static Category 우아한테크코스_일정(final Member creator) {
+        return new Category(우아한테크코스_이름, creator, GOOGLE);
+    }
+
     public static CategoryResponse 공통_일정_응답(final MemberResponse creatorResponse) {
         return new CategoryResponse(1L, 공통_일정_이름, creatorResponse, LocalDateTime.now());
     }

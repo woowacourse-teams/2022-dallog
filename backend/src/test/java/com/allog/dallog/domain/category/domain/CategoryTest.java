@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.category.domain;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
@@ -79,6 +80,19 @@ class CategoryTest {
 
         // when
         boolean actual = 내_일정.isPersonal();
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("외부 연동 카테고리면 true를 반환한다.")
+    @Test
+    void 외부_연동_카테고리면_true를_반환한다() {
+        // given
+        Category 우아한테크코스_일정 = 우아한테크코스_일정(관리자());
+
+        // when
+        boolean actual = 우아한테크코스_일정.isExternal();
 
         // then
         assertThat(actual).isTrue();
