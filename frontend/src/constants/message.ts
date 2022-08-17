@@ -1,5 +1,3 @@
-import { VALIDATION_STRING } from './validate';
-
 const CONFIRM_MESSAGE = {
   DELETE: '정말 삭제하시겠습니까?',
   UNSUBSCRIBE: '구독을 해제하시겠습니까?',
@@ -11,8 +9,8 @@ const ERROR_MESSAGE = {
 };
 
 const TOOLTIP_MESSAGE = {
-  CANNOT_UNSUBSCRIBE_MINE: '본인의 카테고리는 구독 취소할 수 없습니다.',
-  CANNOT_EDIT_DELETE_DEFAULT_CATEGORY: `${VALIDATION_STRING.CATEGORY}은 수정/삭제가 불가능한 기본 카테고리입니다.`,
+  CANNOT_UNSUBSCRIBE_MINE: '나의 카테고리는 구독 취소할 수 없습니다.',
+  CANNOT_EDIT_DELETE_DEFAULT_CATEGORY: '기본 카테고리는 수정/삭제가 불가능합니다.',
 };
 
 export { CONFIRM_MESSAGE, ERROR_MESSAGE, TOOLTIP_MESSAGE };
