@@ -2,6 +2,7 @@ import { css, Theme } from '@emotion/react';
 
 const layoutStyle = ({ colors, flex }: Theme) => css`
   ${flex.column};
+
   align-items: flex-start;
   justify-content: center;
   gap: 10rem;
@@ -51,7 +52,17 @@ const googleSelectBoxStyle = ({ flex }: Theme) => css`
   gap: 2rem;
 `;
 
+const formStyle = ({ flex }: Theme) => css`
+  ${flex.column};
+
+  align-items: flex-start;
+
+  width: 100%;
+  height: 100%;
+`;
+
 export {
+  formStyle,
   googleSelectBoxStyle,
   googleSelectStyle,
   headerStyle,

@@ -1,31 +1,32 @@
-import { validateLength } from '@/validation';
+import { validateLength, validateNotEmpty } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useControlledInput from '@/hooks/useControlledInput';
 
-import { CategoryType } from '@/@types/category';
+import { GoogleCalendarGetResponseType } from '@/@types/googleCalendar';
 
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
+import Spinner from '@/components/@common/Spinner/Spinner';
 import {
   cancelButton,
   content,
   controlButtons,
-  form,
   saveButton,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
 import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
 import { VALIDATION_MESSAGE } from '@/constants/message';
 
-import categoryApi from '@/api/category';
+import googleCalendarApi from '@/api/googleCalendar';
 
 import {
+  formStyle,
   googleSelectBoxStyle,
   googleSelectStyle,
   headerStyle,
@@ -43,67 +44,77 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
 
   const { accessToken } = useRecoilValue(userState);
 
-  const { inputValue, onChangeValue } = useControlledInput();
+  const { inputValue: categoryInputValue, onChangeValue: onChangeCategoryInputValue } =
+    useControlledInput();
+  const { inputValue: googleCalendarInputValue, onChangeValue: onChangeGoogleCalendarInputValue } =
+    useControlledInput();
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation<
-    AxiosResponse<CategoryType>,
-    AxiosError,
-    Pick<CategoryType, 'name'>,
-    unknown
-  >((body) => categoryApi.post(accessToken, body), {
-    onSuccess: () => onSuccessPostCategory(),
-    useErrorBoundary: true,
-  });
+  const { isLoading, data } = useQuery<AxiosResponse<GoogleCalendarGetResponseType>, AxiosError>(
+    CACHE_KEY.GOOGLE_CALENDAR,
+    () => googleCalendarApi.get(accessToken)
+  );
+
+  const { mutate } = useMutation(
+    (body: { externalId: string; name: string }) => googleCalendarApi.post(accessToken, body),
+    {
+      onSuccess: () => onSuccessPostCategory(),
+      useErrorBoundary: true,
+    }
+  );
 
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ name: inputValue });
+    mutate({ externalId: googleCalendarInputValue, name: categoryInputValue });
   };
 
   const onSuccessPostCategory = () => {
     queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
     queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+
+    closeModal();
   };
 
-  const googleList = ['우테코', '우테코BE', '우테코FE', '내일정'];
+  if (isLoading || data === undefined) {
+    return <Spinner size={10} />;
+  }
 
   return (
     <div css={layoutStyle}>
       <div css={headerStyle}>구글 캘린더 가져오기</div>
-      <div css={googleSelectBoxStyle}>
-        <div css={titleStyle}>구글 캘린더 목록</div>
-        <select
-          id="myCategories"
-          defaultValue={googleList[0]}
-          css={googleSelectStyle}
-          // onChange={handleChangeMyCategorySelect}
-        >
-          <option value="" disabled>
-            구글 캘린더 목록
-          </option>
-          {googleList.map((el) => (
-            <option key={el} value={el}>
-              {el}
+      <form css={formStyle} onSubmit={handleSubmitCategoryAddForm}>
+        <div css={googleSelectBoxStyle}>
+          <div css={titleStyle}>구글 캘린더 목록</div>
+          <select
+            value={googleCalendarInputValue}
+            css={googleSelectStyle}
+            onChange={onChangeGoogleCalendarInputValue}
+          >
+            <option value="" disabled>
+              구글 캘린더 선택 (필수)
             </option>
-          ))}
-        </select>
-      </div>
-      <form css={form} onSubmit={handleSubmitCategoryAddForm}>
+            {data.data.externalCalendars.map((el) => (
+              <option key={el.calendarId} value={el.calendarId}>
+                {el.summary}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div css={content}>
           <Fieldset
             placeholder="카테고리 이름"
             autoFocus={true}
-            onChange={onChangeValue}
+            onChange={onChangeCategoryInputValue}
             errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}
             isValid={validateLength(
-              inputValue,
+              categoryInputValue,
               VALIDATION_SIZE.MIN_LENGTH,
               VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
             )}
@@ -120,10 +131,10 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
             cssProp={saveButton(theme)}
             disabled={
               !validateLength(
-                inputValue,
+                categoryInputValue,
                 VALIDATION_SIZE.MIN_LENGTH,
                 VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-              )
+              ) || !validateNotEmpty(googleCalendarInputValue)
             }
           >
             완료
