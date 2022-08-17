@@ -27,3 +27,21 @@ include::{snippets}/external-calendars/save/request-fields.adoc[]
 ==== Response
 
 include::{snippets}/external-calendars/save/http-response.adoc[]
+
+=== 자신의 외부 캘린더 중복 저장 시 예외 발생
+
+==== Request
+
+include::{snippets}/external-calendars/duplicated-save/http-request.adoc[]
+
+==== Request Headers
+
+include::{snippets}/external-calendars/duplicated-save/request-headers.adoc[]
+
+==== Request Body
+
+include::{snippets}/external-calendars/duplicated-save/request-fields.adoc[]
+
+==== Response
+
+include::{snippets}/external-calendars/duplicated-save/http-response.adoc[]

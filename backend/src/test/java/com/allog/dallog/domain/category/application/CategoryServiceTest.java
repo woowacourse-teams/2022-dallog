@@ -6,10 +6,10 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
@@ -33,6 +33,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
@@ -130,6 +131,20 @@ class CategoryServiceTest extends ServiceTest {
             assertThat(후디_대한민국_공휴일_카테고리.getName()).isEqualTo(대한민국_공휴일_이름);
             assertThat(후디_대한민국_공휴일_카테고리.getCategoryType()).isEqualTo(GOOGLE);
         });
+    }
+
+    @DisplayName("중복된 외부 카테고리를 저장하는 경우 예외를 던진다.")
+    @Test
+    void 중복된_외부_카테고리를_저장하는_경우_예외를_던진다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+
+        // when
+        categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+
+        // then
+        assertThatThrownBy(() -> categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청))
+                .isInstanceOf(DuplicatedExternalCategoryException.class);
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")

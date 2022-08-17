@@ -8,9 +8,7 @@ import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,14 +111,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     }
 
     private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return calculateDayDifference(startDateTime, endDateTime) == 1
-                && startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
+        return startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
                 && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
-    }
-
-    private long calculateDayDifference(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        LocalDate startDate = LocalDate.from(startDateTime);
-        LocalDate endDate = LocalDate.from(endDateTime);
-        return ChronoUnit.DAYS.between(startDate, endDate);
     }
 }

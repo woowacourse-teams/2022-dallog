@@ -13,6 +13,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
@@ -58,13 +59,26 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        CategoryResponse categoryResponse = save(memberId,
-                new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
+        List<Category> categories = categoryRepository.findByMemberId(memberId);
+        validateDuplicateExternalCategory(request.getExternalId(), categories);
 
-        Category category = getCategory(categoryResponse.getId());
+        CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
+        Category category = getCategory(response.getId());
+
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
 
-        return categoryResponse;
+        return response;
+    }
+
+    private void validateDuplicateExternalCategory(final String externalId, final List<Category> categories) {
+        List<Category> externalCategories = categories.stream()
+                .filter(Category::isExternal)
+                .collect(Collectors.toList());
+
+        if (!externalCategories.isEmpty()
+                && externalCategoryDetailRepository.existsByExternalIdAndCategoryIn(externalId, externalCategories)) {
+            throw new DuplicatedExternalCategoryException();
+        }
     }
 
     public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
