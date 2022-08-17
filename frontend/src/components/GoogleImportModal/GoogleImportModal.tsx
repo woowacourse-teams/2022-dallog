@@ -20,8 +20,8 @@ import {
   saveButton,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
-import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
-import { VALIDATION_MESSAGE } from '@/constants/message';
+import { CACHE_KEY } from '@/constants';
+import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
 import googleCalendarApi from '@/api/googleCalendar';
 

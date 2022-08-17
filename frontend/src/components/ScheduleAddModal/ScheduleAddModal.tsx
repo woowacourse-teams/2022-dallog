@@ -16,11 +16,11 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
+import { CACHE_KEY } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
-import { VALIDATION_MESSAGE } from '@/constants/message';
+import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { getDate, getDateTime, getOneHourLaterISOString } from '@/utils/date';
+import { getDate, getDateTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';

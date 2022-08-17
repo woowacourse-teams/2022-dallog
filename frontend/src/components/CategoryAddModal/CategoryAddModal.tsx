@@ -1,10 +1,9 @@
-import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
-import useControlledInput from '@/hooks/useControlledInput';
+import useValidateCategory from '@/hooks/useValidateCategory';
 
 import { CategoryType } from '@/@types/category';
 
@@ -13,8 +12,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY, VALIDATION_SIZE } from '@/constants';
-import { VALIDATION_MESSAGE } from '@/constants/message';
+import { CACHE_KEY } from '@/constants';
 
 import categoryApi from '@/api/category';
 
@@ -37,7 +35,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
 
   const theme = useTheme();
 
-  const { inputValue, onChangeValue } = useControlledInput();
+  const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation<
@@ -52,7 +50,7 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    mutate({ name: inputValue });
+    mutate({ name: categoryValue.inputValue });
   };
 
   const onSuccessPostCategory = () => {
@@ -70,35 +68,18 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
         <div css={content}>
           <Fieldset
             placeholder="이름"
-            value={inputValue}
+            value={categoryValue.inputValue}
             autoFocus={true}
-            onChange={onChangeValue}
-            isValid={validateLength(
-              inputValue,
-              VALIDATION_SIZE.MIN_LENGTH,
-              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-            )}
-            errorMessage={VALIDATION_MESSAGE.STRING_LENGTH(
-              VALIDATION_SIZE.MIN_LENGTH,
-              VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-            )}
+            onChange={categoryValue.onChangeValue}
+            isValid={isValidCategory}
+            errorMessage={getCategoryErrorMessage()}
           />
         </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소
           </Button>
-          <Button
-            type="submit"
-            cssProp={saveButton(theme)}
-            disabled={
-              !validateLength(
-                inputValue,
-                VALIDATION_SIZE.MIN_LENGTH,
-                VALIDATION_SIZE.CATEGORY_NAME_MAX_LENGTH
-              )
-            }
-          >
+          <Button type="submit" cssProp={saveButton(theme)} disabled={!isValidCategory}>
             완료
           </Button>
         </div>
