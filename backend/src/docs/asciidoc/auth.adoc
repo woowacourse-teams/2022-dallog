@@ -6,9 +6,13 @@
 
 include::{snippets}/auth/link/http-request.adoc[]
 
-==== pathParameters
+==== Path Parameters
 
 include::{snippets}/auth/link/path-parameters.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/auth/link/request-parameters.adoc[]
 
 ==== Response
 

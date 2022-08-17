@@ -15,7 +15,7 @@ import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 public class StubOAuthClient implements OAuthClient {
 
     @Override
-    public OAuthMember getOAuthMember(final String code) {
+    public OAuthMember getOAuthMember(final String code, final String redirectUri) {
         if (code.equals(STUB_MEMBER_인증_코드)) {
             return STUB_OAUTH_MEMBER();
         }
