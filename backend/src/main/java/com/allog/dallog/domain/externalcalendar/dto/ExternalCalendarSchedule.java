@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public class ExternalCalendarSchedule {
 
     private String id;
-    private String title;
-    private String description;
+    private String title = "";
+    private String description = "";
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
