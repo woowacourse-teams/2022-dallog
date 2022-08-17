@@ -286,7 +286,7 @@ function CalendarPage() {
                     const nowDate = getFormattedDate(info.year, info.month, info.date);
                     const nowDay = getDayFromFormattedDate(nowDate);
 
-                    if (startDate === nowDate && el.priority >= maxView) {
+                    if (startDate <= nowDate && nowDate <= endDate && el.priority >= maxView) {
                       return (
                         <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
                           일정 더보기
