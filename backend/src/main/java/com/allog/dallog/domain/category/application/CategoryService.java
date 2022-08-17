@@ -121,10 +121,8 @@ public class CategoryService {
 
         scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
         subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
+        externalCategoryDetailRepository.deleteByCategoryId(categoryId);
         categoryRepository.deleteById(categoryId);
-        if (externalCategoryDetailRepository.existsByCategoryId(categoryId)) {
-            externalCategoryDetailRepository.deleteByCategoryId(categoryId);
-        }
     }
 
     private void validatePersonalCategory(final Long categoryId) {
