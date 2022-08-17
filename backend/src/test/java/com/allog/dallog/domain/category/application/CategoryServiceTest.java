@@ -147,7 +147,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(DuplicatedExternalCategoryException.class);
     }
 
-
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
     @Test
     void 페이지와_제목을_받아_해당하는_구간의_카테고리를_가져온다() {

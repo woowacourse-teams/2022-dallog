@@ -2,7 +2,6 @@ package com.allog.dallog.domain.category.exception;
 
 public class DuplicatedExternalCategoryException extends RuntimeException {
 
-
     public DuplicatedExternalCategoryException(final String message) {
         super(message);
     }
