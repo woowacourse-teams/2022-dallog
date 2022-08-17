@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.category.application;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -65,8 +67,9 @@ public class CategoryService {
         return categoryResponse;
     }
 
-    public CategoriesResponse findAllByName(final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findAllLikeCategoryName(name, pageable).getContent();
+    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
+        List<Category> categories
+                = categoryRepository.findAllLikeCategoryNameAndCategoryType(name, NORMAL, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }

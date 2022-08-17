@@ -6,10 +6,13 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.구글_연동_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -32,9 +35,9 @@ class CategoryRepositoryTest extends RepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("페이지와 사이즈와 카테고리 이름을 활용하여 해당하는 카테고리를 조회한다.")
+    @DisplayName("카테고리 이름과 타입과 페이징을 활용하여 해당하는 카테고리를 조회한다.")
     @Test
-    void 페이지와_사이즈와_카테고리_이름을_활용하여_해당하는_카테고리를_조회한다() {
+    void 카테고리_이름과_타입과_페이징을_활용하여_해당하는_카테고리를_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         categoryRepository.save(공통_일정(관리자));
@@ -42,11 +45,13 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRepository.save(FE_일정(관리자));
         categoryRepository.save(매트_아고라(관리자));
         categoryRepository.save(후디_JPA_스터디(관리자));
+        categoryRepository.save(내_일정(관리자));
+        categoryRepository.save(구글_연동_일정(관리자));
 
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryName("일", pageRequest);
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryNameAndCategoryType("일", NORMAL, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(3)
@@ -68,7 +73,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryName("파랑", pageRequest);
+        Slice<Category> actual = categoryRepository.findAllLikeCategoryNameAndCategoryType("파랑", NORMAL, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(0);

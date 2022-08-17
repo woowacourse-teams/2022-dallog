@@ -147,7 +147,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findAllByName("일", request);
+        CategoriesResponse response = categoryService.findNormalByName("일", request);
 
         // then
         assertThat(response.getCategories())
@@ -165,7 +165,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.save(후디.getId(), 내_일정_생성_요청);
 
         // when
-        CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
+        CategoriesResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
 
         // then
         assertThat(response.getCategories()).hasSize(0);
