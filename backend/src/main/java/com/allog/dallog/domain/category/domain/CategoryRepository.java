@@ -11,7 +11,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c "
             + "FROM Category c "
             + "WHERE c.name LIKE %:name% AND c.categoryType = :categoryType")
-    Slice<Category> findAllLikeCategoryNameAndCategoryType(final String name, final CategoryType categoryType, final Pageable pageable);
+    Slice<Category> findByNameContainingAndCategoryType(final String name, final CategoryType categoryType, final Pageable pageable);
 
     @Query("SELECT c "
             + "FROM Category c "

@@ -6,7 +6,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.구글_연동_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
@@ -46,12 +46,12 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRepository.save(매트_아고라(관리자));
         categoryRepository.save(후디_JPA_스터디(관리자));
         categoryRepository.save(내_일정(관리자));
-        categoryRepository.save(구글_연동_일정(관리자));
+        categoryRepository.save(우아한테크코스_일정(관리자));
 
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryNameAndCategoryType("일", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("일", NORMAL, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(3)
@@ -73,7 +73,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findAllLikeCategoryNameAndCategoryType("파랑", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("파랑", NORMAL, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(0);
