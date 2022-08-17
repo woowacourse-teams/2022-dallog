@@ -32,7 +32,7 @@ jobs:
         run: npm run check-prettier
 
       - name: Build
-        run: npm run build
+        run: npm run dev-build
 
       - name: Component test
         run: npm run test
