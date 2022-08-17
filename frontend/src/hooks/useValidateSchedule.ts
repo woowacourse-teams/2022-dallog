@@ -1,7 +1,7 @@
 import { validateLength, validateNotEmpty, validateStartEndDateTime } from '@/validation';
 import { useEffect } from 'react';
 
-import { VALIDATION_SIZE } from '@/constants';
+import { VALIDATION_SIZE } from '@/constants/validate';
 
 import { getOneHourEarlierISOString, getOneHourLaterISOString } from '@/utils/date';
 
