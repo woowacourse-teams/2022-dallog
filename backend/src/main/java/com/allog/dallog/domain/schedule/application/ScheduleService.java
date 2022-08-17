@@ -28,13 +28,13 @@ public class ScheduleService {
     public ScheduleResponse save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryService.getCategory(categoryId);
         categoryService.validateCreatorBy(memberId, category);
-        validateExternalType(category);
+        validateCategoryType(category);
 
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return new ScheduleResponse(schedule);
     }
 
-    private static void validateExternalType(final Category category) {
+    private static void validateCategoryType(final Category category) {
         if (category.isExternal()) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
         }
