@@ -45,7 +45,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<CategoriesResponse> findAllByName(@RequestParam(defaultValue = "") final String name,
                                                             final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findAllByName(name, pageable));
+        return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
     }
 
     @GetMapping("/me")

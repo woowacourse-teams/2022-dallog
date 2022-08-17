@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
@@ -137,6 +138,22 @@ class ScheduleServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> scheduleService.save(후디.getId(), 0L, 일정_생성_요청)).
                 isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("일정 생성시 전달한 카테고리가 외부 연동 카테고리라면 예외를 던진다.")
+    @Test
+    void 일정_생성시_전달한_카테고리가_외부_연동_카테고리라면_예외를_던진다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse 대한민국_공휴일 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+
+        LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
+        LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
+        ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.save(후디.getId(), 대한민국_공휴일.getId(), 일정_생성_요청)).
+                isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("일정의 ID로 단건 일정을 조회한다.")

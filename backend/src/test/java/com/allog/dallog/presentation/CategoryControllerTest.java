@@ -130,7 +130,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findAllByName(any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
@@ -159,7 +159,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findAllByName(any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
