@@ -9,6 +9,7 @@ const CACHE_KEY = {
   CATEGORIES: 'categories',
   CATEGORY: 'category',
   ENTER: 'enter',
+  GOOGLE_CALENDAR: 'googleCalendar',
   MY_CATEGORIES: 'myCategories',
   PROFILE: 'profile',
   SCHEDULE: 'schedule',
