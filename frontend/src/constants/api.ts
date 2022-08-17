@@ -14,6 +14,7 @@ const CACHE_KEY = {
   MY_CATEGORIES: 'myCategories',
   PROFILE: 'profile',
   SCHEDULE: 'schedule',
+  SCHEDULER: 'scheduler',
   SCHEDULES: 'schedules',
   SUBSCRIPTIONS: 'subscriptions',
   VALIDATE: 'validate',

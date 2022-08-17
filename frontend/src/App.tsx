@@ -12,6 +12,7 @@ import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage/PrivacyPolicyPage';
+import SchedulingPage from '@/pages/SchedulingPage/SchedulingPage';
 
 import { PATH } from '@/constants';
 
@@ -45,6 +46,7 @@ function App() {
             </Route>
             <Route element={<ProtectRoute />}>
               <Route path={PATH.CATEGORY} element={<CategoryPage />} />
+              <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
