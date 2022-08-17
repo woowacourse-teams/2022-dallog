@@ -11,6 +11,7 @@ import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import MainPage from '@/pages/MainPage/MainPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage/PrivacyPolicyPage';
 
 import { PATH } from '@/constants';
 
@@ -40,6 +41,7 @@ function App() {
             <Route element={<PublicRoute />}>
               <Route path={PATH.MAIN} element={<MainPage />} />
               <Route path={PATH.AUTH} element={<AuthPage />} />
+              <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
             </Route>
             <Route element={<ProtectRoute />}>
               <Route path={PATH.CATEGORY} element={<CategoryPage />} />
