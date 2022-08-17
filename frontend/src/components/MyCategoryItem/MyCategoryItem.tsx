@@ -12,7 +12,8 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModifyModal';
 
 import { CACHE_KEY } from '@/constants';
-import { CONFIRM_MESSAGE } from '@/constants/message';
+import { CATEGORY_TYPE } from '@/constants/category';
+import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 
@@ -21,7 +22,7 @@ import categoryApi from '@/api/category';
 import { FiEdit3 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
-import { buttonStyle, categoryItemStyle, itemStyle } from './MyCategoryItem.style';
+import { buttonStyle, categoryItemStyle, itemStyle, menuTitle } from './MyCategoryItem.style';
 
 interface MyCategoryItemProps {
   category: CategoryType;
@@ -50,6 +51,8 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
     queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
   };
 
+  const canEditCategory = category.categoryType !== CATEGORY_TYPE.PERSONAL;
+
   return (
     <div css={categoryItemStyle}>
       <span css={itemStyle}>{getISODateString(category.createdAt)}</span>
@@ -58,11 +61,25 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
         <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
           <CategoryModifyModal category={category} closeModal={toggleCategoryModifyModalOpen} />
         </ModalPortal>
-        <Button cssProp={buttonStyle} onClick={toggleCategoryModifyModalOpen}>
+        <Button
+          cssProp={buttonStyle}
+          onClick={toggleCategoryModifyModalOpen}
+          disabled={!canEditCategory}
+        >
           <FiEdit3 size={20} />
+          {!canEditCategory ? (
+            <span css={menuTitle}>{TOOLTIP_MESSAGE.CANNOT_EDIT_DELETE_DEFAULT_CATEGORY}</span>
+          ) : (
+            <></>
+          )}
         </Button>
-        <Button cssProp={buttonStyle} onClick={handleClickDeleteButton}>
+        <Button cssProp={buttonStyle} onClick={handleClickDeleteButton} disabled={!canEditCategory}>
           <RiDeleteBin6Line size={20} />
+          {!canEditCategory ? (
+            <span css={menuTitle}>{TOOLTIP_MESSAGE.CANNOT_EDIT_DELETE_DEFAULT_CATEGORY}</span>
+          ) : (
+            <></>
+          )}
         </Button>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
 const buttonStyle = ({ colors }: Theme) => css`
+  position: relative;
+
   width: 8rem;
   height: 8rem;
 
@@ -15,6 +17,27 @@ const buttonStyle = ({ colors }: Theme) => css`
 
     filter: none;
   }
+
+  &:hover span {
+    visibility: visible;
+  }
+`;
+
+const menuTitle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
 `;
 
 const categoryItemStyle = ({ colors, flex }: Theme) => css`
@@ -33,4 +56,4 @@ const itemStyle = css`
   text-align: center;
 `;
 
-export { buttonStyle, categoryItemStyle, itemStyle };
+export { buttonStyle, categoryItemStyle, itemStyle, menuTitle };
