@@ -12,8 +12,8 @@ public class GoogleCalendarEventResponse {
     private String id;
     private String status;
     private String htmlLink;
-    private String summary;
-    private String description;
+    private String summary = "";
+    private String description = "";
     private String location;
     private GoogleDateFormat start;
     private GoogleDateFormat end;
