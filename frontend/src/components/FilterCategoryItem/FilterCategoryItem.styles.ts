@@ -94,14 +94,19 @@ const outerStyle = css`
   background-color: transparent;
 `;
 
+const grayTextStyle = ({ colors }: Theme) => css`
+  color: ${colors.GRAY_600};
+`;
+
 export {
   itemStyle,
   colorStyle,
   checkBoxNameStyle,
-  nameStyle,
+  grayTextStyle,
   headerStyle,
-  outerStyle,
   iconStyle,
+  nameStyle,
+  outerStyle,
   paletteStyle,
   paletteLayoutStyle,
 };

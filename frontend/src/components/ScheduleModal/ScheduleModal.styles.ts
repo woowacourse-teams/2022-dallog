@@ -100,12 +100,17 @@ const colorStyle = (colorCode: string | undefined) => css`
   background: ${colorCode};
 `;
 
+const grayTextStyle = ({ colors }: Theme) => css`
+  color: ${colors.GRAY_600};
+`;
+
 export {
   buttonStyle,
   buttonTitleStyle,
   colorStyle,
   contentBlockStyle,
   contentStyle,
+  grayTextStyle,
   headerStyle,
   scheduleIconStyle,
   scheduleInfoStyle,

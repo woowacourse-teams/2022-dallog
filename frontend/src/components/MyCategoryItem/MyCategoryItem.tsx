@@ -22,7 +22,13 @@ import categoryApi from '@/api/category';
 import { FiEdit3 } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
-import { buttonStyle, categoryItemStyle, itemStyle, menuTitle } from './MyCategoryItem.style';
+import {
+  buttonStyle,
+  categoryItemStyle,
+  grayTextStyle,
+  itemStyle,
+  menuTitle,
+} from './MyCategoryItem.style';
 
 interface MyCategoryItemProps {
   category: CategoryType;
@@ -56,7 +62,13 @@ function MyCategoryItem({ category }: MyCategoryItemProps) {
   return (
     <div css={categoryItemStyle}>
       <span css={itemStyle}>{getISODateString(category.createdAt)}</span>
-      <span css={itemStyle}>{category.name}</span>
+      <span css={itemStyle}>
+        {category.name}
+        <span css={grayTextStyle}>
+          {category.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
+          {category.categoryType === CATEGORY_TYPE.PERSONAL && ' (기본)'}
+        </span>
+      </span>
       <div css={itemStyle}>
         <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
           <CategoryModifyModal category={category} closeModal={toggleCategoryModifyModalOpen} />
