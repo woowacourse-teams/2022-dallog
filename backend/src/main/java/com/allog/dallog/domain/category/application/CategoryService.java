@@ -11,6 +11,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -89,7 +90,6 @@ public class CategoryService {
     @Transactional
     public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
         Category category = getCategory(categoryId);
-
         validatePermission(memberId, categoryId);
 
         category.changeName(request.getName());
@@ -99,10 +99,18 @@ public class CategoryService {
     public void deleteById(final Long memberId, final Long categoryId) {
         validateCategoryExisting(categoryId);
         validatePermission(memberId, categoryId);
+        validatePersonalCategory(categoryId);
 
         scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
         subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
         categoryRepository.deleteById(categoryId);
+    }
+
+    private void validatePersonalCategory(final Long categoryId) {
+        Category category = getCategory(categoryId);
+        if (category.isPersonal()) {
+            throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
+        }
     }
 
     private void validateCategoryExisting(final Long categoryId) {

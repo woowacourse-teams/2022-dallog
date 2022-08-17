@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RegisterService {
 
-    private static final String PERSONAL_CATEGORY_NAME = "개인 일정";
+    private static final String PERSONAL_CATEGORY_NAME = "내 일정";
 
     private final MemberService memberService;
     private final CategoryService categoryService;

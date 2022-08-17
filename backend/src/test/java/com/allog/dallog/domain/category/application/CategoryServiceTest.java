@@ -9,8 +9,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_개인_학습_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
@@ -26,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -92,13 +92,13 @@ class CategoryServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
 
         // when
-        CategoryResponse 후디_개인_학습_일정_응답 = categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
-        Category 후디_개인_학습_일정 = categoryRepository.findById(후디_개인_학습_일정_응답.getId()).get();
+        CategoryResponse 내_일정_응답 = categoryService.save(후디.getId(), 내_일정_생성_요청);
+        Category 내_일정 = categoryRepository.findById(내_일정_응답.getId()).get();
 
         // then
         assertAll(() -> {
-            assertThat(후디_개인_학습_일정.getName()).isEqualTo(후디_개인_학습_일정_이름);
-            assertThat(후디_개인_학습_일정.isPersonal()).isTrue();
+            assertThat(내_일정.getName()).isEqualTo(CategoryFixtures.내_일정_이름);
+            assertThat(내_일정.isPersonal()).isTrue();
         });
     }
 
@@ -162,7 +162,7 @@ class CategoryServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
         MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
-        categoryService.save(후디.getId(), 후디_개인_학습_일정_생성_요청);
+        categoryService.save(후디.getId(), 내_일정_생성_요청);
 
         // when
         CategoriesResponse response = categoryService.findAllByName("", PageRequest.of(0, 10));
@@ -371,6 +371,19 @@ class CategoryServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
+    }
+
+    @DisplayName("개인 카테고리는 삭제할 수 없다.")
+    @Test
+    void 개인_카테고리는_삭제할_수_없다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 내_일정 = categoryService.save(관리자.getId(), 내_일정_생성_요청);
+        subscriptionService.save(관리자.getId(), 내_일정.getId());
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 내_일정.getId()))
+                .isInstanceOf(InvalidCategoryException.class);
     }
 
     @DisplayName("특정 회원의 카테고리를 전부 삭제한다.")
