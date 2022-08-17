@@ -1,7 +1,10 @@
 package com.allog.dallog.domain.member.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class MemberUpdateRequest {
 
+    @NotBlank(message = "공백일 수 없습니다.")
     private String displayName;
 
     private MemberUpdateRequest() {

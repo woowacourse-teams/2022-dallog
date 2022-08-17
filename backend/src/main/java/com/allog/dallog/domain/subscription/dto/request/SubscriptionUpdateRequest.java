@@ -2,9 +2,11 @@ package com.allog.dallog.domain.subscription.dto.request;
 
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotBlank;
 
 public class SubscriptionUpdateRequest {
 
+    @NotBlank(message = "공백일 수 없습니다.")
     private String colorCode;
     private boolean checked;
 
