@@ -13,6 +13,7 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 
 import { CACHE_KEY } from '@/constants';
+import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
@@ -93,10 +94,15 @@ function ScheduleModal({
     return dateTime.replace('T', ' ');
   };
 
+  const canEditSchedule =
+    (scheduleInfo.categoryType === CATEGORY_TYPE.NORMAL ||
+      scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL) &&
+    profileGetResponse?.data.id === categoryGetResponse?.data.creator.id;
+
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>
       <div css={headerStyle}>
-        {profileGetResponse?.data.id === categoryGetResponse?.data.creator.id && (
+        {canEditSchedule && (
           <>
             <Button cssProp={buttonStyle} onClick={handleClickModifyButton}>
               <FiEdit3 />

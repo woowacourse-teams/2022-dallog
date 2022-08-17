@@ -64,7 +64,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>,
+    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
     unknown
   >((body) => scheduleApi.post(accessToken, categoryId, body), {
     onSuccess: () => {

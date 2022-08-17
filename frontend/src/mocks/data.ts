@@ -268,6 +268,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       memo: '잠실역',
       categoryId: 3,
       colorCode: '#F37970',
+      categoryType: 'NORMAL',
     },
     {
       id: '2',
@@ -277,6 +278,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       memo: '',
       categoryId: 7,
       colorCode: '#FEDA15',
+      categoryType: 'NORMAL',
     },
     {
       id: '3',
@@ -286,6 +288,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       memo: '✈️',
       categoryId: 20,
       colorCode: '#0C2D48',
+      categoryType: 'NORMAL',
     },
   ],
 
@@ -298,6 +301,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       memo: '',
       categoryId: 19,
       colorCode: '#695E93',
+      categoryType: 'NORMAL',
     },
   ],
 
@@ -310,6 +314,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       memo: '실행 컨텍스트',
       categoryId: 10,
       colorCode: '#81B622',
+      categoryType: 'NORMAL',
     },
   ],
 };

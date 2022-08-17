@@ -59,7 +59,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const { mutate } = useMutation<
     AxiosResponse,
     AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode'>,
+    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
     unknown
   >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
     onSuccess: () => onSuccessPatchSchedule(),
