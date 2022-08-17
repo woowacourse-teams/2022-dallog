@@ -66,7 +66,7 @@ function CalendarPage() {
 
   const dateRef = useRef<HTMLDivElement>(null);
 
-  const [hoveringId, setHoveringId] = useState(0);
+  const [hoveringId, setHoveringId] = useState('0');
   const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
   const [modalPos, setModalPos] = useState<ModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
@@ -216,12 +216,12 @@ function CalendarPage() {
     toggleDateModalOpen();
   };
 
-  const onMouseEnter = (scheduleId: number) => {
+  const onMouseEnter = (scheduleId: string) => {
     setHoveringId(scheduleId);
   };
 
   const onMouseLeave = () => {
-    setHoveringId(0);
+    setHoveringId('0');
   };
 
   const maxView =

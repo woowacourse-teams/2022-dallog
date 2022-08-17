@@ -209,7 +209,7 @@ const myCategoryDB = {
 
 const scheduleDB = [
   {
-    id: 1,
+    id: '1',
     title: '공원조 회식',
     startDateTime: '2022-07-07T18:00',
     endDateTime: '2022-07-07T22:00',
@@ -217,7 +217,7 @@ const scheduleDB = [
     categoryId: 3,
   },
   {
-    id: 2,
+    id: '2',
     title: 'Typescript 강의',
     startDateTime: '2022-07-09T10:00',
     endDateTime: '2022-07-10T12:30',
@@ -225,7 +225,7 @@ const scheduleDB = [
     categoryId: 12,
   },
   {
-    id: 3,
+    id: '3',
     title: '어깨',
     startDateTime: '2022-07-17T00:00',
     endDateTime: '2022-07-17T23:59',
@@ -233,7 +233,7 @@ const scheduleDB = [
     categoryId: 19,
   },
   {
-    id: 4,
+    id: '4',
     title: '준조 MT',
     startDateTime: '2022-07-17T17:00',
     endDateTime: '2022-07-21T07:00',
@@ -241,7 +241,7 @@ const scheduleDB = [
     categoryId: 7,
   },
   {
-    id: 5,
+    id: '5',
     title: '제주 여행',
     startDateTime: '2022-07-04T13:00',
     endDateTime: '2022-07-06T07:00',
@@ -249,7 +249,7 @@ const scheduleDB = [
     categoryId: 20,
   },
   {
-    id: 6,
+    id: '6',
     title: '공원조 MT',
     startDateTime: '2022-07-23T13:00',
     endDateTime: '2022-07-23T15:00',
@@ -261,7 +261,7 @@ const scheduleDB = [
 const getScheduleDB: { [key: string]: ScheduleType[] } = {
   longTerms: [
     {
-      id: 1,
+      id: '1',
       title: '공원조 회식',
       startDateTime: '2022-08-04T13:00',
       endDateTime: '2022-08-06T07:00',
@@ -270,7 +270,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       colorCode: '#F37970',
     },
     {
-      id: 2,
+      id: '2',
       title: '준조 MT',
       startDateTime: '2022-08-17T13:00',
       endDateTime: '2022-08-21T07:00',
@@ -279,7 +279,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
       colorCode: '#FEDA15',
     },
     {
-      id: 3,
+      id: '3',
       title: '제주 여행',
       startDateTime: '2022-08-05T13:00',
       endDateTime: '2022-08-22T07:00',
@@ -291,7 +291,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
 
   allDays: [
     {
-      id: 4,
+      id: '4',
       title: '어깨',
       startDateTime: '2022-08-17T00:00',
       endDateTime: '2022-08-17T23:59',
@@ -303,7 +303,7 @@ const getScheduleDB: { [key: string]: ScheduleType[] } = {
 
   fewHours: [
     {
-      id: 5,
+      id: '5',
       title: '모의 면접',
       startDateTime: '2022-08-23T13:00',
       endDateTime: '2022-08-23T15:00',
