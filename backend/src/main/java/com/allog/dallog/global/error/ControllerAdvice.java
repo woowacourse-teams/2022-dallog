@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.exception.EmptyAuthorizationHeaderException;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
+import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
@@ -39,7 +40,8 @@ public class ControllerAdvice {
             InvalidMemberException.class,
             InvalidScheduleException.class,
             InvalidSubscriptionException.class,
-            ExistSubscriptionException.class
+            ExistSubscriptionException.class,
+            DuplicatedExternalCategoryException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
