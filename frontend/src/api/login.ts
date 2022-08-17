@@ -12,7 +12,9 @@ const loginApi = {
   },
 
   getUrl: async () => {
-    const { data } = await dallogApi.get(loginApi.endPoint.googleEntry);
+    const { data } = await dallogApi.get(
+      `${loginApi.endPoint.googleEntry}?redirectUri=${location.href}oauth`
+    );
 
     return data.oAuthUri;
   },
@@ -20,6 +22,7 @@ const loginApi = {
   auth: async (code: string | null) => {
     const { data } = await dallogApi.post(loginApi.endPoint.googleToken, {
       code,
+      redirectUri: location.href.split('?')[0],
     });
 
     return data.accessToken;
