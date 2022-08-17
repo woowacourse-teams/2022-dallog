@@ -86,7 +86,8 @@ public class SubscriptionService {
 
     public List<SubscriptionResponse> findByCategoryId(final Long categoryId) {
         return subscriptionRepository.findByCategoryId(categoryId)
-                .stream().map(SubscriptionResponse::new)
+                .stream()
+                .map(SubscriptionResponse::new)
                 .collect(Collectors.toList());
     }
 
