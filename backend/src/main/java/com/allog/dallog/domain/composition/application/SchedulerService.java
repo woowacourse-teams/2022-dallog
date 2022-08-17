@@ -1,11 +1,11 @@
 package com.allog.dallog.domain.composition.application;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.integrationschedule.domain.Period;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
-import com.allog.dallog.domain.schedule.domain.Period;
-import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.scheduler.Scheduler;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
@@ -21,13 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SchedulerService {
 
-    private final ScheduleService scheduleService;
+    private final IntegrationScheduleDao integrationScheduleDao;
     private final SubscriptionService subscriptionService;
     private final MemberService memberService;
 
-    public SchedulerService(final ScheduleService scheduleService, final SubscriptionService subscriptionService,
-                            final MemberService memberService) {
-        this.scheduleService = scheduleService;
+    public SchedulerService(final IntegrationScheduleDao integrationScheduleDao,
+                            final SubscriptionService subscriptionService, final MemberService memberService) {
+        this.integrationScheduleDao = integrationScheduleDao;
         this.subscriptionService = subscriptionService;
         this.memberService = memberService;
     }
@@ -35,7 +35,7 @@ public class SchedulerService {
     public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final DateRangeRequest dateRange) {
         List<MemberResponse> subscribers = getSubscribers(categoryId);
         List<Category> categories = getCategoriesOfSubscribers(subscribers);
-        List<Schedule> schedules = getSchedulesOfCategories(categories, dateRange);
+        List<IntegrationSchedule> schedules = getSchedulesOfCategories(categories, dateRange);
 
         Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime().toLocalDate(),
                 dateRange.getEndDateTime().toLocalDate());
@@ -58,8 +58,14 @@ public class SchedulerService {
                 .collect(Collectors.toList());
     }
 
-    private List<Schedule> getSchedulesOfCategories(final List<Category> categories, final DateRangeRequest dateRange) {
-        return scheduleService.findBy(categories, dateRange);
+    private List<IntegrationSchedule> getSchedulesOfCategories(final List<Category> categories,
+                                                               final DateRangeRequest dateRange) {
+        List<Long> categoryIds = categories.stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
+
+        return integrationScheduleDao.findByCategoryIdInAndBetween(categoryIds, dateRange.getStartDateTime(),
+                dateRange.getEndDateTime());
     }
 
     private List<PeriodResponse> convertPeriodsToPeriodResponses(final List<Period> periods) {

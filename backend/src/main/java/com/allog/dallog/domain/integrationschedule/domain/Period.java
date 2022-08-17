@@ -38,12 +38,6 @@ public class Period {
         return ChronoUnit.MINUTES.between(startTime, endTime) % ONE_HOUR;
     }
 
-    public Period plusMinutes(final int minutes) {
-        LocalDateTime startDateTime = this.startDateTime.plusMinutes(minutes);
-        LocalDateTime endDateTime = this.endDateTime.plusMinutes(minutes);
-        return new Period(startDateTime, endDateTime);
-    }
-
     public List<Period> slice(final Period otherPeriod) {
         if (isNotOverlapped(otherPeriod)) {
             return List.of(this);

@@ -84,6 +84,10 @@ public class IntegrationSchedule {
         return period.getEndDateTime();
     }
 
+    public Period getPeriod() {
+        return period;
+    }
+
     public String getMemo() {
         return memo;
     }

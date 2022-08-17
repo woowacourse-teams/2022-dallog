@@ -173,8 +173,6 @@ class SchedulerServiceTest extends ServiceTest {
                 new SubscriptionUpdateRequest(Color.COLOR_1, false));
 
         // when
-        LocalDate startDate = LocalDate.of(2022, 7, 1);
-        LocalDate endDate = LocalDate.of(2022, 8, 31);
         List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
@@ -186,7 +184,7 @@ class SchedulerServiceTest extends ServiceTest {
                     날짜_2022년_7월_27일_0시_0분);
             assertThat(actual.stream().map(PeriodResponse::getEndDateTime)).containsExactly(날짜_2022년_7월_7일_16시_0분,
                     날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_20일_11시_59분,
-                    LocalDateTime.of(endDate, LocalTime.MAX));
+                    LocalDateTime.of(LocalDate.of(2022, 8, 31), LocalTime.MAX));
         });
     }
 }
