@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 
 import useControlledInput from '@/hooks/useControlledInput';
 
-import { GoogleCalendarGetResponseType } from '@/@types/googleCalendar';
+import { GoogleCalendarGetResponseType, GoogleCalendarPostBodyType } from '@/@types/googleCalendar';
 
 import { userState } from '@/recoil/atoms';
 
@@ -57,10 +57,9 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
   );
 
   const { mutate } = useMutation(
-    (body: { externalId: string; name: string }) => googleCalendarApi.post(accessToken, body),
+    (body: GoogleCalendarPostBodyType) => googleCalendarApi.post(accessToken, body),
     {
       onSuccess: () => onSuccessPostCategory(),
-      useErrorBoundary: true,
     }
   );
 

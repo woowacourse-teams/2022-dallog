@@ -1,4 +1,4 @@
-import { GoogleCalendarGetResponseType } from '@/@types/googleCalendar';
+import { GoogleCalendarGetResponseType, GoogleCalendarPostBodyType } from '@/@types/googleCalendar';
 
 import dallogApi from './';
 
@@ -21,13 +21,7 @@ const googleCalendarApi = {
     return response;
   },
 
-  post: async (
-    accessToken: string,
-    body: {
-      externalId: string;
-      name: string;
-    }
-  ) => {
+  post: async (accessToken: string, body: GoogleCalendarPostBodyType) => {
     const response = await dallogApi.post(googleCalendarApi.endpoint, body, {
       headers: { ...googleCalendarApi.headers, Authorization: `Bearer ${accessToken}` },
     });

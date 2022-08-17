@@ -5,4 +5,9 @@ interface GoogleCalendarGetResponseType {
   }>;
 }
 
-export { GoogleCalendarGetResponseType };
+interface GoogleCalendarPostBodyType {
+  externalId: string;
+  name: string;
+}
+
+export { GoogleCalendarGetResponseType, GoogleCalendarPostBodyType };
