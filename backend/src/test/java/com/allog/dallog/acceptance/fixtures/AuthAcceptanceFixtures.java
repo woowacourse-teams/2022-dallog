@@ -13,7 +13,8 @@ public class AuthAcceptanceFixtures {
     public static ExtractableResponse<Response> OAuth_인증_URI를_생성한다(final String oauthProvider) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/api/auth/{oauthProvider}/oauth-uri", oauthProvider)
+                .when().get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", oauthProvider,
+                        "https://dallog.me/oauth")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .extract();
