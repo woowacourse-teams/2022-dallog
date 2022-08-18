@@ -125,7 +125,8 @@ sonarqube {
         property "sonar.profile", "Sonar way"
         property "sonar.java.binaries", "${buildDir}/classes"
         property "sonar.test.inclusions", "**/*Test.java"
-        property 'sonar.coverage.exclusions', '**/jacoco/**, **/test/**/*, **/*Application*, **/global/config/**, **/dto/**, **/*Exception*, **/infrastructure/**, **/BaseEntity*, **/ControllerAdvice*, **/AuthorizationExtractor*'
+        property 'sonar.exclusions', '**/jacoco/**'
+        property 'sonar.coverage.exclusions', '**/test/**/*, **/*Application*, **/global/config/**, **/dto/**, **/*Exception*, **/infrastructure/**, **/BaseEntity*, **/ControllerAdvice*, **/AuthorizationExtractor*'
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/jacoco/index.xml"
     }
 }
