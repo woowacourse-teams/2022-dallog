@@ -10,7 +10,6 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { PALETTE } from '@/constants/style';
 
