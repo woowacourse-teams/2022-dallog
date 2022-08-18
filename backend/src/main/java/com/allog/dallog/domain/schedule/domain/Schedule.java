@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 public class Schedule extends BaseEntity {
 
-    private static final int MAX_TITLE_LENGTH = 20;
+    private static final int MAX_TITLE_LENGTH = 50;
     private static final int MAX_MEMO_LENGTH = 255;
 
     @Id
