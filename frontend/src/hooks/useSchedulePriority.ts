@@ -74,6 +74,14 @@ function useSchedulePriority(calendarMonth: DateType[]) {
   const getAllDaysPriority = (allDays: Array<ScheduleType>) =>
     allDays.map((el) => {
       const startDate = getISODateString(el.startDateTime);
+
+      if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
+        return {
+          schedule: el,
+          priority: CALENDAR.MAX_VIEW + 1,
+        };
+      }
+
       const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
 
       if (priorityPosition === -1) {
@@ -94,6 +102,14 @@ function useSchedulePriority(calendarMonth: DateType[]) {
   const getFewHoursPriority = (fewHours: Array<ScheduleType>) =>
     fewHours.map((el) => {
       const startDate = getISODateString(el.startDateTime);
+
+      if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
+        return {
+          schedule: el,
+          priority: CALENDAR.MAX_VIEW + 1,
+        };
+      }
+
       const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
 
       if (priorityPosition === -1) {
