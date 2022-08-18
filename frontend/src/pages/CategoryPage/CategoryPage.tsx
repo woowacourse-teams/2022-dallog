@@ -18,11 +18,13 @@ import {
   buttonStyle,
   categoryPageStyle,
   controlStyle,
+  modeTextStyle,
   outLineButtonStyle,
   searchButtonStyle,
   searchFieldsetStyle,
   searchFormStyle,
   searchInputStyle,
+  toggleModeStyle,
 } from './CategoryPage.styles';
 
 const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList'));
@@ -82,19 +84,11 @@ function CategoryPage() {
               disabled={mode === 'MY'}
             />
           </form>
-          <Button cssProp={outLineButtonStyle(theme)} onClick={handleClickFilteringButton}>
-            {mode === 'ALL' ? (
-              <span>
-                나의 카테고리
-                <br /> 보기
-              </span>
-            ) : (
-              <span>
-                전체 카테고리
-                <br /> 보기
-              </span>
-            )}
+          <Button cssProp={toggleModeStyle(theme, mode)} onClick={handleClickFilteringButton}>
+            <span css={modeTextStyle(theme, mode === 'ALL')}>전체</span>
+            <span css={modeTextStyle(theme, mode === 'MY')}>개인</span>
           </Button>
+
           <Button cssProp={outLineButtonStyle(theme)} onClick={handleClickGoogleImportButton}>
             <p>구글 캘린더</p>
             <p>가져오기</p>

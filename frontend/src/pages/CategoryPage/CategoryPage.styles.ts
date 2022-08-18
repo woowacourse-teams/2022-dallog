@@ -34,7 +34,7 @@ const searchInputStyle = css`
 `;
 
 const buttonStyle = ({ colors }: Theme) => css`
-  width: 30rem;
+  width: 40rem;
   height: 12rem;
   border-radius: 3px;
 
@@ -60,7 +60,6 @@ const outLineButtonStyle = ({ colors }: Theme) => css`
   width: 40rem;
   height: 12rem;
   border-radius: 3px;
-
   border: 1px solid ${colors.YELLOW_500};
 
   font-size: 3.5rem;
@@ -69,13 +68,40 @@ const outLineButtonStyle = ({ colors }: Theme) => css`
   color: ${colors.YELLOW_500};
 `;
 
+const toggleModeStyle = ({ colors, flex }: Theme, mode: 'ALL' | 'MY') => css`
+  ${flex.row};
+
+  justify-content: space-around;
+
+  width: 35rem;
+  height: 12rem;
+  padding: 0 1rem;
+  border-radius: 3px;
+  border: 1px solid ${colors.YELLOW_500};
+
+  background: linear-gradient(
+    90deg,
+    ${mode === 'ALL' ? colors.YELLOW_500 : colors.WHITE} 50%,
+    ${mode === 'MY' ? colors.YELLOW_500 : colors.WHITE} 50%
+  );
+`;
+
+const modeTextStyle = ({ colors }: Theme, isSelected: boolean) => css`
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+  color: ${isSelected ? colors.WHITE : colors.YELLOW_500};
+`;
+
 export {
   buttonStyle,
   categoryPageStyle,
   controlStyle,
+  modeTextStyle,
   outLineButtonStyle,
   searchButtonStyle,
   searchFieldsetStyle,
   searchFormStyle,
   searchInputStyle,
+  toggleModeStyle,
 };
