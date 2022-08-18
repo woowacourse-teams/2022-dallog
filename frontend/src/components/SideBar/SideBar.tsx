@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 
 import { sideBarState, userState } from '@/recoil/atoms';
@@ -9,12 +10,14 @@ function SideBar() {
   const { accessToken } = useRecoilValue(userState);
   const isSideBarOpen = useRecoilValue(sideBarState);
 
-  if (!accessToken || !isSideBarOpen) {
+  const theme = useTheme();
+
+  if (!accessToken) {
     return <></>;
   }
 
   return (
-    <div css={sideBar}>
+    <div css={sideBar(theme, isSideBarOpen)}>
       <FilterCategoryList />
     </div>
   );
