@@ -1,5 +1,8 @@
+import { AxiosError } from 'axios';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
+import useSnackBar from '@/hooks/useSnackBar';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
 import NavBar from '@/components/NavBar/NavBar';
@@ -16,22 +19,31 @@ import SchedulingPage from '@/pages/SchedulingPage/SchedulingPage';
 
 import { PATH } from '@/constants';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      useErrorBoundary: true,
-      retry: 1,
-      retryDelay: 0,
-    },
-    mutations: {
-      useErrorBoundary: true,
-      retry: 1,
-      retryDelay: 0,
-    },
-  },
-});
+import { ERROR_MESSAGE } from './constants/message';
 
 function App() {
+  const { openSnackBar } = useSnackBar();
+
+  const onError = (error: unknown) =>
+    error instanceof AxiosError
+      ? openSnackBar(error.response?.data.message ?? ERROR_MESSAGE.DEFAULT)
+      : openSnackBar(ERROR_MESSAGE.DEFAULT);
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        retryDelay: 0,
+        onError,
+      },
+      mutations: {
+        retry: 1,
+        retryDelay: 0,
+        onError,
+      },
+    },
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
