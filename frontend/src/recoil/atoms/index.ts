@@ -6,7 +6,7 @@ import { getAccessToken } from '@/utils/storage';
 
 const sideBarState = atom({
   key: ATOM_KEY.SIDE_BAR,
-  default: true,
+  default: false,
 });
 
 const userState = atom({
