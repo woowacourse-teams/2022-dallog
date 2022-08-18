@@ -15,6 +15,7 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 
 import { CACHE_KEY } from '@/constants/api';
+import { CATEGORY_TYPE } from '@/constants/category';
 
 import { getDate } from '@/utils/date';
 
@@ -88,6 +89,10 @@ function SchedulingPage() {
     return `${dateTime.replace('T', ' ').replace(':', '시 ').slice(0, -3)}분`;
   };
 
+  const subscriptions = subscriptionsGetResponse.data.filter(
+    (subscription) => subscription.category.categoryType === CATEGORY_TYPE.NORMAL
+  );
+
   return (
     <PageLayout>
       <div css={pageStyle}>
@@ -98,8 +103,10 @@ function SchedulingPage() {
               css={subscriptionSelectStyle}
               value={category.inputValue}
               onChange={category.onChangeValue}
+              disabled={!subscriptions.length}
             >
-              {subscriptionsGetResponse.data.map((subscription) => (
+              {!subscriptions.length && <option value="">구독한 카테고리가 없습니다.</option>}
+              {subscriptions.map((subscription) => (
                 <option key={subscription.category.id} value={subscription.category.id}>
                   {subscription.category.name}
                 </option>
