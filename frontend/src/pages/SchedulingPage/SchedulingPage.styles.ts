@@ -54,10 +54,6 @@ const dateTimeFieldsetStyle = css`
   font-size: 4rem;
 `;
 
-const signStyle = css`
-  font-size: inherit;
-`;
-
 const resultStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
@@ -92,7 +88,15 @@ const searchButtonStyle = ({ colors, flex }: Theme) => css`
   }
 `;
 
-const timeStyle = ({ colors }: Theme) => css`
+const resultTimeStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  gap: 3rem;
+
+  width: 100%;
+`;
+
+const resultDateTimeStyle = ({ colors }: Theme) => css`
   width: 100%;
   padding: 6rem;
   border-radius: 8px;
@@ -111,10 +115,10 @@ export {
   formStyle,
   labelStyle,
   pageStyle,
+  resultDateTimeStyle,
   resultStyle,
+  resultTimeStyle,
   searchButtonStyle,
-  signStyle,
   subscriptionSelectStyle,
   subscriptionStyle,
-  timeStyle,
 };

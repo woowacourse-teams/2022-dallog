@@ -21,6 +21,7 @@ import { getDate } from '@/utils/date';
 import schedulerApi from '@/api/scheduler';
 import subscriptionApi from '@/api/subscription';
 
+import { BsArrowRight } from 'react-icons/bs';
 import { GoSearch } from 'react-icons/go';
 
 import {
@@ -29,12 +30,12 @@ import {
   formStyle,
   labelStyle,
   pageStyle,
+  resultDateTimeStyle,
   resultStyle,
+  resultTimeStyle,
   searchButtonStyle,
-  signStyle,
   subscriptionSelectStyle,
   subscriptionStyle,
-  timeStyle,
 } from './SchedulingPage.styles';
 
 function SchedulingPage() {
@@ -113,7 +114,7 @@ function SchedulingPage() {
               value={startDateTime.inputValue}
               onChange={startDateTime.onChangeValue}
             />
-            <span css={signStyle}>→</span>
+            <BsArrowRight size={40} />
             <Fieldset
               type="date"
               cssProp={{ div: dateTimeFieldsetStyle, label: labelStyle(theme) }}
@@ -130,9 +131,11 @@ function SchedulingPage() {
         <div css={resultStyle}>
           {schedulingGetResponse &&
             schedulingGetResponse.data.map((schedule) => (
-              <div key={schedule.startDateTime} css={timeStyle}>{`${formatDateTime(
-                schedule.startDateTime
-              )} ~ ${formatDateTime(schedule.endDateTime)}`}</div>
+              <div key={schedule.startDateTime} css={resultTimeStyle}>
+                <div css={resultDateTimeStyle}>{formatDateTime(schedule.startDateTime)}</div>
+                <BsArrowRight size={40} />
+                <div css={resultDateTimeStyle}>{formatDateTime(schedule.endDateTime)}</div>
+              </div>
             ))}
         </div>
       </div>
