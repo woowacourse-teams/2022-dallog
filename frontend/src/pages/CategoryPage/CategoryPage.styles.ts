@@ -36,7 +36,8 @@ const searchInputStyle = css`
 const buttonStyle = ({ colors }: Theme) => css`
   width: 40rem;
   height: 12rem;
-  border-radius: 3px;
+  border-radius: 8px;
+  border: 1px solid ${colors.GRAY_500};
 
   background: ${colors.YELLOW_500};
 
@@ -59,8 +60,8 @@ const controlStyle = ({ flex }: Theme) => css`
 const outLineButtonStyle = ({ colors }: Theme) => css`
   width: 40rem;
   height: 12rem;
-  border-radius: 3px;
-  border: 1px solid ${colors.YELLOW_500};
+  border-radius: 8px;
+  border: 1px solid ${colors.GRAY_500};
 
   font-size: 3.5rem;
   font-weight: 700;
@@ -76,8 +77,8 @@ const toggleModeStyle = ({ colors, flex }: Theme, mode: 'ALL' | 'MY') => css`
   width: 35rem;
   height: 12rem;
   padding: 0 1rem;
-  border-radius: 3px;
-  border: 1px solid ${colors.YELLOW_500};
+  border-radius: 8px;
+  border: 1px solid ${colors.GRAY_500};
 
   background: linear-gradient(
     90deg,

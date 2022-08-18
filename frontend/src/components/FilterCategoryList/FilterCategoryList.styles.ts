@@ -1,11 +1,14 @@
 import { css, Theme } from '@emotion/react';
 
-const contentStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
+  ${flex.column}
 
-  width: 100%;
+  display: ${isSideBarOpen ? 'flex' : 'none'};
+  justify-content: flex-start;
+
+  width: 54rem;
+
+  font-size: 4rem;
 `;
 
 const headerStyle = ({ flex }: Theme) => css`
@@ -15,20 +18,42 @@ const headerStyle = ({ flex }: Theme) => css`
 
   width: 100%;
   height: 8rem;
-  margin-bottom: 2rem;
 
   font-weight: bold;
 `;
 
-const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
-  ${flex.column};
+const googleImportButtonStyle = ({ colors, flex }: Theme) => css`
+  ${flex.row}
 
-  display: ${isSideBarOpen ? 'flex' : 'none'};
-  justify-content: flex-start;
+  position: relative;
 
-  width: 54rem;
+  width: 100%;
+  height: 11rem;
+  padding: 4rem;
+  margin: 2rem 0 3rem;
+  border-radius: 4px;
+  border: 1px solid ${colors.GRAY_600};
+
+  background: ${colors.WHITE};
 
   font-size: 4rem;
+  color: ${colors.GRAY_600};
+
+  &:hover {
+    filter: none;
+  }
+`;
+
+const googleImportTextStyle = css`
+  width: 100%;
+`;
+
+const contentStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  width: 100%;
 `;
 
 const skeletonStyle = ({ flex }: Theme) => css`
@@ -48,4 +73,13 @@ const skeletonListStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
 
   font-size: 4rem;
 `;
-export { contentStyle, headerStyle, listStyle, skeletonStyle, skeletonListStyle };
+
+export {
+  contentStyle,
+  googleImportButtonStyle,
+  googleImportTextStyle,
+  headerStyle,
+  listStyle,
+  skeletonStyle,
+  skeletonListStyle,
+};
