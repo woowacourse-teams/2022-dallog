@@ -57,6 +57,7 @@ function Profile() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(CACHE_KEY.PROFILE);
+        queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
       },
     }
   );
