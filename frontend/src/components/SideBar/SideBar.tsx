@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import { lazy, Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -14,14 +13,12 @@ function SideBar() {
   const { accessToken } = useRecoilValue(userState);
   const isSideBarOpen = useRecoilValue(sideBarState);
 
-  const theme = useTheme();
-
-  if (!accessToken) {
+  if (!accessToken || !isSideBarOpen) {
     return <></>;
   }
 
   return (
-    <div css={sideBar(theme, isSideBarOpen)}>
+    <div css={sideBar}>
       <Suspense fallback={<FilterCategoryFallback />}>
         <FilterCategoryList />
       </Suspense>
