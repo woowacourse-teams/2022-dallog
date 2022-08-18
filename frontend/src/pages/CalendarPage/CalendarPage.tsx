@@ -69,7 +69,7 @@ function CalendarPage() {
   const dateRef = useRef<HTMLDivElement>(null);
 
   const [hoveringId, setHoveringId] = useState('0');
-  const [dateInfo, setDateInfo] = useState<CalendarType | null>(null);
+  const [dateInfo, setDateInfo] = useState<Omit<CalendarType, 'day'>>();
   const [modalPos, setModalPos] = useState<ModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
   const [moreDateInfo, setMoreDateInfo] = useState<CalendarType | null>(null);
@@ -99,6 +99,17 @@ function CalendarPage() {
   );
 
   const rowNum = Math.ceil(calendarMonth.length / 7);
+
+  const handleClickScheduleAddButton = () => {
+    const todayInfo = {
+      year: getThisYear(),
+      month: getThisMonth(),
+      date: getThisDate(),
+    };
+
+    setDateInfo(todayInfo);
+    toggleScheduleAddModalOpen();
+  };
 
   const handleClickDate = (e: React.MouseEvent, info: CalendarType) => {
     if (e.target !== e.currentTarget) {
@@ -197,10 +208,12 @@ function CalendarPage() {
               );
             })}
           </div>
-          <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
-            <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
-          </ModalPortal>
-          <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
+          {dateInfo && (
+            <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
+              <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
+            </ModalPortal>
+          )}
+          <ScheduleAddButton onClick={handleClickScheduleAddButton} />
         </div>
       </PageLayout>
     );
@@ -423,10 +436,14 @@ function CalendarPage() {
         </div>
       </div>
 
-      <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
-        <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
-      </ModalPortal>
-      <ScheduleAddButton onClick={toggleScheduleAddModalOpen} />
+      {dateInfo ? (
+        <ModalPortal isOpen={isScheduleAddModalOpen} closeModal={toggleScheduleAddModalOpen}>
+          <ScheduleAddModal dateInfo={dateInfo} closeModal={toggleScheduleAddModalOpen} />
+        </ModalPortal>
+      ) : (
+        <></>
+      )}
+      <ScheduleAddButton onClick={handleClickScheduleAddButton} />
 
       {scheduleInfo ? (
         <>
