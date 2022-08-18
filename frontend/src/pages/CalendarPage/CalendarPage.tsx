@@ -35,6 +35,7 @@ import {
   getISODateString,
   getThisDate,
   getThisMonth,
+  getThisYear,
 } from '@/utils/date';
 
 import scheduleApi from '@/api/schedule';
@@ -185,7 +186,9 @@ function CalendarPage() {
                       theme,
                       info.day,
                       current.month === info.month,
-                      getThisMonth() === info.month && getThisDate() === info.date
+                      getThisYear() === info.year &&
+                        getThisMonth() === info.month &&
+                        getThisDate() === info.date
                     )}
                   >
                     {info.date}
@@ -275,7 +278,9 @@ function CalendarPage() {
                       theme,
                       info.day,
                       current.month === info.month,
-                      getThisMonth() === info.month && getThisDate() === info.date
+                      getThisYear() === info.year &&
+                        getThisMonth() === info.month &&
+                        getThisDate() === info.date
                     )}
                   >
                     {info.date}
