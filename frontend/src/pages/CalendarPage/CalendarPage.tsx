@@ -18,7 +18,7 @@ import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
-import DateModal from '@/components/DateModal/DateModal';
+import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
 import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
@@ -72,7 +72,7 @@ function CalendarPage() {
   const [dateInfo, setDateInfo] = useState<Omit<CalendarType, 'day'>>();
   const [modalPos, setModalPos] = useState<ModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
-  const [moreDateInfo, setMoreDateInfo] = useState<CalendarType | null>(null);
+  const [moreScheduleInfo, setMoreScheduleInfo] = useState<CalendarType | null>(null);
 
   const {
     calendarMonth,
@@ -91,7 +91,7 @@ function CalendarPage() {
   const { state: isScheduleModalOpen, toggleState: toggleScheduleModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
-  const { state: isDateModalOpen, toggleState: toggleDateModalOpen } = useToggle();
+  const { state: isMoreScheduleModalOpen, toggleState: toggleMoreScheduleModalOpen } = useToggle();
 
   const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
     [CACHE_KEY.SCHEDULES, current],
@@ -229,8 +229,8 @@ function CalendarPage() {
     }
 
     setModalPos(calculateModalPos(e.clientX, e.clientY));
-    setMoreDateInfo(info);
-    toggleDateModalOpen();
+    setMoreScheduleInfo(info);
+    toggleMoreScheduleModalOpen();
   };
 
   const onMouseEnter = (scheduleId: string) => {
@@ -415,15 +415,15 @@ function CalendarPage() {
                   })}
                 </div>
 
-                {info === moreDateInfo && (
+                {info === moreScheduleInfo && (
                   <ModalPortal
-                    isOpen={isDateModalOpen}
-                    closeModal={toggleDateModalOpen}
+                    isOpen={isMoreScheduleModalOpen}
+                    closeModal={toggleMoreScheduleModalOpen}
                     dimmerBackground={TRANSPARENT}
                   >
-                    <DateModal
-                      dateModalPos={modalPos}
-                      moreDateInfo={moreDateInfo}
+                    <MoreScheduleModal
+                      moreScheduleModalPos={modalPos}
+                      moreScheduleInfo={moreScheduleInfo}
                       longTermsWithPriority={longTermsWithPriority}
                       allDaysWithPriority={allDaysWithPriority}
                       fewHoursWithPriority={fewHoursWithPriority}
