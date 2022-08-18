@@ -8,8 +8,8 @@ import { SubscriptionType } from '@/@types/subscription';
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
+import Spinner from '@/components/@common/Spinner/Spinner';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { PALETTE } from '@/constants/style';
 
@@ -41,14 +41,11 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { isLoading, mutate } = useMutation(
     (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
       subscriptionApi.patch(accessToken, subscription.id, body),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-        queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-      },
+      onSuccess: () => queryClient.invalidateQueries(),
     }
   );
 
@@ -100,9 +97,11 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
         </span>
       </div>
       <div css={paletteLayoutStyle}>
+        {isLoading && <Spinner />}
         <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
           <BiPalette size={20} />
         </Button>
+
         {isPaletteOpen && (
           <>
             <div css={outerStyle} onClick={togglePaletteOpen} />
