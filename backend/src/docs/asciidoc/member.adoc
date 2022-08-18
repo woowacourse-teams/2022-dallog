@@ -1,0 +1,53 @@
+== Member(회원)
+
+=== 내 정보 조회
+
+==== Request
+
+include::{snippets}/members/me/http-request.adoc[]
+
+==== RequestHeaders
+
+include::{snippets}/members/me/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/members/me/http-response.adoc[]
+
+=== 삭제된 회원 정보 조회
+
+==== Request
+
+include::{snippets}/members/exception/notfound/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/members/exception/notfound/http-response.adoc[]
+
+=== 내 정보 수정
+
+==== Request
+
+include::{snippets}/members/update/http-request.adoc[]
+
+==== RequestHeaders
+
+include::{snippets}/members/update/request-headers.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/members/update/request-body.adoc[]
+
+==== Response
+
+include::{snippets}/members/update/http-response.adoc[]
+
+=== 회원 탈퇴
+
+==== Request
+
+include::{snippets}/members/delete/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/members/delete/http-response.adoc[]

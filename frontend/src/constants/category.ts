@@ -1,0 +1,7 @@
+const CATEGORY_TYPE = {
+  GOOGLE: 'GOOGLE',
+  NORMAL: 'NORMAL',
+  PERSONAL: 'PERSONAL',
+};
+
+export { CATEGORY_TYPE };
