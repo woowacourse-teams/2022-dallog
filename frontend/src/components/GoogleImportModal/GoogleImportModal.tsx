@@ -15,10 +15,10 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import {
-  cancelButton,
+  cancelButtonStyle,
   content,
   controlButtons,
-  saveButton,
+  saveButtonStyle,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
 import { CACHE_KEY } from '@/constants/api';
@@ -113,12 +113,12 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
           />
         </div>
         <div css={controlButtons}>
-          <Button cssProp={cancelButton(theme)} onClick={closeModal}>
+          <Button cssProp={cancelButtonStyle(theme)} onClick={closeModal}>
             취소
           </Button>
           <Button
             type="submit"
-            cssProp={saveButton(theme)}
+            cssProp={saveButtonStyle(theme)}
             disabled={!isValidCategory || !validateNotEmpty(googleCalendarInputValue)}
           >
             완료
