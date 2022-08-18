@@ -4,6 +4,7 @@ import { ModalPosType } from '@/@types';
 import { CalendarType } from '@/@types/calendar';
 import { ScheduleType } from '@/@types/schedule';
 
+import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 
 import { getFormattedDate, getISODateString, getThisDate, getThisMonth } from '@/utils/date';
@@ -61,7 +62,7 @@ function DateModal({
               key={`modal-${nowDate}#${el.schedule.id}`}
               css={itemWithBackgroundStyle(el.schedule.colorCode)}
             >
-              {el.schedule.title}
+              {el.schedule.title || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
@@ -77,7 +78,7 @@ function DateModal({
               key={`modal-${nowDate}#${el.schedule.id}`}
               css={itemWithBackgroundStyle(el.schedule.colorCode)}
             >
-              {el.schedule.title}
+              {el.schedule.title || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
@@ -93,7 +94,7 @@ function DateModal({
               key={`modal-${nowDate}#${el.schedule.id}`}
               css={itemWithoutBackgroundStyle(theme, el.schedule.colorCode)}
             >
-              {el.schedule.title}
+              {el.schedule.title || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );

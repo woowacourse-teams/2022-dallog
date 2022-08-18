@@ -6,6 +6,7 @@ const ATOM_KEY = {
 
 const CALENDAR = {
   MAX_VIEW: 10,
+  EMPTY_TITLE: '제목없음',
 };
 
 const SELECTOR_KEY = {

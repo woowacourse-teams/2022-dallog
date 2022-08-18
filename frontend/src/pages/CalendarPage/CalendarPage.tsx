@@ -310,7 +310,8 @@ function CalendarPage() {
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
                           onMouseLeave={onMouseLeave}
                         >
-                          {(startDate === nowDate || nowDay === 0) && el.schedule.title}
+                          {(startDate === nowDate || nowDay === 0) &&
+                            (el.schedule.title || CALENDAR.EMPTY_TITLE)}
                         </div>
                       )
                     );
@@ -342,7 +343,7 @@ function CalendarPage() {
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
                           onMouseLeave={onMouseLeave}
                         >
-                          {el.schedule.title}
+                          {el.schedule.title || CALENDAR.EMPTY_TITLE}
                         </div>
                       )
                     );
@@ -375,7 +376,7 @@ function CalendarPage() {
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
                           onMouseLeave={onMouseLeave}
                         >
-                          {el.schedule.title}
+                          {el.schedule.title || CALENDAR.EMPTY_TITLE}
                         </div>
                       )
                     );
