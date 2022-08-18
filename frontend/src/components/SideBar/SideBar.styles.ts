@@ -1,14 +1,14 @@
 import { css, Theme } from '@emotion/react';
 
-const sideBar = ({ colors }: Theme, isSideBarOpen: boolean) => css`
+const sideBar = ({ colors }: Theme) => css`
   overflow-y: overlay;
   overflow-x: hidden;
   position: fixed;
   z-index: 10;
 
-  width: ${isSideBarOpen ? '64rem' : '0'};
+  width: 64rem;
   height: calc(100vh - 16rem);
-  padding: ${isSideBarOpen ? '4rem' : '0'};
+  padding: 4rem;
   border: 1px solid ${colors.GRAY_400};
 
   background: ${colors.WHITE};

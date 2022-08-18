@@ -1,9 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-
-import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
@@ -17,15 +13,10 @@ function NotFoundPage() {
 
   const navigation = useNavigate();
 
-  const [isSideBarOpen, toggleSideBarOpen] = useRecoilState(sideBarSelector);
-
   const handleClickReturnButton = () => {
     navigation(PATH.MAIN);
   };
 
-  useEffect(() => {
-    toggleSideBarOpen(isSideBarOpen);
-  }, []);
   return (
     <PageLayout>
       <div css={layoutStyle}>
