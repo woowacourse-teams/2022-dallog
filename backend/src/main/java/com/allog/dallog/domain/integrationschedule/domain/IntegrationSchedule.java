@@ -6,6 +6,7 @@ import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class IntegrationSchedule {
 
@@ -94,5 +95,26 @@ public class IntegrationSchedule {
 
     public String getCategoryType() {
         return categoryType;
+    }
+
+    // 중복 일정을 판별하기 위한 equals & hashCode
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        IntegrationSchedule that = (IntegrationSchedule) o;
+        return Objects.equals(id, that.id) && Objects.equals(categoryId, that.categoryId)
+                && Objects.equals(title, that.title) && Objects.equals(period, that.period)
+                && Objects.equals(memo, that.memo) && Objects.equals(categoryType, that.categoryType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, categoryId, title, period, memo, categoryType);
     }
 }

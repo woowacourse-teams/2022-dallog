@@ -18,6 +18,16 @@ include::{snippets}/subscription/save/request-headers.adoc[]
 
 include::{snippets}/subscription/save/http-response.adoc[]
 
+=== 자신의 구독 목록 조회
+
+==== Request
+
+include::{snippets}/subscription/findMine/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/findMine/http-response.adoc[]
+
 === 중복된 구독 등록
 
 ==== Request
