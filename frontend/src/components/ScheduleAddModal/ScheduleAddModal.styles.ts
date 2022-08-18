@@ -18,7 +18,6 @@ const form = ({ flex }: Theme) => css`
 
 const categorySelect = ({ colors }: Theme) => css`
   width: 100%;
-  height: 13rem;
   padding: 3rem;
   border: 1px solid ${colors.GRAY_400};
   border-radius: 8px;
@@ -86,6 +85,22 @@ const saveButton = ({ colors }: Theme) => css`
   color: ${colors.WHITE};
 `;
 
+const labelStyle = ({ colors }: Theme) => css`
+  padding: 0 1rem;
+
+  font-size: 4rem;
+  color: ${colors.GRAY_800};
+`;
+
+const selectBoxStyle = ({ flex }: Theme) => css`
+  ${flex.column};
+
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  width: 100%;
+`;
+
 export {
   allDayButton,
   arrow,
@@ -94,6 +109,8 @@ export {
   controlButtons,
   dateTime,
   form,
+  labelStyle,
   saveButton,
   scheduleAddModal,
+  selectBoxStyle,
 };
