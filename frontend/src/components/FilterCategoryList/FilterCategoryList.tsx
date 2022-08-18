@@ -13,6 +13,7 @@ import { CACHE_KEY } from '@/constants/api';
 
 import subscriptionApi from '@/api/subscription';
 
+import FilterCategoryFallback from './FilterCategoryList.fallback';
 import { contentStyle, headerStyle, listStyle } from './FilterCategoryList.styles';
 
 function FilterCategoryList() {
@@ -21,10 +22,14 @@ function FilterCategoryList() {
 
   const theme = useTheme();
 
-  const { data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
+  const { isLoading, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
     CACHE_KEY.SUBSCRIPTIONS,
     () => subscriptionApi.get(accessToken)
   );
+
+  if (isLoading || data === undefined) {
+    return <FilterCategoryFallback />;
+  }
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>

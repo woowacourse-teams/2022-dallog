@@ -21,7 +21,7 @@ const headerStyle = ({ flex }: Theme) => css`
 `;
 
 const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
-  ${flex.column}
+  ${flex.column};
 
   display: ${isSideBarOpen ? 'flex' : 'none'};
   justify-content: flex-start;
@@ -37,4 +37,15 @@ const skeletonStyle = ({ flex }: Theme) => css`
   gap: 5rem;
 `;
 
-export { contentStyle, headerStyle, listStyle, skeletonStyle };
+const skeletonListStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
+  ${flex.column};
+
+  display: ${isSideBarOpen ? 'flex' : 'none'};
+  justify-content: flex-start;
+
+  width: 54rem;
+  margin-top: 16rem;
+
+  font-size: 4rem;
+`;
+export { contentStyle, headerStyle, listStyle, skeletonStyle, skeletonListStyle };
