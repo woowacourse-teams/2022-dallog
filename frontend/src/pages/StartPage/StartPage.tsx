@@ -16,7 +16,9 @@ import loginApi from '@/api/login';
 
 import { FcGoogle } from 'react-icons/fc';
 
-import howToUse from '../../assets/how_to_use_1.png';
+import howToUse1 from '../../assets/how_to_use_1.png';
+import howToUse2 from '../../assets/how_to_use_2.png';
+import howToUse3 from '../../assets/how_to_use_3.png';
 import {
   blackTextStyle,
   calendarStyle,
@@ -119,24 +121,26 @@ function StartPage() {
           <span css={methodHeaderStyle}> 달록은 이렇습니다</span>
           <div ref={firstMethod} css={refStyle} />
           <div css={methodItemStyle(theme, methodAnimation[0], 'left')}>
-            <img src={howToUse} alt="달록 사용법 1" css={imageStyle} />
+            <img src={howToUse1} alt="달록 사용법 1" css={imageStyle} />
             <span css={methodTextStyle}>
-              공유 받고 싶은 카테고리를 구독하여 내 달력에서 일정을 볼 수 있습니다.
+              공유 받고 싶은 카테고리를 구독하여 <br /> 내 달력에서 일정을 볼 수 있습니다.
             </span>
           </div>
           <div ref={secondMethod} css={refStyle} />
           <div css={methodItemStyle(theme, methodAnimation[1], 'right')}>
             <span css={methodTextStyle}>
-              구독한 카테고리 목록에서 내가 보고 싶은 일정만 필터링하여 볼 수 있습니다.
+              구글 캘린더에서 원하는 캘린더를
+              <br /> 가져올 수 있습니다.
             </span>
-            <img src={howToUse} alt="달록 사용법 2" css={imageStyle} />
+            <img src={howToUse2} alt="달록 사용법 2" css={imageStyle} />
           </div>
           <div ref={thirdMethod} css={refStyle} />
           <div css={methodItemStyle(theme, methodAnimation[2], 'left')}>
-            <img src={howToUse} alt="달록 사용법 3" css={imageStyle} />
+            <img src={howToUse3} alt="달록 사용법 3" css={imageStyle} />
             <span css={methodTextStyle}>
-              카테고리를 생성하고 일정을 생성하면 공유하고 싶은 일정을 구독자들에게 보여줄 수
-              있습니다.
+              카테고리 내에서 팀원들과 <br />
+              겹치지 않는 시간을 <br />
+              확인할 수 있습니다.
             </span>
           </div>
         </section>

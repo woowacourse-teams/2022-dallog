@@ -183,7 +183,7 @@ const secondSectionStyle = ({ flex, colors }: Theme) => css`
   height: 100%;
   margin-top: 20rem;
   padding: 20rem auto;
-  gap: 20rem;
+  gap: 10rem;
 
   background: ${colors.GRAY_200};
 `;
