@@ -29,7 +29,7 @@ function useSchedulePriority(calendarMonth: DateType[]) {
   );
 
   const getLongTermsPriority = (longTerms: Array<ScheduleType>) =>
-    longTerms.map((el, index) => {
+    longTerms.map((el) => {
       const startDate = getISODateString(el.startDateTime);
       const endDate = getISODateString(el.endDateTime);
 
@@ -41,14 +41,14 @@ function useSchedulePriority(calendarMonth: DateType[]) {
         })
         .map((el) => getFormattedDate(el.year, el.month, el.date));
 
-      if (!calendarInfoWithPriority.hasOwnProperty(scheduleRange[index])) {
+      if (!calendarInfoWithPriority.hasOwnProperty(scheduleRange[0])) {
         return {
           schedule: el,
           priority: CALENDAR.MAX_VIEW + 1,
         };
       }
 
-      const priorityPosition = calendarInfoWithPriority[scheduleRange[index]].findIndex(
+      const priorityPosition = calendarInfoWithPriority[scheduleRange[0]].findIndex(
         (el) => el === false
       );
 
@@ -60,7 +60,9 @@ function useSchedulePriority(calendarMonth: DateType[]) {
       }
 
       scheduleRange.forEach((el) => {
-        calendarInfoWithPriority[el][priorityPosition] = true;
+        if (calendarInfoWithPriority.hasOwnProperty(el)) {
+          calendarInfoWithPriority[el][priorityPosition] = true;
+        }
       });
 
       return {
