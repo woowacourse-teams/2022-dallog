@@ -21,7 +21,6 @@ function useUserValue() {
     () => loginApi.validate(user.accessToken),
     {
       onError: () => onErrorValidate(),
-      onSuccess: () => onSuccessValidate(),
       retry: false,
       useErrorBoundary: false,
     }
@@ -31,10 +30,6 @@ function useUserValue() {
     setSideBarOpen(false);
     removeAccessToken();
     resetUser();
-  };
-
-  const onSuccessValidate = () => {
-    setSideBarOpen(true);
   };
 
   return { isAuthenticating: isLoading, user };

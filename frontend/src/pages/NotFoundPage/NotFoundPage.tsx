@@ -26,6 +26,7 @@ function NotFoundPage() {
   useEffect(() => {
     toggleSideBarOpen(isSideBarOpen);
   }, []);
+
   return (
     <PageLayout>
       <div css={layoutStyle}>
