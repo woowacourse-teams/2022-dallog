@@ -64,11 +64,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const categoryId = useControlledInput();
 
-  const {
-    isLoading,
-    error,
-    mutate: postSchedule,
-  } = useMutation<
+  const { isLoading, mutate: postSchedule } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError,
     Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
@@ -134,8 +130,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   };
 
   if (isLoading) return <>Loading</>;
-
-  if (error) return <>Error</>;
 
   return (
     <div css={scheduleAddModal}>
