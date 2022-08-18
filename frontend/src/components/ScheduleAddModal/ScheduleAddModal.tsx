@@ -163,6 +163,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
           )}
           autoFocus
+          labelText="일정 제목"
         />
         <Button cssProp={allDayButton(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
@@ -172,12 +173,14 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             type={dateFieldset.type}
             value={validationSchedule.startDateTime.inputValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
+            labelText="시작 날짜"
           />
           <p css={arrow}>↓</p>
           <Fieldset
             type={dateFieldset.type}
             value={validationSchedule.endDateTime.inputValue}
             onChange={validationSchedule.endDateTime.onChangeValue}
+            labelText="끝 날짜"
           />
         </div>
         <Fieldset
@@ -193,6 +196,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             0,
             VALIDATION_SIZE.SCHEDULE_MEMO_MAX_LENGTH
           )}
+          labelText="메모 (선택)"
         />
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>

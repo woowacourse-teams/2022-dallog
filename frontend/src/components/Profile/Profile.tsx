@@ -101,6 +101,7 @@ function Profile() {
               refProp={inputRef.displayName}
               cssProp={inputStyle}
               autoFocus={true}
+              labelText="닉네임"
             />
             <Button
               type="submit"

@@ -75,6 +75,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
             onChange={categoryValue.onChangeValue}
             isValid={isValidCategory}
             errorMessage={getCategoryErrorMessage()}
+            labelText="카테고리 이름"
           />
         </div>
         <div css={controlButtons}>
