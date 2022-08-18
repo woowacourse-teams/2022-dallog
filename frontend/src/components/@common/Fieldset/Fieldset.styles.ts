@@ -36,7 +36,7 @@ const inputStyle = ({ colors }: Theme, isValid?: boolean) => css`
 `;
 
 const errorMessageStyle = ({ colors }: Theme, isValid?: boolean) => css`
-  visibility: ${isValid ? 'hidden' : 'visible'};
+  display: ${isValid ? 'none' : 'block'};
 
   font-size: 3rem;
   color: ${colors.RED_400};
