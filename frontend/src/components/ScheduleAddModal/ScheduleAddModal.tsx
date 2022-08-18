@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
 
 import { CalendarType } from '@/@types/calendar';
@@ -33,8 +34,10 @@ import {
   controlButtons,
   dateTime,
   form,
+  labelStyle,
   saveButton,
   scheduleAddModal,
+  selectBoxStyle,
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
@@ -47,15 +50,19 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const theme = useTheme();
 
-  const [categoryId, setCategoryId] = useState(0);
   const [isAllDay, setAllDay] = useState(true);
 
   const queryClient = useQueryClient();
 
   const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken)
+    () => categoryApi.getMy(accessToken),
+    {
+      onSuccess: (data) => onSuccessGetCategories(data),
+    }
   );
+
+  const categoryId = useControlledInput();
 
   const {
     isLoading,
@@ -66,7 +73,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     AxiosError,
     Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
     unknown
-  >((body) => scheduleApi.post(accessToken, categoryId, body), {
+  >((body) => scheduleApi.post(accessToken, Number(categoryId.inputValue), body), {
     onSuccess: () => {
       onSuccessPostSchedule();
     },
@@ -116,14 +123,13 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     postSchedule(allDayBody);
   };
 
-  const handleChangeMyCategorySelect = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const categoryId = Number(target.value);
-
-    setCategoryId(categoryId);
+  const onSuccessGetCategories = (data: AxiosResponse<CategoryType[]>) => {
+    categoryId.setInputValue(`${data.data[0].id}`);
   };
 
   const onSuccessPostSchedule = () => {
     queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
     closeModal();
   };
 
@@ -134,21 +140,20 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
-        <select
-          id="myCategories"
-          defaultValue=""
-          css={categorySelect}
-          onChange={handleChangeMyCategorySelect}
-        >
-          <option value="" disabled>
-            카테고리
-          </option>
-          {data?.data.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <div css={selectBoxStyle}>
+          <span css={labelStyle}>카테고리</span>
+          <select
+            css={categorySelect}
+            value={categoryId.inputValue}
+            onChange={categoryId.onChangeValue}
+          >
+            {data?.data.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <Fieldset
           placeholder="제목을 입력하세요."
           value={validationSchedule.title.inputValue}

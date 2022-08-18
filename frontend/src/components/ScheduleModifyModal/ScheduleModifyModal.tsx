@@ -28,10 +28,12 @@ import {
   allDayButtonStyle,
   arrowStyle,
   cancelButtonStyle,
+  categoryBoxStyle,
   categoryStyle,
   controlButtonsStyle,
   dateTimeStyle,
   formStyle,
+  labelStyle,
   modalStyle,
   saveButtonStyle,
 } from './ScheduleModifyModal.styles';
@@ -123,7 +125,10 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   return (
     <div css={modalStyle}>
       <form css={formStyle} onSubmit={handleSubmitScheduleModifyForm}>
-        <div css={categoryStyle(theme, scheduleInfo.colorCode)}>{data?.data.name}</div>
+        <div css={categoryBoxStyle}>
+          <div css={labelStyle}>카테고리</div>
+          <div css={categoryStyle(theme, scheduleInfo.colorCode)}>{data?.data.name}</div>
+        </div>
         <Fieldset
           placeholder="제목을 입력하세요."
           value={validationSchedule.title.inputValue}

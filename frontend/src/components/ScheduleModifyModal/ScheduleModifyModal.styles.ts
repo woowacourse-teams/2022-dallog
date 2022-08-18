@@ -92,6 +92,22 @@ const saveButtonStyle = ({ colors }: Theme) => css`
   color: ${colors.WHITE};
 `;
 
+const labelStyle = ({ colors }: Theme) => css`
+  padding: 0 1rem;
+
+  font-size: 4rem;
+  color: ${colors.GRAY_800};
+`;
+
+const categoryBoxStyle = ({ flex }: Theme) => css`
+  ${flex.column};
+
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  width: 100%;
+`;
+
 export {
   allDayButtonStyle,
   arrowStyle,
@@ -100,6 +116,8 @@ export {
   controlButtonsStyle,
   dateTimeStyle,
   formStyle,
+  labelStyle,
   modalStyle,
   saveButtonStyle,
+  categoryBoxStyle,
 };
