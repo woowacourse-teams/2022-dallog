@@ -2,7 +2,6 @@ import { css, Theme } from '@emotion/react';
 
 const modalStyle = ({ colors }: Theme) => css`
   width: 120rem;
-  height: 160rem;
   padding: 12.5rem;
   border-radius: 12px;
 
@@ -12,9 +11,7 @@ const modalStyle = ({ colors }: Theme) => css`
 const formStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
-  justify-content: space-between;
-
-  height: 100%;
+  gap: 6rem;
 `;
 
 const categoryStyle = ({ colors }: Theme, colorCode: string) => css`

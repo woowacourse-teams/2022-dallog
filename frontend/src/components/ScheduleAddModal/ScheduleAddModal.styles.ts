@@ -2,7 +2,6 @@ import { css, Theme } from '@emotion/react';
 
 const scheduleAddModal = ({ colors }: Theme) => css`
   width: 120rem;
-  height: 160rem;
   padding: 12.5rem;
   border-radius: 12px;
 
@@ -12,7 +11,7 @@ const scheduleAddModal = ({ colors }: Theme) => css`
 const form = ({ flex }: Theme) => css`
   ${flex.column};
 
-  justify-content: space-between;
+  gap: 6rem;
 
   height: 100%;
 `;
@@ -24,7 +23,7 @@ const categorySelect = ({ colors }: Theme) => css`
   border: 1px solid ${colors.GRAY_400};
   border-radius: 8px;
 
-  font-size: 5rem;
+  font-size: 4rem;
 `;
 
 const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`

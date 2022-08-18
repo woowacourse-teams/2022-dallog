@@ -30,7 +30,6 @@ import {
   googleSelectBoxStyle,
   googleSelectStyle,
   headerStyle,
-  inputStyle,
   layoutStyle,
   titleStyle,
 } from './GoogleImportModal.styles';
@@ -111,7 +110,6 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
             errorMessage={getCategoryErrorMessage()}
             isValid={isValidCategory}
             labelText={'연동할 달록 카테고리 생성'}
-            cssProp={inputStyle}
           />
         </div>
         <div css={controlButtons}>

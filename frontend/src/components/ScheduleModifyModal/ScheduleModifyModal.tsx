@@ -137,7 +137,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             VALIDATION_SIZE.MIN_LENGTH,
             VALIDATION_SIZE.SCHEDULE_TITLE_MAX_LENGTH
           )}
-          labelText="일정 제목"
+          labelText="제목"
         />
         <Button cssProp={allDayButtonStyle(theme, isAllDay)} onClick={handleClickAllDayButton}>
           종일
@@ -147,14 +147,13 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             type={startDateFieldsetProps.type}
             value={validationSchedule.startDateTime.inputValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
-            labelText="시작 날짜"
+            labelText="날짜"
           />
           <p css={arrowStyle}>↓</p>
           <Fieldset
             type={endDateFieldsetProps.type}
             value={validationSchedule.endDateTime.inputValue}
             onChange={validationSchedule.endDateTime.onChangeValue}
-            labelText="끝 날짜"
           />
         </div>
         <Fieldset
