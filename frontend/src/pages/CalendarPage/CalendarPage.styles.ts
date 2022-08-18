@@ -145,21 +145,30 @@ const itemWithBackgroundStyle = (
   priority: number,
   color: string,
   isHovering: boolean,
-  maxView: number
+  maxView: number,
+  isEndDate: boolean
 ) => css`
+  overflow: hidden;
   position: absolute;
   top: ${priority * 5.5 + 1}rem;
 
   display: ${priority >= maxView ? 'none' : 'block'};
-  width: 100%;
+
+  width: ${isEndDate ? '96%' : '100%'};
   height: 5rem;
   padding: 1rem;
+  ${isEndDate &&
+  css`
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  `}
 
   background: ${color};
 
   font-size: 2.75rem;
   line-height: 2.75rem;
   white-space: nowrap;
+  text-overflow: ellipsis;
   color: white;
 
   cursor: pointer;
@@ -171,9 +180,10 @@ const itemWithoutBackgroundStyle = (
   priority: number,
   color: string,
   isHovering: boolean,
-  maxView: number
+  maxView: number,
+  isEndDate: boolean
 ) => css`
-  ${itemWithBackgroundStyle(priority, color, isHovering, maxView)};
+  ${itemWithBackgroundStyle(priority, color, isHovering, maxView, isEndDate)};
 
   overflow: hidden;
 

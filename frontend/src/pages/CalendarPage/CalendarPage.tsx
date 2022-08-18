@@ -256,7 +256,7 @@ function CalendarPage() {
         </div>
         <div css={navBarGrid}>
           {DAYS.map((day) => (
-            <span key={day} css={dayBar(theme, day)}>
+            <span key={`${day}#day`} css={dayBar(theme, day)}>
               {day}
             </span>
           ))}
@@ -266,9 +266,8 @@ function CalendarPage() {
             const key = getFormattedDate(info.year, info.month, info.date);
 
             return (
-              <>
+              <div key={key}>
                 <div
-                  key={key}
                   css={dateBorder(theme, info.day)}
                   onClick={(e) => handleClickDate(e, info)}
                   ref={dateRef}
@@ -294,7 +293,11 @@ function CalendarPage() {
 
                     if (startDate <= nowDate && nowDate <= endDate && el.priority >= maxView) {
                       return (
-                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                        <span
+                          key={`${nowDate}#${el.schedule.id}#longTerms#more`}
+                          css={moreStyle}
+                          onClick={(e) => handleClickMoreButton(e, info)}
+                        >
                           일정 더보기
                         </span>
                       );
@@ -304,12 +307,13 @@ function CalendarPage() {
                       startDate <= nowDate &&
                       nowDate <= endDate && (
                         <div
-                          key={`${nowDate}#${el.schedule.id}`}
+                          key={`${nowDate}#${el.schedule.id}#longTerms`}
                           css={itemWithBackgroundStyle(
                             el.priority,
                             el.schedule.colorCode,
                             hoveringId === el.schedule.id,
-                            maxView
+                            maxView,
+                            nowDate === endDate
                           )}
                           onMouseEnter={() => onMouseEnter(el.schedule.id)}
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
@@ -328,7 +332,11 @@ function CalendarPage() {
 
                     if (startDate === nowDate && el.priority >= maxView) {
                       return (
-                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                        <span
+                          key={`${nowDate}#${el.schedule.id}#allDays#more`}
+                          css={moreStyle}
+                          onClick={(e) => handleClickMoreButton(e, info)}
+                        >
                           일정 더보기
                         </span>
                       );
@@ -337,12 +345,13 @@ function CalendarPage() {
                     return (
                       startDate === nowDate && (
                         <div
-                          key={`${nowDate}#${el.schedule.id}`}
+                          key={`${nowDate}#${el.schedule.id}#allDays`}
                           css={itemWithBackgroundStyle(
                             el.priority,
                             el.schedule.colorCode,
                             hoveringId === el.schedule.id,
-                            maxView
+                            maxView,
+                            true
                           )}
                           onMouseEnter={() => onMouseEnter(el.schedule.id)}
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
@@ -360,7 +369,11 @@ function CalendarPage() {
 
                     if (startDate === nowDate && el.priority >= maxView) {
                       return (
-                        <span css={moreStyle} onClick={(e) => handleClickMoreButton(e, info)}>
+                        <span
+                          key={`${nowDate}#${el.schedule.id}#fewHours#more`}
+                          css={moreStyle}
+                          onClick={(e) => handleClickMoreButton(e, info)}
+                        >
                           일정 더보기
                         </span>
                       );
@@ -369,13 +382,14 @@ function CalendarPage() {
                     return (
                       startDate === nowDate && (
                         <div
-                          key={`${nowDate}#${el.schedule.id}`}
+                          key={`${nowDate}#${el.schedule.id}#fewHours`}
                           css={itemWithoutBackgroundStyle(
                             theme,
                             el.priority,
                             el.schedule.colorCode,
                             hoveringId === el.schedule.id,
-                            maxView
+                            maxView,
+                            false
                           )}
                           onMouseEnter={() => onMouseEnter(el.schedule.id)}
                           onClick={(e) => handleClickSchedule(e, el.schedule)}
@@ -403,7 +417,7 @@ function CalendarPage() {
                     />
                   </ModalPortal>
                 )}
-              </>
+              </div>
             );
           })}
         </div>
