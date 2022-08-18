@@ -23,9 +23,6 @@ const inputStyle = {
 
     font-size: 3rem;
   `,
-  label: css`
-    height: 0%;
-  `,
   input: css`
     height: 3rem;
 

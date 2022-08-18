@@ -7,13 +7,15 @@ const fieldsetStyle = ({ flex }: Theme) => css`
   gap: 2.5rem;
 
   width: 100%;
-  height: 15rem;
+  height: auto;
 
-  font-size: 5rem;
+  font-size: 4rem;
 `;
 
-const labelStyle = css`
+const labelStyle = ({ colors }: Theme) => css`
   padding: 0 1rem;
+
+  color: ${colors.GRAY_800};
 `;
 
 const inputStyle = ({ colors }: Theme, isValid?: boolean) => css`

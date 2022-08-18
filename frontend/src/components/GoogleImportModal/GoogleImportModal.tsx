@@ -15,10 +15,10 @@ import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import {
-  cancelButton,
+  cancelButtonStyle,
   content,
   controlButtons,
-  saveButton,
+  saveButtonStyle,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
 
 import { CACHE_KEY } from '@/constants/api';
@@ -30,7 +30,6 @@ import {
   googleSelectBoxStyle,
   googleSelectStyle,
   headerStyle,
-  inputStyle,
   layoutStyle,
   titleStyle,
 } from './GoogleImportModal.styles';
@@ -111,16 +110,15 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
             errorMessage={getCategoryErrorMessage()}
             isValid={isValidCategory}
             labelText={'연동할 달록 카테고리 생성'}
-            cssProp={inputStyle}
           />
         </div>
         <div css={controlButtons}>
-          <Button cssProp={cancelButton(theme)} onClick={closeModal}>
+          <Button cssProp={cancelButtonStyle(theme)} onClick={closeModal}>
             취소
           </Button>
           <Button
             type="submit"
-            cssProp={saveButton(theme)}
+            cssProp={saveButtonStyle(theme)}
             disabled={!isValidCategory || !validateNotEmpty(googleCalendarInputValue)}
           >
             완료

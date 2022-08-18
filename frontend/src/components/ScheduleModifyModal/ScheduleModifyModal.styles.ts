@@ -2,7 +2,6 @@ import { css, Theme } from '@emotion/react';
 
 const modalStyle = ({ colors }: Theme) => css`
   width: 120rem;
-  height: 160rem;
   padding: 12.5rem;
   border-radius: 12px;
 
@@ -12,9 +11,7 @@ const modalStyle = ({ colors }: Theme) => css`
 const formStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
-  justify-content: space-between;
-
-  height: 100%;
+  gap: 6rem;
 `;
 
 const categoryStyle = ({ colors }: Theme, colorCode: string) => css`
@@ -71,27 +68,27 @@ const controlButtonsStyle = ({ flex }: Theme) => css`
 `;
 
 const cancelButtonStyle = ({ colors }: Theme) => css`
-  width: 22.5rem;
-  height: 10rem;
-  border: 2px solid ${colors.GRAY_500};
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+  border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
   filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
 
   background: ${colors.WHITE};
 
-  font-size: 5rem;
+  font-size: 4rem;
   color: ${colors.GRAY_600};
 `;
 
 const saveButtonStyle = ({ colors }: Theme) => css`
-  width: 22.5rem;
-  height: 10rem;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
   border-radius: 8px;
   filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
 
   background: ${colors.YELLOW_500};
 
-  font-size: 5rem;
+  font-size: 4rem;
   color: ${colors.WHITE};
 `;
 

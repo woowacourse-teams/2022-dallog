@@ -18,12 +18,12 @@ import { CATEGORY_TYPE } from '@/constants/category';
 import categoryApi from '@/api/category';
 
 import {
-  cancelButton,
+  cancelButtonStyle,
   categoryAddModal,
   content,
   controlButtons,
   form,
-  saveButton,
+  saveButtonStyle,
   title,
 } from './CategoryAddModal.styles';
 
@@ -74,13 +74,14 @@ function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
             onChange={categoryValue.onChangeValue}
             isValid={isValidCategory}
             errorMessage={getCategoryErrorMessage()}
+            labelText="카테고리 이름"
           />
         </div>
         <div css={controlButtons}>
-          <Button cssProp={cancelButton(theme)} onClick={closeModal}>
+          <Button cssProp={cancelButtonStyle(theme)} onClick={closeModal}>
             취소
           </Button>
-          <Button type="submit" cssProp={saveButton(theme)} disabled={!isValidCategory}>
+          <Button type="submit" cssProp={saveButtonStyle(theme)} disabled={!isValidCategory}>
             완료
           </Button>
         </div>

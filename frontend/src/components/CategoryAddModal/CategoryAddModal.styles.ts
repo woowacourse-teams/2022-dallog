@@ -42,29 +42,37 @@ const controlButtons = ({ flex }: Theme) => css`
   gap: 5rem;
 `;
 
-const cancelButton = ({ colors }: Theme) => css`
-  width: 22.5rem;
-  height: 10rem;
-  border: 2px solid ${colors.GRAY_500};
+const cancelButtonStyle = ({ colors }: Theme) => css`
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+  border: 1px solid ${colors.GRAY_500};
   border-radius: 8px;
   filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
 
   background: ${colors.WHITE};
 
-  font-size: 5rem;
+  font-size: 4rem;
   color: ${colors.GRAY_600};
 `;
 
-const saveButton = ({ colors }: Theme) => css`
-  width: 22.5rem;
-  height: 10rem;
+const saveButtonStyle = ({ colors }: Theme) => css`
+  padding: 2rem 3rem;
+  box-sizing: border-box;
   border-radius: 8px;
   filter: drop-shadow(0px 2px 2px ${colors.GRAY_400});
 
   background: ${colors.YELLOW_500};
 
-  font-size: 5rem;
+  font-size: 4rem;
   color: ${colors.WHITE};
 `;
 
-export { cancelButton, categoryAddModal, content, controlButtons, form, saveButton, title };
+export {
+  cancelButtonStyle,
+  categoryAddModal,
+  content,
+  controlButtons,
+  form,
+  saveButtonStyle,
+  title,
+};

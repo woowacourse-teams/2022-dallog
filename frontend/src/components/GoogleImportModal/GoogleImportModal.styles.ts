@@ -24,24 +24,16 @@ const headerStyle = css`
 `;
 
 const titleStyle = css`
-  font-size: 5rem;
-  font-weight: bold;
+  padding: 0 1rem;
+  font-size: 4rem;
 `;
 
-const inputStyle = {
-  label: css`
-    ${titleStyle};
-  `,
-};
-
 const googleSelectStyle = ({ colors }: Theme) => css`
-  width: 100%;
-  height: 13rem;
   padding: 3rem;
   border: 1px solid ${colors.GRAY_400};
   border-radius: 8px;
 
-  font-size: 5rem;
+  font-size: 4rem;
 `;
 
 const googleSelectBoxStyle = ({ flex }: Theme) => css`
@@ -50,6 +42,8 @@ const googleSelectBoxStyle = ({ flex }: Theme) => css`
   align-items: flex-start;
 
   gap: 2rem;
+
+  font-size: 4rem;
 `;
 
 const formStyle = ({ flex }: Theme) => css`
@@ -61,12 +55,4 @@ const formStyle = ({ flex }: Theme) => css`
   height: 100%;
 `;
 
-export {
-  formStyle,
-  googleSelectBoxStyle,
-  googleSelectStyle,
-  headerStyle,
-  inputStyle,
-  layoutStyle,
-  titleStyle,
-};
+export { formStyle, googleSelectBoxStyle, googleSelectStyle, headerStyle, layoutStyle, titleStyle };
