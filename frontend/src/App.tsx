@@ -43,12 +43,12 @@ function App() {
               <Route path={PATH.MAIN} element={<MainPage />} />
               <Route path={PATH.AUTH} element={<AuthPage />} />
               <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
             <Route element={<ProtectRoute />}>
               <Route path={PATH.CATEGORY} element={<CategoryPage />} />
               <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
             </Route>
-            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           <SnackBar />
         </Router>
