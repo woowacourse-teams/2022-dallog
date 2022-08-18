@@ -118,13 +118,14 @@ jacocoTestCoverageVerification {
 
 sonarqube {
     properties {
+        property 'sonar.projectKey', 'dallog'
         property "sonar.sources", "src"
         property "sonar.language", "java"
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.profile", "Sonar way"
         property "sonar.java.binaries", "${buildDir}/classes"
         property "sonar.test.inclusions", "**/*Test.java"
-        property 'sonar.exclusions', '**/jacoco/**'
+        property 'sonar.exclusions', '**/jacoco/**, src/test/**/*, **/*Application*, **/global/config/**, **/dto/**, **/*Exception*, *.infrastructure.*, *.BaseEntity, *.ControllerAdvice, *.AuthorizationExtractor'
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/jacoco/index.xml"
     }
 }
