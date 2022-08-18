@@ -85,7 +85,7 @@ function SchedulingPage() {
   };
 
   const formatDateTime = (dateTime: string) => {
-    return dateTime.replace('T', ' ').slice(0, -3);
+    return `${dateTime.replace('T', ' ').replace(':', '시 ').slice(0, -3)}분`;
   };
 
   return (
