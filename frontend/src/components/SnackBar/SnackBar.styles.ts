@@ -3,7 +3,7 @@ import { css, Theme } from '@emotion/react';
 const snackBarStyle = ({ colors }: Theme, isOpen: boolean) => css`
   ${isOpen &&
   css`
-    z-index: 30;
+    z-index: 50;
     position: fixed;
     bottom: 5rem;
     left: 50%;
