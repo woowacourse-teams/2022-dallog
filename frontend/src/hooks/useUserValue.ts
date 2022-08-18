@@ -4,7 +4,7 @@ import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 
 import { removeAccessToken } from '@/utils/storage';
 

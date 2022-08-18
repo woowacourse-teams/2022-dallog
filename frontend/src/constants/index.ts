@@ -4,20 +4,6 @@ const ATOM_KEY = {
   USER: 'userState',
 };
 
-const CACHE_KEY = {
-  AUTH: 'auth',
-  CATEGORIES: 'categories',
-  CATEGORY: 'category',
-  ENTER: 'enter',
-  GOOGLE_CALENDAR: 'googleCalendar',
-  MY_CATEGORIES: 'myCategories',
-  PROFILE: 'profile',
-  SCHEDULE: 'schedule',
-  SCHEDULES: 'schedules',
-  SUBSCRIPTIONS: 'subscriptions',
-  VALIDATE: 'validate',
-};
-
 const CALENDAR = {
   MAX_VIEW: 10,
 };
@@ -35,6 +21,7 @@ const PATH = {
   AUTH: '/oauth',
   CATEGORY: '/category',
   POLICY: '/policy',
+  SCHEDULING: '/scheduling',
 };
 
-export { ATOM_KEY, CACHE_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };
+export { ATOM_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };

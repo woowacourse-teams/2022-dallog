@@ -6,8 +6,8 @@ import { useRecoilState } from 'recoil';
 
 import { userState } from '@/recoil/atoms';
 
-import { CACHE_KEY, PATH } from '@/constants';
-import { API } from '@/constants/api';
+import { PATH } from '@/constants';
+import { API, CACHE_KEY } from '@/constants/api';
 
 import { getSearchParam } from '@/utils';
 import { setAccessToken } from '@/utils/storage';

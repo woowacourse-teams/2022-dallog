@@ -2,27 +2,28 @@ import { css, Theme } from '@emotion/react';
 
 const categoryPageStyle = css`
   height: 80%;
-  padding: 5rem;
+  padding: 9rem;
 `;
 
 const searchFormStyle = css`
   position: relative;
 
   width: 100%;
+  height: 12rem;
+  margin-bottom: 8rem;
 `;
 
 const searchButtonStyle = css`
   position: absolute;
 
-  top: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 
   width: 12rem;
-  height: calc(100% - 5rem);
 `;
 
 const searchFieldsetStyle = css`
-  height: 10rem;
-  margin-bottom: 5rem;
+  height: 100%;
 `;
 
 const searchInputStyle = css`
@@ -34,7 +35,7 @@ const searchInputStyle = css`
 
 const buttonStyle = ({ colors }: Theme) => css`
   width: 30rem;
-  height: 10rem;
+  height: 12rem;
   border-radius: 3px;
 
   background: ${colors.YELLOW_500};
@@ -57,7 +58,7 @@ const controlStyle = ({ flex }: Theme) => css`
 
 const outLineButtonStyle = ({ colors }: Theme) => css`
   width: 40rem;
-  height: 10rem;
+  height: 12rem;
   border-radius: 3px;
 
   border: 1px solid ${colors.YELLOW_500};

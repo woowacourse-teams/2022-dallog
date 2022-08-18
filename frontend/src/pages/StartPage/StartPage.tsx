@@ -8,7 +8,7 @@ import Button from '@/components/@common/Button/Button';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Footer from '@/components/Footer/Footer';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 
 import { getThisDate } from '@/utils/date';
 

@@ -10,7 +10,7 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';

@@ -8,7 +8,7 @@ import { userState } from '@/recoil/atoms';
 
 import MyCategoryItem from '@/components/MyCategoryItem/MyCategoryItem';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 
 import categoryApi from '@/api/category';
 

@@ -9,7 +9,7 @@ import { sideBarState, userState } from '@/recoil/atoms';
 
 import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
 
-import { CACHE_KEY } from '@/constants';
+import { CACHE_KEY } from '@/constants/api';
 
 import subscriptionApi from '@/api/subscription';
 
