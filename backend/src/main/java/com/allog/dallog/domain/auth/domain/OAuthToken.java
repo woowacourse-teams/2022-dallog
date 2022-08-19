@@ -2,6 +2,7 @@ package com.allog.dallog.domain.auth.domain;
 
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,9 @@ public class OAuthToken extends BaseEntity {
     }
 
     public void change(final String refreshToken) {
-        this.refreshToken = refreshToken;
+        if (!Objects.isNull(refreshToken)) {
+            this.refreshToken = refreshToken;
+        }
     }
 
     public Long getId() {
