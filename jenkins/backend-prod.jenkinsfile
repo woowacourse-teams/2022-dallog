@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    stages {
+        stage('Github') {
+            steps {
+                git branch: 'main', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+                withCredentials([GitUsernamePassword(credentialsId: 'github-access-token', gitToolName: 'Default')]) {
+                    sh 'git submodule update --init --recursive'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('backend') {
+                    sh "./gradlew bootJar"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                dir('backend/build/libs') {
+                    sshagent(credentials: ['key-dallog']) {
+                        sh "scp -o StrictHostKeyChecking=no backend-0.0.1-SNAPSHOT.jar ubuntu@${env.BACKEND_PROD_IP}:/home/ubuntu"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.BACKEND_PROD_IP} 'sh run.sh' &"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            discordSend title: "백엔드 프로덕션 서버 배포에 성공하였습니다 ✨",
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_BACKEND_PROD_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+        failure {
+            discordSend title: "백엔드 프로덕션 서버 배포에 실패하였습니다 ❌",
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_BACKEND_PROD_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+    }
+}

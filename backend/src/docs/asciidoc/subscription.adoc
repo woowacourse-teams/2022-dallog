@@ -1,0 +1,123 @@
+== Subscription(구독)
+
+=== 구독 등록
+
+==== Request
+
+include::{snippets}/subscription/save/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/save/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/save/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/save/http-response.adoc[]
+
+=== 자신의 구독 목록 조회
+
+==== Request
+
+include::{snippets}/subscription/findMine/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/findMine/http-response.adoc[]
+
+=== 중복된 구독 등록
+
+==== Request
+
+include::{snippets}/subscription/exist/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/exist/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/exist/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/exist/http-response.adoc[]
+
+==== Request
+
+include::{snippets}/subscription/me/http-request.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/me/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/me/http-response.adoc[]
+
+=== 3자의 개인 카테고리 구독 요청시
+
+==== Response
+
+include::{snippets}/subscription/private-category/http-response.adoc[]
+
+=== 내 구독 정보 수정
+
+==== Request
+
+include::{snippets}/subscription/update/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/update/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/update/request-headers.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/subscription/update/request-body.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/update/http-response.adoc[]
+
+=== 내 구독 정보 삭제
+
+==== Request
+
+include::{snippets}/subscription/delete/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/delete/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/delete/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/delete/http-response.adoc[]
+
+=== 내 구독 정보가 아닌 구독 삭제
+
+==== Request
+
+include::{snippets}/subscription/permission/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/subscription/permission/path-parameters.adoc[]
+
+==== Request Headers
+
+include::{snippets}/subscription/permission/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}/subscription/permission/http-response.adoc[]

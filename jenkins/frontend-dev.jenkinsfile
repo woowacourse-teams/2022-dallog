@@ -1,0 +1,53 @@
+API_URL = "https://dev-api.dallog.me"
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Github') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/woowacourse-teams/2022-dallog.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    sh "echo 'API_URL = ${API_URL}' > .env"
+                    nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
+                        sh "npm install -g yarn"
+                        sh "yarn"
+                        sh "yarn prod-build"
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                dir('frontend/dist') {
+                    sshagent(credentials: ['key-dallog']) {
+                        sh "scp -o StrictHostKeyChecking=no -r ./* ubuntu@${env.FRONTEND_DEV_IP}:/home/ubuntu/"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.FRONTEND_DEV_IP} 'sudo cp -r ./* /usr/share/nginx/html/ && sudo rm -rf ./*'"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            discordSend title: "프론트엔드 개발 서버 배포에 성공하였습니다 ✨",
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_FRONTEND_DEV_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+        failure {
+            discordSend title: "프론트엔드 개발 서버 배포에 실패하였습니다 ❌",
+                description: "빌드 번호 #${env.BUILD_NUMBER}",
+                link: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}",
+                result: currentBuild.currentResult, 
+                webhookURL: env.DISCORD_FRONTEND_DEV_WEBHOOK,
+                footer: "http://jenkins.dallog.me:8080/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+        }
+    }
+}
