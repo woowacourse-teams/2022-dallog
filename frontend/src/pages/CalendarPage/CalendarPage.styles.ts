@@ -173,6 +173,8 @@ const itemWithBackgroundStyle = (
 
   cursor: pointer;
   filter: ${isHovering && 'brightness(0.95)'};
+
+  transition: background-color 0.3s;
 `;
 
 const itemWithoutBackgroundStyle = (
@@ -195,6 +197,8 @@ const itemWithoutBackgroundStyle = (
 
   cursor: pointer;
   filter: none;
+
+  transition: background-color 0.3s;
 `;
 
 const moreStyle = ({ colors }: Theme) => css`
