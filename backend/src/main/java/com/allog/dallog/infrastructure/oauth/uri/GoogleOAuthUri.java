@@ -20,7 +20,6 @@ public class GoogleOAuthUri implements OAuthUri {
                 + "redirect_uri=" + redirectUri + "&"
                 + "response_type=code&"
                 + "scope=" + String.join(" ", properties.getScopes()) + "&"
-                + "access_type=" + properties.getAccessType() + "&"
-                + "prompt=" + properties.getPrompt();
+                + "access_type=" + properties.getAccessType();
     }
 }
