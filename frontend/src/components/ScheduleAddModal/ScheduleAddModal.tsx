@@ -16,6 +16,7 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
+import Spinner from '@/components/@common/Spinner/Spinner';
 
 import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME } from '@/constants/date';
@@ -54,17 +55,16 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken),
-    {
-      onSuccess: (data) => onSuccessGetCategories(data),
-    }
-  );
+  const { isLoading: isGetCategoryLoading, data } = useQuery<
+    AxiosResponse<CategoryType[]>,
+    AxiosError
+  >(CACHE_KEY.MY_CATEGORIES, () => categoryApi.getMy(accessToken), {
+    onSuccess: (data) => onSuccessGetCategories(data),
+  });
 
   const categoryId = useControlledInput();
 
-  const { isLoading, mutate: postSchedule } = useMutation<
+  const { mutate: postSchedule } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
     AxiosError,
     Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
@@ -129,7 +129,9 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     closeModal();
   };
 
-  if (isLoading) return <>Loading</>;
+  if (isGetCategoryLoading || data === undefined) {
+    return <Spinner size={10} />;
+  }
 
   return (
     <div css={scheduleAddModal}>
