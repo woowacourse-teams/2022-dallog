@@ -25,42 +25,6 @@ function useValidateSchedule({
   const endDateTime = useControlledInput(initialEndDateTime);
   const memo = useControlledInput(initialMemo);
 
-  useEffect(() => {
-    const resetEndDateTimeValue = () => {
-      if (startDateTime.inputValue <= endDateTime.inputValue) {
-        return;
-      }
-
-      if (!startDateTime.inputValue.includes('T')) {
-        endDateTime.setInputValue(startDateTime.inputValue);
-
-        return;
-      }
-
-      endDateTime.setInputValue(getOneHourLaterISOString(startDateTime.inputValue));
-    };
-
-    resetEndDateTimeValue();
-  }, [startDateTime.inputValue]);
-
-  useEffect(() => {
-    const resetStartDateTimeValue = () => {
-      if (endDateTime.inputValue >= startDateTime.inputValue) {
-        return;
-      }
-
-      if (!endDateTime.inputValue.includes('T')) {
-        startDateTime.setInputValue(endDateTime.inputValue);
-
-        return;
-      }
-
-      startDateTime.setInputValue(getOneHourEarlierISOString(endDateTime.inputValue));
-    };
-
-    resetStartDateTimeValue();
-  }, [endDateTime.inputValue]);
-
   const isValidSchedule =
     validateLength(
       title.inputValue,

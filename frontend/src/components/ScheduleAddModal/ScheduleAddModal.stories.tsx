@@ -15,6 +15,5 @@ Primary.args = {
     year: 2022,
     month: 8,
     date: 5,
-    day: 5,
   },
 };

@@ -41,7 +41,7 @@ import {
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
-  dateInfo: CalendarType | null;
+  dateInfo: Omit<CalendarType, 'day'>;
   closeModal: () => void;
 }
 

@@ -45,6 +45,10 @@ const buttonStyle = ({ colors }: Theme) => css`
   font-weight: 700;
   line-height: 3.5rem;
   color: ${colors.WHITE};
+
+  &:hover {
+    box-shadow: none;
+  }
 `;
 
 const controlStyle = ({ flex }: Theme) => css`
