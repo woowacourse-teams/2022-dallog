@@ -1,6 +1,38 @@
-# 2022-dallog
+<div align="center">
+<img src="https://user-images.githubusercontent.com/11745691/185735071-5eb23eaa-745b-4d69-a336-b64e5a6f011e.png" />
 
-## 알록달록🌈 팀원 소개
+달력이 기록을 공유할 때, 달록 🌙
+
+[<img src="https://img.shields.io/badge/-dallog.me-important?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.me) [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.github.io) [<img src="https://img.shields.io/badge/release-v0.1.2-critical?style=flat&logo=google-chrome&logoColor=white" />](https://github.com/woowacourse-teams/2022-dallog/releases/tag/v0.1.2)
+
+[](https://dallog.me)
+
+</div>
+
+## 🌙 소개
+
+![](https://user-images.githubusercontent.com/11745691/185747659-09a78acb-29bc-42d4-bf29-763376bf5628.png)
+달록은 우아한테크코스 공유 캘린더입니다. 우아한테크코스 공식 일정, 데일리 팀, 스터디 등 파편화된 여러 일정을 모아 달록에서 관리할 수 있습니다. 사용자는 관심있는 일정 카테고리를 구독하여 개인화된 캘린더를 사용할 수 있습니다.
+
+## 🛠 Tech Stacks
+
+### Front-end
+
+![](https://user-images.githubusercontent.com/11745691/185746994-2523e796-7876-4188-9b3a-30f0295c97c6.png)
+
+### Back-end
+
+![](https://user-images.githubusercontent.com/11745691/185746988-3b2894c7-2dcc-43fc-b9da-bacf5fbdf866.png)
+
+## ⚙️ Infrastructure
+
+![](https://user-images.githubusercontent.com/11745691/185746996-8c2ec104-95a4-472e-9ad0-27a2a22ce821.png)
+
+## 🌈 알록달록하게 일을 더 잘하는 9가지 방법
+
+![](https://user-images.githubusercontent.com/11745691/185748153-bf170c7a-99cd-49ee-9420-397af9c7f35e.png)
+
+## 👥 Members
 
 |                   Backend                    |                      Backend                       |                     Backend                      |                   Backend                    |                    Frontend                    |                  Frontend                   |
 | :------------------------------------------: | :------------------------------------------------: | :----------------------------------------------: | :------------------------------------------: | :--------------------------------------------: | :-----------------------------------------: |
