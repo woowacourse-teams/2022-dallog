@@ -18,11 +18,11 @@
 
 ### Front-end
 
-![](https://user-images.githubusercontent.com/11745691/185746994-2523e796-7876-4188-9b3a-30f0295c97c6.png)
+![](https://user-images.githubusercontent.com/11745691/188255671-080e1818-dadc-43d1-91f0-911f7b12add5.png)
 
 ### Back-end
 
-![](https://user-images.githubusercontent.com/11745691/185746988-3b2894c7-2dcc-43fc-b9da-bacf5fbdf866.png)
+![](https://user-images.githubusercontent.com/11745691/188255703-966c55f6-b868-49c2-a915-8e6fc84ce287.png)
 
 ## ⚙️ Infrastructure
 
