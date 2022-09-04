@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("prod")
-public class GoogleOAuthUri implements OAuthUri {
+@Profile({"local", "dev"})
+public class DevGoogleOAuthUri implements OAuthUri {
 
     private final GoogleProperties properties;
 
-    public GoogleOAuthUri(final GoogleProperties properties) {
+    public DevGoogleOAuthUri(final GoogleProperties properties) {
         this.properties = properties;
     }
 
@@ -22,6 +22,7 @@ public class GoogleOAuthUri implements OAuthUri {
                 + "redirect_uri=" + redirectUri + "&"
                 + "response_type=code&"
                 + "scope=" + String.join(" ", properties.getScopes()) + "&"
-                + "access_type=" + properties.getAccessType();
+                + "access_type=" + properties.getAccessType() + "&"
+                + "prompt=consent";
     }
 }
