@@ -32,7 +32,6 @@ oauth:
   google:
     client-id: hyeonic
     client-secret: 123
-    redirect-uri: http://localhost:3000
     oauth-end-point: https://accounts.google.com/o/oauth2/v2/auth
     response-type: code
     scopes:
