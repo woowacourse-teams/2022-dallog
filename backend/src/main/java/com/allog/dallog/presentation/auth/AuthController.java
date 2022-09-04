@@ -5,6 +5,7 @@ import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/{oauthProvider}/token")
     public ResponseEntity<TokenResponse> generateToken(@PathVariable final String oauthProvider,
-                                                       @RequestBody final TokenRequest tokenRequest) {
+                                                       @Valid @RequestBody final TokenRequest tokenRequest) {
         TokenResponse tokenResponse = authService.generateToken(tokenRequest);
         return ResponseEntity.ok(tokenResponse);
     }
