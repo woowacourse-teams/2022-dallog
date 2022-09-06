@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.schedule.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
@@ -57,15 +58,23 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
-    public void change(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
-                       final String memo) {
+    public void change(final Category category, final String title, final LocalDateTime startDateTime,
+                       final LocalDateTime endDateTime, final String memo) {
+        validateCategoryType(category);
         validateTitleLength(title);
         validatePeriod(startDateTime, endDateTime);
         validateMemoLength(memo);
+        this.category = category;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.memo = memo;
+    }
+
+    private void validateCategoryType(final Category category) {
+        if (category.isExternal()) {
+            throw new InvalidScheduleException("일정의 카테고리를 외부 연동 카테고리로 변경 할 수 없습니다.");
+        }
     }
 
     private void validateTitleLength(final String title) {
