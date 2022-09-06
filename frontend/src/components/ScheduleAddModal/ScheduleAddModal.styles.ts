@@ -16,15 +16,6 @@ const form = ({ flex }: Theme) => css`
   height: 100%;
 `;
 
-const categorySelect = ({ colors }: Theme) => css`
-  width: 100%;
-  padding: 3rem;
-  border: 1px solid ${colors.GRAY_400};
-  border-radius: 8px;
-
-  font-size: 4rem;
-`;
-
 const allDayButton = ({ colors }: Theme, isAllDay: boolean) => css`
   width: 100%;
   height: 9rem;
@@ -50,6 +41,29 @@ const arrow = ({ colors }: Theme) => css`
   font-size: 6rem;
   font-weight: bold;
   color: ${colors.GRAY_500};
+`;
+
+const lineStyle = ({ colors }: Theme) => css`
+  width: 100%;
+  border: 1px solid ${colors.GRAY_300};
+`;
+
+const selectBoxStyle = ({ flex }: Theme) => css`
+  ${flex.column};
+
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  width: 100%;
+`;
+
+const categorySelect = ({ colors }: Theme) => css`
+  width: 100%;
+  padding: 3rem;
+  border: 1px solid ${colors.GRAY_400};
+  border-radius: 8px;
+
+  font-size: 4rem;
 `;
 
 const controlButtons = ({ flex }: Theme) => css`
@@ -92,15 +106,6 @@ const labelStyle = ({ colors }: Theme) => css`
   color: ${colors.GRAY_800};
 `;
 
-const selectBoxStyle = ({ flex }: Theme) => css`
-  ${flex.column};
-
-  align-items: flex-start;
-  gap: 2.5rem;
-
-  width: 100%;
-`;
-
 export {
   allDayButton,
   arrow,
@@ -110,6 +115,7 @@ export {
   dateTime,
   form,
   labelStyle,
+  lineStyle,
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
