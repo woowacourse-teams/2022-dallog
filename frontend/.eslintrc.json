@@ -16,5 +16,10 @@
     "import/named": "off",
     "import/no-unresolved": "off",
     "@typescript-eslint/no-var-requires": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
