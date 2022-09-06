@@ -43,11 +43,6 @@ const arrow = ({ colors }: Theme) => css`
   color: ${colors.GRAY_500};
 `;
 
-const lineStyle = ({ colors }: Theme) => css`
-  width: 100%;
-  border: 1px solid ${colors.GRAY_300};
-`;
-
 const selectBoxStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
@@ -115,7 +110,6 @@ export {
   dateTime,
   form,
   labelStyle,
-  lineStyle,
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
