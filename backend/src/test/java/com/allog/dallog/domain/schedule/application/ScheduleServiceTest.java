@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
@@ -209,6 +210,35 @@ class ScheduleServiceTest extends ServiceTest {
         assertAll(
                 () -> {
                     assertThat(actual.getId()).isEqualTo(기존_일정.getId());
+                    assertThat(actual.getTitle()).isEqualTo(레벨_인터뷰_제목);
+                    assertThat(actual.getStartDateTime()).isEqualTo(레벨_인터뷰_시작일시);
+                    assertThat(actual.getEndDateTime()).isEqualTo(레벨_인터뷰_종료일시);
+                    assertThat(actual.getMemo()).isEqualTo(레벨_인터뷰_메모);
+                }
+        );
+    }
+
+    @DisplayName("일정의 카테고리도 수정한다.")
+    @Test
+    void 일정의_카테고리도_수정한다() {
+        // given
+        MemberResponse 후디 = memberService.save(후디());
+        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        CategoryResponse FE_일정 = categoryService.save(후디.getId(), FE_일정_생성_요청);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(FE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
+
+        // when
+        scheduleService.update(기존_일정.getId(), 후디.getId(), 일정_수정_요청);
+
+        // then
+        ScheduleResponse actual = scheduleService.findById(기존_일정.getId());
+        assertAll(
+                () -> {
+                    assertThat(actual.getId()).isEqualTo(기존_일정.getId());
+                    assertThat(actual.getCategoryType()).isEqualTo(FE_일정.getCategoryType());
                     assertThat(actual.getTitle()).isEqualTo(레벨_인터뷰_제목);
                     assertThat(actual.getStartDateTime()).isEqualTo(레벨_인터뷰_시작일시);
                     assertThat(actual.getEndDateTime()).isEqualTo(레벨_인터뷰_종료일시);
