@@ -188,8 +188,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_성공하면_204를_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willDoNothing()
                 .given(scheduleService)
                 .update(any(), any(), any());
@@ -214,8 +216,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_해당_일정의_카테고리에_대한_권한이_없다면_403을_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willThrow(new NoPermissionException())
                 .given(scheduleService)
                 .update(any(), any(), any());
@@ -237,8 +241,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_일정이_존재하지_않는_경우_404를_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willThrow(new NoSuchScheduleException())
                 .given(scheduleService)
                 .update(any(), any(), any());
