@@ -36,7 +36,6 @@ import {
   dateTime,
   form,
   labelStyle,
-  lineStyle,
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
@@ -185,7 +184,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           )}
           labelText="메모 (선택)"
         />
-        <hr css={lineStyle} />
         <div css={selectBoxStyle}>
           <span css={labelStyle}>카테고리</span>
           <select
