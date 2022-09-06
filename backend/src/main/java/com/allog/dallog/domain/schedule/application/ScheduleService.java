@@ -34,7 +34,7 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
-    private static void validateCategoryType(final Category category) {
+    private void validateCategoryType(final Category category) {
         if (category.isExternal()) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
         }
@@ -55,7 +55,9 @@ public class ScheduleService {
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
         Schedule schedule = getSchedule(id);
         categoryService.validateCreatorBy(memberId, schedule.getCategory());
-        schedule.change(request.getTitle(), request.getStartDateTime(), request.getEndDateTime(), request.getMemo());
+        Category categoryForUpdate = categoryService.getCategory(request.getCategoryId());
+        schedule.change(categoryForUpdate, request.getTitle(), request.getStartDateTime(),
+                request.getEndDateTime(), request.getMemo());
     }
 
     @Transactional
