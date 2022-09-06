@@ -54,9 +54,12 @@ public class ScheduleService {
     @Transactional
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
         Schedule schedule = getSchedule(id);
-        categoryService.validateCreatorBy(memberId, schedule.getCategory());
-        Category categoryForUpdate = categoryService.getCategory(request.getCategoryId());
-        schedule.change(categoryForUpdate, request.getTitle(), request.getStartDateTime(),
+        Category category = schedule.getCategory();
+        categoryService.validateCreatorBy(memberId, category);
+        if (category.isNotSameCategory(request.getCategoryId())) {
+            category = categoryService.getCategory(request.getCategoryId());
+        }
+        schedule.change(category, request.getTitle(), request.getStartDateTime(),
                 request.getEndDateTime(), request.getMemo());
     }
 

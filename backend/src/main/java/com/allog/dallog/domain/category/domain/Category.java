@@ -95,6 +95,10 @@ public class Category extends BaseEntity {
         return categoryType == GOOGLE;
     }
 
+    public boolean isNotSameCategory(final long otherCategoryId) {
+        return this.id != otherCategoryId;
+    }
+
     public Long getId() {
         return id;
     }
