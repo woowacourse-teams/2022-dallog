@@ -36,6 +36,7 @@ import {
   dateTime,
   form,
   labelStyle,
+  lineStyle,
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
@@ -136,20 +137,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   return (
     <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
-        <div css={selectBoxStyle}>
-          <span css={labelStyle}>카테고리</span>
-          <select
-            css={categorySelect}
-            value={categoryId.inputValue}
-            onChange={categoryId.onChangeValue}
-          >
-            {data?.data.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
         <Fieldset
           placeholder="제목을 입력하세요."
           value={validationSchedule.title.inputValue}
@@ -198,6 +185,21 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           )}
           labelText="메모 (선택)"
         />
+        <hr css={lineStyle} />
+        <div css={selectBoxStyle}>
+          <span css={labelStyle}>카테고리</span>
+          <select
+            css={categorySelect}
+            value={categoryId.inputValue}
+            onChange={categoryId.onChangeValue}
+          >
+            {data?.data.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div css={controlButtons}>
           <Button cssProp={cancelButton(theme)} onClick={closeModal}>
             취소
