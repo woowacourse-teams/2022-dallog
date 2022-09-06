@@ -65,7 +65,8 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
         ScheduleResponse 알록달록_회의 = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId()).as(ScheduleResponse.class);
 
-        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(공통_일정_응답.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시,
+                레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
 
         // when
         ExtractableResponse<Response> response = 일정을_수정한다(accessToken, 알록달록_회의.getId(), 일정_수정_요청);

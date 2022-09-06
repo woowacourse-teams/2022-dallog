@@ -1,11 +1,13 @@
 package com.allog.dallog.domain.schedule.dto.request;
 
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ScheduleUpdateRequest {
+
+    @NotNull(message = "Null일 수 없습니다.")
+    private long categoryId;
 
     @NotNull(message = "Null일 수 없습니다.")
     private String title;
@@ -22,12 +24,17 @@ public class ScheduleUpdateRequest {
     private ScheduleUpdateRequest() {
     }
 
-    public ScheduleUpdateRequest(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
-                                 final String memo) {
+    public ScheduleUpdateRequest(final long categoryId, final String title, final LocalDateTime startDateTime,
+                                 final LocalDateTime endDateTime, final String memo) {
+        this.categoryId = categoryId;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.memo = memo;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
     }
 
     public String getTitle() {
