@@ -18,15 +18,15 @@ include::{snippets}/schedules/findAllByMember/http-response.adoc[]
 
 ==== Request
 
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-request.adoc[]
+include::{snippets}/schedules/findAllByMember/http-request.adoc[]
 
 ==== RequestParameters
 
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/request-parameters.adoc[]
+include::{snippets}/schedules/findAllByMember/request-parameters.adoc[]
 
 ==== Response
 
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-response.adoc[]
+include::{snippets}/schedules/findAllByMember/http-response.adoc[]
 
 === 일정 등록
 
