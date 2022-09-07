@@ -4,9 +4,7 @@ interface Colors {
   [key: string]: string;
 }
 
-interface Flex {
-  [key: string]: SerializedStyles;
-}
+type Flex = Record<'row' | 'column', SerializedStyles>;
 
 declare module '@emotion/react' {
   export interface Theme {
