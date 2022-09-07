@@ -11,10 +11,21 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/no-unknown-property": [
+      "error",
+      {
+        "ignore": ["css"]
+      }
+    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/named": "off",
     "import/no-unresolved": "off",
     "@typescript-eslint/no-var-requires": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
