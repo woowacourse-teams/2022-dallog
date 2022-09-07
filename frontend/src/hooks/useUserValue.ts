@@ -23,6 +23,7 @@ function useUserValue() {
       onError: () => onErrorValidate(),
       retry: false,
       useErrorBoundary: false,
+      enabled: !!user.accessToken,
     }
   );
 
