@@ -57,6 +57,15 @@ const logoutButtonStyle = ({ colors }: Theme) => css`
   font-size: 3rem;
 `;
 
+const withdrawalButtonStyle = ({ colors }: Theme) => css`
+  padding: 2rem 3rem;
+  border: 1px solid ${colors.RED_400};
+  border-radius: 3px;
+
+  font-size: 3rem;
+  color: ${colors.RED_400};
+`;
+
 const menu = ({ colors }: Theme) => css`
   position: relative;
 
@@ -126,4 +135,5 @@ export {
   nameStyle,
   nameButtonStyle,
   skeletonStyle,
+  withdrawalButtonStyle,
 };
