@@ -49,31 +49,9 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
     }
   );
 
-  const handleClickFilledCheckBox = (colorCode: string) => {
+  const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
     mutate({
-      checked: false,
-      colorCode,
-    });
-  };
-
-  const handleClickBlankCheckBox = (colorCode: string) => {
-    mutate({
-      checked: true,
-      colorCode,
-    });
-  };
-
-  const handleClickCategoryName = (checked: boolean, colorCode: string) => {
-    if (checked) {
-      mutate({
-        checked: false,
-        colorCode,
-      });
-      return;
-    }
-
-    mutate({
-      checked: true,
+      checked: !checked,
       colorCode,
     });
   };
@@ -93,7 +71,7 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
             size={20}
             color={subscription.colorCode}
             onClick={() => {
-              handleClickFilledCheckBox(subscription.colorCode);
+              handleClickCategoryItem(subscription.checked, subscription.colorCode);
             }}
           />
         ) : (
@@ -101,14 +79,14 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
             size={20}
             color={subscription.colorCode}
             onClick={() => {
-              handleClickBlankCheckBox(subscription.colorCode);
+              handleClickCategoryItem(subscription.checked, subscription.colorCode);
             }}
           />
         )}
         <span
           css={nameStyle}
           onClick={() => {
-            handleClickCategoryName(subscription.checked, subscription.colorCode);
+            handleClickCategoryItem(subscription.checked, subscription.colorCode);
           }}
         >
           {subscription.category.name}
