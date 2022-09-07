@@ -46,6 +46,9 @@ dependencies {
 
     // Sonarqube를 위한 의존성
     implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+
+    // Flyway를 위한 의존성
+    implementation 'org.flywaydb:flyway-mysql'
 }
 
 test {
