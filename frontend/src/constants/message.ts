@@ -2,6 +2,7 @@ const CONFIRM_MESSAGE = {
   DELETE: '정말 삭제하시겠습니까?',
   UNSUBSCRIBE: '구독을 해제하시겠습니까?',
   LOGOUT: '로그아웃하시겠습니까?',
+  WITHDRAWAL: '정말 탈퇴하시겠습니까?',
 };
 
 const ERROR_MESSAGE = {
