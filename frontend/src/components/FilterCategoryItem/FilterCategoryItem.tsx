@@ -49,16 +49,9 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
     }
   );
 
-  const handleClickFilledCheckBox = (colorCode: string) => {
+  const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
     mutate({
-      checked: false,
-      colorCode,
-    });
-  };
-
-  const handleClickBlankCheckBox = (colorCode: string) => {
-    mutate({
-      checked: true,
+      checked: !checked,
       colorCode,
     });
   };
@@ -71,24 +64,31 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
   return (
     <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
-        {subscription.checked ? (
-          <Button
+        {isLoading ? (
+          <Spinner />
+        ) : subscription.checked ? (
+          <RiCheckboxFill
+            size={20}
+            color={subscription.colorCode}
             onClick={() => {
-              handleClickFilledCheckBox(subscription.colorCode);
+              handleClickCategoryItem(subscription.checked, subscription.colorCode);
             }}
-          >
-            <RiCheckboxFill size={20} color={subscription.colorCode} />
-          </Button>
+          />
         ) : (
-          <Button
+          <RiCheckboxBlankLine
+            size={20}
+            color={subscription.colorCode}
             onClick={() => {
-              handleClickBlankCheckBox(subscription.colorCode);
+              handleClickCategoryItem(subscription.checked, subscription.colorCode);
             }}
-          >
-            <RiCheckboxBlankLine size={20} color={subscription.colorCode} />
-          </Button>
+          />
         )}
-        <span css={nameStyle}>
+        <span
+          css={nameStyle}
+          onClick={() => {
+            handleClickCategoryItem(subscription.checked, subscription.colorCode);
+          }}
+        >
           {subscription.category.name}
           <span css={grayTextStyle}>
             {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
@@ -97,7 +97,6 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
         </span>
       </div>
       <div css={paletteLayoutStyle}>
-        {isLoading && <Spinner />}
         <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
           <BiPalette size={20} />
         </Button>
