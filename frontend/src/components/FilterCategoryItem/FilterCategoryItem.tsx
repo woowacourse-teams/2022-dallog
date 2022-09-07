@@ -63,6 +63,21 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
     });
   };
 
+  const handleClickCategoryName = (checked: boolean, colorCode: string) => {
+    if (checked) {
+      mutate({
+        checked: false,
+        colorCode,
+      });
+      return;
+    }
+
+    mutate({
+      checked: true,
+      colorCode,
+    });
+  };
+
   const handleClickPalette = (checked: boolean, colorCode: string) => {
     mutate({ checked, colorCode });
     togglePaletteOpen();
@@ -71,24 +86,31 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
   return (
     <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
-        {subscription.checked ? (
-          <Button
+        {isLoading ? (
+          <Spinner />
+        ) : subscription.checked ? (
+          <RiCheckboxFill
+            size={20}
+            color={subscription.colorCode}
             onClick={() => {
               handleClickFilledCheckBox(subscription.colorCode);
             }}
-          >
-            <RiCheckboxFill size={20} color={subscription.colorCode} />
-          </Button>
+          />
         ) : (
-          <Button
+          <RiCheckboxBlankLine
+            size={20}
+            color={subscription.colorCode}
             onClick={() => {
               handleClickBlankCheckBox(subscription.colorCode);
             }}
-          >
-            <RiCheckboxBlankLine size={20} color={subscription.colorCode} />
-          </Button>
+          />
         )}
-        <span css={nameStyle}>
+        <span
+          css={nameStyle}
+          onClick={() => {
+            handleClickCategoryName(subscription.checked, subscription.colorCode);
+          }}
+        >
           {subscription.category.name}
           <span css={grayTextStyle}>
             {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
@@ -97,7 +119,6 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
         </span>
       </div>
       <div css={paletteLayoutStyle}>
-        {isLoading && <Spinner />}
         <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
           <BiPalette size={20} />
         </Button>
