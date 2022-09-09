@@ -32,12 +32,18 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Test
-        run: ls && cd build && ls && cd test-results && ls && cd test && ls
-
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           junit_files: "backend/build/test-results/**/*.xml"
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.2
+        with:
+          paths: ${{ github.workspace }}/backend/build/jacoco/index.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
 
