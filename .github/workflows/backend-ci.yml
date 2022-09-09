@@ -32,8 +32,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Test
+        run: ls && cd build && ls && cd test-results && ls && cd test && ls
+
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          files: build/test-results/**/*.xml
+          junit_files: "backend/build/test-results/test/*.xml"
+
