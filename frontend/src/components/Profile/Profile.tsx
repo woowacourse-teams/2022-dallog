@@ -4,12 +4,16 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
+import useToggle from '@/hooks/useToggle';
+
 import { ProfileType } from '@/@types/profile';
 
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
+import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import WithdrawalModal from '@/components/WithdrawalModal/WithdrawalModal';
 
 import { PATH } from '@/constants';
 import { CACHE_KEY } from '@/constants/api';
@@ -34,6 +38,7 @@ import {
   menuTitle,
   nameButtonStyle,
   nameStyle,
+  withdrawalButtonStyle,
 } from './Profile.styles';
 
 function Profile() {
@@ -61,6 +66,8 @@ function Profile() {
       },
     }
   );
+
+  const { state: isWithdrawalModalOpen, toggleState: toggleWithdrawalModalOpen } = useToggle();
 
   const handleClickModifyButton = () => {
     setEditingName(true);
@@ -126,6 +133,14 @@ function Profile() {
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
       </Button>
+
+      <Button cssProp={withdrawalButtonStyle} onClick={toggleWithdrawalModalOpen}>
+        회원 탈퇴
+      </Button>
+
+      <ModalPortal isOpen={isWithdrawalModalOpen} closeModal={toggleWithdrawalModalOpen}>
+        <WithdrawalModal closeModal={toggleWithdrawalModalOpen} />
+      </ModalPortal>
     </div>
   );
 }

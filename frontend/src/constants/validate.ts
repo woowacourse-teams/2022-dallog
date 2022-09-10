@@ -7,6 +7,7 @@ const VALIDATION_SIZE = {
 
 const VALIDATION_STRING = {
   CATEGORY: '내 일정',
+  WITHDRAWAL: '달록 탈퇴',
 };
 
 const VALIDATION_MESSAGE = {
