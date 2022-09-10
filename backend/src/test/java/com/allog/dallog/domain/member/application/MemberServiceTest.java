@@ -9,18 +9,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private MemberAfterEvent memberSaveAfterEvent;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
 
     @DisplayName("회원을 저장한다.")
     @Test
@@ -30,6 +46,24 @@ class MemberServiceTest extends ServiceTest {
 
         // then
         assertThat(파랑).isNotNull();
+    }
+
+    @DisplayName("회원을 저장하면 카테고리 하나와 구독 하나가 생긴다.")
+    @Test
+    void 회원을_저장하면_카테고리_하나와_구독_하나가_생긴다() {
+        // given
+        MemberResponse 매트 = memberService.save(매트(), memberSaveAfterEvent);
+
+        // when
+        PageRequest pageRequest = PageRequest.of(0, 1);
+        CategoriesResponse categoriesActual = categoryService.findMineByName(매트.getId(), "내 일정", pageRequest);
+        List<Subscription> subscriptionsActual = subscriptionService.getAllByMemberId(매트.getId());
+
+        // then
+        Assertions.assertAll(() -> {
+            assertThat(categoriesActual.getCategories()).hasSize(1);
+            assertThat(subscriptionsActual).hasSize(1);
+        });
     }
 
     @DisplayName("이메일로 회원을 찾는다.")
