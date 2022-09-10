@@ -160,7 +160,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             type={dateFieldset.type}
             value={validationSchedule.startDateTime.inputValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
-            labelText="날짜"
+            labelText={isAllDay ? '날짜' : '날짜 / 시간'}
           />
           <p css={arrow}>↓</p>
           <Fieldset
