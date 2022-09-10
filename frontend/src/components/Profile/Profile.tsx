@@ -42,15 +42,15 @@ import {
 } from './Profile.styles';
 
 function Profile() {
+  const { accessToken } = useRecoilValue(userState);
+
+  const navigate = useNavigate();
+
   const [isEditingName, setEditingName] = useState(false);
 
   const inputRef = {
     displayName: useRef<HTMLInputElement>(null),
   };
-
-  const navigate = useNavigate();
-
-  const { accessToken } = useRecoilValue(userState);
 
   const queryClient = useQueryClient();
   const { data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
@@ -108,7 +108,6 @@ function Profile() {
               refProp={inputRef.displayName}
               cssProp={inputStyle}
               autoFocus={true}
-              labelText="닉네임"
             />
             <Button
               type="submit"
