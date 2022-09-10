@@ -33,6 +33,13 @@ public class MemberService {
         return new MemberResponse(newMember);
     }
 
+    @Transactional
+    public MemberResponse save(final Member member, final MemberAfterEvent memberAfterEvent) {
+        Member newMember = memberRepository.save(member);
+        memberAfterEvent.process(newMember);
+        return new MemberResponse(newMember);
+    }
+
     public MemberResponse findById(final Long id) {
         return new MemberResponse(getMember(id));
     }

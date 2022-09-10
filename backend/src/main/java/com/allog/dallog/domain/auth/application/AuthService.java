@@ -6,9 +6,10 @@ import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
-import com.allog.dallog.domain.composition.application.RegisterService;
+import com.allog.dallog.domain.member.application.MemberAfterEvent;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.SocialType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,19 +20,19 @@ public class AuthService {
     private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final MemberService memberService;
-    private final RegisterService registerService;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final TokenProvider tokenProvider;
+    private final MemberAfterEvent memberSaveAfterEvent;
 
     public AuthService(final OAuthUri oAuthUri, final OAuthClient oAuthClient, final MemberService memberService,
-                       final RegisterService registerService, final OAuthTokenRepository oAuthTokenRepository,
-                       final TokenProvider tokenProvider) {
+                       final OAuthTokenRepository oAuthTokenRepository, final TokenProvider tokenProvider,
+                       final MemberAfterEvent memberSaveAfterEvent) {
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.memberService = memberService;
-        this.registerService = registerService;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.tokenProvider = tokenProvider;
+        this.memberSaveAfterEvent = memberSaveAfterEvent;
     }
 
     public String generateGoogleLink(final String redirectUri) {
@@ -55,10 +56,15 @@ public class AuthService {
 
     private Member getMember(final OAuthMember oAuthMember) {
         if (!memberService.existsByEmail(oAuthMember.getEmail())) {
-            registerService.register(oAuthMember);
+            memberService.save(parseMember(oAuthMember), memberSaveAfterEvent);
         }
 
         return memberService.getByEmail(oAuthMember.getEmail());
+    }
+
+    private Member parseMember(final OAuthMember oAuthMember) {
+        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
+                SocialType.GOOGLE);
     }
 
     private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member foundMember) {
