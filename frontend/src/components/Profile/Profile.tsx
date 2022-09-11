@@ -5,10 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import useToggle from '@/hooks/useToggle';
-
-import { ProfileType } from '@/@types/profile';
-
-import { userState } from '@/recoil/atoms';
+import useUserValue from '@/hooks/useUserValue';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -42,9 +39,9 @@ import {
 } from './Profile.styles';
 
 function Profile() {
-  const { accessToken } = useRecoilValue(userState);
-
   const navigate = useNavigate();
+
+  const { user } = useUserValue();
 
   const [isEditingName, setEditingName] = useState(false);
 
@@ -53,12 +50,8 @@ function Profile() {
   };
 
   const queryClient = useQueryClient();
-  const { data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
-    profileApi.get(accessToken)
-  );
-
   const { mutate } = useMutation(
-    (body: { displayName: string }) => profileApi.patch(accessToken, body),
+    (body: { displayName: string }) => profileApi.patch(user.accessToken, body),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(CACHE_KEY.PROFILE);
@@ -98,13 +91,13 @@ function Profile() {
 
   return (
     <div css={layoutStyle}>
-      <img src={data?.data.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
+      <img src={user.profileImageUrl} css={imageStyle} alt="프로필 이미지" />
       <div css={contentStyle}>
         {isEditingName ? (
           <form css={nameButtonStyle}>
             <Fieldset
-              defaultValue={data?.data.displayName}
-              placeholder={data?.data.displayName}
+              defaultValue={user.displayName}
+              placeholder={user.displayName}
               refProp={inputRef.displayName}
               cssProp={inputStyle}
               autoFocus={true}
@@ -112,7 +105,7 @@ function Profile() {
             <Button
               type="submit"
               cssProp={menu}
-              onClick={() => handleClickCompleteButton(data?.data.displayName)}
+              onClick={() => handleClickCompleteButton(user.displayName)}
             >
               <AiOutlineCheck size={14} />
               <span css={menuTitle}>완료</span>
@@ -120,14 +113,14 @@ function Profile() {
           </form>
         ) : (
           <div>
-            <span css={nameStyle}>{data?.data.displayName}</span>
+            <span css={nameStyle}>{user.displayName}</span>
             <Button cssProp={menu} onClick={handleClickModifyButton}>
               <FiEdit3 size={14} />
               <span css={menuTitle}>수정</span>
             </Button>
           </div>
         )}
-        <span css={emailStyle}>{data?.data.email}</span>
+        <span css={emailStyle}>{user.email}</span>
       </div>
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
