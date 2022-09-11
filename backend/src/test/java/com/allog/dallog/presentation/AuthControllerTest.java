@@ -102,7 +102,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/exception/token",
+                .andDo(document("auth/generateToken/failByResourceServerError",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

@@ -138,7 +138,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findAllByName/allByNoName",
+                .andDo(document("category/findAllByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
