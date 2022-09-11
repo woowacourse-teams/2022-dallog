@@ -1,5 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
+import { ModalPosType } from '@/@types';
+
 const itemStyle = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
@@ -60,9 +62,12 @@ const iconStyle = css`
   visibility: hidden;
 `;
 
-const paletteStyle = ({ colors }: Theme) => css`
+const paletteStyle = ({ colors }: Theme, modalPos: ModalPosType) => css`
   position: absolute;
-  right: 0;
+  top: ${modalPos.top ? `${modalPos.top + 5}px` : 'none'};
+  right: ${modalPos.right ? `${modalPos.right + 5}px` : 'none'};
+  bottom: ${modalPos.bottom ? `${modalPos.bottom + 5}px` : 'none'};
+  left: ${modalPos.left ? `${modalPos.left + 5}px` : 'none'};
   z-index: 30;
 
   display: grid;
@@ -94,15 +99,10 @@ const outerStyle = css`
   background-color: transparent;
 `;
 
-const grayTextStyle = ({ colors }: Theme) => css`
-  color: ${colors.GRAY_600};
-`;
-
 export {
   itemStyle,
   colorStyle,
   checkBoxNameStyle,
-  grayTextStyle,
   headerStyle,
   iconStyle,
   nameStyle,
