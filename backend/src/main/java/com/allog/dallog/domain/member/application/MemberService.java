@@ -19,24 +19,20 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
+    private final MemberAfterEvent memberSaveAfterEvent;
 
     public MemberService(final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                         final OAuthTokenRepository oAuthTokenRepository) {
+                         final OAuthTokenRepository oAuthTokenRepository, final MemberAfterEvent memberSaveAfterEvent) {
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
+        this.memberSaveAfterEvent = memberSaveAfterEvent;
     }
 
     @Transactional
     public MemberResponse save(final Member member) {
         Member newMember = memberRepository.save(member);
-        return new MemberResponse(newMember);
-    }
-
-    @Transactional
-    public MemberResponse save(final Member member, final MemberAfterEvent memberAfterEvent) {
-        Member newMember = memberRepository.save(member);
-        memberAfterEvent.process(newMember);
+        memberSaveAfterEvent.process(newMember);
         return new MemberResponse(newMember);
     }
 

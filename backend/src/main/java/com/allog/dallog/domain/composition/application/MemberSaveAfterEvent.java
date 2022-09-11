@@ -38,11 +38,11 @@ public class MemberSaveAfterEvent implements MemberAfterEvent {
 
     private void validateArgs(final Object... args) {
         if (args.length != 1 || !(args[ARGS_MEMBER_INDEX] instanceof Member)) {
-            throw new IllegalArgumentException("member save after event에서 필요한 매개변수 목록과 일치하지 않습니다.");
+            throw new IllegalArgumentException("MemberSaveAfterEvent에서 필요한 매개변수 목록과 일치하지 않습니다.");
         }
     }
 
-    private Member parseMember(final Object[] args) {
+    private Member parseMember(final Object... args) {
         return (Member) args[ARGS_MEMBER_INDEX];
     }
 }
