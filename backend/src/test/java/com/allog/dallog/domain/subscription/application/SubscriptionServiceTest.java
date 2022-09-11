@@ -130,7 +130,7 @@ class SubscriptionServiceTest extends ServiceTest {
         SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디.getId());
 
         // then
-        assertThat(subscriptionsResponse.getSubscriptions()).hasSize(3);
+        assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4);
     }
 
     @DisplayName("구독 정보를 수정한다.")
@@ -188,7 +188,7 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.deleteById(response.getId(), 후디.getId());
 
         // then
-        assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(2);
+        assertThat(subscriptionService.findByMemberId(후디.getId()).getSubscriptions()).hasSize(3);
     }
 
     @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")

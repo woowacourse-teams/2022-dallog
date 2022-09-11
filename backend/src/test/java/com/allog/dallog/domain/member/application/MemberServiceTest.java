@@ -30,9 +30,6 @@ class MemberServiceTest extends ServiceTest {
     private MemberService memberService;
 
     @Autowired
-    private MemberAfterEvent memberSaveAfterEvent;
-
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -52,7 +49,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 회원을_저장하면_카테고리_하나와_구독_하나가_생긴다() {
         // given
-        MemberResponse 매트 = memberService.save(매트(), memberSaveAfterEvent);
+        MemberResponse 매트 = memberService.save(매트());
 
         // when
         PageRequest pageRequest = PageRequest.of(0, 1);

@@ -38,7 +38,7 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑.getId());
 
         // then
-        assertThat(subscriptions).hasSize(1);
+        assertThat(subscriptions).hasSize(2);
     }
 
     @DisplayName("외부 카테고리 생성 시 자동으로 구독한다.")
@@ -53,6 +53,6 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑.getId());
 
         // then
-        assertThat(subscriptions).hasSize(1);
+        assertThat(subscriptions).hasSize(2);
     }
 }
