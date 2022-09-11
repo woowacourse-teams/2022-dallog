@@ -67,7 +67,6 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-//        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
         given(authService.generateToken(any())).willReturn(MEMBER_인증_코드_토큰_응답());
 
         // when & then
