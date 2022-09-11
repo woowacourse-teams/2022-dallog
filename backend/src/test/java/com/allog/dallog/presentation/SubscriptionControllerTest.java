@@ -122,7 +122,7 @@ class SubscriptionControllerTest extends ControllerTest {
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("subscription/exist",
+                .andDo(document("subscription/save/failByAlreadyExisting",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -147,7 +147,7 @@ class SubscriptionControllerTest extends ControllerTest {
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("subscription/private-category",
+                .andDo(document("subscription/save/failBySubscribingPrivateCategoryOfOther",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -253,9 +253,9 @@ class SubscriptionControllerTest extends ControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @DisplayName("자신이 가지고 있지 않은 구독 정보인 경우 예외를 던진다.")
+    @DisplayName("구독 제거시 자신이 가지고 있지 않은 구독 정보인 경우 예외를 던진다.")
     @Test
-    void 자신이_가지고_있지_않은_구독_정보인_경우_예외를_던진다() throws Exception {
+    void 구독_제거시_자신이_가지고_있지_않은_구독_정보인_경우_예외를_던진다() throws Exception {
         // given
         given(authService.extractMemberId(any())).willReturn(매트_응답.getId());
         willThrow(new NoPermissionException())
@@ -268,7 +268,7 @@ class SubscriptionControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("subscription/permission",
+                .andDo(document("subscription/delete/failByNotMine",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

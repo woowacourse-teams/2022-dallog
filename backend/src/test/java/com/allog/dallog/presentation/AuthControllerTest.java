@@ -47,7 +47,7 @@ class AuthControllerTest extends ControllerTest {
         mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", OAUTH_PROVIDER,
                         "https://dallog.me/oauth"))
                 .andDo(print())
-                .andDo(document("auth/link",
+                .andDo(document("auth/generateLink",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -76,7 +76,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/token",
+                .andDo(document("auth/generateToken",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

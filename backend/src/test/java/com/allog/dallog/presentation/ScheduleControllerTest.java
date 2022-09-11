@@ -90,7 +90,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save",
+                .andDo(document("schedule/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -113,7 +113,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save/forbidden",
+                .andDo(document("schedule/save/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -136,7 +136,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save/notfound",
+                .andDo(document("schedule/save/failByNoCategory",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -156,7 +156,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("schedules/findone",
+                .andDo(document("schedule/findById",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -176,7 +176,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("schedules/findone/notfound",
+                .andDo(document("schedule/findById/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -200,7 +200,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update",
+                .andDo(document("schedule/update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -226,7 +226,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update/forbidden",
+                .andDo(document("schedule/update/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -249,7 +249,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update/notfound",
+                .andDo(document("schedule/update/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -269,7 +269,7 @@ class ScheduleControllerTest extends ControllerTest {
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete",
+                .andDo(document("schedule/delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -292,7 +292,7 @@ class ScheduleControllerTest extends ControllerTest {
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete/forbidden",
+                .andDo(document("schedule/delete/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -312,7 +312,7 @@ class ScheduleControllerTest extends ControllerTest {
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete/notfound",
+                .andDo(document("schedule/delete/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -355,7 +355,7 @@ class ScheduleControllerTest extends ControllerTest {
                         get("/api/members/me/schedules?startDateTime={startDate}&endDateTime={endDate}", startDate, endDate)
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/findAllByMember",
+                .andDo(document("schedule/findSchedulesByMemberId",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(

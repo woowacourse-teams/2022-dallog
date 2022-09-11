@@ -83,7 +83,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(BE_일정_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/save",
+                .andDo(document("category/save",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -111,7 +111,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(잘못된_카테고리_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/save/badRequest",
+                .andDo(document("category/save/failByInvalidNameFormat",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -138,7 +138,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findAll",
+                .andDo(document("categories/findAllByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -167,7 +167,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findAllLikeName",
+                .andDo(document("category/findAllByName/fileterByName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -198,7 +198,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/findMine",
+                .andDo(document("category/findMineByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -229,7 +229,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/findMineLikeName",
+                .andDo(document("category/findMineByName/fileterByName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -256,7 +256,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findById",
+                .andDo(document("category/findById",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -281,7 +281,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findById/notFound",
+                .andDo(document("category/findById/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -310,7 +310,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update",
+                .andDo(document("category/update",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -340,7 +340,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update/notFound",
+                .andDo(document("category/update/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -370,7 +370,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update/badRequest",
+                .andDo(document("category/update/failByInvalidNameFormat",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -397,7 +397,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/delete",
+                .andDo(document("category/delete",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -425,7 +425,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/delete/notFound",
+                .andDo(document("category/delete/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(

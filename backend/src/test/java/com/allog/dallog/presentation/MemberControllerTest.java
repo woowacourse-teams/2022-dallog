@@ -57,7 +57,7 @@ class MemberControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("members/me",
+                .andDo(document("member/findMe",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -80,7 +80,7 @@ class MemberControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("members/exception/notfound",
+                .andDo(document("member/findMe/failNoMember",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -107,7 +107,7 @@ class MemberControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(회원_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("members/update",
+                .andDo(document("member/update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -133,7 +133,7 @@ class MemberControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("members/delete",
+                .andDo(document("member/delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
