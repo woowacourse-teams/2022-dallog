@@ -25,6 +25,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -87,7 +90,22 @@ class CategoryControllerTest extends ControllerTest {
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰"))
+                                        headerWithName("Authorization").description("JWT 토큰")),
+                                requestFields(
+                                        fieldWithPath("name").description("카테고리 이름 (최대 20글자)"),
+                                        fieldWithPath("categoryType").description("카테고리 타입 (NORMAL | PERSONAL | GOOGLE)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("카테고리 ID"),
+                                        fieldWithPath("name").description("카테고리 이름"),
+                                        fieldWithPath("categoryType").description("카테고리 타입 (NORMAL | PERSONAL | GOOGLE)"),
+                                        fieldWithPath("creator.id").description("카테고리 생성자 ID"),
+                                        fieldWithPath("creator.email").description("카테고리 생성자 이메일"),
+                                        fieldWithPath("creator.displayName").description("카테고리 생성자 이름"),
+                                        fieldWithPath("creator.profileImageUrl").description("카테고리 생성자 프로필 이미지 URL"),
+                                        fieldWithPath("creator.socialType").description("카테고리 생성자의 소셜 타입"),
+                                        fieldWithPath("createdAt").description("카테고리 생성일자")
+                                )
                         )
                 )
                 .andExpect(status().isCreated());
@@ -157,7 +175,7 @@ class CategoryControllerTest extends ControllerTest {
         int page = 0;
         int size = 10;
 
-        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
         given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
 

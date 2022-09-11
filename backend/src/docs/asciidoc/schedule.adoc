@@ -2,121 +2,107 @@
 
 === 회원 일정 목록 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/schedules/findAllByMember/http-request.adoc[]
+include::{snippets}/schedule/findSchedulesByMemberId/http-request.adoc[]
 
-==== RequestParameters
+==== Request Parameters
 
-include::{snippets}/schedules/findAllByMember/request-parameters.adoc[]
+include::{snippets}/schedule/findSchedulesByMemberId/request-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/findAllByMember/http-response.adoc[]
-
-=== 회원 일정 및 외부 일정 목록 조회
-
-==== Request
-
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-request.adoc[]
-
-==== RequestParameters
-
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/request-parameters.adoc[]
-
-==== Response
-
-include::{snippets}/schedules/findAllByMemberWithExternalSchedule/http-response.adoc[]
+include::{snippets}/schedule/findSchedulesByMemberId/http-response.adoc[]
 
 === 일정 등록
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/schedules/save/http-request.adoc[]
+include::{snippets}/schedule/save/http-request.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/save/http-response.adoc[]
+include::{snippets}/schedule/save/http-response.adoc[]
 
-=== 일정 생성 (카테고리 권한 없음)
+=== 일정 등록 (카테고리 권한이 없을 때)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/save/forbidden/http-response.adoc[]
+include::{snippets}/schedule/save/failByNoPermission/http-response.adoc[]
 
 === 일정 생성 (카테고리가 존재하지 않음)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/save/notfound/http-response.adoc[]
+include::{snippets}/schedule/save/failByNoCategory/http-response.adoc[]
 
 === 일정 단건 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/schedules/findone/http-request.adoc[]
+include::{snippets}/schedule/findById/http-request.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/findone/http-response.adoc[]
+include::{snippets}/schedule/findById/http-response.adoc[]
 
-=== 일정 단건 조회 (일정이 존재하지 않음)
+=== 일정 단건 조회 (일정이 존재하지 않을 때)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/findone/notfound/http-response.adoc[]
+include::{snippets}/schedule/findById/failByNoSchedule/http-response.adoc[]
 
 === 일정 수정
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/schedules/update/http-request.adoc[]
+include::{snippets}/schedule/update/http-request.adoc[]
 
-==== Path Variable
+==== Path Parameters
 
-include::{snippets}/schedules/update/path-parameters.adoc[]
+include::{snippets}/schedule/update/path-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/update/http-response.adoc[]
+include::{snippets}/schedule/update/http-response.adoc[]
 
-=== 일정 수정 (카테고리 권한 없음)
+=== 일정 수정 (카테고리 권한이 없을 때)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/update/forbidden/http-response.adoc[]
+include::{snippets}/schedule/update/failByNoPermission/http-response.adoc[]
 
-=== 일정 수정 (카테고리가 존재하지 않음)
+=== 일정 수정 (카테고리가 존재하지 않을 때)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/update/notfound/http-response.adoc[]
+include::{snippets}/schedule/update/failByNoSchedule/http-response.adoc[]
 
 === 일정 제거
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/schedules/delete/http-request.adoc[]
+include::{snippets}/schedule/delete/http-request.adoc[]
 
-==== Path Variable
+==== Path Parameters
 
-include::{snippets}/schedules/delete/path-parameters.adoc[]
+include::{snippets}/schedule/delete/path-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/delete/http-response.adoc[]
+include::{snippets}/schedule/delete/http-response.adoc[]
 
-=== 일정 제거 (카테고리 권한 없음)
+=== 일정 제거 (카테고리 권한이 없을 때)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/delete/forbidden/http-response.adoc[]
+include::{snippets}/schedule/delete/failByNoPermission/http-response.adoc[]
 
 === 일정 제거 (카테고리가 존재하지 않음)
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/schedules/delete/notfound/http-response.adoc[]
+include::{snippets}/schedule/delete/failByNoSchedule/http-response.adoc[]
 
 === 일정 조율
 
@@ -124,14 +110,16 @@ include::{snippets}/schedules/delete/notfound/http-response.adoc[]
 
 ==== Request
 
-include::{snippets}/scheduler/category/available-periods/http-request.adoc[]
+include::{snippets}/scheduler/scheduleByCategory/http-request.adoc[]
 
-==== Parameters
+==== Path Parameters
 
-include::{snippets}/scheduler/category/available-periods/path-parameters.adoc[]
+include::{snippets}/scheduler/scheduleByCategory/path-parameters.adoc[]
 
-include::{snippets}/scheduler/category/available-periods/request-parameters.adoc[]
+==== Request Parameters
+
+include::{snippets}/scheduler/scheduleByCategory/request-parameters.adoc[]
 
 ==== Response
 
-include::{snippets}/scheduler/category/available-periods/http-response.adoc[]
+include::{snippets}/scheduler/scheduleByCategory/http-response.adoc[]

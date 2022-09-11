@@ -2,52 +2,44 @@
 
 === 내 정보 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/members/me/http-request.adoc[]
+include::{snippets}/member/findMe/http-request.adoc[]
 
-==== RequestHeaders
+==== HTTP Response
 
-include::{snippets}/members/me/request-headers.adoc[]
+include::{snippets}/member/findMe/http-response.adoc[]
 
-==== Response
+==== Response Fields
 
-include::{snippets}/members/me/http-response.adoc[]
+include::{snippets}/member/findMe/response-fields.adoc[]
 
-=== 삭제된 회원 정보 조회
+=== 내 정보 조회 (존재하지 않는 회원 조회 시)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/members/exception/notfound/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/members/exception/notfound/http-response.adoc[]
+include::{snippets}/member/findMe/failNoMember/http-response.adoc[]
 
 === 내 정보 수정
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/members/update/http-request.adoc[]
+include::{snippets}/member/update/http-request.adoc[]
 
-==== RequestHeaders
+==== Request Fields
 
-include::{snippets}/members/update/request-headers.adoc[]
+include::{snippets}/member/update/request-fields.adoc[]
 
-==== Request Parameters
+==== HTTP Response
 
-include::{snippets}/members/update/request-body.adoc[]
-
-==== Response
-
-include::{snippets}/members/update/http-response.adoc[]
+include::{snippets}/member/update/http-response.adoc[]
 
 === 회원 탈퇴
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/members/delete/http-request.adoc[]
+include::{snippets}/member/delete/http-request.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/members/delete/http-response.adoc[]
+include::{snippets}/member/delete/http-response.adoc[]

@@ -15,6 +15,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -62,6 +63,13 @@ class MemberControllerTest extends ControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName("Authorization").description("JWT 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID"),
+                                fieldWithPath("email").description("회원 이메일"),
+                                fieldWithPath("displayName").description("회원 이름"),
+                                fieldWithPath("profileImageUrl").description("회원 프로필 이미지 URL"),
+                                fieldWithPath("socialType").description("회원 소셜 타입")
                         )
                 ))
                 .andExpect(status().isOk());

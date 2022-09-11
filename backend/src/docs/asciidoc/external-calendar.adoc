@@ -2,46 +2,38 @@
 
 === 자신의 외부 캘린더 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/external-calendars/get/http-request.adoc[]
+include::{snippets}/externalCalendar/getExternalCalendar/http-request.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/external-calendars/get/http-response.adoc[]
+include::{snippets}/externalCalendar/getExternalCalendar/http-response.adoc[]
 
 === 자신의 외부 캘린더 저장
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/external-calendars/save/http-request.adoc[]
+include::{snippets}/externalCalendar/save/http-request.adoc[]
 
-==== Request Headers
+==== Request Fields
 
-include::{snippets}/external-calendars/save/request-headers.adoc[]
+include::{snippets}/externalCalendar/save/request-fields.adoc[]
 
-==== Request Body
+==== HTTP Response
 
-include::{snippets}/external-calendars/save/request-fields.adoc[]
-
-==== Response
-
-include::{snippets}/external-calendars/save/http-response.adoc[]
+include::{snippets}/externalCalendar/save/http-response.adoc[]
 
 === 자신의 외부 캘린더 중복 저장 시 예외 발생
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/external-calendars/duplicated-save/http-request.adoc[]
+include::{snippets}/externalCalendar/save/failByDuplicate/http-request.adoc[]
 
-==== Request Headers
+==== Request Fields
 
-include::{snippets}/external-calendars/duplicated-save/request-headers.adoc[]
+include::{snippets}/externalCalendar/save/failByDuplicate/request-fields.adoc[]
 
-==== Request Body
+==== HTTP Response
 
-include::{snippets}/external-calendars/duplicated-save/request-fields.adoc[]
-
-==== Response
-
-include::{snippets}/external-calendars/duplicated-save/http-response.adoc[]
+include::{snippets}/externalCalendar/save/failByDuplicate/http-response.adoc[]

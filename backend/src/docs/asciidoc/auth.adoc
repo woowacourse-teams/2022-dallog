@@ -2,58 +2,50 @@
 
 === OAuth 로그인 링크 생성
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/auth/link/http-request.adoc[]
+include::{snippets}/auth/generateLink/http-request.adoc[]
 
 ==== Path Parameters
 
-include::{snippets}/auth/link/path-parameters.adoc[]
+include::{snippets}/auth/generateLink/path-parameters.adoc[]
 
 ==== Request Parameters
 
-include::{snippets}/auth/link/request-parameters.adoc[]
+include::{snippets}/auth/generateLink/request-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/auth/link/http-response.adoc[]
+include::{snippets}/auth/generateLink/http-response.adoc[]
 
-==== ResponseFields
+==== Response Fields
 
-include::{snippets}/auth/link/response-fields.adoc[]
+include::{snippets}/auth/generateLink/response-fields.adoc[]
 
 === OAuth 로그인
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/auth/token/http-request.adoc[]
+include::{snippets}/auth/generateToken/http-request.adoc[]
 
-==== PathParameters
+==== Path Parameters
 
-include::{snippets}/auth/token/path-parameters.adoc[]
+include::{snippets}/auth/generateToken/path-parameters.adoc[]
 
-==== RequestFields
+==== Request Fields
 
-include::{snippets}/auth/token/request-fields.adoc[]
+include::{snippets}/auth/generateToken/request-fields.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/auth/token/http-response.adoc[]
+include::{snippets}/auth/generateToken/http-response.adoc[]
 
-=== OAuth 로그인 : Resource Server 에러
+==== Response Fields
 
-==== Request
+include::{snippets}/auth/generateToken/response-fields.adoc[]
 
-include::{snippets}/auth/exception/token/http-request.adoc[]
+=== OAuth 로그인 (Resource Server 에러)
 
-==== PathParameters
+==== HTTP Response
 
-include::{snippets}/auth/exception/token/path-parameters.adoc[]
-
-==== RequestFields
-
-include::{snippets}/auth/exception/token/request-fields.adoc[]
-
-==== Response
-
-include::{snippets}/auth/exception/token/http-response.adoc[]
+include::{snippets}/auth/generateToken/failByResourceServerError/http-response.adoc[]
