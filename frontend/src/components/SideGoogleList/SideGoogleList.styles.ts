@@ -11,6 +11,14 @@ const listStyle = ({ flex }: Theme, isSideBarOpen: boolean) => css`
   font-size: 4rem;
 `;
 
+const headerLayoutStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  justify-content: space-between;
+
+  width: 100%;
+`;
+
 const headerStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
@@ -20,40 +28,20 @@ const headerStyle = ({ flex }: Theme) => css`
   height: 8rem;
 
   font-weight: bold;
+
+  cursor: pointer;
 `;
 
-const googleImportButtonStyle = ({ colors, flex }: Theme) => css`
-  ${flex.row}
-
-  position: relative;
-
-  width: 100%;
-  height: 11rem;
-  padding: 4rem;
-  margin: 2rem 0 3rem;
-  border-radius: 4px;
-  border: 1px solid ${colors.GRAY_600};
-
-  background: ${colors.WHITE};
-
-  font-size: 4rem;
-  color: ${colors.GRAY_600};
-
-  &:hover {
-    filter: none;
-  }
-`;
-
-const googleImportTextStyle = css`
-  width: 100%;
-`;
-
-const contentStyle = css`
+const contentStyle = (isListOpen: boolean, listLength: number) => css`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow: hidden;
 
   width: 100%;
+  height: ${isListOpen ? `${8 * listLength}rem` : 0};
+
+  transition: height 0.3s ease-in-out;
 `;
 
-export { contentStyle, googleImportButtonStyle, googleImportTextStyle, headerStyle, listStyle };
+export { contentStyle, headerLayoutStyle, headerStyle, listStyle };

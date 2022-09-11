@@ -12,15 +12,9 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
 import GoogleImportModal from '@/components/GoogleImportModal/GoogleImportModal';
 
-import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineDown, AiOutlineGooglePlus, AiOutlineUp } from 'react-icons/ai';
 
-import {
-  contentStyle,
-  googleImportButtonStyle,
-  googleImportTextStyle,
-  headerStyle,
-  listStyle,
-} from './SideGoogleList.styles';
+import { contentStyle, headerLayoutStyle, headerStyle, listStyle } from './SideGoogleList.styles';
 
 interface SideGoogleListProps {
   categories: SubscriptionType[];
@@ -31,6 +25,7 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
 
   const theme = useTheme();
 
+  const { state: isGoogleListOpen, toggleState: toggleGoogleListOpen } = useToggle(true);
   const { state: isGoogleImportModalOpen, toggleState: toggleGoogleImportModalOpen } = useToggle();
 
   const handleClickGoogleImportButton = () => {
@@ -39,12 +34,18 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
-      <span css={headerStyle}>구글 카테고리 목록</span>
-      <Button cssProp={googleImportButtonStyle(theme)} onClick={handleClickGoogleImportButton}>
-        <FcGoogle size={20} />
-        <p css={googleImportTextStyle}>구글 캘린더 가져오기</p>
-      </Button>
-      <div css={contentStyle}>
+      <div css={headerLayoutStyle}>
+        <span css={headerStyle} onClick={toggleGoogleListOpen}>
+          구글 카테고리 목록
+        </span>
+        <Button>
+          <AiOutlineGooglePlus size={20} onClick={handleClickGoogleImportButton} />
+        </Button>
+        <Button onClick={toggleGoogleListOpen}>
+          {isGoogleListOpen ? <AiOutlineUp /> : <AiOutlineDown />}
+        </Button>
+      </div>
+      <div css={contentStyle(isGoogleListOpen, categories.length)}>
         {categories.map((el) => {
           return <FilterCategoryItem key={el.category.id} subscription={el} />;
         })}
