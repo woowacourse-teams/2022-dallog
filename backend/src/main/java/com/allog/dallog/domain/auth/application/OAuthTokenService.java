@@ -31,4 +31,9 @@ public class OAuthTokenService {
         return oAuthTokenRepository.findByMemberId(memberId)
                 .orElseThrow(NoSuchMemberException::new);
     }
+
+    @Transactional
+    public void deleteByMemberId(final Long memberId) {
+        oAuthTokenRepository.deleteByMemberId(memberId);
+    }
 }

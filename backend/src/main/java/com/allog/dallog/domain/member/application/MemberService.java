@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.member.application;
 
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -18,15 +17,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
-    private final OAuthTokenRepository oAuthTokenRepository;
     private final MemberAfterEvent memberSaveAfterEvent;
+    private final MemberBeforeEvent memberDeleteBeforeEvent;
 
     public MemberService(final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                         final OAuthTokenRepository oAuthTokenRepository, final MemberAfterEvent memberSaveAfterEvent) {
+                         final MemberAfterEvent memberSaveAfterEvent, final MemberBeforeEvent memberDeleteBeforeEvent) {
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
-        this.oAuthTokenRepository = oAuthTokenRepository;
         this.memberSaveAfterEvent = memberSaveAfterEvent;
+        this.memberDeleteBeforeEvent = memberDeleteBeforeEvent;
     }
 
     @Transactional
@@ -56,11 +55,11 @@ public class MemberService {
 
     @Transactional
     public void deleteById(final Long id) {
-        oAuthTokenRepository.deleteByMemberId(id);
+        memberDeleteBeforeEvent.process(getMember(id));
         memberRepository.deleteById(id);
     }
 
-    public Member getMember(final Long id) {
+    private Member getMember(final Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(NoSuchMemberException::new);
     }
