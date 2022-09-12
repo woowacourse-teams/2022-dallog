@@ -36,7 +36,7 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleGoogleListOpen}>
-          구글 카테고리 목록
+          구글 카테고리
         </span>
         <Button>
           <AiOutlineGooglePlus size={20} onClick={handleClickGoogleImportButton} />

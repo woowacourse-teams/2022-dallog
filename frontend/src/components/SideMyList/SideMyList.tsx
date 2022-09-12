@@ -38,7 +38,7 @@ function SideMyList({ categories }: SideMyListProps) {
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleMyListOpen}>
-          나의 카테고리 목록
+          나의 카테고리
         </span>
         <Button>
           <BiListPlus size={20} onClick={handleClickCategoryAddButton} />

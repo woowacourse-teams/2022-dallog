@@ -34,7 +34,7 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleSubscribedListOpen}>
-          구독 카테고리 목록
+          구독 카테고리
         </span>
         <Button onClick={toggleSubscribedListOpen}>
           {isSubscribedListOpen ? <AiOutlineUp /> : <AiOutlineDown />}
