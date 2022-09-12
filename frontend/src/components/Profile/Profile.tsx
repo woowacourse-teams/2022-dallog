@@ -1,8 +1,6 @@
-import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
 import useToggle from '@/hooks/useToggle';
 import useUserValue from '@/hooks/useUserValue';
