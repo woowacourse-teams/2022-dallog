@@ -7,6 +7,7 @@ import { SubscriptionType } from '@/@types/subscription';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
+import Spinner from '@/components/@common/Spinner/Spinner';
 import SideGoogleList from '@/components/SideGoogleList/SideGoogleList';
 import SideMyList from '@/components/SideMyList/SideMyList';
 import SideSubscribedList from '@/components/SideSubscribedList/SideSubscribedList';
@@ -26,11 +27,18 @@ function SideBar() {
 
   const { isLoading, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
     CACHE_KEY.SUBSCRIPTIONS,
-    () => subscriptionApi.get(user.accessToken)
+    () => subscriptionApi.get(user.accessToken),
+    {
+      enabled: !!user.accessToken,
+    }
   );
 
   if (!user.accessToken || isLoading || data === undefined) {
-    return <></>;
+    return (
+      <div css={sideBar(theme, isSideBarOpen)}>
+        <Spinner />
+      </div>
+    );
   }
 
   const subscribedList = data.data.filter(
