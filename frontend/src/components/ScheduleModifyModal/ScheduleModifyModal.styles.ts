@@ -53,9 +53,39 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
   font-size: 4rem;
   color: ${colors.GRAY_700};
 
+  input + label {
+    position: relative;
+
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid ${colors.YELLOW_500};
+    border-radius: 2px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked + label::after {
+    content: '✓';
+
+    position: absolute;
+    top: -1px;
+    left: -1px;
+
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2px;
+
+    background: ${colors.YELLOW_500};
+
+    font-weight: 600;
+    color: white;
+    text-align: center;
+  }
+
   input {
-    accent-color: ${colors.ORANGE_500};
-    transform: scale(1.1);
+    display: none;
   }
 `;
 
