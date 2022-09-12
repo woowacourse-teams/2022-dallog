@@ -8,9 +8,12 @@ import { SubscriptionType } from '@/@types/subscription';
 import { sideBarState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
+import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import SideItem from '@/components/SideItem/SideItem';
 
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+import { BiListPlus } from 'react-icons/bi';
 
 import { contentStyle, headerLayoutStyle, headerStyle, listStyle } from './SideMyList.styles';
 
@@ -25,12 +28,21 @@ function SideMyList({ categories }: SideMyListProps) {
 
   const { state: isMyListOpen, toggleState: toggleMyListOpen } = useToggle(true);
 
+  const { state: isCategoryAddModalOpen, toggleState: toggleCategoryAddModalOpen } = useToggle();
+
+  const handleClickCategoryAddButton = () => {
+    toggleCategoryAddModalOpen();
+  };
+
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleMyListOpen}>
           나의 카테고리 목록
         </span>
+        <Button>
+          <BiListPlus size={20} onClick={handleClickCategoryAddButton} />
+        </Button>
         <Button onClick={toggleMyListOpen}>
           {isMyListOpen ? <AiOutlineUp /> : <AiOutlineDown />}
         </Button>
@@ -41,6 +53,9 @@ function SideMyList({ categories }: SideMyListProps) {
           return <SideItem key={el.category.id} subscription={el} />;
         })}
       </div>
+      <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
+        <CategoryAddModal closeModal={toggleCategoryAddModalOpen} />
+      </ModalPortal>
     </div>
   );
 }
