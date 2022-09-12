@@ -8,7 +8,7 @@ import { SubscriptionType } from '@/@types/subscription';
 import { sideBarState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
-import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
+import SideItem from '@/components/SideItem/SideItem';
 
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 
@@ -38,7 +38,7 @@ function SideMyList({ categories }: SideMyListProps) {
 
       <div css={contentStyle(isMyListOpen, categories.length)}>
         {categories.map((el) => {
-          return <FilterCategoryItem key={el.category.id} subscription={el} />;
+          return <SideItem key={el.category.id} subscription={el} />;
         })}
       </div>
     </div>

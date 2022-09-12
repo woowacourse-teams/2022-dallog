@@ -9,8 +9,8 @@ import { sideBarState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
-import FilterCategoryItem from '@/components/FilterCategoryItem/FilterCategoryItem';
 import GoogleImportModal from '@/components/GoogleImportModal/GoogleImportModal';
+import SideItem from '@/components/SideItem/SideItem';
 
 import { AiOutlineDown, AiOutlineGooglePlus, AiOutlineUp } from 'react-icons/ai';
 
@@ -47,7 +47,7 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
       </div>
       <div css={contentStyle(isGoogleListOpen, categories.length)}>
         {categories.map((el) => {
-          return <FilterCategoryItem key={el.category.id} subscription={el} />;
+          return <SideItem key={el.category.id} subscription={el} />;
         })}
       </div>
       <ModalPortal isOpen={isGoogleImportModalOpen} closeModal={toggleGoogleImportModalOpen}>
