@@ -39,7 +39,7 @@ const contentStyle = (isListOpen: boolean, listLength: number) => css`
   overflow: hidden;
 
   width: 100%;
-  height: ${isListOpen ? `${8 * listLength}rem` : 0};
+  height: ${isListOpen ? `${8 * (listLength + 1)}rem` : 0};
   margin-bottom: 5rem;
 
   transition: height 0.3s ease-in-out;
