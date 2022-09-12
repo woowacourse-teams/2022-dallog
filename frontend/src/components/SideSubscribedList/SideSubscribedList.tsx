@@ -44,6 +44,7 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
         {categories.map((el) => {
           return <SideItem key={el.category.id} subscription={el} />;
         })}
+        {categories.length === 0 && <span>카테고리를 구독해주세요.</span>}
       </div>
     </div>
   );

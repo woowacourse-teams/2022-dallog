@@ -49,6 +49,7 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
         {categories.map((el) => {
           return <SideItem key={el.category.id} subscription={el} />;
         })}
+        {categories.length === 0 && <span>카테고리를 추가해주세요.</span>}
       </div>
       <ModalPortal isOpen={isGoogleImportModalOpen} closeModal={toggleGoogleImportModalOpen}>
         <GoogleImportModal closeModal={toggleGoogleImportModalOpen} />
