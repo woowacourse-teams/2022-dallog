@@ -37,7 +37,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/subscriptions")
-    public ResponseEntity<SubscriptionsResponse> findMine(@AuthenticationPrincipal final LoginMember loginMember) {
+    public ResponseEntity<SubscriptionsResponse> findMySubscriptions(@AuthenticationPrincipal final LoginMember loginMember) {
         SubscriptionsResponse response = subscriptionService.findByMemberId(loginMember.getId());
         return ResponseEntity.ok(response);
     }
@@ -51,8 +51,8 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/subscriptions/{subscriptionId}")
-    public ResponseEntity<Void> deleteById(@AuthenticationPrincipal final LoginMember loginMember,
-                                           @PathVariable final Long subscriptionId) {
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
+                                       @PathVariable final Long subscriptionId) {
         subscriptionService.deleteById(subscriptionId, loginMember.getId());
         return ResponseEntity.noContent().build();
     }

@@ -43,7 +43,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/members/me/schedules")
-    public ResponseEntity<MemberScheduleResponses> findSchedulesByMemberId(
+    public ResponseEntity<MemberScheduleResponses> findMySchedules(
             @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
         MemberScheduleResponses response = calendarService.findSchedulesByMemberId(loginMember.getId(), request);
         return ResponseEntity.ok(response);
