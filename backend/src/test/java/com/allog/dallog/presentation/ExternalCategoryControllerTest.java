@@ -36,8 +36,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(ExternalCalendarController.class)
-class ExternalCalendarControllerTest extends ControllerTest {
+@WebMvcTest(ExternalCategoryController.class)
+class ExternalCategoryControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";

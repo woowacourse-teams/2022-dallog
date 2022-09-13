@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/external-calendars/me")
 @RestController
-public class ExternalCalendarController {
+public class ExternalCategoryController {
 
     private final ExternalCalendarService externalCalendarService;
     private final CategorySubscriptionService categorySubscriptionService;
 
-    public ExternalCalendarController(final ExternalCalendarService externalCalendarService,
+    public ExternalCategoryController(final ExternalCalendarService externalCalendarService,
                                       final CategorySubscriptionService categorySubscriptionService) {
         this.externalCalendarService = externalCalendarService;
         this.categorySubscriptionService = categorySubscriptionService;
