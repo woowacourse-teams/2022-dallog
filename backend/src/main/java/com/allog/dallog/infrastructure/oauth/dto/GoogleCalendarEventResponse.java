@@ -7,36 +7,23 @@ import java.util.Objects;
 
 public class GoogleCalendarEventResponse {
 
-    private String kind;
-    private String etag;
     private String id;
-    private String status;
-    private String htmlLink;
     private String summary = "";
     private String description = "";
-    private String location;
     private GoogleDateFormat start;
     private GoogleDateFormat end;
-    private String recurringEventId;
 
     private GoogleCalendarEventResponse() {
     }
 
-    public GoogleCalendarEventResponse(final String kind, final String etag, final String id, final String status,
-                                       final String htmlLink, final String summary, final String description,
-                                       final String location, final GoogleDateFormat start, final GoogleDateFormat end,
-                                       final String recurringEventId) {
-        this.kind = kind;
-        this.etag = etag;
+    public GoogleCalendarEventResponse(final String id, final String summary, final String description,
+                                       final GoogleDateFormat start,
+                                       final GoogleDateFormat end) {
         this.id = id;
-        this.status = status;
-        this.htmlLink = htmlLink;
         this.summary = summary;
         this.description = description;
-        this.location = location;
         this.start = start;
         this.end = end;
-        this.recurringEventId = recurringEventId;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -55,24 +42,8 @@ public class GoogleCalendarEventResponse {
         return LocalDateTime.of(LocalDate.parse(end.getDate()), LocalTime.MIN);
     }
 
-    public String getKind() {
-        return kind;
-    }
-
-    public String getEtag() {
-        return etag;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getHtmlLink() {
-        return htmlLink;
     }
 
     public String getSummary() {
@@ -83,19 +54,11 @@ public class GoogleCalendarEventResponse {
         return description;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
     public GoogleDateFormat getStart() {
         return start;
     }
 
     public GoogleDateFormat getEnd() {
         return end;
-    }
-
-    public String getRecurringEventId() {
-        return recurringEventId;
     }
 }
