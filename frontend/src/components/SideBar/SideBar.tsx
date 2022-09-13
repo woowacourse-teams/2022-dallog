@@ -41,9 +41,7 @@ function SideBar() {
     );
   }
 
-  const subscribedList = data.data.filter(
-    (el) => el.category.categoryType === CATEGORY_TYPE.NORMAL && el.category.creator.id !== user.id
-  );
+  const subscribedList = data.data.filter((el) => el.category.creator.id !== user.id);
 
   const myList = data.data.filter(
     (el) => el.category.categoryType !== CATEGORY_TYPE.GOOGLE && el.category.creator.id === user.id
