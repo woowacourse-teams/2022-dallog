@@ -33,25 +33,60 @@ const categoryStyle = ({ colors }: Theme, colorCode: string) => css`
   }
 `;
 
-const allDayButtonStyle = ({ colors }: Theme, isAllDay: boolean) => css`
-  width: 100%;
-  height: 9rem;
-  border: 1px solid ${colors.GRAY_500};
-  border-radius: 8px;
-  filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
-
-  background: ${isAllDay ? colors.YELLOW_500 : colors.WHITE};
-
-  font-size: 5rem;
-  color: ${isAllDay ? colors.WHITE : colors.GRAY_600};
-`;
-
 const dateTimeStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
+  position: relative;
   gap: 2.5rem;
 
   width: 100%;
+`;
+
+const checkboxStyle = ({ colors, flex }: Theme) => css`
+  ${flex.row}
+
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  gap: 2rem;
+
+  font-size: 4rem;
+  color: ${colors.GRAY_700};
+
+  input + label {
+    position: relative;
+
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid ${colors.YELLOW_500};
+    border-radius: 2px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked + label::after {
+    content: '✓';
+
+    position: absolute;
+    top: -1px;
+    left: -1px;
+
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2px;
+
+    background: ${colors.YELLOW_500};
+
+    font-weight: 600;
+    color: white;
+    text-align: center;
+  }
+
+  input {
+    display: none;
+  }
 `;
 
 const arrowStyle = ({ colors }: Theme) => css`
@@ -109,10 +144,10 @@ const categoryBoxStyle = ({ flex }: Theme) => css`
 `;
 
 export {
-  allDayButtonStyle,
   arrowStyle,
   cancelButtonStyle,
   categoryStyle,
+  checkboxStyle,
   controlButtonsStyle,
   dateTimeStyle,
   formStyle,
