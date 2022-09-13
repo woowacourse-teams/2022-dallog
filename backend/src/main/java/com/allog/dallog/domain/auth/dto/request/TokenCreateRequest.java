@@ -3,7 +3,7 @@ package com.allog.dallog.domain.auth.dto.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class TokenRequest {
+public class TokenCreateRequest {
 
     @NotBlank(message = "인가 코드는 공백일 수 없습니다.")
     private String code;
@@ -11,10 +11,10 @@ public class TokenRequest {
     @NotNull(message = "Null일 수 없습니다.")
     private String redirectUri;
 
-    private TokenRequest() {
+    private TokenCreateRequest() {
     }
 
-    public TokenRequest(final String code, final String redirectUri) {
+    public TokenCreateRequest(final String code, final String redirectUri) {
         this.code = code;
         this.redirectUri = redirectUri;
     }

@@ -2,8 +2,8 @@ package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
-import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.domain.auth.dto.request.TokenCreateRequest;
+import com.allog.dallog.domain.auth.dto.response.OAuthLinkResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +26,16 @@ public class AuthController {
     }
 
     @GetMapping("/{oauthProvider}/oauth-uri")
-    public ResponseEntity<OAuthUriResponse> generateLink(@PathVariable final String oauthProvider,
-                                                         @RequestParam final String redirectUri) {
-        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(authService.generateGoogleLink(redirectUri));
-        return ResponseEntity.ok(oAuthUriResponse);
+    public ResponseEntity<OAuthLinkResponse> generateLink(@PathVariable final String oauthProvider,
+                                                          @RequestParam final String redirectUri) {
+        OAuthLinkResponse oAuthLinkResponse = new OAuthLinkResponse(authService.generateGoogleLink(redirectUri));
+        return ResponseEntity.ok(oAuthLinkResponse);
     }
 
     @PostMapping("/{oauthProvider}/token")
     public ResponseEntity<TokenResponse> generateToken(@PathVariable final String oauthProvider,
-                                                       @Valid @RequestBody final TokenRequest tokenRequest) {
-        TokenResponse tokenResponse = authService.generateToken(tokenRequest);
+                                                       @Valid @RequestBody final TokenCreateRequest tokenCreateRequest) {
+        TokenResponse tokenResponse = authService.generateToken(tokenCreateRequest);
         return ResponseEntity.ok(tokenResponse);
     }
 

@@ -1,7 +1,7 @@
 package com.allog.dallog.common.fixtures;
 
 import com.allog.dallog.domain.auth.dto.OAuthMember;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.request.TokenCreateRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 
 public class AuthFixtures {
@@ -33,8 +33,8 @@ public class AuthFixtures {
     public static final String STUB_OAUTH_SCOPE = "openid";
     public static final String STUB_OAUTH_TOKEN_TYPE = "Bearer";
 
-    public static TokenRequest MEMBER_인증_코드_토큰_요청() {
-        return new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
+    public static TokenCreateRequest MEMBER_인증_코드_토큰_요청() {
+        return new TokenCreateRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
     }
 
     public static TokenResponse MEMBER_인증_코드_토큰_응답() {

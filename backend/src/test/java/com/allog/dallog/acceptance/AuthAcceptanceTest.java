@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.config.TokenConfig;
-import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.domain.auth.dto.response.OAuthLinkResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -29,12 +29,12 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     void 구글_OAuth_인증_URI를_생성하여_반환한다() {
         // given & when
         ExtractableResponse<Response> response = OAuth_인증_URI를_생성한다(GOOGLE_PROVIDER);
-        OAuthUriResponse oAuthUriResponse = response.as(OAuthUriResponse.class);
+        OAuthLinkResponse oAuthLinkResponse = response.as(OAuthLinkResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(oAuthUriResponse.getoAuthUri()).contains("https://");
+            assertThat(oAuthLinkResponse.getoAuthUri()).contains("https://");
         });
     }
 

@@ -3,7 +3,7 @@ package com.allog.dallog.domain.auth.application;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.request.TokenCreateRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.composition.application.RegisterService;
@@ -39,9 +39,9 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse generateToken(final TokenRequest tokenRequest) {
-        String code = tokenRequest.getCode();
-        String redirectUri = tokenRequest.getRedirectUri();
+    public TokenResponse generateToken(final TokenCreateRequest tokenCreateRequest) {
+        String code = tokenCreateRequest.getCode();
+        String redirectUri = tokenCreateRequest.getRedirectUri();
 
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code, redirectUri);
         Member foundMember = getMember(oAuthMember);
