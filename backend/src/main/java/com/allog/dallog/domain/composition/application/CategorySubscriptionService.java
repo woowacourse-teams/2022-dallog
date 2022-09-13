@@ -23,14 +23,14 @@ public class CategorySubscriptionService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        CategoryResponse response = categoryService.save(memberId, request);
+        CategoryResponse response = categoryService.saveCategory(memberId, request);
         subscriptionService.save(memberId, response.getId());
         return response;
     }
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        CategoryResponse response = categoryService.save(memberId, request);
+        CategoryResponse response = categoryService.saveExternalCategory(memberId, request);
         subscriptionService.save(memberId, response.getId());
         return response;
     }

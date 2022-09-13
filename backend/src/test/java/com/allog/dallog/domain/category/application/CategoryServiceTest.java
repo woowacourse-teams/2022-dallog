@@ -8,7 +8,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_외부_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
@@ -81,7 +80,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 관리자 = memberRepository.save(관리자());
 
         // when
-        CategoryResponse response = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse response = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // then
         assertThat(response.getName()).isEqualTo(공통_일정_이름);
@@ -94,7 +93,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
 
         // when
-        CategoryResponse 내_일정_응답 = categoryService.save(후디.getId(), 내_일정_생성_요청);
+        CategoryResponse 내_일정_응답 = categoryService.saveCategory(후디.getId(), 내_일정_생성_요청);
         Category 내_일정 = categoryRepository.findById(내_일정_응답.getId()).get();
 
         // then
@@ -113,7 +112,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 관리자 = memberRepository.save(관리자());
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(관리자.getId(), request))
+        assertThatThrownBy(() -> categoryService.saveCategory(관리자.getId(), request))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
@@ -124,7 +123,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
 
         // when
-        CategoryResponse 후디_대한민국_공휴일_카테고리_응답 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+        CategoryResponse 후디_대한민국_공휴일_카테고리_응답 = categoryService.saveExternalCategory(후디.getId(), 대한민국_공휴일_생성_요청);
         Category 후디_대한민국_공휴일_카테고리 = categoryRepository.findById(후디_대한민국_공휴일_카테고리_응답.getId()).get();
 
         // then
@@ -141,10 +140,10 @@ class CategoryServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
 
         // when
-        categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+        categoryService.saveExternalCategory(후디.getId(), 대한민국_공휴일_생성_요청);
 
         // then
-        assertThatThrownBy(() -> categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청))
+        assertThatThrownBy(() -> categoryService.saveExternalCategory(후디.getId(), 대한민국_공휴일_생성_요청))
                 .isInstanceOf(DuplicatedExternalCategoryException.class);
     }
 
@@ -154,16 +153,16 @@ class CategoryServiceTest extends ServiceTest {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
+        categoryService.saveCategory(관리자_ID, 공통_일정_생성_요청);
+        categoryService.saveCategory(관리자_ID, BE_일정_생성_요청);
+        categoryService.saveCategory(관리자_ID, FE_일정_생성_요청);
+        categoryService.saveCategory(관리자_ID, 매트_아고라_생성_요청);
+        categoryService.saveCategory(관리자_ID, 후디_JPA_스터디_생성_요청);
 
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("일", request);
+        CategoriesResponse response = categoryService.findNormalCategoriesByName("일", request);
 
         // then
         assertThat(response.getCategories())
@@ -178,61 +177,13 @@ class CategoryServiceTest extends ServiceTest {
         // given
         MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
         MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
-        categoryService.save(후디.getId(), 내_일정_생성_요청);
+        categoryService.saveCategory(후디.getId(), 내_일정_생성_요청);
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
+        CategoriesResponse response = categoryService.findNormalCategoriesByName("", PageRequest.of(0, 10));
 
         // then
         assertThat(response.getCategories()).hasSize(0);
-    }
-
-    @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
-    @Test
-    void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
-
-        PageRequest request = PageRequest.of(1, 2);
-
-        // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "", request);
-
-        // then
-        assertThat(response.getCategories())
-                .hasSize(2)
-                .extracting(CategoryResponse::getName)
-                .contains(FE_일정_이름, 매트_아고라_이름);
-    }
-
-    @DisplayName("회원 id와 제목과 페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
-    @Test
-    void 회원_id와_제목과_페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
-
-        PageRequest request = PageRequest.of(0, 3);
-
-        // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "일", request);
-
-        // then
-        assertThat(response.getCategories())
-                .hasSize(3)
-                .extracting(CategoryResponse::getName)
-                .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")
@@ -240,7 +191,7 @@ class CategoryServiceTest extends ServiceTest {
     void id를_통해_카테고리를_단건_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
         CategoryResponse 조회한_공통_일정 = categoryService.findById(공통_일정.getId());
@@ -256,7 +207,7 @@ class CategoryServiceTest extends ServiceTest {
     void id를_통해_카테고리를_단건_조회할_때_카테고리가_존재하지_않다면_예외가_발생한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
         assertThatThrownBy(() -> categoryService.findById(공통_일정.getId() + 1))
@@ -268,7 +219,7 @@ class CategoryServiceTest extends ServiceTest {
     void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         String 우테코_공통_일정_이름 = "우테코 공통 일정";
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(우테코_공통_일정_이름);
@@ -286,7 +237,7 @@ class CategoryServiceTest extends ServiceTest {
     void 존재하지_않는_카테고리를_수정할_경우_예외를_던진다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(BE_일정_이름);
 
         // when & then
@@ -301,7 +252,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 관리자 = memberRepository.save(관리자());
         Member 매트 = memberRepository.save(매트());
 
-        CategoryResponse savedCategory = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse savedCategory = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
 
         // when & then
@@ -314,10 +265,10 @@ class CategoryServiceTest extends ServiceTest {
     void 회원과_카테고리_id를_통해_카테고리를_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         //then
         assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
@@ -329,10 +280,10 @@ class CategoryServiceTest extends ServiceTest {
     void 존재하지_않는_카테고리를_삭제할_경우_예외를_던진다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 공통_일정.getId() + 1))
+        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -342,11 +293,11 @@ class CategoryServiceTest extends ServiceTest {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Member 매트 = memberRepository.save(매트());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
         assertThatThrownBy(
-                () -> categoryService.deleteById(매트.getId(), 공통_일정.getId()))
+                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -355,12 +306,12 @@ class CategoryServiceTest extends ServiceTest {
     void 카테고리_삭제_시_연관된_일정_엔티티도_모두_제거된다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         ScheduleResponse 알록달록_회식 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 알록달록_회식_생성_요청);
         ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
         assertAll(() -> {
@@ -376,13 +327,13 @@ class CategoryServiceTest extends ServiceTest {
     void 카테고리_삭제_시_연관된_구독_엔티티도_모두_제거된다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         Member 후디 = memberRepository.save(후디());
         SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
@@ -394,11 +345,11 @@ class CategoryServiceTest extends ServiceTest {
     void 개인_카테고리는_삭제할_수_없다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 내_일정 = categoryService.save(관리자.getId(), 내_일정_생성_요청);
+        CategoryResponse 내_일정 = categoryService.saveCategory(관리자.getId(), 내_일정_생성_요청);
         subscriptionService.save(관리자.getId(), 내_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 내_일정.getId()))
+        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 내_일정.getId()))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
@@ -407,7 +358,7 @@ class CategoryServiceTest extends ServiceTest {
     void 특정_회원의_카테고리를_전부_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
 
         // when
         categoryService.deleteByMemberId(관리자.getId());
@@ -422,7 +373,7 @@ class CategoryServiceTest extends ServiceTest {
     void 특정_회원의_카테고리를_삭제할_때_연관된_일정도_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         ScheduleResponse 알록달록_회식 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 알록달록_회식_생성_요청);
         ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
 
@@ -443,10 +394,10 @@ class CategoryServiceTest extends ServiceTest {
     void 외부_캘린더의_카테고리를_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 우아한테크코스_외부_일정 = categoryService.save(관리자.getId(), 우아한테크코스_외부_일정_생성_요청);
+        CategoryResponse 우아한테크코스_외부_일정 = categoryService.saveCategory(관리자.getId(), 우아한테크코스_외부_일정_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 우아한테크코스_외부_일정.getId());
+        categoryService.delete(관리자.getId(), 우아한테크코스_외부_일정.getId());
 
         // then
         assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))

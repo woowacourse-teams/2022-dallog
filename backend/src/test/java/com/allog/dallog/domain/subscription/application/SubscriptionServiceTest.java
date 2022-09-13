@@ -49,7 +49,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 새로운_구독을_생성한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
 
         // when
         SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
@@ -63,7 +63,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 자신이_생성하지_않은_개인_카테고리를_구독시_예외가_발생한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디.getId(), 내_일정_생성_요청);
+        CategoryResponse 후디_개인_학습_일정 = categoryService.saveCategory(후디.getId(), 내_일정_생성_요청);
 
         MemberResponse 매트 = memberService.save(매트());
 
@@ -78,7 +78,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 이미_존재하는_구독_정보를_저장할_경우_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when & then
@@ -91,7 +91,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 구독_id를_기반으로_단건_조회한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when
@@ -117,9 +117,9 @@ class SubscriptionServiceTest extends ServiceTest {
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
         MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse 후디 = memberService.save(후디());
         subscriptionService.save(후디.getId(), 공통_일정.getId());
@@ -138,7 +138,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 구독_정보를_수정한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
         Color color = Color.COLOR_1;
 
@@ -159,7 +159,7 @@ class SubscriptionServiceTest extends ServiceTest {
     void 구독_정보_수정_시_존재하지_않는_색상인_경우_예외를_던진다(final String colorCode) {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         SubscriptionResponse response = subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when
@@ -175,9 +175,9 @@ class SubscriptionServiceTest extends ServiceTest {
     void 구독_정보를_삭제한다() {
         // given
         MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(관리자.getId(), FE_일정_생성_요청);
 
         MemberResponse 후디 = memberService.save(후디());
         SubscriptionResponse response = subscriptionService.save(후디.getId(), 공통_일정.getId());
@@ -198,7 +198,7 @@ class SubscriptionServiceTest extends ServiceTest {
         MemberResponse 관리자 = memberService.save(관리자());
         MemberResponse 파랑 = memberService.save(파랑());
 
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(파랑.getId(), 공통_일정.getId());
 
         // when & then
@@ -212,7 +212,7 @@ class SubscriptionServiceTest extends ServiceTest {
         // given
         MemberResponse 관리자 = memberService.save(관리자());
 
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(관리자.getId(), 공통_일정.getId());
 
         // when & then

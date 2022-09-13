@@ -49,7 +49,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
+    public CategoryResponse saveCategory(final Long memberId, final CategoryCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchMemberException::new);
         Category newCategory = new Category(request.getName(), member,
@@ -59,11 +59,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
+    public CategoryResponse saveExternalCategory(final Long memberId, final ExternalCategoryCreateRequest request) {
         List<Category> categories = categoryRepository.findByMemberId(memberId);
         validateDuplicateExternalCategory(request.getExternalId(), categories);
 
-        CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
+        CategoryResponse response = saveCategory(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
         Category category = getCategory(response.getId());
 
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
@@ -82,16 +82,9 @@ public class CategoryService {
         }
     }
 
-    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
+    public CategoriesResponse findNormalCategoriesByName(final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
-
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
-    }
-
-    public CategoriesResponse findMineByName(final Long memberId, final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(memberId, name, pageable)
-                .getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
@@ -114,8 +107,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteById(final Long memberId, final Long categoryId) {
-        validateCategoryExisting(categoryId);
+    public void delete(final Long memberId, final Long categoryId) {
+        validateExistCategory(categoryId);
         validatePermission(memberId, categoryId);
         validatePersonalCategory(categoryId);
 
@@ -123,25 +116,6 @@ public class CategoryService {
         subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
         externalCategoryDetailRepository.deleteByCategoryId(categoryId);
         categoryRepository.deleteById(categoryId);
-    }
-
-    private void validatePersonalCategory(final Long categoryId) {
-        Category category = getCategory(categoryId);
-        if (category.isPersonal()) {
-            throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validateCategoryExisting(final Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validatePermission(final Long memberId, final Long categoryId) {
-        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
-            throw new NoPermissionException();
-        }
     }
 
     @Transactional
@@ -154,6 +128,25 @@ public class CategoryService {
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
         subscriptionRepository.deleteByCategoryIdIn(categoryIds);
         categoryRepository.deleteByMemberId(memberId);
+    }
+
+    private void validatePersonalCategory(final Long categoryId) {
+        Category category = getCategory(categoryId);
+        if (category.isPersonal()) {
+            throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
+        }
+    }
+
+    private void validateExistCategory(final Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다.");
+        }
+    }
+
+    private void validatePermission(final Long memberId, final Long categoryId) {
+        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
+            throw new NoPermissionException();
+        }
     }
 
     public void validateCreatorBy(final Long memberId, final Category category) {

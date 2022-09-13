@@ -47,7 +47,7 @@ public class RegisterService {
 
     private CategoryResponse createPersonalCategory(final Long memberId) {
         CategoryCreateRequest categoryCreateRequest = new CategoryCreateRequest(PERSONAL_CATEGORY_NAME, PERSONAL);
-        return categoryService.save(memberId, categoryCreateRequest);
+        return categoryService.saveCategory(memberId, categoryCreateRequest);
     }
 
     @Transactional

@@ -59,7 +59,7 @@ class RegisterServiceTest extends ServiceTest {
         MemberResponse memberResponse = registerService.register(member);
         Long memberId = memberResponse.getId();
 
-        CategoryResponse categoryResponse = categoryService.save(memberId, 공통_일정_생성_요청);
+        CategoryResponse categoryResponse = categoryService.saveCategory(memberId, 공통_일정_생성_요청);
         subscriptionService.save(memberId, categoryResponse.getId());
 
         // when

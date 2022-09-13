@@ -54,7 +54,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 새로운_일정을_생성한다() {
         // given & when
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // then
@@ -66,7 +66,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 새로운_일정을_생성_할_때_일정_제목의_길이가_50을_초과하는_경우_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
 
         String 잘못된_일정_제목 = "일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일";
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(잘못된_일정_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시,
@@ -82,7 +82,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 새로운_일정을_생성_할_때_일정_메모의_길이가_255를_초과하는_경우_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
 
         String 잘못된_일정_메모 = "1".repeat(256);
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시,
@@ -98,7 +98,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 새로운_일정을_생성_할_때_종료일시가_시작일시_이전이라면_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
         LocalDateTime 종료일시 = 날짜_2022년_7월_1일_0시_0분;
@@ -115,7 +115,7 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 리버 = memberService.save(리버());
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
         LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
@@ -146,7 +146,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정_생성시_전달한_카테고리가_외부_연동_카테고리라면_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse 대한민국_공휴일 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
+        CategoryResponse 대한민국_공휴일 = categoryService.saveExternalCategory(후디.getId(), 대한민국_공휴일_생성_요청);
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
         LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
@@ -162,7 +162,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정의_ID로_단건_일정을_조회한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when
@@ -183,7 +183,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 존재하지_않는_일정_ID로_단건_일정을_조회하면_예외를_던진다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
         Long 잘못된_아이디 = 0L;
 
@@ -196,7 +196,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정을_수정한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
@@ -223,10 +223,10 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정의_카테고리도_수정한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        CategoryResponse FE_일정 = categoryService.save(후디.getId(), FE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(후디.getId(), FE_일정_생성_요청);
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(FE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
                 레벨_인터뷰_메모);
 
@@ -253,7 +253,7 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 리버 = memberService.save(리버());
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
@@ -269,7 +269,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정_수정_시_존재하지_않은_일정일_경우_예외가_발생한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
@@ -285,7 +285,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정을_삭제한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when
@@ -302,7 +302,7 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         MemberResponse 리버 = memberService.save(리버());
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then
@@ -315,7 +315,7 @@ class ScheduleServiceTest extends ServiceTest {
     void 일정_삭제_시_존재하지_않은_일정일_경우_예외가_발생한다() {
         // given
         MemberResponse 후디 = memberService.save(후디());
-        CategoryResponse BE_일정 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디.getId(), BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then

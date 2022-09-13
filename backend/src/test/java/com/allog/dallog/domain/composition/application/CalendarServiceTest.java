@@ -80,7 +80,7 @@ class CalendarServiceTest extends ServiceTest {
         MemberResponse 후디 = memberService.save(후디());
         oAuthTokenRepository.save(new OAuthToken(memberService.getMember(후디.getId()), "wegwefaasdasdasda"));
 
-        CategoryResponse BE_일정_응답 = categoryService.save(후디.getId(), BE_일정_생성_요청);
+        CategoryResponse BE_일정_응답 = categoryService.saveCategory(후디.getId(), BE_일정_생성_요청);
         Category BE_일정 = categoryService.getCategory(BE_일정_응답.getId());
 
         subscriptionService.save(후디.getId(), BE_일정.getId());
@@ -115,7 +115,7 @@ class CalendarServiceTest extends ServiceTest {
         scheduleService.save(후디.getId(), BE_일정.getId(),
                 new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
 
-        CategoryResponse 우아한테크코스_외부_일정_응답 = categoryService.save(후디.getId(), 우아한테크코스_외부_일정_생성_요청);
+        CategoryResponse 우아한테크코스_외부_일정_응답 = categoryService.saveCategory(후디.getId(), 우아한테크코스_외부_일정_생성_요청);
         Category 우아한테크코스 = categoryService.getCategory(우아한테크코스_외부_일정_응답.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스, "dfggsdfasdasadsgs"));
 
@@ -142,9 +142,9 @@ class CalendarServiceTest extends ServiceTest {
     void 카테고리를_구독하는_유저들의_모든_내부_일정을_가져온다() {
         // given
         MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(관리자.getId(), FE_일정_생성_요청);
 
         /* 카테고리에 일정 추가 */
         scheduleService.save(관리자.getId(), 공통_일정.getId(),

@@ -68,9 +68,9 @@ class SchedulerServiceTest extends ServiceTest {
         // given
         /* 관리자 및 카테고리 생성 */
         MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(관리자.getId(), FE_일정_생성_요청);
 
         /* 카테고리에 일정 추가 */
         scheduleService.save(관리자.getId(), 공통_일정.getId(),
@@ -127,9 +127,9 @@ class SchedulerServiceTest extends ServiceTest {
         // given
         /* 관리자 및 카테고리 생성 */
         MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.saveCategory(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.saveCategory(관리자.getId(), BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.saveCategory(관리자.getId(), FE_일정_생성_요청);
 
         /* 카테고리에 일정 추가 */
         scheduleService.save(관리자.getId(), 공통_일정.getId(),
