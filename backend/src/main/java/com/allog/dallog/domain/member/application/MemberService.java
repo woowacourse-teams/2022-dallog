@@ -10,7 +10,6 @@ import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -42,8 +41,7 @@ public class MemberService {
     }
 
     public MemberResponse findBySubscriptionId(final Long subscriptionId) {
-        Subscription subscription = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(NoSuchSubscriptionException::new);
+        Subscription subscription = subscriptionRepository.getById(subscriptionId);
 
         Member member = subscription.getMember();
         return new MemberResponse(member);
