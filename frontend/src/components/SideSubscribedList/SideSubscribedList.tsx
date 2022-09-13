@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import useToggle from '@/hooks/useToggle';
@@ -10,13 +11,18 @@ import { sideBarState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import SideItem from '@/components/SideItem/SideItem';
 
+import { PATH } from '@/constants';
+
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+import { BsPlus } from 'react-icons/bs';
 
 import {
   contentStyle,
   headerLayoutStyle,
   headerStyle,
   listStyle,
+  menuStyle,
+  menuTitleStyle,
 } from './SideSubscribedList.styles';
 
 interface SideSubscribedListProps {
@@ -30,12 +36,20 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
 
   const theme = useTheme();
 
+  const navigate = useNavigate();
+
+  const handleClickCategoryAddButton = () => navigate(PATH.CATEGORY);
+
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleSubscribedListOpen}>
           구독 카테고리
         </span>
+        <Button cssProp={menuStyle}>
+          <BsPlus size={20} onClick={handleClickCategoryAddButton} />
+          <span css={menuTitleStyle}>카테고리 구독</span>
+        </Button>
         <Button onClick={toggleSubscribedListOpen}>
           {isSubscribedListOpen ? <AiOutlineUp /> : <AiOutlineDown />}
         </Button>

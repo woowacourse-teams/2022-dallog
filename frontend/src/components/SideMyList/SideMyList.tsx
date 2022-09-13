@@ -13,9 +13,16 @@ import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import SideItem from '@/components/SideItem/SideItem';
 
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-import { BiListPlus } from 'react-icons/bi';
+import { BsPlus } from 'react-icons/bs';
 
-import { contentStyle, headerLayoutStyle, headerStyle, listStyle } from './SideMyList.styles';
+import {
+  contentStyle,
+  headerLayoutStyle,
+  headerStyle,
+  listStyle,
+  menuStyle,
+  menuTitleStyle,
+} from './SideMyList.styles';
 
 interface SideMyListProps {
   categories: SubscriptionType[];
@@ -40,8 +47,9 @@ function SideMyList({ categories }: SideMyListProps) {
         <span css={headerStyle} onClick={toggleMyListOpen}>
           나의 카테고리
         </span>
-        <Button>
-          <BiListPlus size={20} onClick={handleClickCategoryAddButton} />
+        <Button cssProp={menuStyle}>
+          <BsPlus size={20} onClick={handleClickCategoryAddButton} />
+          <span css={menuTitleStyle}>카테고리 추가</span>
         </Button>
         <Button onClick={toggleMyListOpen}>
           {isMyListOpen ? <AiOutlineUp /> : <AiOutlineDown />}

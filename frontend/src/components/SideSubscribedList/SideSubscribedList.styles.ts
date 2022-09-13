@@ -45,4 +45,39 @@ const contentStyle = (isListOpen: boolean, listLength: number) => css`
   transition: height 0.3s ease-in-out;
 `;
 
-export { contentStyle, headerLayoutStyle, headerStyle, listStyle };
+const menuStyle = ({ colors }: Theme) => css`
+  position: relative;
+
+  width: 9rem;
+  height: 9rem;
+
+  &:hover {
+    border-radius: 50%;
+
+    background: ${colors.GRAY_100};
+
+    filter: none;
+  }
+
+  &:hover span {
+    visibility: visible;
+  }
+`;
+
+const menuTitleStyle = ({ colors }: Theme) => css`
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 2rem 3rem;
+
+  background: ${colors.GRAY_700}ee;
+
+  font-size: 3rem;
+  font-weight: normal;
+  color: ${colors.WHITE};
+  white-space: nowrap;
+`;
+export { contentStyle, headerLayoutStyle, headerStyle, listStyle, menuStyle, menuTitleStyle };
