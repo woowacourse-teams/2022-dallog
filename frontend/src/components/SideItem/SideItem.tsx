@@ -1,9 +1,7 @@
-import { useTheme } from '@emotion/react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useModalPosition from '@/hooks/useModalPosition';
-import useToggle from '@/hooks/useToggle';
 
 import { SubscriptionType } from '@/@types/subscription';
 
@@ -12,31 +10,21 @@ import { userState } from '@/recoil/atoms';
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import Spinner from '@/components/@common/Spinner/Spinner';
-import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModifyModal';
+import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/SubscriptionModifyModal';
 
-import { CACHE_KEY } from '@/constants/api';
-import { CATEGORY_TYPE } from '@/constants/category';
-import { CONFIRM_MESSAGE } from '@/constants/message';
-import { PALETTE, TRANSPARENT } from '@/constants/style';
+import { TRANSPARENT } from '@/constants/style';
 
-import categoryApi from '@/api/category';
 import subscriptionApi from '@/api/subscription';
 
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { FiEdit3 } from 'react-icons/fi';
-import { RiCheckboxBlankLine, RiCheckboxFill, RiDeleteBin5Line } from 'react-icons/ri';
+import { RiCheckboxBlankLine, RiCheckboxFill } from 'react-icons/ri';
 
 import {
   checkBoxNameStyle,
-  colorStyle,
-  controlButtonStyle,
   iconStyle,
   itemStyle,
   modalLayoutStyle,
-  modalPosStyle,
   nameStyle,
-  outerStyle,
-  paletteStyle,
 } from './SideItem.styles';
 
 interface SideItemProps {
@@ -44,16 +32,7 @@ interface SideItemProps {
 }
 
 function SideItem({ subscription }: SideItemProps) {
-  const theme = useTheme();
-
   const user = useRecoilValue(userState);
-
-  const {
-    state: isPaletteOpen,
-    toggleState: togglePaletteOpen,
-    handleClickOpenButton,
-    modalPos,
-  } = useModalPosition();
 
   const queryClient = useQueryClient();
 
@@ -65,42 +44,19 @@ function SideItem({ subscription }: SideItemProps) {
     }
   );
 
-  const { mutate: deleteSubscription } = useMutation(
-    () => categoryApi.delete(user.accessToken, subscription.category.id),
-    {
-      onSuccess: () => onSuccessDeleteCategory(),
-    }
-  );
+  const {
+    state: isPaletteOpen,
+    toggleState: togglePaletteOpen,
+    handleClickOpenButton,
+    modalPos,
+  } = useModalPosition();
 
-  const { state: isCategoryModifyModalOpen, toggleState: toggleCategoryModifyModalOpen } =
-    useToggle();
-
-  const handleClickDeleteButton = () => {
-    if (confirm(CONFIRM_MESSAGE.DELETE)) {
-      deleteSubscription();
-    }
-  };
-
-  const onSuccessDeleteCategory = () => {
-    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-  };
   const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
     patchSubscription({
       checked: !checked,
       colorCode,
     });
   };
-
-  const handleClickPalette = (checked: boolean, colorCode: string) => {
-    patchSubscription({ checked, colorCode });
-    togglePaletteOpen();
-  };
-
-  const canEditSubscription =
-    subscription.category.categoryType !== CATEGORY_TYPE.PERSONAL &&
-    subscription.category.creator.id === user.id;
 
   return (
     <div css={itemStyle}>
@@ -143,49 +99,15 @@ function SideItem({ subscription }: SideItemProps) {
             closeModal={togglePaletteOpen}
             dimmerBackground={TRANSPARENT}
           >
-            <>
-              <div css={outerStyle} onClick={togglePaletteOpen} />
-              <div css={modalPosStyle(theme, modalPos)}>
-                {canEditSubscription && (
-                  <>
-                    <Button cssProp={controlButtonStyle} onClick={toggleCategoryModifyModalOpen}>
-                      <FiEdit3 size={20} />
-                      <span>수정</span>
-                    </Button>
-                    <Button cssProp={controlButtonStyle} onClick={handleClickDeleteButton}>
-                      <RiDeleteBin5Line size={20} />
-                      <span>삭제</span>
-                    </Button>
-                  </>
-                )}
-
-                <div css={paletteStyle}>
-                  {PALETTE.map((color) => {
-                    return (
-                      <Button
-                        key={color}
-                        cssProp={colorStyle(color)}
-                        onClick={() => {
-                          handleClickPalette(subscription.checked, color);
-                        }}
-                      ></Button>
-                    );
-                  })}
-                </div>
-              </div>
-            </>
+            <SubscriptionModifyModal
+              togglePaletteOpen={togglePaletteOpen}
+              modalPos={modalPos}
+              subscription={subscription}
+              patchSubscription={patchSubscription}
+            />
           </ModalPortal>
         )}
       </div>
-      <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
-        <CategoryModifyModal
-          category={subscription.category}
-          closeModal={() => {
-            togglePaletteOpen();
-            toggleCategoryModifyModalOpen();
-          }}
-        />
-      </ModalPortal>
     </div>
   );
 }
