@@ -37,12 +37,6 @@ public class MemberService {
         this.oAuthTokenRepository = oAuthTokenRepository;
     }
 
-    @Transactional
-    public MemberResponse save(final Member member) {
-        Member newMember = memberRepository.save(member);
-        return new MemberResponse(newMember);
-    }
-
     public MemberResponse findById(final Long id) {
         return new MemberResponse(memberRepository.getById(id));
     }
