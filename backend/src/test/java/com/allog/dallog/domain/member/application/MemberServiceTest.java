@@ -1,15 +1,12 @@
 package com.allog.dallog.domain.member.application;
 
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버_이메일;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑_이메일;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
@@ -30,19 +27,6 @@ class MemberServiceTest extends ServiceTest {
 
         // then
         assertThat(파랑).isNotNull();
-    }
-
-    @DisplayName("이메일로 회원을 찾는다.")
-    @Test
-    void 이메일로_회원을_찾는다() {
-        // given
-        MemberResponse 파랑 = memberService.save(파랑());
-
-        // when
-        Member actual = memberService.getByEmail(파랑_이메일);
-
-        // then
-        assertThat(actual.getId()).isEqualTo(파랑.getId());
     }
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
@@ -85,43 +69,6 @@ class MemberServiceTest extends ServiceTest {
 
         // then
         assertThatThrownBy(() -> memberService.findById(후디.getId()))
-                .isInstanceOf(NoSuchMemberException.class);
-    }
-
-    @DisplayName("주어진 이메일로 가입된 회원이 있으면 true를 반환한다.")
-    @Test
-    void 주어진_이메일로_가입된_회원이_있으면_true를_반환한다() {
-        // given
-        memberService.save(파랑());
-
-        // when
-        boolean actual = memberService.existsByEmail(파랑_이메일);
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("주어진 이메일로 가입된 회원이 없으면 false를 반환한다.")
-    @Test
-    void 주어진_이메일로_가입된_회원이_없으면_false를_반환한다() {
-        // given
-        memberService.save(파랑());
-
-        // when
-        boolean actual = memberService.existsByEmail(리버_이메일);
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @DisplayName("회원이 존재하지 않으면 예외를 던진다.")
-    @Test
-    void 회원이_존재하지_않으면_예외를_던진다() {
-        // given
-        Long id = 0L;
-
-        // when & then
-        assertThatThrownBy(() -> memberService.validateExistsMember(id))
                 .isInstanceOf(NoSuchMemberException.class);
     }
 }
