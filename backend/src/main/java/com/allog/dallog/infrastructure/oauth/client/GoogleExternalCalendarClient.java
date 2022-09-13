@@ -58,13 +58,13 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     @Override
     public List<IntegrationSchedule> getExternalCalendarSchedules(final String accessToken,
                                                                   final Long internalCategoryId,
-                                                                  final String calendarId,
+                                                                  final String externalCalendarId,
                                                                   final String startDateTime,
                                                                   final String endDateTime) {
         HttpEntity<Void> request = new HttpEntity<>(generateCalendarRequestHeaders(accessToken));
 
-        Map<String, String> uriVariables = generateEventsVariables(calendarId, startDateTime, endDateTime);
-        GoogleCalendarEventsResponse response = fetchGoogleCalendarEvents(uriVariables, request).getBody();
+        Map<String, String> uriVariables = generateEventsVariables(externalCalendarId, startDateTime, endDateTime);
+        GoogleCalendarEventsResponse response = fetchGoogleCalendarEvents(request, uriVariables).getBody();
 
         return response.getItems()
                 .stream()
@@ -89,7 +89,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     }
 
     private ResponseEntity<GoogleCalendarEventsResponse> fetchGoogleCalendarEvents(
-            final Map<String, String> uriVariables, final HttpEntity<Void> request) {
+            final HttpEntity<Void> request, final Map<String, String> uriVariables) {
         try {
             return restTemplate.exchange(CALENDAR_EVENTS_REQUEST_URI, HttpMethod.GET, request,
                     GoogleCalendarEventsResponse.class, uriVariables);
@@ -102,16 +102,8 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
                                                          final GoogleCalendarEventResponse event) {
         LocalDateTime startDateTime = event.getStartDateTime();
         LocalDateTime endDateTime = event.getEndDateTime();
-        if (isAllDay(startDateTime, endDateTime)) {
-            endDateTime = endDateTime.minusMinutes(1);
-        }
 
         return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
                 endDateTime, event.getDescription(), CategoryType.GOOGLE.name());
-    }
-
-    private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
-                && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
     }
 }
