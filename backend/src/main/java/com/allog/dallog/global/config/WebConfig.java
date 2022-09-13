@@ -21,9 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        String[] patterns = allowOriginUrlPatterns.stream()
-                .toArray(String[]::new);
+    public void addCorsMappings(final CorsRegistry registry) {
+        String[] patterns = allowOriginUrlPatterns.toArray(String[]::new);
 
         registry.addMapping("/**")
                 .allowedMethods("*")
@@ -31,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(authenticationPrincipalArgumentResolver);
     }
 }
