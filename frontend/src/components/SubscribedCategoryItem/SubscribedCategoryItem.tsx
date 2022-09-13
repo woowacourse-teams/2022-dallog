@@ -1,10 +1,10 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useUserValue from '@/hooks/useUserValue';
+
 import { CategoryType } from '@/@types/category';
-import { ProfileType } from '@/@types/profile';
 
 import { userState } from '@/recoil/atoms';
 
@@ -15,7 +15,6 @@ import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 
-import profileApi from '@/api/profile';
 import subscriptionApi from '@/api/subscription';
 
 import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCategoryItem.styles';
@@ -31,9 +30,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<AxiosResponse<ProfileType>, AxiosError>(CACHE_KEY.PROFILE, () =>
-    profileApi.get(accessToken)
-  );
+  const { user } = useUserValue();
 
   const { mutate } = useMutation(() => subscriptionApi.delete(accessToken, subscriptionId), {
     onSuccess: () => {
@@ -47,7 +44,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
     }
   };
 
-  const canUnsubscribeCategory = category.creator.id !== data?.data.id;
+  const canUnsubscribeCategory = category.creator.id !== user.id;
 
   return (
     <div css={categoryItem}>
