@@ -79,38 +79,6 @@ class CategoryRepositoryTest extends RepositoryTest {
         assertThat(actual.getContent()).hasSize(0);
     }
 
-    @DisplayName("특정 멤버가 생성한 카테고리를 카테고리 이름과 페이징을 통해 조회한다.")
-    @Test
-    void 특정_멤버가_생성한_카테고리를_카테고리_이름과_페이징을_통해_조회한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-        categoryRepository.save(FE_일정(관리자));
-        categoryRepository.save(매트_아고라(관리자));
-        categoryRepository.save(후디_JPA_스터디(관리자));
-
-        Member 후디 = memberRepository.save(후디());
-        categoryRepository.save(후디_JPA_스터디(후디));
-
-        PageRequest pageRequest = PageRequest.of(0, 8);
-
-        // when
-        Slice<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "일", pageRequest);
-
-        // then
-        assertAll(() -> {
-            assertThat(categories.getContent()).hasSize(3)
-                    .extracting(Category::getName)
-                    .containsExactlyInAnyOrder(공통_일정_이름, BE_일정_이름, FE_일정_이름);
-            assertThat(
-                    categories.getContent().stream()
-                            .map(Category::getCreatedAt)
-                            .allMatch(Objects::nonNull))
-                    .isTrue();
-        });
-    }
-
     @DisplayName("특정 멤버가 생성한 카테고리를 조회한다.")
     @Test
     void 특정_멤버가_생성한_카테고리를_조회한다() {
@@ -166,23 +134,5 @@ class CategoryRepositoryTest extends RepositoryTest {
 
         // then
         assertThat(actual).isFalse();
-    }
-
-    @DisplayName("특정 회원이 만든 카테고리를 모두 삭제한다")
-    @Test
-    void 특정_회원이_만든_카테고리를_모두_삭제한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-
-        PageRequest pageRequest = PageRequest.of(0, 2);
-
-        // when
-        categoryRepository.deleteByMemberId(관리자.getId());
-
-        // then
-        assertThat(categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "", pageRequest))
-                .hasSize(0);
     }
 }
