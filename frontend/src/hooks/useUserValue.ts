@@ -19,7 +19,7 @@ function useUserValue() {
 
   const setSideBarOpen = useSetRecoilState(sideBarState);
 
-  const { isLoading } = useQuery<AxiosResponse, AxiosError>(
+  const { isLoading, isSuccess } = useQuery<AxiosResponse, AxiosError>(
     CACHE_KEY.VALIDATE,
     () => loginApi.validate(user.accessToken),
     {
@@ -38,7 +38,7 @@ function useUserValue() {
       onSuccess: ({ data }) => setUser({ ...user, ...data }),
       retry: false,
       useErrorBoundary: false,
-      enabled: !!user.accessToken,
+      enabled: isSuccess,
       staleTime: 5 * 60 * 1000,
     }
   );
