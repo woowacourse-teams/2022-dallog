@@ -39,6 +39,7 @@ function useUserValue() {
       retry: false,
       useErrorBoundary: false,
       enabled: !!user.accessToken,
+      staleTime: 5 * 60 * 1000,
     }
   );
 
