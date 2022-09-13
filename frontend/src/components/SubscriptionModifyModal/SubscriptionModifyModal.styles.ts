@@ -41,7 +41,6 @@ const modalPosStyle = ({ colors, flex }: Theme, modalPos: ModalPosType) => css`
   right: ${modalPos.right ? `${modalPos.right}px` : 'none'};
   bottom: ${modalPos.bottom ? `${modalPos.bottom}px` : 'none'};
   left: ${modalPos.left ? `${modalPos.left}px` : 'none'};
-  z-index: 30;
 
   border: 1px solid ${colors.GRAY_300};
   border-radius: 4px;
@@ -63,7 +62,6 @@ const outerStyle = css`
   position: fixed;
   left: 0;
   top: 16rem;
-  z-index: 20;
 
   width: 100%;
   height: 100%;
