@@ -1,13 +1,13 @@
 package com.allog.dallog.domain.composition.application;
 
+import static com.allog.dallog.common.fixtures.AuthFixtures.관리자_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.매트_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.파랑_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
-import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
-import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
@@ -30,7 +30,6 @@ import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
@@ -67,43 +66,43 @@ class SchedulerServiceTest extends ServiceTest {
     void 비어있는_기간_목록을_반환한다() {
         // given
         /* 관리자 및 카테고리 생성 */
-        MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
+        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.save(관리자_id, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.save(관리자_id, FE_일정_생성_요청);
 
         /* 카테고리에 일정 추가 */
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 1", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_10일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 2", 날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_15일_16시_0분, ""));
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 1", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 2", 날짜_2022년_7월_16일_20시_0분, 날짜_2022년_7월_20일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 3", 날짜_2022년_7월_20일_11시_59분, 날짜_2022년_7월_27일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), FE_일정.getId(),
+        scheduleService.save(관리자_id, FE_일정.getId(),
                 new ScheduleCreateRequest("프론트엔드 일정 1", 날짜_2022년_7월_27일_11시_59분, 날짜_2022년_7월_31일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), FE_일정.getId(),
+        scheduleService.save(관리자_id, FE_일정.getId(),
                 new ScheduleCreateRequest("프론트엔드 일정 2", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
 
         /* 카테고리 구독 */
-        MemberResponse 후디 = memberService.save(후디());
-        MemberResponse 파랑 = memberService.save(파랑());
-        MemberResponse 매트 = memberService.save(매트());
-        MemberResponse 리버 = memberService.save(리버());
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
 
-        subscriptionService.save(후디.getId(), 공통_일정.getId());
-        subscriptionService.save(파랑.getId(), 공통_일정.getId());
-        subscriptionService.save(매트.getId(), 공통_일정.getId());
-        subscriptionService.save(리버.getId(), 공통_일정.getId());
+        subscriptionService.save(후디_id, 공통_일정.getId());
+        subscriptionService.save(파랑_id, 공통_일정.getId());
+        subscriptionService.save(매트_id, 공통_일정.getId());
+        subscriptionService.save(리버_id, 공통_일정.getId());
 
-        subscriptionService.save(매트.getId(), BE_일정.getId());
-        subscriptionService.save(매트.getId(), FE_일정.getId());
-        subscriptionService.save(리버.getId(), FE_일정.getId());
+        subscriptionService.save(매트_id, BE_일정.getId());
+        subscriptionService.save(매트_id, FE_일정.getId());
+        subscriptionService.save(리버_id, FE_일정.getId());
 
         // when
         List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
@@ -126,46 +125,46 @@ class SchedulerServiceTest extends ServiceTest {
     void 체크하지_않은_구독은_일정_산정_대상에서_제외된다() {
         // given
         /* 관리자 및 카테고리 생성 */
-        MemberResponse 관리자 = memberService.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자.getId(), FE_일정_생성_요청);
+        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
+        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
+        CategoryResponse BE_일정 = categoryService.save(관리자_id, BE_일정_생성_요청);
+        CategoryResponse FE_일정 = categoryService.save(관리자_id, FE_일정_생성_요청);
 
         /* 카테고리에 일정 추가 */
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 1", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_10일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 2", 날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_15일_16시_0분, ""));
-        scheduleService.save(관리자.getId(), 공통_일정.getId(),
+        scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 3", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 1", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 2", 날짜_2022년_7월_16일_20시_0분, 날짜_2022년_7월_20일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), BE_일정.getId(),
+        scheduleService.save(관리자_id, BE_일정.getId(),
                 new ScheduleCreateRequest("백엔드 일정 3", 날짜_2022년_7월_20일_11시_59분, 날짜_2022년_7월_27일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), FE_일정.getId(),
+        scheduleService.save(관리자_id, FE_일정.getId(),
                 new ScheduleCreateRequest("프론트엔드 일정 1", 날짜_2022년_7월_27일_11시_59분, 날짜_2022년_7월_31일_0시_0분, ""));
-        scheduleService.save(관리자.getId(), FE_일정.getId(),
+        scheduleService.save(관리자_id, FE_일정.getId(),
                 new ScheduleCreateRequest("프론트엔드 일정 2", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
 
         /* 카테고리 구독 */
-        MemberResponse 후디 = memberService.save(후디());
-        MemberResponse 파랑 = memberService.save(파랑());
-        MemberResponse 매트 = memberService.save(매트());
-        MemberResponse 리버 = memberService.save(리버());
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
 
-        subscriptionService.save(후디.getId(), 공통_일정.getId());
-        subscriptionService.save(파랑.getId(), 공통_일정.getId());
-        subscriptionService.save(매트.getId(), 공통_일정.getId());
-        subscriptionService.save(리버.getId(), 공통_일정.getId());
-        subscriptionService.save(매트.getId(), BE_일정.getId());
+        subscriptionService.save(후디_id, 공통_일정.getId());
+        subscriptionService.save(파랑_id, 공통_일정.getId());
+        subscriptionService.save(매트_id, 공통_일정.getId());
+        subscriptionService.save(리버_id, 공통_일정.getId());
+        subscriptionService.save(매트_id, BE_일정.getId());
 
-        SubscriptionResponse 매트_FE_일정_구독 = subscriptionService.save(매트.getId(), FE_일정.getId());
-        SubscriptionResponse 리버_FE_일정_구독 = subscriptionService.save(리버.getId(), FE_일정.getId());
-        subscriptionService.update(매트_FE_일정_구독.getId(), 매트.getId(),
+        SubscriptionResponse 매트_FE_일정_구독 = subscriptionService.save(매트_id, FE_일정.getId());
+        SubscriptionResponse 리버_FE_일정_구독 = subscriptionService.save(리버_id, FE_일정.getId());
+        subscriptionService.update(매트_FE_일정_구독.getId(), 매트_id,
                 new SubscriptionUpdateRequest(Color.COLOR_1, false));
-        subscriptionService.update(리버_FE_일정_구독.getId(), 리버.getId(),
+        subscriptionService.update(리버_FE_일정_구독.getId(), 리버_id,
                 new SubscriptionUpdateRequest(Color.COLOR_1, false));
 
         // when
