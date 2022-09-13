@@ -75,6 +75,11 @@ public class AuthService {
         return new TokenResponse(accessToken);
     }
 
+    private Member parseMember(final OAuthMember oAuthMember) {
+        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
+                SocialType.GOOGLE);
+    }
+
     private Category saveCategory(final Member savedMember) {
         return categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, savedMember, PERSONAL));
     }
@@ -82,11 +87,6 @@ public class AuthService {
     private Subscription saveSubscription(final Member savedMember, final Category savedCategory) {
         Color randomColor = Color.pickAny(PICK_RANDOM_STRATEGY);
         return subscriptionRepository.save(new Subscription(savedMember, savedCategory, randomColor));
-    }
-
-    private Member parseMember(final OAuthMember oAuthMember) {
-        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
-                SocialType.GOOGLE);
     }
 
     private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member foundMember) {
