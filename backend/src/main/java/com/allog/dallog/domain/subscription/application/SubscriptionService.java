@@ -13,7 +13,6 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,10 +39,10 @@ public class SubscriptionService {
 
     @Transactional
     public SubscriptionResponse save(final Long memberId, final Long categoryId) {
-        validateAlreadyExists(memberId, categoryId);
+        subscriptionRepository.validateExistsSubscription(memberId, categoryId);
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(NoSuchMemberException::new);
+        Member member = memberRepository.getById(memberId);
+
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(NoSuchCategoryException::new);
         validatePermission(memberId, category);
@@ -51,12 +50,6 @@ public class SubscriptionService {
         Color color = Color.pick(colorPicker.pickNumber());
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
         return new SubscriptionResponse(subscription);
-    }
-
-    private void validateAlreadyExists(final Long memberId, final Long categoryId) {
-        if (subscriptionRepository.existsByMemberIdAndCategoryId(memberId, categoryId)) {
-            throw new ExistSubscriptionException();
-        }
     }
 
     private void validatePermission(final Long memberId, final Category category) {
