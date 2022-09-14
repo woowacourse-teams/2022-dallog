@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
@@ -43,9 +42,6 @@ class MemberControllerTest extends ControllerTest {
 
     @MockBean
     private MemberService memberService;
-
-    @MockBean
-    private RegisterService registerService;
 
     @DisplayName("자신의 회원 정보를 조회한다.")
     @Test
@@ -128,8 +124,8 @@ class MemberControllerTest extends ControllerTest {
     void 등록된_회원이_회원탈퇴_한다() throws Exception {
         // given
         willDoNothing()
-                .given(registerService)
-                .deleteByMemberId(any());
+                .given(memberService)
+                .deleteById(any());
 
         // when & then
         mockMvc.perform(delete("/api/members/me")

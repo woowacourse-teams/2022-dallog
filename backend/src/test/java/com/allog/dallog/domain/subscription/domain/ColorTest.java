@@ -4,6 +4,7 @@ package com.allog.dallog.domain.subscription.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,14 @@ class ColorTest {
     @Test
     void 랜덤으로_색상을_가져온다() {
         // given
-        ColorPickerStrategy testStrategy = () -> 0;
+        ColorPicker colorPicker = () -> 0;
+        int randomIndex = colorPicker.pickNumber();
 
-        // when & then
-        assertThat(Color.pickAny(testStrategy)).isEqualTo(Color.COLOR_1);
+        // when
+        Color actual = Color.pick(randomIndex);
+
+        // then
+        assertThat(actual).isEqualTo(Color.COLOR_1);
     }
 
     @DisplayName("color code에 맞는 색상을 가져온다.")

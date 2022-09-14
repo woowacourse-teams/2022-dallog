@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.category.application;
 
+import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
@@ -14,7 +16,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스�
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
+import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -40,7 +42,6 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
@@ -60,9 +61,6 @@ class CategoryServiceTest extends ServiceTest {
     private CategoryService categoryService;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
     private SubscriptionService subscriptionService;
 
     @Autowired
@@ -70,6 +68,12 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -176,9 +180,8 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        MemberResponse 후디 = memberService.save(후디()); // 후디의 개인 카테고리가 생성된다
-        MemberResponse 리버 = memberService.save(리버()); // 리버의 개인 카테고리가 생성된다
-        categoryService.save(후디.getId(), 내_일정_생성_요청);
+        authService.generateToken(후디_인증_코드_토큰_요청());
+        authService.generateToken(리버_인증_코드_토큰_요청());
 
         // when
         CategoriesResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
