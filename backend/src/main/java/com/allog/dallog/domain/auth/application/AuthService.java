@@ -69,11 +69,11 @@ public class AuthService {
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
-        if (!memberRepository.existsByEmail(oAuthMember.getEmail())) {
-            return saveMember(oAuthMember);
+        if (memberRepository.existsByEmail(oAuthMember.getEmail())) {
+            return memberRepository.getByEmail(oAuthMember.getEmail());
         }
 
-        return memberRepository.getByEmail(oAuthMember.getEmail());
+        return saveMember(oAuthMember);
     }
 
     private Member saveMember(final OAuthMember oAuthMember) {
