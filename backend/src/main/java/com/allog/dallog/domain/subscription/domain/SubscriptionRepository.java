@@ -11,7 +11,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     List<Subscription> getByMemberId(final Long memberId);
 
-    List<Subscription> findByCategoryId(final Long categoryId);
+    List<Subscription> getByCategoryId(final Long categoryId);
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
 
