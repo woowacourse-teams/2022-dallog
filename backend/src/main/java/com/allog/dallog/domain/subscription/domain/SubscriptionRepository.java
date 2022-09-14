@@ -9,13 +9,13 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     boolean existsByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
-    List<Subscription> getByMemberId(final Long memberId);
-
-    List<Subscription> getByCategoryId(final Long categoryId);
-
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
 
     void deleteByCategoryIdIn(final List<Long> categoryIds);
+
+    List<Subscription> getByMemberId(final Long memberId);
+
+    List<Subscription> getByCategoryId(final Long categoryId);
 
     default Subscription getById(final Long id) {
         return findById(id)

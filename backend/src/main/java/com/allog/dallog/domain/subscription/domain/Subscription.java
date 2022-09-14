@@ -54,6 +54,10 @@ public class Subscription extends BaseEntity {
         this.checked = checked;
     }
 
+    public void validateCreator(final Member member) {
+
+    }
+
     public Long getId() {
         return id;
     }

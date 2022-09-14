@@ -40,7 +40,7 @@ public class SubscriptionService {
 
         Member member = memberRepository.getById(memberId);
         Category category = categoryRepository.getById(categoryId);
-        category.validateCanSubscribe(member);
+        member.validateCanSubscribe(category);
 
         Color color = Color.pick(colorPicker.pickNumber());
         Subscription savedSubscription = subscriptionRepository.save(new Subscription(member, category, color));
@@ -76,10 +76,17 @@ public class SubscriptionService {
 
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
-        validateSubscriptionPermission(id, memberId);
-
         Subscription subscription = subscriptionRepository.getById(id);
+        Member member = memberRepository.getById(memberId);
+        subscription.validateCreator(member);
+
         subscription.change(request.getColor(), request.isChecked());
+    }
+
+    private void validateSubscriptionPermission(final Long id, final Long memberId) {
+        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
+            throw new NoPermissionException();
+        }
     }
 
     @Transactional
@@ -90,12 +97,6 @@ public class SubscriptionService {
         validateCategoryCreator(subscription.getCategory(), memberId);
 
         subscriptionRepository.deleteById(id);
-    }
-
-    private void validateSubscriptionPermission(final Long id, final Long memberId) {
-        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
-            throw new NoPermissionException();
-        }
     }
 
     private void validateCategoryCreator(final Category category, final Long memberId) {

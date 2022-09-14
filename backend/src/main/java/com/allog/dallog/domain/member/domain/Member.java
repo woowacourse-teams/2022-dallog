@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.member.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import java.util.Objects;
@@ -71,8 +73,10 @@ public class Member extends BaseEntity {
         }
     }
 
-    public boolean isCreator(final Member otherMember) {
-        return this.equals(otherMember);
+    public void validateCanSubscribe(final Category category) {
+        if (category.isPersonal() && !this.equals(category.getMember())) {
+            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
+        }
     }
 
     public Long getId() {
