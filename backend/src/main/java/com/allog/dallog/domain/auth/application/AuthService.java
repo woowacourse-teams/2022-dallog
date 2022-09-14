@@ -77,14 +77,14 @@ public class AuthService {
     }
 
     private Member saveMember(final OAuthMember oAuthMember) {
-        Member savedMember = memberRepository.save(parseMember(oAuthMember));
+        Member savedMember = memberRepository.save(toMember(oAuthMember));
         Category savedCategory = saveCategory(savedMember);
         saveSubscription(savedMember, savedCategory);
 
         return savedMember;
     }
 
-    private Member parseMember(final OAuthMember oAuthMember) {
+    private Member toMember(final OAuthMember oAuthMember) {
         return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
                 SocialType.GOOGLE);
     }
