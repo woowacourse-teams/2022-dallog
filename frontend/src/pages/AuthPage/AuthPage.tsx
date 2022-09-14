@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
-import { API, CACHE_KEY } from '@/constants/api';
+import { API } from '@/constants/api';
 
 import { getSearchParam } from '@/utils';
 import { setAccessToken } from '@/utils/storage';
@@ -20,7 +20,7 @@ function AuthPage() {
 
   const code = getSearchParam(API.AUTH_CODE_KEY);
 
-  const { mutate } = useMutation<string, AxiosError>(CACHE_KEY.AUTH, () => loginApi.auth(code), {
+  const { mutate } = useMutation<string, AxiosError>(() => loginApi.auth(code), {
     onError: () => onErrorAuth(),
     onSuccess: (data) => onSuccessAuth(data),
   });

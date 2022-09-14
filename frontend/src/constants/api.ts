@@ -6,7 +6,6 @@ const API = {
 const API_URL = process.env.API_URL;
 
 const CACHE_KEY = {
-  AUTH: 'auth',
   CATEGORIES: 'categories',
   CATEGORY: 'category',
   ENTER: 'enter',
