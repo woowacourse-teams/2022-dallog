@@ -4,10 +4,10 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.domain.category.domain.CategoryType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class IntegrationScheduleTest {
         // when & then
         assertDoesNotThrow(
                 () -> new IntegrationSchedule(id, categoryId, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모,
-                        CategoryType.NORMAL.name()));
+                        NORMAL));
     }
 
     @DisplayName("LongTerm인지 확인 할 떄, 일정의 시작일시와 종료일시가 다르면 true를 반환한다.")
@@ -35,7 +35,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 1),
-                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isLongTerms();
@@ -52,7 +52,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 1),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isLongTerms();
@@ -69,7 +69,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isAllDays();
@@ -86,7 +86,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isAllDays();
@@ -103,7 +103,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isFewHours();
@@ -120,7 +120,7 @@ class IntegrationScheduleTest {
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isFewHours();

@@ -18,7 +18,8 @@ public class MemberScheduleResponse {
     public MemberScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
         this(integrationSchedule.getId(), integrationSchedule.getTitle(), integrationSchedule.getStartDateTime(),
                 integrationSchedule.getEndDateTime(), integrationSchedule.getMemo(),
-                integrationSchedule.getCategoryId(), color.getColorCode(), integrationSchedule.getCategoryType());
+                integrationSchedule.getCategoryId(), color.getColorCode(),
+                integrationSchedule.getCategoryType().name());
     }
 
     public MemberScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,

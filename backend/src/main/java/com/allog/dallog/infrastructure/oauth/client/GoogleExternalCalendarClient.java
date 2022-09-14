@@ -104,6 +104,6 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         LocalDateTime endDateTime = event.getEndDateTime();
 
         return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
-                endDateTime, event.getDescription(), CategoryType.GOOGLE.name());
+                endDateTime, event.getDescription(), CategoryType.GOOGLE);
     }
 }

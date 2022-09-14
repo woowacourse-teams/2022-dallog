@@ -1,8 +1,8 @@
 package com.allog.dallog.domain.integrationschedule.domain;
 
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.domain.category.domain.CategoryType;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,15 +16,15 @@ class IntegrationSchedulesTest {
         Long categoryId = 1L;
         IntegrationSchedule 첫번째로_정렬되어야_하는_일정 = new IntegrationSchedule("1", categoryId, "일정1",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 2, 0, 0), "일정1", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 2, 0, 0), "일정1", NORMAL);
 
         IntegrationSchedule 두번째로_정렬되어야_하는_일정 = new IntegrationSchedule("2", categoryId, "일정2",
                 LocalDateTime.of(2022, 3, 3, 0, 0),
-                LocalDateTime.of(2022, 3, 4, 0, 0), "일정2", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 4, 0, 0), "일정2", NORMAL);
 
         IntegrationSchedule 세번째로_정렬되어야_하는_일정 = new IntegrationSchedule("3", categoryId, "일정3",
                 LocalDateTime.of(2022, 3, 5, 0, 0),
-                LocalDateTime.of(2022, 3, 7, 0, 0), "일정3", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 7, 0, 0), "일정3", NORMAL);
 
         // when
         IntegrationSchedules integrationSchedules = new IntegrationSchedules();
@@ -45,15 +45,15 @@ class IntegrationSchedulesTest {
         Long categoryId = 1L;
         IntegrationSchedule 첫번째로_정렬되어야_하는_일정 = new IntegrationSchedule("1", categoryId, "일정1",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 10, 0, 0), "일정1", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 10, 0, 0), "일정1", NORMAL);
 
         IntegrationSchedule 두번째로_정렬되어야_하는_일정 = new IntegrationSchedule("2", categoryId, "일정2",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 7, 0, 0), "일정2", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 7, 0, 0), "일정2", NORMAL);
 
         IntegrationSchedule 세번째로_정렬되어야_하는_일정 = new IntegrationSchedule("3", categoryId, "일정3",
                 LocalDateTime.of(2022, 3, 5, 0, 0),
-                LocalDateTime.of(2022, 3, 5, 0, 0), "일정3", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 5, 0, 0), "일정3", NORMAL);
 
         // when
         IntegrationSchedules integrationSchedules = new IntegrationSchedules();
@@ -74,15 +74,15 @@ class IntegrationSchedulesTest {
         Long categoryId = 1L;
         IntegrationSchedule 첫번째로_정렬되어야_하는_일정 = new IntegrationSchedule("1", categoryId, "가",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 10, 0, 0), "일정1", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 10, 0, 0), "일정1", NORMAL);
 
         IntegrationSchedule 두번째로_정렬되어야_하는_일정 = new IntegrationSchedule("2", categoryId, "나",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 10, 0, 0), "일정2", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 10, 0, 0), "일정2", NORMAL);
 
         IntegrationSchedule 세번째로_정렬되어야_하는_일정 = new IntegrationSchedule("3", categoryId, "다",
                 LocalDateTime.of(2022, 3, 1, 0, 0),
-                LocalDateTime.of(2022, 3, 10, 0, 0), "일정3", CategoryType.NORMAL.name());
+                LocalDateTime.of(2022, 3, 10, 0, 0), "일정3", NORMAL);
 
         // when
         IntegrationSchedules integrationSchedules = new IntegrationSchedules();
