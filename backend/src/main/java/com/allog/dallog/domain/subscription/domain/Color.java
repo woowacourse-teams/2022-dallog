@@ -36,8 +36,8 @@ public enum Color {
         this.colorCode = colorCode;
     }
 
-    public static Color pickAny(ColorPickerStrategy strategy) {
-        return Color.values()[strategy.pickNumber()];
+    public static Color pick(int index) {
+        return Color.values()[index];
     }
 
     public static Color from(final String colorCode) {

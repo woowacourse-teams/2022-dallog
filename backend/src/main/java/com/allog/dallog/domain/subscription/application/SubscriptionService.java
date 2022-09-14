@@ -8,7 +8,6 @@ import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
@@ -17,7 +16,6 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,19 +24,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SubscriptionService {
 
-    private static final ColorPickerStrategy PICK_RANDOM_STRATEGY
-            = () -> ThreadLocalRandom.current().nextInt(Color.values().length);
-
     private final SubscriptionRepository subscriptionRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final ColorPicker colorPicker;
 
     public SubscriptionService(final SubscriptionRepository subscriptionRepository,
-                               final MemberRepository memberRepository,
-                               final CategoryRepository categoryRepository) {
+                               final MemberRepository memberRepository, final CategoryRepository categoryRepository,
+                               final ColorPicker colorPicker) {
         this.subscriptionRepository = subscriptionRepository;
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.colorPicker = colorPicker;
     }
 
     @Transactional
@@ -51,7 +48,7 @@ public class SubscriptionService {
                 .orElseThrow(NoSuchCategoryException::new);
         validatePermission(memberId, category);
 
-        Color color = Color.pickAny(PICK_RANDOM_STRATEGY);
+        Color color = Color.pick(colorPicker.pickNumber());
         Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
         return new SubscriptionResponse(subscription);
     }

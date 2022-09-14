@@ -12,11 +12,10 @@ import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.domain.SocialType;
+import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,28 +24,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private static final String PERSONAL_CATEGORY_NAME = "내 일정";
-    private static final ColorPickerStrategy PICK_RANDOM_STRATEGY = () -> ThreadLocalRandom.current()
-            .nextInt(Color.values().length);
 
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
-    private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final TokenProvider tokenProvider;
+    private final ColorPicker colorPicker;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-                       final SubscriptionRepository subscriptionRepository,
-                       final OAuthTokenRepository oAuthTokenRepository, final OAuthUri oAuthUri,
-                       final OAuthClient oAuthClient, final TokenProvider tokenProvider) {
+                       final OAuthTokenRepository oAuthTokenRepository,
+                       final SubscriptionRepository subscriptionRepository, final OAuthUri oAuthUri,
+                       final OAuthClient oAuthClient, final TokenProvider tokenProvider,
+                       final ColorPicker colorPicker) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
-        this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
+        this.subscriptionRepository = subscriptionRepository;
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.tokenProvider = tokenProvider;
+        this.colorPicker = colorPicker;
     }
 
     public String generateGoogleLink(final String redirectUri) {
@@ -94,7 +94,7 @@ public class AuthService {
     }
 
     private Subscription saveSubscription(final Member savedMember, final Category savedCategory) {
-        Color randomColor = Color.pickAny(PICK_RANDOM_STRATEGY);
+        Color randomColor = Color.pick(colorPicker.pickNumber());
         return subscriptionRepository.save(new Subscription(savedMember, savedCategory, randomColor));
     }
 
