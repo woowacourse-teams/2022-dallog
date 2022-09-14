@@ -117,7 +117,8 @@ public class CalendarService {
     private List<IntegrationSchedule> getExternalSchedules(final Long memberId, final DateRangeRequest request,
                                                            final List<ExternalCategoryDetail> externalCategories) {
         String refreshToken = getOAuthToken(memberId).getRefreshToken();
-        String accessToken = oAuthClient.getAccessToken(refreshToken).getAccessToken();
+        String accessToken = oAuthClient.getAccessToken(refreshToken)
+                .getValue();
 
         return externalCategories.stream()
                 .flatMap(externalCategory -> flatIntegrationSchedules(request, accessToken, externalCategory))
