@@ -157,7 +157,8 @@ public class CategoryService {
     }
 
     public void validateCreatorBy(final Long memberId, final Category category) {
-        if (!category.isCreator(memberId)) {
+        Member member = memberRepository.getById(memberId);
+        if (!category.isCreator(member)) {
             throw new NoPermissionException();
         }
     }

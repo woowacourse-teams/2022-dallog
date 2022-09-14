@@ -3,7 +3,6 @@ package com.allog.dallog.domain.category.domain;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
@@ -80,8 +79,8 @@ public class Category extends BaseEntity {
         }
     }
 
-    public boolean isCreator(final Long memberId) {
-        return Objects.equals(member.getId(), memberId);
+    public boolean isCreator(final Member creator) {
+        return this.member.equals(creator);
     }
 
     public boolean isPersonal() {

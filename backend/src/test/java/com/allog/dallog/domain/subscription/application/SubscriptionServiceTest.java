@@ -180,7 +180,7 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.save(후디_id, FE_일정.getId());
 
         // when
-        subscriptionService.deleteById(response.getId(), 후디_id);
+        subscriptionService.delete(response.getId(), 후디_id);
 
         // then
         assertThat(subscriptionService.findByMemberId(후디_id).getSubscriptions()).hasSize(3);
@@ -197,7 +197,7 @@ class SubscriptionServiceTest extends ServiceTest {
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(파랑_id, 공통_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteById(공통_일정_구독.getId(), 관리자_id))
+        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자_id))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -211,7 +211,7 @@ class SubscriptionServiceTest extends ServiceTest {
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(관리자_id, 공통_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.deleteById(공통_일정_구독.getId(), 관리자_id))
+        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자_id))
                 .isInstanceOf(NoPermissionException.class);
     }
 }

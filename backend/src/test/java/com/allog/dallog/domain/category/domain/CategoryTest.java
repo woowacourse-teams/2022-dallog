@@ -10,6 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -63,10 +64,11 @@ class CategoryTest {
     @Test
     void 제공된_멤버의_ID와_카테고리를_생성한_멤버의_ID가_일치하지_않으면_false를_반환한다() {
         // given
+        Member 관리자 = 관리자();
         Category BE_일정 = BE_일정(관리자());
 
         // when
-        boolean actual = BE_일정.isCreator(999L);
+        boolean actual = BE_일정.isCreator(관리자);
 
         // then
         assertThat(actual).isFalse();

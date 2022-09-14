@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.subscription.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
@@ -54,8 +55,16 @@ public class Subscription extends BaseEntity {
         this.checked = checked;
     }
 
-    public void validateCreator(final Member member) {
+    public void validateCanEditBy(final Member member) {
+        if (!this.member.equals(member)) {
+            throw new NoPermissionException();
+        }
+    }
 
+    public void validateCanDeleteBy(final Member member) {
+        if (category.isCreator(member)) {
+            throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
+        }
     }
 
     public Long getId() {

@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -97,24 +98,5 @@ public class Member extends BaseEntity {
 
     public SocialType getSocialType() {
         return socialType;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Member member = (Member) o;
-        return Objects.equals(id, member.id) && Objects.equals(email, member.email)
-                && Objects.equals(displayName, member.displayName) && Objects.equals(profileImageUrl,
-                member.profileImageUrl) && socialType == member.socialType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, displayName, profileImageUrl, socialType);
     }
 }

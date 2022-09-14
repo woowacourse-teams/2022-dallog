@@ -23,7 +23,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     }
 
     default void validateExistsSubscription(final Long memberId, final Long categoryId) {
-        if (this.existsByMemberIdAndCategoryId(memberId, categoryId)) {
+        if (existsByMemberIdAndCategoryId(memberId, categoryId)) {
             throw new ExistSubscriptionException();
         }
     }

@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.subscription.application;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -78,30 +77,15 @@ public class SubscriptionService {
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
         Subscription subscription = subscriptionRepository.getById(id);
         Member member = memberRepository.getById(memberId);
-        subscription.validateCreator(member);
-
+        subscription.validateCanEditBy(member);
         subscription.change(request.getColor(), request.isChecked());
     }
 
-    private void validateSubscriptionPermission(final Long id, final Long memberId) {
-        if (!subscriptionRepository.existsByIdAndMemberId(id, memberId)) {
-            throw new NoPermissionException();
-        }
-    }
-
     @Transactional
-    public void deleteById(final Long id, final Long memberId) {
+    public void delete(final Long id, final Long memberId) {
         Subscription subscription = subscriptionRepository.getById(id);
-
-        validateSubscriptionPermission(id, memberId);
-        validateCategoryCreator(subscription.getCategory(), memberId);
-
+        Member member = memberRepository.getById(memberId);
+        subscription.validateCanDeleteBy(member);
         subscriptionRepository.deleteById(id);
-    }
-
-    private void validateCategoryCreator(final Category category, final Long memberId) {
-        if (category.isCreator(memberId)) {
-            throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
-        }
     }
 }
