@@ -3,10 +3,8 @@ package com.allog.dallog.domain.subscription.application;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
@@ -42,20 +40,12 @@ public class SubscriptionService {
         subscriptionRepository.validateExistsSubscription(memberId, categoryId);
 
         Member member = memberRepository.getById(memberId);
-
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(NoSuchCategoryException::new);
-        validatePermission(memberId, category);
+        Category category = categoryRepository.getById(categoryId);
+        category.validateCanSubscribe(member);
 
         Color color = Color.pick(colorPicker.pickNumber());
-        Subscription subscription = subscriptionRepository.save(new Subscription(member, category, color));
-        return new SubscriptionResponse(subscription);
-    }
-
-    private void validatePermission(final Long memberId, final Category category) {
-        if (category.isPersonal() && !category.isCreator(memberId)) {
-            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
-        }
+        Subscription savedSubscription = subscriptionRepository.save(new Subscription(member, category, color));
+        return new SubscriptionResponse(savedSubscription);
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {

@@ -28,6 +28,10 @@ public class SubscriptionResponse {
         this.checked = checked;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,9 +42,5 @@ public class SubscriptionResponse {
 
     public String getColorCode() {
         return colorCode;
-    }
-
-    public boolean isChecked() {
-        return checked;
     }
 }

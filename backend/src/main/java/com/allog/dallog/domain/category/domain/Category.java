@@ -3,6 +3,7 @@ package com.allog.dallog.domain.category.domain;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
@@ -76,6 +77,12 @@ public class Category extends BaseEntity {
         }
         if (name.length() > MAX_NAME_LENGTH) {
             throw new InvalidCategoryException("카테고리 이름의 길이는 20을 초과할 수 없습니다.");
+        }
+    }
+
+    public void validateCanSubscribe(final Member member) {
+        if (this.categoryType == PERSONAL && !this.member.isCreator(member)) {
+            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
         }
     }
 

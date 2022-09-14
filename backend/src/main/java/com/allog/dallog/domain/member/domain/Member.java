@@ -2,6 +2,7 @@ package com.allog.dallog.domain.member.domain;
 
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
@@ -52,6 +53,11 @@ public class Member extends BaseEntity {
         this.socialType = socialType;
     }
 
+    public void change(final String displayName) {
+        validateDisplayName(displayName);
+        this.displayName = displayName;
+    }
+
     private void validateEmail(final String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         if (!matcher.matches()) {
@@ -65,9 +71,8 @@ public class Member extends BaseEntity {
         }
     }
 
-    public void change(final String displayName) {
-        validateDisplayName(displayName);
-        this.displayName = displayName;
+    public boolean isCreator(final Member otherMember) {
+        return this.equals(otherMember);
     }
 
     public Long getId() {
@@ -88,5 +93,24 @@ public class Member extends BaseEntity {
 
     public SocialType getSocialType() {
         return socialType;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Member member = (Member) o;
+        return Objects.equals(id, member.id) && Objects.equals(email, member.email)
+                && Objects.equals(displayName, member.displayName) && Objects.equals(profileImageUrl,
+                member.profileImageUrl) && socialType == member.socialType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, displayName, profileImageUrl, socialType);
     }
 }
