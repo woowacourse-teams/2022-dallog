@@ -1,64 +1,61 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
-import useToggle from '@/hooks/useToggle';
+import useModalPosition from '@/hooks/useModalPosition';
 
 import { SubscriptionType } from '@/@types/subscription';
 
 import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
+import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import Spinner from '@/components/@common/Spinner/Spinner';
+import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/SubscriptionModifyModal';
 
-import { CATEGORY_TYPE } from '@/constants/category';
-import { PALETTE } from '@/constants/style';
+import { TRANSPARENT } from '@/constants/style';
 
 import subscriptionApi from '@/api/subscription';
 
-import { BiPalette } from 'react-icons/bi';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { RiCheckboxBlankLine, RiCheckboxFill } from 'react-icons/ri';
 
 import {
   checkBoxNameStyle,
-  colorStyle,
-  grayTextStyle,
   iconStyle,
   itemStyle,
+  modalLayoutStyle,
   nameStyle,
-  outerStyle,
-  paletteLayoutStyle,
-  paletteStyle,
-} from './FilterCategoryItem.styles';
+} from './SideItem.styles';
 
-interface FilterItemProps {
+interface SideItemProps {
   subscription: SubscriptionType;
 }
 
-function FilterCategoryItem({ subscription }: FilterItemProps) {
-  const { accessToken } = useRecoilValue(userState);
-
-  const { state: isPaletteOpen, toggleState: togglePaletteOpen } = useToggle();
+function SideItem({ subscription }: SideItemProps) {
+  const user = useRecoilValue(userState);
 
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate } = useMutation(
+  const { isLoading, mutate: patchSubscription } = useMutation(
     (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
-      subscriptionApi.patch(accessToken, subscription.id, body),
+      subscriptionApi.patch(user.accessToken, subscription.id, body),
     {
       onSuccess: () => queryClient.invalidateQueries(),
     }
   );
 
+  const {
+    state: isPaletteOpen,
+    toggleState: togglePaletteOpen,
+    handleClickOpenButton,
+    modalPos,
+  } = useModalPosition();
+
   const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
-    mutate({
+    patchSubscription({
       checked: !checked,
       colorCode,
     });
-  };
-
-  const handleClickPalette = (checked: boolean, colorCode: string) => {
-    mutate({ checked, colorCode });
-    togglePaletteOpen();
   };
 
   return (
@@ -90,38 +87,29 @@ function FilterCategoryItem({ subscription }: FilterItemProps) {
           }}
         >
           {subscription.category.name}
-          <span css={grayTextStyle}>
-            {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE && ' (구글)'}
-            {subscription.category.categoryType === CATEGORY_TYPE.PERSONAL && ' (기본)'}
-          </span>
         </span>
       </div>
-      <div css={paletteLayoutStyle}>
-        <Button cssProp={iconStyle} onClick={togglePaletteOpen}>
-          <BiPalette size={20} />
+      <div css={modalLayoutStyle}>
+        <Button cssProp={iconStyle}>
+          <BiDotsVerticalRounded size={20} onClick={handleClickOpenButton} />
         </Button>
-
         {isPaletteOpen && (
-          <>
-            <div css={outerStyle} onClick={togglePaletteOpen} />
-            <div css={paletteStyle}>
-              {PALETTE.map((color) => {
-                return (
-                  <Button
-                    key={color}
-                    cssProp={colorStyle(color)}
-                    onClick={() => {
-                      handleClickPalette(subscription.checked, color);
-                    }}
-                  ></Button>
-                );
-              })}
-            </div>
-          </>
+          <ModalPortal
+            isOpen={isPaletteOpen}
+            closeModal={togglePaletteOpen}
+            dimmerBackground={TRANSPARENT}
+          >
+            <SubscriptionModifyModal
+              togglePaletteOpen={togglePaletteOpen}
+              modalPos={modalPos}
+              subscription={subscription}
+              patchSubscription={patchSubscription}
+            />
+          </ModalPortal>
         )}
       </div>
     </div>
   );
 }
 
-export default FilterCategoryItem;
+export default SideItem;

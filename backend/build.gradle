@@ -122,7 +122,7 @@ sonarqube {
         property "sonar.sources", "src"
         property "sonar.language", "java"
         property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.profile", "Sonar way"
+        property "sonar.profile", "Dallog Custom Java Ruleset"
         property "sonar.java.binaries", "${buildDir}/classes"
         property "sonar.test.inclusions", "**/*Test.java"
         property 'sonar.exclusions', '**/jacoco/**'

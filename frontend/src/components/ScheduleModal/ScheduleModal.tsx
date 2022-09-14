@@ -1,14 +1,12 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
+
+import useUserValue from '@/hooks/useUserValue';
 
 import { ModalPosType } from '@/@types';
 import { CategoryType } from '@/@types/category';
-import { ProfileType } from '@/@types/profile';
 import { ScheduleType } from '@/@types/schedule';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -17,7 +15,6 @@ import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
-import profileApi from '@/api/profile';
 import scheduleApi from '@/api/schedule';
 
 import { FiCalendar, FiEdit3 } from 'react-icons/fi';
@@ -51,24 +48,18 @@ function ScheduleModal({
   toggleScheduleModifyModalOpen,
   closeModal,
 }: ScheduleModalProps) {
-  const { accessToken } = useRecoilValue(userState);
+  const { user } = useUserValue();
 
   const theme = useTheme();
 
   const queryClient = useQueryClient();
-
-  const { data: profileGetResponse } = useQuery<AxiosResponse<ProfileType>, AxiosError>(
-    CACHE_KEY.PROFILE,
-    () => profileApi.get(accessToken)
-  );
-
   const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
     CACHE_KEY.CATEGORY,
     () => categoryApi.getSingle(scheduleInfo.categoryId)
   );
 
   const { mutate } = useMutation<AxiosResponse, AxiosError>(
-    () => scheduleApi.delete(accessToken, scheduleInfo.id),
+    () => scheduleApi.delete(user.accessToken, scheduleInfo.id),
     {
       onSuccess: () => onSuccessDeleteSchedule(),
     }
@@ -102,7 +93,7 @@ function ScheduleModal({
   const canEditSchedule =
     (scheduleInfo.categoryType === CATEGORY_TYPE.NORMAL ||
       scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL) &&
-    profileGetResponse?.data.id === categoryGetResponse?.data.creator.id;
+    user.id === categoryGetResponse?.data.creator.id;
 
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>

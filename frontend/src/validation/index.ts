@@ -1,17 +1,21 @@
-const validateLength = (target: string, min: number, max: number) => {
-  return min <= target.length && target.length <= max;
-};
+import { VALIDATION_STRING } from '@/constants/validate';
 
-const validateNotEmpty = (target: string) => {
-  return target.length > 0;
-};
+const validateLength = (target: string, min: number, max: number) =>
+  min <= target.length && target.length <= max;
 
-const validateNotEqualString = (target: string, comparisonTarget: string) => {
-  return target.trim() !== comparisonTarget;
-};
+const validateNotEmpty = (target: string) => target.length > 0;
 
-const validateStartEndDateTime = (startDate: string, endDate: string) => {
-  return startDate <= endDate;
-};
+const validateNotEqualString = (target: string, comparisonTarget: string) =>
+  target.trim() !== comparisonTarget;
 
-export { validateLength, validateNotEmpty, validateNotEqualString, validateStartEndDateTime };
+const validateStartEndDateTime = (startDate: string, endDate: string) => startDate <= endDate;
+
+const validateWithdrawalCondition = (value: string) => value === VALIDATION_STRING.WITHDRAWAL;
+
+export {
+  validateLength,
+  validateNotEmpty,
+  validateNotEqualString,
+  validateStartEndDateTime,
+  validateWithdrawalCondition,
+};

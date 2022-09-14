@@ -25,11 +25,11 @@ import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
 
 import {
-  allDayButtonStyle,
   arrowStyle,
   cancelButtonStyle,
   categoryBoxStyle,
   categoryStyle,
+  checkboxStyle,
   controlButtonsStyle,
   dateTimeStyle,
   formStyle,
@@ -144,15 +144,22 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
           )}
           labelText="제목"
         />
-        <Button cssProp={allDayButtonStyle(theme, isAllDay)} onClick={handleClickAllDayButton}>
-          종일
-        </Button>
         <div css={dateTimeStyle} key={startDateFieldsetProps.type}>
+          <div css={checkboxStyle}>
+            <input
+              type="checkbox"
+              id="allDay"
+              checked={isAllDay}
+              onClick={handleClickAllDayButton}
+            />
+            <label htmlFor="allDay" />
+            <label htmlFor="allDay">종일</label>
+          </div>
           <Fieldset
             type={startDateFieldsetProps.type}
             value={validationSchedule.startDateTime.inputValue}
             onChange={validationSchedule.startDateTime.onChangeValue}
-            labelText="날짜"
+            labelText={isAllDay ? '날짜' : '날짜 / 시간'}
           />
           <p css={arrowStyle}>↓</p>
           <Fieldset
