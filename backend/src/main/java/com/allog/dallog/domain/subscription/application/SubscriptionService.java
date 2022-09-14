@@ -11,7 +11,6 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ public class SubscriptionService {
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
+        List<Subscription> subscriptions = subscriptionRepository.getByMemberId(memberId);
 
         List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
                 .map(SubscriptionResponse::new)
@@ -59,8 +58,7 @@ public class SubscriptionService {
     }
 
     public SubscriptionResponse findById(final Long id) {
-        Subscription subscription = getSubscription(id);
-
+        Subscription subscription = subscriptionRepository.getById(id);
         return new SubscriptionResponse(subscription);
     }
 
@@ -72,25 +70,20 @@ public class SubscriptionService {
     }
 
     public List<Subscription> getAllByMemberId(final Long memberId) {
-        return subscriptionRepository.findByMemberId(memberId);
+        return subscriptionRepository.getByMemberId(memberId);
     }
 
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
         validateSubscriptionPermission(id, memberId);
 
-        Subscription subscription = getSubscription(id);
+        Subscription subscription = subscriptionRepository.getById(id);
         subscription.change(request.getColor(), request.isChecked());
-    }
-
-    private Subscription getSubscription(final Long id) {
-        return subscriptionRepository.findById(id)
-                .orElseThrow(NoSuchSubscriptionException::new);
     }
 
     @Transactional
     public void deleteById(final Long id, final Long memberId) {
-        Subscription subscription = getSubscription(id);
+        Subscription subscription = subscriptionRepository.getById(id);
 
         validateSubscriptionPermission(id, memberId);
         validateCategoryCreator(subscription.getCategory(), memberId);
