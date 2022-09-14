@@ -3,7 +3,6 @@ package com.allog.dallog.domain.externalcalendar.application;
 import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
@@ -30,9 +29,9 @@ public class ExternalCalendarService {
         OAuthToken oAuthToken = oAuthTokenRepository.findByMemberId(memberId)
                 .orElseThrow(NoSuchOAuthTokenException::new);
 
-        OAuthAccessTokenResponse oAuthAccessTokenResponse = oAuthClient.getAccessToken(oAuthToken.getRefreshToken());
-        String oAuthAccessToken = oAuthAccessTokenResponse.getAccessToken();
-        
+        String oAuthAccessToken = oAuthClient.getAccessToken(oAuthToken.getRefreshToken())
+                .getValue();
+
         List<ExternalCalendar> externalCalendars = externalCalendarClient.getExternalCalendars(oAuthAccessToken);
 
         return new ExternalCalendarsResponse(externalCalendars);
