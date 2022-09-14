@@ -39,7 +39,7 @@ public class SubscriptionService {
 
         Member member = memberRepository.getById(memberId);
         Category category = categoryRepository.getById(categoryId);
-        member.validateCanSubscribe(category);
+        category.validateSubscriptionPossible(member);
 
         Color color = Color.pick(colorPicker.pickNumber());
         Subscription savedSubscription = subscriptionRepository.save(new Subscription(member, category, color));
@@ -77,7 +77,7 @@ public class SubscriptionService {
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
         Subscription subscription = subscriptionRepository.getById(id);
         Member member = memberRepository.getById(memberId);
-        subscription.validateCanEditBy(member);
+        subscription.validateUpdatePossible(member);
         subscription.change(request.getColor(), request.isChecked());
     }
 
@@ -85,7 +85,7 @@ public class SubscriptionService {
     public void delete(final Long id, final Long memberId) {
         Subscription subscription = subscriptionRepository.getById(id);
         Member member = memberRepository.getById(memberId);
-        subscription.validateCanDeleteBy(member);
+        subscription.validateDeletePossible(member);
         subscriptionRepository.deleteById(id);
     }
 }

@@ -55,13 +55,13 @@ public class Subscription extends BaseEntity {
         this.checked = checked;
     }
 
-    public void validateCanEditBy(final Member member) {
+    public void validateUpdatePossible(final Member member) {
         if (!this.member.equals(member)) {
             throw new NoPermissionException();
         }
     }
 
-    public void validateCanDeleteBy(final Member member) {
+    public void validateDeletePossible(final Member member) {
         if (category.isCreator(member)) {
             throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
         }

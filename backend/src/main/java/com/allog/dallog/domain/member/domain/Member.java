@@ -74,12 +74,6 @@ public class Member extends BaseEntity {
         }
     }
 
-    public void validateCanSubscribe(final Category category) {
-        if (category.isPersonal() && !this.equals(category.getMember())) {
-            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
-        }
-    }
-
     public Long getId() {
         return id;
     }
