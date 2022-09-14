@@ -3,7 +3,6 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
-import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
