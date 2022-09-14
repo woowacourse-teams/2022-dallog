@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.integrationschedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -19,16 +20,16 @@ public class IntegrationSchedule {
     private final String title;
     private final Period period;
     private final String memo;
-    private final String categoryType;
+    private final CategoryType categoryType;
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title,
                                final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String memo,
-                               final String categoryType) {
+                               final CategoryType categoryType) {
         this(id, categoryId, title, new Period(startDateTime, endDateTime), memo, categoryType);
     }
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title, final Period period,
-                               final String memo, final String categoryType) {
+                               final String memo, final CategoryType categoryType) {
         this.id = id;
         this.categoryId = categoryId;
         this.title = title;
@@ -93,11 +94,9 @@ public class IntegrationSchedule {
         return memo;
     }
 
-    public String getCategoryType() {
+    public CategoryType getCategoryType() {
         return categoryType;
     }
-
-    // 중복 일정을 판별하기 위한 equals & hashCode
 
     @Override
     public boolean equals(final Object o) {

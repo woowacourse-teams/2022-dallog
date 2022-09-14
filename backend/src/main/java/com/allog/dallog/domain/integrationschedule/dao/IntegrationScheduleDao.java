@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.integrationschedule.dao;
 
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.integrationschedule.domain.Period;
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ public class IntegrationScheduleDao {
             LocalDateTime startDateTime = resultSet.getTimestamp("startDateTime").toLocalDateTime();
             LocalDateTime endDateTime = resultSet.getTimestamp("endDateTime").toLocalDateTime();
             String memo = resultSet.getString("memo");
-            String categoryType = resultSet.getString("categoryType");
+            CategoryType categoryType = CategoryType.from((resultSet.getString("categoryType")));
 
             Period period = new Period(startDateTime, endDateTime);
 

@@ -31,7 +31,6 @@ public class ExternalCalendarController {
     @GetMapping
     public ResponseEntity<ExternalCalendarsResponse> getExternalCalendar(
             @AuthenticationPrincipal final LoginMember loginMember) {
-
         return ResponseEntity.ok(externalCalendarService.findByMemberId(loginMember.getId()));
     }
 
