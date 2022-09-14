@@ -12,7 +12,6 @@ import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.domain.SocialType;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.ColorPickerStrategy;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -60,19 +59,29 @@ public class AuthService {
         String redirectUri = tokenRequest.getRedirectUri();
 
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code, redirectUri);
-
-        if (!memberRepository.existsByEmail(oAuthMember.getEmail())) {
-            Member savedMember = memberRepository.save(parseMember(oAuthMember));
-            Category savedCategory = saveCategory(savedMember);
-            saveSubscription(savedMember, savedCategory);
-        }
-        Member foundMember = memberRepository.getByEmail(oAuthMember.getEmail());
+        Member foundMember = findMember(oAuthMember);
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
         String accessToken = tokenProvider.createToken(String.valueOf(foundMember.getId()));
 
         return new TokenResponse(accessToken);
+    }
+
+    private Member findMember(final OAuthMember oAuthMember) {
+        if (!memberRepository.existsByEmail(oAuthMember.getEmail())) {
+            return saveMember(oAuthMember);
+        }
+
+        return memberRepository.getByEmail(oAuthMember.getEmail());
+    }
+
+    private Member saveMember(final OAuthMember oAuthMember) {
+        Member savedMember = memberRepository.save(parseMember(oAuthMember));
+        Category savedCategory = saveCategory(savedMember);
+        saveSubscription(savedMember, savedCategory);
+
+        return savedMember;
     }
 
     private Member parseMember(final OAuthMember oAuthMember) {
@@ -90,20 +99,17 @@ public class AuthService {
     }
 
     private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member foundMember) {
-        if (!oAuthTokenRepository.existsByMemberId(foundMember.getId())) {
-            oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
+        if (oAuthTokenRepository.existsByMemberId(foundMember.getId())) {
+            return oAuthTokenRepository.getByMemberId(foundMember.getId());
         }
 
-        return oAuthTokenRepository.getByMemberId(foundMember.getId());
+        return oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
     }
 
     public Long extractMemberId(final String accessToken) {
         tokenProvider.validateToken(accessToken);
         Long memberId = Long.valueOf(tokenProvider.getPayload(accessToken));
-        if (!memberRepository.existsById(memberId)) {
-            throw new NoSuchMemberException();
-        }
-
+        memberRepository.validateExistsById(memberId);
         return memberId;
     }
 }
