@@ -7,34 +7,15 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 public class OAuthAccessTokenResponse {
 
     private String accessToken;
-    private String expiresIn;
-    private String scope;
-    private String tokenType;
 
     private OAuthAccessTokenResponse() {
     }
 
-    public OAuthAccessTokenResponse(final String accessToken, final String expiresIn, final String scope,
-                                    final String tokenType) {
+    public OAuthAccessTokenResponse(final String accessToken) {
         this.accessToken = accessToken;
-        this.expiresIn = expiresIn;
-        this.scope = scope;
-        this.tokenType = tokenType;
     }
 
     public String getAccessToken() {
         return accessToken;
-    }
-
-    public String getExpiresIn() {
-        return expiresIn;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public String getTokenType() {
-        return tokenType;
     }
 }
