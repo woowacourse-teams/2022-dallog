@@ -11,12 +11,14 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구�
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상2_구독;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상3_구독;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -161,5 +163,16 @@ class SubscriptionRepositoryTest extends RepositoryTest {
 
         // then
         assertThat(subscriptionRepository.findAll()).hasSize(0);
+    }
+
+    @DisplayName("존재하지 않는 id인 경우 예외를 던진다.")
+    @Test
+    void 존재하지_않는_id인_경우_예외를_던진다() {
+        // given
+        Long id = 0L;
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionRepository.getById(id))
+                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 }
