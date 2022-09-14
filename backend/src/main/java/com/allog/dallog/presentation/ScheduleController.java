@@ -66,7 +66,7 @@ public class ScheduleController {
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long scheduleId) {
-        scheduleService.deleteById(scheduleId, loginMember.getId());
+        scheduleService.delete(scheduleId, loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }

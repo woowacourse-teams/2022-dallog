@@ -251,7 +251,7 @@ class ScheduleServiceTest extends ServiceTest {
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when
-        scheduleService.deleteById(알록달록_회의.getId(), 후디_id);
+        scheduleService.delete(알록달록_회의.getId(), 후디_id);
 
         // then
         assertThatThrownBy(() -> scheduleService.findById(알록달록_회의.getId()))
@@ -268,7 +268,7 @@ class ScheduleServiceTest extends ServiceTest {
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의.getId(), 리버_id))
+        assertThatThrownBy(() -> scheduleService.delete(알록달록_회의.getId(), 리버_id))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -281,7 +281,7 @@ class ScheduleServiceTest extends ServiceTest {
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.deleteById(알록달록_회의.getId() + 1, 후디_id))
+        assertThatThrownBy(() -> scheduleService.delete(알록달록_회의.getId() + 1, 후디_id))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 }
