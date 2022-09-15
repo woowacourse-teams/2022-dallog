@@ -16,6 +16,9 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
+import com.allog.dallog.domain.subscription.application.ColorPicker;
+import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -31,16 +34,18 @@ public class CategoryService {
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ColorPicker colorPicker;
 
     public CategoryService(final CategoryRepository categoryRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                           final ScheduleRepository scheduleRepository) {
+                           final ScheduleRepository scheduleRepository, final ColorPicker colorPicker) {
         this.categoryRepository = categoryRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.scheduleRepository = scheduleRepository;
+        this.colorPicker = colorPicker;
     }
 
     @Transactional
@@ -48,7 +53,13 @@ public class CategoryService {
         Member member = memberRepository.getById(memberId);
         Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
+        subscribeCategory(member, savedCategory);
         return new CategoryResponse(savedCategory);
+    }
+
+    private void subscribeCategory(final Member member, final Category category) {
+        Color color = Color.pick(colorPicker.pickNumber());
+        subscriptionRepository.save(new Subscription(member, category, color));
     }
 
     @Transactional
@@ -65,6 +76,11 @@ public class CategoryService {
         return response;
     }
 
+    public CategoryResponse findById(final Long id) {
+        Category category = categoryRepository.getById(id);
+        return new CategoryResponse(category);
+    }
+
     public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
@@ -74,14 +90,9 @@ public class CategoryService {
 
     public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByMemberIdAndNameContaining(name, memberId, pageable).getContent();
+                = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
-    }
-
-    public CategoryResponse findById(final Long id) {
-        Category category = categoryRepository.getById(id);
-        return new CategoryResponse(category);
     }
 
     @Transactional

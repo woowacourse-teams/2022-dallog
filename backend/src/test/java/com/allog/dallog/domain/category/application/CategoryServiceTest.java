@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
@@ -46,8 +47,10 @@ import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -108,6 +111,21 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
+    @DisplayName("카테고리 생성 시 자동으로 구독한다.")
+    @Test
+    void 카테고리_생성_시_자동으로_구독한다() {
+        // given
+        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+
+        // when
+        categoryService.save(파랑_id, 공통_일정_생성_요청);
+
+        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
+
+        // then
+        assertThat(subscriptions).hasSize(2);
+    }
+
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
@@ -150,6 +168,22 @@ class CategoryServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청))
                 .isInstanceOf(ExistExternalCategoryException.class);
+    }
+
+
+    @DisplayName("외부 카테고리 생성 시 자동으로 구독한다.")
+    @Test
+    void 외부_카테고리_생성_시_자동으로_구독한다() {
+        // given
+        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+
+        // when
+        categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);
+
+        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
+
+        // then
+        assertThat(subscriptions).hasSize(2);
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
