@@ -88,19 +88,18 @@ public class Schedule extends BaseEntity {
     }
 
     public void validateUpdatePossible(final Long memberId) {
-        if (this.category.isExternal()) {
-            throw new NoPermissionException("외부 연동 카테고리에는 일정을 변경할 수 없습니다.");
-        }
-        if (!this.category.isCreatorId(memberId)) {
-            throw new NoPermissionException();
-        }
+        validateModifyPossible(memberId);
     }
 
     public void validateDeletePossible(final Long memberId) {
-        if (this.category.isExternal()) {
-            throw new NoPermissionException("외부 연동 카테고리에는 일정을 삭제할 수 없습니다.");
+        validateModifyPossible(memberId);
+    }
+
+    private void validateModifyPossible(final Long memberId) {
+        if (category.isExternal()) {
+            throw new NoPermissionException("외부 연동 카테고리에는 일정을 변경할 수 없습니다.");
         }
-        if (!this.category.isCreatorId(memberId)) {
+        if (!category.isCreatorId(memberId)) {
             throw new NoPermissionException();
         }
     }

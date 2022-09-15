@@ -13,13 +13,11 @@ import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateReques
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
-import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +46,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
         Member member = memberRepository.getById(memberId);
-        Category category = new Category(request.getName(), member,
-                CategoryType.valueOf(request.getCategoryType().toUpperCase()));
+        Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
         return new CategoryResponse(savedCategory);
     }
@@ -87,11 +84,6 @@ public class CategoryService {
         return new CategoryResponse(category);
     }
 
-    public Category getCategory(final Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(NoSuchCategoryException::new);
-    }
-
     @Transactional
     public void update(final Long memberId, final Long id, final CategoryUpdateRequest request) {
         categoryRepository.validateExistsByIdAndMemberId(id, memberId);
@@ -100,7 +92,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteById(final Long memberId, final Long id) {
+    public void delete(final Long memberId, final Long id) {
         categoryRepository.validateExistsByIdAndMemberId(id, memberId);
         Category category = categoryRepository.getById(id);
 
@@ -116,17 +108,5 @@ public class CategoryService {
         if (category.isPersonal()) {
             throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
         }
-    }
-
-    @Transactional
-    public void deleteByMemberId(final Long memberId) {
-        List<Long> categoryIds = categoryRepository.findByMemberId(memberId)
-                .stream()
-                .map(Category::getId)
-                .collect(Collectors.toList());
-
-        scheduleRepository.deleteByCategoryIdIn(categoryIds);
-        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
-        categoryRepository.deleteByMemberId(memberId);
     }
 }

@@ -71,7 +71,7 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long categoryId) {
-        categoryService.deleteById(loginMember.getId(), categoryId);
+        categoryService.delete(loginMember.getId(), categoryId);
         return ResponseEntity.noContent().build();
     }
 }
