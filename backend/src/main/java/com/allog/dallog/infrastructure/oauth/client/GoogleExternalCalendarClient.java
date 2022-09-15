@@ -103,7 +103,16 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         LocalDateTime startDateTime = event.getStartDateTime();
         LocalDateTime endDateTime = event.getEndDateTime();
 
+        if (isAllDay(startDateTime, endDateTime)) {
+            endDateTime = endDateTime.minusMinutes(1);
+        }
+
         return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
                 endDateTime, event.getDescription(), CategoryType.GOOGLE);
+    }
+
+    private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+        return startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
+                && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
     }
 }
