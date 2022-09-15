@@ -3,10 +3,10 @@ package com.allog.dallog.domain.category.domain;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -79,8 +79,14 @@ public class Category extends BaseEntity {
         }
     }
 
-    public boolean isCreator(final Long memberId) {
-        return Objects.equals(member.getId(), memberId);
+    public void validateSubscriptionPossible(final Member member) {
+        if (this.categoryType == PERSONAL && !isCreatorId(member.getId())) {
+            throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
+        }
+    }
+
+    public boolean isCreatorId(final Long creatorId) {
+        return member.hasSameId(creatorId);
     }
 
     public boolean isPersonal() {

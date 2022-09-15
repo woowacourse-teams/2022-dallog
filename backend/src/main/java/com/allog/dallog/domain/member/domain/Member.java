@@ -2,6 +2,7 @@ package com.allog.dallog.domain.member.domain;
 
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.persistence.Column;
@@ -52,6 +53,11 @@ public class Member extends BaseEntity {
         this.socialType = socialType;
     }
 
+    public void change(final String displayName) {
+        validateDisplayName(displayName);
+        this.displayName = displayName;
+    }
+
     private void validateEmail(final String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         if (!matcher.matches()) {
@@ -65,9 +71,8 @@ public class Member extends BaseEntity {
         }
     }
 
-    public void change(final String displayName) {
-        validateDisplayName(displayName);
-        this.displayName = displayName;
+    public boolean hasSameId(final Long memberId) {
+        return Objects.equals(this.id, memberId);
     }
 
     public Long getId() {

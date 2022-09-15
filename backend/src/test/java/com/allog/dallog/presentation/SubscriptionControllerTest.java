@@ -234,7 +234,7 @@ class SubscriptionControllerTest extends ControllerTest {
 
         given(authService.extractMemberId(any())).willReturn(매트_응답.getId());
         willDoNothing().given(subscriptionService)
-                .deleteById(색상1_구독_응답.getId(), 매트_응답.getId());
+                .delete(색상1_구독_응답.getId(), 매트_응답.getId());
 
         // when & then
         mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 색상1_구독_응답.getId())
@@ -261,7 +261,7 @@ class SubscriptionControllerTest extends ControllerTest {
         willThrow(new NoPermissionException())
                 .willDoNothing()
                 .given(subscriptionService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/members/me/subscriptions/{subscriptionId}", 1L)

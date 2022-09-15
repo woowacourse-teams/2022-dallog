@@ -83,7 +83,7 @@ class SubscriptionRepositoryTest extends RepositoryTest {
         subscriptionRepository.save(색상3_구독(후디, FE_일정));
 
         // when
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(후디.getId());
+        List<Subscription> subscriptions = subscriptionRepository.getByMemberId(후디.getId());
 
         // then
         assertThat(subscriptions).hasSize(3);
@@ -96,7 +96,7 @@ class SubscriptionRepositoryTest extends RepositoryTest {
         Member 관리자 = memberRepository.save(관리자());
 
         // when
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(관리자.getId());
+        List<Subscription> subscriptions = subscriptionRepository.getByMemberId(관리자.getId());
 
         // then
         assertThat(subscriptions).isEmpty();
