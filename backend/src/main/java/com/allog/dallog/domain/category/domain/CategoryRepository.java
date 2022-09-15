@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.category.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -31,5 +32,11 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     default Category getById(final Long id) {
         return this.findById(id)
                 .orElseThrow(NoSuchCategoryException::new);
+    }
+
+    default void validateExistsByIdAndMemberId(final Long id, final Long memberId) {
+        if (!existsByIdAndMemberId(id, memberId)) {
+            throw new NoPermissionException();
+        }
     }
 }

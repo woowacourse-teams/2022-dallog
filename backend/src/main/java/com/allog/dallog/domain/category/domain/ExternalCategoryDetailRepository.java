@@ -13,7 +13,7 @@ public interface ExternalCategoryDetailRepository extends JpaRepository<External
 
     void deleteByCategoryId(final Long categoryId);
 
-    default void validateExistCategory(final String externalId, final List<Category> externalCategories) {
+    default void validateExistByExternalIdAndCategoryIn(final String externalId, final List<Category> externalCategories) {
         if (existsByExternalIdAndCategoryIn(externalId, externalCategories)) {
             throw new ExistExternalCategoryException();
         }

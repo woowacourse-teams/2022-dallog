@@ -2,7 +2,6 @@ package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -57,9 +56,10 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        List<Category> externalCategories = categoryRepository.findByMemberIdAndCategoryType(memberId,
-                CategoryType.GOOGLE);
-        externalCategoryDetailRepository.validateExistCategory(request.getExternalId(), externalCategories);
+        List<Category> externalCategories = categoryRepository
+                .findByMemberIdAndCategoryType(memberId, CategoryType.GOOGLE);
+        externalCategoryDetailRepository
+                .validateExistByExternalIdAndCategoryIn(request.getExternalId(), externalCategories);
 
         CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
         Category category = categoryRepository.getById(response.getId());
@@ -93,41 +93,28 @@ public class CategoryService {
     }
 
     @Transactional
-    public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
-        Category category = getCategory(categoryId);
-        validatePermission(memberId, categoryId);
-
+    public void update(final Long memberId, final Long id, final CategoryUpdateRequest request) {
+        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
+        Category category = categoryRepository.getById(id);
         category.changeName(request.getName());
     }
 
     @Transactional
-    public void deleteById(final Long memberId, final Long categoryId) {
-        validateCategoryExisting(categoryId);
-        validatePermission(memberId, categoryId);
-        validatePersonalCategory(categoryId);
+    public void deleteById(final Long memberId, final Long id) {
+        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
+        Category category = categoryRepository.getById(id);
 
-        scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
-        subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
-        externalCategoryDetailRepository.deleteByCategoryId(categoryId);
-        categoryRepository.deleteById(categoryId);
+        validateNotPersonalCategory(category);
+
+        scheduleRepository.deleteByCategoryIdIn(List.of(id));
+        subscriptionRepository.deleteByCategoryIdIn(List.of(id));
+        externalCategoryDetailRepository.deleteByCategoryId(id);
+        categoryRepository.deleteById(id);
     }
 
-    private void validatePersonalCategory(final Long categoryId) {
-        Category category = getCategory(categoryId);
+    private void validateNotPersonalCategory(final Category category) {
         if (category.isPersonal()) {
             throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validateCategoryExisting(final Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validatePermission(final Long memberId, final Long categoryId) {
-        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
-            throw new NoPermissionException();
         }
     }
 
@@ -141,11 +128,5 @@ public class CategoryService {
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
         subscriptionRepository.deleteByCategoryIdIn(categoryIds);
         categoryRepository.deleteByMemberId(memberId);
-    }
-
-    public void validateCreatorBy(final Long memberId, final Category category) {
-        if (!category.isCreatorId(memberId)) {
-            throw new NoPermissionException();
-        }
     }
 }
