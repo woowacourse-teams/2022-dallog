@@ -9,6 +9,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 public class CategoryFixtures {
@@ -87,5 +88,16 @@ public class CategoryFixtures {
 
     public static CategoryResponse 후디_JPA_스터디_응답(final MemberResponse creatorResponse) {
         return new CategoryResponse(5L, 후디_JPA_스터디_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+    }
+
+    public static Category setId(final Category category, final Long id) {
+        try {
+            Field idField = Category.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(category, id);
+            return category;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 }
