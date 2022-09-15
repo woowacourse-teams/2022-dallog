@@ -4,7 +4,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 
 public enum CategoryType {
 
-    NORMAL, PERSONAL, GOOGLE;
+    PUBLIC, PERSONAL, GOOGLE;
 
     public static CategoryType from(final String value) {
         try {

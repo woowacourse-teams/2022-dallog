@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.category.application;
 
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
@@ -13,7 +13,6 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
@@ -58,31 +57,34 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        List<Category> externalCategories = categoryRepository.findByMemberIdAndCategoryType(memberId, CategoryType.GOOGLE);
+        List<Category> externalCategories = categoryRepository.findByMemberIdAndCategoryType(memberId,
+                CategoryType.GOOGLE);
         externalCategoryDetailRepository.validateExistCategory(request.getExternalId(), externalCategories);
 
         CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
         Category category = categoryRepository.getById(response.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
+
         return response;
     }
 
-    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
+    public CategoriesResponse findPublicByName(final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
+                = categoryRepository.findByNameContainingAndCategoryType(name, PUBLIC, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
-    public CategoriesResponse findMineByName(final Long memberId, final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(memberId, name, pageable)
-                .getContent();
+    public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
+        List<Category> categories
+                = categoryRepository.findByNameContainingAndMemberId(name, memberId, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoryResponse findById(final Long id) {
-        return new CategoryResponse(getCategory(id));
+        Category category = categoryRepository.getById(id);
+        return new CategoryResponse(category);
     }
 
     public Category getCategory(final Long id) {

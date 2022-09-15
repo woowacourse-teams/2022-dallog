@@ -12,7 +12,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -115,7 +115,7 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 잘못된_이름_형식으로_카테고리를_생성하면_400_Bad_Request가_발생한다() throws Exception {
         // given
-        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, NORMAL);
+        CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, PUBLIC);
 
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
                 .given(categorySubscriptionService)
@@ -148,7 +148,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findPublicByName(any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
@@ -177,7 +177,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findPublicByName(any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
@@ -207,7 +207,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
@@ -238,7 +238,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)

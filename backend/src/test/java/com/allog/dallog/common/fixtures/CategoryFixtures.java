@@ -1,7 +1,7 @@
 package com.allog.dallog.common.fixtures;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.category.domain.Category;
@@ -15,23 +15,23 @@ public class CategoryFixtures {
 
     /* 공통 일정 카테고리 */
     public static final String 공통_일정_이름 = "공통 일정";
-    public static final CategoryCreateRequest 공통_일정_생성_요청 = new CategoryCreateRequest(공통_일정_이름, NORMAL);
+    public static final CategoryCreateRequest 공통_일정_생성_요청 = new CategoryCreateRequest(공통_일정_이름, PUBLIC);
 
     /* BE 일정 카테고리 */
     public static final String BE_일정_이름 = "BE 일정";
-    public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, NORMAL);
+    public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, PUBLIC);
 
     /* FE 일정 카테고리 */
     public static final String FE_일정_이름 = "FE 일정";
-    public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, NORMAL);
+    public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, PUBLIC);
 
     /* 매트 아고라 카테고리 */
     public static final String 매트_아고라_이름 = "매트 아고라";
-    public static final CategoryCreateRequest 매트_아고라_생성_요청 = new CategoryCreateRequest(매트_아고라_이름, NORMAL);
+    public static final CategoryCreateRequest 매트_아고라_생성_요청 = new CategoryCreateRequest(매트_아고라_이름, PUBLIC);
 
     /* 후디 JPA 스터디 카테고리 */
     public static final String 후디_JPA_스터디_이름 = "후디 JPA 스터디";
-    public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름, NORMAL);
+    public static final CategoryCreateRequest 후디_JPA_스터디_생성_요청 = new CategoryCreateRequest(후디_JPA_스터디_이름, PUBLIC);
 
     /* 내 일정 카테고리 */
     public static final String 내_일정_이름 = "내 일정";
@@ -70,22 +70,22 @@ public class CategoryFixtures {
     }
 
     public static CategoryResponse 공통_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(1L, 공통_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(1L, 공통_일정_이름, PUBLIC.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse BE_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(2L, BE_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(2L, BE_일정_이름, PUBLIC.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse FE_일정_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(3L, FE_일정_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(3L, FE_일정_이름, PUBLIC.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse 매트_아고라_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(4L, 매트_아고라_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(4L, 매트_아고라_이름, PUBLIC.name(), creatorResponse, LocalDateTime.now());
     }
 
     public static CategoryResponse 후디_JPA_스터디_응답(final MemberResponse creatorResponse) {
-        return new CategoryResponse(5L, 후디_JPA_스터디_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+        return new CategoryResponse(5L, 후디_JPA_스터디_이름, PUBLIC.name(), creatorResponse, LocalDateTime.now());
     }
 }

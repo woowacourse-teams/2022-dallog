@@ -43,9 +43,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesResponse> findByName(@RequestParam(defaultValue = "") final String name,
-                                                         final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
+    public ResponseEntity<CategoriesResponse> findPublicByName(@RequestParam(defaultValue = "") final String name,
+                                                               final Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findPublicByName(name, pageable));
     }
 
     @GetMapping("/{categoryId}")
@@ -57,7 +57,7 @@ public class CategoryController {
     public ResponseEntity<CategoriesResponse> findMyCategories(@AuthenticationPrincipal final LoginMember loginMember,
                                                                @RequestParam(defaultValue = "") final String name,
                                                                final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findMineByName(loginMember.getId(), name, pageable));
+        return ResponseEntity.ok(categoryService.findMyCategories(loginMember.getId(), name, pageable));
     }
 
     @PatchMapping("/{categoryId}")

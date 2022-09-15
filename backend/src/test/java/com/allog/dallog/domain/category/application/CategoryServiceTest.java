@@ -21,7 +21,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -113,7 +113,7 @@ class CategoryServiceTest extends ServiceTest {
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 새로운_카테고리를_생성_할_때_이름이_공백이거나_길이가_20을_초과하는_경우_예외를_던진다(final String name) {
         // given
-        CategoryCreateRequest request = new CategoryCreateRequest(name, NORMAL);
+        CategoryCreateRequest request = new CategoryCreateRequest(name, PUBLIC);
         Member 관리자 = memberRepository.save(관리자());
 
         // when & then
@@ -167,7 +167,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("일", request);
+        CategoriesResponse response = categoryService.findPublicByName("일", request);
 
         // then
         assertThat(response.getCategories())
@@ -184,7 +184,7 @@ class CategoryServiceTest extends ServiceTest {
         authService.generateToken(리버_인증_코드_토큰_요청());
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
+        CategoriesResponse response = categoryService.findPublicByName("", PageRequest.of(0, 10));
 
         // then
         assertThat(response.getCategories()).hasSize(0);
@@ -205,7 +205,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(1, 2);
 
         // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "", request);
+        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "", request);
 
         // then
         assertThat(response.getCategories())
@@ -229,7 +229,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "일", request);
+        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "일", request);
 
         // then
         assertThat(response.getCategories())

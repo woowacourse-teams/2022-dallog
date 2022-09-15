@@ -6,13 +6,13 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -51,7 +51,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("일", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("일", PUBLIC, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(3)
@@ -73,7 +73,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("파랑", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("파랑", PUBLIC, pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(0);
@@ -96,7 +96,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 8);
 
         // when
-        Slice<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "일", pageRequest);
+        Slice<Category> categories = categoryRepository.findByNameContainingAndMemberId("일", 관리자.getId(), pageRequest);
 
         // then
         assertAll(() -> {
@@ -182,7 +182,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRepository.deleteByMemberId(관리자.getId());
 
         // then
-        assertThat(categoryRepository.findByMemberIdLikeCategoryName(관리자.getId(), "", pageRequest))
+        assertThat(categoryRepository.findByNameContainingAndMemberId("", 관리자.getId(), pageRequest))
                 .hasSize(0);
     }
 }

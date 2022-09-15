@@ -48,7 +48,7 @@ public class Category extends BaseEntity {
         validateNameLength(name);
         this.name = name;
         this.member = member;
-        this.categoryType = CategoryType.NORMAL;
+        this.categoryType = CategoryType.PUBLIC;
     }
 
     public Category(final String name, final Member member, final CategoryType categoryType) {
