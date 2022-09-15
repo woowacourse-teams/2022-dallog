@@ -4,7 +4,7 @@ import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.integrationschedule.domain.Period;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,7 +24,7 @@ public class IntegrationScheduleDao {
                                                                   final LocalDateTime startDateTime,
                                                                   final LocalDateTime endDateTime) {
         if (categoryIds.isEmpty()) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
 
         String sql = "SELECT s.id as id, c.id as categoryId, s.title as title, "

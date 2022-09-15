@@ -16,15 +16,14 @@ import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.Subscriptions;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// TODO: 전체 리팩토링
 @Transactional(readOnly = true)
 @Service
 public class CalendarService {
@@ -54,8 +53,8 @@ public class CalendarService {
     public List<IntegrationSchedule> getSchedulesOfSubscriberIds(final List<Long> subscriberIds,
                                                                  final DateRangeRequest dateRange) {
         return subscriberIds.stream()
-                .flatMap(subscriberId -> getIntegrationSchedulesByMemberIdAndSubscriptions(subscriberId,
-                        dateRange).stream())
+                .flatMap(subscriberId ->
+                        getIntegrationSchedulesByMemberIdAndSubscriptions(subscriberId, dateRange).stream())
                 .distinct()
                 .collect(Collectors.toList());
     }
@@ -70,12 +69,11 @@ public class CalendarService {
 
     private List<IntegrationSchedule> getIntegrationSchedulesByMemberIdAndSubscriptions(final Long memberId,
                                                                                         final DateRangeRequest dateRange) {
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<Long> internalCategoryIds = findCheckedInternalCategories(subscriptions);
+        Subscriptions subscriptions = new Subscriptions(subscriptionService.getAllByMemberId(memberId));
+        List<Long> internalCategoryIds = subscriptions.findCheckedCategoryIdsBy(Category::isInternal);
 
-        List<IntegrationSchedule> integrationSchedules = new ArrayList<>(
-                integrationScheduleDao.findByCategoryIdInAndBetween(
-                        internalCategoryIds, dateRange.getStartDateTime(), dateRange.getEndDateTime()));
+        List<IntegrationSchedule> integrationSchedules = integrationScheduleDao.findByCategoryIdInAndBetween(
+                internalCategoryIds, dateRange.getStartDateTime(), dateRange.getEndDateTime());
 
         List<ExternalCategoryDetail> externalCategoryDetails = findCheckedExternalCategoryDetails(subscriptions);
         if (!externalCategoryDetails.isEmpty()) {
@@ -85,32 +83,15 @@ public class CalendarService {
         return integrationSchedules;
     }
 
-    private List<Long> findCheckedInternalCategories(final List<Subscription> subscriptions) {
-        return findCheckedSubscriptions(subscriptions)
+    private List<ExternalCategoryDetail> findCheckedExternalCategoryDetails(final Subscriptions subscriptions) {
+        return subscriptions.findCheckedCategoryIdsBy(Category::isExternal)
                 .stream()
-                .map(Subscription::getCategory)
-                .filter(Category::isInternal)
-                .map(Category::getId)
-                .collect(Collectors.toList());
-    }
-
-    private List<ExternalCategoryDetail> findCheckedExternalCategoryDetails(final List<Subscription> subscriptions) {
-        return findCheckedSubscriptions(subscriptions)
-                .stream()
-                .map(Subscription::getCategory)
-                .filter(Category::isExternal)
                 .map(this::getExternalCategoryDetail)
                 .collect(Collectors.toList());
     }
 
-    private List<Subscription> findCheckedSubscriptions(final List<Subscription> subscriptions) {
-        return subscriptions.stream()
-                .filter(Subscription::isChecked)
-                .collect(Collectors.toList());
-    }
-
-    private ExternalCategoryDetail getExternalCategoryDetail(final Category category) {
-        return externalCategoryDetailRepository.findByCategoryId(category.getId())
+    private ExternalCategoryDetail getExternalCategoryDetail(final Long categoryId) {
+        return externalCategoryDetailRepository.findByCategoryId(categoryId)
                 .orElseThrow(NoSuchExternalCategoryDetailException::new);
     }
 
