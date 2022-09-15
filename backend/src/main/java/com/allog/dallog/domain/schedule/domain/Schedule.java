@@ -1,7 +1,9 @@
 package com.allog.dallog.domain.schedule.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
+import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -83,6 +85,24 @@ public class Schedule extends BaseEntity {
     private void validateMemoLength(final String memo) {
         if (memo.length() > MAX_MEMO_LENGTH) {
             throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
+        }
+    }
+
+    public void validateUpdatePossible(final Long memberId) {
+        if (this.category.isExternal()) {
+            throw new NoPermissionException("외부 연동 카테고리에는 일정을 변경할 수 없습니다.");
+        }
+        if (!this.category.isCreatorId(memberId)) {
+            throw new NoPermissionException();
+        }
+    }
+
+    public void validateDeletePossible(final Long memberId) {
+        if (this.category.isExternal()) {
+            throw new NoPermissionException("외부 연동 카테고리에는 일정을 삭제할 수 없습니다.");
+        }
+        if (!this.category.isCreatorId(memberId)) {
+            throw new NoPermissionException();
         }
     }
 

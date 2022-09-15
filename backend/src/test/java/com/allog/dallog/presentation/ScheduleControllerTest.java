@@ -263,7 +263,7 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willDoNothing()
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/schedules/{scheduleId}", scheduleId)
@@ -286,7 +286,7 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willThrow(new NoPermissionException())
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
@@ -306,7 +306,7 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willThrow(new NoSuchScheduleException())
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)

@@ -43,7 +43,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/members/me/schedules")
-    public ResponseEntity<MemberScheduleResponses> findSchedulesByMemberId(
+    public ResponseEntity<MemberScheduleResponses> findByMemberId(
             @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
         MemberScheduleResponses response = calendarService.findSchedulesByMemberId(loginMember.getId(), request);
         return ResponseEntity.ok(response);
@@ -66,7 +66,7 @@ public class ScheduleController {
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long scheduleId) {
-        scheduleService.deleteById(scheduleId, loginMember.getId());
+        scheduleService.delete(scheduleId, loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }

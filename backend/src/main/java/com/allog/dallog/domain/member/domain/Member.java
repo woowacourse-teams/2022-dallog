@@ -53,11 +53,6 @@ public class Member extends BaseEntity {
         this.socialType = socialType;
     }
 
-    public void change(final String displayName) {
-        validateDisplayName(displayName);
-        this.displayName = displayName;
-    }
-
     private void validateEmail(final String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         if (!matcher.matches()) {
@@ -69,6 +64,11 @@ public class Member extends BaseEntity {
         if (displayName.isEmpty() || displayName.length() > MAX_DISPLAY_NAME_LENGTH) {
             throw new InvalidMemberException("이름 형식이 올바르지 않습니다.");
         }
+    }
+
+    public void change(final String displayName) {
+        validateDisplayName(displayName);
+        this.displayName = displayName;
     }
 
     public boolean hasSameId(final Long memberId) {
