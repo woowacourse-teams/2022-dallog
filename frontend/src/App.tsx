@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import useSnackBar from '@/hooks/useSnackBar';
@@ -62,6 +63,7 @@ function App() {
           <SnackBar />
         </Router>
       </ErrorBoundary>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
