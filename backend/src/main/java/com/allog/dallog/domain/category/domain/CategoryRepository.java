@@ -20,11 +20,13 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             + "WHERE c.member.id = :memberId AND c.name LIKE %:name%")
     Slice<Category> findByMemberIdLikeCategoryName(final Long memberId, final String name, final Pageable pageable);
 
-    List<Category> findByMemberId(Long memberId);
+    List<Category> findByMemberIdAndCategoryType(final Long memberId, final CategoryType categoryType);
 
-    boolean existsByIdAndMemberId(Long id, Long memberId);
+    List<Category> findByMemberId(final Long memberId);
 
-    void deleteByMemberId(Long memberId);
+    boolean existsByIdAndMemberId(final Long id, final Long memberId);
+
+    void deleteByMemberId(final Long memberId);
 
     default Category getById(final Long id) {
         return this.findById(id)

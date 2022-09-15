@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
-import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
+import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
@@ -107,7 +107,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
     @Test
     void 외부_캘린더를_중복하여_저장하면_상태코드_400을_반환한다() throws Exception {
         // given
-        willThrow(new DuplicatedExternalCategoryException())
+        willThrow(new ExistExternalCategoryException())
                 .given(categorySubscriptionService)
                 .save(any(), any(ExternalCategoryCreateRequest.class));
 

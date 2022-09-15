@@ -36,7 +36,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
+import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
@@ -149,7 +149,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // then
         assertThatThrownBy(() -> categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청))
-                .isInstanceOf(DuplicatedExternalCategoryException.class);
+                .isInstanceOf(ExistExternalCategoryException.class);
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")

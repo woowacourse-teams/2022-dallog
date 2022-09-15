@@ -13,12 +13,11 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
+import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
@@ -50,36 +49,22 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(NoSuchMemberException::new);
-        Category newCategory = new Category(request.getName(), member,
+        Member member = memberRepository.getById(memberId);
+        Category category = new Category(request.getName(), member,
                 CategoryType.valueOf(request.getCategoryType().toUpperCase()));
-        categoryRepository.save(newCategory);
-        return new CategoryResponse(newCategory);
+        Category savedCategory = categoryRepository.save(category);
+        return new CategoryResponse(savedCategory);
     }
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        List<Category> categories = categoryRepository.findByMemberId(memberId);
-        validateDuplicateExternalCategory(request.getExternalId(), categories);
+        List<Category> externalCategories = categoryRepository.findByMemberIdAndCategoryType(memberId, CategoryType.GOOGLE);
+        externalCategoryDetailRepository.validateExistCategory(request.getExternalId(), externalCategories);
 
         CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
-        Category category = getCategory(response.getId());
-
+        Category category = categoryRepository.getById(response.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
-
         return response;
-    }
-
-    private void validateDuplicateExternalCategory(final String externalId, final List<Category> categories) {
-        List<Category> externalCategories = categories.stream()
-                .filter(Category::isExternal)
-                .collect(Collectors.toList());
-
-        if (!externalCategories.isEmpty()
-                && externalCategoryDetailRepository.existsByExternalIdAndCategoryIn(externalId, externalCategories)) {
-            throw new DuplicatedExternalCategoryException();
-        }
     }
 
     public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
