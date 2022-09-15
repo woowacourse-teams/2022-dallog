@@ -42,8 +42,17 @@ public class Period {
         if (isNotOverlapped(otherPeriod)) {
             return List.of(this);
         }
-
         return sliceByOtherPeriod(otherPeriod);
+    }
+
+    private boolean isNotOverlapped(final Period otherPeriod) {
+        // other가 좌측 방향으로 멀리 떨어져 겹치지 않을때
+        boolean farFromLeftSideOfBase = otherPeriod.endDateTime.isBefore(startDateTime);
+
+        // other가 우측 방향으로 멀리 떨어져 겹치지 않을때
+        boolean farFromRightSideOfBase = otherPeriod.startDateTime.isAfter(endDateTime);
+
+        return farFromLeftSideOfBase || farFromRightSideOfBase;
     }
 
     private List<Period> sliceByOtherPeriod(final Period otherPeriod) {
@@ -57,16 +66,6 @@ public class Period {
         }
 
         return periods;
-    }
-
-    private boolean isNotOverlapped(final Period otherPeriod) {
-        boolean farFromLeftSideOfBase = otherPeriod.endDateTime.isBefore(startDateTime);
-        // other가 좌측 방향으로 멀리 떨어져 겹치지 않을때
-
-        boolean farFromRightSideOfBase = otherPeriod.startDateTime.isAfter(endDateTime);
-        // other가 우측 방향으로 멀리 떨어져 겹치지 않을때
-
-        return farFromLeftSideOfBase || farFromRightSideOfBase;
     }
 
     public LocalDateTime getStartDateTime() {
