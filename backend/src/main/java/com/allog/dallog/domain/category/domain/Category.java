@@ -86,7 +86,7 @@ public class Category extends BaseEntity {
     }
 
     public boolean isCreator(final Member creator) {
-        return this.member.equals(creator);
+        return member.equals(creator);
     }
 
     public boolean isPersonal() {
