@@ -1,10 +1,7 @@
 package com.allog.dallog.domain.member.domain;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
-import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,6 +69,10 @@ public class Member extends BaseEntity {
         if (displayName.isEmpty() || displayName.length() > MAX_DISPLAY_NAME_LENGTH) {
             throw new InvalidMemberException("이름 형식이 올바르지 않습니다.");
         }
+    }
+
+    public boolean hasSameId(final Long memberId) {
+        return Objects.equals(this.id, memberId);
     }
 
     public Long getId() {

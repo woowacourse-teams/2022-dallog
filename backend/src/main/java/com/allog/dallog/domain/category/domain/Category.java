@@ -80,13 +80,13 @@ public class Category extends BaseEntity {
     }
 
     public void validateSubscriptionPossible(final Member member) {
-        if (this.categoryType == PERSONAL && !isCreator(member)) {
+        if (this.categoryType == PERSONAL && !isCreatorId(member.getId())) {
             throw new NoPermissionException("구독 권한이 없는 카테고리입니다.");
         }
     }
 
-    public boolean isCreator(final Member creator) {
-        return member.equals(creator);
+    public boolean isCreatorId(final Long creatorId) {
+        return member.hasSameId(creatorId);
     }
 
     public boolean isPersonal() {

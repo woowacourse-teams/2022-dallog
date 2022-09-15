@@ -4,6 +4,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -64,11 +65,10 @@ class CategoryTest {
     @Test
     void 제공된_멤버의_ID와_카테고리를_생성한_멤버의_ID가_일치하지_않으면_false를_반환한다() {
         // given
-        Member 관리자 = 관리자();
         Category BE_일정 = BE_일정(관리자());
 
         // when
-        boolean actual = BE_일정.isCreator(관리자);
+        boolean actual = BE_일정.isCreatorId(999L);
 
         // then
         assertThat(actual).isFalse();

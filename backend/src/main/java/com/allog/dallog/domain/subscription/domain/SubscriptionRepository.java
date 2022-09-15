@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.subscription.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
@@ -22,9 +23,15 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
                 .orElseThrow(NoSuchSubscriptionException::new);
     }
 
-    default void validateExistsSubscription(final Long memberId, final Long categoryId) {
+    default void validateNotExistsByMemberIdAndCategoryId(final Long memberId, final Long categoryId) {
         if (existsByMemberIdAndCategoryId(memberId, categoryId)) {
             throw new ExistSubscriptionException();
+        }
+    }
+
+    default void validateExistsByIdAndMemberId(final Long id, final Long memberId) {
+        if (!existsByIdAndMemberId(id, memberId)) {
+            throw new NoPermissionException();
         }
     }
 }

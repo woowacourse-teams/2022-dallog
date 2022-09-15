@@ -35,7 +35,7 @@ public class SubscriptionService {
 
     @Transactional
     public SubscriptionResponse save(final Long memberId, final Long categoryId) {
-        subscriptionRepository.validateExistsSubscription(memberId, categoryId);
+        subscriptionRepository.validateNotExistsByMemberIdAndCategoryId(memberId, categoryId);
 
         Member member = memberRepository.getById(memberId);
         Category category = categoryRepository.getById(categoryId);
@@ -75,17 +75,15 @@ public class SubscriptionService {
 
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
+        subscriptionRepository.validateExistsByIdAndMemberId(id, memberId);
         Subscription subscription = subscriptionRepository.getById(id);
-        Member member = memberRepository.getById(memberId);
-        subscription.validateUpdatePossible(member);
         subscription.change(request.getColor(), request.isChecked());
     }
 
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Subscription subscription = subscriptionRepository.getById(id);
-        Member member = memberRepository.getById(memberId);
-        subscription.validateDeletePossible(member);
+        subscription.validateDeletePossible(memberId);
         subscriptionRepository.deleteById(id);
     }
 }
