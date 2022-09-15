@@ -24,15 +24,7 @@ include::{snippets}/externalCalendar/save/request-fields.adoc[]
 
 include::{snippets}/externalCalendar/save/http-response.adoc[]
 
-=== 자신의 외부 캘린더 중복 저장 시 예외 발생
-
-==== HTTP Request
-
-include::{snippets}/externalCalendar/save/failByDuplicate/http-request.adoc[]
-
-==== Request Fields
-
-include::{snippets}/externalCalendar/save/failByDuplicate/request-fields.adoc[]
+=== 자신의 외부 캘린더 저장 (중복 저장할 경우)
 
 ==== HTTP Response
 
