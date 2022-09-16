@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.subscription.application;
 
-
 import static com.allog.dallog.common.fixtures.AuthFixtures.관리자_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.매트_인증_코드_토큰_요청;
