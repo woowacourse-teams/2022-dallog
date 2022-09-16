@@ -6,6 +6,7 @@ import useToggle from '@/hooks/useToggle';
 import { OPTION_HEIGHT } from '@/constants/style';
 
 import {
+  dimmerStyle,
   hiddenStyle,
   labelStyle,
   optionLayoutStyle,
@@ -35,8 +36,14 @@ function Select({ options, value, onChange }: SelectProps) {
     ref.current?.scrollTo(0, selectedPosition * OPTION_HEIGHT);
   });
 
+  const handleClickDimmer = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleSelectOpen();
+  };
+
   return (
     <div>
+      <div css={dimmerStyle(isSelectOpen)} onClick={handleClickDimmer}></div>
       <div css={selectStyle} onClick={toggleSelectOpen}>
         {value || '옵션 선택'}
       </div>

@@ -6,6 +6,16 @@ const hiddenStyle = css`
   display: none;
 `;
 
+const dimmerStyle = (isSelectOpen: boolean) => css`
+  display: ${!isSelectOpen && 'none'};
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: transparent;
+`;
+
 const selectStyle = ({ colors }: Theme) => css`
   width: 42.75rem;
   height: 11.75rem;
@@ -16,6 +26,8 @@ const selectStyle = ({ colors }: Theme) => css`
   font-size: 4rem;
   text-align: center;
   line-height: 12rem;
+
+  cursor: pointer;
 
   &:focus {
     outline: none;
@@ -66,4 +78,12 @@ const relativeStyle = css`
   position: relative;
 `;
 
-export { labelStyle, hiddenStyle, selectStyle, optionStyle, optionLayoutStyle, relativeStyle };
+export {
+  dimmerStyle,
+  labelStyle,
+  hiddenStyle,
+  selectStyle,
+  optionStyle,
+  optionLayoutStyle,
+  relativeStyle,
+};
