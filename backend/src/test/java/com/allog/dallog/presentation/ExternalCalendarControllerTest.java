@@ -65,7 +65,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("externalCalendar/getExternalCalendar",
+                .andDo(document("external-calendars/get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -79,8 +79,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
     @Test
     void 외부_캘린더를_카테고리로_저장하면_상태코드_201을_반환한다() throws Exception {
         // given
-        given(categoryService.save(any(), any(ExternalCategoryCreateRequest.class))).willReturn(
-                공통_일정_응답(후디_응답));
+        given(categoryService.save(any(), any(ExternalCategoryCreateRequest.class))).willReturn(공통_일정_응답(후디_응답));
 
         // when & then
         mockMvc.perform(post("/api/external-calendars/me")
@@ -90,7 +89,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(우아한테크코스_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("externalCalendar/save",
+                .andDo(document("external-calendars/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -103,7 +102,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @DisplayName("외부 캘린더를 중복하여 저장하면 상태코드 400을 반환한다.")
+    @DisplayName("외부 캘린더를 카테고리로 저장하면 상태코드 201을 반환한다.")
     @Test
     void 외부_캘린더를_중복하여_저장하면_상태코드_400을_반환한다() throws Exception {
         // given
@@ -119,7 +118,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(우아한테크코스_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("externalCalendar/save/failByDuplicate",
+                .andDo(document("external-calendars/duplicated-save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

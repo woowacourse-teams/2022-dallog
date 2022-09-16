@@ -162,6 +162,7 @@ class SchedulerServiceTest extends ServiceTest {
 
         SubscriptionResponse 매트_FE_일정_구독 = subscriptionService.save(매트_id, FE_일정.getId());
         SubscriptionResponse 리버_FE_일정_구독 = subscriptionService.save(리버_id, FE_일정.getId());
+
         subscriptionService.update(매트_FE_일정_구독.getId(), 매트_id,
                 new SubscriptionUpdateRequest(Color.COLOR_1, false));
         subscriptionService.update(리버_FE_일정_구독.getId(), 리버_id,
@@ -173,12 +174,13 @@ class SchedulerServiceTest extends ServiceTest {
 
         // then
         assertAll(() -> {
-            assertThat(actual).hasSize(6);
+            assertThat(actual).hasSize(7);
             assertThat(actual.stream().map(PeriodResponse::getStartDateTime)).containsExactly(날짜_2022년_7월_1일_0시_0분,
                     날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_1분, 날짜_2022년_7월_20일_0시_0분,
-                    날짜_2022년_7월_27일_0시_0분);
+                    날짜_2022년_7월_27일_0시_0분, 날짜_2022년_8월_15일_14시_0분);
             assertThat(actual.stream().map(PeriodResponse::getEndDateTime)).containsExactly(날짜_2022년_7월_7일_16시_0분,
                     날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_20일_11시_59분,
+                    날짜_2022년_7월_27일_11시_59분,
                     LocalDateTime.of(2022, 8, 31, 0, 0));
         });
     }

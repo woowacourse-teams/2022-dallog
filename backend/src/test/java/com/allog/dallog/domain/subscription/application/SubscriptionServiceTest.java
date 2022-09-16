@@ -2,14 +2,18 @@ package com.allog.dallog.domain.subscription.application;
 
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.관리자_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.매트_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.파랑_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -17,8 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -39,6 +49,15 @@ class SubscriptionServiceTest extends ServiceTest {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     @DisplayName("새로운 구독을 생성한다.")
     @Test
     void 새로운_구독을_생성한다() {
@@ -46,8 +65,10 @@ class SubscriptionServiceTest extends ServiceTest {
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+
         // when
-        SubscriptionResponse response = subscriptionService.save(후디_id, BE_일정.getId());
+        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
 
         // then
         assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
@@ -74,7 +95,6 @@ class SubscriptionServiceTest extends ServiceTest {
         // given
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        subscriptionService.save(후디_id, BE_일정.getId());
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.save(후디_id, BE_일정.getId()))
@@ -87,7 +107,9 @@ class SubscriptionServiceTest extends ServiceTest {
         // given
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        SubscriptionResponse 빨간색_구독 = subscriptionService.save(후디_id, BE_일정.getId());
+
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        SubscriptionResponse 빨간색_구독 = subscriptionService.save(리버_id, BE_일정.getId());
 
         // when
         SubscriptionResponse foundResponse = subscriptionService.findById(빨간색_구독.getId());
@@ -134,12 +156,14 @@ class SubscriptionServiceTest extends ServiceTest {
         // given
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        SubscriptionResponse response = subscriptionService.save(후디_id, BE_일정.getId());
+
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
         Color color = Color.COLOR_1;
 
         // when
         SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(color, true);
-        subscriptionService.update(response.getId(), 후디_id, request);
+        subscriptionService.update(response.getId(), 리버_id, request);
 
         // then
         assertAll(() -> {
@@ -155,13 +179,15 @@ class SubscriptionServiceTest extends ServiceTest {
         // given
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        SubscriptionResponse response = subscriptionService.save(후디_id, BE_일정.getId());
+
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
 
         // when
         SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(colorCode, true);
 
         // then
-        assertThatThrownBy(() -> subscriptionService.update(response.getId(), 후디_id, request))
+        assertThatThrownBy(() -> subscriptionService.update(response.getId(), 리버_id, request))
                 .isInstanceOf(InvalidSubscriptionException.class);
     }
 
@@ -205,13 +231,12 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 자신이_만든_카테고리에_대한_구독을_삭제할_경우_예외를_던진다() {
         // given
-        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
-
-        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
-        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(관리자_id, 공통_일정.getId());
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        Subscription 공통_일정_구독 = subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자_id))
+        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 }

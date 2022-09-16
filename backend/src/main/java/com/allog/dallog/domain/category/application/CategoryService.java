@@ -39,7 +39,8 @@ public class CategoryService {
     public CategoryService(final CategoryRepository categoryRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                           final ScheduleRepository scheduleRepository, final ColorPicker colorPicker) {
+                           final ScheduleRepository scheduleRepository,
+                           final ColorPicker colorPicker) {
         this.categoryRepository = categoryRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.memberRepository = memberRepository;
@@ -53,7 +54,7 @@ public class CategoryService {
         Member member = memberRepository.getById(memberId);
         Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
-        subscribeCategory(member, savedCategory);
+        subscribeCategory(member, category);
         return new CategoryResponse(savedCategory);
     }
 
@@ -76,12 +77,7 @@ public class CategoryService {
         return response;
     }
 
-    public CategoryResponse findById(final Long id) {
-        Category category = categoryRepository.getById(id);
-        return new CategoryResponse(category);
-    }
-
-    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
+    public CategoriesResponse findPublicByName(final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
 
@@ -90,9 +86,14 @@ public class CategoryService {
 
     public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
+                = categoryRepository.findByNameContainingAndMemberId(name, memberId, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
+    }
+
+    public CategoryResponse findById(final Long id) {
+        Category category = categoryRepository.getById(id);
+        return new CategoryResponse(category);
     }
 
     @Transactional
