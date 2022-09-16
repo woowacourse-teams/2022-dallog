@@ -12,8 +12,8 @@ public class TypedSchedules {
         initializeValues();
         for (IntegrationSchedule integrationSchedule : integrationSchedules) {
             ScheduleType scheduleType = ScheduleType.from(integrationSchedule);
-            IntegrationSchedules sortedSchedules = values.get(scheduleType);
-            sortedSchedules.add(integrationSchedule);
+            IntegrationSchedules schedules = values.get(scheduleType);
+            schedules.add(integrationSchedule);
         }
     }
 
