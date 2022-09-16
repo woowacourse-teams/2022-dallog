@@ -16,6 +16,8 @@ interface FieldsetProps extends React.HTMLAttributes<HTMLInputElement> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValid?: boolean;
   errorMessage?: string;
+  min?: string | number;
+  max?: string | number;
 }
 
 function Fieldset({
@@ -32,6 +34,8 @@ function Fieldset({
   labelText,
   isValid,
   errorMessage,
+  min,
+  max,
 }: FieldsetProps) {
   const theme = useTheme();
 
@@ -53,6 +57,8 @@ function Fieldset({
         ref={refProp}
         disabled={disabled}
         onChange={onChange}
+        min={min}
+        max={max}
       />
       {errorMessage && <span css={errorMessageStyle(theme, isValid)}>{errorMessage}</span>}
     </div>
