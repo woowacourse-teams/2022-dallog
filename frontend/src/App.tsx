@@ -34,6 +34,7 @@ function App() {
       queries: {
         retry: 1,
         retryDelay: 0,
+        staleTime: 1 * 60 * 1000,
         onError,
       },
       mutations: {
