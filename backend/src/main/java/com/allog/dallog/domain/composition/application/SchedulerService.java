@@ -31,7 +31,7 @@ public class SchedulerService {
 
     public List<PeriodResponse> getAvailablePeriods(final Long categoryId, final DateRangeRequest dateRange) {
         List<Long> subscriberIds = getSubscriberIds(categoryId);
-        List<IntegrationSchedule> schedules = calendarService.getSchedulesOfSubscriberIds(subscriberIds, dateRange);
+        List<IntegrationSchedule> schedules = calendarService.getSchedulesBySubscriberIds(subscriberIds, dateRange);
 
         Scheduler scheduler = new Scheduler(schedules, dateRange.getStartDateTime(), dateRange.getEndDateTime());
 

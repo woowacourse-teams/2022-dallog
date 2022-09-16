@@ -1,20 +1,17 @@
 package com.allog.dallog.domain.composition.application;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
-import com.allog.dallog.domain.category.exception.NoSuchExternalCategoryDetailException;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.integrationschedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,45 +26,43 @@ public class CalendarService {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final SubscriptionService subscriptionService;
     private final IntegrationScheduleDao integrationScheduleDao;
+    private final SubscriptionRepository subscriptionRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final OAuthClient oAuthClient;
     private final ExternalCalendarClient externalCalendarClient;
 
-    public CalendarService(final SubscriptionService subscriptionService,
-                           final IntegrationScheduleDao integrationScheduleDao,
+    public CalendarService(final IntegrationScheduleDao integrationScheduleDao,
+                           final SubscriptionRepository subscriptionRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final OAuthTokenRepository oAuthTokenRepository, final OAuthClient oAuthClient,
                            final ExternalCalendarClient externalCalendarClient) {
-        this.subscriptionService = subscriptionService;
         this.integrationScheduleDao = integrationScheduleDao;
+        this.subscriptionRepository = subscriptionRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.oAuthClient = oAuthClient;
         this.externalCalendarClient = externalCalendarClient;
     }
 
-    public List<IntegrationSchedule> getSchedulesOfSubscriberIds(final List<Long> subscriberIds,
+    public List<IntegrationSchedule> getSchedulesBySubscriberIds(final List<Long> subscriberIds,
                                                                  final DateRangeRequest dateRange) {
         return subscriberIds.stream()
-                .flatMap(subscriberId ->
-                        getIntegrationSchedulesByMemberIdAndSubscriptions(subscriberId, dateRange).stream())
+                .flatMap(subscriberId -> getIntegrationSchedulesByMemberId(subscriberId, dateRange).stream())
                 .distinct()
                 .collect(Collectors.toList());
     }
 
     public MemberScheduleResponses findSchedulesByMemberId(final Long memberId, final DateRangeRequest dateRange) {
-        Subscriptions subscriptions = new Subscriptions(subscriptionService.getAllByMemberId(memberId));
-        List<IntegrationSchedule> integrationSchedules =
-                getIntegrationSchedulesByMemberIdAndSubscriptions(memberId, dateRange);
+        Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
+        List<IntegrationSchedule> integrationSchedules = getIntegrationSchedulesByMemberId(memberId, dateRange);
         return new MemberScheduleResponses(subscriptions, new TypedSchedules(integrationSchedules));
     }
 
-    private List<IntegrationSchedule> getIntegrationSchedulesByMemberIdAndSubscriptions(final Long memberId,
-                                                                                        final DateRangeRequest dateRange) {
-        Subscriptions subscriptions = new Subscriptions(subscriptionService.getAllByMemberId(memberId));
+    private List<IntegrationSchedule> getIntegrationSchedulesByMemberId(final Long memberId,
+                                                                        final DateRangeRequest dateRange) {
+        Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
         List<Long> internalCategoryIds = subscriptions.findCheckedCategoryIdsBy(Category::isInternal);
 
         List<IntegrationSchedule> integrationSchedules = integrationScheduleDao.findByCategoryIdInAndBetween(
@@ -84,28 +79,20 @@ public class CalendarService {
     private List<ExternalCategoryDetail> findCheckedExternalCategoryDetails(final Subscriptions subscriptions) {
         return subscriptions.findCheckedCategoryIdsBy(Category::isExternal)
                 .stream()
-                .map(this::getExternalCategoryDetail)
+                .map(externalCategoryDetailRepository::getByCategoryId)
                 .collect(Collectors.toList());
-    }
-
-    private ExternalCategoryDetail getExternalCategoryDetail(final Long categoryId) {
-        return externalCategoryDetailRepository.findByCategoryId(categoryId)
-                .orElseThrow(NoSuchExternalCategoryDetailException::new);
     }
 
     private List<IntegrationSchedule> getExternalSchedules(final Long memberId, final DateRangeRequest request,
                                                            final List<ExternalCategoryDetail> externalCategories) {
-        String refreshToken = getOAuthToken(memberId).getRefreshToken();
+        String refreshToken = oAuthTokenRepository.getByMemberId(memberId)
+                .getRefreshToken();
         String accessToken = oAuthClient.getAccessToken(refreshToken)
                 .getValue();
 
         return externalCategories.stream()
                 .flatMap(externalCategory -> flatIntegrationSchedules(request, accessToken, externalCategory))
                 .collect(Collectors.toList());
-    }
-
-    private OAuthToken getOAuthToken(final Long memberId) {
-        return oAuthTokenRepository.findByMemberId(memberId).orElseThrow(NoSuchOAuthTokenException::new);
     }
 
     private Stream<IntegrationSchedule> flatIntegrationSchedules(final DateRangeRequest dateRangeRequest,

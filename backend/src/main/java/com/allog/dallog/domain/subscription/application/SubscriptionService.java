@@ -68,11 +68,6 @@ public class SubscriptionService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: 상위 Service인 CalanderService에서만 사용하는 메서드입니다. 삭제 예정
-    public List<Subscription> getAllByMemberId(final Long memberId) {
-        return subscriptionRepository.findByMemberId(memberId);
-    }
-
     @Transactional
     public void update(final Long id, final Long memberId, final SubscriptionUpdateRequest request) {
         subscriptionRepository.validateExistsByIdAndMemberId(id, memberId);

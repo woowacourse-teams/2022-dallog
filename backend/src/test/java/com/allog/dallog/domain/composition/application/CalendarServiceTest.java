@@ -175,7 +175,7 @@ class CalendarServiceTest extends ServiceTest {
         subscriptionService.save(리버_id, FE_일정.getId());
 
         // when
-        List<IntegrationSchedule> actual = calendarService.getSchedulesOfSubscriberIds(
+        List<IntegrationSchedule> actual = calendarService.getSchedulesBySubscriberIds(
                 List.of(후디_id, 파랑_id, 매트_id, 리버_id), new DateRangeRequest("2022-07-07T16:00", "2022-08-15T14:00"));
 
         // then

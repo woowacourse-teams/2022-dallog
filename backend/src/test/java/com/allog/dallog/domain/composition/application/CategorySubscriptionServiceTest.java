@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.AuthFixtures;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class CategorySubscriptionServiceTest extends ServiceTest {
     private CategorySubscriptionService categorySubscriptionService;
 
     @Autowired
-    private SubscriptionService subscriptionService;
+    private SubscriptionRepository subscriptionRepository;
 
     @DisplayName("카테고리 생성 시 자동으로 구독한다.")
     @Test
@@ -30,7 +30,7 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         // when
         categorySubscriptionService.save(파랑_id, 공통_일정_생성_요청);
 
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(파랑_id);
 
         // then
         assertThat(subscriptions).hasSize(2);
@@ -45,7 +45,7 @@ class CategorySubscriptionServiceTest extends ServiceTest {
         // when
         categorySubscriptionService.save(파랑_id, 대한민국_공휴일_생성_요청);
 
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(파랑_id);
 
         // then
         assertThat(subscriptions).hasSize(2);
