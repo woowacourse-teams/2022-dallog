@@ -1,5 +1,6 @@
 package com.allog.dallog.presentation;
 
+import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_응답;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
@@ -44,14 +45,14 @@ class AuthControllerTest extends ControllerTest {
         given(authService.generateGoogleLink(any())).willReturn(OAuth_로그인_링크);
 
         // when & then
-        mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", OAUTH_PROVIDER,
+        mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", GOOGLE_PROVIDER,
                         "https://dallog.me/oauth"))
                 .andDo(print())
-                .andDo(document("auth/link",
+                .andDo(document("auth/generateLink",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
-                                parameterWithName("oauthProvider").description("OAuth 로그인 제공자")
+                                parameterWithName("oauthProvider").description("OAuth 로그인 제공자 (GOOGLE)")
                         ),
                         requestParameters(
                                 parameterWithName("redirectUri").description("OAuth Redirect URI")
@@ -67,7 +68,6 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-//        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
         given(authService.generateToken(any())).willReturn(MEMBER_인증_코드_토큰_응답());
 
         // when & then
@@ -76,7 +76,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/token",
+                .andDo(document("auth/generateToken",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -86,6 +86,9 @@ class AuthControllerTest extends ControllerTest {
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("OAuth 로그인 인증 코드"),
                                 fieldWithPath("redirectUri").type(JsonFieldType.STRING)
                                         .description("OAuth Redirect URI")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("달록 Access Token")
                         )
                 ))
                 .andExpect(status().isOk());
@@ -103,7 +106,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/exception/token",
+                .andDo(document("auth/generateToken/failByResourceServerError",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

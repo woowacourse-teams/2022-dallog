@@ -2,144 +2,132 @@
 
 === 카테고리 생성
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/save/http-request.adoc[]
+include::{snippets}/category/save/http-request.adoc[]
 
-==== Response
+==== Request Fields
 
-include::{snippets}/categories/save/http-response.adoc[]
+include::{snippets}/category/save/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/save/http-response.adoc[]
+
+==== Response Fields
+
+include::{snippets}/category/save/response-fields.adoc[]
 
 === 카테고리 생성 (유효하지 않은 카테고리 이름)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/categories/save/badRequest/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/categories/save/badRequest/http-response.adoc[]
+include::{snippets}/category/save/failByInvalidNameFormat/http-response.adoc[]
 
 === 전체 카테고리 조회
 
 ==== Request
 
-include::{snippets}/categories/findAll/http-request.adoc[]
+include::{snippets}/category/findAllByName/allByNoName/http-request.adoc[]
 
-==== RequestParameters
+==== Request Parameters
 
-include::{snippets}/categories/findAll/request-parameters.adoc[]
+include::{snippets}/category/findAllByName/allByNoName/request-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/findAll/http-response.adoc[]
+include::{snippets}/category/findAllByName/allByNoName/http-response.adoc[]
 
-=== 카테고리 제목 조회
+=== 전체 카테고리 목록 이름으로 필터링
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/findAllLikeName/http-request.adoc[]
+include::{snippets}/category/findAllByName/fileterByName/http-request.adoc[]
 
-==== RequestParameters
+==== Request Parameters
 
-include::{snippets}/categories/findAllLikeName/request-parameters.adoc[]
+include::{snippets}/category/findAllByName/fileterByName/request-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/findAllLikeName/http-response.adoc[]
+include::{snippets}/category/findAllByName/fileterByName/http-response.adoc[]
 
 === 자신이 생성한 카테고리 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/findMine/http-request.adoc[]
+include::{snippets}/category/findMineByName/allByNoName/http-request.adoc[]
 
-==== RequestParameters
+==== Request Parameters
 
-include::{snippets}/categories/findMine/request-parameters.adoc[]
+include::{snippets}/category/findMineByName/allByNoName/request-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/findMine/response-body.adoc[]
+include::{snippets}/category/findMineByName/allByNoName/http-response.adoc[]
 
 === ID를 통한 카테고리 단건 조회
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/findById/http-request.adoc[]
+include::{snippets}/category/findById/http-request.adoc[]
 
-==== PathParameters
+==== Path Parameters
 
-include::{snippets}/categories/findById/path-parameters.adoc[]
+include::{snippets}/category/findById/path-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/findById/http-response.adoc[]
+include::{snippets}/category/findById/http-response.adoc[]
 
 === ID를 통한 카테고리 단건 조회 (존재하지 않는 경우)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/categories/findById/notFound/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/categories/findById/notFound/http-response.adoc[]
+include::{snippets}/category/findById/failByNoCategory/http-response.adoc[]
 
 === 카테고리 수정
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/update/http-request.adoc[]
+include::{snippets}/category/update/http-request.adoc[]
 
-==== PathParameters
+==== Path Parameters
 
-include::{snippets}/categories/update/path-parameters.adoc[]
+include::{snippets}/category/update/path-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/update/http-response.adoc[]
+include::{snippets}/category/update/http-response.adoc[]
 
 === 카테고리 수정 (존재하지 않는 경우)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/categories/update/notFound/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/categories/update/notFound/http-response.adoc[]
+include::{snippets}/category/update/failByNoCategory/http-response.adoc[]
 
 === 카테고리 수정 (유효하지 않은 카테고리 이름)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/categories/update/badRequest/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/categories/update/badRequest/http-response.adoc[]
+include::{snippets}/category/update/failByInvalidNameFormat/http-response.adoc[]
 
 === 카테고리 삭제
 
-==== Request
+==== HTTP Request
 
-include::{snippets}/categories/delete/http-request.adoc[]
+include::{snippets}/category/delete/http-request.adoc[]
 
-==== PathParameters
+==== Path Parameters
 
-include::{snippets}/categories/delete/path-parameters.adoc[]
+include::{snippets}/category/delete/path-parameters.adoc[]
 
-==== Response
+==== HTTP Response
 
-include::{snippets}/categories/delete/http-response.adoc[]
+include::{snippets}/category/delete/http-response.adoc[]
 
 === 카테고리 삭제 (존재하지 않는 경우)
 
-==== Request
+==== HTTP Response
 
-include::{snippets}/categories/delete/notFound/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/categories/delete/notFound/http-response.adoc[]
+include::{snippets}/category/delete/failByNoCategory/http-response.adoc[]

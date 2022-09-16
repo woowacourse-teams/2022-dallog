@@ -64,7 +64,7 @@ class SchedulerControllerTest extends ControllerTest {
                                 1L, startDateTime, endDateTime)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("scheduler/category/available-periods",
+                .andDo(document("scheduler/scheduleByCategory",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
