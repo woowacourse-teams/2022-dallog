@@ -15,7 +15,6 @@ import com.allog.dallog.domain.integrationschedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -59,11 +58,10 @@ public class CalendarService {
                 .collect(Collectors.toList());
     }
 
-    public MemberScheduleResponses findSchedulesByMemberId(final Long memberId,
-                                                           final DateRangeRequest dateRange) {
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(memberId);
-        List<IntegrationSchedule> integrationSchedules = getIntegrationSchedulesByMemberIdAndSubscriptions(memberId,
-                dateRange);
+    public MemberScheduleResponses findSchedulesByMemberId(final Long memberId, final DateRangeRequest dateRange) {
+        Subscriptions subscriptions = new Subscriptions(subscriptionService.getAllByMemberId(memberId));
+        List<IntegrationSchedule> integrationSchedules =
+                getIntegrationSchedulesByMemberIdAndSubscriptions(memberId, dateRange);
         return new MemberScheduleResponses(subscriptions, new TypedSchedules(integrationSchedules));
     }
 
