@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.category.application;
 
-import static com.allog.dallog.domain.category.domain.CategoryType.PUBLIC;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -65,16 +65,16 @@ public class CategoryService {
         return response;
     }
 
-    public CategoriesResponse findPublicByName(final String name, final Pageable pageable) {
+    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndCategoryType(name, PUBLIC, pageable).getContent();
+                = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndMemberId(name, memberId, pageable).getContent();
+                = categoryRepository.findByMemberIdAndNameContaining(name, memberId, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }

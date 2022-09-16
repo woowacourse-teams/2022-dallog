@@ -14,10 +14,10 @@ public class CategoriesResponse {
 
     public CategoriesResponse(final int page, final List<Category> categories) {
         this.page = page;
-        this.categories = toDtos(categories);
+        this.categories = toResponses(categories);
     }
 
-    private List<CategoryResponse> toDtos(final List<Category> categories) {
+    private List<CategoryResponse> toResponses(final List<Category> categories) {
         return categories.stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());

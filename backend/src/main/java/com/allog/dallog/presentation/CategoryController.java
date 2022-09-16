@@ -45,7 +45,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<CategoriesResponse> findPublicByName(@RequestParam(defaultValue = "") final String name,
                                                                final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findPublicByName(name, pageable));
+        return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
     }
 
     @GetMapping("/{categoryId}")

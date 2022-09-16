@@ -22,7 +22,7 @@ public class CategoryCreateRequest {
     }
 
     public Category toEntity(final Member member) {
-        return new Category(name, member, CategoryType.valueOf(categoryType.toUpperCase()));
+        return new Category(name, member, CategoryType.from(categoryType));
     }
 
     public String getName() {
