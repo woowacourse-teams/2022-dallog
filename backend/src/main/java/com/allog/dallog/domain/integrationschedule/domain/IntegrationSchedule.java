@@ -2,11 +2,8 @@ package com.allog.dallog.domain.integrationschedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryType;
-import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 public class IntegrationSchedule {
@@ -53,15 +50,7 @@ public class IntegrationSchedule {
                 && period.calculateDayDifference() < ONE_DAY;
     }
 
-    public Color findSubscriptionColor(final List<Subscription> subscriptions) {
-        return subscriptions.stream()
-                .filter(this::isSameCategory)
-                .findAny()
-                .orElseThrow(() -> new NoSuchCategoryException("구독하지 않은 카테고리 입니다."))
-                .getColor();
-    }
-
-    private boolean isSameCategory(final Subscription subscription) {
+    public boolean isSameCategory(final Subscription subscription) {
         Category category = subscription.getCategory();
         return category.getId().equals(categoryId);
     }

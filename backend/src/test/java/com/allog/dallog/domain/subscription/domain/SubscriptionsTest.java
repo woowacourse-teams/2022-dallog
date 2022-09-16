@@ -5,14 +5,17 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.setId;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
+import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.달록_여행;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_2;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_3;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_4;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -64,5 +67,43 @@ class SubscriptionsTest {
 
         // when & then
         assertThat(subscriptions.findCheckedCategoryIdsBy(Category::isExternal)).isEqualTo(List.of(4L));
+    }
+
+    @DisplayName("특정 스케줄의 구독 색상을 찾는다.")
+    @Test
+    void 특정_스케줄의_구독_색상을_찾는다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        Category BE_일정 = setId(BE_일정(파랑), 2L);
+        Category 내_일정 = setId(내_일정(파랑), 3L);
+        Category 우아한테크코스_일정 = setId(우아한테크코스_일정(파랑), 4L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+        Subscription BE_일정_구독 = new Subscription(파랑, BE_일정, COLOR_2);
+        Subscription 내_일정_구독 = new Subscription(파랑, 내_일정, COLOR_3);
+        Subscription 우아한테크코스_일정_구독 = new Subscription(파랑, 우아한테크코스_일정, COLOR_4);
+
+        Subscriptions subscriptions =
+                new Subscriptions(List.of(공통_일정_구독, BE_일정_구독, 내_일정_구독, 우아한테크코스_일정_구독));
+
+        // when & then
+        assertThat(subscriptions.findColor(달록_여행)).isEqualTo(COLOR_2);
+    }
+
+    @DisplayName("구독하지 않은 스케줄의 구독 색상을 찾는 경우 예외를 던진다")
+    @Test
+    void 구독하지_않은_스케줄의_구독_색상을_찾는_경우_예외를_던진다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        setId(BE_일정(파랑), 2L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+
+        Subscriptions subscriptions = new Subscriptions(List.of(공통_일정_구독));
+
+        // when & then
+        assertThatThrownBy(() -> subscriptions.findColor(달록_여행)).isInstanceOf(NoSuchCategoryException.class);
     }
 }
