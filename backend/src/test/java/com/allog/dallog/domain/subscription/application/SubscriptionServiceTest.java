@@ -158,6 +158,7 @@ class SubscriptionServiceTest extends ServiceTest {
         Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
         Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+
         CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
         subscriptionService.save(파랑_id, BE_일정.getId());
         subscriptionService.save(리버_id, BE_일정.getId());
