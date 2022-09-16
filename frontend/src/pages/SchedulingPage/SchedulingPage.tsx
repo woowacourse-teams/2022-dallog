@@ -52,8 +52,8 @@ function SchedulingPage() {
   });
 
   const category = useControlledInput();
-  const startDateTime = useControlledInput(getDate(null));
-  const endDateTime = useControlledInput(getDate(null));
+  const startDateTime = useControlledInput(getDate());
+  const endDateTime = useControlledInput(getDate());
 
   const onSuccessGetSubscriptions = (data: AxiosResponse<SubscriptionType[]>) => {
     category.setInputValue(`${data.data[0].category.id}`);

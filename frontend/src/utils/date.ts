@@ -62,8 +62,8 @@ const getCalendarMonth = (year: number, month: number) => {
   });
 };
 
-const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
+const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
+  if (dateInfo === undefined) {
     return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
   }
 
@@ -72,8 +72,8 @@ const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
   return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
 };
 
-const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
+const getDateTime = (dateInfo?: Omit<CalendarType, 'day'>) => {
+  if (dateInfo === undefined) {
     return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
   }
 
@@ -83,6 +83,35 @@ const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
     .toISOString()
     .replace(/\..*/, '')
     .slice(0, -3);
+};
+
+const getStartTime = () => {
+  const [nowHour, nowMinute] = new Date(+new Date() + 3240 * 10000)
+    .toISOString()
+    .replace(/\..*/, '')
+    .slice(0, -3)
+    .split('T')[1]
+    .split(':');
+
+  if (nowMinute === '00' || nowMinute === '30') return `${nowHour}:${nowMinute}`;
+
+  if (nowMinute < '30') return `${nowHour}:30`;
+
+  if (nowMinute > '30') {
+    if (nowHour >= '23') {
+      return '00:00';
+    }
+  }
+  return `${+nowHour + 1}:00`;
+};
+
+const getEndTime = (startTime?: string) => {
+  const [nowHour, nowMinute] =
+    startTime === undefined ? getStartTime().split(':') : startTime.split(':');
+
+  return nowHour < '23'
+    ? `${(+nowHour + 1).toString().padStart(2, '0')}:${nowMinute}`
+    : `00:${nowMinute}`;
 };
 
 const getDayFromFormattedDate = (date: string) => {
@@ -152,6 +181,7 @@ export {
   getDate,
   getDateTime,
   getDayFromFormattedDate,
+  getEndTime,
   getFormattedDate,
   getISODateString,
   getKoreaISOString,
@@ -159,6 +189,7 @@ export {
   getNextYearMonth,
   getOneHourEarlierISOString,
   getOneHourLaterISOString,
+  getStartTime,
   getThisDate,
   getThisMonth,
   getThisYear,
