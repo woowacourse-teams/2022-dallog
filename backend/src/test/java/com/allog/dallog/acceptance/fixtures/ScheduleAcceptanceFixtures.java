@@ -15,7 +15,7 @@ public class ScheduleAcceptanceFixtures {
 
     public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String accessToken, final Long categoryId) {
 
-        Map<String, String> params = new HashMap();
+        Map<String, String> params = new HashMap<>();
         params.put("title", 알록달록_회의_제목);
         params.put("startDateTime", "2022-07-04T13:00");
         params.put("endDateTime", "2022-07-05T16:00");

@@ -15,7 +15,7 @@ public class Subscriptions {
         this.subscriptions = subscriptions;
     }
 
-    public List<Long> findCheckedCategoryIdsBy(Predicate<Category> predicate) {
+    public List<Long> findCheckedCategoryIdsBy(final Predicate<Category> predicate) {
         return subscriptions.stream()
                 .filter(Subscription::isChecked)
                 .map(Subscription::getCategory)
