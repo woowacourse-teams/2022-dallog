@@ -36,7 +36,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
+import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.application.MemberService;
@@ -149,7 +149,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // then
         assertThatThrownBy(() -> categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청))
-                .isInstanceOf(DuplicatedExternalCategoryException.class);
+                .isInstanceOf(ExistExternalCategoryException.class);
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
@@ -205,7 +205,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(1, 2);
 
         // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "", request);
+        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "", request);
 
         // then
         assertThat(response.getCategories())
@@ -229,7 +229,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findMineByName(관리자_ID, "일", request);
+        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "일", request);
 
         // then
         assertThat(response.getCategories())
@@ -278,7 +278,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         categoryService.update(관리자.getId(), 공통_일정.getId(), categoryUpdateRequest);
-        Category category = categoryService.getCategory(공통_일정.getId());
+        Category category = categoryRepository.getById(공통_일정.getId());
 
         //then
         assertThat(category.getName()).isEqualTo(우테코_공통_일정_이름);
@@ -294,7 +294,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(() -> categoryService.update(관리자.getId(), 공통_일정.getId() + 1, categoryUpdateRequest))
-                .isInstanceOf(NoSuchCategoryException.class);
+                .isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("자신이 만들지 않은 카테고리를 수정할 경우 예외를 던진다.")
@@ -320,10 +320,10 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         //then
-        assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
+        assertThatThrownBy(() -> categoryRepository.getById(공통_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -335,8 +335,8 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 공통_일정.getId() + 1))
-                .isInstanceOf(NoSuchCategoryException.class);
+        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
+                .isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("자신이 만들지 않은 카테고리를 삭제할 경우 예외를 던진다.")
@@ -349,7 +349,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(
-                () -> categoryService.deleteById(매트.getId(), 공통_일정.getId()))
+                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
@@ -363,7 +363,7 @@ class CategoryServiceTest extends ServiceTest {
         ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
         assertAll(() -> {
@@ -385,7 +385,7 @@ class CategoryServiceTest extends ServiceTest {
         SubscriptionResponse 구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
         // when
-        categoryService.deleteById(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
@@ -401,44 +401,8 @@ class CategoryServiceTest extends ServiceTest {
         subscriptionService.save(관리자.getId(), 내_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> categoryService.deleteById(관리자.getId(), 내_일정.getId()))
+        assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 내_일정.getId()))
                 .isInstanceOf(InvalidCategoryException.class);
-    }
-
-    @DisplayName("특정 회원의 카테고리를 전부 삭제한다.")
-    @Test
-    void 특정_회원의_카테고리를_전부_삭제한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-
-        // when
-        categoryService.deleteByMemberId(관리자.getId());
-
-        //then
-        assertThatThrownBy(() -> categoryService.getCategory(공통_일정.getId()))
-                .isInstanceOf(NoSuchCategoryException.class);
-    }
-
-    @DisplayName("특정 회원의 카테고리를 삭제할 때 연관된 일정도 삭제한다.")
-    @Test
-    void 특정_회원의_카테고리를_삭제할_때_연관된_일정도_삭제한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        ScheduleResponse 알록달록_회식 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 알록달록_회식_생성_요청);
-        ScheduleResponse 레벨_인터뷰 = scheduleService.save(관리자.getId(), 공통_일정.getId(), 레벨_인터뷰_생성_요청);
-
-        // when
-        categoryService.deleteByMemberId(관리자.getId());
-
-        // then
-        assertAll(() -> {
-            assertThatThrownBy(() -> scheduleService.findById(알록달록_회식.getId()))
-                    .isInstanceOf(NoSuchScheduleException.class);
-            assertThatThrownBy(() -> scheduleService.findById(레벨_인터뷰.getId()))
-                    .isInstanceOf(NoSuchScheduleException.class);
-        });
     }
 
     @DisplayName("외부 캘린더의 카테고리를 삭제한다.")
@@ -449,7 +413,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 우아한테크코스_외부_일정 = categoryService.save(관리자.getId(), 우아한테크코스_외부_일정_생성_요청);
 
         // when
-        categoryService.deleteById(관리자.getId(), 우아한테크코스_외부_일정.getId());
+        categoryService.delete(관리자.getId(), 우아한테크코스_외부_일정.getId());
 
         // then
         assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))

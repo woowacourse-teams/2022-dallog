@@ -44,14 +44,14 @@ public class ScheduleService {
     @Transactional
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateUpdatePossible(memberId);
+        schedule.validateEditablePossible(memberId);
         schedule.change(request.getTitle(), request.getStartDateTime(), request.getEndDateTime(), request.getMemo());
     }
 
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateDeletePossible(memberId);
+        schedule.validateEditablePossible(memberId);
         scheduleRepository.deleteById(id);
     }
 }

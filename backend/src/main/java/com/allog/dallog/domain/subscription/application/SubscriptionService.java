@@ -47,7 +47,7 @@ public class SubscriptionService {
     }
 
     public SubscriptionsResponse findByMemberId(final Long memberId) {
-        List<Subscription> subscriptions = subscriptionRepository.getByMemberId(memberId);
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
 
         List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
                 .map(SubscriptionResponse::new)
@@ -62,7 +62,7 @@ public class SubscriptionService {
     }
 
     public List<SubscriptionResponse> findByCategoryId(final Long categoryId) {
-        return subscriptionRepository.getByCategoryId(categoryId)
+        return subscriptionRepository.findByCategoryId(categoryId)
                 .stream()
                 .map(SubscriptionResponse::new)
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class SubscriptionService {
 
     // TODO: 상위 Service인 CalanderService에서만 사용하는 메서드입니다. 삭제 예정
     public List<Subscription> getAllByMemberId(final Long memberId) {
-        return subscriptionRepository.getByMemberId(memberId);
+        return subscriptionRepository.findByMemberId(memberId);
     }
 
     @Transactional

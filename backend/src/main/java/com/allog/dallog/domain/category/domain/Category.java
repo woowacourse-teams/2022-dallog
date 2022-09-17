@@ -93,6 +93,7 @@ public class Category extends BaseEntity {
             throw new NoPermissionException();
         }
     }
+
     public boolean isCreatorId(final Long creatorId) {
         return member.hasSameId(creatorId);
     }

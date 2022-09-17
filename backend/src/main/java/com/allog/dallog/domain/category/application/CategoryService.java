@@ -2,7 +2,6 @@ package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -13,16 +12,12 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.category.exception.DuplicatedExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
-import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,36 +45,24 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(NoSuchMemberException::new);
-        Category newCategory = new Category(request.getName(), member,
-                CategoryType.valueOf(request.getCategoryType().toUpperCase()));
-        categoryRepository.save(newCategory);
-        return new CategoryResponse(newCategory);
+        Member member = memberRepository.getById(memberId);
+        Category category = request.toEntity(member);
+        Category savedCategory = categoryRepository.save(category);
+        return new CategoryResponse(savedCategory);
     }
 
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
-        List<Category> categories = categoryRepository.findByMemberId(memberId);
-        validateDuplicateExternalCategory(request.getExternalId(), categories);
+        List<Category> externalCategories = categoryRepository
+                .findByMemberIdAndCategoryType(memberId, CategoryType.GOOGLE);
+        externalCategoryDetailRepository
+                .validateExistByExternalIdAndCategoryIn(request.getExternalId(), externalCategories);
 
         CategoryResponse response = save(memberId, new CategoryCreateRequest(request.getName(), CategoryType.GOOGLE));
-        Category category = getCategory(response.getId());
-
+        Category category = categoryRepository.getById(response.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
 
         return response;
-    }
-
-    private void validateDuplicateExternalCategory(final String externalId, final List<Category> categories) {
-        List<Category> externalCategories = categories.stream()
-                .filter(Category::isExternal)
-                .collect(Collectors.toList());
-
-        if (!externalCategories.isEmpty()
-                && externalCategoryDetailRepository.existsByExternalIdAndCategoryIn(externalId, externalCategories)) {
-            throw new DuplicatedExternalCategoryException();
-        }
     }
 
     public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
@@ -89,76 +72,41 @@ public class CategoryService {
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
-    public CategoriesResponse findMineByName(final Long memberId, final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByMemberIdLikeCategoryName(memberId, name, pageable)
-                .getContent();
+    public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
+        List<Category> categories
+                = categoryRepository.findByMemberIdAndNameContaining(name, memberId, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
     public CategoryResponse findById(final Long id) {
-        return new CategoryResponse(getCategory(id));
-    }
-
-    public Category getCategory(final Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(NoSuchCategoryException::new);
+        Category category = categoryRepository.getById(id);
+        return new CategoryResponse(category);
     }
 
     @Transactional
-    public void update(final Long memberId, final Long categoryId, final CategoryUpdateRequest request) {
-        Category category = getCategory(categoryId);
-        validatePermission(memberId, categoryId);
-
+    public void update(final Long memberId, final Long id, final CategoryUpdateRequest request) {
+        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
+        Category category = categoryRepository.getById(id);
         category.changeName(request.getName());
     }
 
     @Transactional
-    public void deleteById(final Long memberId, final Long categoryId) {
-        validateCategoryExisting(categoryId);
-        validatePermission(memberId, categoryId);
-        validatePersonalCategory(categoryId);
+    public void delete(final Long memberId, final Long id) {
+        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
+        Category category = categoryRepository.getById(id);
 
-        scheduleRepository.deleteByCategoryIdIn(List.of(categoryId));
-        subscriptionRepository.deleteByCategoryIdIn(List.of(categoryId));
-        externalCategoryDetailRepository.deleteByCategoryId(categoryId);
-        categoryRepository.deleteById(categoryId);
+        validateNotPersonalCategory(category);
+
+        scheduleRepository.deleteByCategoryIdIn(List.of(id));
+        subscriptionRepository.deleteByCategoryIdIn(List.of(id));
+        externalCategoryDetailRepository.deleteByCategoryId(id);
+        categoryRepository.deleteById(id);
     }
 
-    private void validatePersonalCategory(final Long categoryId) {
-        Category category = getCategory(categoryId);
+    private void validateNotPersonalCategory(final Category category) {
         if (category.isPersonal()) {
             throw new InvalidCategoryException("내 일정 카테고리는 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validateCategoryExisting(final Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다.");
-        }
-    }
-
-    private void validatePermission(final Long memberId, final Long categoryId) {
-        if (!categoryRepository.existsByIdAndMemberId(categoryId, memberId)) {
-            throw new NoPermissionException();
-        }
-    }
-
-    @Transactional
-    public void deleteByMemberId(final Long memberId) {
-        List<Long> categoryIds = categoryRepository.findByMemberId(memberId)
-                .stream()
-                .map(Category::getId)
-                .collect(Collectors.toList());
-
-        scheduleRepository.deleteByCategoryIdIn(categoryIds);
-        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
-        categoryRepository.deleteByMemberId(memberId);
-    }
-
-    public void validateCreatorBy(final Long memberId, final Category category) {
-        if (!category.isCreatorId(memberId)) {
-            throw new NoPermissionException();
         }
     }
 }

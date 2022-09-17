@@ -207,7 +207,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
@@ -238,7 +238,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)
@@ -406,7 +406,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         willDoNothing()
                 .given(categoryService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
@@ -434,7 +434,7 @@ class CategoryControllerTest extends ControllerTest {
         willThrow(new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다."))
                 .willDoNothing()
                 .given(categoryService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)

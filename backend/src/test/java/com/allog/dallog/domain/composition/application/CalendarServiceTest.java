@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
@@ -64,6 +65,9 @@ class CalendarServiceTest extends ServiceTest {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @DisplayName("시작일시와 종료일시로 유저의 캘린더를 일정 유형에 따라 분류하고 정렬하여 반환한다.")
     @Test
     void 시작일시와_종료일시로_유저의_캘린더를_일정_유형에_따라_분류하고_정렬하여_반환한다() {
@@ -71,7 +75,7 @@ class CalendarServiceTest extends ServiceTest {
         Long memberId = parseMemberId(MEMBER_인증_코드_토큰_요청());
 
         CategoryResponse BE_일정_응답 = categoryService.save(memberId, BE_일정_생성_요청);
-        Category BE_일정 = categoryService.getCategory(BE_일정_응답.getId());
+        Category BE_일정 = categoryRepository.getById(BE_일정_응답.getId());
 
         subscriptionService.save(memberId, BE_일정.getId());
 
@@ -106,7 +110,7 @@ class CalendarServiceTest extends ServiceTest {
                 new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
 
         CategoryResponse 우아한테크코스_외부_일정_응답 = categoryService.save(memberId, 우아한테크코스_외부_일정_생성_요청);
-        Category 우아한테크코스 = categoryService.getCategory(우아한테크코스_외부_일정_응답.getId());
+        Category 우아한테크코스 = categoryRepository.getById(우아한테크코스_외부_일정_응답.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스, "dfggsdfasdasadsgs"));
 
         subscriptionService.save(memberId, 우아한테크코스.getId());
