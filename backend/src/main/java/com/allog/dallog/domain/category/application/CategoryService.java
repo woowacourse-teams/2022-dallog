@@ -77,7 +77,7 @@ public class CategoryService {
         return response;
     }
 
-    public CategoriesResponse findPublicByName(final String name, final Pageable pageable) {
+    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
 
@@ -86,7 +86,7 @@ public class CategoryService {
 
     public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndMemberId(name, memberId, pageable).getContent();
+                = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }

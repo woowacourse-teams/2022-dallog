@@ -452,34 +452,4 @@ class CategoryServiceTest extends ServiceTest {
         assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
-
-    @DisplayName("카테고리 생성 시 자동으로 구독한다.")
-    @Test
-    void 카테고리_생성_시_자동으로_구독한다() {
-        // given
-        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
-
-        // when
-        categoryService.save(파랑_id, 공통_일정_생성_요청);
-
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
-
-        // then
-        assertThat(subscriptions).hasSize(2);
-    }
-
-    @DisplayName("외부 카테고리 생성 시 자동으로 구독한다.")
-    @Test
-    void 외부_카테고리_생성_시_자동으로_구독한다() {
-        // given
-        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
-
-        // when
-        categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);
-
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
-
-        // then
-        assertThat(subscriptions).hasSize(2);
-    }
 }
