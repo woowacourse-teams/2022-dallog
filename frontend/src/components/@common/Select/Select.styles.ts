@@ -76,6 +76,7 @@ const labelStyle = css`
 
 const relativeStyle = css`
   position: relative;
+  z-index: 30;
 `;
 
 export {
