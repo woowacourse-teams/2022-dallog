@@ -50,7 +50,7 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
-    public List<IntegrationSchedule> findByMemberIdAndDateRange(final Long memberId, final DateRangeRequest dateRange) {
+    public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId, final DateRangeRequest dateRange) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
         return integrationSchedules(dateRange, subscriptions);
     }

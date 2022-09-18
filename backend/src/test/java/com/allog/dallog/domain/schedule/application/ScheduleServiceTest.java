@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
-import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
@@ -201,7 +200,7 @@ class ScheduleServiceTest extends ServiceTest {
         ScheduleResponse 알록달록_회식 = scheduleService.save(리버_id, BE_일정.getId(), 알록달록_회식_생성_요청);
 
         // when
-        List<IntegrationSchedule> schedules = scheduleService.findByMemberIdAndDateRange(리버_id,
+        List<IntegrationSchedule> schedules = scheduleService.findInternalByMemberIdAndDateRange(리버_id,
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then

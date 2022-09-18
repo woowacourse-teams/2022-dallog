@@ -48,7 +48,8 @@ public class SubscribingSchedulesFinder {
         List<IntegrationSchedule> schedules = new ArrayList<>();
 
         List<IntegrationSchedule> externalSchedules = findExternalSchedules(memberId, dateRange);
-        List<IntegrationSchedule> internalSchedules = scheduleService.findByMemberIdAndDateRange(memberId, dateRange);
+        List<IntegrationSchedule> internalSchedules = scheduleService.findInternalByMemberIdAndDateRange(memberId,
+                dateRange);
 
         schedules.addAll(externalSchedules);
         schedules.addAll(internalSchedules);
