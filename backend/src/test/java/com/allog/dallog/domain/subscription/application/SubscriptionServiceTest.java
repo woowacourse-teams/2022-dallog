@@ -34,6 +34,7 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -147,6 +148,26 @@ class SubscriptionServiceTest extends ServiceTest {
 
         // then
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4);
+    }
+
+    @DisplayName("category id를 기반으로 구독 정보를 조회한다.")
+    @Test
+    void category_id를_기반으로_구독_정보를_조회한다() {
+        // given
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
+        subscriptionService.save(파랑_id, BE_일정.getId());
+        subscriptionService.save(리버_id, BE_일정.getId());
+        subscriptionService.save(후디_id, BE_일정.getId());
+
+        // when
+        List<SubscriptionResponse> actual = subscriptionService.findByCategoryId(BE_일정.getId());
+
+        // then
+        assertThat(actual).hasSize(4);
     }
 
     @DisplayName("구독 정보를 수정한다.")
