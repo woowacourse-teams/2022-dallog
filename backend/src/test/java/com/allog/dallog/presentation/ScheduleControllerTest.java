@@ -35,6 +35,7 @@ import com.allog.dallog.domain.composition.application.SchedulerService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.application.SubscribingSchedulesFinder;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
@@ -67,6 +68,9 @@ class ScheduleControllerTest extends ControllerTest {
 
     @MockBean
     private CalendarService calendarService;
+
+    @MockBean
+    private SubscribingSchedulesFinder subscribingSchedulesFinder;
 
     @MockBean
     private IntegrationScheduleDao integrationScheduleDao;
@@ -347,7 +351,7 @@ class ScheduleControllerTest extends ControllerTest {
         MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
 
-        given(calendarService.findSchedulesByMemberId(any(), any()))
+        given(subscribingSchedulesFinder.findMySubscribingSchedules(any(), any()))
                 .willReturn(memberScheduleResponses);
 
         // when & then

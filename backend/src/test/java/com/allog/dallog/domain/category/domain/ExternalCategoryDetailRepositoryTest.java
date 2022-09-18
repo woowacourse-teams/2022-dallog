@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.category.domain;
 
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,8 +38,10 @@ public class ExternalCategoryDetailRepositoryTest extends RepositoryTest {
 
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스_일정, "externalId"));
 
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
         // when & then
-        assertThatThrownBy(() -> externalCategoryDetailRepository.getByCategoryId(0L))
+        assertThatThrownBy(() -> externalCategoryDetailRepository.getByCategory(공통_일정))
                 .isInstanceOf(NoSuchExternalCategoryDetailException.class);
     }
 

@@ -44,7 +44,7 @@ class SubscriptionsTest {
                 new Subscriptions(List.of(공통_일정_구독, BE_일정_구독, 내_일정_구독, 우아한테크코스_일정_구독));
 
         // when & then
-        assertThat(subscriptions.findCheckedCategoryIdsBy(Category::isInternal)).isEqualTo(List.of(1L, 3L));
+        assertThat(subscriptions.findInternalCategory()).isEqualTo(List.of(공통_일정, 내_일정));
     }
 
     @DisplayName("체크된 카테고리 중 외부 카테고리의 아이디를 찾는다.")
@@ -66,7 +66,7 @@ class SubscriptionsTest {
                 new Subscriptions(List.of(공통_일정_구독, BE_일정_구독, 내_일정_구독, 우아한테크코스_일정_구독));
 
         // when & then
-        assertThat(subscriptions.findCheckedCategoryIdsBy(Category::isExternal)).isEqualTo(List.of(4L));
+        assertThat(subscriptions.findExternalCategory()).isEqualTo(List.of(우아한테크코스_일정));
     }
 
     @DisplayName("특정 스케줄의 구독 색상을 찾는다.")

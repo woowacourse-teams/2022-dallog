@@ -2,6 +2,7 @@ package com.allog.dallog.domain.integrationschedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryType;
+import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,6 +19,15 @@ public class IntegrationSchedule {
     private final Period period;
     private final String memo;
     private final CategoryType categoryType;
+
+    public IntegrationSchedule(final Schedule schedule, final CategoryType categoryType) {
+        this.id = String.valueOf(schedule.getId());
+        this.categoryId = schedule.getCategory().getId();
+        this.title = schedule.getTitle();
+        this.period = new Period(schedule.getStartDateTime(), schedule.getEndDateTime());
+        this.memo = schedule.getMemo();
+        this.categoryType = categoryType;
+    }
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title,
                                final LocalDateTime startDateTime, final LocalDateTime endDateTime, final String memo,

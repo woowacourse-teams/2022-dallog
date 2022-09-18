@@ -8,9 +8,7 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.integrationschedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
 import java.time.format.DateTimeFormatter;
@@ -54,16 +52,15 @@ public class CalendarService {
                 .collect(Collectors.toList());
     }
 
-    public MemberScheduleResponses findSchedulesByMemberId(final Long memberId, final DateRangeRequest dateRange) {
-        Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        List<IntegrationSchedule> integrationSchedules = getIntegrationSchedulesByMemberId(memberId, dateRange);
-        return new MemberScheduleResponses(subscriptions, new TypedSchedules(integrationSchedules));
-    }
-
     private List<IntegrationSchedule> getIntegrationSchedulesByMemberId(final Long memberId,
                                                                         final DateRangeRequest dateRange) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        List<Long> internalCategoryIds = subscriptions.findCheckedCategoryIdsBy(Category::isInternal);
+        List<Category> internalCategory = subscriptions.findInternalCategory();
+
+        // todo : SchedulerService를 리팩터링할때 제거 될 진행할 예정입니다.
+        List<Long> internalCategoryIds = internalCategory.stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
 
         List<IntegrationSchedule> integrationSchedules = integrationScheduleDao.findByCategoryIdInAndBetween(
                 internalCategoryIds, dateRange.getStartDateTime(), dateRange.getEndDateTime());
@@ -77,9 +74,9 @@ public class CalendarService {
     }
 
     private List<ExternalCategoryDetail> findCheckedExternalCategoryDetails(final Subscriptions subscriptions) {
-        return subscriptions.findCheckedCategoryIdsBy(Category::isExternal)
+        return subscriptions.findExternalCategory()
                 .stream()
-                .map(externalCategoryDetailRepository::getByCategoryId)
+                .map(externalCategoryDetailRepository::getByCategory)
                 .collect(Collectors.toList());
     }
 

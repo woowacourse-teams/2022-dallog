@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "subscriptions")
 @Entity
 public class Subscription extends BaseEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -59,6 +59,14 @@ public class Subscription extends BaseEntity {
         if (category.isCreatorId(memberId)) {
             throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
         }
+    }
+
+    public boolean hasInternalCategory() {
+        return category.isInternal();
+    }
+
+    public boolean hasExternalCategory() {
+        return category.isExternal();
     }
 
     public Long getId() {
