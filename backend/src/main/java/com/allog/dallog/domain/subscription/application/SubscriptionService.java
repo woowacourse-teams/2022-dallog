@@ -51,13 +51,6 @@ public class SubscriptionService {
         return new SubscriptionResponse(subscription);
     }
 
-    public List<SubscriptionResponse> findByCategoryId(final Long categoryId) {
-        return subscriptionRepository.findByCategoryId(categoryId)
-                .stream()
-                .map(SubscriptionResponse::new)
-                .collect(Collectors.toList());
-    }
-
     public SubscriptionsResponse findByMemberId(final Long memberId) {
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
 
@@ -66,6 +59,13 @@ public class SubscriptionService {
                 .collect(Collectors.toList());
 
         return new SubscriptionsResponse(subscriptionResponses);
+    }
+
+    public List<SubscriptionResponse> findByCategoryId(final Long categoryId) {
+        return subscriptionRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(SubscriptionResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
