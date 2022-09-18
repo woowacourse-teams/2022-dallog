@@ -8,6 +8,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
@@ -26,7 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
@@ -70,6 +73,11 @@ class CalendarServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(관리자_id, BE_일정_생성_요청);
         CategoryResponse FE_일정 = categoryService.save(관리자_id, FE_일정_생성_요청);
 
+        CategoryResponse 외부_BE_일정_응답 = categoryService.save(관리자_id, 외부_BE_일정_생성_요청);
+        Category 외부_BE_일정 = categoryRepository.getById(외부_BE_일정_응답.getId());
+
+        externalCategoryDetailRepository.save(new ExternalCategoryDetail(외부_BE_일정, "11111111"));
+
         /* 카테고리에 일정 추가 */
         scheduleService.save(관리자_id, 공통_일정.getId(),
                 new ScheduleCreateRequest("공통 일정 1", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_10일_0시_0분, ""));
@@ -103,13 +111,18 @@ class CalendarServiceTest extends ServiceTest {
         subscriptionService.save(매트_id, FE_일정.getId());
         subscriptionService.save(리버_id, FE_일정.getId());
 
+        subscriptionService.save(후디_id, 외부_BE_일정.getId());
+        subscriptionService.save(파랑_id, 외부_BE_일정.getId());
+        subscriptionService.save(매트_id, 외부_BE_일정.getId());
+        subscriptionService.save(리버_id, 외부_BE_일정.getId());
+
         // when
         List<IntegrationSchedule> actual = calendarService.getSchedulesBySubscriberIds(
                 List.of(후디_id, 파랑_id, 매트_id, 리버_id), new DateRangeRequest("2022-07-07T16:00", "2022-08-15T14:00"));
 
         // then
         assertThat(actual.stream().map(IntegrationSchedule::getTitle))
-                .containsExactly("공통 일정 1", "공통 일정 2", "공통 일정 3", "백엔드 일정 1", "백엔드 일정 2", "백엔드 일정 3", "프론트엔드 일정 1",
-                        "프론트엔드 일정 2");
+                .contains("공통 일정 1", "공통 일정 2", "공통 일정 3", "백엔드 일정 1", "백엔드 일정 2", "백엔드 일정 3", "프론트엔드 일정 1",
+                        "포수타", "레벨3 방학", "프론트엔드 일정 2");
     }
 }

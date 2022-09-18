@@ -106,4 +106,42 @@ class SubscriptionsTest {
         // when & then
         assertThatThrownBy(() -> subscriptions.findColor(달록_여행)).isInstanceOf(NoSuchCategoryException.class);
     }
+
+    @DisplayName("구독한 카테고리중 내부 카테고리를 찾아 반환한다.")
+    @Test
+    void 구독한_카테고리중_내부_카테고리를_찾아_반환한다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        setId(BE_일정(파랑), 2L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+
+        Subscriptions subscriptions = new Subscriptions(List.of(공통_일정_구독));
+
+        // when
+        List<Category> categories = subscriptions.findInternalCategory();
+
+        // then
+        assertThat(categories).hasSize(1);
+    }
+
+    @DisplayName("구독한 카테고리중 외부 카테고리를 찾아 반환한다.")
+    @Test
+    void 구독한_카테고리중_외부_카테고리를_찾아_반환한다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        setId(BE_일정(파랑), 2L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+
+        Subscriptions subscriptions = new Subscriptions(List.of(공통_일정_구독));
+
+        // when
+        List<Category> categories = subscriptions.findExternalCategory();
+
+        // then
+        assertThat(categories).hasSize(0);
+    }
 }
