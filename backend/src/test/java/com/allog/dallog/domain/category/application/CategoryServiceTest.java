@@ -49,6 +49,7 @@ import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -120,10 +121,10 @@ class CategoryServiceTest extends ServiceTest {
         // when
         categoryService.save(파랑_id, 공통_일정_생성_요청);
 
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
-
+        SubscriptionsResponse subscriptions = subscriptionService.findByMemberId(파랑_id);
+        List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
         // then
-        assertThat(subscriptions).hasSize(2);
+        assertThat(actual).hasSize(2);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
@@ -180,10 +181,11 @@ class CategoryServiceTest extends ServiceTest {
         // when
         categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);
 
-        List<Subscription> subscriptions = subscriptionService.getAllByMemberId(파랑_id);
+        SubscriptionsResponse subscriptions = subscriptionService.findByMemberId(파랑_id);
+        List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
 
         // then
-        assertThat(subscriptions).hasSize(2);
+        assertThat(actual).hasSize(2);
     }
 
     @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")

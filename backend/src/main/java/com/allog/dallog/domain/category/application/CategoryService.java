@@ -39,8 +39,7 @@ public class CategoryService {
     public CategoryService(final CategoryRepository categoryRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                           final ScheduleRepository scheduleRepository,
-                           final ColorPicker colorPicker) {
+                           final ScheduleRepository scheduleRepository, final ColorPicker colorPicker) {
         this.categoryRepository = categoryRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.memberRepository = memberRepository;
