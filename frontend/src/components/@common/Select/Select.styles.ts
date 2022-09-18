@@ -7,7 +7,8 @@ const hiddenStyle = css`
 `;
 
 const dimmerStyle = (isSelectOpen: boolean) => css`
-  display: ${!isSelectOpen && 'none'};
+  ${!isSelectOpen && hiddenStyle};
+
   position: fixed;
   width: 100%;
   height: 100%;
@@ -21,7 +22,6 @@ const selectStyle = ({ colors }: Theme) => css`
   height: 11.75rem;
   border-radius: 8px;
   border: 1px solid ${colors.GRAY_400};
-  box-sizing: contain;
 
   font-size: 4rem;
   text-align: center;
