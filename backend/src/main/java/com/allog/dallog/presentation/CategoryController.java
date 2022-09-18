@@ -6,7 +6,6 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
@@ -27,23 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final CategorySubscriptionService categorySubscriptionService;
 
-    public CategoryController(final CategoryService categoryService,
-                              final CategorySubscriptionService categorySubscriptionService) {
+    public CategoryController(final CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.categorySubscriptionService = categorySubscriptionService;
     }
 
     @PostMapping
     public ResponseEntity<CategoryResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
                                                  @Valid @RequestBody final CategoryCreateRequest request) {
-        CategoryResponse categoryResponse = categorySubscriptionService.save(loginMember.getId(), request);
+        CategoryResponse categoryResponse = categoryService.save(loginMember.getId(), request);
         return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesResponse> findPublicByName(@RequestParam(defaultValue = "") final String name,
+    public ResponseEntity<CategoriesResponse> findNormalByName(@RequestParam(defaultValue = "") final String name,
                                                                final Pageable pageable) {
         return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
     }

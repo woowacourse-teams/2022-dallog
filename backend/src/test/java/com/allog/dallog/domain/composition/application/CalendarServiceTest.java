@@ -77,8 +77,6 @@ class CalendarServiceTest extends ServiceTest {
         CategoryResponse BE_일정_응답 = categoryService.save(memberId, BE_일정_생성_요청);
         Category BE_일정 = categoryRepository.getById(BE_일정_응답.getId());
 
-        subscriptionService.save(memberId, BE_일정.getId());
-
         /* 장기간 일정 */
         scheduleService.save(memberId, BE_일정.getId(),
                 new ScheduleCreateRequest("장기간 첫번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
@@ -112,8 +110,6 @@ class CalendarServiceTest extends ServiceTest {
         CategoryResponse 우아한테크코스_외부_일정_응답 = categoryService.save(memberId, 우아한테크코스_외부_일정_생성_요청);
         Category 우아한테크코스 = categoryRepository.getById(우아한테크코스_외부_일정_응답.getId());
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스, "dfggsdfasdasadsgs"));
-
-        subscriptionService.save(memberId, 우아한테크코스.getId());
 
         // when
         MemberScheduleResponses memberScheduleResponses = calendarService.findSchedulesByMemberId(memberId,

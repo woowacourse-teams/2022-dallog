@@ -46,16 +46,6 @@ public class SubscriptionService {
         return new SubscriptionResponse(savedSubscription);
     }
 
-    public SubscriptionsResponse findByMemberId(final Long memberId) {
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
-
-        List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
-                .map(SubscriptionResponse::new)
-                .collect(Collectors.toList());
-
-        return new SubscriptionsResponse(subscriptionResponses);
-    }
-
     public SubscriptionResponse findById(final Long id) {
         Subscription subscription = subscriptionRepository.getById(id);
         return new SubscriptionResponse(subscription);
@@ -66,6 +56,16 @@ public class SubscriptionService {
                 .stream()
                 .map(SubscriptionResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public SubscriptionsResponse findByMemberId(final Long memberId) {
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(memberId);
+
+        List<SubscriptionResponse> subscriptionResponses = subscriptions.stream()
+                .map(SubscriptionResponse::new)
+                .collect(Collectors.toList());
+
+        return new SubscriptionsResponse(subscriptionResponses);
     }
 
     @Transactional

@@ -45,7 +45,6 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,15 +67,12 @@ class CategoryControllerTest extends ControllerTest {
     @MockBean
     private CategoryService categoryService;
 
-    @MockBean
-    private CategorySubscriptionService categorySubscriptionService;
-
     @DisplayName("카테고리를 생성한다.")
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
         CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
-        given(categorySubscriptionService.save(any(), any(CategoryCreateRequest.class))).willReturn(카테고리);
+        given(categoryService.save(any(), any(CategoryCreateRequest.class))).willReturn(카테고리);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -118,7 +114,7 @@ class CategoryControllerTest extends ControllerTest {
         CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, NORMAL);
 
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
-                .given(categorySubscriptionService)
+                .given(categoryService)
                 .save(any(), any(CategoryCreateRequest.class));
 
         // when & then
