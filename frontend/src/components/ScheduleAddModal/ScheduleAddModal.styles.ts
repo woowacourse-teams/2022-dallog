@@ -136,13 +136,35 @@ const labelStyle = ({ colors }: Theme) => css`
   color: ${colors.GRAY_800};
 `;
 
+const dateTimePickerStyle = ({ flex }: Theme) => css`
+  ${flex.row};
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  width: 100%;
+`;
+
+const dateFieldsetStyle = (isAllDay: boolean) => {
+  return {
+    div: css`
+      width: ${isAllDay ? '100%' : '45%'};
+    `,
+    input: css`
+      height: 11.75rem;
+    `,
+  };
+};
+
 export {
   arrow,
   categorySelect,
   cancelButton,
   checkboxStyle,
   controlButtons,
+  dateFieldsetStyle,
   dateTime,
+  dateTimePickerStyle,
   form,
   labelStyle,
   saveButton,
