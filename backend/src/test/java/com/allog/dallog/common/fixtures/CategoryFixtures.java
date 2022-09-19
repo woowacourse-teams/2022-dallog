@@ -21,10 +21,12 @@ public class CategoryFixtures {
     /* BE 일정 카테고리 */
     public static final String BE_일정_이름 = "BE 일정";
     public static final CategoryCreateRequest BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, NORMAL);
+    public static final CategoryCreateRequest 외부_BE_일정_생성_요청 = new CategoryCreateRequest(BE_일정_이름, GOOGLE);
 
     /* FE 일정 카테고리 */
     public static final String FE_일정_이름 = "FE 일정";
     public static final CategoryCreateRequest FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, NORMAL);
+    public static final CategoryCreateRequest 외부_FE_일정_생성_요청 = new CategoryCreateRequest(FE_일정_이름, GOOGLE);
 
     /* 매트 아고라 카테고리 */
     public static final String 매트_아고라_이름 = "매트 아고라";

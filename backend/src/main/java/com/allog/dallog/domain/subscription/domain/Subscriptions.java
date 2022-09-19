@@ -4,7 +4,6 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Subscriptions {
@@ -15,12 +14,19 @@ public class Subscriptions {
         this.subscriptions = subscriptions;
     }
 
-    public List<Long> findCheckedCategoryIdsBy(final Predicate<Category> predicate) {
+    public List<Category> findInternalCategory() {
         return subscriptions.stream()
                 .filter(Subscription::isChecked)
+                .filter(Subscription::hasInternalCategory)
                 .map(Subscription::getCategory)
-                .filter(predicate)
-                .map(Category::getId)
+                .collect(Collectors.toList());
+    }
+
+    public List<Category> findExternalCategory() {
+        return subscriptions.stream()
+                .filter(Subscription::isChecked)
+                .filter(Subscription::hasExternalCategory)
+                .map(Subscription::getCategory)
                 .collect(Collectors.toList());
     }
 

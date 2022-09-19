@@ -11,11 +11,13 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -25,12 +27,15 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,6 +188,31 @@ class ScheduleServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(() -> scheduleService.findById(잘못된_아이디));
+    }
+
+    @DisplayName("월별 일정 조회 시, 통합일정 정보를 반환한다.")
+    @Test
+    void 월별_일정_조회_시_통합일정_정보를_반환한다() {
+        // given
+        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(리버_id, BE_일정_생성_요청);
+        ScheduleResponse 알록달록_회의 = scheduleService.save(리버_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+        ScheduleResponse 알록달록_회식 = scheduleService.save(리버_id, BE_일정.getId(), 알록달록_회식_생성_요청);
+
+        // when
+        List<IntegrationSchedule> schedules = scheduleService.findInternalByMemberIdAndDateRange(리버_id,
+                new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
+
+        // then
+        assertThat(schedules).hasSize(2);
+        assertAll(
+                () -> {
+                    assertThat(schedules.get(0).getId()).isEqualTo(String.valueOf(알록달록_회의.getId()));
+                    assertThat(schedules.get(0).getCategoryType()).isEqualTo(NORMAL);
+                    assertThat(schedules.get(1).getId()).isEqualTo(String.valueOf(알록달록_회식.getId()));
+                    assertThat(schedules.get(1).getCategoryType()).isEqualTo(NORMAL);
+                }
+        );
     }
 
     @DisplayName("일정을 수정한다.")

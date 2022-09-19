@@ -44,7 +44,7 @@ class SubscriptionsTest {
                 new Subscriptions(List.of(공통_일정_구독, BE_일정_구독, 내_일정_구독, 우아한테크코스_일정_구독));
 
         // when & then
-        assertThat(subscriptions.findCheckedCategoryIdsBy(Category::isInternal)).isEqualTo(List.of(1L, 3L));
+        assertThat(subscriptions.findInternalCategory()).isEqualTo(List.of(공통_일정, 내_일정));
     }
 
     @DisplayName("체크된 카테고리 중 외부 카테고리의 아이디를 찾는다.")
@@ -66,7 +66,7 @@ class SubscriptionsTest {
                 new Subscriptions(List.of(공통_일정_구독, BE_일정_구독, 내_일정_구독, 우아한테크코스_일정_구독));
 
         // when & then
-        assertThat(subscriptions.findCheckedCategoryIdsBy(Category::isExternal)).isEqualTo(List.of(4L));
+        assertThat(subscriptions.findExternalCategory()).isEqualTo(List.of(우아한테크코스_일정));
     }
 
     @DisplayName("특정 스케줄의 구독 색상을 찾는다.")
@@ -105,5 +105,43 @@ class SubscriptionsTest {
 
         // when & then
         assertThatThrownBy(() -> subscriptions.findColor(달록_여행)).isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("구독한 카테고리중 내부 카테고리를 찾아 반환한다.")
+    @Test
+    void 구독한_카테고리중_내부_카테고리를_찾아_반환한다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        setId(BE_일정(파랑), 2L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+
+        Subscriptions subscriptions = new Subscriptions(List.of(공통_일정_구독));
+
+        // when
+        List<Category> categories = subscriptions.findInternalCategory();
+
+        // then
+        assertThat(categories).hasSize(1);
+    }
+
+    @DisplayName("구독한 카테고리중 외부 카테고리를 찾아 반환한다.")
+    @Test
+    void 구독한_카테고리중_외부_카테고리를_찾아_반환한다() {
+        // given
+        Member 파랑 = 파랑();
+        Category 공통_일정 = setId(공통_일정(파랑), 1L);
+        setId(BE_일정(파랑), 2L);
+
+        Subscription 공통_일정_구독 = new Subscription(파랑, 공통_일정, COLOR_1);
+
+        Subscriptions subscriptions = new Subscriptions(List.of(공통_일정_구독));
+
+        // when
+        List<Category> categories = subscriptions.findExternalCategory();
+
+        // then
+        assertThat(categories).hasSize(0);
     }
 }
