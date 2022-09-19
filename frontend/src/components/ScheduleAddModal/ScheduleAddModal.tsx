@@ -58,11 +58,9 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   const { isLoading: isGetCategoryLoading, data } = useQuery<
     AxiosResponse<CategoryType[]>,
     AxiosError
-  >(CACHE_KEY.MY_CATEGORIES, () => categoryApi.getMy(accessToken), {
-    onSuccess: (data) => onSuccessGetCategories(data),
-  });
+  >(CACHE_KEY.MY_CATEGORIES, () => categoryApi.getMy(accessToken));
 
-  const categoryId = useControlledInput();
+  const categoryId = useControlledInput(String(data?.data[0].id));
 
   const { mutate: postSchedule } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
@@ -117,10 +115,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     };
 
     postSchedule(allDayBody);
-  };
-
-  const onSuccessGetCategories = (data: AxiosResponse<CategoryType[]>) => {
-    categoryId.setInputValue(`${data.data[0].id}`);
   };
 
   const onSuccessPostSchedule = () => {

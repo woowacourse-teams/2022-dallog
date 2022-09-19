@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 function useControlledInput(initialInputValue?: string) {
-  const [inputValue, setInputValue] = useState<string>(initialInputValue ?? '');
+  const [inputValue, setInputValue] = useState(initialInputValue ?? '');
 
   const onChangeValue = ({
     target,
