@@ -19,13 +19,13 @@ import {
   dateItemStyle,
   detailTextStyle,
   firstItemStyle,
-  firstSectionStyle,
   googleLoginButton,
   introductionStyle,
   loginText,
   mainContentStyle,
   pageStyle,
   secondItemStyle,
+  sectionStyle,
   thirdItemStyle,
   whiteTextStyle,
 } from './StartPage.styles';
@@ -53,7 +53,7 @@ function StartPage() {
   return (
     <PageLayout>
       <div css={pageStyle}>
-        <section css={firstSectionStyle}>
+        <section css={sectionStyle}>
           <div css={calendarStyle}>
             <div css={dateItemStyle}>{getThisDate()}</div>
             <div css={firstItemStyle}>운동 일정</div>

@@ -167,7 +167,7 @@ const mainContentStyle = ({ flex }: Theme) => css`
   gap: 6rem;
 `;
 
-const firstSectionStyle = ({ flex }: Theme) => css`
+const sectionStyle = ({ flex }: Theme) => css`
   ${flex.row};
 
   align-items: flex-start;
@@ -198,7 +198,6 @@ export {
   detailTextStyle,
   dateItemStyle,
   firstItemStyle,
-  firstSectionStyle,
   googleLoginButton,
   loginText,
   introductionStyle,
@@ -206,6 +205,7 @@ export {
   pageStyle,
   secondItemStyle,
   secondSectionStyle,
+  sectionStyle,
   thirdItemStyle,
   whiteTextStyle,
 };
