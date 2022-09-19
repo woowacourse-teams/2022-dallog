@@ -3,6 +3,7 @@ package com.allog.dallog.domain.schedule.application;
 import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
@@ -274,6 +275,36 @@ class ScheduleServiceTest extends ServiceTest {
         assertThatThrownBy(() -> scheduleService.update(기존_일정.getId() + 1, 후디_id, 일정_수정_요청))
                 .isInstanceOf(NoSuchScheduleException.class);
     }
+
+    @DisplayName("일정의 카테고리도 수정한다.")
+    @Test
+    void 일정의_카테고리도_수정한다() {
+        // given
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        CategoryResponse FE_일정 = categoryService.save(후디_id, FE_일정_생성_요청);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(FE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
+
+        // when
+        scheduleService.update(기존_일정.getId(), 후디_id, 일정_수정_요청);
+
+        // then
+        ScheduleResponse actual = scheduleService.findById(기존_일정.getId());
+        assertAll(
+                () -> {
+                    assertThat(actual.getId()).isEqualTo(기존_일정.getId());
+                    assertThat(actual.getCategoryType()).isEqualTo(FE_일정.getCategoryType());
+                    assertThat(actual.getTitle()).isEqualTo(레벨_인터뷰_제목);
+                    assertThat(actual.getStartDateTime()).isEqualTo(레벨_인터뷰_시작일시);
+                    assertThat(actual.getEndDateTime()).isEqualTo(레벨_인터뷰_종료일시);
+                    assertThat(actual.getMemo()).isEqualTo(레벨_인터뷰_메모);
+                }
+        );
+    }
+
 
     @DisplayName("일정을 삭제한다.")
     @Test
