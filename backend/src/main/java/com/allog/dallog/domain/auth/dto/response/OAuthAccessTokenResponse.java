@@ -6,16 +6,16 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class OAuthAccessTokenResponse {
 
-    private String value;
+    private String accessToken;
 
     private OAuthAccessTokenResponse() {
     }
 
-    public OAuthAccessTokenResponse(final String value) {
-        this.value = value;
+    public OAuthAccessTokenResponse(final String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public String getValue() {
-        return value;
+    public String getAccessToken() {
+        return accessToken;
     }
 }
