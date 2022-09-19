@@ -33,6 +33,26 @@ const categoryStyle = ({ colors }: Theme, colorCode: string) => css`
   }
 `;
 
+const dateFieldsetStyle = (isAllDay: boolean) => {
+  return {
+    div: css`
+      width: ${isAllDay ? '100%' : '45%'};
+    `,
+    input: css`
+      height: 11.75rem;
+    `,
+  };
+};
+
+const dateTimePickerStyle = ({ flex }: Theme) => css`
+  ${flex.row};
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  width: 100%;
+`;
+
 const dateTimeStyle = ({ flex }: Theme) => css`
   ${flex.column}
 
@@ -149,6 +169,8 @@ export {
   categoryStyle,
   checkboxStyle,
   controlButtonsStyle,
+  dateFieldsetStyle,
+  dateTimePickerStyle,
   dateTimeStyle,
   formStyle,
   labelStyle,

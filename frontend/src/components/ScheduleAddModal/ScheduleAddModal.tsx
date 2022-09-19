@@ -16,13 +16,14 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
+import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
 import { CACHE_KEY } from '@/constants/api';
-import { DATE_TIME } from '@/constants/date';
+import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { getDate, getDateTime } from '@/utils/date';
+import { getDate, getEndTime, getStartTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -33,7 +34,9 @@ import {
   categorySelect,
   checkboxStyle,
   controlButtons,
+  dateFieldsetStyle,
   dateTime,
+  dateTimePickerStyle,
   form,
   labelStyle,
   saveButton,
@@ -73,19 +76,11 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     },
   });
 
-  const dateFieldset = isAllDay
-    ? {
-        type: 'date',
-        initialValue: getDate(dateInfo),
-      }
-    : {
-        type: 'datetime-local',
-        initialValue: getDateTime(dateInfo),
-      };
-
   const validationSchedule = useValidateSchedule({
-    initialStartDateTime: dateFieldset.initialValue,
-    initialEndDateTime: dateFieldset.initialValue,
+    initialStartDate: getDate(dateInfo),
+    initialStartTime: isAllDay ? DATE_TIME.START : getStartTime(),
+    initialEndDate: getDate(dateInfo),
+    initialEndTime: isAllDay ? DATE_TIME.END : getEndTime(),
   });
 
   const handleClickAllDayButton = () => {
@@ -97,24 +92,12 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
     const body = {
       title: validationSchedule.title.inputValue,
-      startDateTime: validationSchedule.startDateTime.inputValue,
-      endDateTime: validationSchedule.endDateTime.inputValue,
+      startDateTime: `${validationSchedule.startDate.inputValue}T${validationSchedule.startTime.inputValue}`,
+      endDateTime: `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`,
       memo: validationSchedule.memo.inputValue,
     };
 
-    if (!isAllDay) {
-      postSchedule(body);
-
-      return;
-    }
-
-    const allDayBody = {
-      ...body,
-      startDateTime: `${body.startDateTime}T${DATE_TIME.START}`,
-      endDateTime: `${body.endDateTime}T${DATE_TIME.END}`,
-    };
-
-    postSchedule(allDayBody);
+    postSchedule(body);
   };
 
   const onSuccessPostSchedule = () => {
@@ -146,7 +129,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
           autoFocus
           labelText="제목"
         />
-        <div css={dateTime} key={dateFieldset.type}>
+        <div css={dateTime}>
           <div css={checkboxStyle}>
             <input
               type="checkbox"
@@ -157,18 +140,39 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             <label htmlFor="allDay" />
             <label htmlFor="allDay">종일</label>
           </div>
-          <Fieldset
-            type={dateFieldset.type}
-            value={validationSchedule.startDateTime.inputValue}
-            onChange={validationSchedule.startDateTime.onChangeValue}
-            labelText={isAllDay ? '날짜' : '날짜 / 시간'}
-          />
+          <div css={dateTimePickerStyle}>
+            <Fieldset
+              type="date"
+              value={validationSchedule.startDate.inputValue}
+              onChange={validationSchedule.startDate.onChangeValue}
+              labelText={isAllDay ? '날짜' : '날짜 / 시간'}
+              cssProp={dateFieldsetStyle(isAllDay)}
+            />
+            {!isAllDay && (
+              <Select
+                options={TIMES}
+                value={validationSchedule.startTime.inputValue}
+                onChange={validationSchedule.startTime.onChangeValue}
+              />
+            )}
+          </div>
           <p css={arrow}>↓</p>
-          <Fieldset
-            type={dateFieldset.type}
-            value={validationSchedule.endDateTime.inputValue}
-            onChange={validationSchedule.endDateTime.onChangeValue}
-          />
+          <div css={dateTimePickerStyle}>
+            <Fieldset
+              type="date"
+              value={validationSchedule.endDate.inputValue}
+              onChange={validationSchedule.endDate.onChangeValue}
+              cssProp={dateFieldsetStyle(isAllDay)}
+              min={validationSchedule.startDate.inputValue}
+            />
+            {!isAllDay && (
+              <Select
+                options={TIMES}
+                value={validationSchedule.endTime.inputValue}
+                onChange={validationSchedule.endTime.onChangeValue}
+              />
+            )}
+          </div>
         </div>
         <div css={selectBoxStyle}>
           <span css={labelStyle}>카테고리</span>
