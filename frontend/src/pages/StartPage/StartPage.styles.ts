@@ -167,7 +167,7 @@ const mainContentStyle = ({ flex }: Theme) => css`
   gap: 6rem;
 `;
 
-const firstSectionStyle = ({ flex }: Theme) => css`
+const sectionStyle = ({ flex }: Theme) => css`
   ${flex.row};
 
   align-items: flex-start;
@@ -190,76 +190,6 @@ const secondSectionStyle = ({ flex, colors }: Theme) => css`
 
 const pageStyle = ({ flex }: Theme) => css`
   ${flex.column};
-
-  overflow-x: hidden;
-`;
-
-const methodHeaderStyle = ({ colors }: Theme) => css`
-  margin-top: 10rem;
-
-  font-size: 5rem;
-  color: ${colors.GRAY_500};
-`;
-
-const methodTextStyle = ({ colors }: Theme) => css`
-  font-size: 6rem;
-  line-height: 10rem;
-  color: ${colors.GRAY_500};
-`;
-
-const methodItemStyle = ({ flex }: Theme, isShowing: boolean, direction: 'left' | 'right') => css`
-  ${flex.row};
-
-  position: relative;
-  left: ${direction === 'left' ? '-100%' : '100%'};
-  gap: 20rem;
-
-  width: 70%;
-  height: 100%;
-  padding: 20rem;
-
-  opacity: 0;
-
-  @keyframes slideInFromLeft {
-    from {
-      opacity: 0;
-      left: -100%;
-    }
-
-    to {
-      left: 0;
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideInFromRight {
-    from {
-      opacity: 0;
-      left: 100%;
-    }
-
-    to {
-      left: 0;
-      opacity: 1;
-    }
-  }
-
-  ${isShowing &&
-  css`
-    animation-name: ${direction === 'left' ? 'slideInFromLeft' : 'slideInFromRight'};
-    animation-duration: 0.7s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-  `}
-`;
-
-const imageStyle = css`
-  width: 120rem;
-  height: auto;
-`;
-
-const refStyle = css`
-  height: 1rem;
 `;
 
 export {
@@ -268,19 +198,14 @@ export {
   detailTextStyle,
   dateItemStyle,
   firstItemStyle,
-  firstSectionStyle,
   googleLoginButton,
   loginText,
-  imageStyle,
   introductionStyle,
   mainContentStyle,
-  methodHeaderStyle,
-  methodItemStyle,
-  methodTextStyle,
   pageStyle,
-  refStyle,
   secondItemStyle,
   secondSectionStyle,
+  sectionStyle,
   thirdItemStyle,
   whiteTextStyle,
 };
