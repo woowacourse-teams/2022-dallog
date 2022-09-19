@@ -223,7 +223,8 @@ class ScheduleServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
 
         // when
         scheduleService.update(기존_일정.getId(), 후디_id, 일정_수정_요청);
@@ -250,7 +251,8 @@ class ScheduleServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 리버_id, 일정_수정_요청))
@@ -265,7 +267,8 @@ class ScheduleServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.update(기존_일정.getId() + 1, 후디_id, 일정_수정_요청))
