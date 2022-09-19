@@ -4,7 +4,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_외부_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_11일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_1분;
@@ -12,9 +12,9 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_20시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_11시_59분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_21일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_11시_59분;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_28일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
@@ -33,7 +33,6 @@ import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +47,6 @@ class SubscribingSchedulesFinderTest extends ServiceTest {
 
     @Autowired
     private ExternalCategoryDetailRepository externalCategoryDetailRepository;
-
-    @Autowired
-    private SubscriptionService subscriptionService;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -81,11 +77,11 @@ class SubscribingSchedulesFinderTest extends ServiceTest {
 
         /* 종일 일정 */
         scheduleService.save(memberId, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_10일_11시_59분, ""));
+                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_11일_0시_0분, ""));
         scheduleService.save(memberId, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_20일_11시_59분, ""));
+                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_21일_0시_0분, ""));
         scheduleService.save(memberId, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_27일_11시_59분, ""));
+                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_28일_0시_0분, ""));
 
         /* 몇시간 일정 */
         scheduleService.save(memberId, BE_일정.getId(),

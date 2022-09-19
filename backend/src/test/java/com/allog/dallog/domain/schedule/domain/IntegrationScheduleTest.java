@@ -27,9 +27,9 @@ class IntegrationScheduleTest {
                         NORMAL));
     }
 
-    @DisplayName("LongTerm인지 확인 할 떄, 일정의 시작일시와 종료일시가 다르면 true를 반환한다.")
+    @DisplayName("LongTerm인지 확인 할 때, AllDays가 아니고 일정의 시작일과 종료일이 다르면 true를 반환한다.")
     @Test
-    void LongTerm인지_확인_할_떄_일정의_시작일시와_종료일시가_다르면_true를_반환한다() {
+    void LongTerm인지_확인_할_때_AllDays가_아니고_일정의_시작일과_종료일이_다르면_true를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
@@ -44,9 +44,9 @@ class IntegrationScheduleTest {
         assertThat(actual).isTrue();
     }
 
-    @DisplayName("LongTerm인지 확인 할 떄, 일정의 시작일시와 종료일시가 같으면 false를 반환한다.")
+    @DisplayName("LongTerm인지 확인 할 때, 일정의 시작일과 종료일이 같으면 false를 반환한다.")
     @Test
-    void LongTerm인지_확인_할_때_일정의_시작일시와_종료일시가_다르면_false를_반환한다() {
+    void LongTerm인지_확인_할_때_일정의_시작일과_종료일이_같으면_false를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
@@ -61,15 +61,32 @@ class IntegrationScheduleTest {
         assertThat(actual).isFalse();
     }
 
-    @DisplayName("AllDays인지 확인 할 떄, 일정의 시작일시와 종료일시가 같고 자정이면 true를 반환한다.")
+    @DisplayName("LongTerm인지 확인 할 때, 일정의 시작일과 종료일이 달라도 AllDays면 false를 반환한다.")
     @Test
-    void AllDays인지_확인_할_때_일정의_시작일시와_종료일시가_같고_자정이면_true를_반환한다() {
+    void LongTerm인지_확인_할_때_일정의_시작일과_종료일이_달라도_AllDays면_false를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, NORMAL);
+                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모, NORMAL);
+
+        // when
+        boolean actual = integrationSchedule.isLongTerms();
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @DisplayName("AllDays인지 확인 할 때, 일정의 일차가 하루고 시작시간과 종료시간 모두 자정이면 true를 반환한다.")
+    @Test
+    void AllDays인지_확인_할_때_일정의_일차가_하루고_시작시간과_종료시간이_모두_자정이면_true를_반환한다() {
+        // given
+        String id = "1";
+        Long categoryId = 1L;
+        IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
+                LocalDateTime.of(2022, 7, 1, 0, 0),
+                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isAllDays();
@@ -78,15 +95,15 @@ class IntegrationScheduleTest {
         assertThat(actual).isTrue();
     }
 
-    @DisplayName("AllDays인지 확인 할 떄, 일정의 시작일시와 종료일시가 같지만 자정이 아니면 false를 반환한다.")
+    @DisplayName("AllDays인지 확인 할 때, 일정의 일차가 하루여도 시작시간과 종료시간이 자정이 아니면 false를 반환한다.")
     @Test
-    void AllDays인지_확인_할_때_일정의_시작일시와_종료일시가_같지만_자정이_아니면_false를_반환한다() {
+    void AllDays인지_확인_할_때_일정의_일차가_하루여도_시작시간과_종료시간이__자정이_아니면_false를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, NORMAL);
+                LocalDateTime.of(2022, 7, 2, 0, 1), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isAllDays();
@@ -95,15 +112,15 @@ class IntegrationScheduleTest {
         assertThat(actual).isFalse();
     }
 
-    @DisplayName("FewHours인지 확인 할 떄, 일정의 시작일시와 종료일시가 같고 자정이 아니면 true를 반환한다.")
+    @DisplayName("FewHours인지 확인 할 때, 일정의 시작일과 종료일이 같으면 true를 반환한다.")
     @Test
-    void FewHours인지_확인_할_때_일정의_시작일시와_종료일시가_같고_자정이_아니면_true를_반환한다() {
+    void FewHours인지_확인_할_때_일정의_시작일과_종료일이_같으면_true를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 11, 58), 알록달록_회의_메모, NORMAL);
+                LocalDateTime.of(2022, 7, 1, 11, 59), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isFewHours();
@@ -112,15 +129,15 @@ class IntegrationScheduleTest {
         assertThat(actual).isTrue();
     }
 
-    @DisplayName("FewHours인지 확인 할 떄, 일정의 시작일시와 종료일시가 같지만 자정이면 false를 반환한다.")
+    @DisplayName("FewHours인지 확인 할 때, 일정의 시작일과 종료일이 다르면 false를 반환한다.")
     @Test
-    void FewHours인지_확인_할_때_일정의_시작일시와_종료일시가_같지만_자정이면_false를_반환한다() {
+    void FewHours인지_확인_할_때_일정의_시작일과_종료일이_다르면_false를_반환한다() {
         // given
         String id = "1";
         Long categoryId = 1L;
         IntegrationSchedule integrationSchedule = new IntegrationSchedule(id, categoryId, 알록달록_회의_제목,
                 LocalDateTime.of(2022, 7, 1, 0, 0),
-                LocalDateTime.of(2022, 7, 1, 23, 59), 알록달록_회의_메모, NORMAL);
+                LocalDateTime.of(2022, 7, 2, 0, 0), 알록달록_회의_메모, NORMAL);
 
         // when
         boolean actual = integrationSchedule.isFewHours();

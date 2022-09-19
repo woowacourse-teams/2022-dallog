@@ -9,8 +9,6 @@ import java.util.Objects;
 public class IntegrationSchedule {
 
     private static final int ONE_DAY = 1;
-    private static final int MIDNIGHT_HOUR = 23;
-    private static final int MIDNIGHT_MINUTE = 59;
 
     private final String id;
     private final Long categoryId;
@@ -45,18 +43,17 @@ public class IntegrationSchedule {
     }
 
     public boolean isLongTerms() {
-        return period.calculateDayDifference() >= ONE_DAY;
+        return !isAllDays()
+                && period.calculateDayDifference() >= ONE_DAY;
     }
 
     public boolean isAllDays() {
-        return period.calculateDayDifference() < ONE_DAY
-                && period.calculateHourDifference() == MIDNIGHT_HOUR
-                && period.calculateMinuteDifference() == MIDNIGHT_MINUTE;
+        return period.calculateDayDifference() == ONE_DAY
+                && period.isMidnightToMidnight();
     }
 
     public boolean isFewHours() {
-        return !isAllDays()
-                && period.calculateDayDifference() < ONE_DAY;
+        return period.calculateDayDifference() < ONE_DAY;
     }
 
     public boolean isSameCategory(final Subscription subscription) {
