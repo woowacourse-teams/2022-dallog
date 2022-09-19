@@ -190,8 +190,6 @@ const secondSectionStyle = ({ flex, colors }: Theme) => css`
 
 const pageStyle = ({ flex }: Theme) => css`
   ${flex.column};
-
-  overflow-x: hidden;
 `;
 
 export {
