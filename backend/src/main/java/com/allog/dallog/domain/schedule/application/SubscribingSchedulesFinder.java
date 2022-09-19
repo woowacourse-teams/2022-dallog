@@ -79,7 +79,7 @@ public class SubscribingSchedulesFinder {
         String refreshToken = oAuthToken.getRefreshToken();
 
         OAuthAccessTokenResponse accessTokenResponse = oAuthClient.getAccessToken(refreshToken);
-        return accessTokenResponse.getValue();
+        return accessTokenResponse.getAccessToken();
     }
 
     private List<IntegrationSchedule> findExternalSchedules(final DateRangeRequest dateRange, final String accessToken,

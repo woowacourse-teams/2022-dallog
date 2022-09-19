@@ -5,8 +5,8 @@ import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
@@ -83,7 +83,7 @@ public class CalendarService {
         String refreshToken = oAuthTokenRepository.getByMemberId(memberId)
                 .getRefreshToken();
         String accessToken = oAuthClient.getAccessToken(refreshToken)
-                .getValue();
+                .getAccessToken();
 
         return externalCategories.stream()
                 .flatMap(externalCategory -> flatIntegrationSchedules(request, accessToken, externalCategory))
