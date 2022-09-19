@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,20 @@ public class ScheduleTest {
 
         // when & then
         assertThatThrownBy(() -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 잘못된_메모))
+                .isInstanceOf(InvalidScheduleException.class);
+    }
+
+    @DisplayName("일정의 카테고리를 외부연동 카테고리로 변경 하려는 경우 예외를 던진다.")
+    @Test
+    void 일정의_카테고리를_외부연동_카테고리로_변경_하려는_경우_예외를_던진다() {
+        // given
+        Category BE_일정_카테고리 = BE_일정(관리자());
+        Schedule BE_일정 = new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
+
+        Category 외부_연동_카테고리 = new Category("외부 카테고리", 관리자(), CategoryType.GOOGLE);
+
+        // when & then
+        assertThatThrownBy(() -> BE_일정.changeCategory(외부_연동_카테고리))
                 .isInstanceOf(InvalidScheduleException.class);
     }
 }

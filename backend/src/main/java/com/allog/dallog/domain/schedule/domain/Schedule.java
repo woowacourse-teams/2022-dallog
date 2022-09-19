@@ -69,6 +69,17 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
+    public void changeCategory(final Category category) {
+        validateCategoryType(category);
+        this.category = category;
+    }
+
+    private void validateCategoryType(final Category category) {
+        if (category.isExternal()) {
+            throw new InvalidScheduleException("일정의 카테고리를 외부 연동 카테고리로 변경 할 수 없습니다.");
+        }
+    }
+
     private void validateTitleLength(final String title) {
         if (title.length() > MAX_TITLE_LENGTH) {
             throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
@@ -94,6 +105,10 @@ public class Schedule extends BaseEntity {
         if (!category.isCreatorId(memberId)) {
             throw new NoPermissionException();
         }
+    }
+
+    public boolean hasNotSameCategory(final Long categoryId) {
+        return !category.getId().equals(categoryId);
     }
 
     public Long getId() {

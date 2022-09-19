@@ -67,6 +67,11 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.getById(id);
         schedule.validateEditablePossible(memberId);
         schedule.change(request.getTitle(), request.getStartDateTime(), request.getEndDateTime(), request.getMemo());
+
+        if (schedule.hasNotSameCategory(request.getCategoryId())) {
+            Category category = categoryRepository.getById(request.getCategoryId());
+            schedule.changeCategory(category);
+        }
     }
 
     @Transactional
