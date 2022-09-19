@@ -27,8 +27,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
                 .orElseThrow(NoSuchScheduleException::new);
     }
 
-    default List<IntegrationSchedule> createByCategoryAndBetween(
-            final Category category, final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
+    default List<IntegrationSchedule> createByCategoryAndBetween(final Category category,
+                                                                 final LocalDateTime startDateTime,
+                                                                 final LocalDateTime endDateTime) {
         List<Schedule> schedules = findByCategoryAndBetween(category, startDateTime, endDateTime);
 
         return schedules.stream()

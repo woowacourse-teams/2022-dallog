@@ -5,9 +5,8 @@ import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
@@ -25,7 +24,6 @@ public class CalendarService {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final IntegrationScheduleDao integrationScheduleDao;
     private final ScheduleService scheduleService;
     private final SubscriptionRepository subscriptionRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
@@ -33,12 +31,11 @@ public class CalendarService {
     private final OAuthClient oAuthClient;
     private final ExternalCalendarClient externalCalendarClient;
 
-    public CalendarService(final IntegrationScheduleDao integrationScheduleDao, final ScheduleService scheduleService,
+    public CalendarService(final ScheduleService scheduleService,
                            final SubscriptionRepository subscriptionRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final OAuthTokenRepository oAuthTokenRepository, final OAuthClient oAuthClient,
                            final ExternalCalendarClient externalCalendarClient) {
-        this.integrationScheduleDao = integrationScheduleDao;
         this.scheduleService = scheduleService;
         this.subscriptionRepository = subscriptionRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;

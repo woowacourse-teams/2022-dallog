@@ -66,15 +66,15 @@ public class SubscribingSchedulesFinder {
             return schedules;
         }
 
-        String accessToken = getGoogleAccessToken(memberId);
+        String accessToken = getExternalAccessToken(memberId);
         for (ExternalCategoryDetail detail : details) {
-            List<IntegrationSchedule> googleSchedules = findGoogleSchedules(dateRange, accessToken, detail);
-            schedules.addAll(googleSchedules);
+            List<IntegrationSchedule> externalSchedules = findExternalSchedules(dateRange, accessToken, detail);
+            schedules.addAll(externalSchedules);
         }
         return schedules;
     }
 
-    private String getGoogleAccessToken(final Long memberId) {
+    private String getExternalAccessToken(final Long memberId) {
         OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
         String refreshToken = oAuthToken.getRefreshToken();
 
@@ -82,8 +82,8 @@ public class SubscribingSchedulesFinder {
         return accessTokenResponse.getValue();
     }
 
-    private List<IntegrationSchedule> findGoogleSchedules(final DateRangeRequest dateRange, final String accessToken,
-                                                          final ExternalCategoryDetail detail) {
+    private List<IntegrationSchedule> findExternalSchedules(final DateRangeRequest dateRange, final String accessToken,
+                                                            final ExternalCategoryDetail detail) {
         LocalDateTime startDateTime = dateRange.getStartDateTime();
         LocalDateTime endDateTime = dateRange.getEndDateTime();
 
