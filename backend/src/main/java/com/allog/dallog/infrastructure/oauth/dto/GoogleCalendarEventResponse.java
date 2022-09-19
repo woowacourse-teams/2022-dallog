@@ -1,5 +1,7 @@
 package com.allog.dallog.infrastructure.oauth.dto;
 
+import com.allog.dallog.domain.category.domain.CategoryType;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,7 +28,12 @@ public class GoogleCalendarEventResponse {
         this.end = end;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public IntegrationSchedule toIntegrationSchedule(final Long internalCategoryId) {
+        return new IntegrationSchedule(id, internalCategoryId, summary, getStartDateTime(), getEndDateTime(),
+                description, CategoryType.GOOGLE);
+    }
+
+    private LocalDateTime getStartDateTime() {
         if (Objects.isNull(start.getDate())) {
             return LocalDateTime.parse(start.getDateTime().substring(0, 19));
         }
@@ -34,7 +41,7 @@ public class GoogleCalendarEventResponse {
         return LocalDateTime.of(LocalDate.parse(start.getDate()), LocalTime.MIN);
     }
 
-    public LocalDateTime getEndDateTime() {
+    private LocalDateTime getEndDateTime() {
         if (Objects.isNull(end.getDate())) {
             return LocalDateTime.parse(end.getDateTime().substring(0, 19));
         }
