@@ -3,8 +3,8 @@ package com.allog.dallog.common.fixtures;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.integrationschedule.domain.Period;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.Period;
 import java.time.LocalDateTime;
 
 public class IntegrationScheduleFixtures {

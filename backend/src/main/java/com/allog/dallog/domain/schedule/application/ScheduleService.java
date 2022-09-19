@@ -2,9 +2,9 @@ package com.allog.dallog.domain.schedule.application;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
@@ -50,7 +50,8 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
-    public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId, final DateRangeRequest dateRange) {
+    public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId,
+                                                                        final DateRangeRequest dateRange) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
         return integrationSchedules(dateRange, subscriptions);
     }

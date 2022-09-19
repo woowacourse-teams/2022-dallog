@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.composition.application.SchedulerService;
-import com.allog.dallog.domain.integrationschedule.domain.Period;
+import com.allog.dallog.domain.schedule.domain.Period;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

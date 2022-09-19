@@ -2,7 +2,7 @@ package com.allog.dallog.domain.subscription.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import java.util.List;
 import java.util.stream.Collectors;
 

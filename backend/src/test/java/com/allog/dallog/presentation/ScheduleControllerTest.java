@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
@@ -51,6 +52,9 @@ class ScheduleControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
+
+    @MockBean
+    private AuthService authService;
 
     @MockBean
     private ScheduleService scheduleService;

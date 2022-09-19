@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.integrationschedule.domain;
+package com.allog.dallog.domain.schedule.domain;
 
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;

@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.schedule.dto.response;
 
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
 

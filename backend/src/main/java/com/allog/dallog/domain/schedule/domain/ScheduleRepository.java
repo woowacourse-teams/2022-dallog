@@ -1,7 +1,6 @@
 package com.allog.dallog.domain.schedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
 import java.util.List;

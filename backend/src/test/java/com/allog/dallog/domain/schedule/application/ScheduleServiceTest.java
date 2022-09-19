@@ -27,7 +27,7 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;

@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.integrationschedule.domain;
+package com.allog.dallog.domain.schedule.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
