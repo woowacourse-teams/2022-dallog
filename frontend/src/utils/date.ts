@@ -4,7 +4,7 @@ import { DATE_TIME } from '@/constants/date';
 
 import { zeroFill } from '.';
 
-const checkAllDay = (startDateTime: string | undefined, endDateTime: string | undefined) => {
+const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
   if (startDateTime === undefined || endDateTime === undefined) {
     return null;
   }
@@ -116,6 +116,10 @@ const getISODateString = (ISOString: string) => {
   return ISOString.split('T')[0];
 };
 
+const getISOTimeString = (ISOString: string) => {
+  return ISOString.split('T')[1];
+};
+
 const getKoreaISOString = (time: number) => {
   return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
 };
@@ -132,7 +136,7 @@ const getNextYearMonth = (targetYear: number, targetMonth: number) => {
 };
 
 const getOneHourEarlierISOString = (ISOString: string) => {
-  const hour = ISOString.split('T')[1].split(':')[0];
+  const hour = getISOTimeString(ISOString).split(':')[0];
 
   const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) - 1))
     .replace(/\..*/, '')
@@ -142,7 +146,7 @@ const getOneHourEarlierISOString = (ISOString: string) => {
 };
 
 const getOneHourLaterISOString = (ISOString: string) => {
-  const hour = ISOString.split('T')[1].split(':')[0];
+  const hour = getISOTimeString(ISOString).split(':')[0];
 
   const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) + 1))
     .replace(/\..*/, '')
@@ -174,6 +178,7 @@ export {
   getEndTime,
   getFormattedDate,
   getISODateString,
+  getISOTimeString,
   getKoreaISOString,
   getNextDate,
   getNextYearMonth,

@@ -26,13 +26,15 @@ import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModify
 
 import { CALENDAR } from '@/constants';
 import { CACHE_KEY } from '@/constants/api';
-import { DAYS } from '@/constants/date';
+import { DATE_TIME, DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
 import {
+  getBeforeDate,
   getDayFromFormattedDate,
   getFormattedDate,
   getISODateString,
+  getISOTimeString,
   getThisDate,
   getThisMonth,
   getThisYear,
@@ -304,7 +306,19 @@ function CalendarPage() {
                     const nowDate = getFormattedDate(info.year, info.month, info.date);
                     const nowDay = getDayFromFormattedDate(nowDate);
 
-                    if (startDate <= nowDate && nowDate <= endDate && el.priority >= maxView) {
+                    const isAllDay = getISOTimeString(el.schedule.endDateTime).startsWith(
+                      DATE_TIME.END
+                    );
+
+                    if (
+                      !(
+                        startDate <= nowDate &&
+                        (nowDate < endDate || (nowDate == endDate && !isAllDay))
+                      )
+                    )
+                      return;
+
+                    if (el.priority >= maxView) {
                       return (
                         <span
                           key={`${nowDate}#${el.schedule.id}#longTerms#more`}
@@ -316,26 +330,29 @@ function CalendarPage() {
                       );
                     }
 
+                    const isEndDate =
+                      nowDate ===
+                      (isAllDay
+                        ? getISODateString(getBeforeDate(new Date(endDate), 1).toISOString())
+                        : endDate);
+
                     return (
-                      startDate <= nowDate &&
-                      nowDate <= endDate && (
-                        <div
-                          key={`${nowDate}#${el.schedule.id}#longTerms`}
-                          css={itemWithBackgroundStyle(
-                            el.priority,
-                            el.schedule.colorCode,
-                            hoveringId === el.schedule.id,
-                            maxView,
-                            nowDate === endDate
-                          )}
-                          onMouseEnter={() => onMouseEnter(el.schedule.id)}
-                          onClick={(e) => handleClickSchedule(e, el.schedule)}
-                          onMouseLeave={onMouseLeave}
-                        >
-                          {(startDate === nowDate || nowDay === 0) &&
-                            (el.schedule.title || CALENDAR.EMPTY_TITLE)}
-                        </div>
-                      )
+                      <div
+                        key={`${nowDate}#${el.schedule.id}#longTerms`}
+                        css={itemWithBackgroundStyle(
+                          el.priority,
+                          el.schedule.colorCode,
+                          hoveringId === el.schedule.id,
+                          maxView,
+                          isEndDate
+                        )}
+                        onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                        onClick={(e) => handleClickSchedule(e, el.schedule)}
+                        onMouseLeave={onMouseLeave}
+                      >
+                        {(startDate === nowDate || nowDay === 0) &&
+                          (el.schedule.title || CALENDAR.EMPTY_TITLE)}
+                      </div>
                     );
                   })}
 
