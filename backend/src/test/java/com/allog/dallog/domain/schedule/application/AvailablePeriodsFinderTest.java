@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.composition.application;
+package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.관리자_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
@@ -8,6 +8,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_11시_59분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
@@ -29,8 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
@@ -44,10 +43,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class SchedulerServiceTest extends ServiceTest {
+class AvailablePeriodsFinderTest extends ServiceTest {
 
     @Autowired
-    private SchedulerService schedulerService;
+    private AvailablePeriodsFinder availablePeriodsFinder;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -57,9 +56,6 @@ class SchedulerServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
-
-    @Autowired
-    private MemberService memberService;
 
     @DisplayName("비어있는 기간 목록을 반환한다.")
     @Test
@@ -104,19 +100,21 @@ class SchedulerServiceTest extends ServiceTest {
         subscriptionService.save(매트_id, FE_일정.getId());
         subscriptionService.save(리버_id, FE_일정.getId());
 
+        categoryService.save(매트_id, 대한민국_공휴일_생성_요청);
+
         // when
-        List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
+        List<PeriodResponse> actual = availablePeriodsFinder.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
         assertAll(() -> {
-            assertThat(actual).hasSize(7);
+            assertThat(actual).hasSize(8);
             assertThat(actual.stream().map(PeriodResponse::getStartDateTime)).containsExactly(날짜_2022년_7월_1일_0시_0분,
                     날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_1분, 날짜_2022년_7월_20일_0시_0분,
-                    날짜_2022년_7월_27일_0시_0분, 날짜_2022년_8월_15일_14시_0분);
+                    날짜_2022년_7월_27일_0시_0분, 날짜_2022년_8월_15일_14시_0분, LocalDateTime.of(2022, 8, 20, 0, 0));
             assertThat(actual.stream().map(PeriodResponse::getEndDateTime)).containsExactly(날짜_2022년_7월_7일_16시_0분,
                     날짜_2022년_7월_10일_11시_59분, 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_20일_11시_59분,
-                    날짜_2022년_7월_27일_11시_59분, LocalDateTime.of(2022, 8, 31, 0, 0));
+                    날짜_2022년_7월_27일_11시_59분, LocalDateTime.of(2022, 8, 20, 0, 0), LocalDateTime.of(2022, 8, 31, 0, 0));
         });
     }
 
@@ -169,7 +167,7 @@ class SchedulerServiceTest extends ServiceTest {
                 new SubscriptionUpdateRequest(Color.COLOR_1, false));
 
         // when
-        List<PeriodResponse> actual = schedulerService.getAvailablePeriods(공통_일정.getId(),
+        List<PeriodResponse> actual = availablePeriodsFinder.getAvailablePeriods(공통_일정.getId(),
                 new DateRangeRequest("2022-07-01T00:00", "2022-08-31T00:00"));
 
         // then
