@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.schedule.domain;
 
+import static java.time.LocalTime.MIDNIGHT;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Period {
-
-    private static final int ONE_HOUR = 60;
 
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
@@ -26,16 +26,10 @@ public class Period {
         return ChronoUnit.DAYS.between(startDate, endDate);
     }
 
-    public long calculateHourDifference() {
+    public boolean isMidnightToMidnight() {
         LocalTime startTime = LocalTime.from(startDateTime);
         LocalTime endTime = LocalTime.from(endDateTime);
-        return ChronoUnit.HOURS.between(startTime, endTime);
-    }
-
-    public long calculateMinuteDifference() {
-        LocalTime startTime = LocalTime.from(startDateTime);
-        LocalTime endTime = LocalTime.from(endDateTime);
-        return ChronoUnit.MINUTES.between(startTime, endTime) % ONE_HOUR;
+        return startTime.equals(MIDNIGHT) && endTime.equals(MIDNIGHT);
     }
 
     public List<Period> slice(final Period otherPeriod) {

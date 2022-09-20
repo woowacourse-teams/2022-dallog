@@ -1,14 +1,11 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
-import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,13 +59,13 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
                                                                   final String startDateTime,
                                                                   final String endDateTime) {
         HttpEntity<Void> request = new HttpEntity<>(generateCalendarRequestHeaders(accessToken));
-
         Map<String, String> uriVariables = generateEventsVariables(externalCalendarId, startDateTime, endDateTime);
+
         GoogleCalendarEventsResponse response = fetchGoogleCalendarEvents(request, uriVariables).getBody();
 
         return response.getItems()
                 .stream()
-                .map(event -> parseIntegrationSchedule(internalCategoryId, event))
+                .map(event -> event.toIntegrationSchedule(internalCategoryId))
                 .collect(Collectors.toList());
     }
 
@@ -96,23 +93,5 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         } catch (RestClientException e) {
             throw new OAuthException(e);
         }
-    }
-
-    private IntegrationSchedule parseIntegrationSchedule(final Long internalCategoryId,
-                                                         final GoogleCalendarEventResponse event) {
-        LocalDateTime startDateTime = event.getStartDateTime();
-        LocalDateTime endDateTime = event.getEndDateTime();
-
-        if (isAllDay(startDateTime, endDateTime)) {
-            endDateTime = endDateTime.minusMinutes(1);
-        }
-
-        return new IntegrationSchedule(event.getId(), internalCategoryId, event.getSummary(), startDateTime,
-                endDateTime, event.getDescription(), CategoryType.GOOGLE);
-    }
-
-    private boolean isAllDay(final LocalDateTime startDateTime, final LocalDateTime endDateTime) {
-        return startDateTime.getHour() == 0 && startDateTime.getMinute() == 0
-                && endDateTime.getHour() == 0 && endDateTime.getMinute() == 0;
     }
 }

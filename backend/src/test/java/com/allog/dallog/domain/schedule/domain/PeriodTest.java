@@ -26,36 +26,36 @@ class PeriodTest {
         assertThat(dayDifference).isEqualTo(2);
     }
 
-    @DisplayName("시작일시와 종료일시의 시간 차이를 반환한다.")
+    @DisplayName("시작시간과 종료시간이 모두 자정이면 true를 반환한다.")
     @Test
-    void 시작일시와_종료일시의_시간_차이를_반환한다() {
+    void 시작시간과_종료시간이_모두_자정이면_true를_반환한다() {
         // given
-        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 2, 11, 0);
-        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 4, 23, 0);
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 2, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 4, 0, 0);
 
         Period period = new Period(startDateTime, endDateTime);
 
         // when
-        long hourDifference = period.calculateHourDifference();
+        boolean actual = period.isMidnightToMidnight();
 
         // then
-        assertThat(hourDifference).isEqualTo(12);
+        assertThat(actual).isTrue();
     }
 
-    @DisplayName("시작일시와 종료일시의 분 차이를 반환한다.")
+    @DisplayName("시작시간과 종료시간 중 하나라도 자정이 아니면 false를 반환한다.")
     @Test
-    void 시작일시와_종료일시의_분_차이를_반환한다() {
+    void 시작시간과_종료시간_중_하나라도_자정이_아니면_false를_반환한다() {
         // given
-        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 2, 11, 17);
-        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 4, 11, 19);
+        LocalDateTime startDateTime = LocalDateTime.of(2022, 1, 2, 10, 10);
+        LocalDateTime endDateTime = LocalDateTime.of(2022, 1, 4, 0, 0);
 
         Period period = new Period(startDateTime, endDateTime);
 
         // when
-        long minuteDifference = period.calculateMinuteDifference();
+        boolean actual = period.isMidnightToMidnight();
 
         // then
-        assertThat(minuteDifference).isEqualTo(2);
+        assertThat(actual).isFalse();
     }
 
     @DisplayName("기간 뺄셈시 상대 기간이 우측에 걸쳐있을 때의 결과를 계산한다.")
@@ -145,9 +145,7 @@ class PeriodTest {
         List<Period> actual = basePeriod.slice(otherPeriod);
 
         // then
-        assertAll(() -> {
-            assertThat(actual).hasSize(0);
-        });
+        assertThat(actual).hasSize(0);
     }
 
     @DisplayName("기간 뺄셈시 상대 기간과 겹치지 않으면 자기자신을 리스트로 반환한다.")
