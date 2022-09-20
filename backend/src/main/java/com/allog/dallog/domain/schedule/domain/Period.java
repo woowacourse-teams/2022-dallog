@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.integrationschedule.domain;
+package com.allog.dallog.domain.schedule.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

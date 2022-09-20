@@ -22,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.integrationschedule.domain.Period;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.Period;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

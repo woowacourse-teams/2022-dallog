@@ -1,8 +1,7 @@
-package com.allog.dallog.domain.integrationschedule.domain;
+package com.allog.dallog.domain.schedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryType;
-import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
 import java.util.Objects;

@@ -8,7 +8,7 @@ import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.Ìè¨Ïà
 
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import java.util.List;
 
 public class StubExternalCalendarClient implements ExternalCalendarClient {

@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.integrationschedule.domain;
+package com.allog.dallog.domain.schedule.domain;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;

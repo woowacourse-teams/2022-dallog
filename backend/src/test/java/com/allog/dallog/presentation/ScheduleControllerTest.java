@@ -30,10 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.composition.application.CalendarService;
-import com.allog.dallog.domain.composition.application.SchedulerService;
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.application.SubscribingSchedulesFinder;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
@@ -64,19 +60,7 @@ class ScheduleControllerTest extends ControllerTest {
     private ScheduleService scheduleService;
 
     @MockBean
-    private SchedulerService schedulerService;
-
-    @MockBean
-    private CalendarService calendarService;
-
-    @MockBean
     private SubscribingSchedulesFinder subscribingSchedulesFinder;
-
-    @MockBean
-    private IntegrationScheduleDao integrationScheduleDao;
-
-    @MockBean
-    private ExternalCalendarClient externalCalendarClient;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test

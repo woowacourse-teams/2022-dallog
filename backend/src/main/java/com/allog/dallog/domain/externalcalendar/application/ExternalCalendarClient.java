@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.externalcalendar.application;
 
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import java.util.List;
 
 public interface ExternalCalendarClient {

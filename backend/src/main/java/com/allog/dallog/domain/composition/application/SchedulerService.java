@@ -1,9 +1,9 @@
 package com.allog.dallog.domain.composition.application;
 
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.integrationschedule.domain.Period;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.Period;
 import com.allog.dallog.domain.schedule.domain.scheduler.Scheduler;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
