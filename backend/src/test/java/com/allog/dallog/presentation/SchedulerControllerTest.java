@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.composition.application.SchedulerService;
+import com.allog.dallog.domain.schedule.application.AvailablePeriodsFinder;
 import com.allog.dallog.domain.schedule.domain.Period;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import java.util.List;
@@ -41,7 +41,7 @@ class SchedulerControllerTest extends ControllerTest {
     private AuthService authService;
 
     @MockBean
-    private SchedulerService schedulerService;
+    private AvailablePeriodsFinder availablePeriodsFinder;
 
     @DisplayName("일정 조율 결과를 반환한다.")
     @Test
@@ -50,7 +50,7 @@ class SchedulerControllerTest extends ControllerTest {
         String startDateTime = "2022-07-01T00:00";
         String endDateTime = "2022-07-31T00:00";
 
-        given(schedulerService.getAvailablePeriods(any(), any()))
+        given(availablePeriodsFinder.getAvailablePeriods(any(), any()))
                 .willReturn(List.of(
                         new PeriodResponse(new Period(날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_10일_0시_0분)),
                         new PeriodResponse(new Period(날짜_2022년_7월_15일_16시_0분, 날짜_2022년_7월_16일_16시_0분)),

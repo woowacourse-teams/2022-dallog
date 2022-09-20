@@ -1,6 +1,6 @@
 package com.allog.dallog.presentation;
 
-import com.allog.dallog.domain.composition.application.SchedulerService;
+import com.allog.dallog.domain.schedule.application.AvailablePeriodsFinder;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.PeriodResponse;
 import java.util.List;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SchedulerController {
 
-    private final SchedulerService schedulerService;
+    private final AvailablePeriodsFinder availablePeriodsFinder;
 
-    public SchedulerController(final SchedulerService schedulerService) {
-        this.schedulerService = schedulerService;
+    public SchedulerController(final AvailablePeriodsFinder availablePeriodsFinder) {
+        this.availablePeriodsFinder = availablePeriodsFinder;
     }
 
     @GetMapping("/categories/{categoryId}/available-periods")
     public ResponseEntity<List<PeriodResponse>> scheduleByCategory(@PathVariable final Long categoryId,
                                                                    @ModelAttribute DateRangeRequest dateRange) {
-        List<PeriodResponse> periods = schedulerService.getAvailablePeriods(categoryId, dateRange);
+        List<PeriodResponse> periods = availablePeriodsFinder.getAvailablePeriods(categoryId, dateRange);
         return ResponseEntity.ok(periods);
     }
 }
