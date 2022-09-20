@@ -3,6 +3,7 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,24 +16,27 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s "
             + "FROM Schedule s "
             + "JOIN s.category c "
-            + "WHERE c = :category "
+            + "WHERE c IN :categories "
             + "AND s.startDateTime <= :endDate "
             + "AND s.endDateTime >= :startDate")
-    List<Schedule> findByCategoryAndBetween(final Category category, final LocalDateTime startDate,
-                                            final LocalDateTime endDate);
+    List<Schedule> findByCategoriesAndBetween(final List<Category> categories, final LocalDateTime startDate,
+                                              final LocalDateTime endDate);
 
     default Schedule getById(final Long id) {
         return this.findById(id)
                 .orElseThrow(NoSuchScheduleException::new);
     }
 
-    default List<IntegrationSchedule> createByCategoryAndBetween(final Category category,
-                                                                 final LocalDateTime startDateTime,
-                                                                 final LocalDateTime endDateTime) {
-        List<Schedule> schedules = findByCategoryAndBetween(category, startDateTime, endDateTime);
+    default List<IntegrationSchedule> getByCategoriesAndBetween(final List<Category> categories,
+                                                                final LocalDateTime startDateTime,
+                                                                final LocalDateTime endDateTime) {
+        if (categories.isEmpty()) {
+            return new ArrayList<>();
+        }
 
+        List<Schedule> schedules = findByCategoriesAndBetween(categories, startDateTime, endDateTime);
         return schedules.stream()
-                .map(schedule -> new IntegrationSchedule(schedule, category.getCategoryType()))
+                .map(IntegrationSchedule::new)
                 .collect(Collectors.toList());
     }
 }

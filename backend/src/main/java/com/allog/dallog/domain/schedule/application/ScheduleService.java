@@ -13,7 +13,6 @@ import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,15 +57,9 @@ public class ScheduleService {
 
     private List<IntegrationSchedule> integrationSchedules(final DateRangeRequest dateRange,
                                                            final Subscriptions subscriptions) {
-        List<IntegrationSchedule> integrationSchedules = new ArrayList<>();
-
         List<Category> categories = subscriptions.findInternalCategory();
-        for (Category category : categories) {
-            List<IntegrationSchedule> schedules = scheduleRepository.createByCategoryAndBetween(
-                    category, dateRange.getStartDateTime(), dateRange.getEndDateTime());
-            integrationSchedules.addAll(schedules);
-        }
-        return integrationSchedules;
+        return scheduleRepository.getByCategoriesAndBetween(categories, dateRange.getStartDateTime(),
+                dateRange.getEndDateTime());
     }
 
     @Transactional

@@ -17,13 +17,14 @@ public class IntegrationSchedule {
     private final String memo;
     private final CategoryType categoryType;
 
-    public IntegrationSchedule(final Schedule schedule, final CategoryType categoryType) {
+    public IntegrationSchedule(final Schedule schedule) {
         this.id = String.valueOf(schedule.getId());
-        this.categoryId = schedule.getCategory().getId();
+        Category category = schedule.getCategory();
+        this.categoryId = category.getId();
         this.title = schedule.getTitle();
         this.period = new Period(schedule.getStartDateTime(), schedule.getEndDateTime());
         this.memo = schedule.getMemo();
-        this.categoryType = categoryType;
+        this.categoryType = category.getCategoryType();
     }
 
     public IntegrationSchedule(final String id, final Long categoryId, final String title,
