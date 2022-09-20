@@ -50,13 +50,6 @@ public class ScheduleService {
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
     }
 
-    private static List<Category> toInternalCategories(final List<Subscription> subscriptions) {
-        return subscriptions.stream()
-                .filter(Subscription::hasInternalCategory)
-                .map(Subscription::getCategory)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public ScheduleResponse save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryRepository.getById(categoryId);
@@ -129,6 +122,13 @@ public class ScheduleService {
         LocalDateTime startDate = request.getStartDateTime();
         LocalDateTime endDate = request.getEndDateTime();
         return scheduleRepository.getByCategoriesAndBetween(internalCategories, startDate, endDate);
+    }
+
+    private List<Category> toInternalCategories(final List<Subscription> subscriptions) {
+        return subscriptions.stream()
+                .filter(Subscription::hasInternalCategory)
+                .map(Subscription::getCategory)
+                .collect(Collectors.toList());
     }
 
     private Map<String, List<ExternalRequestMaterial>> toTokenByExternalIds(final List<Subscription> subscriptions) {
