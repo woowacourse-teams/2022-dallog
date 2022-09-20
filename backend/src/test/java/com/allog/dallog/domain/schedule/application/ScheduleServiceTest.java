@@ -46,6 +46,7 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.dto.AvailablePeriodMaterial;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -403,11 +404,10 @@ class ScheduleServiceTest extends ServiceTest {
         DateRangeRequest request = new DateRangeRequest("2022-07-07T16:00", "2022-08-15T12:00");
 
         // when
-        List<IntegrationSchedule> actual = scheduleService.findInMembersByCategoryIdAndDateRange(공통_일정.getId(),
-                request);
+        AvailablePeriodMaterial actual = scheduleService.findInMembersByCategoryIdAndDateRange(공통_일정.getId(), request);
 
         // then
-        assertThat(actual).hasSize(6);
+        assertThat(actual.getInternalSchedules()).hasSize(6);
     }
 
     @DisplayName("카테고리를 구독하는 유저들의 특정 구간의 내부 일정을 가져온다.")
@@ -449,10 +449,9 @@ class ScheduleServiceTest extends ServiceTest {
         DateRangeRequest request = new DateRangeRequest("2022-07-07T16:00", "2022-08-15T12:00");
 
         // when
-        List<IntegrationSchedule> actual = scheduleService.findInMembersByCategoryIdAndDateRange(공통_일정.getId(),
-                request);
+        AvailablePeriodMaterial actual = scheduleService.findInMembersByCategoryIdAndDateRange(공통_일정.getId(), request);
 
         // then
-        assertThat(actual).hasSize(6);
+        assertThat(actual.getInternalSchedules()).hasSize(6);
     }
 }
