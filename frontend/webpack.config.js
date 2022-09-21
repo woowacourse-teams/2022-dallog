@@ -57,7 +57,10 @@ module.exports = {
     new CleanWebpackPlugin(),
     new Dotenv(),
     new MiniCssExtractPlugin(),
-    new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'disabled',
+      generateStatsFile: true,
+    }),
   ],
   devServer: {
     historyApiFallback: true,

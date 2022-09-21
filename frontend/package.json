@@ -12,7 +12,8 @@
     "pretty": "prettier . --write",
     "check-lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "check-prettier": "prettier -c ./src",
-    "test": "jest --setupFiles ./setupFile.js"
+    "test": "jest --setupFiles ./setupFile.js",
+    "report": "webpack-bundle-analyzer --port 4200 dist/stats.json"
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
