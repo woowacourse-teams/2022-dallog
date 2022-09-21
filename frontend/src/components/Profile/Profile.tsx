@@ -19,8 +19,7 @@ import { removeAccessToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 
-import { AiOutlineCheck } from 'react-icons/ai';
-import { FiEdit3 } from 'react-icons/fi';
+import { MdOutlineCheck, MdOutlineModeEdit } from 'react-icons/md';
 
 import {
   contentStyle,
@@ -105,7 +104,7 @@ function Profile() {
               cssProp={menu}
               onClick={() => handleClickCompleteButton(user.displayName)}
             >
-              <AiOutlineCheck size={14} />
+              <MdOutlineCheck size={14} />
               <span css={menuTitle}>완료</span>
             </Button>
           </form>
@@ -113,7 +112,7 @@ function Profile() {
           <div>
             <span css={nameStyle}>{user.displayName}</span>
             <Button cssProp={menu} onClick={handleClickModifyButton}>
-              <FiEdit3 size={14} />
+              <MdOutlineModeEdit size={14} />
               <span css={menuTitle}>수정</span>
             </Button>
           </div>

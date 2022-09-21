@@ -1,11 +1,14 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const prod = process.env.NODE_ENV === 'production';
-
 module.exports = {
   mode: prod ? 'production' : 'development',
   devtool: prod ? 'hidden-source-map' : 'eval',
@@ -24,7 +27,7 @@ module.exports = {
       },
       {
         test: /\\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [prod ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jp(e*)g|gif)$/,
@@ -53,10 +56,18 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new Dotenv(),
+    new MiniCssExtractPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'disabled',
+      generateStatsFile: true,
+    }),
   ],
   devServer: {
     historyApiFallback: true,
     port: 3000,
     hot: true,
+  },
+  optimization: {
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
 };

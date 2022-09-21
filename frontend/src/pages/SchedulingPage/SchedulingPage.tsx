@@ -22,8 +22,7 @@ import { getDate } from '@/utils/date';
 import schedulerApi from '@/api/scheduler';
 import subscriptionApi from '@/api/subscription';
 
-import { BsArrowRight } from 'react-icons/bs';
-import { GoSearch } from 'react-icons/go';
+import { MdOutlineArrowForward, MdSearch } from 'react-icons/md';
 
 import {
   dateTimeFieldsetStyle,
@@ -121,7 +120,7 @@ function SchedulingPage() {
               value={startDateTime.inputValue}
               onChange={startDateTime.onChangeValue}
             />
-            <BsArrowRight size={40} />
+            <MdOutlineArrowForward size={40} />
             <Fieldset
               type="date"
               cssProp={{ div: dateTimeFieldsetStyle, label: labelStyle(theme) }}
@@ -132,7 +131,7 @@ function SchedulingPage() {
           </div>
         </form>
         <Button cssProp={searchButtonStyle(theme)} onClick={handleClickSearchButton}>
-          <GoSearch size={20} />
+          <MdSearch size={20} />
           <span>카테고리 구독자들 모두 가능한 시간 조회하기</span>
         </Button>
         <div css={resultStyle}>
@@ -140,7 +139,7 @@ function SchedulingPage() {
             schedulingGetResponse.data.map((schedule) => (
               <div key={schedule.startDateTime} css={resultTimeStyle}>
                 <div css={resultDateTimeStyle}>{formatDateTime(schedule.startDateTime)}</div>
-                <BsArrowRight size={40} />
+                <MdOutlineArrowForward size={40} />
                 <div css={resultDateTimeStyle}>{formatDateTime(schedule.endDateTime)}</div>
               </div>
             ))}

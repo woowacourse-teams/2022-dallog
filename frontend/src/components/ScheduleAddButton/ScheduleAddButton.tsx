@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react';
 
 import Button from '@/components/@common/Button/Button';
 
-import { BsCalendarPlusFill } from 'react-icons/bs';
+import { MdEditCalendar } from 'react-icons/md';
 
 import { scheduleAddButton } from './ScheduleAddButton.styles';
 
@@ -15,7 +15,7 @@ function ScheduleAddButton({ onClick }: ScheduleAddButtonProps) {
 
   return (
     <Button cssProp={scheduleAddButton(theme)} onClick={onClick}>
-      <BsCalendarPlusFill />
+      <MdEditCalendar />
     </Button>
   );
 }

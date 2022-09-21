@@ -16,8 +16,7 @@ import { TRANSPARENT } from '@/constants/style';
 
 import subscriptionApi from '@/api/subscription';
 
-import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { RiCheckboxBlankLine, RiCheckboxFill } from 'react-icons/ri';
+import { MdCheckBox, MdCheckBoxOutlineBlank, MdMoreVert } from 'react-icons/md';
 
 import {
   checkBoxNameStyle,
@@ -64,7 +63,7 @@ function SideItem({ subscription }: SideItemProps) {
         {isLoading ? (
           <Spinner />
         ) : subscription.checked ? (
-          <RiCheckboxFill
+          <MdCheckBox
             size={20}
             color={subscription.colorCode}
             onClick={() => {
@@ -72,7 +71,7 @@ function SideItem({ subscription }: SideItemProps) {
             }}
           />
         ) : (
-          <RiCheckboxBlankLine
+          <MdCheckBoxOutlineBlank
             size={20}
             color={subscription.colorCode}
             onClick={() => {
@@ -91,7 +90,7 @@ function SideItem({ subscription }: SideItemProps) {
       </div>
       <div css={modalLayoutStyle}>
         <Button cssProp={iconStyle}>
-          <BiDotsVerticalRounded size={20} onClick={handleClickOpenButton} />
+          <MdMoreVert size={20} onClick={handleClickOpenButton} />
         </Button>
         {isPaletteOpen && (
           <ModalPortal

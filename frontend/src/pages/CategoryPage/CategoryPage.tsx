@@ -10,7 +10,7 @@ import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import CategoryListFallback from '@/components/CategoryList/CategoryList.fallback';
 
-import { GoSearch } from 'react-icons/go';
+import { MdSearch } from 'react-icons/md';
 
 import {
   buttonStyle,
@@ -55,7 +55,7 @@ function CategoryPage() {
         <div css={controlStyle}>
           <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
             <Button type="submit" cssProp={searchButtonStyle}>
-              <GoSearch size={16} />
+              <MdSearch size={16} />
             </Button>
             <Fieldset
               placeholder="카테고리 이름 검색"

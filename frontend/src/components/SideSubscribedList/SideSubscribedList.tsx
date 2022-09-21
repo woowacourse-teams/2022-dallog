@@ -13,8 +13,7 @@ import SideItem from '@/components/SideItem/SideItem';
 
 import { PATH } from '@/constants';
 
-import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-import { BsPlus } from 'react-icons/bs';
+import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 import {
   contentStyle,
@@ -47,11 +46,15 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
           구독 카테고리
         </span>
         <Button cssProp={menuStyle}>
-          <BsPlus size={20} onClick={handleClickCategoryAddButton} />
+          <MdAdd size={20} onClick={handleClickCategoryAddButton} />
           <span css={menuTitleStyle}>카테고리 구독</span>
         </Button>
         <Button onClick={toggleSubscribedListOpen}>
-          {isSubscribedListOpen ? <AiOutlineUp /> : <AiOutlineDown />}
+          {isSubscribedListOpen ? (
+            <MdKeyboardArrowUp size={20} />
+          ) : (
+            <MdKeyboardArrowDown size={20} />
+          )}
         </Button>
       </div>
       <div css={contentStyle(isSubscribedListOpen, categories.length)}>
