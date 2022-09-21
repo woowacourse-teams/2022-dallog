@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -51,18 +51,20 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <Router>
-          <NavBar />
-          <SideBar />
-          <Routes>
-            <Route path={PATH.MAIN} element={<MainPage />} />
-            <Route path={PATH.AUTH} element={<AuthPage />} />
-            <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-            <Route element={<ProtectRoute />}>
-              <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-              <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<></>}>
+            <NavBar />
+            <SideBar />
+            <Routes>
+              <Route path={PATH.MAIN} element={<MainPage />} />
+              <Route path={PATH.AUTH} element={<AuthPage />} />
+              <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              <Route element={<ProtectRoute />}>
+                <Route path={PATH.CATEGORY} element={<CategoryPage />} />
+                <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
+              </Route>
+            </Routes>
+          </Suspense>
           <SnackBar />
         </Router>
       </ErrorBoundary>
