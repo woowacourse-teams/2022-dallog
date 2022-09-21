@@ -1,8 +1,10 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const prod = process.env.NODE_ENV === 'production';
 
@@ -58,5 +60,8 @@ module.exports = {
     historyApiFallback: true,
     port: 3000,
     hot: true,
+  },
+  optimization: {
+    minimizer: [new CssMinimizerPlugin()],
   },
 };
