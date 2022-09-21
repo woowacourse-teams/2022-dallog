@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const prod = process.env.NODE_ENV === 'production';
 
@@ -26,7 +27,7 @@ module.exports = {
       },
       {
         test: /\\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [prod ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jp(e*)g|gif)$/,
@@ -55,6 +56,7 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new Dotenv(),
+    new MiniCssExtractPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
