@@ -42,7 +42,7 @@ import {
 
 import scheduleApi from '@/api/schedule';
 
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import {
   calendarGrid,
@@ -163,14 +163,14 @@ function CalendarPage() {
               </div>
               <div css={monthPicker}>
                 <Button cssProp={navButton} onClick={moveToBeforeMonth}>
-                  <AiOutlineLeft />
+                  <MdKeyboardArrowLeft />
                   <span css={navButtonTitle}>전 달</span>
                 </Button>
                 <Button cssProp={todayButton} onClick={moveToToday}>
                   오늘
                 </Button>
                 <Button cssProp={navButton} onClick={moveToNextMonth}>
-                  <AiOutlineRight />
+                  <MdKeyboardArrowRight />
                   <span css={navButtonTitle}>다음 달</span>
                 </Button>
               </div>
@@ -257,14 +257,14 @@ function CalendarPage() {
           </span>
           <div css={monthPicker}>
             <Button cssProp={navButton} onClick={moveToBeforeMonth}>
-              <AiOutlineLeft />
+              <MdKeyboardArrowLeft />
               <span css={navButtonTitle}>전 달</span>
             </Button>
             <Button cssProp={todayButton} onClick={moveToToday}>
               오늘
             </Button>
             <Button cssProp={navButton} onClick={moveToNextMonth}>
-              <AiOutlineRight />
+              <MdKeyboardArrowRight />
               <span css={navButtonTitle}>다음 달</span>
             </Button>
           </div>

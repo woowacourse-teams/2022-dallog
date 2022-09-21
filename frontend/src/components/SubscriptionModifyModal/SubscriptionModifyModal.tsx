@@ -21,8 +21,7 @@ import { PALETTE } from '@/constants/style';
 
 import categoryApi from '@/api/category';
 
-import { FiEdit3 } from 'react-icons/fi';
-import { RiDeleteBin5Line } from 'react-icons/ri';
+import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 
 import {
   colorStyle,
@@ -94,11 +93,11 @@ function SubscriptionModifyModal({
         {canEditSubscription && (
           <>
             <Button cssProp={controlButtonStyle} onClick={toggleCategoryModifyModalOpen}>
-              <FiEdit3 size={20} />
+              <MdOutlineModeEdit size={20} />
               <span>수정</span>
             </Button>
             <Button cssProp={controlButtonStyle} onClick={handleClickDeleteButton}>
-              <RiDeleteBin5Line size={20} />
+              <MdDeleteOutline size={20} />
               <span>삭제</span>
             </Button>
           </>
