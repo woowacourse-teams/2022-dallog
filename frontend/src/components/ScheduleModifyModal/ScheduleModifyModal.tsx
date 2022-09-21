@@ -20,7 +20,7 @@ import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { checkAllDay } from '@/utils/date';
+import { checkAllDay, getISODateString, getNextDate } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -95,8 +95,12 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       startDateTime: `${validationSchedule.startDate.inputValue}T${
         isAllDay ? DATE_TIME.START : validationSchedule.startTime.inputValue
       }`,
-      endDateTime: `${validationSchedule.endDate.inputValue}T${
-        isAllDay ? DATE_TIME.END : validationSchedule.endTime.inputValue
+      endDateTime: `${
+        isAllDay
+          ? `${getISODateString(
+              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
+            )}T${DATE_TIME.END}`
+          : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
       memo: validationSchedule.memo.inputValue,
     };

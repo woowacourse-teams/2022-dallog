@@ -23,7 +23,7 @@ import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { getDate, getEndTime, getStartTime } from '@/utils/date';
+import { getDate, getEndTime, getISODateString, getNextDate, getStartTime } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -93,7 +93,13 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     const body = {
       title: validationSchedule.title.inputValue,
       startDateTime: `${validationSchedule.startDate.inputValue}T${validationSchedule.startTime.inputValue}`,
-      endDateTime: `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`,
+      endDateTime: `${
+        isAllDay
+          ? getISODateString(
+              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
+            )
+          : validationSchedule.endDate.inputValue
+      }T${validationSchedule.endTime.inputValue}`,
       memo: validationSchedule.memo.inputValue,
     };
 
