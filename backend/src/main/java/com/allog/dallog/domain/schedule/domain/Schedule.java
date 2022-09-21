@@ -58,11 +58,12 @@ public class Schedule extends BaseEntity {
         this.memo = memo;
     }
 
-    public void change(final String title, final LocalDateTime startDateTime, final LocalDateTime endDateTime,
-                       final String memo) {
+    public void change(final Category category, final String title, final LocalDateTime startDateTime,
+                       final LocalDateTime endDateTime, final String memo) {
         validateTitleLength(title);
         validatePeriod(startDateTime, endDateTime);
         validateMemoLength(memo);
+        this.category = category;
         this.title = title;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -87,10 +88,7 @@ public class Schedule extends BaseEntity {
         }
     }
 
-    public void validateEditablePossible(final Long memberId) {
-        if (category.isExternal()) {
-            throw new NoPermissionException("외부 연동 카테고리의 일정은 변경할 수 없습니다.");
-        }
+    public void validateEditPossible(final Long memberId) {
         if (!category.isCreatorId(memberId)) {
             throw new NoPermissionException();
         }

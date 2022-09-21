@@ -64,15 +64,20 @@ public class ScheduleService {
 
     @Transactional
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
+        Long categoryId = request.getCategoryId();
+        categoryRepository.validateExistsByIdAndMemberId(categoryId, memberId);
+
+        Category categoryForUpdate = categoryRepository.getById(categoryId);
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateEditablePossible(memberId);
-        schedule.change(request.getTitle(), request.getStartDateTime(), request.getEndDateTime(), request.getMemo());
+        schedule.validateEditPossible(memberId);
+        schedule.change(categoryForUpdate, request.getTitle(), request.getStartDateTime(), request.getEndDateTime(),
+                request.getMemo());
     }
 
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateEditablePossible(memberId);
+        schedule.validateEditPossible(memberId);
         scheduleRepository.deleteById(id);
     }
 }
