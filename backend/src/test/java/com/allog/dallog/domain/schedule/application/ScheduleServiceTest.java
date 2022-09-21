@@ -305,7 +305,6 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-
     @DisplayName("일정을 삭제한다.")
     @Test
     void 일정을_삭제한다() {
