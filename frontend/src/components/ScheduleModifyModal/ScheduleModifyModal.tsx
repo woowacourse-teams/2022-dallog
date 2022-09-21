@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
 
 import { CategoryType } from '@/@types/category';
@@ -20,7 +21,7 @@ import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { checkAllDay, getISODateString, getNextDate } from '@/utils/date';
+import { checkAllDay, getBeforeDate, getISODateString, getNextDate } from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -29,7 +30,6 @@ import {
   arrowStyle,
   cancelButtonStyle,
   categoryBoxStyle,
-  categoryStyle,
   checkboxStyle,
   controlButtonsStyle,
   dateFieldsetStyle,
@@ -39,6 +39,7 @@ import {
   labelStyle,
   modalStyle,
   saveButtonStyle,
+  selectTimeStyle,
 } from './ScheduleModifyModal.styles';
 
 interface ScheduleModifyModalProps {
@@ -57,8 +58,9 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
-    categoryApi.getSingle(scheduleInfo.categoryId)
+  const { data: categoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+    CACHE_KEY.MY_CATEGORIES,
+    () => categoryApi.getMy(accessToken)
   );
 
   const { mutate } = useMutation<
@@ -69,6 +71,10 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
     onSuccess: () => onSuccessPatchSchedule(),
   });
+
+  const categoryId = useControlledInput(
+    categoriesGetResponse?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
+  );
 
   const onSuccessPatchSchedule = () => {
     queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
@@ -82,7 +88,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     initialTitle: scheduleInfo.title,
     initialStartDate: startDate,
     initialStartTime: startTime.slice(0, 5),
-    initialEndDate: endDate,
+    initialEndDate: getISODateString(getBeforeDate(new Date(endDate), 1).toISOString()),
     initialEndTime: endTime.slice(0, 5),
     initialMemo: scheduleInfo.memo,
   });
@@ -103,6 +109,9 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
           : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
       memo: validationSchedule.memo.inputValue,
+      categoryId:
+        categoriesGetResponse?.data.find((category) => category.name === categoryId.inputValue)
+          ?.id || scheduleInfo.categoryId,
     };
 
     mutate(body);
@@ -112,13 +121,11 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     setAllDay((prev) => !prev);
   };
 
+  const categories = categoriesGetResponse?.data.map((category) => category.name);
+
   return (
     <div css={modalStyle}>
       <form css={formStyle} onSubmit={handleSubmitScheduleModifyForm}>
-        <div css={categoryBoxStyle}>
-          <div css={labelStyle}>카테고리</div>
-          <div css={categoryStyle(theme, scheduleInfo.colorCode)}>{data?.data.name}</div>
-        </div>
         <Fieldset
           placeholder="제목을 입력하세요."
           value={validationSchedule.title.inputValue}
@@ -158,6 +165,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
                 options={TIMES}
                 value={validationSchedule.startTime.inputValue}
                 onChange={validationSchedule.startTime.onChangeValue}
+                cssProp={selectTimeStyle}
               />
             )}
           </div>
@@ -169,16 +177,28 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
               value={validationSchedule.endDate.inputValue}
               onChange={validationSchedule.endDate.onChangeValue}
               cssProp={dateFieldsetStyle(isAllDay)}
+              min={validationSchedule.startDate.inputValue}
             />
             {!isAllDay && (
               <Select
                 options={TIMES}
                 value={validationSchedule.endTime.inputValue}
                 onChange={validationSchedule.endTime.onChangeValue}
+                cssProp={selectTimeStyle}
               />
             )}
           </div>
         </div>
+        {categories && (
+          <div css={categoryBoxStyle}>
+            <div css={labelStyle}>카테고리</div>
+            <Select
+              options={categories}
+              value={categoryId.inputValue}
+              onChange={categoryId.onChangeValue}
+            />
+          </div>
+        )}
         <Fieldset
           placeholder="메모를 추가하세요."
           value={validationSchedule.memo.inputValue}
