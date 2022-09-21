@@ -9,7 +9,10 @@ const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
     return null;
   }
 
-  return startDateTime.includes(DATE_TIME.START) && endDateTime.includes(DATE_TIME.END);
+  return (
+    startDateTime.startsWith(DATE_TIME.START, DATE_TIME.START_INDEX) &&
+    endDateTime.startsWith(DATE_TIME.END, DATE_TIME.START_INDEX)
+  );
 };
 
 const getBeforeDate = (targetDay: Date, offset: number) =>

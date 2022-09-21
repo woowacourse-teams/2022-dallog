@@ -1,6 +1,7 @@
 import { zeroFill } from '@/utils';
 
 const DATE_TIME = {
+  START_INDEX: 11,
   START: '00:00',
   END: '00:00',
 };
