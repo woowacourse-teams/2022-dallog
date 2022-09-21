@@ -48,7 +48,7 @@ function Select({ options, value, onChange, cssProp }: SelectProps) {
   return (
     <div css={[layoutStyle, cssProp?.select]}>
       <div css={dimmerStyle(isSelectOpen)} onClick={handleClickDimmer}></div>
-      <div css={[selectStyle]} onClick={toggleSelectOpen}>
+      <div css={selectStyle} onClick={toggleSelectOpen}>
         {value || '옵션 선택'}
       </div>
       <div css={relativeStyle}>
