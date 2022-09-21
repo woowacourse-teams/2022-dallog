@@ -3,12 +3,15 @@ import { useEffect, useRef } from 'react';
 
 import useToggle from '@/hooks/useToggle';
 
+import { SelectCssPropType } from '@/@types';
+
 import { OPTION_HEIGHT } from '@/constants/style';
 
 import {
   dimmerStyle,
   hiddenStyle,
   labelStyle,
+  layoutStyle,
   optionLayoutStyle,
   optionStyle,
   relativeStyle,
@@ -21,9 +24,10 @@ interface SelectProps {
   onChange: ({
     target,
   }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
+  cssProp?: SelectCssPropType;
 }
 
-function Select({ options, value, onChange }: SelectProps) {
+function Select({ options, value, onChange, cssProp }: SelectProps) {
   const theme = useTheme();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -42,13 +46,13 @@ function Select({ options, value, onChange }: SelectProps) {
   };
 
   return (
-    <div>
+    <div css={[layoutStyle, cssProp?.select]}>
       <div css={dimmerStyle(isSelectOpen)} onClick={handleClickDimmer}></div>
       <div css={selectStyle} onClick={toggleSelectOpen}>
         {value || '옵션 선택'}
       </div>
       <div css={relativeStyle}>
-        <div css={optionLayoutStyle(theme, isSelectOpen)} ref={ref}>
+        <div css={[optionLayoutStyle(theme, isSelectOpen), cssProp?.optionBox]} ref={ref}>
           {isSelectOpen &&
             options.map((opt, index) => (
               <div key={index} css={optionStyle(theme, opt === value)}>
@@ -61,7 +65,8 @@ function Select({ options, value, onChange }: SelectProps) {
                   css={hiddenStyle}
                   onClick={toggleSelectOpen}
                 />
-                <label htmlFor={opt} css={labelStyle}>
+
+                <label htmlFor={opt} css={[labelStyle, cssProp?.option]}>
                   {opt}
                 </label>
               </div>

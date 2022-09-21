@@ -2,6 +2,10 @@ import { css, Theme } from '@emotion/react';
 
 import { OPTION_HEIGHT } from '@/constants/style';
 
+const layoutStyle = css`
+  width: 100%;
+`;
+
 const hiddenStyle = css`
   display: none;
 `;
@@ -18,7 +22,7 @@ const dimmerStyle = (isSelectOpen: boolean) => css`
 `;
 
 const selectStyle = ({ colors }: Theme) => css`
-  width: 42.75rem;
+  width: 100%;
   height: 11.75rem;
   border-radius: 8px;
   border: 1px solid ${colors.GRAY_400};
@@ -40,8 +44,8 @@ const optionLayoutStyle = ({ colors }: Theme, isSelectOpen: boolean) => css`
   position: absolute;
   overflow: overlay;
 
-  width: 42.75rem;
-  height: ${isSelectOpen ? '50rem' : 0};
+  width: 100%;
+  max-height: ${isSelectOpen ? '50rem' : 0};
   border: ${isSelectOpen && `1px solid ${colors.GRAY_400}`};
   border-radius: 8px;
 
@@ -82,6 +86,7 @@ const relativeStyle = css`
 export {
   dimmerStyle,
   labelStyle,
+  layoutStyle,
   hiddenStyle,
   selectStyle,
   optionStyle,

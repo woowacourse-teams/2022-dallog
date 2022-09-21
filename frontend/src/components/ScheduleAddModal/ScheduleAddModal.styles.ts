@@ -156,6 +156,12 @@ const dateFieldsetStyle = (isAllDay: boolean) => {
   };
 };
 
+const selectTimeStyle = {
+  select: css`
+    width: 45%;
+  `,
+};
+
 export {
   arrow,
   categorySelect,
@@ -170,4 +176,5 @@ export {
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
+  selectTimeStyle,
 };

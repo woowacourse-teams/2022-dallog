@@ -42,6 +42,7 @@ import {
   saveButton,
   scheduleAddModal,
   selectBoxStyle,
+  selectTimeStyle,
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
@@ -159,6 +160,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
                 options={TIMES}
                 value={validationSchedule.startTime.inputValue}
                 onChange={validationSchedule.startTime.onChangeValue}
+                cssProp={selectTimeStyle}
               />
             )}
           </div>
@@ -176,6 +178,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
                 options={TIMES}
                 value={validationSchedule.endTime.inputValue}
                 onChange={validationSchedule.endTime.onChangeValue}
+                cssProp={selectTimeStyle}
               />
             )}
           </div>
