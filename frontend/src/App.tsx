@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { lazy } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -6,20 +7,21 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import useSnackBar from '@/hooks/useSnackBar';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
-import NavBar from '@/components/NavBar/NavBar';
-import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
-import SideBar from '@/components/SideBar/SideBar';
-import SnackBar from '@/components/SnackBar/SnackBar';
-import AuthPage from '@/pages/AuthPage/AuthPage';
-import CategoryPage from '@/pages/CategoryPage/CategoryPage';
-import MainPage from '@/pages/MainPage/MainPage';
-import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
-import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage/PrivacyPolicyPage';
-import SchedulingPage from '@/pages/SchedulingPage/SchedulingPage';
 
 import { PATH } from '@/constants';
 
 import { ERROR_MESSAGE } from './constants/message';
+
+const NavBar = lazy(() => import('@/components/NavBar/NavBar'));
+const ProtectRoute = lazy(() => import('@/components/ProtectRoute/ProtectRoute'));
+const SideBar = lazy(() => import('@/components/SideBar/SideBar'));
+const SnackBar = lazy(() => import('@/components/SnackBar/SnackBar'));
+const AuthPage = lazy(() => import('@/pages/AuthPage/AuthPage'));
+const CategoryPage = lazy(() => import('@/pages/CategoryPage/CategoryPage'));
+const MainPage = lazy(() => import('@/pages/MainPage/MainPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage/PrivacyPolicyPage'));
+const SchedulingPage = lazy(() => import('@/pages/SchedulingPage/SchedulingPage'));
 
 function App() {
   const { openSnackBar } = useSnackBar();
