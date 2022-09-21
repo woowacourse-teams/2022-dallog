@@ -5,7 +5,7 @@ import { DATE_TIME } from '@/constants/date';
 import { zeroFill } from '.';
 
 const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
-  if (startDateTime === undefined || endDateTime === undefined) {
+  if (startDateTime === undefined || endDateTime === undefined || startDateTime === endDateTime) {
     return null;
   }
 
