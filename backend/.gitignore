@@ -41,3 +41,7 @@ out/
 
 ### logs ###
 logs/
+
+### .yml ###
+*.yml
+*.yaml
