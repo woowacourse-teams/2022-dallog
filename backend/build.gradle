@@ -150,5 +150,4 @@ task copyDocument(type: Copy) {
 }
 
 bootJar {
-    dependsOn copyDocument
 }
