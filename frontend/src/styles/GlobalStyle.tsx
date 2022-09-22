@@ -2,8 +2,6 @@ import { css, Global, Theme } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 
 const global = ({ colors }: Theme) => css`
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.4/dist/web/static/pretendard.css');
-
   ${emotionReset}
 
   *,
@@ -17,7 +15,9 @@ const global = ({ colors }: Theme) => css`
   body {
     overflow: overlay;
 
-    font-family: 'Pretendard', sans-serif;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
+      'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
     font-size: 3rem;
 
     *::-webkit-scrollbar {
