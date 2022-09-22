@@ -143,6 +143,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
               id="allDay"
               checked={isAllDay}
               onClick={handleClickAllDayButton}
+              readOnly
             />
             <label htmlFor="allDay" />
             <label htmlFor="allDay">종일</label>
