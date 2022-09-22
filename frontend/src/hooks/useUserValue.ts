@@ -37,6 +37,7 @@ function useUserValue() {
       retry: false,
       useErrorBoundary: false,
       enabled: isSuccess,
+      staleTime: 1 * 60 * 1000,
     }
   );
 
