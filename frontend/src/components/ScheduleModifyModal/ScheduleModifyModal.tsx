@@ -18,6 +18,7 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
 
 import { CACHE_KEY } from '@/constants/api';
+import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
@@ -124,7 +125,9 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     setAllDay((prev) => !prev);
   };
 
-  const categories = categoriesGetResponse?.data.map((category) => category.name);
+  const categories = categoriesGetResponse?.data
+    .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
+    .map((category) => category.name);
 
   return (
     <div css={modalStyle}>
