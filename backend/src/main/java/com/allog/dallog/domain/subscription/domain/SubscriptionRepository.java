@@ -12,13 +12,15 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
 
-    void deleteByCategoryIdIn(final List<Long> categoryIds);
-
     // TODO: N + 1 개선 예정
     // TODO: @EntityGraph(attributePaths = {"category", "category.member"})
     List<Subscription> findByMemberId(final Long memberId);
 
     List<Subscription> findByCategoryId(final Long categoryId);
+
+    List<Subscription> findByMemberIdIn(final List<Long> memberIds);
+
+    void deleteByCategoryIdIn(final List<Long> categoryIds);
 
     default Subscription getById(final Long id) {
         return findById(id)

@@ -52,11 +52,11 @@ public class ScheduleService {
     public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId,
                                                                         final DateRangeRequest dateRange) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        return integrationSchedules(dateRange, subscriptions);
+        return toIntegrationSchedules(dateRange, subscriptions);
     }
 
-    private List<IntegrationSchedule> integrationSchedules(final DateRangeRequest dateRange,
-                                                           final Subscriptions subscriptions) {
+    private List<IntegrationSchedule> toIntegrationSchedules(final DateRangeRequest dateRange,
+                                                             final Subscriptions subscriptions) {
         List<Category> categories = subscriptions.findInternalCategory();
         return scheduleRepository.getByCategoriesAndBetween(categories, dateRange.getStartDateTime(),
                 dateRange.getEndDateTime());

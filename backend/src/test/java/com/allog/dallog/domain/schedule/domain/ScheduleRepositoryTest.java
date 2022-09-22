@@ -57,7 +57,7 @@ class ScheduleRepositoryTest extends RepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("특정 카테고리들에 속한 일정을 전부 삭제한다")
+    @DisplayName("특정 카테고리들에 속한 일정을 전부 삭제한다.")
     @Test
     void 특정_카테고리들에_속한_일정을_전부_삭제한다() {
         // given
@@ -120,9 +120,9 @@ class ScheduleRepositoryTest extends RepositoryTest {
         assertThat(actual).hasSize(1);
     }
 
-    @DisplayName("조회하기 위한 category id의 크기가 0인 경우 빈 리스트를 반환한다.")
+    @DisplayName("조회하기 위한 category 리스트의 크기가 0인 경우 빈 리스트를 반환한다.")
     @Test
-    void 조회하기_위한_category_id의_크기가_0인_경우_빈_리스트를_반환한다() {
+    void 조회하기_위한_category_리스트의_크기가_0인_경우_빈_리스트를_반환한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
 
@@ -179,9 +179,9 @@ class ScheduleRepositoryTest extends RepositoryTest {
         assertThat(actual).hasSize(1);
     }
 
-    @DisplayName("카테고리가 여러 개 일 때, 카테고리 id 리스트와 시작일시, 종료일시를 전달하면 그 사이에 해당하는 일정을 조회한다.")
+    @DisplayName("카테고리가 여러 개 일 때, 카테고리 리스트와 시작일시, 종료일시를 전달하면 그 사이에 해당하는 일정을 조회한다.")
     @Test
-    void 카테고리가_여러_개_일_때_카테고리_id_리스트와_시작일시_종료일시를_전달하면_그_사이에_해당하는_일정을_조회한다() {
+    void 카테고리가_여러_개_일_때_카테고리_리스트와_시작일시_종료일시를_전달하면_그_사이에_해당하는_일정을_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
 

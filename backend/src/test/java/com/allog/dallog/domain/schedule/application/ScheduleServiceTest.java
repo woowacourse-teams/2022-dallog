@@ -35,6 +35,7 @@ import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
+import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,9 @@ class ScheduleServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
 
     @DisplayName("새로운 일정을 생성한다.")
     @Test
