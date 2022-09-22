@@ -29,7 +29,7 @@ function SideBar() {
     CACHE_KEY.SUBSCRIPTIONS,
     () => subscriptionApi.get(user.accessToken),
     {
-      enabled: !!user.accessToken,
+      enabled: isSideBarOpen && !!user.accessToken,
     }
   );
 
