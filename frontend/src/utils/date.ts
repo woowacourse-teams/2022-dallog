@@ -4,12 +4,15 @@ import { DATE_TIME } from '@/constants/date';
 
 import { zeroFill } from '.';
 
-const checkAllDay = (startDateTime: string | undefined, endDateTime: string | undefined) => {
-  if (startDateTime === undefined || endDateTime === undefined) {
+const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
+  if (startDateTime === undefined || endDateTime === undefined || startDateTime === endDateTime) {
     return null;
   }
 
-  return startDateTime.includes(DATE_TIME.START) && endDateTime.includes(DATE_TIME.END);
+  return (
+    startDateTime.startsWith(DATE_TIME.START, DATE_TIME.START_INDEX) &&
+    endDateTime.startsWith(DATE_TIME.END, DATE_TIME.START_INDEX)
+  );
 };
 
 const getBeforeDate = (targetDay: Date, offset: number) =>
@@ -62,8 +65,8 @@ const getCalendarMonth = (year: number, month: number) => {
   });
 };
 
-const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
+const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
+  if (!dateInfo) {
     return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
   }
 
@@ -72,8 +75,8 @@ const getDate = (dateInfo: Omit<CalendarType, 'day'> | null) => {
   return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
 };
 
-const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
-  if (dateInfo === null) {
+const getDateTime = (dateInfo?: Omit<CalendarType, 'day'>) => {
+  if (!dateInfo) {
     return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
   }
 
@@ -83,6 +86,25 @@ const getDateTime = (dateInfo: Omit<CalendarType, 'day'> | null) => {
     .toISOString()
     .replace(/\..*/, '')
     .slice(0, -3);
+};
+
+const getStartTime = () => {
+  const [nowHour, nowMinute] = getDateTime().split('T')[1].split(':');
+
+  if (nowMinute === '00' || nowMinute === '30') return `${zeroFill(nowHour)}:${nowMinute}`;
+
+  if (nowMinute < '30') return `${zeroFill(nowHour)}:30`;
+
+  if (nowHour >= '23') return '00:00';
+
+  return `${zeroFill(+nowHour + 1)}:00`;
+};
+
+const getEndTime = (startTime?: string) => {
+  const [nowHour, nowMinute] =
+    startTime === undefined ? getStartTime().split(':') : startTime.split(':');
+
+  return nowHour < '23' ? `${zeroFill(+nowHour + 1)}:${nowMinute}` : `00:${nowMinute}`;
 };
 
 const getDayFromFormattedDate = (date: string) => {
@@ -95,6 +117,10 @@ const getFormattedDate = (year: number | string, month: number | string, date: n
 
 const getISODateString = (ISOString: string) => {
   return ISOString.split('T')[0];
+};
+
+const getISOTimeString = (ISOString: string) => {
+  return ISOString.split('T')[1];
 };
 
 const getKoreaISOString = (time: number) => {
@@ -113,7 +139,7 @@ const getNextYearMonth = (targetYear: number, targetMonth: number) => {
 };
 
 const getOneHourEarlierISOString = (ISOString: string) => {
-  const hour = ISOString.split('T')[1].split(':')[0];
+  const hour = getISOTimeString(ISOString).split(':')[0];
 
   const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) - 1))
     .replace(/\..*/, '')
@@ -123,7 +149,7 @@ const getOneHourEarlierISOString = (ISOString: string) => {
 };
 
 const getOneHourLaterISOString = (ISOString: string) => {
-  const hour = ISOString.split('T')[1].split(':')[0];
+  const hour = getISOTimeString(ISOString).split(':')[0];
 
   const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) + 1))
     .replace(/\..*/, '')
@@ -152,13 +178,16 @@ export {
   getDate,
   getDateTime,
   getDayFromFormattedDate,
+  getEndTime,
   getFormattedDate,
   getISODateString,
+  getISOTimeString,
   getKoreaISOString,
   getNextDate,
   getNextYearMonth,
   getOneHourEarlierISOString,
   getOneHourLaterISOString,
+  getStartTime,
   getThisDate,
   getThisMonth,
   getThisYear,

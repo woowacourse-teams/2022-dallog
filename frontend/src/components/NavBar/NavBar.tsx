@@ -15,11 +15,13 @@ import ProfileFallback from '@/components/Profile/Profile.fallback';
 import { PATH } from '@/constants';
 import { TRANSPARENT } from '@/constants/style';
 
-import { BiCategory } from 'react-icons/bi';
-import { FaUserCircle } from 'react-icons/fa';
-import { FiCalendar } from 'react-icons/fi';
-import { HiChevronDoubleLeft, HiMenu } from 'react-icons/hi';
-import { IoPeopleOutline } from 'react-icons/io5';
+import {
+  MdCalendarToday,
+  MdMenu,
+  MdMenuOpen,
+  MdOutlineCategory,
+  MdPersonOutline,
+} from 'react-icons/md';
 
 import BlackLogo from '../../assets/dallog_black.png';
 import { logo, logoImg, logoText, menu, menus, menuTitle, navBar } from './NavBar.styles';
@@ -47,10 +49,6 @@ function NavBar() {
     navigate(PATH.CATEGORY);
   };
 
-  const handleClickSchedulingMenuButton = () => {
-    navigate(PATH.SCHEDULING);
-  };
-
   const handleClickProfileMenuButton = () => {
     toggleProfileModalOpen();
   };
@@ -60,7 +58,7 @@ function NavBar() {
       <div css={menus}>
         {accessToken && (
           <Button cssProp={menu(theme)} onClick={handleClickSideBarButton}>
-            {isSideBarOpen ? <HiChevronDoubleLeft size={28} /> : <HiMenu size={28} />}
+            {isSideBarOpen ? <MdMenuOpen size={28} /> : <MdMenu size={28} />}
             <span css={menuTitle}>메뉴</span>
           </Button>
         )}
@@ -73,19 +71,15 @@ function NavBar() {
         {accessToken && (
           <>
             <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
-              <FiCalendar />
+              <MdCalendarToday />
               <span css={menuTitle}>달력</span>
             </Button>
             <Button cssProp={menu(theme)} onClick={handleClickCategoryMenuButton}>
-              <BiCategory />
+              <MdOutlineCategory />
               <span css={menuTitle}>카테고리</span>
             </Button>
-            <Button cssProp={menu(theme)} onClick={handleClickSchedulingMenuButton}>
-              <IoPeopleOutline />
-              <span css={menuTitle}>일정 조율</span>
-            </Button>
             <Button cssProp={menu(theme)} onClick={handleClickProfileMenuButton}>
-              <FaUserCircle />
+              <MdPersonOutline />
               <span css={menuTitle}>프로필</span>
             </Button>
             <ModalPortal

@@ -17,9 +17,12 @@ import { CONFIRM_MESSAGE } from '@/constants/message';
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
 
-import { FiCalendar, FiEdit3 } from 'react-icons/fi';
-import { GrClose } from 'react-icons/gr';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import {
+  MdClose,
+  MdDeleteOutline,
+  MdOutlineCalendarToday,
+  MdOutlineModeEdit,
+} from 'react-icons/md';
 
 import {
   buttonStyle,
@@ -101,23 +104,23 @@ function ScheduleModal({
         {canEditSchedule && (
           <>
             <Button cssProp={buttonStyle} onClick={handleClickModifyButton}>
-              <FiEdit3 />
+              <MdOutlineModeEdit />
               <span css={buttonTitleStyle}>일정 수정</span>
             </Button>
             <Button cssProp={buttonStyle} onClick={handleClickDeleteButton}>
-              <RiDeleteBin6Line />
+              <MdDeleteOutline />
               <span css={buttonTitleStyle}>일정 삭제</span>
             </Button>
           </>
         )}
         <Button cssProp={buttonStyle} onClick={closeModal}>
-          <GrClose />
+          <MdClose />
           <span css={buttonTitleStyle}>닫기</span>
         </Button>
       </div>
       <div css={contentStyle}>
         <div css={contentBlockStyle}>
-          <FiCalendar css={scheduleIconStyle} />
+          <MdOutlineCalendarToday css={scheduleIconStyle} />
           <div css={scheduleInfoStyle}>
             <p css={scheduleTitleStyle}>{scheduleInfo.title}</p>
             <p>

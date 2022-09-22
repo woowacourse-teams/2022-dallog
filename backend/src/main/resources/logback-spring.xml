@@ -36,6 +36,18 @@
         </filter>
     </appender>
 
+    <springProfile name="test">
+        <logger level="INFO" name="org.springframework.boot">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger level="INFO" name="com.allog.dallog">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger level="TRACE" name="org.hibernate.type.descriptor.sql.BasicBinder">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
+
     <springProfile name="local">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
@@ -43,18 +55,26 @@
     </springProfile>
 
     <springProfile name="dev">
-        <root level="INFO">
+        <logger level="INFO" name="org.springframework.boot">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
-        </root>
+        </logger>
+        <logger level="INFO" name="com.allog.dallog">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </logger>
         <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
             <appender-ref ref="ASYNC_DISCORD"/>
         </logger>
     </springProfile>
 
     <springProfile name="prod">
-        <root level="WARN">
+        <logger level="WARN" name="org.springframework.boot">
             <appender-ref ref="FILE"/>
-        </root>
+        </logger>
+        <logger level="WARN" name="com.allog.dallog">
+            <appender-ref ref="FILE"/>
+        </logger>
         <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
             <appender-ref ref="ASYNC_DISCORD"/>
         </logger>

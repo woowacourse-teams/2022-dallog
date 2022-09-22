@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { ProfileType } from '@/@types/profile';
 
@@ -15,8 +15,6 @@ import profileApi from '@/api/profile';
 
 function useUserValue() {
   const [user, setUser] = useRecoilState(userState);
-  const resetUser = useResetRecoilState(userState);
-
   const setSideBarOpen = useSetRecoilState(sideBarState);
 
   const { isLoading, isSuccess } = useQuery<AxiosResponse, AxiosError>(
@@ -39,14 +37,13 @@ function useUserValue() {
       retry: false,
       useErrorBoundary: false,
       enabled: isSuccess,
-      staleTime: 5 * 60 * 1000,
     }
   );
 
   const onErrorValidate = () => {
+    setUser({ accessToken: '' });
     setSideBarOpen(false);
     removeAccessToken();
-    resetUser();
   };
 
   return { isAuthenticating: isLoading, user };

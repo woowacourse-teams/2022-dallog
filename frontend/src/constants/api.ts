@@ -6,7 +6,6 @@ const API = {
 const API_URL = process.env.API_URL;
 
 const CACHE_KEY = {
-  AUTH: 'auth',
   CATEGORIES: 'categories',
   CATEGORY: 'category',
   ENTER: 'enter',
@@ -14,7 +13,6 @@ const CACHE_KEY = {
   MY_CATEGORIES: 'myCategories',
   PROFILE: 'profile',
   SCHEDULE: 'schedule',
-  SCHEDULER: 'scheduler',
   SCHEDULES: 'schedules',
   SUBSCRIPTIONS: 'subscriptions',
   VALIDATE: 'validate',

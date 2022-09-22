@@ -15,13 +15,13 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.composition.application.RegisterService;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
@@ -44,9 +44,6 @@ class MemberControllerTest extends ControllerTest {
     @MockBean
     private MemberService memberService;
 
-    @MockBean
-    private RegisterService registerService;
-
     @DisplayName("자신의 회원 정보를 조회한다.")
     @Test
     void 자신의_회원_정보를_조회한다() throws Exception {
@@ -61,11 +58,18 @@ class MemberControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("members/me",
+                .andDo(document("member/findMe",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName("Authorization").description("JWT 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("회원 ID"),
+                                fieldWithPath("email").description("회원 이메일"),
+                                fieldWithPath("displayName").description("회원 이름"),
+                                fieldWithPath("profileImageUrl").description("회원 프로필 이미지 URL"),
+                                fieldWithPath("socialType").description("회원 소셜 타입")
                         )
                 ))
                 .andExpect(status().isOk());
@@ -84,7 +88,7 @@ class MemberControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("members/exception/notfound",
+                .andDo(document("member/findMe/failNoMember",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -111,7 +115,7 @@ class MemberControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(회원_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("members/update",
+                .andDo(document("member/update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -128,8 +132,8 @@ class MemberControllerTest extends ControllerTest {
     void 등록된_회원이_회원탈퇴_한다() throws Exception {
         // given
         willDoNothing()
-                .given(registerService)
-                .deleteByMemberId(any());
+                .given(memberService)
+                .deleteById(any());
 
         // when & then
         mockMvc.perform(delete("/api/members/me")
@@ -137,7 +141,7 @@ class MemberControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("members/delete",
+                .andDo(document("member/delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

@@ -30,11 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.composition.application.CalendarService;
-import com.allog.dallog.domain.composition.application.SchedulerService;
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.integrationschedule.dao.IntegrationScheduleDao;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
+import com.allog.dallog.domain.schedule.application.SubscribingSchedulesFinder;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
@@ -63,16 +60,7 @@ class ScheduleControllerTest extends ControllerTest {
     private ScheduleService scheduleService;
 
     @MockBean
-    private SchedulerService schedulerService;
-
-    @MockBean
-    private CalendarService calendarService;
-
-    @MockBean
-    private IntegrationScheduleDao integrationScheduleDao;
-
-    @MockBean
-    private ExternalCalendarClient externalCalendarClient;
+    private SubscribingSchedulesFinder subscribingSchedulesFinder;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
@@ -90,7 +78,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save",
+                .andDo(document("schedule/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -113,7 +101,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save/forbidden",
+                .andDo(document("schedule/save/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -136,7 +124,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("schedules/save/notfound",
+                .andDo(document("schedule/save/failByNoCategory",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -156,7 +144,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("schedules/findone",
+                .andDo(document("schedule/findById",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -176,7 +164,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("schedules/findone/notfound",
+                .andDo(document("schedule/findById/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -188,8 +176,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_성공하면_204를_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willDoNothing()
                 .given(scheduleService)
                 .update(any(), any(), any());
@@ -200,7 +190,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update",
+                .andDo(document("schedule/update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -214,8 +204,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_해당_일정의_카테고리에_대한_권한이_없다면_403을_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willThrow(new NoPermissionException())
                 .given(scheduleService)
                 .update(any(), any(), any());
@@ -226,7 +218,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update/forbidden",
+                .andDo(document("schedule/update/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -237,8 +229,10 @@ class ScheduleControllerTest extends ControllerTest {
     @Test
     void 일정을_수정하는데_일정이_존재하지_않는_경우_404를_반환한다() throws Exception {
         // given
+        Long categoryId = 1L;
         Long scheduleId = 1L;
-        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
+        ScheduleUpdateRequest 수정_요청 = new ScheduleUpdateRequest(categoryId, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
         willThrow(new NoSuchScheduleException())
                 .given(scheduleService)
                 .update(any(), any(), any());
@@ -249,7 +243,7 @@ class ScheduleControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(수정_요청)))
                 .andDo(print())
-                .andDo(document("schedules/update/notfound",
+                .andDo(document("schedule/update/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -263,13 +257,13 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willDoNothing()
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete",
+                .andDo(document("schedule/delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -286,13 +280,13 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willThrow(new NoPermissionException())
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete/forbidden",
+                .andDo(document("schedule/delete/failByNoPermission",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -306,13 +300,13 @@ class ScheduleControllerTest extends ControllerTest {
         Long scheduleId = 1L;
         willThrow(new NoSuchScheduleException())
                 .given(scheduleService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/schedules/{scheduleId}", scheduleId)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/delete/notfound",
+                .andDo(document("schedule/delete/failByNoSchedule",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())
                 ))
@@ -347,7 +341,7 @@ class ScheduleControllerTest extends ControllerTest {
         MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
 
-        given(calendarService.findSchedulesByMemberId(any(), any()))
+        given(subscribingSchedulesFinder.findMySubscribingSchedules(any(), any()))
                 .willReturn(memberScheduleResponses);
 
         // when & then
@@ -355,7 +349,7 @@ class ScheduleControllerTest extends ControllerTest {
                         get("/api/members/me/schedules?startDateTime={startDate}&endDateTime={endDate}", startDate, endDate)
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE))
                 .andDo(print())
-                .andDo(document("schedules/findAllByMember",
+                .andDo(document("schedule/findSchedulesByMemberId",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(

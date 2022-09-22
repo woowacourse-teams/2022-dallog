@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.schedule.dto.response;
 
-import com.allog.dallog.domain.integrationschedule.domain.IntegrationSchedule;
+import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
 
@@ -18,7 +18,8 @@ public class MemberScheduleResponse {
     public MemberScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
         this(integrationSchedule.getId(), integrationSchedule.getTitle(), integrationSchedule.getStartDateTime(),
                 integrationSchedule.getEndDateTime(), integrationSchedule.getMemo(),
-                integrationSchedule.getCategoryId(), color.getColorCode(), integrationSchedule.getCategoryType());
+                integrationSchedule.getCategoryId(), color.getColorCode(),
+                integrationSchedule.getCategoryType().name());
     }
 
     public MemberScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,

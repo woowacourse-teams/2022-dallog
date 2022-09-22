@@ -3,7 +3,7 @@ import { css, Theme } from '@emotion/react';
 import { DAYS } from '@/constants/date';
 
 const calendarPage = css`
-  padding: 0 5rem;
+  padding: 0 5rem 5rem;
 `;
 
 const calendarHeader = ({ colors, flex }: Theme) => css`
@@ -82,12 +82,14 @@ const navButtonTitle = ({ colors }: Theme) => css`
 const navBarGrid = css`
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
+
+  height: 7rem;
 `;
 
 const calendarGrid = (rowNum: number) => css`
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
-  grid-auto-rows: calc(75vh / ${rowNum});
+  grid-auto-rows: calc(calc(100vh - 42rem) / ${rowNum});
 `;
 
 const dayBar = ({ colors }: Theme, day: string) => css`

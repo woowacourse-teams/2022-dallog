@@ -1,14 +1,17 @@
 package com.allog.dallog.domain.member.application;
 
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
+import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
 import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,29 +20,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
+    private final ScheduleRepository scheduleRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
 
-    public MemberService(final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
+    public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
+                         final ScheduleRepository scheduleRepository,
+                         final SubscriptionRepository subscriptionRepository,
                          final OAuthTokenRepository oAuthTokenRepository) {
         this.memberRepository = memberRepository;
+        this.categoryRepository = categoryRepository;
+        this.scheduleRepository = scheduleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
     }
 
-    @Transactional
-    public MemberResponse save(final Member member) {
-        Member newMember = memberRepository.save(member);
-        return new MemberResponse(newMember);
-    }
-
     public MemberResponse findById(final Long id) {
-        return new MemberResponse(getMember(id));
+        return new MemberResponse(memberRepository.getById(id));
     }
 
     public MemberResponse findBySubscriptionId(final Long subscriptionId) {
-        Subscription subscription = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(NoSuchSubscriptionException::new);
+        Subscription subscription = subscriptionRepository.getById(subscriptionId);
 
         Member member = subscription.getMember();
         return new MemberResponse(member);
@@ -47,33 +49,22 @@ public class MemberService {
 
     @Transactional
     public void update(final Long id, final MemberUpdateRequest request) {
-        Member member = getMember(id);
+        Member member = memberRepository.getById(id);
         member.change(request.getDisplayName());
     }
 
     @Transactional
     public void deleteById(final Long id) {
+        List<Long> categoryIds = categoryRepository.findByMemberId(id)
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
+
+        scheduleRepository.deleteByCategoryIdIn(categoryIds);
+        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
+        categoryRepository.deleteByMemberId(id);
+
         oAuthTokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
-    }
-
-    public Member getMember(final Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(NoSuchMemberException::new);
-    }
-
-    public Member getByEmail(final String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(NoSuchMemberException::new);
-    }
-
-    public boolean existsByEmail(final String email) {
-        return memberRepository.existsByEmail(email);
-    }
-
-    public void validateExistsMember(final Long id) {
-        if (!memberRepository.existsById(id)) {
-            throw new NoSuchMemberException("존재하지 않는 회원입니다.");
-        }
     }
 }

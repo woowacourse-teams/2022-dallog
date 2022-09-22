@@ -4,15 +4,13 @@ public class GoogleDateFormat {
 
     private String date;
     private String dateTime;
-    private String timeZone;
 
     private GoogleDateFormat() {
     }
 
-    public GoogleDateFormat(final String date, final String dateTime, final String timeZone) {
+    public GoogleDateFormat(final String date, final String dateTime) {
         this.date = date;
         this.dateTime = dateTime;
-        this.timeZone = timeZone;
     }
 
     public String getDate() {
@@ -21,9 +19,5 @@ public class GoogleDateFormat {
 
     public String getDateTime() {
         return dateTime;
-    }
-
-    public String getTimeZone() {
-        return timeZone;
     }
 }

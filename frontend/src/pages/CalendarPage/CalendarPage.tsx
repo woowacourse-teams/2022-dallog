@@ -26,13 +26,15 @@ import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModify
 
 import { CALENDAR } from '@/constants';
 import { CACHE_KEY } from '@/constants/api';
-import { DAYS } from '@/constants/date';
+import { DATE_TIME, DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
 import {
+  getBeforeDate,
   getDayFromFormattedDate,
   getFormattedDate,
   getISODateString,
+  getISOTimeString,
   getThisDate,
   getThisMonth,
   getThisYear,
@@ -40,7 +42,7 @@ import {
 
 import scheduleApi from '@/api/schedule';
 
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import {
   calendarGrid,
@@ -161,14 +163,14 @@ function CalendarPage() {
               </div>
               <div css={monthPicker}>
                 <Button cssProp={navButton} onClick={moveToBeforeMonth}>
-                  <AiOutlineLeft />
+                  <MdKeyboardArrowLeft />
                   <span css={navButtonTitle}>전 달</span>
                 </Button>
                 <Button cssProp={todayButton} onClick={moveToToday}>
                   오늘
                 </Button>
                 <Button cssProp={navButton} onClick={moveToNextMonth}>
-                  <AiOutlineRight />
+                  <MdKeyboardArrowRight />
                   <span css={navButtonTitle}>다음 달</span>
                 </Button>
               </div>
@@ -255,14 +257,14 @@ function CalendarPage() {
           </span>
           <div css={monthPicker}>
             <Button cssProp={navButton} onClick={moveToBeforeMonth}>
-              <AiOutlineLeft />
+              <MdKeyboardArrowLeft />
               <span css={navButtonTitle}>전 달</span>
             </Button>
             <Button cssProp={todayButton} onClick={moveToToday}>
               오늘
             </Button>
             <Button cssProp={navButton} onClick={moveToNextMonth}>
-              <AiOutlineRight />
+              <MdKeyboardArrowRight />
               <span css={navButtonTitle}>다음 달</span>
             </Button>
           </div>
@@ -304,7 +306,19 @@ function CalendarPage() {
                     const nowDate = getFormattedDate(info.year, info.month, info.date);
                     const nowDay = getDayFromFormattedDate(nowDate);
 
-                    if (startDate <= nowDate && nowDate <= endDate && el.priority >= maxView) {
+                    const isAllDay = getISOTimeString(el.schedule.endDateTime).startsWith(
+                      DATE_TIME.END
+                    );
+
+                    if (
+                      !(
+                        startDate <= nowDate &&
+                        (nowDate < endDate || (nowDate == endDate && !isAllDay))
+                      )
+                    )
+                      return;
+
+                    if (el.priority >= maxView) {
                       return (
                         <span
                           key={`${nowDate}#${el.schedule.id}#longTerms#more`}
@@ -316,26 +330,29 @@ function CalendarPage() {
                       );
                     }
 
+                    const isEndDate =
+                      nowDate ===
+                      (isAllDay
+                        ? getISODateString(getBeforeDate(new Date(endDate), 1).toISOString())
+                        : endDate);
+
                     return (
-                      startDate <= nowDate &&
-                      nowDate <= endDate && (
-                        <div
-                          key={`${nowDate}#${el.schedule.id}#longTerms`}
-                          css={itemWithBackgroundStyle(
-                            el.priority,
-                            el.schedule.colorCode,
-                            hoveringId === el.schedule.id,
-                            maxView,
-                            nowDate === endDate
-                          )}
-                          onMouseEnter={() => onMouseEnter(el.schedule.id)}
-                          onClick={(e) => handleClickSchedule(e, el.schedule)}
-                          onMouseLeave={onMouseLeave}
-                        >
-                          {(startDate === nowDate || nowDay === 0) &&
-                            (el.schedule.title || CALENDAR.EMPTY_TITLE)}
-                        </div>
-                      )
+                      <div
+                        key={`${nowDate}#${el.schedule.id}#longTerms`}
+                        css={itemWithBackgroundStyle(
+                          el.priority,
+                          el.schedule.colorCode,
+                          hoveringId === el.schedule.id,
+                          maxView,
+                          isEndDate
+                        )}
+                        onMouseEnter={() => onMouseEnter(el.schedule.id)}
+                        onClick={(e) => handleClickSchedule(e, el.schedule)}
+                        onMouseLeave={onMouseLeave}
+                      >
+                        {(startDate === nowDate || nowDay === 0) &&
+                          (el.schedule.title || CALENDAR.EMPTY_TITLE)}
+                      </div>
                     );
                   })}
 

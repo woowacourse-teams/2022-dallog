@@ -1,25 +1,26 @@
 import { AxiosError } from 'axios';
+import { lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import useSnackBar from '@/hooks/useSnackBar';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
-import NavBar from '@/components/NavBar/NavBar';
-import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
-import PublicRoute from '@/components/PublicRoute/PublicRoute';
-import SideBar from '@/components/SideBar/SideBar';
-import SnackBar from '@/components/SnackBar/SnackBar';
-import AuthPage from '@/pages/AuthPage/AuthPage';
-import CategoryPage from '@/pages/CategoryPage/CategoryPage';
-import MainPage from '@/pages/MainPage/MainPage';
-import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
-import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage/PrivacyPolicyPage';
-import SchedulingPage from '@/pages/SchedulingPage/SchedulingPage';
 
 import { PATH } from '@/constants';
 
 import { ERROR_MESSAGE } from './constants/message';
+
+const NavBar = lazy(() => import('@/components/NavBar/NavBar'));
+const ProtectRoute = lazy(() => import('@/components/ProtectRoute/ProtectRoute'));
+const SideBar = lazy(() => import('@/components/SideBar/SideBar'));
+const SnackBar = lazy(() => import('@/components/SnackBar/SnackBar'));
+const AuthPage = lazy(() => import('@/pages/AuthPage/AuthPage'));
+const CategoryPage = lazy(() => import('@/pages/CategoryPage/CategoryPage'));
+const MainPage = lazy(() => import('@/pages/MainPage/MainPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage/PrivacyPolicyPage'));
 
 function App() {
   const { openSnackBar } = useSnackBar();
@@ -34,6 +35,7 @@ function App() {
       queries: {
         retry: 1,
         retryDelay: 0,
+        staleTime: 1 * 60 * 1000,
         onError,
       },
       mutations: {
@@ -48,23 +50,23 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <Router>
-          <NavBar />
-          <SideBar />
-          <Routes>
-            <Route element={<PublicRoute />}>
+          <Suspense fallback={<></>}>
+            <NavBar />
+            <SideBar />
+            <Routes>
               <Route path={PATH.MAIN} element={<MainPage />} />
               <Route path={PATH.AUTH} element={<AuthPage />} />
               <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFoundPage />} />
-            </Route>
-            <Route element={<ProtectRoute />}>
-              <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-              <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
-            </Route>
-          </Routes>
+              <Route element={<ProtectRoute />}>
+                <Route path={PATH.CATEGORY} element={<CategoryPage />} />
+              </Route>
+            </Routes>
+          </Suspense>
           <SnackBar />
         </Router>
       </ErrorBoundary>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

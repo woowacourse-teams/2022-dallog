@@ -37,11 +37,3 @@ jobs:
         if: always()
         with:
           junit_files: ${{ github.workspace }}/backend/build/test-results/**/*.xml
-
-      - name: Add coverage to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.2
-        with:
-          paths: ${{ github.workspace }}/backend/build/jacoco/index.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-

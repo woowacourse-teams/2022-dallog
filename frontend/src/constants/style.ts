@@ -27,4 +27,6 @@ const PALETTE = [
 
 const TRANSPARENT = 'transparent';
 
-export { PALETTE, TRANSPARENT };
+const OPTION_HEIGHT = 36;
+
+export { OPTION_HEIGHT, PALETTE, TRANSPARENT };

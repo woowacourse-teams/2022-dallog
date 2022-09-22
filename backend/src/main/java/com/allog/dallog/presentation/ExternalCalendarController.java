@@ -1,9 +1,9 @@
 package com.allog.dallog.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
@@ -20,25 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExternalCalendarController {
 
     private final ExternalCalendarService externalCalendarService;
-    private final CategorySubscriptionService categorySubscriptionService;
+    private final CategoryService categoryService;
 
     public ExternalCalendarController(final ExternalCalendarService externalCalendarService,
-                                      final CategorySubscriptionService categorySubscriptionService) {
+                                      final CategoryService categoryService) {
         this.externalCalendarService = externalCalendarService;
-        this.categorySubscriptionService = categorySubscriptionService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public ResponseEntity<ExternalCalendarsResponse> getExternalCalendar(
             @AuthenticationPrincipal final LoginMember loginMember) {
-
         return ResponseEntity.ok(externalCalendarService.findByMemberId(loginMember.getId()));
     }
 
     @PostMapping
     public ResponseEntity<CategoryResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
                                                  @RequestBody final ExternalCategoryCreateRequest request) {
-        CategoryResponse response = categorySubscriptionService.save(loginMember.getId(), request);
+        CategoryResponse response = categoryService.save(loginMember.getId(), request);
         return ResponseEntity.created(URI.create("/api/categories/" + response.getId())).body(response);
     }
 }

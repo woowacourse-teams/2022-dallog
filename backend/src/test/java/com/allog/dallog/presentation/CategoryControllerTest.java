@@ -25,6 +25,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
@@ -42,7 +45,6 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.composition.application.CategorySubscriptionService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,15 +67,12 @@ class CategoryControllerTest extends ControllerTest {
     @MockBean
     private CategoryService categoryService;
 
-    @MockBean
-    private CategorySubscriptionService categorySubscriptionService;
-
     @DisplayName("카테고리를 생성한다.")
     @Test
     void 카테고리를_생성한다() throws Exception {
         // given
         CategoryResponse 카테고리 = BE_일정_응답(후디_응답);
-        given(categorySubscriptionService.save(any(), any(CategoryCreateRequest.class))).willReturn(카테고리);
+        given(categoryService.save(any(), any(CategoryCreateRequest.class))).willReturn(카테고리);
 
         // when & then
         mockMvc.perform(post("/api/categories")
@@ -83,11 +82,26 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(BE_일정_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/save",
+                .andDo(document("category/save",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
-                                        headerWithName("Authorization").description("JWT 토큰"))
+                                        headerWithName("Authorization").description("JWT 토큰")),
+                                requestFields(
+                                        fieldWithPath("name").description("카테고리 이름 (최대 20글자)"),
+                                        fieldWithPath("categoryType").description("카테고리 타입 (NORMAL | PERSONAL | GOOGLE)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("카테고리 ID"),
+                                        fieldWithPath("name").description("카테고리 이름"),
+                                        fieldWithPath("categoryType").description("카테고리 타입 (NORMAL | PERSONAL | GOOGLE)"),
+                                        fieldWithPath("creator.id").description("카테고리 생성자 ID"),
+                                        fieldWithPath("creator.email").description("카테고리 생성자 이메일"),
+                                        fieldWithPath("creator.displayName").description("카테고리 생성자 이름"),
+                                        fieldWithPath("creator.profileImageUrl").description("카테고리 생성자 프로필 이미지 URL"),
+                                        fieldWithPath("creator.socialType").description("카테고리 생성자의 소셜 타입"),
+                                        fieldWithPath("createdAt").description("카테고리 생성일자")
+                                )
                         )
                 )
                 .andExpect(status().isCreated());
@@ -100,7 +114,7 @@ class CategoryControllerTest extends ControllerTest {
         CategoryCreateRequest 잘못된_카테고리_생성_요청 = new CategoryCreateRequest(INVALID_CATEGORY_NAME, NORMAL);
 
         willThrow(new InvalidCategoryException(CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE))
-                .given(categorySubscriptionService)
+                .given(categoryService)
                 .save(any(), any(CategoryCreateRequest.class));
 
         // when & then
@@ -111,7 +125,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(잘못된_카테고리_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/save/badRequest",
+                .andDo(document("category/save/failByInvalidNameFormat",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -138,7 +152,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findAll",
+                .andDo(document("category/findAllByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -157,7 +171,7 @@ class CategoryControllerTest extends ControllerTest {
         int page = 0;
         int size = 10;
 
-        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
         given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
 
@@ -167,7 +181,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findAllLikeName",
+                .andDo(document("category/findAllByName/fileterByName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -189,7 +203,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
@@ -198,7 +212,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/findMine",
+                .andDo(document("category/findMineByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -220,7 +234,7 @@ class CategoryControllerTest extends ControllerTest {
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
         CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMineByName(any(), any(), any())).willReturn(categoriesResponse);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)
@@ -229,7 +243,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/findMineLikeName",
+                .andDo(document("category/findMineByName/fileterByName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -256,7 +270,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findById",
+                .andDo(document("category/findById",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -281,7 +295,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("categories/findById/notFound",
+                .andDo(document("category/findById/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -310,7 +324,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update",
+                .andDo(document("category/update",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -340,7 +354,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update/notFound",
+                .andDo(document("category/update/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -370,7 +384,7 @@ class CategoryControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(카테고리_수정_요청))
                 )
                 .andDo(print())
-                .andDo(document("categories/update/badRequest",
+                .andDo(document("category/update/failByInvalidNameFormat",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -388,7 +402,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         willDoNothing()
                 .given(categoryService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
@@ -397,7 +411,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/delete",
+                .andDo(document("category/delete",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -416,7 +430,7 @@ class CategoryControllerTest extends ControllerTest {
         willThrow(new NoSuchCategoryException("존재하지 않는 카테고리를 삭제할 수 없습니다."))
                 .willDoNothing()
                 .given(categoryService)
-                .deleteById(any(), any());
+                .delete(any(), any());
 
         // when & then
         mockMvc.perform(delete("/api/categories/{categoryId}", categoryId)
@@ -425,7 +439,7 @@ class CategoryControllerTest extends ControllerTest {
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
-                .andDo(document("categories/delete/notFound",
+                .andDo(document("category/delete/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(

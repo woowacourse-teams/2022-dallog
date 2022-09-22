@@ -1,6 +1,11 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.auth.dto.OAuthMember;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.관리자;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
+
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 
@@ -29,9 +34,26 @@ public class AuthFixtures {
     public static final String 더미_시크릿_키 = "asdfasarspofjkosdfasdjkflikasndflkasndsdfjkadsnfkjasdn";
 
     public static final String STUB_OAUTH_ACCESS_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
-    public static final String STUB_OAUTH_EXPIRES_IN = "3599";
-    public static final String STUB_OAUTH_SCOPE = "openid";
-    public static final String STUB_OAUTH_TOKEN_TYPE = "Bearer";
+
+    public static TokenRequest 관리자_인증_코드_토큰_요청() {
+        return new TokenRequest(관리자.getCode(), "https://dallog.me/oauth");
+    }
+
+    public static TokenRequest 파랑_인증_코드_토큰_요청() {
+        return new TokenRequest(파랑.getCode(), "https://dallog.me/oauth");
+    }
+
+    public static TokenRequest 리버_인증_코드_토큰_요청() {
+        return new TokenRequest(리버.getCode(), "https://dallog.me/oauth");
+    }
+
+    public static TokenRequest 후디_인증_코드_토큰_요청() {
+        return new TokenRequest(후디.getCode(), "https://dallog.me/oauth");
+    }
+
+    public static TokenRequest 매트_인증_코드_토큰_요청() {
+        return new TokenRequest(매트.getCode(), "https://dallog.me/oauth");
+    }
 
     public static TokenRequest MEMBER_인증_코드_토큰_요청() {
         return new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
@@ -41,11 +63,5 @@ public class AuthFixtures {
         return new TokenResponse(STUB_MEMBER_인증_코드);
     }
 
-    public static OAuthMember STUB_OAUTH_MEMBER() {
-        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필, MEMBER_REFRESH_TOKEN);
-    }
 
-    public static OAuthMember STUB_OAUTH_CREATOR() {
-        return new OAuthMember(CREATOR_이메일, CREATOR_이름, CREATOR_프로필, CREATOR_REFRESH_TOKEN);
-    }
 }

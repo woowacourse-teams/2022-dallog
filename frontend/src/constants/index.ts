@@ -22,7 +22,6 @@ const PATH = {
   AUTH: '/oauth',
   CATEGORY: '/category',
   POLICY: '/policy',
-  SCHEDULING: '/scheduling',
 };
 
 export { ATOM_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };
