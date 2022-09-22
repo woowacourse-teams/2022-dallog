@@ -7,8 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ErrorTestController {
 
+    private final ErrorTestService errorTestService;
+
+    public ErrorTestController(final ErrorTestService errorTestService) {
+        this.errorTestService = errorTestService;
+    }
+
     @GetMapping("/api/error")
-    public ResponseEntity<Void> error() throws Exception {
-        throw new Exception("이거슨 에러 테스트다.");
+    public ResponseEntity<Void> error() {
+        errorTestService.invokeError();
+        return ResponseEntity.internalServerError().build();
     }
 }

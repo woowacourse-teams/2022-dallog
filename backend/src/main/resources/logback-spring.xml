@@ -55,8 +55,5 @@
         <root level="WARN">
             <appender-ref ref="FILE"/>
         </root>
-        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
-            <appender-ref ref="ASYNC_DISCORD"/>
-        </logger>
     </springProfile>
 </configuration>
