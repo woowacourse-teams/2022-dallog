@@ -1,14 +1,15 @@
 spring:
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
   main:
     allow-bean-definition-overriding: true
 
   datasource:
     url: jdbc:h2:~/dallog;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-
-  sql:
-    init:
-      mode: NEVER
 
   jpa:
     properties:
@@ -19,10 +20,15 @@ spring:
     hibernate:
       ddl-auto: create
 
-  data:
-    web:
-      pageable:
-        max-page-size: 100
+cors:
+  allow-origin:
+    urls: http://localhost:3000
+
+security:
+  jwt:
+    token:
+      secret-key: fsmjgbdafmjgbasmfgadbsgmadfhgbfamjghbvmssdgsdfgdf
+      expire-length: 3600000
 
 oauth:
   google:
@@ -34,13 +40,4 @@ oauth:
       - https://www.googleapis.com/auth/userinfo.profile
       - https://www.googleapis.com/auth/userinfo.email
     token-uri: https://oauth2.googleapis.com/token
-
-cors:
-  allow-origin:
-    urls: http://localhost:3000
-
-security:
-  jwt:
-    token:
-      secret-key: fsmjgbdafmjgbasmfgadbsgmadfhgbfamjghbvmssdgsdfgdf
-      expire-length: 3600000
+    access-type: offline
