@@ -46,7 +46,7 @@ const dateItemStyle = ({ colors }: Theme) => css`
 
 const itemStyle = css`
   position: relative;
-  left: -100%;
+  transform: translateX(-100%);
 
   width: 200rem;
   height: 50rem;
@@ -61,11 +61,11 @@ const itemStyle = css`
   @keyframes slideIn {
     from {
       opacity: 0;
-      left: -100%;
+      transform: translateX(-100%);
     }
 
     to {
-      left: 0;
+      transform: translateX(0);
       opacity: 1;
     }
   }
