@@ -1,12 +1,17 @@
 package com.allog.dallog.domain.schedule.application;
 
+import com.allog.dallog.domain.auth.domain.OAuthToken;
+import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
+import com.allog.dallog.domain.schedule.dto.FindSchedulesMaterial;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -25,14 +30,20 @@ public class ScheduleService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final OAuthTokenRepository oAuthTokenRepository;
+    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
 
     public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryRepository categoryRepository,
                            final MemberRepository memberRepository,
-                           final SubscriptionRepository subscriptionRepository) {
+                           final SubscriptionRepository subscriptionRepository,
+                           final OAuthTokenRepository oAuthTokenRepository,
+                           final ExternalCategoryDetailRepository externalCategoryDetailRepository) {
         this.scheduleRepository = scheduleRepository;
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.oAuthTokenRepository = oAuthTokenRepository;
+        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
     }
 
     @Transactional
@@ -49,17 +60,31 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
-    public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId,
-                                                                        final DateRangeRequest dateRange) {
+    public FindSchedulesMaterial findInternalByMemberIdAndDateRange(final Long memberId,
+                                                                    final DateRangeRequest request) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        return toIntegrationSchedules(dateRange, subscriptions);
+        List<IntegrationSchedule> schedules = toIntegrationSchedules(subscriptions, request);
+
+        String refreshToken = toRefreshToken(memberId);
+        List<ExternalCategoryDetail> externalCategoryDetails = toCategoryDetails(subscriptions);
+
+        return new FindSchedulesMaterial(subscriptions, schedules, refreshToken, externalCategoryDetails);
     }
 
-    private List<IntegrationSchedule> toIntegrationSchedules(final DateRangeRequest dateRange,
-                                                             final Subscriptions subscriptions) {
+    private String toRefreshToken(final Long memberId) {
+        OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
+        return oAuthToken.getRefreshToken();
+    }
+
+    private List<ExternalCategoryDetail> toCategoryDetails(final Subscriptions subscriptions) {
+        return externalCategoryDetailRepository.findByCategoryIn(subscriptions.findExternalCategory());
+    }
+
+    private List<IntegrationSchedule> toIntegrationSchedules(final Subscriptions subscriptions,
+                                                             final DateRangeRequest request) {
         List<Category> categories = subscriptions.findInternalCategory();
-        return scheduleRepository.getByCategoriesAndBetween(categories, dateRange.getStartDateTime(),
-                dateRange.getEndDateTime());
+        return scheduleRepository.getByCategoriesAndBetween(categories, request.getStartDateTime(),
+                request.getEndDateTime());
     }
 
     @Transactional

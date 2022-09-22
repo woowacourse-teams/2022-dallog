@@ -1,22 +1,20 @@
 package com.allog.dallog.domain.schedule.application;
 
 import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.domain.OAuthToken;
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
-import com.allog.dallog.domain.category.application.ExternalCategoryDetailService;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.TypedSchedules;
+import com.allog.dallog.domain.schedule.dto.FindSchedulesMaterial;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import com.allog.dallog.domain.subscription.domain.Subscriptions;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,72 +23,58 @@ public class SubscribingSchedulesFinder {
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     private final ScheduleService scheduleService;
-    private final SubscriptionRepository subscriptionRepository;
-    private final ExternalCategoryDetailService externalCategoryDetailService;
-    private final ExternalCalendarClient externalCalendarClient;
-    private final OAuthTokenRepository oAuthTokenRepository;
     private final OAuthClient oAuthClient;
+    private final ExternalCalendarClient externalCalendarClient;
 
-    public SubscribingSchedulesFinder(final ScheduleService scheduleService,
-                                      final SubscriptionRepository subscriptionRepository,
-                                      final ExternalCategoryDetailService externalCategoryDetailService,
-                                      final ExternalCalendarClient externalCalendarClient,
-                                      final OAuthTokenRepository oAuthTokenRepository, final OAuthClient oAuthClient) {
+    public SubscribingSchedulesFinder(final ScheduleService scheduleService, final OAuthClient oAuthClient,
+                                      final ExternalCalendarClient externalCalendarClient) {
         this.scheduleService = scheduleService;
-        this.subscriptionRepository = subscriptionRepository;
-        this.externalCategoryDetailService = externalCategoryDetailService;
-        this.externalCalendarClient = externalCalendarClient;
-        this.oAuthTokenRepository = oAuthTokenRepository;
         this.oAuthClient = oAuthClient;
+        this.externalCalendarClient = externalCalendarClient;
     }
 
-    public MemberScheduleResponses findMySubscribingSchedules(final Long memberId, final DateRangeRequest dateRange) {
-        List<IntegrationSchedule> schedules = new ArrayList<>();
+    public MemberScheduleResponses findMySubscribingSchedules(final Long memberId, final DateRangeRequest request) {
+        FindSchedulesMaterial material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
 
-        List<IntegrationSchedule> externalSchedules = findExternalSchedules(memberId, dateRange);
-        List<IntegrationSchedule> internalSchedules = scheduleService.findInternalByMemberIdAndDateRange(memberId,
-                dateRange);
+        List<IntegrationSchedule> schedules = material.getSchedules();
 
+        String refreshToken = material.getRefreshToken();
+        String accessToken = toAccessToken(refreshToken);
+
+        List<IntegrationSchedule> externalSchedules = toExternalSchedules(request, material, accessToken);
         schedules.addAll(externalSchedules);
-        schedules.addAll(internalSchedules);
 
-        Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        return new MemberScheduleResponses(subscriptions, new TypedSchedules(schedules));
+        return new MemberScheduleResponses(material.getSubscriptions(), new TypedSchedules(schedules));
     }
 
-    private List<IntegrationSchedule> findExternalSchedules(final Long memberId, final DateRangeRequest dateRange) {
-        List<IntegrationSchedule> schedules = new ArrayList<>();
+    private String toAccessToken(final String refreshToken) {
+        OAuthAccessTokenResponse oAuthToken = oAuthClient.getAccessToken(refreshToken);
+        return oAuthToken.getAccessToken();
+    }
 
-        List<ExternalCategoryDetail> details = externalCategoryDetailService.findByMemberId(memberId);
-        if (details.isEmpty()) {
-            return schedules;
+    private List<IntegrationSchedule> toExternalSchedules(final DateRangeRequest request,
+                                                          final FindSchedulesMaterial material,
+                                                          final String accessToken) {
+        List<ExternalCategoryDetail> externalCategoryDetails = material.getExternalCategoryDetails();
+        if (externalCategoryDetails.isEmpty()) {
+            return new ArrayList<>();
         }
 
-        String accessToken = getExternalAccessToken(memberId);
-        for (ExternalCategoryDetail detail : details) {
-            List<IntegrationSchedule> externalSchedules = findExternalSchedules(dateRange, accessToken, detail);
-            schedules.addAll(externalSchedules);
-        }
-        return schedules;
+        return externalCategoryDetails.stream()
+                .map(externalCategoryDetail -> findExternalSchedules(request, accessToken, externalCategoryDetail))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
-    private String getExternalAccessToken(final Long memberId) {
-        OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
-        String refreshToken = oAuthToken.getRefreshToken();
+    private List<IntegrationSchedule> findExternalSchedules(final DateRangeRequest request, final String accessToken,
+                                                            final ExternalCategoryDetail externalCategoryDetail) {
+        String startDateTime = request.getStartDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        String endDateTime = request.getEndDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
 
-        OAuthAccessTokenResponse accessTokenResponse = oAuthClient.getAccessToken(refreshToken);
-        return accessTokenResponse.getAccessToken();
-    }
-
-    private List<IntegrationSchedule> findExternalSchedules(final DateRangeRequest dateRange, final String accessToken,
-                                                            final ExternalCategoryDetail detail) {
-        LocalDateTime startDateTime = dateRange.getStartDateTime();
-        LocalDateTime endDateTime = dateRange.getEndDateTime();
-
-        String startTime = startDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        String endTime = endDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        Category externalCategory = externalCategoryDetail.getCategory();
+        String externalId = externalCategoryDetail.getExternalId();
 
         return externalCalendarClient.getExternalCalendarSchedules(
-                accessToken, detail.getCategory().getId(), detail.getExternalId(), startTime, endTime);
+                accessToken, externalCategory.getId(), externalId, startDateTime, endDateTime);
     }
 }
