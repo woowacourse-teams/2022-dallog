@@ -154,6 +154,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
               id="allDay"
               checked={isAllDay}
               onClick={handleClickAllDayButton}
+              readOnly
             />
             <label htmlFor="allDay" />
             <label htmlFor="allDay">종일</label>
