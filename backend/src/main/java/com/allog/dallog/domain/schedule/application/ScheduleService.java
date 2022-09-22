@@ -11,9 +11,11 @@ import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +54,11 @@ public class ScheduleService {
     public List<IntegrationSchedule> findInternalByMemberIdAndDateRange(final Long memberId,
                                                                         final DateRangeRequest dateRange) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        return integrationSchedules(dateRange, subscriptions);
+        return toIntegrationSchedules(dateRange, subscriptions);
     }
 
-    private List<IntegrationSchedule> integrationSchedules(final DateRangeRequest dateRange,
-                                                           final Subscriptions subscriptions) {
+    private List<IntegrationSchedule> toIntegrationSchedules(final DateRangeRequest dateRange,
+                                                             final Subscriptions subscriptions) {
         List<Category> categories = subscriptions.findInternalCategory();
         return scheduleRepository.getByCategoriesAndBetween(categories, dateRange.getStartDateTime(),
                 dateRange.getEndDateTime());
@@ -79,5 +81,26 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.getById(id);
         schedule.validateEditPossible(memberId);
         scheduleRepository.deleteById(id);
+    }
+
+    public List<IntegrationSchedule> findInMembersByCategoryIdAndDateRange(final Long categoryId,
+                                                                           final DateRangeRequest request) {
+        List<Long> memberIds = toMemberIds(categoryId);
+        List<Category> internalCategories = toInternalCategories(memberIds);
+        return scheduleRepository.getByCategoriesAndBetween(internalCategories, request.getStartDateTime(),
+                request.getEndDateTime());
+    }
+
+    private List<Long> toMemberIds(final Long categoryId) {
+        return subscriptionRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(Subscription::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toList());
+    }
+
+    private List<Category> toInternalCategories(final List<Long> memberIds) {
+        Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberIdIn(memberIds));
+        return subscriptions.findInternalCategory();
     }
 }
