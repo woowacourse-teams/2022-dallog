@@ -1,8 +1,9 @@
 import { ScheduleType } from '@/@types/schedule';
 
 import { CALENDAR } from '@/constants';
+import { DATE_TIME } from '@/constants/date';
 
-import { getFormattedDate, getISODateString } from '@/utils/date';
+import { getFormattedDate, getISODateString, getISOTimeString } from '@/utils/date';
 
 interface DateType {
   year: number;
@@ -32,12 +33,13 @@ function useSchedulePriority(calendarMonth: DateType[]) {
     longTerms.map((el) => {
       const startDate = getISODateString(el.startDateTime);
       const endDate = getISODateString(el.endDateTime);
-
+      const isAllDay = getISOTimeString(el.endDateTime).startsWith(DATE_TIME.END);
       const scheduleRange = calendarMonth
+
         .filter((el) => {
           const date = getFormattedDate(el.year, el.month, el.date);
 
-          return startDate <= date && date <= endDate;
+          return startDate <= date && (date < endDate || (date == endDate && !isAllDay));
         })
         .map((el) => getFormattedDate(el.year, el.month, el.date));
 
