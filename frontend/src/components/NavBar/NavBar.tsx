@@ -16,7 +16,6 @@ import { PATH } from '@/constants';
 import { TRANSPARENT } from '@/constants/style';
 
 import {
-  MdAccessTime,
   MdCalendarToday,
   MdMenu,
   MdMenuOpen,
@@ -50,10 +49,6 @@ function NavBar() {
     navigate(PATH.CATEGORY);
   };
 
-  const handleClickSchedulingMenuButton = () => {
-    navigate(PATH.SCHEDULING);
-  };
-
   const handleClickProfileMenuButton = () => {
     toggleProfileModalOpen();
   };
@@ -82,10 +77,6 @@ function NavBar() {
             <Button cssProp={menu(theme)} onClick={handleClickCategoryMenuButton}>
               <MdOutlineCategory />
               <span css={menuTitle}>카테고리</span>
-            </Button>
-            <Button cssProp={menu(theme)} onClick={handleClickSchedulingMenuButton}>
-              <MdAccessTime />
-              <span css={menuTitle}>일정 조율</span>
             </Button>
             <Button cssProp={menu(theme)} onClick={handleClickProfileMenuButton}>
               <MdPersonOutline />

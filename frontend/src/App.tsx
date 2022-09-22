@@ -21,7 +21,6 @@ const CategoryPage = lazy(() => import('@/pages/CategoryPage/CategoryPage'));
 const MainPage = lazy(() => import('@/pages/MainPage/MainPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage/PrivacyPolicyPage'));
-const SchedulingPage = lazy(() => import('@/pages/SchedulingPage/SchedulingPage'));
 
 function App() {
   const { openSnackBar } = useSnackBar();
@@ -61,7 +60,6 @@ function App() {
               <Route path="*" element={<NotFoundPage />} />
               <Route element={<ProtectRoute />}>
                 <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-                <Route path={PATH.SCHEDULING} element={<SchedulingPage />} />
               </Route>
             </Routes>
           </Suspense>
