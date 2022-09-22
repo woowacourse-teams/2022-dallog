@@ -1,9 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
@@ -27,19 +25,14 @@ public class ScheduleService {
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
-    private final OAuthTokenRepository oAuthTokenRepository;
-    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
 
     public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryRepository categoryRepository,
-                           final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                           final OAuthTokenRepository oAuthTokenRepository,
-                           final ExternalCategoryDetailRepository externalCategoryDetailRepository) {
+                           final MemberRepository memberRepository,
+                           final SubscriptionRepository subscriptionRepository) {
         this.scheduleRepository = scheduleRepository;
         this.categoryRepository = categoryRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
-        this.oAuthTokenRepository = oAuthTokenRepository;
-        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
     }
 
     @Transactional
