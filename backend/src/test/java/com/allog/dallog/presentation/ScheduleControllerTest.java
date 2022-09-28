@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.schedule.application.CheckedSchedulesFinder;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
-import com.allog.dallog.domain.schedule.application.SubscribingSchedulesFinder;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
@@ -60,7 +60,7 @@ class ScheduleControllerTest extends ControllerTest {
     private ScheduleService scheduleService;
 
     @MockBean
-    private SubscribingSchedulesFinder subscribingSchedulesFinder;
+    private CheckedSchedulesFinder checkedSchedulesFinder;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test
@@ -341,7 +341,7 @@ class ScheduleControllerTest extends ControllerTest {
         MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
 
-        given(subscribingSchedulesFinder.findMySubscribingSchedules(any(), any()))
+        given(checkedSchedulesFinder.findMyCheckedSchedules(any(), any()))
                 .willReturn(memberScheduleResponses);
 
         // when & then

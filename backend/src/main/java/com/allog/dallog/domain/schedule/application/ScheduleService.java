@@ -11,7 +11,7 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
-import com.allog.dallog.domain.schedule.dto.FindSchedulesMaterial;
+import com.allog.dallog.domain.schedule.dto.MaterialToFindSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
@@ -60,15 +60,15 @@ public class ScheduleService {
         return new ScheduleResponse(schedule);
     }
 
-    public FindSchedulesMaterial findInternalByMemberIdAndDateRange(final Long memberId,
-                                                                    final DateRangeRequest request) {
+    public MaterialToFindSchedules findInternalByMemberIdAndDateRange(final Long memberId,
+                                                                      final DateRangeRequest request) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
         List<IntegrationSchedule> schedules = toIntegrationSchedules(subscriptions, request);
 
         String refreshToken = toRefreshToken(memberId);
         List<ExternalCategoryDetail> externalCategoryDetails = toCategoryDetails(subscriptions);
 
-        return new FindSchedulesMaterial(subscriptions, schedules, refreshToken, externalCategoryDetails);
+        return new MaterialToFindSchedules(subscriptions, schedules, refreshToken, externalCategoryDetails);
     }
 
     private String toRefreshToken(final Long memberId) {

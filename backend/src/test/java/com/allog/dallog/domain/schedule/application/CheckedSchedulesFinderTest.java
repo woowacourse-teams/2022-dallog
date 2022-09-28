@@ -37,10 +37,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class SubscribingSchedulesFinderTest extends ServiceTest {
+class CheckedSchedulesFinderTest extends ServiceTest {
 
     @Autowired
-    private SubscribingSchedulesFinder subscribingSchedulesFinder;
+    private CheckedSchedulesFinder checkedSchedulesFinder;
 
     @Autowired
     private CategoryService categoryService;
@@ -98,7 +98,7 @@ class SubscribingSchedulesFinderTest extends ServiceTest {
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스, "dfggsdfasdasadsgs"));
 
         // when
-        MemberScheduleResponses memberScheduleResponses = subscribingSchedulesFinder.findMySubscribingSchedules(
+        MemberScheduleResponses memberScheduleResponses = checkedSchedulesFinder.findMyCheckedSchedules(
                 memberId, new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then

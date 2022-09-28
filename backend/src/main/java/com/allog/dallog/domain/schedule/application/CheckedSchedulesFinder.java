@@ -7,7 +7,7 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.TypedSchedules;
-import com.allog.dallog.domain.schedule.dto.FindSchedulesMaterial;
+import com.allog.dallog.domain.schedule.dto.MaterialToFindSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SubscribingSchedulesFinder {
+public class CheckedSchedulesFinder {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -26,15 +26,15 @@ public class SubscribingSchedulesFinder {
     private final OAuthClient oAuthClient;
     private final ExternalCalendarClient externalCalendarClient;
 
-    public SubscribingSchedulesFinder(final ScheduleService scheduleService, final OAuthClient oAuthClient,
-                                      final ExternalCalendarClient externalCalendarClient) {
+    public CheckedSchedulesFinder(final ScheduleService scheduleService, final OAuthClient oAuthClient,
+                                  final ExternalCalendarClient externalCalendarClient) {
         this.scheduleService = scheduleService;
         this.oAuthClient = oAuthClient;
         this.externalCalendarClient = externalCalendarClient;
     }
 
-    public MemberScheduleResponses findMySubscribingSchedules(final Long memberId, final DateRangeRequest request) {
-        FindSchedulesMaterial material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
+    public MemberScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request) {
+        MaterialToFindSchedules material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
 
         List<IntegrationSchedule> schedules = material.getSchedules();
 
@@ -53,7 +53,7 @@ public class SubscribingSchedulesFinder {
     }
 
     private List<IntegrationSchedule> toExternalSchedules(final DateRangeRequest request,
-                                                          final FindSchedulesMaterial material,
+                                                          final MaterialToFindSchedules material,
                                                           final String accessToken) {
         List<ExternalCategoryDetail> externalCategoryDetails = material.getExternalCategoryDetails();
         if (externalCategoryDetails.isEmpty()) {
