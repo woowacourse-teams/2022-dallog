@@ -2,6 +2,7 @@ package com.allog.dallog.domain.auth.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
+import com.allog.dallog.domain.auth.domain.InMemoryTokenRepository;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
@@ -63,9 +64,22 @@ public class AuthService {
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
-        String accessToken = tokenProvider.createToken(String.valueOf(foundMember.getId()));
 
-        return new TokenResponse(accessToken);
+        return createTokenResponse(foundMember);
+    }
+
+    private TokenResponse createTokenResponse(final Member foundMember) {
+        Long memberId = foundMember.getId();
+        String accessToken = tokenProvider.createToken(String.valueOf(memberId));
+
+        if (InMemoryTokenRepository.exist(memberId)) {
+            String refreshToken = InMemoryTokenRepository.getToken(memberId);
+            return new TokenResponse(accessToken, refreshToken);
+        }
+
+        String refreshToken = tokenProvider.createToken(String.valueOf(memberId));
+        InMemoryTokenRepository.save(memberId, refreshToken);
+        return new TokenResponse(accessToken, refreshToken);
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
