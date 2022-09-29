@@ -287,4 +287,22 @@ class SubscriptionServiceTest extends ServiceTest {
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
     }
+
+    @DisplayName("카테고리를 구독 해제하면 카테고리에 대한 역할이 제거된다")
+    @Test
+    void 카테고리를_구독_해제하면_카테고리에_대한_역할이_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 후디 = memberRepository.save(후디());
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        // when
+        subscriptionService.delete(공통_일정_구독.getId(), 후디.getId());
+        boolean actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).isPresent();
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }
