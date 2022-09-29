@@ -30,18 +30,34 @@ public class CategoryRole {
     private Member member;
 
     @Enumerated(EnumType.STRING)
-    private CategoryRoleType roleType;
+    private CategoryRoleType categoryRoleType;
 
     protected CategoryRole() {
     }
 
-    public CategoryRole(final Category category, final Member member, final CategoryRoleType roleType) {
+    public CategoryRole(final Category category, final Member member, final CategoryRoleType categoryRoleType) {
         this.category = category;
         this.member = member;
-        this.roleType = roleType;
+        this.categoryRoleType = categoryRoleType;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public CategoryRoleType getCategoryRoleType() {
+        return categoryRoleType;
     }
 
     public boolean ableTo(final CategoryAuthority authority) {
-        return roleType.ableTo(authority);
+        return categoryRoleType.ableTo(authority);
     }
 }

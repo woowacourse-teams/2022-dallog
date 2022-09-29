@@ -2,6 +2,9 @@ package com.allog.dallog.domain.subscription.application;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.categoryrole.CategoryRole;
+import com.allog.dallog.domain.categoryrole.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -22,14 +25,16 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
     private final ColorPicker colorPicker;
 
     public SubscriptionService(final SubscriptionRepository subscriptionRepository,
                                final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-                               final ColorPicker colorPicker) {
+                               final CategoryRoleRepository categoryRoleRepository, final ColorPicker colorPicker) {
         this.subscriptionRepository = subscriptionRepository;
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
         this.colorPicker = colorPicker;
     }
 
@@ -41,9 +46,20 @@ public class SubscriptionService {
         Category category = categoryRepository.getById(categoryId);
         category.validateSubscriptionPossible(member);
 
-        Color color = Color.pick(colorPicker.pickNumber());
-        Subscription savedSubscription = subscriptionRepository.save(new Subscription(member, category, color));
+        Subscription savedSubscription = createSubscription(member, category);
+        createCategoryRole(member, category);
+
         return new SubscriptionResponse(savedSubscription);
+    }
+
+    private Subscription createSubscription(final Member member, final Category category) {
+        Color color = Color.pick(colorPicker.pickNumber());
+        return subscriptionRepository.save(new Subscription(member, category, color));
+    }
+
+    private void createCategoryRole(final Member member, final Category category) {
+        CategoryRole categoryRole = new CategoryRole(category, member, CategoryRoleType.NONE);
+        categoryRoleRepository.save(categoryRole);
     }
 
     public SubscriptionResponse findById(final Long id) {

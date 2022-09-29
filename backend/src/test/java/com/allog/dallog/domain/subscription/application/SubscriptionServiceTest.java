@@ -12,6 +12,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,6 +24,9 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.categoryrole.CategoryRole;
+import com.allog.dallog.domain.categoryrole.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -57,6 +61,9 @@ class SubscriptionServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRoleRepository categoryRoleRepository;
 
     @DisplayName("새로운 구독을 생성한다.")
     @Test
@@ -262,5 +269,22 @@ class SubscriptionServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
+    }
+
+    @DisplayName("카테고리를 구독하면 카테고리에 대한 NONE 역할이 생성된다")
+    @Test
+    void 카테고리를_구독하면_카테고리에_대한_NONE_역할이_생성된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        // when
+        Member 후디 = memberRepository.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+
+        // then
+        assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
     }
 }
