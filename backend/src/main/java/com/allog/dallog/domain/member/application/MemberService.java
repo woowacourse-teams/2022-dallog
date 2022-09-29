@@ -3,6 +3,7 @@ package com.allog.dallog.domain.member.application;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.categoryrole.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -24,16 +25,19 @@ public class MemberService {
     private final ScheduleRepository scheduleRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
 
     public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                          final ScheduleRepository scheduleRepository,
                          final SubscriptionRepository subscriptionRepository,
-                         final OAuthTokenRepository oAuthTokenRepository) {
+                         final OAuthTokenRepository oAuthTokenRepository,
+                         final CategoryRoleRepository categoryRoleRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.scheduleRepository = scheduleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
     }
 
     public MemberResponse findById(final Long id) {
@@ -63,6 +67,7 @@ public class MemberService {
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
         subscriptionRepository.deleteByCategoryIdIn(categoryIds);
         categoryRepository.deleteByMemberId(id);
+        categoryRoleRepository.deleteByMemberId(id);
 
         oAuthTokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
