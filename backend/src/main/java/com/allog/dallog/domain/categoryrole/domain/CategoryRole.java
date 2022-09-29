@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.categoryrole;
+package com.allog.dallog.domain.categoryrole.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.member.domain.Member;

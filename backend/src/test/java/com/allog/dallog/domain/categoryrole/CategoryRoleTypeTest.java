@@ -2,6 +2,8 @@ package com.allog.dallog.domain.categoryrole;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

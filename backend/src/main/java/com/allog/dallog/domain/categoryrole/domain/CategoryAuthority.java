@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.categoryrole;
+package com.allog.dallog.domain.categoryrole.domain;
 
 public enum CategoryAuthority {
     RENAME_CATEGORY,

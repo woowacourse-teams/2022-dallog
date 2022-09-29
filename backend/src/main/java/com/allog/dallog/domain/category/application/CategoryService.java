@@ -13,7 +13,7 @@ import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateReques
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
-import com.allog.dallog.domain.categoryrole.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;

@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.categoryrole;
+package com.allog.dallog.domain.categoryrole.domain;
 
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import java.util.Optional;
