@@ -206,7 +206,7 @@ class ScheduleServiceTest extends ServiceTest {
 
         // when
         List<IntegrationSchedule> schedules = scheduleService.findInternalByMemberIdAndDateRange(리버_id,
-                new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
+                new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59")).getSchedules();
 
         // then
         assertThat(schedules).hasSize(2);
