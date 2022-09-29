@@ -13,6 +13,7 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.domain.subscription.exception.NotAbleToUnsubscribeException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -106,6 +107,11 @@ public class SubscriptionService {
     private void deleteCategoryRole(final Long memberId, final Subscription subscription) {
         Category category = subscription.getCategory();
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, category.getId());
+
+        if (!categoryRole.isNone()) {
+            throw new NotAbleToUnsubscribeException("해당 카테고리에 관리자로 참여중이므로 구독을 해제할 수 없습니다.");
+        }
+
         categoryRoleRepository.deleteById(categoryRole.getId());
     }
 }

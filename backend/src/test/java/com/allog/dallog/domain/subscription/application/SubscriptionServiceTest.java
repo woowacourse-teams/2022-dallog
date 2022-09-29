@@ -38,12 +38,14 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import com.allog.dallog.domain.subscription.exception.NotAbleToUnsubscribeException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class SubscriptionServiceTest extends ServiceTest {
 
@@ -304,5 +306,24 @@ class SubscriptionServiceTest extends ServiceTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Transactional
+    @DisplayName("카테고리 역할이 NONE이 아닌 경우 카테고리를 구독 해제할 수 없다")
+    @Test
+    void 카테고리_역할이_NONE이_아닌_경우_카테고리를_구독_해제할_수_없다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 후디 = memberRepository.save(후디());
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        CategoryRole 역할 = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+        역할.changeRole(CategoryRoleType.ADMIN);
+
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 후디.getId()))
+                .isInstanceOf(NotAbleToUnsubscribeException.class);
     }
 }

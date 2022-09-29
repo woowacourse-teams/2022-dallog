@@ -57,6 +57,14 @@ public class CategoryRole {
         return categoryRoleType;
     }
 
+    public boolean isNone() {
+        return categoryRoleType.equals(CategoryRoleType.NONE);
+    }
+
+    public void changeRole(final CategoryRoleType categoryRoleType) {
+        this.categoryRoleType = categoryRoleType;
+    }
+
     public boolean ableTo(final CategoryAuthority authority) {
         return categoryRoleType.ableTo(authority);
     }
