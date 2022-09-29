@@ -13,6 +13,7 @@ import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateReques
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.categoryrole.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
@@ -34,17 +35,20 @@ public class CategoryService {
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
     private final ColorPicker colorPicker;
 
     public CategoryService(final CategoryRepository categoryRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                            final MemberRepository memberRepository, final SubscriptionRepository subscriptionRepository,
-                           final ScheduleRepository scheduleRepository, final ColorPicker colorPicker) {
+                           final ScheduleRepository scheduleRepository,
+                           final CategoryRoleRepository categoryRoleRepository, final ColorPicker colorPicker) {
         this.categoryRepository = categoryRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.scheduleRepository = scheduleRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
         this.colorPicker = colorPicker;
     }
 
@@ -112,6 +116,7 @@ public class CategoryService {
         scheduleRepository.deleteByCategoryIdIn(List.of(id));
         subscriptionRepository.deleteByCategoryIdIn(List.of(id));
         externalCategoryDetailRepository.deleteByCategoryId(id);
+        categoryRoleRepository.deleteByCategoryId(id);
         categoryRepository.deleteById(id);
     }
 

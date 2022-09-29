@@ -8,6 +8,8 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
 
     Optional<CategoryRole> findByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
+    void deleteByCategoryId(final Long categoryId);
+
     default CategoryRole getByMemberIdAndCategoryId(final Long memberId, final Long categoryId) {
         return findByMemberIdAndCategoryId(memberId, categoryId)
                 .orElseThrow(NoSuchCategoryRoleException::new);
