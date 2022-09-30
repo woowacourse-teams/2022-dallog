@@ -61,6 +61,10 @@ public class CategoryRole extends BaseEntity {
         return categoryRoleType.ableTo(authority);
     }
 
+    public void changeRole(final CategoryRoleType categoryRoleType) {
+        this.categoryRoleType = categoryRoleType;
+    }
+
     public Long getId() {
         return id;
     }
@@ -75,19 +79,5 @@ public class CategoryRole extends BaseEntity {
 
     public CategoryRoleType getCategoryRoleType() {
         return categoryRoleType;
-    }
-
-    public void changeRole(final CategoryRoleType categoryRoleType) {
-        this.categoryRoleType = categoryRoleType;
-    }
-
-    @Override
-    public String toString() {
-        return "CategoryRole{" +
-                "id=" + id +
-                ", category=" + category +
-                ", member=" + member +
-                ", categoryRoleType=" + categoryRoleType +
-                '}';
     }
 }
