@@ -4,6 +4,8 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.더미_시크릿_키
 
 import com.allog.dallog.domain.auth.application.StubTokenProvider;
 import com.allog.dallog.domain.auth.application.TokenProvider;
+import com.allog.dallog.domain.auth.domain.InMemoryTokenRepository;
+import com.allog.dallog.domain.auth.domain.TokenRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -13,5 +15,10 @@ public class TokenConfig {
     @Bean
     public TokenProvider tokenProvider() {
         return new StubTokenProvider(더미_시크릿_키);
+    }
+
+    @Bean
+    public TokenRepository tokenRepository() {
+        return new InMemoryTokenRepository();
     }
 }

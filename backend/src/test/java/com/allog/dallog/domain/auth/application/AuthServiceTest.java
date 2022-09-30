@@ -3,6 +3,7 @@ package com.allog.dallog.domain.auth.application;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
@@ -41,8 +42,10 @@ class AuthServiceTest extends ServiceTest {
         TokenResponse actual = authService.generateToken(tokenRequest);
 
         // then
-        assertThat(actual.getAccessToken()).isNotEmpty();
-        assertThat(actual.getRefreshToken()).isNotEmpty();
+        assertAll(() -> {
+            assertThat(actual.getAccessToken()).isNotEmpty();
+            assertThat(actual.getRefreshToken()).isNotEmpty();
+        });
     }
 
     @DisplayName("Authorization Code를 받으면 회원이 데이터베이스에 저장된다.")
