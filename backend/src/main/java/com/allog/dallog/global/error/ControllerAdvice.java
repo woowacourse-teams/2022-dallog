@@ -7,6 +7,9 @@ import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
@@ -41,7 +44,8 @@ public class ControllerAdvice {
             InvalidScheduleException.class,
             InvalidSubscriptionException.class,
             ExistSubscriptionException.class,
-            ExistExternalCategoryException.class
+            ExistExternalCategoryException.class,
+            NotAbleToMangeRoleException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
@@ -57,8 +61,11 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
-    @ExceptionHandler(NoPermissionException.class)
-    public ResponseEntity<ErrorResponse> handleNoPermission(final NoPermissionException e) {
+    @ExceptionHandler({
+            NoPermissionException.class,
+            NoPermissionToManageRoleException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNoPermission(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
@@ -68,7 +75,8 @@ public class ControllerAdvice {
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class,
             NoSuchScheduleException.class,
-            NoSuchOAuthTokenException.class
+            NoSuchOAuthTokenException.class,
+            NoSuchCategoryRoleException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

@@ -76,10 +76,10 @@ public class CategoryController {
     }
 
     @PatchMapping("/{categoryId}/subscribers/{memberId}/role")
-    public ResponseEntity<CategoryResponse> updateRole(@AuthenticationPrincipal final LoginMember loginMember,
-                                                       @PathVariable final Long categoryId,
-                                                       @PathVariable final Long memberId,
-                                                       @RequestBody final CategoryRoleUpdateRequest request) {
+    public ResponseEntity<Void> updateRole(@AuthenticationPrincipal final LoginMember loginMember,
+                                           @PathVariable final Long categoryId,
+                                           @PathVariable final Long memberId,
+                                           @RequestBody final CategoryRoleUpdateRequest request) {
         categoryRoleService.updateRole(loginMember.getId(), memberId, categoryId, request);
         return ResponseEntity.noContent().build();
     }
