@@ -68,8 +68,8 @@ public class AuthService {
         return createTokenResponse(foundMember);
     }
 
-    private TokenResponse createTokenResponse(final Member foundMember) {
-        Long memberId = foundMember.getId();
+    private TokenResponse createTokenResponse(final Member member) {
+        Long memberId = member.getId();
         String accessToken = tokenProvider.createToken(String.valueOf(memberId));
 
         if (InMemoryTokenRepository.exist(memberId)) {
