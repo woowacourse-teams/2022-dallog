@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "roles")
+@Table(name = "category_roles")
 @Entity
 public class CategoryRole extends BaseEntity {
 
@@ -42,6 +42,14 @@ public class CategoryRole extends BaseEntity {
         this.categoryRoleType = categoryRoleType;
     }
 
+    public boolean isNone() {
+        return categoryRoleType.equals(CategoryRoleType.NONE);
+    }
+
+    public boolean ableTo(final CategoryAuthority authority) {
+        return categoryRoleType.ableTo(authority);
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,15 +66,7 @@ public class CategoryRole extends BaseEntity {
         return categoryRoleType;
     }
 
-    public boolean isNone() {
-        return categoryRoleType.equals(CategoryRoleType.NONE);
-    }
-
     public void changeRole(final CategoryRoleType categoryRoleType) {
         this.categoryRoleType = categoryRoleType;
-    }
-
-    public boolean ableTo(final CategoryAuthority authority) {
-        return categoryRoleType.ableTo(authority);
     }
 }
