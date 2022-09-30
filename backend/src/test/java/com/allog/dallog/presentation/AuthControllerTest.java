@@ -88,7 +88,8 @@ class AuthControllerTest extends ControllerTest {
                                         .description("OAuth Redirect URI")
                         ),
                         responseFields(
-                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("달록 Access Token")
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("달록 Access Token"),
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("달록 Refresh Token")
                         )
                 ))
                 .andExpect(status().isOk());

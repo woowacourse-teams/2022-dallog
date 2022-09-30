@@ -4,6 +4,7 @@ import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
+import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
@@ -33,12 +34,13 @@ public class AuthService {
     private final OAuthClient oAuthClient;
     private final TokenProvider tokenProvider;
     private final ColorPicker colorPicker;
+    private final TokenRepository tokenRepository;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                        final OAuthTokenRepository oAuthTokenRepository,
                        final SubscriptionRepository subscriptionRepository, final OAuthUri oAuthUri,
                        final OAuthClient oAuthClient, final TokenProvider tokenProvider,
-                       final ColorPicker colorPicker) {
+                       final ColorPicker colorPicker, final TokenRepository tokenRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
@@ -47,6 +49,7 @@ public class AuthService {
         this.oAuthClient = oAuthClient;
         this.tokenProvider = tokenProvider;
         this.colorPicker = colorPicker;
+        this.tokenRepository = tokenRepository;
     }
 
     public String generateGoogleLink(final String redirectUri) {
@@ -63,9 +66,22 @@ public class AuthService {
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
-        String accessToken = tokenProvider.createToken(String.valueOf(foundMember.getId()));
 
-        return new TokenResponse(accessToken);
+        return createTokenResponse(foundMember);
+    }
+
+    private TokenResponse createTokenResponse(final Member member) {
+        Long memberId = member.getId();
+        String accessToken = tokenProvider.createToken(String.valueOf(memberId));
+
+        if (tokenRepository.exist(memberId)) {
+            String refreshToken = tokenRepository.getToken(memberId);
+            return new TokenResponse(accessToken, refreshToken);
+        }
+
+        String refreshToken = tokenProvider.createToken(String.valueOf(memberId));
+        tokenRepository.save(memberId, refreshToken);
+        return new TokenResponse(accessToken, refreshToken);
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
