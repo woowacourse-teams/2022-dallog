@@ -4,6 +4,7 @@ import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.구독_목록을_조회한다;
+import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.카테고리를_구독한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_CREATOR_인증_코드;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
@@ -153,16 +154,5 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract()
                 .as(CategoryResponse.class);
-    }
-
-    private SubscriptionResponse 카테고리를_구독한다(final String accessToken, final Long categoryId) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryId)
-                .then().log().all()
-                .statusCode(HttpStatus.CREATED.value())
-                .extract()
-                .as(SubscriptionResponse.class);
     }
 }

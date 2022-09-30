@@ -2,6 +2,7 @@ package com.allog.dallog.acceptance.fixtures;
 
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -67,6 +68,18 @@ public class CategoryAcceptanceFixtures {
         return RestAssured.given().log().all()
                 .auth().oauth2(accessToken)
                 .when().delete("/api/categories/{categoryId}", id)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 회원의_카테고리_역할을_변경한다(final String accessToken, final Long categoryId,
+                                                                  final Long memberId,
+                                                                  final CategoryRoleUpdateRequest request) {
+        return RestAssured.given().log().all()
+                .auth().oauth2(accessToken)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when().patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
                 .then().log().all()
                 .extract();
     }

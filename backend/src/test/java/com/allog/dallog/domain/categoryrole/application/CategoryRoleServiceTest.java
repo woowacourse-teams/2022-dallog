@@ -53,8 +53,8 @@ class CategoryRoleServiceTest extends ServiceTest {
         subscriptionService.save(후디.getId(), BE_일정.getId());
 
         // when
-        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(후디.getId(), BE_일정.getId(), ADMIN);
-        categoryRoleService.updateRole(관리자.getId(), request);
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(ADMIN);
+        categoryRoleService.updateRole(관리자.getId(), 후디.getId(), BE_일정.getId(), request);
 
         CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), BE_일정.getId()).get();
 
@@ -75,10 +75,11 @@ class CategoryRoleServiceTest extends ServiceTest {
         subscriptionService.save(관리자가_아닌_유저.getId(), BE_일정.getId());
         subscriptionService.save(구독자.getId(), BE_일정.getId());
 
-        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(구독자.getId(), BE_일정.getId(), ADMIN);
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(ADMIN);
 
         // when & then
-        assertThatThrownBy(() -> categoryRoleService.updateRole(관리자가_아닌_유저.getId(), request))
+        assertThatThrownBy(
+                () -> categoryRoleService.updateRole(관리자가_아닌_유저.getId(), 구독자.getId(), BE_일정.getId(), request))
                 .isInstanceOf(NoPermissionToManageRoleException.class);
     }
 
@@ -95,11 +96,11 @@ class CategoryRoleServiceTest extends ServiceTest {
         subscriptionService.save(후디.getId(), BE_일정.getId());
         subscriptionService.save(매트.getId(), BE_일정.getId());
 
-        categoryRoleService.updateRole(관리자.getId(), new CategoryRoleUpdateRequest(후디.getId(), BE_일정.getId(), ADMIN));
-        categoryRoleService.updateRole(관리자.getId(), new CategoryRoleUpdateRequest(매트.getId(), BE_일정.getId(), ADMIN));
+        categoryRoleService.updateRole(관리자.getId(), 후디.getId(), BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(관리자.getId(), 매트.getId(), BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
 
         // when
-        categoryRoleService.updateRole(후디.getId(), new CategoryRoleUpdateRequest(매트.getId(), BE_일정.getId(), NONE));
+        categoryRoleService.updateRole(후디.getId(), 매트.getId(), BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
         CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(매트.getId(), BE_일정.getId()).get();
 
         // then
@@ -115,12 +116,12 @@ class CategoryRoleServiceTest extends ServiceTest {
 
         Member 후디 = memberRepository.save(후디());
         subscriptionService.save(후디.getId(), BE_일정.getId());
-        categoryRoleService.updateRole(관리자.getId(), new CategoryRoleUpdateRequest(후디.getId(), BE_일정.getId(), ADMIN));
+        categoryRoleService.updateRole(관리자.getId(), 후디.getId(), BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
         // '관리자' 회원이 유일한 ADMIN이 아니도록 다른 ADMIN 추가
 
         // when
-        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(관리자.getId(), BE_일정.getId(), NONE);
-        categoryRoleService.updateRole(관리자.getId(), request);
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
+        categoryRoleService.updateRole(관리자.getId(), 관리자.getId(), BE_일정.getId(), request);
 
         CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(관리자.getId(), BE_일정.getId()).get();
 
@@ -136,8 +137,8 @@ class CategoryRoleServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
 
         // when & then
-        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(관리자.getId(), BE_일정.getId(), NONE);
-        assertThatThrownBy(() -> categoryRoleService.updateRole(관리자.getId(), request))
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
+        assertThatThrownBy(() -> categoryRoleService.updateRole(관리자.getId(), 관리자.getId(), BE_일정.getId(), request))
                 .isInstanceOf(NotAbleToMangeRoleException.class);
     }
 }

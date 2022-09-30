@@ -16,7 +16,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -136,7 +135,7 @@ class MemberControllerTest extends ControllerTest {
                 .deleteById(any());
 
         // when & then
-        mockMvc.perform(delete("/api/members/me")
+        mockMvc.perform(patch("/api/{categoryId}/subscribers/{memberId}/role")
                         .accept(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )

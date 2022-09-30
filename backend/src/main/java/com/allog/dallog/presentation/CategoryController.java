@@ -6,6 +6,8 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
@@ -26,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryRoleService categoryRoleService;
 
-    public CategoryController(final CategoryService categoryService) {
+    public CategoryController(final CategoryService categoryService, final CategoryRoleService categoryRoleService) {
         this.categoryService = categoryService;
+        this.categoryRoleService = categoryRoleService;
     }
 
     @PostMapping
@@ -68,6 +72,15 @@ public class CategoryController {
     public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long categoryId) {
         categoryService.delete(loginMember.getId(), categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{categoryId}/subscribers/{memberId}/role")
+    public ResponseEntity<CategoryResponse> updateRole(@AuthenticationPrincipal final LoginMember loginMember,
+                                                       @PathVariable final Long categoryId,
+                                                       @PathVariable final Long memberId,
+                                                       @RequestBody final CategoryRoleUpdateRequest request) {
+        categoryRoleService.updateRole(loginMember.getId(), memberId, categoryId, request);
         return ResponseEntity.noContent().build();
     }
 }

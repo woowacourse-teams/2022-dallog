@@ -8,22 +8,28 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_제목과_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_페이징을_통해_조회한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.회원의_카테고리_역할을_변경한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
+import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
+import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.카테고리를_구독한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -201,6 +207,27 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 내가_등록한_카테고리를_삭제한다(accessToken, savedCategory.getId());
+
+        // then
+        상태코드_204가_반환된다(response);
+    }
+
+    @DisplayName("특정 구독자의 카테고리 역할을 수정하면 상태코드 204를 반환한다.")
+    @Test
+    void 특정_구독자의_카테고리_역할을_수정하면_상태코드_204를_반환한다() {
+        // given
+        String 관리자_토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, OAuthFixtures.후디.getCode());
+        CategoryResponse 카테고리 = 새로운_카테고리를_등록한다(관리자_토큰, 공통_일정_생성_요청).as(CategoryResponse.class);
+
+        String 구독자_토큰 = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, OAuthFixtures.매트.getCode());
+        ExtractableResponse<Response> 회원정보 = 자신의_정보를_조회한다(구독자_토큰);
+        long 구독자_id = 회원정보.body().jsonPath().getLong("id");
+
+        카테고리를_구독한다(구독자_토큰, 카테고리.getId());
+
+        // when
+        ExtractableResponse<Response> response = 회원의_카테고리_역할을_변경한다(관리자_토큰, 카테고리.getId(), 구독자_id,
+                new CategoryRoleUpdateRequest(ADMIN));
 
         // then
         상태코드_204가_반환된다(response);

@@ -20,9 +20,8 @@ public class CategoryRoleService {
     }
 
     @Transactional
-    public void updateRole(final Long loginMemberId, final CategoryRoleUpdateRequest request) {
-        Long categoryId = request.getCategoryId();
-        Long memberId = request.getMemberId();
+    public void updateRole(final Long loginMemberId, final Long memberId, final Long categoryId,
+                           final CategoryRoleUpdateRequest request) {
         CategoryRoleType roleType = request.getCategoryRoleType();
 
         validateAuthority(loginMemberId, categoryId);
