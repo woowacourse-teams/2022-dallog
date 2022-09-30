@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.categoryrole.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
+import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
 import javax.persistence.Entity;
@@ -42,8 +43,18 @@ public class CategoryRole extends BaseEntity {
         this.categoryRoleType = categoryRoleType;
     }
 
+    public boolean isAdmin() {
+        return categoryRoleType.equals(CategoryRoleType.ADMIN);
+    }
+
     public boolean isNone() {
         return categoryRoleType.equals(CategoryRoleType.NONE);
+    }
+
+    public void validateAuthority(final CategoryAuthority authority) {
+        if (!ableTo(authority)) {
+            throw new NoPermissionToManageRoleException();
+        }
     }
 
     public boolean ableTo(final CategoryAuthority authority) {
@@ -68,5 +79,15 @@ public class CategoryRole extends BaseEntity {
 
     public void changeRole(final CategoryRoleType categoryRoleType) {
         this.categoryRoleType = categoryRoleType;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryRole{" +
+                "id=" + id +
+                ", category=" + category +
+                ", member=" + member +
+                ", categoryRoleType=" + categoryRoleType +
+                '}';
     }
 }
