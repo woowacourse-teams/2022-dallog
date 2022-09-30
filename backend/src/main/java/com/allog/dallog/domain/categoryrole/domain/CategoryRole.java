@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.categoryrole.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
 import javax.persistence.Entity;
@@ -53,7 +53,7 @@ public class CategoryRole extends BaseEntity {
 
     public void validateAuthority(final CategoryAuthority authority) {
         if (!ableTo(authority)) {
-            throw new NoPermissionToManageRoleException();
+            throw new NoCategoryAuthorityException(authority);
         }
     }
 

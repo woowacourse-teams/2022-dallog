@@ -15,7 +15,7 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
-import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -80,7 +80,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(
                 () -> categoryRoleService.updateRole(관리자가_아닌_유저.getId(), 구독자.getId(), BE_일정.getId(), request))
-                .isInstanceOf(NoPermissionToManageRoleException.class);
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("ADMIN 회원이 다른 관리자 유저의 역할을 변경할 수 있다")

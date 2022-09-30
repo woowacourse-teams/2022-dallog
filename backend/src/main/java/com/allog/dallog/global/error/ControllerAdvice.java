@@ -7,7 +7,7 @@ import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
@@ -63,7 +63,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             NoPermissionException.class,
-            NoPermissionToManageRoleException.class
+            NoCategoryAuthorityException.class
     })
     public ResponseEntity<ErrorResponse> handleNoPermission(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

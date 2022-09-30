@@ -43,6 +43,7 @@ import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -350,22 +351,24 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(() -> categoryService.update(관리자.getId(), 공통_일정.getId() + 1, categoryUpdateRequest))
-                .isInstanceOf(NoPermissionException.class);
+                .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("자신이 만들지 않은 카테고리를 수정할 경우 예외를 던진다.")
+    @DisplayName("자신이 ADMIN이 아닌 카테고리를 수정할 경우 예외를 던진다.")
     @Test
-    void 자신이_만들지_않은_카테고리를_수정할_경우_예외를_던진다() {
+    void 자신이_ADMIN이_아닌_카테고리를_수정할_경우_예외를_던진다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Member 매트 = memberRepository.save(매트());
 
-        CategoryResponse savedCategory = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        subscriptionService.save(매트.getId(), 공통_일정.getId());
+
         CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
 
         // when & then
-        assertThatThrownBy(() -> categoryService.update(매트.getId(), savedCategory.getId(), categoryUpdateRequest))
-                .isInstanceOf(NoPermissionException.class);
+        assertThatThrownBy(() -> categoryService.update(매트.getId(), 공통_일정.getId(), categoryUpdateRequest))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("회원과 카테고리 id를 통해 카테고리를 삭제한다.")

@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 class CategoryRoleTest {
 
     @DisplayName("역할이 특정 권한을 가지고 있는지 확인한다.")
-    @CsvSource(value = {"ADMIN,RENAME_CATEGORY,true", "NONE,RENAME_CATEGORY,false"})
+    @CsvSource(value = {"ADMIN,UPDATE_CATEGORY,true", "NONE,UPDATE_CATEGORY,false"})
     @ParameterizedTest
     void 역할이_특정_권한을_가지고_있는지_확인한다(final CategoryRoleType roleType, final CategoryAuthority authority,
                                  final boolean expected) {

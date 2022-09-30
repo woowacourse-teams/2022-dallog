@@ -1,10 +1,20 @@
 package com.allog.dallog.domain.categoryrole.domain;
 
 public enum CategoryAuthority {
-    RENAME_CATEGORY,
-    DELETE_CATEGORY,
-    ADD_SCHEDULE,
-    MODIFY_SCHEDULE,
-    DELETE_SCHEDULE,
-    MANAGE_ROLE
+    UPDATE_CATEGORY("카테고리 수정"),
+    DELETE_CATEGORY("카테고리 제거"),
+    ADD_SCHEDULE("일정 추가"),
+    UPDATE_SCHEDULE("일정 수정"),
+    DELETE_SCHEDULE("일정 제거"),
+    MANAGE_ROLE("역할 변경");
+
+    private final String name;
+
+    CategoryAuthority(final String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

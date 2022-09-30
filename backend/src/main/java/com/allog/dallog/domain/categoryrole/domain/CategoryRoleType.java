@@ -4,14 +4,14 @@ import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.DELETE_CATEGORY;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.DELETE_SCHEDULE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.MANAGE_ROLE;
-import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.MODIFY_SCHEDULE;
-import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.RENAME_CATEGORY;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_CATEGORY;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 
 import java.util.EnumSet;
 import java.util.Set;
 
 public enum CategoryRoleType {
-    ADMIN(EnumSet.of(RENAME_CATEGORY, DELETE_CATEGORY, ADD_SCHEDULE, MODIFY_SCHEDULE, DELETE_SCHEDULE, MANAGE_ROLE)),
+    ADMIN(EnumSet.of(UPDATE_CATEGORY, DELETE_CATEGORY, ADD_SCHEDULE, UPDATE_SCHEDULE, DELETE_SCHEDULE, MANAGE_ROLE)),
     NONE(Set.of());
 
     private final Set<CategoryAuthority> authorities;
