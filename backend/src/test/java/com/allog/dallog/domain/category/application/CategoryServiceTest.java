@@ -40,6 +40,8 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -47,7 +49,6 @@ import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
@@ -81,6 +82,9 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRoleRepository categoryRoleRepository;
 
     @DisplayName("새로운 카테고리를 생성한다.")
     @Test
@@ -426,6 +430,26 @@ class CategoryServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
                 .isInstanceOf(NoSuchSubscriptionException.class);
+    }
+
+    @DisplayName("카테고리 삭제 시 연관된 카테고리 역할 엔티티도 모두 제거된다.")
+    @Test
+    void 카테고리_삭제_시_연관된_카테고리_역할_엔티티도_모두_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 후디 = memberRepository.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        CategoryRole 역할 = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+
+        // when
+        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        boolean actual = categoryRoleRepository.findById(역할.getId()).isPresent();
+
+        // then
+        assertThat(actual).isFalse();
     }
 
     @DisplayName("개인 카테고리는 삭제할 수 없다.")

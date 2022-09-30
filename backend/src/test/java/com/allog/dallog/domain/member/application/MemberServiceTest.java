@@ -1,6 +1,9 @@
 package com.allog.dallog.domain.member.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
+import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -10,6 +13,9 @@ import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.MemberResponse;
@@ -34,6 +40,9 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryRoleRepository categoryRoleRepository;
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
@@ -98,5 +107,24 @@ class MemberServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> memberService.findById(후디_id))
                 .isInstanceOf(NoSuchMemberException.class);
+    }
+
+    @DisplayName("회원 삭제 시 연관된 카테고리 역할 엔티티도 모두 제거된다.")
+    @Test
+    void 회원_삭제_시_연관된_카테고리_역할_엔티티도_모두_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Member 후디 = memberRepository.save(후디());
+
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        CategoryRole 역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 후디, CategoryRoleType.ADMIN));
+
+        // when
+        memberService.deleteById(후디.getId());
+        boolean actual = categoryRoleRepository.findById(역할.getId()).isPresent();
+
+        // then
+        assertThat(actual).isFalse();
     }
 }
