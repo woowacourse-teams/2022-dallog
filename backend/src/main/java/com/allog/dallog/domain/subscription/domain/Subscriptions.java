@@ -32,7 +32,7 @@ public class Subscriptions {
 
     public Color findColor(final IntegrationSchedule schedule) {
         return subscriptions.stream()
-                .filter(schedule::isSameCategory)
+                .filter(subscription -> schedule.isSameCategory(subscription.getCategory()))
                 .findAny()
                 .orElseThrow(() -> new NoSuchCategoryException("구독하지 않은 카테고리 입니다."))
                 .getColor();

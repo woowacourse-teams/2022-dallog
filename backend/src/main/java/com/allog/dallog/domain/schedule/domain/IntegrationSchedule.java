@@ -2,7 +2,6 @@ package com.allog.dallog.domain.schedule.domain;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryType;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -57,9 +56,9 @@ public class IntegrationSchedule {
         return period.calculateDayDifference() < ONE_DAY;
     }
 
-    public boolean isSameCategory(final Subscription subscription) {
-        Category category = subscription.getCategory();
-        return category.getId().equals(categoryId);
+    public boolean isSameCategory(final Category category) {
+        Long categoryId = category.getId();
+        return this.categoryId.equals(categoryId);
     }
 
     public String getId() {
