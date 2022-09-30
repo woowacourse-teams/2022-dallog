@@ -16,9 +16,4 @@ public class TokenConfig {
     public TokenProvider tokenProvider() {
         return new StubTokenProvider(더미_시크릿_키);
     }
-
-    @Bean
-    public TokenRepository tokenRepository() {
-        return new InMemoryTokenRepository();
-    }
 }
