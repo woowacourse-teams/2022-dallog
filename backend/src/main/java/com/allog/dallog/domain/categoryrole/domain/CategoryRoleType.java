@@ -20,7 +20,6 @@ public enum CategoryRoleType {
     }
 
     public boolean ableTo(final CategoryAuthority authority) {
-        return authorities.stream()
-                .anyMatch(it -> it.equals(authority));
+        return authorities.contains(authority);
     }
 }
