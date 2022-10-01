@@ -17,18 +17,34 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider implements TokenProvider {
 
     private final SecretKey key;
-    private final long validityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
 
     public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") final String secretKey,
-                            @Value("${security.jwt.token.expire-length}") final long validityInMilliseconds) {
+                            @Value("${security.jwt.token.access.expire-length}") final long accessTokenValidityInMilliseconds,
+                            @Value("${security.jwt.token.refresh.expire-length}") final long refreshTokenValidityInMilliseconds) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.validityInMilliseconds = validityInMilliseconds;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
 
     @Override
-    public String createToken(final String payload) {
+    public String createAccessToken(final String payload) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(payload)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    @Override
+    public String createRefreshToken(final String payload) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(payload)

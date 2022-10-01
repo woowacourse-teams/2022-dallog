@@ -14,16 +14,30 @@ import javax.crypto.SecretKey;
 public class StubTokenProvider implements TokenProvider {
 
     private final SecretKey key;
-    private final long validityInMilliseconds = 0;
+    private final long accessTokenValidityInMilliseconds = 0;
+    private final long refreshTokenValidityInMilliseconds = 0;
 
     public StubTokenProvider(final String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
-    public String createToken(final String payload) {
+    public String createAccessToken(final String payload) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(payload)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    @Override
+    public String createRefreshToken(final String payload) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(payload)
