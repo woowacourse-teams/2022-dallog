@@ -40,12 +40,24 @@ class JwtTokenProviderTest {
         assertThat(actual).isEqualTo(PAYLOAD);
     }
 
-    @DisplayName("validateToken 메서드는 만료된 토큰을 전달하면 예외를 던진다.")
+    @DisplayName("validateToken 메서드는 만료된 엑세스 토큰을 전달하면 예외를 던진다.")
     @Test
-    void validateToken_메서드는_만료된_토큰을_전달하면_예외를_던진다() {
+    void validateToken_메서드는_만료된_엑세스_토큰을_전달하면_예외를_던진다() {
         // given
         TokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0, 0);
         String expiredToken = expiredJwtTokenProvider.createAccessToken(PAYLOAD);
+
+        // when & then
+        assertThatThrownBy(() -> jwtTokenProvider.validateToken(expiredToken))
+                .isInstanceOf(InvalidTokenException.class);
+    }
+
+    @DisplayName("validateToken 메서드는 만료된 리프레시 토큰을 전달하면 예외를 던진다.")
+    @Test
+    void validateToken_메서드는_만료된_리프레시_토큰을_전달하면_예외를_던진다() {
+        // given
+        TokenProvider expiredJwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY, 0, 0);
+        String expiredToken = expiredJwtTokenProvider.createRefreshToken(PAYLOAD);
 
         // when & then
         assertThatThrownBy(() -> jwtTokenProvider.validateToken(expiredToken))
