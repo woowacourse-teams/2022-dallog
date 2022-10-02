@@ -66,3 +66,14 @@ CREATE TABLE IF NOT EXISTS external_category_details (
     FOREIGN KEY (categories_id) REFERENCES categories (id)
 );
 
+CREATE TABLE IF NOT EXISTS category_roles (
+    id BIGINT AUTO_INCREMENT,
+    members_id BIGINT NOT NULL,
+    categories_id BIGINT NOT NULL,
+    category_role_type VARCHAR(255),
+    created_at timestamp not null DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp not null DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (categories_id) REFERENCES categories (id),
+    FOREIGN KEY (members_id) REFERENCES members (id)
+);
