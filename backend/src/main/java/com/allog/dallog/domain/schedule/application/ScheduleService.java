@@ -16,13 +16,18 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
+import com.allog.dallog.domain.schedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.MaterialToFindSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.domain.subscription.application.ColorPicker;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +43,14 @@ public class ScheduleService {
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
+    private final ColorPicker colorPicker;
 
     public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryRepository categoryRepository,
                            final CategoryRoleRepository categoryRoleRepository, final MemberRepository memberRepository,
                            final SubscriptionRepository subscriptionRepository,
                            final OAuthTokenRepository oAuthTokenRepository,
-                           final ExternalCategoryDetailRepository externalCategoryDetailRepository) {
+                           final ExternalCategoryDetailRepository externalCategoryDetailRepository,
+                           final ColorPicker colorPicker) {
         this.scheduleRepository = scheduleRepository;
         this.categoryRepository = categoryRepository;
         this.categoryRoleRepository = categoryRoleRepository;
@@ -51,6 +58,7 @@ public class ScheduleService {
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;
+        this.colorPicker = colorPicker;
     }
 
     @Transactional
@@ -81,6 +89,13 @@ public class ScheduleService {
         return new MaterialToFindSchedules(subscriptions, schedules, refreshToken, externalCategoryDetails);
     }
 
+    private List<IntegrationSchedule> toIntegrationSchedules(final Subscriptions subscriptions,
+                                                             final DateRangeRequest request) {
+        List<Category> categories = subscriptions.findInternalCategory();
+        return scheduleRepository.getByCategoriesAndBetween(categories, request.getStartDateTime(),
+                request.getEndDateTime());
+    }
+
     private String toRefreshToken(final Long memberId) {
         OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
         return oAuthToken.getRefreshToken();
@@ -90,11 +105,20 @@ public class ScheduleService {
         return externalCategoryDetailRepository.findByCategoryIn(subscriptions.findExternalCategory());
     }
 
-    private List<IntegrationSchedule> toIntegrationSchedules(final Subscriptions subscriptions,
-                                                             final DateRangeRequest request) {
-        List<Category> categories = subscriptions.findInternalCategory();
-        return scheduleRepository.getByCategoriesAndBetween(categories, request.getStartDateTime(),
-                request.getEndDateTime());
+    public MemberScheduleResponses findByCategoryIdAndDateRange(final Long categoryId, final DateRangeRequest request) {
+        Category category = categoryRepository.getById(categoryId);
+        LocalDateTime startDateTime = request.getStartDateTime();
+        LocalDateTime endDateTime = request.getEndDateTime();
+
+        List<IntegrationSchedule> schedules = toIntegrationSchedules(category, startDateTime, endDateTime);
+        Color color = Color.pick(colorPicker.pickNumber());
+
+        return new MemberScheduleResponses(color, new TypedSchedules(schedules));
+    }
+
+    private List<IntegrationSchedule> toIntegrationSchedules(final Category category, final LocalDateTime startDateTime,
+                                                             final LocalDateTime endDateTime) {
+        return scheduleRepository.getByCategoriesAndBetween(List.of(category), startDateTime, endDateTime);
     }
 
     @Transactional
