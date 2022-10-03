@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.DELETE_CATEGORY;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 
 import com.allog.dallog.domain.auth.domain.OAuthToken;
@@ -114,7 +115,11 @@ public class ScheduleService {
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateEditPossible(memberId);
+        Long categoryId = schedule.getCategory().getId();
+
+        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
+        categoryRole.validateAuthority(DELETE_CATEGORY);
+
         scheduleRepository.deleteById(id);
     }
 }
