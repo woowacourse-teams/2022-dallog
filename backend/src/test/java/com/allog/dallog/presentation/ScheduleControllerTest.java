@@ -359,4 +359,51 @@ class ScheduleControllerTest extends ControllerTest {
                 ))
                 .andExpect(status().isOk());
     }
+
+    @DisplayName("카테고리 별 일정 목록을 정상적으로 조회하면 200을 반환한다.")
+    @Test
+    void 카테고리_별_일정_목록을_정상적으로_조회하면_200을_반환한다() throws Exception {
+        // given
+        String startDate = "2022-07-31T00:00";
+        String endDate = "2022-09-03T00:00";
+
+        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse("1L", "장기간 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1.getColorCode(), "NORMAL");
+        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse("1L", "장기간 일정 2",
+                LocalDateTime.of(2022, 8, 3, 0, 0),
+                LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2.getColorCode(), "NORMAL");
+
+        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse("1L", "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3.getColorCode(), "NORMAL");
+        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse("1L", "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
+                LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4.getColorCode(), "NORMAL");
+
+        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse("1L", "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+                LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5.getColorCode(), "NORMAL");
+        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse("1L", "짧은 일정 2",
+                LocalDateTime.of(2022, 8, 5, 17, 0),
+                LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6.getColorCode(), "NORMAL");
+
+        MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
+                List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
+
+        given(scheduleService.findByCategoryIdAndDateRange(any(), any()))
+                .willReturn(memberScheduleResponses);
+
+        // when & then
+        mockMvc.perform(
+                        get("/api/categories/{categoryId}/schedules?startDateTime={startDate}&endDateTime={endDate}", 1L,
+                                startDate, endDate))
+                .andDo(print())
+                .andDo(document("schedule/findSchedulesByCategoryId",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("startDateTime").description("일정 조회 시작 범위 (yyyy-mm-dd'T'HH:mm)"),
+                                parameterWithName("endDateTime").description("일정 조회 마지막 범위 (yyyy-mm-dd'T'HH:mm)")
+                        )
+                ))
+                .andExpect(status().isOk());
+    }
 }
