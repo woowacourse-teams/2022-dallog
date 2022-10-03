@@ -3,6 +3,7 @@ package com.allog.dallog.domain.categoryrole.domain;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.DELETE_CATEGORY;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.DELETE_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.MANAGE_ROLE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_CATEGORY;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
@@ -13,7 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum CategoryRoleType {
-    ADMIN(EnumSet.of(UPDATE_CATEGORY, DELETE_CATEGORY, ADD_SCHEDULE, UPDATE_SCHEDULE, DELETE_SCHEDULE, MANAGE_ROLE)),
+    ADMIN(EnumSet.of(UPDATE_CATEGORY, DELETE_CATEGORY, ADD_SCHEDULE, UPDATE_SCHEDULE, DELETE_SCHEDULE, MANAGE_ROLE,
+            FIND_SUBSCRIBERS)),
     NONE(Set.of());
 
     private final Set<CategoryAuthority> authorities;

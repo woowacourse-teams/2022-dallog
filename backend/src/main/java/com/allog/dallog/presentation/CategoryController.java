@@ -9,6 +9,8 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.member.application.MemberService;
+import com.allog.dallog.domain.member.dto.SubscribersResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
@@ -30,10 +32,13 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     private final CategoryRoleService categoryRoleService;
+    private final MemberService memberService;
 
-    public CategoryController(final CategoryService categoryService, final CategoryRoleService categoryRoleService) {
+    public CategoryController(final CategoryService categoryService, final CategoryRoleService categoryRoleService,
+                              final MemberService memberService) {
         this.categoryService = categoryService;
         this.categoryRoleService = categoryRoleService;
+        this.memberService = memberService;
     }
 
     @PostMapping
@@ -86,6 +91,13 @@ public class CategoryController {
                                        @PathVariable final Long categoryId) {
         categoryService.delete(loginMember.getId(), categoryId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{categoryId}/subscribers")
+    public ResponseEntity<SubscribersResponse> findSubscribers(@AuthenticationPrincipal final LoginMember loginMember,
+                                                               @PathVariable final Long categoryId) {
+        SubscribersResponse subscribers = memberService.findSubscribers(loginMember.getId(), categoryId);
+        return ResponseEntity.ok(subscribers);
     }
 
     @PatchMapping("/{categoryId}/subscribers/{memberId}/role")
