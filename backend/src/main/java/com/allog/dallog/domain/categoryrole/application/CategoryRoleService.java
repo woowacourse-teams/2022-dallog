@@ -37,8 +37,8 @@ public class CategoryRoleService {
         loginMemberCategoryRole.validateAuthority(CategoryAuthority.MANAGE_ROLE);
     }
 
-    private void validateSoleAdmin(final Long loginMemberId, final Long categoryId) {
-        boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(loginMemberId, categoryId);
+    private void validateSoleAdmin(final Long memberId, final Long categoryId) {
+        boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(memberId, categoryId);
         if (isSoleAdmin) {
             throw new NotAbleToMangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다.");
         }
