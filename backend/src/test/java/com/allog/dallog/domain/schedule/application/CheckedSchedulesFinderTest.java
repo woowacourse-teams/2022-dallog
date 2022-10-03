@@ -26,8 +26,8 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponse;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,16 +81,16 @@ class CheckedSchedulesFinderTest extends ServiceTest {
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(우아한테크코스, "dfggsdfasdasadsgs"));
 
         // when
-        MemberScheduleResponses memberScheduleResponses = checkedSchedulesFinder.findMyCheckedSchedules(
+        IntegrationScheduleResponses integrationScheduleResponses = checkedSchedulesFinder.findMyCheckedSchedules(
                 memberId, new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59"));
 
         // then
         assertAll(() -> {
-            assertThat(memberScheduleResponses.getLongTerms()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(integrationScheduleResponses.getLongTerms()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("장기간 첫번째", "장기간 두번째", "장기간 세번째", "장기간 네번째", "장기간 다섯번째");
-            assertThat(memberScheduleResponses.getAllDays()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(integrationScheduleResponses.getAllDays()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("종일 첫번째", "종일 두번째", "종일 세번째");
-            assertThat(memberScheduleResponses.getFewHours()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(integrationScheduleResponses.getFewHours()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
         });
     }

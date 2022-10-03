@@ -34,8 +34,8 @@ import com.allog.dallog.domain.schedule.application.CheckedSchedulesFinder;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponse;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
@@ -320,29 +320,33 @@ class ScheduleControllerTest extends ControllerTest {
         String startDate = "2022-07-31T00:00";
         String endDate = "2022-09-03T00:00";
 
-        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse("1L", "장기간 일정 1",
+        IntegrationScheduleResponse 장기간_일정_1 = new IntegrationScheduleResponse("1L", "장기간 일정 1",
                 LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1.getColorCode(), "NORMAL");
-        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse("1L", "장기간 일정 2",
+        IntegrationScheduleResponse 장기간_일정_2 = new IntegrationScheduleResponse("1L", "장기간 일정 2",
                 LocalDateTime.of(2022, 8, 3, 0, 0),
                 LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2.getColorCode(), "NORMAL");
 
-        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse("1L", "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        IntegrationScheduleResponse 종일_일정_1 = new IntegrationScheduleResponse("1L", "종일 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3.getColorCode(), "NORMAL");
-        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse("1L", "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
+        IntegrationScheduleResponse 종일_일정_2 = new IntegrationScheduleResponse("1L", "종일 일정 2",
+                LocalDateTime.of(2022, 8, 5, 0, 0),
                 LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4.getColorCode(), "NORMAL");
 
-        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse("1L", "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        IntegrationScheduleResponse 짧은_일정_1 = new IntegrationScheduleResponse("1L", "짧은 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5.getColorCode(), "NORMAL");
-        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse("1L", "짧은 일정 2",
+        IntegrationScheduleResponse 짧은_일정_2 = new IntegrationScheduleResponse("1L", "짧은 일정 2",
                 LocalDateTime.of(2022, 8, 5, 17, 0),
                 LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6.getColorCode(), "NORMAL");
 
-        MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
+        IntegrationScheduleResponses integrationScheduleResponses = new IntegrationScheduleResponses(
+                List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
 
         given(checkedSchedulesFinder.findMyCheckedSchedules(any(), any()))
-                .willReturn(memberScheduleResponses);
+                .willReturn(integrationScheduleResponses);
 
         // when & then
         mockMvc.perform(
@@ -367,29 +371,33 @@ class ScheduleControllerTest extends ControllerTest {
         String startDate = "2022-07-31T00:00";
         String endDate = "2022-09-03T00:00";
 
-        MemberScheduleResponse 장기간_일정_1 = new MemberScheduleResponse("1L", "장기간 일정 1",
+        IntegrationScheduleResponse 장기간_일정_1 = new IntegrationScheduleResponse("1L", "장기간 일정 1",
                 LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 3, 0, 0), "장기간 일정 1의 메모", 1L, Color.COLOR_1.getColorCode(), "NORMAL");
-        MemberScheduleResponse 장기간_일정_2 = new MemberScheduleResponse("1L", "장기간 일정 2",
+        IntegrationScheduleResponse 장기간_일정_2 = new IntegrationScheduleResponse("1L", "장기간 일정 2",
                 LocalDateTime.of(2022, 8, 3, 0, 0),
                 LocalDateTime.of(2022, 8, 10, 0, 0), "장기간 일정 2의 메모", 3L, Color.COLOR_2.getColorCode(), "NORMAL");
 
-        MemberScheduleResponse 종일_일정_1 = new MemberScheduleResponse("1L", "종일 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        IntegrationScheduleResponse 종일_일정_1 = new IntegrationScheduleResponse("1L", "종일 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 23, 59), "종일 일정 1의 메모", 1L, Color.COLOR_3.getColorCode(), "NORMAL");
-        MemberScheduleResponse 종일_일정_2 = new MemberScheduleResponse("1L", "종일 일정 2", LocalDateTime.of(2022, 8, 5, 0, 0),
+        IntegrationScheduleResponse 종일_일정_2 = new IntegrationScheduleResponse("1L", "종일 일정 2",
+                LocalDateTime.of(2022, 8, 5, 0, 0),
                 LocalDateTime.of(2022, 8, 5, 23, 59), "종일 일정 2의 메모", 3L, Color.COLOR_4.getColorCode(), "NORMAL");
 
-        MemberScheduleResponse 짧은_일정_1 = new MemberScheduleResponse("1L", "짧은 일정 1", LocalDateTime.of(2022, 8, 1, 0, 0),
+        IntegrationScheduleResponse 짧은_일정_1 = new IntegrationScheduleResponse("1L", "짧은 일정 1",
+                LocalDateTime.of(2022, 8, 1, 0, 0),
                 LocalDateTime.of(2022, 8, 1, 1, 0), "짧은 일정 1의 메모", 1L, Color.COLOR_5.getColorCode(), "NORMAL");
-        MemberScheduleResponse 짧은_일정_2 = new MemberScheduleResponse("1L", "짧은 일정 2",
+        IntegrationScheduleResponse 짧은_일정_2 = new IntegrationScheduleResponse("1L", "짧은 일정 2",
                 LocalDateTime.of(2022, 8, 5, 17, 0),
                 LocalDateTime.of(2022, 8, 5, 19, 0), "짧은 일정 2의 메모", 3L, Color.COLOR_6.getColorCode(), "NORMAL");
 
-        MemberScheduleResponses memberScheduleResponses = new MemberScheduleResponses(List.of(장기간_일정_1, 장기간_일정_2),
+        IntegrationScheduleResponses integrationScheduleResponses = new IntegrationScheduleResponses(
+                List.of(장기간_일정_1, 장기간_일정_2),
                 List.of(종일_일정_1, 종일_일정_2), List.of(짧은_일정_1, 짧은_일정_2));
 
         given(scheduleService.findByCategoryIdAndDateRange(any(), any()))
-                .willReturn(memberScheduleResponses);
+                .willReturn(integrationScheduleResponses);
 
         // when & then
         mockMvc.perform(

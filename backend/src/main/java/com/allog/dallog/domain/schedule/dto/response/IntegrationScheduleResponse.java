@@ -4,7 +4,7 @@ import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.subscription.domain.Color;
 import java.time.LocalDateTime;
 
-public class MemberScheduleResponse {
+public class IntegrationScheduleResponse {
 
     private final String id;
     private final String title;
@@ -15,16 +15,16 @@ public class MemberScheduleResponse {
     private final String colorCode;
     private final String categoryType;
 
-    public MemberScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
+    public IntegrationScheduleResponse(final IntegrationSchedule integrationSchedule, final Color color) {
         this(integrationSchedule.getId(), integrationSchedule.getTitle(), integrationSchedule.getStartDateTime(),
                 integrationSchedule.getEndDateTime(), integrationSchedule.getMemo(),
                 integrationSchedule.getCategoryId(), color.getColorCode(),
                 integrationSchedule.getCategoryType().name());
     }
 
-    public MemberScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,
-                                  final LocalDateTime endDateTime, final String memo, final Long categoryId,
-                                  final String colorCode, final String categoryType) {
+    public IntegrationScheduleResponse(final String id, final String title, final LocalDateTime startDateTime,
+                                       final LocalDateTime endDateTime, final String memo, final Long categoryId,
+                                       final String colorCode, final String categoryType) {
         this.id = id;
         this.title = title;
         this.startDateTime = startDateTime;

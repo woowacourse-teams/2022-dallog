@@ -50,8 +50,8 @@ import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponse;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponse;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
@@ -287,15 +287,15 @@ class ScheduleServiceTest extends ServiceTest {
         DateRangeRequest request = new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59");
 
         // when
-        MemberScheduleResponses actual = scheduleService.findByCategoryIdAndDateRange(BE_일정.getId(), request);
+        IntegrationScheduleResponses actual = scheduleService.findByCategoryIdAndDateRange(BE_일정.getId(), request);
 
         // then
         assertAll(() -> {
-            assertThat(actual.getLongTerms()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(actual.getLongTerms()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("장기간 첫번째", "장기간 두번째", "장기간 세번째", "장기간 네번째", "장기간 다섯번째");
-            assertThat(actual.getAllDays()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(actual.getAllDays()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("종일 첫번째", "종일 두번째", "종일 세번째");
-            assertThat(actual.getFewHours()).extracting(MemberScheduleResponse::getTitle)
+            assertThat(actual.getFewHours()).extracting(IntegrationScheduleResponse::getTitle)
                     .contains("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
         });
     }

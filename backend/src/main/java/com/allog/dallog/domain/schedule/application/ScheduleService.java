@@ -21,7 +21,7 @@ import com.allog.dallog.domain.schedule.dto.MaterialToFindSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -81,19 +81,15 @@ public class ScheduleService {
     public MaterialToFindSchedules findInternalByMemberIdAndDateRange(final Long memberId,
                                                                       final DateRangeRequest request) {
         Subscriptions subscriptions = new Subscriptions(subscriptionRepository.findByMemberId(memberId));
-        List<IntegrationSchedule> schedules = toIntegrationSchedules(subscriptions, request);
+        List<Category> categories = subscriptions.findInternalCategory();
+        LocalDateTime startDateTime = request.getStartDateTime();
+        LocalDateTime endDateTime = request.getEndDateTime();
+        List<IntegrationSchedule> schedules = toIntegrationSchedules(categories, startDateTime, endDateTime);
 
         String refreshToken = toRefreshToken(memberId);
         List<ExternalCategoryDetail> externalCategoryDetails = toCategoryDetails(subscriptions);
 
         return new MaterialToFindSchedules(subscriptions, schedules, refreshToken, externalCategoryDetails);
-    }
-
-    private List<IntegrationSchedule> toIntegrationSchedules(final Subscriptions subscriptions,
-                                                             final DateRangeRequest request) {
-        List<Category> categories = subscriptions.findInternalCategory();
-        return scheduleRepository.getByCategoriesAndBetween(categories, request.getStartDateTime(),
-                request.getEndDateTime());
     }
 
     private String toRefreshToken(final Long memberId) {
@@ -105,20 +101,22 @@ public class ScheduleService {
         return externalCategoryDetailRepository.findByCategoryIn(subscriptions.findExternalCategory());
     }
 
-    public MemberScheduleResponses findByCategoryIdAndDateRange(final Long categoryId, final DateRangeRequest request) {
+    public IntegrationScheduleResponses findByCategoryIdAndDateRange(final Long categoryId,
+                                                                     final DateRangeRequest request) {
         Category category = categoryRepository.getById(categoryId);
         LocalDateTime startDateTime = request.getStartDateTime();
         LocalDateTime endDateTime = request.getEndDateTime();
 
-        List<IntegrationSchedule> schedules = toIntegrationSchedules(category, startDateTime, endDateTime);
+        List<IntegrationSchedule> schedules = toIntegrationSchedules(List.of(category), startDateTime, endDateTime);
         Color color = Color.pick(colorPicker.pickNumber());
 
-        return new MemberScheduleResponses(color, new TypedSchedules(schedules));
+        return new IntegrationScheduleResponses(color, new TypedSchedules(schedules));
     }
 
-    private List<IntegrationSchedule> toIntegrationSchedules(final Category category, final LocalDateTime startDateTime,
+    private List<IntegrationSchedule> toIntegrationSchedules(final List<Category> categories,
+                                                             final LocalDateTime startDateTime,
                                                              final LocalDateTime endDateTime) {
-        return scheduleRepository.getByCategoriesAndBetween(List.of(category), startDateTime, endDateTime);
+        return scheduleRepository.getByCategoriesAndBetween(categories, startDateTime, endDateTime);
     }
 
     @Transactional

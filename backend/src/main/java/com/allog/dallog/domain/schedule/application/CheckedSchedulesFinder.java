@@ -9,7 +9,7 @@ import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.TypedSchedules;
 import com.allog.dallog.domain.schedule.dto.MaterialToFindSchedules;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class CheckedSchedulesFinder {
         this.externalCalendarClient = externalCalendarClient;
     }
 
-    public MemberScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request) {
+    public IntegrationScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request) {
         MaterialToFindSchedules material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
 
         List<IntegrationSchedule> schedules = material.getSchedules();
@@ -44,7 +44,7 @@ public class CheckedSchedulesFinder {
         List<IntegrationSchedule> externalSchedules = toExternalSchedules(request, material, accessToken);
         schedules.addAll(externalSchedules);
 
-        return new MemberScheduleResponses(material.getSubscriptions(), new TypedSchedules(schedules));
+        return new IntegrationScheduleResponses(material.getSubscriptions(), new TypedSchedules(schedules));
     }
 
     private String toAccessToken(final String refreshToken) {
