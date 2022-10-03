@@ -6,32 +6,31 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_10일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_11일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_16시_1분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_18시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_16일_20시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_20일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_21일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_27일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_28일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
-import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_17시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_네번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_두번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_세번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_첫번째_일정;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_네번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_다섯번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_두번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_세번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_첫번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_두번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_세번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_첫번째_일정;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
@@ -268,34 +267,22 @@ class ScheduleServiceTest extends ServiceTest {
         CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
 
         /* 장기간 일정 */
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 첫번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 두번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 세번째", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 네번째", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_15일_16시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("장기간 다섯번째", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, ""));
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_첫번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_두번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_세번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_네번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_다섯번째_요청);
 
         /* 종일 일정 */
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_11일_0시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분, 날짜_2022년_7월_21일_0시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_28일_0시_0분, ""));
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_첫번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_두번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_세번째_일정);
 
         /* 몇시간 일정 */
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 첫번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 두번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 세번째", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_16시_1분, ""));
-        scheduleService.save(매트_id, BE_일정.getId(),
-                new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분, 날짜_2022년_7월_16일_18시_0분, ""));
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_첫번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_두번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_세번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_네번째_일정);
 
         DateRangeRequest request = new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59");
 
