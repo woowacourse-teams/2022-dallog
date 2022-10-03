@@ -80,6 +80,20 @@ include::{snippets}/category/findScheduleEditableCategories/request-parameters.a
 
 include::{snippets}/category/findScheduleEditableCategories/http-response.adoc[]
 
+=== 자신이 ADMIN으로 있는 카테고리 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/category/findAdminCategories/http-request.adoc[]
+
+==== Request Parameters
+
+include::{snippets}/category/findAdminCategories/request-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/findAdminCategories/http-response.adoc[]
+
 === ID를 통한 카테고리 단건 조회
 
 ==== HTTP Request

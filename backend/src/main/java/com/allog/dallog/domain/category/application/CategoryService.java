@@ -3,6 +3,7 @@ package com.allog.dallog.domain.category.application;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -75,7 +76,7 @@ public class CategoryService {
     }
 
     private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
-        CategoryRole categoryRole = new CategoryRole(category, member, CategoryRoleType.ADMIN);
+        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
         categoryRoleRepository.save(categoryRole);
     }
 
@@ -107,11 +108,18 @@ public class CategoryService {
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 
+    // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
     public CategoriesResponse findScheduleEditableCategories(final Long memberId, final Pageable pageable) {
         Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));
         List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes,
                 pageable);
 
+        return new CategoriesResponse(pageable.getPageNumber(), categories);
+    }
+
+    public CategoriesResponse findAdminCategories(final Long memberId, final Pageable pageable) {
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, Set.of(ADMIN),
+                pageable);
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }
 

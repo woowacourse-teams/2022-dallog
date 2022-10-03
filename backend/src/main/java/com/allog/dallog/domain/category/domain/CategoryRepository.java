@@ -33,7 +33,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
                                                       final Set<CategoryRoleType> categoryRoleTypes,
                                                       final Pageable pageable);
 
-
     List<Category> findByMemberId(final Long memberId);
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);

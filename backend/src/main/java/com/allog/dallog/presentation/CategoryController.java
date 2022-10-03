@@ -60,10 +60,16 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.findMyCategories(loginMember.getId(), name, pageable));
     }
 
-    @GetMapping("/me/schedule-editable")
+    @GetMapping("/me/schedule-editable") // 일정 추가, 수정 모달의 카테고리 목록에 사용됨
     public ResponseEntity<CategoriesResponse> findScheduleEditableCategories(
             @AuthenticationPrincipal final LoginMember loginMember, final Pageable pageable) {
         return ResponseEntity.ok(categoryService.findScheduleEditableCategories(loginMember.getId(), pageable));
+    }
+
+    @GetMapping("/me/admin") // 카테고리 관리 페이지에 접근할 수 있는지 판단하기 위해 사용됨
+    public ResponseEntity<CategoriesResponse> findAdminCategories(
+            @AuthenticationPrincipal final LoginMember loginMember, final Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findAdminCategories(loginMember.getId(), pageable));
     }
 
     @PatchMapping("/{categoryId}")

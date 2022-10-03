@@ -286,6 +286,37 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
+    @DisplayName("멤버가 ADMIN으로 있는 카테고리 목록을 조회한다.")
+    @Test
+    void 멤버가_ADMIN으로_있는_카테고리_목록을_조회한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        categoryService.save(관리자.getId(), BE_일정_생성_요청);
+        categoryService.save(관리자.getId(), FE_일정_생성_요청);
+
+        Member 후디 = memberRepository.save(후디());
+        CategoryResponse 매트_아고라 = categoryService.save(후디.getId(), 매트_아고라_생성_요청);
+        CategoryResponse 후디_JPA_스터디 = categoryService.save(후디.getId(), 후디_JPA_스터디_생성_요청);
+
+        subscriptionService.save(관리자.getId(), 매트_아고라.getId());
+        subscriptionService.save(관리자.getId(), 후디_JPA_스터디.getId());
+
+        categoryRoleService.updateRole(후디.getId(), 관리자.getId(), 매트_아고라.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(후디.getId(), 관리자.getId(), 후디_JPA_스터디.getId(),
+                new CategoryRoleUpdateRequest(ADMIN));
+
+        // when
+        CategoriesResponse actual = categoryService.findAdminCategories(관리자.getId(), Pageable.ofSize(10));
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.getCategories().size()).isEqualTo(5);
+            assertThat(actual.getCategories().stream().map(CategoryResponse::getName).collect(Collectors.toList()))
+                    .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
+        });
+    }
+
     @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
     @Test
     void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
