@@ -121,10 +121,12 @@ public class CategoryService {
 
     @Transactional
     public void delete(final Long memberId, final Long id) {
-        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
         Category category = categoryRepository.getById(id);
 
         validateNotPersonalCategory(category);
+
+        CategoryRole role = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, category.getId());
+        role.validateAuthority(CategoryAuthority.DELETE_CATEGORY);
 
         scheduleRepository.deleteByCategoryIdIn(List.of(id));
         subscriptionRepository.deleteByCategoryIdIn(List.of(id));

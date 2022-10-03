@@ -22,6 +22,8 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -30,7 +32,6 @@ import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
@@ -40,9 +41,10 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
@@ -87,6 +89,9 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
+
+    @Autowired
+    private CategoryRoleService categoryRoleService;
 
     @DisplayName("새로운 카테고리를 생성한다.")
     @Test
@@ -145,7 +150,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디_id, JPA_스터디.getId()).get();
 
         // then
-        assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.ADMIN);
+        assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")
@@ -371,19 +376,58 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
-    @DisplayName("회원과 카테고리 id를 통해 카테고리를 삭제한다.")
+    @DisplayName("ADMIN인 회원이 카테고리를 삭제한다.")
     @Test
-    void 회원과_카테고리_id를_통해_카테고리를_삭제한다() {
+    void ADMIN인_회원이_카테고리를_삭제한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
+        Member 후디 = memberRepository.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId());
+        categoryRoleService.updateRole(관리자.getId(), 후디.getId(), 공통_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+
         // when
-        categoryService.delete(관리자.getId(), 공통_일정.getId());
+        categoryService.delete(후디.getId(), 공통_일정.getId());
 
         //then
         assertThatThrownBy(() -> categoryRepository.getById(공통_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리를 삭제할 경우 예외를 던진다.")
+    @Test
+    void ADMIN_역할이_아닌_멤버가_카테고리를_삭제할_경우_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 매트 = memberRepository.save(매트());
+        subscriptionService.save(매트.getId(), 공통_일정.getId());
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 역할이 ADMIN이 아닐 경우 카테고리 삭제시 예외를 던진다.")
+    @Test
+    void 카테고리_생성자라도_역할이_ADMIN이_아닐_경우_카테고리_삭제시_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 매트 = memberRepository.save(매트());
+        subscriptionService.save(매트.getId(), 공통_일정.getId());
+
+        categoryRoleService.updateRole(관리자.getId(), 매트.getId(), 공통_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(매트.getId(), 관리자.getId(), 공통_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.delete(관리자.getId(), 공통_일정.getId()))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("존재하지 않는 카테고리를 삭제할 경우 예외를 던진다.")
@@ -395,21 +439,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(() -> categoryService.delete(관리자.getId(), 공통_일정.getId() + 1))
-                .isInstanceOf(NoPermissionException.class);
-    }
-
-    @DisplayName("자신이 만들지 않은 카테고리를 삭제할 경우 예외를 던진다.")
-    @Test
-    void 자신이_만들지_않은_카테고리를_삭제할_경우_예외를_던진다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Member 매트 = memberRepository.save(매트());
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-
-        // when & then
-        assertThatThrownBy(
-                () -> categoryService.delete(매트.getId(), 공통_일정.getId()))
-                .isInstanceOf(NoPermissionException.class);
+                .isInstanceOf(NoSuchCategoryException.class);
     }
 
     @DisplayName("카테고리 삭제 시 연관된 일정 엔티티도 모두 제거된다.")
