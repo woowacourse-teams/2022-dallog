@@ -60,6 +60,12 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.findMyCategories(loginMember.getId(), name, pageable));
     }
 
+    @GetMapping("/me/schedule-editable")
+    public ResponseEntity<CategoriesResponse> findScheduleEditableCategories(
+            @AuthenticationPrincipal final LoginMember loginMember, final Pageable pageable) {
+        return ResponseEntity.ok(categoryService.findScheduleEditableCategories(loginMember.getId(), pageable));
+    }
+
     @PatchMapping("/{categoryId}")
     public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long categoryId,

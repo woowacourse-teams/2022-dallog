@@ -1,6 +1,8 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -25,6 +27,7 @@ import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +103,14 @@ public class CategoryService {
     public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
+
+        return new CategoriesResponse(pageable.getPageNumber(), categories);
+    }
+
+    public CategoriesResponse findScheduleEditableCategories(final Long memberId, final Pageable pageable) {
+        Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes,
+                pageable);
 
         return new CategoriesResponse(pageable.getPageNumber(), categories);
     }

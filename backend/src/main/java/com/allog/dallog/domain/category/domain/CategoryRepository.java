@@ -1,7 +1,9 @@
 package com.allog.dallog.domain.category.domain;
 
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +23,16 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
                                                         final Pageable pageable);
 
     List<Category> findByMemberIdAndCategoryType(final Long memberId, final CategoryType categoryType);
+
+    @Query("SELECT c "
+            + "FROM CategoryRole r "
+            + "JOIN r.category c "
+            + "WHERE r.member.id = :memberId "
+            + "AND r.categoryRoleType IN :categoryRoleTypes")
+    List<Category> findByMemberIdAndCategoryRoleTypes(final Long memberId,
+                                                      final Set<CategoryRoleType> categoryRoleTypes,
+                                                      final Pageable pageable);
+
 
     List<Category> findByMemberId(final Long memberId);
 

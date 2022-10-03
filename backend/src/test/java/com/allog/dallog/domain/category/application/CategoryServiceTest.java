@@ -13,6 +13,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_외부_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_이름;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
@@ -57,12 +58,14 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 class CategoryServiceTest extends ServiceTest {
 
@@ -250,6 +253,37 @@ class CategoryServiceTest extends ServiceTest {
 
         // then
         assertThat(response.getCategories()).hasSize(0);
+    }
+
+    @DisplayName("멤버가 일정을 추가/수정/삭제할 수 있는 카테고리 목록을 조회한다.")
+    @Test
+    void 멤버가_일정을_추가_수정_삭제할_수_있는_카테고리_목록을_조회한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+        categoryService.save(관리자.getId(), BE_일정_생성_요청);
+        categoryService.save(관리자.getId(), FE_일정_생성_요청);
+
+        Member 후디 = memberRepository.save(후디());
+        CategoryResponse 매트_아고라 = categoryService.save(후디.getId(), 매트_아고라_생성_요청);
+        CategoryResponse 후디_JPA_스터디 = categoryService.save(후디.getId(), 후디_JPA_스터디_생성_요청);
+
+        subscriptionService.save(관리자.getId(), 매트_아고라.getId());
+        subscriptionService.save(관리자.getId(), 후디_JPA_스터디.getId());
+
+        categoryRoleService.updateRole(후디.getId(), 관리자.getId(), 매트_아고라.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(후디.getId(), 관리자.getId(), 후디_JPA_스터디.getId(),
+                new CategoryRoleUpdateRequest(ADMIN));
+
+        // when
+        CategoriesResponse actual = categoryService.findScheduleEditableCategories(관리자.getId(), Pageable.ofSize(10));
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.getCategories().size()).isEqualTo(5);
+            assertThat(actual.getCategories().stream().map(CategoryResponse::getName).collect(Collectors.toList()))
+                    .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
+        });
     }
 
     @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
