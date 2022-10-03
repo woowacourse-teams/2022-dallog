@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.member.dto;
+package com.allog.dallog.domain.member.dto.response;
 
 import com.allog.dallog.domain.member.domain.Member;
 import java.util.List;

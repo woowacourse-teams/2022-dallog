@@ -10,7 +10,7 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.SubscribersResponse;
+import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;

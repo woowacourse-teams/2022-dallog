@@ -57,7 +57,7 @@ import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleExceptio
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.dto.SubscribersResponse;
+import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

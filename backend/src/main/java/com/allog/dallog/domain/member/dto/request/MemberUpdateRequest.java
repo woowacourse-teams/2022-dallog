@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.member.dto;
+package com.allog.dallog.domain.member.dto.request;
 
 import javax.validation.constraints.NotBlank;
 

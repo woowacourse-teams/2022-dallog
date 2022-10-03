@@ -8,7 +8,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 

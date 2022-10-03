@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.category.dto.response;
 
 import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import java.time.LocalDateTime;
 
 public class CategoryResponse {
