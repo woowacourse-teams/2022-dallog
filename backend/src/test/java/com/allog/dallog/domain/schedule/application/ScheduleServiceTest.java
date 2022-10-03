@@ -272,21 +272,45 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("일정 수정 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 수정할 시 예외가 발생한다.")
     @Test
-    void 일정_수정_시_일정의_카테고리에_대한_권한이_없을_경우_예외가_발생한다() {
+    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_수정할_시_예외가_발생한다() {
         // given
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long 카테고리_관리자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_관리자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_구독자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_구독자_id, BE_일정.getId());
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
                 레벨_인터뷰_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 리버_id, 일정_수정_요청))
-                .isInstanceOf(NoPermissionException.class);
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 카테고리_구독자_id, 일정_수정_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 ADMIN 역할이 아니라면 새로운 일정을 수정할 시 예외가 발생한다.")
+    @Test
+    void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_수정할_시_예외가_발생한다() {
+        // given
+        Long 카테고리_생성자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_생성자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_생성자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_관리자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_관리자_id, BE_일정.getId());
+
+        categoryRoleService.updateRole(카테고리_생성자_id, 카테고리_관리자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(카테고리_관리자_id, 카테고리_생성자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 카테고리_생성자_id, 일정_수정_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("일정 수정 시 존재하지 않은 일정일 경우 예외가 발생한다.")

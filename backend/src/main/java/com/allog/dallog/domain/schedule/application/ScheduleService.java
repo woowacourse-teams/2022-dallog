@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
@@ -100,11 +101,12 @@ public class ScheduleService {
     @Transactional
     public void update(final Long id, final Long memberId, final ScheduleUpdateRequest request) {
         Long categoryId = request.getCategoryId();
-        categoryRepository.validateExistsByIdAndMemberId(categoryId, memberId);
-
         Category categoryForUpdate = categoryRepository.getById(categoryId);
         Schedule schedule = scheduleRepository.getById(id);
-        schedule.validateEditPossible(memberId);
+
+        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
+        categoryRole.validateAuthority(UPDATE_SCHEDULE);
+
         schedule.change(categoryForUpdate, request.getTitle(), request.getStartDateTime(), request.getEndDateTime(),
                 request.getMemo());
     }
