@@ -11,9 +11,5 @@ const Template: ComponentStory<typeof ScheduleAddModal> = (args) => <ScheduleAdd
 
 export const Primary = Template.bind({});
 Primary.args = {
-  dateInfo: {
-    year: 2022,
-    month: 8,
-    date: 5,
-  },
+  dateInfo: '2022-08-02T00:00',
 };

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import useToggle from '@/hooks/useToggle';
 
 import { ModalPosType } from '@/@types';
-import { CalendarType } from '@/@types/calendar';
 import { ScheduleType } from '@/@types/schedule';
 
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
@@ -15,7 +14,13 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
-import { getFormattedDate, getISODateString, getThisDate, getThisMonth } from '@/utils/date';
+import {
+  extractDateTime,
+  getFormattedDate,
+  getISODateString,
+  getThisDate,
+  getThisMonth,
+} from '@/utils/date';
 
 import {
   dateTextStyle,
@@ -28,18 +33,18 @@ import {
 
 interface MoreScheduleModalProps {
   moreScheduleModalPos: ModalPosType;
-  moreScheduleInfo: CalendarType;
-  longTermsWithPriority: { schedule: ScheduleType; priority: number }[];
-  allDaysWithPriority: { schedule: ScheduleType; priority: number }[];
-  fewHoursWithPriority: { schedule: ScheduleType; priority: number }[];
+  moreScheduleDateTime: string;
+  longTermSchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
+  allDaySchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
+  fewHourSchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
 }
 
 function MoreScheduleModal({
   moreScheduleModalPos,
-  moreScheduleInfo,
-  longTermsWithPriority,
-  allDaysWithPriority,
-  fewHoursWithPriority,
+  moreScheduleDateTime,
+  longTermSchedulesWithPriority,
+  allDaySchedulesWithPriority,
+  fewHourSchedulesWithPriority,
 }: MoreScheduleModalProps) {
   const theme = useTheme();
 
@@ -76,29 +81,21 @@ function MoreScheduleModal({
     return position;
   };
 
+  const { year, month, date, day } = extractDateTime(moreScheduleDateTime);
+
   return (
     <div css={moreScheduleModalStyle(theme, moreScheduleModalPos)}>
       <div css={headerStyle}>
-        <span css={dayTextStyle(theme, moreScheduleInfo.day)}>{DAYS[moreScheduleInfo.day]}</span>
-        <span
-          css={dateTextStyle(
-            theme,
-            moreScheduleInfo.day,
-            getThisMonth() === moreScheduleInfo.month && getThisDate() === moreScheduleInfo.date
-          )}
-        >
-          {moreScheduleInfo.date}
+        <span css={dayTextStyle(theme, day)}>{DAYS[day]}</span>
+        <span css={dateTextStyle(theme, day, getThisMonth() === month && getThisDate() === date)}>
+          {date}
         </span>
       </div>
 
-      {longTermsWithPriority.map((el) => {
+      {longTermSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
         const endDate = getISODateString(el.schedule.endDateTime);
-        const nowDate = getFormattedDate(
-          moreScheduleInfo.year,
-          moreScheduleInfo.month,
-          moreScheduleInfo.date
-        );
+        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate <= nowDate &&
@@ -114,13 +111,9 @@ function MoreScheduleModal({
         );
       })}
 
-      {allDaysWithPriority.map((el) => {
+      {allDaySchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getFormattedDate(
-          moreScheduleInfo.year,
-          moreScheduleInfo.month,
-          moreScheduleInfo.date
-        );
+        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate === nowDate && (
@@ -135,13 +128,9 @@ function MoreScheduleModal({
         );
       })}
 
-      {fewHoursWithPriority.map((el) => {
+      {fewHourSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getFormattedDate(
-          moreScheduleInfo.year,
-          moreScheduleInfo.month,
-          moreScheduleInfo.date
-        );
+        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate === nowDate && (

@@ -1,3 +1,5 @@
+const OPTION_HEIGHT = 36;
+
 const PALETTE = [
   '#AD1457',
   '#D81B60',
@@ -25,8 +27,11 @@ const PALETTE = [
   '#A79B8E',
 ];
 
+const SCHEDULE = {
+  HEIGHT: 5,
+  HEIGHT_WITH_MARGIN: 5.5,
+};
+
 const TRANSPARENT = 'transparent';
 
-const OPTION_HEIGHT = 36;
-
-export { OPTION_HEIGHT, PALETTE, TRANSPARENT };
+export { OPTION_HEIGHT, PALETTE, SCHEDULE, TRANSPARENT };

@@ -18,53 +18,6 @@ const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
 const getBeforeDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() - offset));
 
-const getBeforeYearMonth = (targetYear: number, targetMonth: number) => {
-  if (targetMonth === 1) {
-    return { year: targetYear - 1, month: 12 };
-  }
-
-  return { year: targetYear, month: targetMonth - 1 };
-};
-
-const getCalendarMonth = (year: number, month: number) => {
-  const firstDate = new Date(year, month - 1, 1);
-
-  const calendarInfo: Date[] = [];
-
-  while (firstDate.getMonth() === month - 1) {
-    calendarInfo.push(new Date(firstDate));
-    firstDate.setDate(firstDate.getDate() + 1);
-  }
-
-  const firstDay = calendarInfo[0].getDay();
-  const lastDay = calendarInfo[calendarInfo.length - 1].getDay();
-
-  if (firstDay !== 0) {
-    Array(firstDay)
-      .fill(0)
-      .forEach((_, idx) => {
-        calendarInfo.unshift(getBeforeDate(new Date(year, month - 1, 1), idx + 1));
-      });
-  }
-
-  if (lastDay !== 6) {
-    Array(6 - lastDay)
-      .fill(0)
-      .forEach((_, idx) => {
-        calendarInfo.push(getNextDate(new Date(year, month, 0), idx + 1));
-      });
-  }
-
-  return calendarInfo.map((el) => {
-    return {
-      year: el.getFullYear(),
-      month: el.getMonth() + 1,
-      date: el.getDate(),
-      day: el.getDay(),
-    };
-  });
-};
-
 const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
   if (!dateInfo) {
     return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
@@ -107,20 +60,8 @@ const getEndTime = (startTime?: string) => {
   return nowHour < '23' ? `${zeroFill(+nowHour + 1)}:${nowMinute}` : `00:${nowMinute}`;
 };
 
-const getDayFromFormattedDate = (date: string) => {
-  return new Date(date).getDay();
-};
-
 const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
   return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
-};
-
-const getISODateString = (ISOString: string) => {
-  return ISOString.split('T')[0];
-};
-
-const getISOTimeString = (ISOString: string) => {
-  return ISOString.split('T')[1];
 };
 
 const getKoreaISOString = (time: number) => {
@@ -129,14 +70,6 @@ const getKoreaISOString = (time: number) => {
 
 const getNextDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() + offset));
-
-const getNextYearMonth = (targetYear: number, targetMonth: number) => {
-  if (targetMonth === 12) {
-    return { year: targetYear + 1, month: 1 };
-  }
-
-  return { year: targetYear, month: targetMonth + 1 };
-};
 
 const getOneHourEarlierISOString = (ISOString: string) => {
   const hour = getISOTimeString(ISOString).split(':')[0];
@@ -170,25 +103,93 @@ const getThisYear = () => {
   return new Date().getFullYear();
 };
 
+const extractDateTime = (dateTime: string) => {
+  const dateTimeObject = new Date(dateTime);
+
+  return {
+    year: dateTimeObject.getFullYear(),
+    month: dateTimeObject.getMonth() + 1,
+    date: dateTimeObject.getDate(),
+    day: dateTimeObject.getDay(),
+  };
+};
+
+const getCurrentCalendar = (currentDateTime: string) => {
+  const firstDateTime = new Date(new Date(currentDateTime).setDate(1));
+  const dateTime = new Date(new Date(currentDateTime).setDate(1));
+  const calendarInfo: string[] = [];
+
+  while (extractDateTime(getISOString(dateTime)).month === extractDateTime(currentDateTime).month) {
+    calendarInfo.push(getISOString(dateTime));
+    dateTime.setDate(extractDateTime(getISOString(dateTime)).date + 1);
+  }
+
+  const firstDay = extractDateTime(calendarInfo[0]).day;
+  const lastDay = extractDateTime(calendarInfo[calendarInfo.length - 1]).day;
+
+  if (firstDay !== 0) {
+    Array(firstDay)
+      .fill(0)
+      .forEach((_, idx) => {
+        calendarInfo.unshift(getDayOffsetDateTime(getISOString(firstDateTime), -(idx + 1)));
+      });
+  }
+
+  if (lastDay !== 6) {
+    Array(6 - lastDay)
+      .fill(0)
+      .forEach((_, idx) => {
+        calendarInfo.push(getDayOffsetDateTime(getISOString(dateTime), idx));
+      });
+  }
+
+  return calendarInfo;
+};
+
+const getDayOffsetDateTime = (dateTime: string, offset: number) =>
+  getISOString(new Date(new Date(dateTime).setDate(extractDateTime(dateTime).date + offset)));
+
+const getISODateString = (ISOString: string) => ISOString.split('T')[0];
+
+const getISOString = (date: Date) => {
+  const offset = 1000 * 60 * 60 * 9;
+  const koreaDateTime = new Date(date.getTime() + offset);
+
+  return koreaDateTime.toISOString().split('.')[0].slice(0, -3);
+};
+
+const getISOTimeString = (ISOString: string) => ISOString.split('T')[1];
+
+const getMonthOffsetDateTime = (dateTime: string, offset: number) =>
+  getISOString(new Date(new Date(dateTime).setMonth(extractDateTime(dateTime).month + offset - 1)));
+
+const getToday = () => {
+  const offset = new Date().getTimezoneOffset() * 60 * 1000;
+
+  return `${getISODateString(getISOString(new Date(Date.now() - offset)))}T${DATE_TIME.START}`;
+};
+
 export {
   checkAllDay,
+  extractDateTime,
   getBeforeDate,
-  getBeforeYearMonth,
-  getCalendarMonth,
+  getCurrentCalendar,
   getDate,
   getDateTime,
-  getDayFromFormattedDate,
+  getDayOffsetDateTime,
   getEndTime,
   getFormattedDate,
   getISODateString,
+  getISOString,
   getISOTimeString,
   getKoreaISOString,
+  getMonthOffsetDateTime,
   getNextDate,
-  getNextYearMonth,
   getOneHourEarlierISOString,
   getOneHourLaterISOString,
   getStartTime,
   getThisDate,
   getThisMonth,
   getThisYear,
+  getToday,
 };

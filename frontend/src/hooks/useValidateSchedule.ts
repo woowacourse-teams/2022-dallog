@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { DATE_TIME } from '@/constants/date';
 import { VALIDATION_SIZE } from '@/constants/validate';
 
-import { getEndTime, getNextDate } from '@/utils/date';
+import { getEndTime, getISODateString, getISOString, getNextDate } from '@/utils/date';
 
 import useControlledInput from './useControlledInput';
 
@@ -56,9 +56,9 @@ function useValidateSchedule({
 
     if (startTime.inputValue >= '23:00') {
       const [year, month, day] = startDate.inputValue.split('-');
-      const nextDate = getNextDate(new Date(+year, +month - 1, +day + 1), 1)
-        .toISOString()
-        .split('T')[0];
+      const nextDate = getISODateString(
+        getISOString(getNextDate(new Date(+year, +month - 1, +day + 1), 1))
+      );
 
       endDate.setInputValue(nextDate);
     }

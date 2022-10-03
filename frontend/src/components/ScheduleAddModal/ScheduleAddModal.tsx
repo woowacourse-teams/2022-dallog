@@ -23,7 +23,14 @@ import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { getDate, getEndTime, getISODateString, getNextDate, getStartTime } from '@/utils/date';
+import {
+  getDate,
+  getEndTime,
+  getISODateString,
+  getISOString,
+  getNextDate,
+  getStartTime,
+} from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -46,7 +53,7 @@ import {
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
-  dateInfo: Omit<CalendarType, 'day'>;
+  dateInfo: string;
   closeModal: () => void;
 }
 
@@ -78,9 +85,9 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   });
 
   const validationSchedule = useValidateSchedule({
-    initialStartDate: getDate(dateInfo),
+    initialStartDate: getISODateString(dateInfo),
     initialStartTime: isAllDay ? DATE_TIME.START : getStartTime(),
-    initialEndDate: getDate(dateInfo),
+    initialEndDate: getISODateString(dateInfo),
     initialEndTime: isAllDay ? DATE_TIME.END : getEndTime(),
   });
 
@@ -97,7 +104,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       endDateTime: `${
         isAllDay
           ? getISODateString(
-              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
+              getISOString(getNextDate(new Date(validationSchedule.endDate.inputValue), 1))
             )
           : validationSchedule.endDate.inputValue
       }T${validationSchedule.endTime.inputValue}`,
