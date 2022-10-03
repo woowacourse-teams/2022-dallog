@@ -206,9 +206,9 @@ include::{snippets}/category/updateRole/failBySoleAdmin/http-response.adoc[]
 
 include::{snippets}/category/findSubscribers/http-request.adoc[]
 
-==== Request Parameters
+==== Path Parameters
 
-include::{snippets}/category/findSubscribers/request-parameters.adoc[]
+include::{snippets}/category/findSubscribers/path-parameters.adoc[]
 
 ==== HTTP Response
 

@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 public class SubscribersResponse {
 
-    private List<MemberResponse> subscribers;
+    private List<MemberWithRoleTypeResponse> subscribers;
 
     private SubscribersResponse() {
     }
 
-    public SubscribersResponse(final List<Member> members) {
-        this.subscribers = toMemberResponses(members);
+    public SubscribersResponse(final List<MemberWithRoleTypeResponse> subscribers) {
+        this.subscribers = subscribers;
     }
 
     private List<MemberResponse> toMemberResponses(final List<Member> members) {
@@ -21,7 +21,7 @@ public class SubscribersResponse {
                 .collect(Collectors.toList());
     }
 
-    public List<MemberResponse> getSubscribers() {
+    public List<MemberWithRoleTypeResponse> getSubscribers() {
         return subscribers;
     }
 }

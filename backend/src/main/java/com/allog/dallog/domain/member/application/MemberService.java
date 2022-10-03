@@ -7,14 +7,17 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
+import com.allog.dallog.domain.member.dto.response.MemberWithRoleTypeResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -60,7 +63,15 @@ public class MemberService {
         categoryRole.validateAuthority(FIND_SUBSCRIBERS);
 
         List<Member> subscribers = memberRepository.findSubscribers(categoryId);
-        return new SubscribersResponse(subscribers);
+
+        List<MemberWithRoleTypeResponse> memberWithTypeResponse = new ArrayList<>();
+        for (Member subscriber : subscribers) {
+            CategoryRoleType categoryRoleType = categoryRoleRepository.getByMemberIdAndCategoryId(subscriber.getId(),
+                    categoryId).getCategoryRoleType();
+            memberWithTypeResponse.add(new MemberWithRoleTypeResponse(subscriber, categoryRoleType));
+        } // TODO: N+1 문제 해결
+
+        return new SubscribersResponse(memberWithTypeResponse);
     }
 
     @Transactional

@@ -169,7 +169,8 @@ class MemberServiceTest extends ServiceTest {
         assertAll(() -> {
             assertThat(actual.getSubscribers().size()).isEqualTo(3);
             assertThat(
-                    actual.getSubscribers().stream().map(MemberResponse::getDisplayName).collect(Collectors.toList()))
+                    actual.getSubscribers().stream().map(it -> it.getMember().getDisplayName())
+                            .collect(Collectors.toList()))
                     .containsExactly(관리자_이름, 후디_이름, 리버_이름);
         });
     }

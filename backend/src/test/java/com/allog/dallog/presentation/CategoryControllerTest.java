@@ -15,6 +15,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -56,7 +57,7 @@ import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityExcepti
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.dto.response.MemberWithRoleTypeResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -658,8 +659,13 @@ class CategoryControllerTest extends ControllerTest {
         // given
         long categoryId = 10;
 
-        List<Member> members = List.of(매트(), 리버(), 파랑(), 후디());
-        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(members));
+        List<MemberWithRoleTypeResponse> subscribers = List.of(
+                new MemberWithRoleTypeResponse(매트(), NONE),
+                new MemberWithRoleTypeResponse(리버(), NONE),
+                new MemberWithRoleTypeResponse(파랑(), NONE),
+                new MemberWithRoleTypeResponse(후디(), NONE)
+        );
+        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(subscribers));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)
