@@ -8,7 +8,7 @@ public class CategoryRoleUpdateRequest {
     @NotBlank(message = "공백일 수 없습니다.")
     private CategoryRoleType categoryRoleType;
 
-    public CategoryRoleUpdateRequest() {
+    private CategoryRoleUpdateRequest() {
     }
 
     public CategoryRoleUpdateRequest(final CategoryRoleType categoryRoleType) {
