@@ -85,7 +85,7 @@ public class Category extends BaseEntity {
         }
     }
 
-    public void validateExternalCategory() {
+    public void validateNotExternalCategory() {
         if (categoryType == GOOGLE) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
         }

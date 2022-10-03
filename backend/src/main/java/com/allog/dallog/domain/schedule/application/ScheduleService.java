@@ -56,7 +56,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponse save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryRepository.getById(categoryId);
-        category.validateExternalCategory();
+        category.validateNotExternalCategory();
 
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
         categoryRole.validateAuthority(ADD_SCHEDULE);
