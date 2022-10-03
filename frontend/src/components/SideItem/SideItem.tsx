@@ -43,12 +43,7 @@ function SideItem({ subscription }: SideItemProps) {
     }
   );
 
-  const {
-    state: isPaletteOpen,
-    toggleState: togglePaletteOpen,
-    handleClickOpenButton,
-    modalPos,
-  } = useModalPosition();
+  const { isModalOpen, toggleModalOpen, handleClickOpen, modalPos } = useModalPosition();
 
   const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
     patchSubscription({
@@ -90,16 +85,16 @@ function SideItem({ subscription }: SideItemProps) {
       </div>
       <div css={modalLayoutStyle}>
         <Button cssProp={iconStyle}>
-          <MdMoreVert size={20} onClick={handleClickOpenButton} />
+          <MdMoreVert size={20} onClick={handleClickOpen} />
         </Button>
-        {isPaletteOpen && (
+        {isModalOpen && (
           <ModalPortal
-            isOpen={isPaletteOpen}
-            closeModal={togglePaletteOpen}
+            isOpen={isModalOpen}
+            closeModal={toggleModalOpen}
             dimmerBackground={TRANSPARENT}
           >
             <SubscriptionModifyModal
-              togglePaletteOpen={togglePaletteOpen}
+              togglePaletteOpen={toggleModalOpen}
               modalPos={modalPos}
               subscription={subscription}
               patchSubscription={patchSubscription}

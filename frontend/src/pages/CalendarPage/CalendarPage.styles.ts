@@ -1,6 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 import { DAYS } from '@/constants/date';
+import { SCHEDULE } from '@/constants/style';
 
 const calendarPage = css`
   padding: 0 5rem 5rem;
@@ -122,7 +123,7 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
   right: 1rem;
 
   width: 5rem;
-  height: 5rem;
+  height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   border-radius: 50%;
 
@@ -144,7 +145,7 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
 `;
 
 const itemWithBackgroundStyle = (
-  priority: number,
+  priority: number | null,
   color: string,
   isHovering: boolean,
   maxView: number,
@@ -152,12 +153,12 @@ const itemWithBackgroundStyle = (
 ) => css`
   overflow: hidden;
   position: absolute;
-  top: ${priority * 5.5 + 1}rem;
+  top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
 
-  display: ${priority >= maxView ? 'none' : 'block'};
+  display: ${priority && priority >= maxView ? 'none' : 'block'};
 
   width: ${isEndDate ? '96%' : '100%'};
-  height: 5rem;
+  height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   ${isEndDate &&
   css`
@@ -181,7 +182,7 @@ const itemWithBackgroundStyle = (
 
 const itemWithoutBackgroundStyle = (
   { colors }: Theme,
-  priority: number,
+  priority: number | null,
   color: string,
   isHovering: boolean,
   maxView: number,
@@ -208,7 +209,7 @@ const moreStyle = ({ colors }: Theme) => css`
   bottom: 0;
 
   width: 100%;
-  height: 5rem;
+  height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
 
   font-size: 2.75rem;

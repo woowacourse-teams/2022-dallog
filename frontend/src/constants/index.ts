@@ -5,7 +5,7 @@ const ATOM_KEY = {
 };
 
 const CALENDAR = {
-  MAX_VIEW: 10,
+  MAX_SCHEDULE_COUNT: 10,
   EMPTY_TITLE: '제목 없음',
 };
 

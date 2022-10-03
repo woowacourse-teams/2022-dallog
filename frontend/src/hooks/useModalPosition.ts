@@ -7,15 +7,16 @@ import useToggle from './useToggle';
 function useModalPosition() {
   const [modalPos, setModalPos] = useState<ModalPosType>({});
 
-  const { state, toggleState } = useToggle();
+  const { state: isModalOpen, toggleState: toggleModalOpen } = useToggle();
 
-  const handleClickOpenButton = (e: React.MouseEvent) => {
+  const handleClickOpen = (e: React.MouseEvent, callback?: () => void) => {
     if (e.target !== e.currentTarget) {
       return;
     }
 
     setModalPos(calculateModalPos(e.clientX, e.clientY));
-    toggleState();
+    callback && callback();
+    toggleModalOpen();
   };
 
   const calculateModalPos = (clickX: number, clickY: number) => {
@@ -34,7 +35,7 @@ function useModalPosition() {
     return position;
   };
 
-  return { state, toggleState, handleClickOpenButton, modalPos };
+  return { isModalOpen, toggleModalOpen, handleClickOpen, modalPos };
 }
 
 export default useModalPosition;

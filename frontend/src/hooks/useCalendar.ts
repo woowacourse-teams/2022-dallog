@@ -1,66 +1,43 @@
 import { useState } from 'react';
 
-import {
-  getBeforeYearMonth,
-  getCalendarMonth,
-  getFormattedDate,
-  getNextYearMonth,
-  getThisMonth,
-  getThisYear,
-} from '@/utils/date';
+import { getCurrentCalendar, getMonthOffsetDateTime, getToday } from '@/utils/date';
 
 function useCalendar() {
-  const [current, setCurrent] = useState({
-    year: getThisYear(),
-    month: getThisMonth(),
-  });
+  const [currentDateTime, setCurrentDateTime] = useState(getToday());
+  const [calendar, setCalendar] = useState(getCurrentCalendar(currentDateTime));
 
-  const [calendarMonth, setCalendarMonth] = useState(
-    getCalendarMonth(getThisYear(), getThisMonth())
-  );
+  const startDateTime = calendar[0];
+  const endDateTime = calendar[calendar.length - 1];
 
   const moveToBeforeMonth = () => {
-    const { year, month } = getBeforeYearMonth(current.year, current.month);
+    const beforeMonthDateTime = getMonthOffsetDateTime(currentDateTime, -1);
 
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
+    setCurrentDateTime(beforeMonthDateTime);
+    setCalendar(getCurrentCalendar(beforeMonthDateTime));
   };
 
   const moveToToday = () => {
-    const year = getThisYear();
-    const month = getThisMonth();
+    const today = getToday();
 
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
+    setCurrentDateTime(today);
+    setCalendar(getCurrentCalendar(today));
   };
 
   const moveToNextMonth = () => {
-    const { year, month } = getNextYearMonth(current.year, current.month);
+    const afterMonthDateTime = getMonthOffsetDateTime(currentDateTime, 1);
 
-    setCurrent({ year, month });
-    setCalendarMonth(getCalendarMonth(year, month));
+    setCurrentDateTime(afterMonthDateTime);
+    setCalendar(getCurrentCalendar(afterMonthDateTime));
   };
 
-  const startDate = getFormattedDate(
-    calendarMonth[0].year,
-    calendarMonth[0].month,
-    calendarMonth[0].date
-  );
-
-  const endDate = getFormattedDate(
-    calendarMonth[calendarMonth.length - 1].year,
-    calendarMonth[calendarMonth.length - 1].month,
-    calendarMonth[calendarMonth.length - 1].date
-  );
-
   return {
-    calendarMonth,
-    current,
-    endDate,
+    calendar,
+    currentDateTime,
+    endDateTime,
     moveToBeforeMonth,
     moveToNextMonth,
     moveToToday,
-    startDate,
+    startDateTime,
   };
 }
 

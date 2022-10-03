@@ -22,7 +22,13 @@ import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { checkAllDay, getBeforeDate, getISODateString, getNextDate } from '@/utils/date';
+import {
+  checkAllDay,
+  getBeforeDate,
+  getISODateString,
+  getISOString,
+  getNextDate,
+} from '@/utils/date';
 
 import categoryApi from '@/api/category';
 import scheduleApi from '@/api/schedule';
@@ -91,7 +97,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     initialStartTime: startTime.slice(0, 5),
     initialEndDate:
       isAllDay && endTime.slice(0, 5) === DATE_TIME.END
-        ? getISODateString(getBeforeDate(new Date(endDate), 1).toISOString())
+        ? getISODateString(getISOString(getBeforeDate(new Date(endDate), 1)))
         : endDate,
     initialEndTime: endTime.slice(0, 5),
     initialMemo: scheduleInfo.memo,
@@ -108,7 +114,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       endDateTime: `${
         isAllDay
           ? `${getISODateString(
-              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
+              getISOString(getNextDate(new Date(validationSchedule.endDate.inputValue), 1))
             )}T${DATE_TIME.END}`
           : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
