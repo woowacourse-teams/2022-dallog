@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
@@ -61,15 +62,15 @@ public class CategoryController {
     }
 
     @GetMapping("/me/schedule-editable") // 일정 추가, 수정 모달의 카테고리 목록에 사용됨
-    public ResponseEntity<CategoriesResponse> findScheduleEditableCategories(
-            @AuthenticationPrincipal final LoginMember loginMember, final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findScheduleEditableCategories(loginMember.getId(), pageable));
+    public ResponseEntity<CategoriesNoPageResponse> findScheduleEditableCategories(
+            @AuthenticationPrincipal final LoginMember loginMember) {
+        return ResponseEntity.ok(categoryService.findScheduleEditableCategories(loginMember.getId()));
     }
 
     @GetMapping("/me/admin") // 카테고리 관리 페이지에 접근할 수 있는지 판단하기 위해 사용됨
-    public ResponseEntity<CategoriesResponse> findAdminCategories(
-            @AuthenticationPrincipal final LoginMember loginMember, final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findAdminCategories(loginMember.getId(), pageable));
+    public ResponseEntity<CategoriesNoPageResponse> findAdminCategories(
+            @AuthenticationPrincipal final LoginMember loginMember) {
+        return ResponseEntity.ok(categoryService.findAdminCategories(loginMember.getId()));
     }
 
     @PatchMapping("/{categoryId}")

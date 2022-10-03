@@ -41,6 +41,7 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -239,15 +240,12 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 내가_일정을_편집할_수_있는_카테고리를_전부_조회한다() throws Exception {
         // given
-        int page = 0;
-        int size = 10;
-
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findScheduleEditableCategories(any(), any())).willReturn(categoriesResponse);
+        CategoriesNoPageResponse categoriesResponse = new CategoriesNoPageResponse(일정_목록);
+        given(categoryService.findScheduleEditableCategories(any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories/me/schedule-editable?page={page}&size={size}", page, size)
+        mockMvc.perform(get("/api/categories/me/schedule-editable")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -255,11 +253,7 @@ class CategoryControllerTest extends ControllerTest {
                 .andDo(print())
                 .andDo(document("category/findScheduleEditableCategories",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
-                                )
+                                preprocessResponse(prettyPrint())
                         )
                 )
                 .andExpect(status().isOk());
@@ -269,15 +263,12 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 내가_ADMIN으로_있는_카테고리를_전부_조회한다() throws Exception {
         // given
-        int page = 0;
-        int size = 10;
-
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findAdminCategories(any(), any())).willReturn(categoriesResponse);
+        CategoriesNoPageResponse categoriesResponse = new CategoriesNoPageResponse(일정_목록);
+        given(categoryService.findAdminCategories(any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories/me/admin?page={page}&size={size}", page, size)
+        mockMvc.perform(get("/api/categories/me/admin")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -285,11 +276,7 @@ class CategoryControllerTest extends ControllerTest {
                 .andDo(print())
                 .andDo(document("category/findAdminCategories",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
-                                )
+                                preprocessResponse(prettyPrint())
                         )
                 )
                 .andExpect(status().isOk());

@@ -13,6 +13,7 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -109,18 +110,15 @@ public class CategoryService {
     }
 
     // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
-    public CategoriesResponse findScheduleEditableCategories(final Long memberId, final Pageable pageable) {
+    public CategoriesNoPageResponse findScheduleEditableCategories(final Long memberId) {
         Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));
-        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes,
-                pageable);
-
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes);
+        return new CategoriesNoPageResponse(categories);
     }
 
-    public CategoriesResponse findAdminCategories(final Long memberId, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, Set.of(ADMIN),
-                pageable);
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
+    public CategoriesNoPageResponse findAdminCategories(final Long memberId) {
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, Set.of(ADMIN));
+        return new CategoriesNoPageResponse(categories);
     }
 
     public CategoryResponse findById(final Long id) {

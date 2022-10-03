@@ -31,7 +31,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 class CategoryRepositoryTest extends RepositoryTest {
@@ -170,8 +169,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRoleRepository.save(new CategoryRole(카테고리5, 후디, ADMIN));
 
         // when
-        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(후디.getId(), Set.of(ADMIN),
-                Pageable.ofSize(10));
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(후디.getId(), Set.of(ADMIN));
         List<String> actual = categories.stream()
                 .map(Category::getName)
                 .collect(Collectors.toList());

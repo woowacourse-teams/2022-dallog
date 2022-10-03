@@ -37,6 +37,7 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
@@ -65,7 +66,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 class CategoryServiceTest extends ServiceTest {
 
@@ -276,7 +276,7 @@ class CategoryServiceTest extends ServiceTest {
                 new CategoryRoleUpdateRequest(ADMIN));
 
         // when
-        CategoriesResponse actual = categoryService.findScheduleEditableCategories(관리자.getId(), Pageable.ofSize(10));
+        CategoriesNoPageResponse actual = categoryService.findScheduleEditableCategories(관리자.getId());
 
         // then
         assertAll(() -> {
@@ -307,7 +307,7 @@ class CategoryServiceTest extends ServiceTest {
                 new CategoryRoleUpdateRequest(ADMIN));
 
         // when
-        CategoriesResponse actual = categoryService.findAdminCategories(관리자.getId(), Pageable.ofSize(10));
+        CategoriesNoPageResponse actual = categoryService.findAdminCategories(관리자.getId());
 
         // then
         assertAll(() -> {

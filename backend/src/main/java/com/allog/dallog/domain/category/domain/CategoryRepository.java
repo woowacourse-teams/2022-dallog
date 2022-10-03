@@ -30,8 +30,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             + "WHERE r.member.id = :memberId "
             + "AND r.categoryRoleType IN :categoryRoleTypes")
     List<Category> findByMemberIdAndCategoryRoleTypes(final Long memberId,
-                                                      final Set<CategoryRoleType> categoryRoleTypes,
-                                                      final Pageable pageable);
+                                                      final Set<CategoryRoleType> categoryRoleTypes);
 
     List<Category> findByMemberId(final Long memberId);
 
