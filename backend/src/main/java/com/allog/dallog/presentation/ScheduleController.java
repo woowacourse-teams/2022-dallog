@@ -50,6 +50,13 @@ public class ScheduleController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/categories/{categoryId}/schedules")
+    public ResponseEntity<MemberScheduleResponses> findByCategoryId(@PathVariable final Long categoryId,
+                                                                    @ModelAttribute DateRangeRequest request) {
+        MemberScheduleResponses response = scheduleService.findByCategoryIdAndDateRange(categoryId, request);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/schedules/{scheduleId}")
     public ResponseEntity<ScheduleResponse> findById(@PathVariable final Long scheduleId) {
         ScheduleResponse response = scheduleService.findById(scheduleId);

@@ -3,6 +3,7 @@ package com.allog.dallog.acceptance.fixtures;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 
+import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
@@ -30,8 +31,19 @@ public class ScheduleAcceptanceFixtures {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> 일정을_수정한다(final String accessToken, final Long scheduleId, final
-    ScheduleUpdateRequest request) {
+    public static ExtractableResponse<Response> 새로운_일정을_등록한다(final String accessToken, final Long categoryId,
+                                                             final ScheduleCreateRequest request) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .body(request)
+                .when().post("/api/categories/{categoryId}/schedules", categoryId)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 일정을_수정한다(final String accessToken, final Long scheduleId,
+                                                         final ScheduleUpdateRequest request) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
@@ -54,6 +66,20 @@ public class ScheduleAcceptanceFixtures {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .auth().oauth2(accessToken)
                 .when().get("/api/schedules/{scheduleId}", scheduleId)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 카테고리_아이디로_일정_리스트를_조회한다(final String accessToken,
+                                                                       final Long categoryId,
+                                                                       final String startDateTime,
+                                                                       final String endDateTime) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(accessToken)
+                .when()
+                .get("/api/categories/{categoryId}/schedules?startDateTime={startDateTime}&endDateTime={endDateTime}",
+                        categoryId, startDateTime, endDateTime)
                 .then().log().all()
                 .extract();
     }
