@@ -12,7 +12,6 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
@@ -57,8 +56,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponse save(final Long memberId, final Long categoryId, final ScheduleCreateRequest request) {
         Category category = categoryRepository.getById(categoryId);
-        Member member = memberRepository.getById(memberId);
-        category.validateCanAddSchedule(member);
+        category.validateExternalCategory();
 
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
         categoryRole.validateAuthority(ADD_SCHEDULE);
