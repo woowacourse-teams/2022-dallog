@@ -89,9 +89,6 @@ public class Category extends BaseEntity {
         if (categoryType == GOOGLE) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
         }
-        if (!this.member.equals(member)) {
-            throw new NoPermissionException();
-        }
     }
 
     public boolean isCreatorId(final Long creatorId) {

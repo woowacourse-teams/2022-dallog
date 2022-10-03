@@ -1,11 +1,15 @@
 package com.allog.dallog.domain.schedule.application;
 
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
@@ -28,18 +32,20 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
     private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
 
     public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryRepository categoryRepository,
-                           final MemberRepository memberRepository,
+                           final CategoryRoleRepository categoryRoleRepository, final MemberRepository memberRepository,
                            final SubscriptionRepository subscriptionRepository,
                            final OAuthTokenRepository oAuthTokenRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository) {
         this.scheduleRepository = scheduleRepository;
         this.categoryRepository = categoryRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
         this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
@@ -51,6 +57,10 @@ public class ScheduleService {
         Category category = categoryRepository.getById(categoryId);
         Member member = memberRepository.getById(memberId);
         category.validateCanAddSchedule(member);
+
+        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
+        categoryRole.validateAuthority(ADD_SCHEDULE);
+
         Schedule schedule = scheduleRepository.save(request.toEntity(category));
         return new ScheduleResponse(schedule);
     }
