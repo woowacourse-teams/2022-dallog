@@ -328,9 +328,9 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("회원과 카테고리 id를 통해 카테고리를 수정한다.")
+    @DisplayName("ADMIN 역할의 멤버는 카테고리를 수정할 수 있다.")
     @Test
-    void 회원과_카테고리_id를_통해_카테고리를_수정한다() {
+    void ADMIN_역할의_멤버는_카테고리를_수정할_수_있다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
@@ -346,6 +346,45 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(category.getName()).isEqualTo(우테코_공통_일정_이름);
     }
 
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리를 수정할 경우 예외를 던진다.")
+    @Test
+    void ADMIN_역할이_아닌_멤버가_카테고리를_수정할_경우_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 매트 = memberRepository.save(매트());
+        subscriptionService.save(매트.getId(), 공통_일정.getId());
+
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.update(매트.getId(), 공통_일정.getId(), categoryUpdateRequest))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 역할이 ADMIN이 아닐 경우 카테고리 수정시 예외를 던진다.")
+    @Test
+    void 카테고리_생성자라도_역할이_ADMIN이_아닐_경우_카테고리_수정시_예외를_던진다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 매트 = memberRepository.save(매트());
+        subscriptionService.save(매트.getId(), 공통_일정.getId());
+
+        categoryRoleService.updateRole(관리자.getId(), 매트.getId(), 공통_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(매트.getId(), 관리자.getId(), 공통_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
+
+        // when & then
+        assertThatThrownBy(
+                () -> categoryService.update(관리자.getId(), 공통_일정.getId(), categoryUpdateRequest))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
     @DisplayName("존재하지 않는 카테고리를 수정할 경우 예외를 던진다.")
     @Test
     void 존재하지_않는_카테고리를_수정할_경우_예외를_던진다() {
@@ -357,23 +396,6 @@ class CategoryServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.update(관리자.getId(), 공통_일정.getId() + 1, categoryUpdateRequest))
                 .isInstanceOf(NoSuchCategoryException.class);
-    }
-
-    @DisplayName("자신이 ADMIN이 아닌 카테고리를 수정할 경우 예외를 던진다.")
-    @Test
-    void 자신이_ADMIN이_아닌_카테고리를_수정할_경우_예외를_던진다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Member 매트 = memberRepository.save(매트());
-
-        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
-        subscriptionService.save(매트.getId(), 공통_일정.getId());
-
-        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("우테코 공통 일정");
-
-        // when & then
-        assertThatThrownBy(() -> categoryService.update(매트.getId(), 공통_일정.getId(), categoryUpdateRequest))
-                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("ADMIN인 회원이 카테고리를 삭제한다.")
