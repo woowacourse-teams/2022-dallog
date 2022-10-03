@@ -45,6 +45,12 @@ import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +72,9 @@ class CategoryControllerTest extends ControllerTest {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean
+    private CategoryRoleService categoryRoleService;
 
     @DisplayName("카테고리를 생성한다.")
     @Test
@@ -448,5 +457,142 @@ class CategoryControllerTest extends ControllerTest {
                         )
                 )
                 .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("ADMIN은 다른 구독자의 카테고리 역할을 변경할 수 있다.")
+    @Test
+    void ADMIN은_다른_구독자의_카테고리_역할을_변경할_수_있다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+        willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                ),
+                                requestFields(
+                                        fieldWithPath("categoryRoleType").description("역할 (ADMIN | NONE)")
+                                )
+                        )
+                )
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("ADMIN이 아닌 회원은 다른 구독자의 카테고리 역할을 변경하면 403 Forbidden이 발생한다.")
+    @Test
+    void ADMIN이_아닌_회원은_다른_구독자의_카테고리_역할을_변경하면_403_Forbidden이_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NoPermissionToManageRoleException())
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failByNoPermission",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("카테고리 역할이 변경될 회원이 해당 카테고리를 구독하지 않은 상황이라면 404 NotFound가 발생한다.")
+    @Test
+    void 카테고리_역할이_변경될_회원이_해당_카테고리를_구독하지_않은_상황이라면_404_NotFound가_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NoSuchCategoryRoleException())
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failByCategoryRoleNotFound",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("자기 자신이 유일한 ADMIN이라면 자신의 역할을 변경할 수 없다.")
+    @Test
+    void 자기_자신이_유일한_ADMIN이라면_자신의_역할을_변경할_수_없다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NotAbleToMangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다."))
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failBySoleAdmin",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isBadRequest());
     }
 }

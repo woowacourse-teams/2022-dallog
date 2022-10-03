@@ -42,6 +42,7 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -129,6 +130,21 @@ class CategoryServiceTest extends ServiceTest {
         List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @DisplayName("카테고리 생성 시 생성자에 대한 카테고리 역할을 ADMIN으로 생성한다.")
+    @Test
+    void 카테고리_생성_시_생성자에_대한_카테고리_역할을_ADMIN으로_생성한다() {
+        // given
+        Long 후디_id = parseMemberId(AuthFixtures.후디_인증_코드_토큰_요청());
+
+        CategoryResponse JPA_스터디 = categoryService.save(후디_id, 후디_JPA_스터디_생성_요청);
+
+        // when
+        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디_id, JPA_스터디.getId()).get();
+
+        // then
+        assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.ADMIN);
     }
 
     @DisplayName("새로운 카테고리를 생성 할 떄 이름이 공백이거나 길이가 20을 초과하는 경우 예외를 던진다.")

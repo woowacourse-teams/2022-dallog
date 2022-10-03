@@ -13,7 +13,9 @@ import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateReques
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
@@ -57,13 +59,20 @@ public class CategoryService {
         Member member = memberRepository.getById(memberId);
         Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
+
         subscribeCategory(member, category);
+        createCategoryRoleAsAdminToCreator(member, category);
         return new CategoryResponse(savedCategory);
     }
 
     private void subscribeCategory(final Member member, final Category category) {
         Color color = Color.pick(colorPicker.pickNumber());
         subscriptionRepository.save(new Subscription(member, category, color));
+    }
+
+    private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
+        CategoryRole categoryRole = new CategoryRole(category, member, CategoryRoleType.ADMIN);
+        categoryRoleRepository.save(categoryRole);
     }
 
     @Transactional
