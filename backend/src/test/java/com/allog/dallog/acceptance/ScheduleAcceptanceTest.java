@@ -1,6 +1,6 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
@@ -47,7 +47,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 정상적인_일정정보를_등록하면_상태코드_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
 
         // when
@@ -61,7 +61,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 카테고리로_일정을_조회하면_상태코드_200을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, OAuthFixtures.매트.getCode());
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, OAuthFixtures.매트.getCode());
         CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청).as(CategoryResponse.class);
 
         /* 장기간 일정 */
@@ -94,7 +94,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 일정_ID로_일정을_단건조회_하면_상태코드_200을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
         ScheduleResponse 알록달록_회의 = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId()).as(ScheduleResponse.class);
 
@@ -109,7 +109,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 일정을_수정하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
         ScheduleResponse 알록달록_회의 = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId()).as(ScheduleResponse.class);
 
@@ -127,7 +127,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
     @Test
     void 일정을_삭제하면_상태코드_204를_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         CategoryResponse 공통_일정_응답 = 새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청).as(CategoryResponse.class);
         ScheduleResponse 알록달록_회의 = 새로운_일정을_등록한다(accessToken, 공통_일정_응답.getId()).as(ScheduleResponse.class);
 

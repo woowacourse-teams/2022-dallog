@@ -30,7 +30,7 @@ public class AuthAcceptanceFixtures {
                 .extract();
     }
 
-    public static String 자체_토큰을_생성하고_토큰을_반환한다(final String oauthProvider, final String code) {
+    public static String 자체_토큰을_생성하고_엑세스_토큰을_반환한다(final String oauthProvider, final String code) {
         TokenResponse tokenResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(new TokenRequest(code, "https://dallog.me/oauth"))

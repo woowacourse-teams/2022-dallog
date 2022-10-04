@@ -1,6 +1,6 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
@@ -27,7 +27,7 @@ class ExternalCalendarAcceptanceTest extends AcceptanceTest {
     @Test
     void 자신의_외부_캘린더_리스트를_조회하면_200을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -50,7 +50,7 @@ class ExternalCalendarAcceptanceTest extends AcceptanceTest {
     @Test
     void 외부_캘린더를_추가하면_201을_반환한다() {
         // given
-        String accessToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()

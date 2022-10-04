@@ -3,6 +3,7 @@ package com.allog.dallog.presentation.auth;
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import javax.validation.Valid;
@@ -33,10 +34,16 @@ public class AuthController {
     }
 
     @PostMapping("/{oauthProvider}/token")
-    public ResponseEntity<TokenResponse> generateToken(@PathVariable final String oauthProvider,
-                                                       @Valid @RequestBody final TokenRequest tokenRequest) {
+    public ResponseEntity<TokenResponse> generateTokens(@PathVariable final String oauthProvider,
+                                                        @Valid @RequestBody final TokenRequest tokenRequest) {
         TokenResponse tokenResponse = authService.generateToken(tokenRequest);
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    @PostMapping("/token/access")
+    public ResponseEntity<TokenResponse> generateAccessToken(@PathVariable final String oauthProvider,
+                                                       @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
+        return null;
     }
 
     @GetMapping("/validate/token")
