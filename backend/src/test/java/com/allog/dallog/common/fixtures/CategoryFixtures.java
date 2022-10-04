@@ -6,6 +6,7 @@ import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
@@ -90,6 +91,11 @@ public class CategoryFixtures {
 
     public static CategoryResponse 후디_JPA_스터디_응답(final MemberResponse creatorResponse) {
         return new CategoryResponse(5L, 후디_JPA_스터디_이름, NORMAL.name(), creatorResponse, LocalDateTime.now());
+    }
+
+    public static CategoryDetailResponse BE_일정_세부_응답(final MemberResponse creatorResponse, final int subscriberCount) {
+        return new CategoryDetailResponse(1L, BE_일정_이름, NORMAL.name(), subscriberCount, creatorResponse,
+                LocalDateTime.now());
     }
 
     public static Category setId(final Category category, final Long id) {
