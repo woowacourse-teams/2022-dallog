@@ -2,7 +2,7 @@ import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 
-import { useDeleteSchedule } from '@/hooks/@queries/schedules';
+import { useDeleteSchedule } from '@/hooks/@queries/schedule';
 import useUserValue from '@/hooks/useUserValue';
 
 import { ModalPosType } from '@/@types';

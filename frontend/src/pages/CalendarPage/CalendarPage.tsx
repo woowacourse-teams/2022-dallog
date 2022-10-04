@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { useRef, useState } from 'react';
 
-import { useGetSchedules } from '@/hooks/@queries/schedules';
+import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
