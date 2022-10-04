@@ -12,22 +12,6 @@ import { removeAccessToken, setAccessToken } from '@/utils/storage';
 
 import loginApi from '@/api/login';
 
-function useGetLoginUrl() {
-  const { error, refetch } = useQuery<string>(CACHE_KEY.ENTER, loginApi.getUrl, {
-    enabled: false,
-    onSuccess: (data) => onSuccessGetLoginUrl(data),
-  });
-
-  const onSuccessGetLoginUrl = (loginUrl: string) => {
-    location.href = loginUrl;
-  };
-
-  return {
-    error,
-    refetch,
-  };
-}
-
 function useAuth(code: string | null) {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
@@ -50,6 +34,22 @@ function useAuth(code: string | null) {
 
   return {
     mutate,
+  };
+}
+
+function useGetLoginUrl() {
+  const { error, refetch } = useQuery<string>(CACHE_KEY.ENTER, loginApi.getUrl, {
+    enabled: false,
+    onSuccess: (data) => onSuccessGetLoginUrl(data),
+  });
+
+  const onSuccessGetLoginUrl = (loginUrl: string) => {
+    location.href = loginUrl;
+  };
+
+  return {
+    error,
+    refetch,
   };
 }
 
@@ -80,4 +80,4 @@ function useLoginValidate() {
   };
 }
 
-export { useGetLoginUrl, useAuth, useLoginValidate };
+export { useAuth, useGetLoginUrl, useLoginValidate };
