@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 CREATE TABLE IF NOT EXISTS schedules (
   id BIGINT AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
-  start_date_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  end_date_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  start_date_time datetime NOT NULL,
+  end_date_time datetime NOT NULL,
   memo VARCHAR(255) NOT NULL,
   categories_id BIGINT NOT NULL,
   created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
