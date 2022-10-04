@@ -75,8 +75,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         // given
         ExtractableResponse<Response> response = 자체_토큰을_생성한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         TokenResponse tokenResponse = response.as(TokenResponse.class);
-        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(tokenResponse.getAccessToken(),
-                tokenResponse.getRefreshToken());
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(tokenResponse.getRefreshToken());
 
         // when
         ExtractableResponse<Response> actual = 리프레시_토큰을_통해_새로운_엑세스_토큰을_생성한다(tokenRenewalRequest);
@@ -86,7 +85,6 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         assertAll(() -> {
             상태코드_200이_반환된다(actual);
             assertThat(tokenRenewalResponse.getAccessToken()).isNotEmpty();
-            assertThat(tokenRenewalResponse.getAccessToken()).isNotEqualTo(tokenResponse.getAccessToken());
         });
     }
 }

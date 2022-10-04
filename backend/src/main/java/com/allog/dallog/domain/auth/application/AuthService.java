@@ -6,8 +6,11 @@ import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.response.TokenRenewalResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
+import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -120,6 +123,20 @@ public class AuthService {
         }
 
         return oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
+    }
+
+    @Transactional
+    public TokenRenewalResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
+        String refreshToken = tokenRenewalRequest.getRefreshToken();
+        tokenProvider.validateToken(refreshToken);
+        Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
+
+        String refreshTokenInMemory = tokenRepository.getToken(memberId);
+        if (!refreshTokenInMemory.equals(refreshToken)) {
+            throw new InvalidTokenException("일치하는 토큰이 아닙니다.");
+        }
+        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
+        return new TokenRenewalResponse(accessToken);
     }
 
     public Long extractMemberId(final String accessToken) {

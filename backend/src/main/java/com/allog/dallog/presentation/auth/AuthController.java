@@ -2,9 +2,10 @@ package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
+import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.domain.auth.dto.response.TokenRenewalResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +41,11 @@ public class AuthController {
         return ResponseEntity.ok(tokenResponse);
     }
 
-    @PostMapping("/token/access")
-    public ResponseEntity<TokenResponse> generateAccessToken(@PathVariable final String oauthProvider,
-                                                       @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
-        return null;
+    @GetMapping("/token/access")
+    public ResponseEntity<TokenRenewalResponse> generateAccessToken(
+            @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
+        TokenRenewalResponse tokenRenewalResponse = authService.generateAccessToken(tokenRenewalRequest);
+        return ResponseEntity.ok(tokenRenewalResponse);
     }
 
     @GetMapping("/validate/token")

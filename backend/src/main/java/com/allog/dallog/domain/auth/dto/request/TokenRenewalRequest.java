@@ -1,12 +1,8 @@
 package com.allog.dallog.domain.auth.dto.request;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class TokenRenewalRequest {
-
-    @NotBlank(message = "엑세스 토큰은 공백일 수 없습니다.")
-    private String accessToken;
 
     @NotNull(message = "리프레시 토큰은 공백일 수 없습니다.")
     private String refreshToken;
@@ -14,13 +10,8 @@ public class TokenRenewalRequest {
     private TokenRenewalRequest() {
     }
 
-    public TokenRenewalRequest(final String accessToken, final String refreshToken) {
-        this.accessToken = accessToken;
+    public TokenRenewalRequest(final String refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
     }
 
     public String getRefreshToken() {
