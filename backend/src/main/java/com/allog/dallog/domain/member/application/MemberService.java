@@ -7,17 +7,14 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
-import com.allog.dallog.domain.member.dto.response.MemberWithRoleTypeResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -62,16 +59,9 @@ public class MemberService {
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(loginMemberId, categoryId);
         categoryRole.validateAuthority(FIND_SUBSCRIBERS);
 
-        List<Member> subscribers = memberRepository.findSubscribers(categoryId);
-
-        List<MemberWithRoleTypeResponse> memberWithTypeResponse = new ArrayList<>();
-        for (Member subscriber : subscribers) {
-            CategoryRoleType categoryRoleType = categoryRoleRepository.getByMemberIdAndCategoryId(subscriber.getId(),
-                    categoryId).getCategoryRoleType();
-            memberWithTypeResponse.add(new MemberWithRoleTypeResponse(subscriber, categoryRoleType));
-        } // TODO: N+1 문제 해결
-
-        return new SubscribersResponse(memberWithTypeResponse);
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryId(categoryId);
+        return new SubscribersResponse(categoryRoles);
+        // 구독자 목록을 조회할 때 CategoryRoleType도 함께 DTO에 포함해야하므로 CategoryRole 리스트를 가져와 DTO를 생성
     }
 
     @Transactional

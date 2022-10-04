@@ -1,7 +1,7 @@
 package com.allog.dallog.domain.member.dto.response;
 
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
-import com.allog.dallog.domain.member.domain.Member;
 
 public class MemberWithRoleTypeResponse {
 
@@ -11,9 +11,9 @@ public class MemberWithRoleTypeResponse {
     private MemberWithRoleTypeResponse() {
     }
 
-    public MemberWithRoleTypeResponse(final Member member, final CategoryRoleType categoryRoleType) {
-        this.member = new MemberResponse(member);
-        this.categoryRoleType = categoryRoleType;
+    public MemberWithRoleTypeResponse(final CategoryRole categoryRole) {
+        this.member = new MemberResponse(categoryRole.getMember());
+        this.categoryRoleType = categoryRole.getCategoryRoleType();
     }
 
     public MemberResponse getMember() {

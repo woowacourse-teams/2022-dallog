@@ -51,13 +51,13 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.response.MemberWithRoleTypeResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -659,13 +659,15 @@ class CategoryControllerTest extends ControllerTest {
         // given
         long categoryId = 10;
 
-        List<MemberWithRoleTypeResponse> subscribers = List.of(
-                new MemberWithRoleTypeResponse(매트(), NONE),
-                new MemberWithRoleTypeResponse(리버(), NONE),
-                new MemberWithRoleTypeResponse(파랑(), NONE),
-                new MemberWithRoleTypeResponse(후디(), NONE)
+        Category 카테고리 = 공통_일정(관리자());
+        List<CategoryRole> categoryRoles = List.of(
+                new CategoryRole(카테고리, 매트(), NONE),
+                new CategoryRole(카테고리, 리버(), NONE),
+                new CategoryRole(카테고리, 파랑(), NONE),
+                new CategoryRole(카테고리, 후디(), NONE)
         );
-        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(subscribers));
+
+        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(categoryRoles));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)

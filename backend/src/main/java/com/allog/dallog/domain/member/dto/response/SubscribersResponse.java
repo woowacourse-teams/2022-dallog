@@ -1,6 +1,6 @@
 package com.allog.dallog.domain.member.dto.response;
 
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,13 +11,13 @@ public class SubscribersResponse {
     private SubscribersResponse() {
     }
 
-    public SubscribersResponse(final List<MemberWithRoleTypeResponse> subscribers) {
-        this.subscribers = subscribers;
+    public SubscribersResponse(final List<CategoryRole> categoryRoles) {
+        this.subscribers = toResponses(categoryRoles);
     }
 
-    private List<MemberResponse> toMemberResponses(final List<Member> members) {
-        return members.stream()
-                .map(MemberResponse::new)
+    private List<MemberWithRoleTypeResponse> toResponses(final List<CategoryRole> categoryRoles) {
+        return categoryRoles.stream()
+                .map(MemberWithRoleTypeResponse::new)
                 .collect(Collectors.toList());
     }
 
