@@ -97,7 +97,7 @@ public class CategoryService {
 
     public CategoriesWithPageResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
+                = categoryRepository.findByNameContainingAndCategoryType(NORMAL, name, pageable).getContent();
 
         return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
     }
