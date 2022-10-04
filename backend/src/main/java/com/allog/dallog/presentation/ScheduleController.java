@@ -6,7 +6,7 @@ import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.MemberScheduleResponses;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
@@ -44,9 +44,17 @@ public class ScheduleController {
     }
 
     @GetMapping("/members/me/schedules")
-    public ResponseEntity<MemberScheduleResponses> findMyCheckedSchedules(
+    public ResponseEntity<IntegrationScheduleResponses> findMyCheckedSchedules(
             @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
-        MemberScheduleResponses response = checkedSchedulesFinder.findMyCheckedSchedules(loginMember.getId(), request);
+        IntegrationScheduleResponses response = checkedSchedulesFinder.findMyCheckedSchedules(loginMember.getId(),
+                request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/categories/{categoryId}/schedules")
+    public ResponseEntity<IntegrationScheduleResponses> findByCategoryId(@PathVariable final Long categoryId,
+                                                                         @ModelAttribute DateRangeRequest request) {
+        IntegrationScheduleResponses response = scheduleService.findByCategoryIdAndDateRange(categoryId, request);
         return ResponseEntity.ok(response);
     }
 

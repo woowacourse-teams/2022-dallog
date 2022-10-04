@@ -13,12 +13,24 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_네번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_두번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_세번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_첫번째_일정;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_시작일시;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_네번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_다섯번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_두번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_세번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.장기간_첫번째_요청;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_두번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_세번째_일정;
+import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_첫번째_일정;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
@@ -38,6 +50,8 @@ import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponse;
+import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
@@ -243,6 +257,47 @@ class ScheduleServiceTest extends ServiceTest {
                     assertThat(schedules.get(1).getCategoryType()).isEqualTo(NORMAL);
                 }
         );
+    }
+
+    @DisplayName("카테고리 별 통합 일정 정보를 조회한다.")
+    @Test
+    void 카테고리_별_통합_일정_정보를_조회한다() {
+        // given
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
+
+        /* 장기간 일정 */
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_첫번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_두번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_세번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_네번째_요청);
+        scheduleService.save(매트_id, BE_일정.getId(), 장기간_다섯번째_요청);
+
+        /* 종일 일정 */
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_첫번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_두번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 종일_세번째_일정);
+
+        /* 몇시간 일정 */
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_첫번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_두번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_세번째_일정);
+        scheduleService.save(매트_id, BE_일정.getId(), 몇시간_네번째_일정);
+
+        DateRangeRequest request = new DateRangeRequest("2022-07-01T00:00", "2022-08-15T23:59");
+
+        // when
+        IntegrationScheduleResponses actual = scheduleService.findByCategoryIdAndDateRange(BE_일정.getId(), request);
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.getLongTerms()).extracting(IntegrationScheduleResponse::getTitle)
+                    .contains("장기간 첫번째", "장기간 두번째", "장기간 세번째", "장기간 네번째", "장기간 다섯번째");
+            assertThat(actual.getAllDays()).extracting(IntegrationScheduleResponse::getTitle)
+                    .contains("종일 첫번째", "종일 두번째", "종일 세번째");
+            assertThat(actual.getFewHours()).extracting(IntegrationScheduleResponse::getTitle)
+                    .contains("몇시간 첫번째", "몇시간 두번째", "몇시간 세번째", "몇시간 네번째");
+        });
     }
 
     @DisplayName("일정을 수정한다.")

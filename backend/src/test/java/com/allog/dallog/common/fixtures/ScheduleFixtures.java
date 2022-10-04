@@ -60,6 +60,36 @@ public class ScheduleFixtures {
     public static final String 매고라_제목 = "매고라";
     public static final String 매고라_메모 = "매고라가 예정되어 있습니다.";
 
+    /* 장기간 일정 */
+    public static final ScheduleCreateRequest 장기간_첫번째_요청 = new ScheduleCreateRequest("장기간 첫번째", 날짜_2022년_7월_1일_0시_0분,
+            날짜_2022년_8월_15일_14시_0분, "");
+    public static final ScheduleCreateRequest 장기간_두번째_요청 = new ScheduleCreateRequest("장기간 두번째", 날짜_2022년_7월_1일_0시_0분,
+            날짜_2022년_7월_31일_0시_0분, "");
+    public static final ScheduleCreateRequest 장기간_세번째_요청 = new ScheduleCreateRequest("장기간 세번째", 날짜_2022년_7월_1일_0시_0분,
+            날짜_2022년_7월_16일_16시_1분, "");
+    public static final ScheduleCreateRequest 장기간_네번째_요청 = new ScheduleCreateRequest("장기간 네번째", 날짜_2022년_7월_7일_16시_0분,
+            날짜_2022년_7월_15일_16시_0분, "");
+    public static final ScheduleCreateRequest 장기간_다섯번째_요청 = new ScheduleCreateRequest("장기간 다섯번째", 날짜_2022년_7월_31일_0시_0분,
+            날짜_2022년_8월_15일_17시_0분, "");
+
+    /* 종일 일정 */
+    public static final ScheduleCreateRequest 종일_첫번째_일정 = new ScheduleCreateRequest("종일 첫번째", 날짜_2022년_7월_10일_0시_0분,
+            날짜_2022년_7월_11일_0시_0분, "");
+    public static final ScheduleCreateRequest 종일_두번째_일정 = new ScheduleCreateRequest("종일 두번째", 날짜_2022년_7월_20일_0시_0분,
+            날짜_2022년_7월_21일_0시_0분, "");
+    public static final ScheduleCreateRequest 종일_세번째_일정 = new ScheduleCreateRequest("종일 세번째", 날짜_2022년_7월_27일_0시_0분,
+            날짜_2022년_7월_28일_0시_0분, "");
+
+    /* 몇시간 일정 */
+    public static final ScheduleCreateRequest 몇시간_첫번째_일정 = new ScheduleCreateRequest("몇시간 첫번째", 날짜_2022년_7월_16일_16시_0분,
+            날짜_2022년_7월_16일_20시_0분, "");
+    public static final ScheduleCreateRequest 몇시간_두번째_일정 = new ScheduleCreateRequest("몇시간 두번째", 날짜_2022년_7월_16일_16시_0분,
+            날짜_2022년_7월_16일_18시_0분, "");
+    public static final ScheduleCreateRequest 몇시간_세번째_일정 = new ScheduleCreateRequest("몇시간 세번째", 날짜_2022년_7월_16일_16시_0분,
+            날짜_2022년_7월_16일_16시_1분, "");
+    public static final ScheduleCreateRequest 몇시간_네번째_일정 = new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분,
+            날짜_2022년_7월_16일_18시_0분, "");
+
     public static Schedule 알록달록_회의(final Category category) {
         return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
     }
