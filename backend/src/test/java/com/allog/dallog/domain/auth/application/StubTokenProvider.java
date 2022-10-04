@@ -23,21 +23,17 @@ public class StubTokenProvider implements TokenProvider {
 
     @Override
     public String createAccessToken(final String payload) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
-
-        return Jwts.builder()
-                .setSubject(payload)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        return createToken(payload, accessTokenValidityInMilliseconds);
     }
 
     @Override
     public String createRefreshToken(final String payload) {
+        return createToken(payload, refreshTokenValidityInMilliseconds);
+    }
+
+    private String createToken(final String payload, final Long validityInMilliseconds) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(payload)
