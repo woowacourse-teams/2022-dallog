@@ -1,13 +1,10 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { useInfiniteQuery, useQuery } from 'react-query';
-import { useRecoilValue } from 'recoil';
+import { useInfiniteQuery } from 'react-query';
 
+import { useGetSubscriptions } from '@/hooks/@queries/subscription';
 import useIntersect from '@/hooks/useIntersect';
 
 import { CategoriesGetResponseType } from '@/@types/category';
-import { SubscriptionType } from '@/@types/subscription';
-
-import { userState } from '@/recoil/atoms';
 
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
@@ -15,7 +12,6 @@ import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/Unsu
 import { API, CACHE_KEY } from '@/constants/api';
 
 import categoryApi from '@/api/category';
-import subscriptionApi from '@/api/subscription';
 
 import {
   categoryTableHeaderStyle,
@@ -29,8 +25,6 @@ interface CategoryListProps {
 }
 
 function CategoryList({ keyword }: CategoryListProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const {
     error: categoriesGetError,
     data: categoriesGetResponse,
@@ -48,10 +42,7 @@ function CategoryList({ keyword }: CategoryListProps) {
     }
   );
 
-  const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useQuery<
-    AxiosResponse<SubscriptionType[]>,
-    AxiosError
-  >(CACHE_KEY.SUBSCRIPTIONS, () => subscriptionApi.get(accessToken));
+  const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useGetSubscriptions({});
 
   const ref = useIntersect(() => {
     hasNextPage && fetchNextPage();

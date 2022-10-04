@@ -1,11 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
-
+import { usePatchSubscription } from '@/hooks/@queries/subscription';
 import useModalPosition from '@/hooks/useModalPosition';
 
 import { SubscriptionType } from '@/@types/subscription';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
@@ -13,8 +9,6 @@ import Spinner from '@/components/@common/Spinner/Spinner';
 import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/SubscriptionModifyModal';
 
 import { TRANSPARENT } from '@/constants/style';
-
-import subscriptionApi from '@/api/subscription';
 
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdMoreVert } from 'react-icons/md';
 
@@ -31,17 +25,9 @@ interface SideItemProps {
 }
 
 function SideItem({ subscription }: SideItemProps) {
-  const user = useRecoilValue(userState);
-
-  const queryClient = useQueryClient();
-
-  const { isLoading, mutate: patchSubscription } = useMutation(
-    (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
-      subscriptionApi.patch(user.accessToken, subscription.id, body),
-    {
-      onSuccess: () => queryClient.invalidateQueries(),
-    }
-  );
+  const { isLoading, mutate: patchSubscription } = usePatchSubscription({
+    subscriptionId: subscription.id,
+  });
 
   const { isModalOpen, toggleModalOpen, handleClickOpen, modalPos } = useModalPosition();
 
