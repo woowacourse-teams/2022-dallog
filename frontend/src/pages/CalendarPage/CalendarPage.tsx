@@ -100,13 +100,11 @@ function CalendarPage() {
       <PageLayout>
         <div css={calendarPage}>
           <div css={calendarHeader}>
-            <span>
-              {currentYear}년 {currentMonth}월
-            </span>
+            {currentYear}년 {currentMonth}월
             <div css={waitingNavStyle}>
               <div css={spinnerStyle}>
                 <Spinner size={4} />
-                <span>일정을 가져오고 있습니다.</span>
+                일정을 가져오고 있습니다.
               </div>
               <div css={monthPicker}>
                 <Button cssProp={navButton} onClick={moveToBeforeMonth}>
@@ -125,7 +123,7 @@ function CalendarPage() {
           </div>
           <div css={navBarGrid}>
             {DAYS.map((day) => (
-              <span key={`${day}#day`} css={dayBar(theme, day)}>
+              <span key={`day#${day}`} css={dayBar(theme, day)}>
                 {day}
               </span>
             ))}
@@ -185,9 +183,7 @@ function CalendarPage() {
     <PageLayout>
       <div css={calendarPage}>
         <div css={calendarHeader}>
-          <span>
-            {currentYear}년 {currentMonth}월
-          </span>
+          {currentYear}년 {currentMonth}월
           <div css={monthPicker}>
             <Button cssProp={navButton} onClick={moveToBeforeMonth}>
               <MdKeyboardArrowLeft />
