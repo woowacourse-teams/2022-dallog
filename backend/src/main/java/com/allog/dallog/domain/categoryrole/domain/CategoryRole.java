@@ -80,14 +80,4 @@ public class CategoryRole extends BaseEntity {
     public CategoryRoleType getCategoryRoleType() {
         return categoryRoleType;
     }
-
-    @Override
-    public String toString() {
-        return "CategoryRole{" +
-                "id=" + id +
-                ", category=" + category +
-                ", member=" + member +
-                ", categoryRoleType=" + categoryRoleType +
-                '}';
-    }
 }
