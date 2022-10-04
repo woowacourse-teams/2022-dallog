@@ -6,7 +6,7 @@ public enum CategoryAuthority {
     ADD_SCHEDULE("일정 추가"),
     UPDATE_SCHEDULE("일정 수정"),
     DELETE_SCHEDULE("일정 제거"),
-    MANAGE_ROLE("역할 변경"),
+    CHANGE_ROLE_OF_SUBSCRIBER("역할 변경"),
     FIND_SUBSCRIBERS("카테고리 구독자 조회");
 
     private final String name;

@@ -558,7 +558,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         Long memberId = 2L;
 
-        willThrow(new NoCategoryAuthorityException(CategoryAuthority.MANAGE_ROLE))
+        willThrow(new NoCategoryAuthorityException(CategoryAuthority.CHANGE_ROLE_OF_SUBSCRIBER))
                 .willDoNothing()
                 .given(categoryRoleService)
                 .updateRole(any(), any(), any(), any());
