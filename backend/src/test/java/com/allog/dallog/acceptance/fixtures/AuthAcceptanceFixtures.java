@@ -1,5 +1,6 @@
 package com.allog.dallog.acceptance.fixtures;
 
+import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import io.restassured.RestAssured;
@@ -41,6 +42,17 @@ public class AuthAcceptanceFixtures {
                 .as(TokenResponse.class);
 
         return tokenResponse.getAccessToken();
+    }
+
+    public static ExtractableResponse<Response> 리프레시_토큰을_통해_새로운_엑세스_토큰을_생성한다(
+            final TokenRenewalRequest tokenRenewalRequest) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(tokenRenewalRequest)
+                .when().post("/api/auth/token/access")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
     }
 
     public static ExtractableResponse<Response> 토큰이_유효한지_검증한다(final String accessToken) {
