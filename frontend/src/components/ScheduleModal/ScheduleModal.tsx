@@ -1,7 +1,8 @@
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 
+import { useDeleteSchedule } from '@/hooks/@queries/schedule';
 import useUserValue from '@/hooks/useUserValue';
 
 import { ModalPosType } from '@/@types';
@@ -15,7 +16,6 @@ import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
 
 import {
   MdClose,
@@ -55,24 +55,15 @@ function ScheduleModal({
 
   const theme = useTheme();
 
-  const queryClient = useQueryClient();
   const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
     CACHE_KEY.CATEGORY,
     () => categoryApi.getSingle(scheduleInfo.categoryId)
   );
 
-  const { mutate } = useMutation<AxiosResponse, AxiosError>(
-    () => scheduleApi.delete(user.accessToken, scheduleInfo.id),
-    {
-      onSuccess: () => onSuccessDeleteSchedule(),
-    }
-  );
-
-  const onSuccessDeleteSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-
-    closeModal();
-  };
+  const { mutate } = useDeleteSchedule({
+    scheduleId: scheduleInfo.id,
+    onSuccess: () => closeModal(),
+  });
 
   const handleClickModifyButton = () => {
     closeModal();

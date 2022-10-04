@@ -1,17 +1,13 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useRef, useState } from 'react';
-import { useQuery } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
-import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
-
-import { userState } from '@/recoil/atoms';
+import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
@@ -24,13 +20,10 @@ import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
 import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
 import { CALENDAR } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, DAYS } from '@/constants/date';
 import { SCHEDULE, TRANSPARENT } from '@/constants/style';
 
 import { extractDateTime, getDayOffsetDateTime, getISODateString, getToday } from '@/utils/date';
-
-import scheduleApi from '@/api/schedule';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
@@ -54,8 +47,6 @@ import {
 } from './CalendarPage.styles';
 
 function CalendarPage() {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const dateRef = useRef<HTMLDivElement>(null);
@@ -85,10 +76,7 @@ function CalendarPage() {
   const scheduleModal = useModalPosition();
   const moreScheduleModal = useModalPosition();
 
-  const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
-    [CACHE_KEY.SCHEDULES, currentDateTime],
-    () => scheduleApi.get(accessToken, startDateTime, endDateTime)
-  );
+  const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
