@@ -29,9 +29,9 @@ security:
     token:
       secret-key: fsmjgbdafmjgbasmfgadbsgmadfhgbfamjghbvmssdgsdfgdf
       access:
-        expire-length: 3_600_000 #1시간
+        expire-length: 3600000 #1시간
       refresh:
-        expire-length: 1_210_000_000 #14일
+        expire-length: 1210000000 #14일
 
 oauth:
   google:
