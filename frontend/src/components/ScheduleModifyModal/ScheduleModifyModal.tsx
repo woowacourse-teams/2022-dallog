@@ -2,9 +2,10 @@ import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import { usePatchSchedule } from '@/hooks/@queries/schedules';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
 
@@ -31,7 +32,6 @@ import {
 } from '@/utils/date';
 
 import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
 
 import {
   arrowStyle,
@@ -63,30 +63,19 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
-  const queryClient = useQueryClient();
-
   const { data: categoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
     () => categoryApi.getMy(accessToken)
   );
 
-  const { mutate } = useMutation<
-    AxiosResponse,
-    AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
-    unknown
-  >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
-    onSuccess: () => onSuccessPatchSchedule(),
+  const { mutate } = usePatchSchedule({
+    scheduleId: scheduleInfo.id,
+    onSuccess: () => closeModal(),
   });
 
   const categoryId = useControlledInput(
     categoriesGetResponse?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
   );
-
-  const onSuccessPatchSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-    closeModal();
-  };
 
   const [startDate, startTime] = scheduleInfo.startDateTime.split('T');
   const [endDate, endTime] = scheduleInfo.endDateTime.split('T');

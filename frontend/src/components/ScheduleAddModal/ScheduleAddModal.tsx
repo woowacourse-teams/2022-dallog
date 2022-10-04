@@ -2,15 +2,14 @@ import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import { usePostSchedule } from '@/hooks/@queries/schedules';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
 
-import { CalendarType } from '@/@types/calendar';
 import { CategoryType } from '@/@types/category';
-import { ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
@@ -24,7 +23,6 @@ import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
 import {
-  getDate,
   getEndTime,
   getISODateString,
   getISOString,
@@ -33,7 +31,6 @@ import {
 } from '@/utils/date';
 
 import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
 
 import {
   arrow,
@@ -64,8 +61,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const [isAllDay, setAllDay] = useState(true);
 
-  const queryClient = useQueryClient();
-
   const { isLoading: isGetCategoryLoading, data } = useQuery<
     AxiosResponse<CategoryType[]>,
     AxiosError
@@ -73,15 +68,9 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const categoryId = useControlledInput(String(data?.data[0].id));
 
-  const { mutate: postSchedule } = useMutation<
-    AxiosResponse<{ schedules: ScheduleType[] }>,
-    AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
-    unknown
-  >((body) => scheduleApi.post(accessToken, Number(categoryId.inputValue), body), {
-    onSuccess: () => {
-      onSuccessPostSchedule();
-    },
+  const { mutate: postSchedule } = usePostSchedule({
+    categoryId: categoryId.inputValue,
+    onSuccess: () => closeModal(),
   });
 
   const validationSchedule = useValidateSchedule({
@@ -112,12 +101,6 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     };
 
     postSchedule(body);
-  };
-
-  const onSuccessPostSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-
-    closeModal();
   };
 
   if (isGetCategoryLoading || data === undefined) {
