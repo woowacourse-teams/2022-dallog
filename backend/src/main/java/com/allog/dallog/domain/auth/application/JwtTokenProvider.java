@@ -33,12 +33,7 @@ public class JwtTokenProvider implements TokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
 
-        return Jwts.builder()
-                .setSubject(payload)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        return createToken(payload, now, validity);
     }
 
     @Override
@@ -46,6 +41,10 @@ public class JwtTokenProvider implements TokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
 
+        return createToken(payload, now, validity);
+    }
+
+    private String createToken(final String payload, final Date now, final Date validity) {
         return Jwts.builder()
                 .setSubject(payload)
                 .setIssuedAt(now)
