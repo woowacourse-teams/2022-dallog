@@ -9,8 +9,6 @@ import Button from '@/components/@common/Button/Button';
 
 import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
-import { getISODateString } from '@/utils/date';
-
 import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCategoryItem.styles';
 
 interface SubscribedCategoryItemProps {
@@ -35,7 +33,6 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
 
   return (
     <div css={categoryItem}>
-      <span css={item}>{getISODateString(category.createdAt)}</span>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

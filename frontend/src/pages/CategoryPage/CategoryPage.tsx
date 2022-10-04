@@ -58,13 +58,13 @@ function CategoryPage() {
               <MdSearch size={16} />
             </Button>
             <Fieldset
-              placeholder="카테고리 이름 검색"
+              placeholder="제목 검색"
               cssProp={{ div: searchFieldsetStyle, input: searchInputStyle }}
               refProp={keywordRef}
             />
           </form>
           <Button cssProp={buttonStyle(theme)} onClick={handleClickCategoryAddButton}>
-            카테고리 추가
+            추가
           </Button>
         </div>
         <Suspense fallback={<CategoryListFallback />}>
