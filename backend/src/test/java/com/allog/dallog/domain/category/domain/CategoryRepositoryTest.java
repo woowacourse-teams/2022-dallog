@@ -139,7 +139,6 @@ class CategoryRepositoryTest extends RepositoryTest {
         });
     }
 
-
     @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 있으면 true를 반환한다.")
     @Test
     void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_있으면_true를_반환한다() {

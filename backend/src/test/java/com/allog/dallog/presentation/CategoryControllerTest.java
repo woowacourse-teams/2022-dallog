@@ -46,9 +46,10 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
+import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
-import com.allog.dallog.domain.categoryrole.exception.NoPermissionToManageRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
 import java.util.List;
@@ -501,7 +502,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         Long memberId = 2L;
 
-        willThrow(new NoPermissionToManageRoleException())
+        willThrow(new NoCategoryAuthorityException(CategoryAuthority.MANAGE_ROLE))
                 .willDoNothing()
                 .given(categoryRoleService)
                 .updateRole(any(), any(), any(), any());

@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.schedule.application;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.매트_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
@@ -19,6 +20,8 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,6 +31,9 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
@@ -53,9 +59,12 @@ class ScheduleServiceTest extends ServiceTest {
     @Autowired
     private SubscriptionService subscriptionService;
 
-    @DisplayName("새로운 일정을 생성한다.")
+    @Autowired
+    private CategoryRoleService categoryRoleService;
+
+    @DisplayName("ADMIN 역할의 멤버는 카테고리에 새로운 일정을 생성할 수 있다.")
     @Test
-    void 새로운_일정을_생성한다() {
+    void ADMIN_역할의_멤버는_카테고리에_새로운_일정을_생성할_수_있다() {
         // given & when
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
@@ -63,6 +72,39 @@ class ScheduleServiceTest extends ServiceTest {
 
         // then
         assertThat(알록달록_회의.getTitle()).isEqualTo(알록달록_회의_제목);
+    }
+
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 생성할 시 예외가 발생한다.")
+    @Test
+    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_생성할_시_예외가_발생한다() {
+        // given
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(매트_id, BE_일정.getId());
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.save(매트_id, BE_일정.getId(), 알록달록_회의_생성_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 ADMIN 역할이 아니라면 새로운 일정을 생성할 시 예외가 발생한다.")
+    @Test
+    void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_생성할_시_예외가_발생한다() {
+        // given
+        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+
+        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(매트_id, BE_일정.getId());
+
+        categoryRoleService.updateRole(후디_id, 매트_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(매트_id, 후디_id, BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("새로운 일정을 생성 할 떄 일정 제목의 길이가 50을 초과하는 경우 예외를 던진다.")
@@ -111,23 +153,6 @@ class ScheduleServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> scheduleService.save(후디_id, BE_일정.getId(), 일정_생성_요청)).
                 isInstanceOf(InvalidScheduleException.class);
-    }
-
-    @DisplayName("일정 생성 요청자가 카테고리의 생성자가 아닌경우 예외를 던진다")
-    @Test
-    void 일정_생성_요청자가_카테고리의_생성자가_아닌경우_예외를_던진다() {
-        // given
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-
-        LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
-        LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
-        ScheduleCreateRequest 일정_생성_요청 = new ScheduleCreateRequest(알록달록_회의_제목, 시작일시, 종료일시, 알록달록_회의_메모);
-
-        // when & then
-        assertThatThrownBy(() -> scheduleService.save(리버_id, BE_일정.getId(), 일정_생성_요청)).
-                isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("일정 생성시 전달한 카테고리가 존재하지 않는다면 예외를 던진다.")
@@ -247,21 +272,45 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("일정 수정 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 수정할 시 예외가 발생한다.")
     @Test
-    void 일정_수정_시_일정의_카테고리에_대한_권한이_없을_경우_예외가_발생한다() {
+    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_수정할_시_예외가_발생한다() {
         // given
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long 카테고리_관리자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_관리자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_구독자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_구독자_id, BE_일정.getId());
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
                 레벨_인터뷰_메모);
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 리버_id, 일정_수정_요청))
-                .isInstanceOf(NoPermissionException.class);
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 카테고리_구독자_id, 일정_수정_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 ADMIN 역할이 아니라면 새로운 일정을 수정할 시 예외가 발생한다.")
+    @Test
+    void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_수정할_시_예외가_발생한다() {
+        // given
+        Long 카테고리_생성자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_생성자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_생성자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_관리자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_관리자_id, BE_일정.getId());
+
+        categoryRoleService.updateRole(카테고리_생성자_id, 카테고리_관리자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(카테고리_관리자_id, 카테고리_생성자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
+                레벨_인터뷰_메모);
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.update(기존_일정.getId(), 카테고리_생성자_id, 일정_수정_요청))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("일정 수정 시 존재하지 않은 일정일 경우 예외가 발생한다.")
@@ -309,9 +358,9 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("일정을 삭제한다.")
+    @DisplayName("ADMIN 역할의 멤버는 카테고리의 일정을 삭제할 수 있다.")
     @Test
-    void 일정을_삭제한다() {
+    void AMDIN_역할의_멤버는_카테고리의_일정을_삭제할_수_있다() {
         // given
         Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
@@ -325,18 +374,39 @@ class ScheduleServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
-    @DisplayName("일정 삭제 시 일정의 카테고리에 대한 권한이 없을 경우 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 삭제할 시 예외가 발생한다.")
     @Test
-    void 일정_삭제_시_일정의_카테고리에_대한_권한이_없을_경우_예외가_발생한다() {
+    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_삭제할_시_예외가_발생한다() {
         // given
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-        ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+        Long 카테고리_관리자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_관리자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_구독자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_구독자_id, BE_일정.getId());
 
         // when & then
-        assertThatThrownBy(() -> scheduleService.delete(알록달록_회의.getId(), 리버_id))
-                .isInstanceOf(NoPermissionException.class);
+        assertThatThrownBy(() -> scheduleService.delete(기존_일정.getId(), 카테고리_구독자_id))
+                .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리 생성자라도 ADMIN 역할이 아니라면 새로운 일정을 삭제할 시 예외가 발생한다.")
+    @Test
+    void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_삭제할_시_예외가_발생한다() {
+        // given
+        Long 카테고리_생성자_id = parseMemberId(후디_인증_코드_토큰_요청());
+        CategoryResponse BE_일정 = categoryService.save(카테고리_생성자_id, BE_일정_생성_요청);
+        ScheduleResponse 기존_일정 = scheduleService.save(카테고리_생성자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
+
+        Long 카테고리_관리자_id = parseMemberId(매트_인증_코드_토큰_요청());
+        subscriptionService.save(카테고리_관리자_id, BE_일정.getId());
+
+        categoryRoleService.updateRole(카테고리_생성자_id, 카테고리_관리자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
+        categoryRoleService.updateRole(카테고리_관리자_id, 카테고리_생성자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
+
+        // when & then
+        assertThatThrownBy(() -> scheduleService.delete(기존_일정.getId(), 카테고리_생성자_id))
+                .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
     @DisplayName("일정 삭제 시 존재하지 않은 일정일 경우 예외가 발생한다.")

@@ -13,6 +13,7 @@ import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateReques
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
+import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
@@ -110,17 +111,22 @@ public class CategoryService {
 
     @Transactional
     public void update(final Long memberId, final Long id, final CategoryUpdateRequest request) {
-        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
         Category category = categoryRepository.getById(id);
+
+        CategoryRole role = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, category.getId());
+        role.validateAuthority(CategoryAuthority.UPDATE_CATEGORY);
+
         category.changeName(request.getName());
     }
 
     @Transactional
     public void delete(final Long memberId, final Long id) {
-        categoryRepository.validateExistsByIdAndMemberId(id, memberId);
         Category category = categoryRepository.getById(id);
 
         validateNotPersonalCategory(category);
+
+        CategoryRole role = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, category.getId());
+        role.validateAuthority(CategoryAuthority.DELETE_CATEGORY);
 
         scheduleRepository.deleteByCategoryIdIn(List.of(id));
         subscriptionRepository.deleteByCategoryIdIn(List.of(id));
