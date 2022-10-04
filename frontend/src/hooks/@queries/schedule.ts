@@ -51,7 +51,7 @@ function useGetSchedules({ startDateTime, endDateTime }: useGetSchedulesProps) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
-    [CACHE_KEY.SCHEDULES],
+    [CACHE_KEY.SCHEDULES, startDateTime, endDateTime],
     () => scheduleApi.get(accessToken, startDateTime, endDateTime)
   );
 
