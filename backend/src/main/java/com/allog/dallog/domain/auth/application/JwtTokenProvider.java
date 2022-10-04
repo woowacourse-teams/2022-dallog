@@ -30,21 +30,18 @@ public class JwtTokenProvider implements TokenProvider {
 
     @Override
     public String createAccessToken(final String payload) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
-
-        return createToken(payload, now, validity);
+        return createToken(payload, accessTokenValidityInMilliseconds);
     }
 
     @Override
     public String createRefreshToken(final String payload) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
-
-        return createToken(payload, now, validity);
+        return createToken(payload, refreshTokenValidityInMilliseconds);
     }
 
-    private String createToken(final String payload, final Date now, final Date validity) {
+    private String createToken(final String payload, final Long validityInMilliseconds) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
         return Jwts.builder()
                 .setSubject(payload)
                 .setIssuedAt(now)
