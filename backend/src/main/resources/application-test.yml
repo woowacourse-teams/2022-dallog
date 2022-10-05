@@ -28,7 +28,10 @@ security:
   jwt:
     token:
       secret-key: fsmjgbdafmjgbasmfgadbsgmadfhgbfamjghbvmssdgsdfgdf
-      expire-length: 3600000
+      access:
+        expire-length: 3600000 #1시간
+      refresh:
+        expire-length: 1210000000 #14일
 
 oauth:
   google:

@@ -72,14 +72,14 @@ public class AuthService {
 
     private TokenResponse createTokenResponse(final Member member) {
         Long memberId = member.getId();
-        String accessToken = tokenProvider.createToken(String.valueOf(memberId));
+        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
 
         if (tokenRepository.exist(memberId)) {
             String refreshToken = tokenRepository.getToken(memberId);
             return new TokenResponse(accessToken, refreshToken);
         }
 
-        String refreshToken = tokenProvider.createToken(String.valueOf(memberId));
+        String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
         tokenRepository.save(memberId, refreshToken);
         return new TokenResponse(accessToken, refreshToken);
     }
