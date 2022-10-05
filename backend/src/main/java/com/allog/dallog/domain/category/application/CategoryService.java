@@ -1,6 +1,9 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -11,6 +14,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
@@ -25,6 +29,7 @@ import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +77,7 @@ public class CategoryService {
     }
 
     private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
-        CategoryRole categoryRole = new CategoryRole(category, member, CategoryRoleType.ADMIN);
+        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
         categoryRoleRepository.save(categoryRole);
     }
 
@@ -90,18 +95,31 @@ public class CategoryService {
         return response;
     }
 
-    public CategoriesResponse findNormalByName(final String name, final Pageable pageable) {
+    public CategoriesWithPageResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
 
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
+        return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
     }
 
-    public CategoriesResponse findMyCategories(final Long memberId, final String name, final Pageable pageable) {
+    public CategoriesWithPageResponse findMyCategories(final Long memberId, final String name,
+                                                       final Pageable pageable) {
         List<Category> categories
                 = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
 
-        return new CategoriesResponse(pageable.getPageNumber(), categories);
+        return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
+    }
+
+    // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
+    public CategoriesResponse findScheduleEditableCategories(final Long memberId) {
+        Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes);
+        return new CategoriesResponse(categories);
+    }
+
+    public CategoriesResponse findAdminCategories(final Long memberId) {
+        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, Set.of(ADMIN));
+        return new CategoriesResponse(categories);
     }
 
     public CategoryResponse findById(final Long id) {

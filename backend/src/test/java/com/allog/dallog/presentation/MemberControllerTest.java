@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -13,8 +13,8 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.domain.member.dto.MemberResponse;
-import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

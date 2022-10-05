@@ -1,13 +1,17 @@
 package com.allog.dallog.domain.member.application;
 
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
+
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.dto.MemberResponse;
-import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
+import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
@@ -49,6 +53,14 @@ public class MemberService {
 
         Member member = subscription.getMember();
         return new MemberResponse(member);
+    }
+
+    public SubscribersResponse findSubscribers(final Long loginMemberId, final Long categoryId) {
+        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(loginMemberId, categoryId);
+        categoryRole.validateAuthority(FIND_SUBSCRIBERS);
+
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryId(categoryId);
+        return new SubscribersResponse(categoryRoles);
     }
 
     @Transactional

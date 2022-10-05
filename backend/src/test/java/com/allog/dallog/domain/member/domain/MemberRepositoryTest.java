@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,12 @@ class MemberRepositoryTest extends RepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @DisplayName("중복된 이메일이 존재하는 경우 true를 반환한다.")
     @Test

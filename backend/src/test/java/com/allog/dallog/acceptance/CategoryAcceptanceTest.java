@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.fixtures.OAuthFixtures;
-import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import io.restassured.response.ExtractableResponse;
@@ -77,13 +77,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(1, 3);
-        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getPage()).isEqualTo(1);
-            assertThat(categoriesResponse.getCategories()).hasSize(2);
+            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(1);
+            assertThat(categoriesWithPageResponse.getCategories()).hasSize(2);
         });
     }
 
@@ -100,13 +100,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("일", 0, 3);
-        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesResponse.getCategories()).hasSize(3);
+            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
+            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
         });
     }
 
@@ -124,12 +124,12 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("", 0, 10);
-        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getCategories()).hasSize(3);
+            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
         });
     }
 
@@ -145,13 +145,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> response
                 = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "", 0, 3);
-        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesResponse.getCategories()).hasSize(3);
+            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
+            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
         });
     }
 
@@ -169,13 +169,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> response
                 = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "일", 0, 2);
-        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
+        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesResponse.getCategories()).hasSize(2);
+            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
+            assertThat(categoriesWithPageResponse.getCategories()).hasSize(2);
         });
     }
 

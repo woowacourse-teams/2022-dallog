@@ -34,7 +34,7 @@ public class CategoryRoleService {
     private void validateAuthority(final Long loginMemberId, final Long categoryId) {
         CategoryRole loginMemberCategoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(loginMemberId,
                 categoryId);
-        loginMemberCategoryRole.validateAuthority(CategoryAuthority.MANAGE_ROLE);
+        loginMemberCategoryRole.validateAuthority(CategoryAuthority.CHANGE_ROLE_OF_SUBSCRIBER);
     }
 
     private void validateSoleAdmin(final Long memberId, final Long categoryId) {
