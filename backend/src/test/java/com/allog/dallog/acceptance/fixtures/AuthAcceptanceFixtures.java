@@ -49,7 +49,7 @@ public class AuthAcceptanceFixtures {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(tokenRenewalRequest)
-                .when().get("/api/auth/token/access")
+                .when().post("/api/auth/token/access")
                 .then().log().all()
                 .extract();
     }

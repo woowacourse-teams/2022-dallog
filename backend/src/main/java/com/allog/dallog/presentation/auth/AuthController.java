@@ -41,7 +41,7 @@ public class AuthController {
         return ResponseEntity.ok(tokenResponse);
     }
 
-    @GetMapping("/token/access")
+    @PostMapping("/token/access")
     public ResponseEntity<TokenRenewalResponse> generateAccessToken(
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
         TokenRenewalResponse tokenRenewalResponse = authService.generateAccessToken(tokenRenewalRequest);

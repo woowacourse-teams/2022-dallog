@@ -1,6 +1,8 @@
 package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_리뉴얼_토큰_요청;
+import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_리뉴얼_토큰_응답;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_응답;
 import static com.allog.dallog.common.fixtures.AuthFixtures.OAUTH_PROVIDER;
@@ -76,7 +78,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/generateToken",
+                .andDo(document("auth/generateTokens",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -120,5 +122,32 @@ class AuthControllerTest extends ControllerTest {
                         )
                 ))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @DisplayName("리프레시 토큰을 통해 새로운 엑세스 토큰을 발급하면 상태코드 200을 반환한다.")
+    @Test
+    void 리프레시_토큰을_통해_새로운_엑세스_토큰을_발급하면_상태코드_200을_반환한다() throws Exception {
+        // given
+        given(authService.generateAccessToken(any())).willReturn(MEMBER_리뉴얼_토큰_응답());
+
+        // when & then
+        mockMvc.perform(post("/api/auth/token/access")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(MEMBER_리뉴얼_토큰_요청())))
+                .andDo(print())
+                .andDo(document("auth/generateRenewalToken",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                        .description("OAuth 자동 로그인 인증 코드")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING)
+                                        .description("달록 Renewal Access Token")
+                        )
+                ))
+                .andExpect(status().isOk());
     }
 }
