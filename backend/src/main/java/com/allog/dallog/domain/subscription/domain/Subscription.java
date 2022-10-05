@@ -56,7 +56,7 @@ public class Subscription extends BaseEntity {
     }
 
     public void validateDeletePossible(final Long memberId) {
-        if (!member.getId().equals(memberId)) {
+        if (!member.hasSameId(memberId)) {
             throw new NoPermissionException("타인의 구독 정보에 접근할 수 없습니다.");
         }
     }
