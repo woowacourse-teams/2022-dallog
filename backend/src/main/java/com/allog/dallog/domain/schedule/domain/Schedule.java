@@ -21,8 +21,8 @@ public class Schedule extends BaseEntity {
     private static final int MAX_TITLE_LENGTH = 50;
     private static final int MAX_MEMO_LENGTH = 255;
 
-    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
-    private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999);
+    private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
+    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,7 +88,7 @@ public class Schedule extends BaseEntity {
     }
 
     private boolean isValidDateTimeRange(final LocalDateTime dateTime) {
-        return dateTime.isBefore(MIN_DATE_TIME) || dateTime.isAfter(MAX_DATE_TIME);
+        return dateTime.isBefore(MAX_DATE_TIME) || dateTime.isAfter(MIN_DATE_TIME);
     }
 
     private void validateMemoLength(final String memo) {
