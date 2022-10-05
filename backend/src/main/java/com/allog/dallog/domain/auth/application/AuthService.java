@@ -2,6 +2,7 @@ package com.allog.dallog.domain.auth.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
+import com.allog.dallog.domain.auth.domain.DallogToken;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
@@ -37,12 +38,14 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final ColorPicker colorPicker;
     private final TokenRepository tokenRepository;
+    private final DallogTokenManager dallogTokenManager;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                        final OAuthTokenRepository oAuthTokenRepository,
                        final SubscriptionRepository subscriptionRepository, final OAuthUri oAuthUri,
                        final OAuthClient oAuthClient, final TokenProvider tokenProvider,
-                       final ColorPicker colorPicker, final TokenRepository tokenRepository) {
+                       final ColorPicker colorPicker, final TokenRepository tokenRepository,
+                       final DallogTokenManager dallogTokenManager) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
@@ -52,6 +55,7 @@ public class AuthService {
         this.tokenProvider = tokenProvider;
         this.colorPicker = colorPicker;
         this.tokenRepository = tokenRepository;
+        this.dallogTokenManager = dallogTokenManager;
     }
 
     public String generateGoogleLink(final String redirectUri) {
@@ -67,9 +71,10 @@ public class AuthService {
         Member foundMember = findMember(oAuthMember);
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
-        oAuthToken.change(oAuthMember.getRefreshToken());
+        oAuthToken.change(oAuthMember.getRefreshToken()); // 의견 제시 할 부분!
 
-        return createTokenResponse(foundMember);
+        DallogToken dallogToken = dallogTokenManager.createDallogToken(foundMember.getId());
+        return new AccessAndRefreshTokenResponse(dallogToken.getAccessToken(), dallogToken.getRefreshToken());
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
@@ -89,26 +94,12 @@ public class AuthService {
         return savedMember;
     }
 
-    private AccessAndRefreshTokenResponse createTokenResponse(final Member member) {
+    private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
         Long memberId = member.getId();
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
-
-        if (tokenRepository.exist(memberId)) {
-            String refreshToken = tokenRepository.getToken(memberId);
-            return new AccessAndRefreshTokenResponse(accessToken, refreshToken);
+        if (oAuthTokenRepository.existsByMemberId(memberId)) {
+            return oAuthTokenRepository.getByMemberId(memberId);
         }
-
-        String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
-        tokenRepository.save(memberId, refreshToken);
-        return new AccessAndRefreshTokenResponse(accessToken, refreshToken);
-    }
-
-    private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member foundMember) {
-        if (oAuthTokenRepository.existsByMemberId(foundMember.getId())) {
-            return oAuthTokenRepository.getByMemberId(foundMember.getId());
-        }
-
-        return oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
+        return oAuthTokenRepository.save(new OAuthToken(member, oAuthMember.getRefreshToken()));
     }
 
     public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {

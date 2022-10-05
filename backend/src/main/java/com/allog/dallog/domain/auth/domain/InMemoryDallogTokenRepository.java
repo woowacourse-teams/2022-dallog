@@ -5,13 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InMemoryTokenRepository implements TokenRepository {
+public class InMemoryDallogTokenRepository implements TokenRepository {
 
     private static final Map<Long, String> TOKEN_REPOSITORY = new ConcurrentHashMap<>();
 
     @Override
-    public void save(final Long memberId, final String refreshToken) {
-        TOKEN_REPOSITORY.put(memberId, refreshToken);
+    public String save(final Long memberId, final String refreshToken) {
+        return TOKEN_REPOSITORY.put(memberId, refreshToken);
     }
 
     @Override
