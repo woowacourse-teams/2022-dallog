@@ -7,7 +7,6 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_종료일시;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.domain.Category;
@@ -39,17 +38,10 @@ public class ScheduleTest {
         LocalDateTime 잘못된_종료_일시 = LocalDateTime.MAX;
 
         // when & then
-        assertAll(() -> {
-                    assertThatThrownBy(
-                            () -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 잘못된_시작_일시,
-                                    알록달록_회의_종료일시, 알록달록_회의_메모)
-                    ).isInstanceOf(InvalidScheduleException.class);
-                    assertThatThrownBy(
-                            () -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시,
-                                    잘못된_종료_일시, 알록달록_회의_메모)
-                    ).isInstanceOf(InvalidScheduleException.class);
-                }
-        );
+        assertThatThrownBy(
+                () -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목,
+                        잘못된_시작_일시, 잘못된_종료_일시, 알록달록_회의_메모)
+        ).isInstanceOf(InvalidScheduleException.class);
     }
 
     @DisplayName("일정 제목의 길이가 50을 초과하는 경우 예외를 던진다.")
