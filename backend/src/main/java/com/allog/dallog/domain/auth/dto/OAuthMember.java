@@ -1,5 +1,8 @@
 package com.allog.dallog.domain.auth.dto;
 
+import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.domain.member.domain.SocialType;
+
 public class OAuthMember {
 
     private final String email;
@@ -29,5 +32,9 @@ public class OAuthMember {
 
     public String getRefreshToken() {
         return refreshToken;
+    }
+
+    public Member toMember() {
+        return new Member(email, displayName, profileImageUrl, SocialType.GOOGLE);
     }
 }
