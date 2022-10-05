@@ -13,6 +13,7 @@ import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenRenewalResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import java.util.List;

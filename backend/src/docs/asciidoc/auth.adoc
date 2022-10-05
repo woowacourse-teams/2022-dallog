@@ -26,26 +26,50 @@ include::{snippets}/auth/generateLink/response-fields.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/auth/generateToken/http-request.adoc[]
+include::{snippets}/auth/generateTokens/http-request.adoc[]
 
 ==== Path Parameters
 
-include::{snippets}/auth/generateToken/path-parameters.adoc[]
+include::{snippets}/auth/generateTokens/path-parameters.adoc[]
 
 ==== Request Fields
 
-include::{snippets}/auth/generateToken/request-fields.adoc[]
+include::{snippets}/auth/generateTokens/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/auth/generateToken/http-response.adoc[]
+include::{snippets}/auth/generateTokens/http-response.adoc[]
 
 ==== Response Fields
 
-include::{snippets}/auth/generateToken/response-fields.adoc[]
+include::{snippets}/auth/generateTokens/response-fields.adoc[]
 
 === OAuth 로그인 (Resource Server 에러)
 
 ==== HTTP Response
 
-include::{snippets}/auth/generateToken/failByResourceServerError/http-response.adoc[]
+include::{snippets}/auth/generateTokens/failByResourceServerError/http-response.adoc[]
+
+=== RefreshToken을 통한 자동 로그인
+
+==== HTTP Request
+
+include::{snippets}/auth/generateRenewalToken/http-request.adoc[]
+
+==== Request Fields
+
+include::{snippets}/auth/generateRenewalToken/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/auth/generateRenewalToken/http-response.adoc[]
+
+==== Response Fields
+
+include::{snippets}/auth/generateRenewalToken/response-fields.adoc[]
+
+=== RefreshToken을 통한 자동 로그인 (Invalid Token 에러)
+
+==== HTTP Response
+
+include::{snippets}/auth/generateRenewalToken/invalidTokenError/http-response.adoc[]

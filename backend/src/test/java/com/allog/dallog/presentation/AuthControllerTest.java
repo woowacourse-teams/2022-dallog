@@ -25,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.exception.InvalidTokenException;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.allog.dallog.presentation.auth.AuthController;
 import org.junit.jupiter.api.DisplayName;
@@ -109,7 +111,7 @@ class AuthControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MEMBER_인증_코드_토큰_요청())))
                 .andDo(print())
-                .andDo(document("auth/generateToken/failByResourceServerError",
+                .andDo(document("auth/generateTokens/failByResourceServerError",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -141,7 +143,7 @@ class AuthControllerTest extends ControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                                        .description("OAuth 자동 로그인 인증 코드")
+                                        .description("OAuth 리프레시 토큰 인증 코드")
                         ),
                         responseFields(
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING)
@@ -149,5 +151,28 @@ class AuthControllerTest extends ControllerTest {
                         )
                 ))
                 .andExpect(status().isOk());
+    }
+
+    @DisplayName("잘못된 리프레시 토큰으로 새로운 엑세스 토큰을 발급하려 하면 상태코드 401을 반환한다.")
+    @Test
+    void 존재하지_않는_리프레시_토큰으로_새로운_엑세스_토큰을_발급하려_하면_상태코드_401을_반환한다() throws Exception {
+        // given
+        given(authService.generateAccessToken(any())).willThrow(new InvalidTokenException());
+
+        // when & then
+        mockMvc.perform(post("/api/auth/token/access")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(MEMBER_리뉴얼_토큰_요청())))
+                .andDo(print())
+                .andDo(document("auth/generateRenewalToken/invalidTokenError",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                        .description("OAuth 리프레시 토큰 인증 코드")
+                        )
+                ))
+                .andExpect(status().isUnauthorized());
     }
 }

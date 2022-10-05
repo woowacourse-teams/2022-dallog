@@ -10,7 +10,7 @@ import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.TokenRenewalResponse;
 import com.allog.dallog.domain.auth.dto.response.TokenResponse;
-import com.allog.dallog.domain.auth.exception.InvalidTokenException;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -125,7 +125,6 @@ public class AuthService {
         return oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
     }
 
-    @Transactional
     public TokenRenewalResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
         String refreshToken = tokenRenewalRequest.getRefreshToken();
         tokenProvider.validateToken(refreshToken);
@@ -133,7 +132,7 @@ public class AuthService {
 
         String refreshTokenInMemory = tokenRepository.getToken(memberId);
         if (!refreshTokenInMemory.equals(refreshToken)) {
-            throw new InvalidTokenException("일치하는 토큰이 아닙니다.");
+            throw new NoSuchTokenException("회원의 리프레시 토큰이 아닙니다.");
         }
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
         return new TokenRenewalResponse(accessToken);
