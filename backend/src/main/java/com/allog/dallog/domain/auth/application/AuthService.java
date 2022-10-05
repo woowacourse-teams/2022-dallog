@@ -15,7 +15,6 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.domain.SocialType;
 import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
@@ -73,6 +72,23 @@ public class AuthService {
         return createTokenResponse(foundMember);
     }
 
+    private Member findMember(final OAuthMember oAuthMember) {
+        String email = oAuthMember.getEmail();
+        if (memberRepository.existsByEmail(email)) {
+            return memberRepository.getByEmail(email);
+        }
+        return saveMember(oAuthMember);
+    }
+
+    private Member saveMember(final OAuthMember oAuthMember) {
+        Member savedMember = memberRepository.save(oAuthMember.toMember());
+        Category savedCategory = categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, savedMember, PERSONAL));
+
+        Color randomColor = Color.pick(colorPicker.pickNumber());
+        subscriptionRepository.save(new Subscription(savedMember, savedCategory, randomColor));
+        return savedMember;
+    }
+
     private AccessAndRefreshTokenResponse createTokenResponse(final Member member) {
         Long memberId = member.getId();
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
@@ -85,36 +101,6 @@ public class AuthService {
         String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
         tokenRepository.save(memberId, refreshToken);
         return new AccessAndRefreshTokenResponse(accessToken, refreshToken);
-    }
-
-    private Member findMember(final OAuthMember oAuthMember) {
-        if (memberRepository.existsByEmail(oAuthMember.getEmail())) {
-            return memberRepository.getByEmail(oAuthMember.getEmail());
-        }
-
-        return saveMember(oAuthMember);
-    }
-
-    private Member saveMember(final OAuthMember oAuthMember) {
-        Member savedMember = memberRepository.save(toMember(oAuthMember));
-        Category savedCategory = saveCategory(savedMember);
-        saveSubscription(savedMember, savedCategory);
-
-        return savedMember;
-    }
-
-    private Member toMember(final OAuthMember oAuthMember) {
-        return new Member(oAuthMember.getEmail(), oAuthMember.getDisplayName(), oAuthMember.getProfileImageUrl(),
-                SocialType.GOOGLE);
-    }
-
-    private Category saveCategory(final Member savedMember) {
-        return categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, savedMember, PERSONAL));
-    }
-
-    private Subscription saveSubscription(final Member savedMember, final Category savedCategory) {
-        Color randomColor = Color.pick(colorPicker.pickNumber());
-        return subscriptionRepository.save(new Subscription(savedMember, savedCategory, randomColor));
     }
 
     private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member foundMember) {
