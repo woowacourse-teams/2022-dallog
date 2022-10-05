@@ -1,9 +1,6 @@
 package com.allog.dallog.domain.categoryrole.application;
 
-import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
-import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
-
-import com.allog.dallog.domain.category.domain.CategoryType;
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
@@ -52,8 +49,9 @@ public class CategoryRoleService {
     }
 
     private void validateCategoryType(final CategoryRole categoryRole) {
-        CategoryType categoryType = categoryRole.getCategory().getCategoryType();
-        if (categoryType == PERSONAL || categoryType == GOOGLE) {
+        Category category = categoryRole.getCategory();
+
+        if (!category.isNormal()) {
             throw new NotAbleToChangeRoleException("개인 카테고리 또는 외부 카테고리에 대한 회원의 역할을 변경할 수 없습니다.");
         }
     }
