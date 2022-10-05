@@ -237,6 +237,80 @@ const dateTextStyle = (
     : `${colors.GRAY_700}80`};
 `;
 
+const itemWithBackgroundStyle = (
+  priority: number | null,
+  color: string,
+  maxView: number,
+  isEndDate: boolean
+) => css`
+  overflow: hidden;
+  position: absolute;
+  top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
+
+  display: ${priority && priority >= maxView ? 'none' : 'block'};
+
+  width: ${isEndDate ? '96%' : '100%'};
+  height: ${SCHEDULE.HEIGHT}rem;
+  padding: 1rem;
+  ${isEndDate &&
+  css`
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  `}
+
+  background: ${color};
+
+  font-size: 2.75rem;
+  line-height: 2.75rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: white;
+
+  cursor: pointer;
+`;
+
+const itemWithoutBackgroundStyle = (
+  { colors }: Theme,
+  priority: number | null,
+  color: string,
+  maxView: number,
+  isEndDate: boolean
+) => css`
+  ${itemWithBackgroundStyle(priority, color, maxView, isEndDate)};
+
+  overflow: hidden;
+
+  border-left: 3px solid ${color};
+
+  background: ${colors.WHITE};
+
+  color: black;
+
+  cursor: pointer;
+  filter: none;
+`;
+
+const moreStyle = ({ colors }: Theme) => css`
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+  height: ${SCHEDULE.HEIGHT}rem;
+  padding: 1rem;
+
+  font-size: 2.75rem;
+  line-height: 2.75rem;
+  white-space: nowrap;
+  font-weight: 200;
+  color: ${colors.GRAY_500};
+
+  cursor: pointer;
+
+  &:hover {
+    color: ${colors.BLACK};
+  }
+`;
+
 export {
   buttonStyle,
   calendarGridStyle,
@@ -250,7 +324,10 @@ export {
   dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
+  itemWithBackgroundStyle,
+  itemWithoutBackgroundStyle,
   monthPickerStyle,
+  moreStyle,
   navButtonStyle,
   navButtonTitleStyle,
   searchButtonStyle,

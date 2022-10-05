@@ -9,6 +9,12 @@ const categoryItem = ({ colors, flex }: Theme) => css`
   border-bottom: 1px solid ${colors.GRAY_400};
 
   font-size: 4rem;
+
+  &:hover {
+    background: ${colors.GRAY_100};
+
+    cursor: pointer;
+  }
 `;
 
 const item = css`

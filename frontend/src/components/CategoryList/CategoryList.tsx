@@ -1,10 +1,11 @@
 import { AxiosError, AxiosResponse } from 'axios';
+import { Dispatch, SetStateAction } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
 import { useGetSubscriptions } from '@/hooks/@queries/subscription';
 import useIntersect from '@/hooks/useIntersect';
 
-import { CategoriesGetResponseType } from '@/@types/category';
+import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
 
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
@@ -22,9 +23,10 @@ import {
 
 interface CategoryListProps {
   keyword: string;
+  setCategory: Dispatch<SetStateAction<Pick<CategoryType, 'id' | 'name'>>>;
 }
 
-function CategoryList({ keyword }: CategoryListProps) {
+function CategoryList({ keyword, setCategory }: CategoryListProps) {
   const {
     error: categoriesGetError,
     data: categoriesGetResponse,
@@ -60,6 +62,10 @@ function CategoryList({ keyword }: CategoryListProps) {
     };
   });
 
+  const handleClickCategoryItem = (category: Pick<CategoryType, 'id' | 'name'>) => {
+    setCategory(category);
+  };
+
   return (
     <>
       <div css={categoryTableHeaderStyle}>
@@ -74,7 +80,13 @@ function CategoryList({ keyword }: CategoryListProps) {
           );
 
           if (subscribedCategoryInfo === undefined) {
-            return <UnsubscribedCategoryItem key={category.id} category={category} />;
+            return (
+              <UnsubscribedCategoryItem
+                key={category.id}
+                category={category}
+                onClick={() => handleClickCategoryItem(category)}
+              />
+            );
           }
 
           return (
@@ -82,6 +94,7 @@ function CategoryList({ keyword }: CategoryListProps) {
               key={category.id}
               category={category}
               subscriptionId={subscribedCategoryInfo.subscriptionId}
+              onClick={() => handleClickCategoryItem(category)}
             />
           );
         })}

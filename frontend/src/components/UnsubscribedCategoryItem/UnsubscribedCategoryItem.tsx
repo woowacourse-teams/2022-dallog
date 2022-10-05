@@ -14,9 +14,10 @@ import { categoryItem, item, subscribeButton } from './UnsubscribedCategoryItem.
 
 interface UnsubscribedCategoryItemProps {
   category: CategoryType;
+  onClick: () => void;
 }
 
-function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
+function UnsubscribedCategoryItem({ category, onClick }: UnsubscribedCategoryItemProps) {
   const theme = useTheme();
 
   const body = {
@@ -30,7 +31,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   };
 
   return (
-    <div css={categoryItem}>
+    <div css={categoryItem} onClick={onClick}>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

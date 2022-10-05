@@ -14,9 +14,14 @@ import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCa
 interface SubscribedCategoryItemProps {
   category: CategoryType;
   subscriptionId: number;
+  onClick: () => void;
 }
 
-function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategoryItemProps) {
+function SubscribedCategoryItem({
+  category,
+  subscriptionId,
+  onClick,
+}: SubscribedCategoryItemProps) {
   const theme = useTheme();
 
   const { user } = useUserValue();
@@ -32,7 +37,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
   const canUnsubscribeCategory = category.creator.id !== user.id;
 
   return (
-    <div css={categoryItem}>
+    <div css={categoryItem} onClick={onClick}>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

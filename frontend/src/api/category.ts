@@ -6,6 +6,7 @@ const categoryApi = {
   endpoint: {
     entire: '/api/categories',
     my: '/api/categories/me',
+    schedules: (categoryId: number) => `/api/categories/${categoryId}/schedules`,
   },
   headers: {
     'Content-Type': 'application/json',
@@ -29,7 +30,7 @@ const categoryApi = {
     return response;
   },
 
-  getSingle: async (categoryId: number | undefined) => {
+  getSingle: async (categoryId?: number) => {
     const response = await dallogApi.get(`${categoryApi.endpoint.entire}/${categoryId}`, {
       headers: { ...categoryApi.headers },
     });
@@ -42,6 +43,19 @@ const categoryApi = {
       headers: { ...categoryApi.headers, Authorization: `Bearer ${accessToken}` },
       transformResponse: (res) => JSON.parse(res).categories,
     });
+
+    return response;
+  },
+
+  getSchedules: async (categoryId: number, startDateTime: string, endDateTime: string) => {
+    const response = await dallogApi.get(
+      `${categoryApi.endpoint.schedules(
+        categoryId
+      )}?startDateTime=${startDateTime}&endDateTime=${endDateTime}`,
+      {
+        headers: { ...categoryApi.headers },
+      }
+    );
 
     return response;
   },
