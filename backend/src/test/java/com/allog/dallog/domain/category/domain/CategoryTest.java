@@ -1,17 +1,17 @@
 package com.allog.dallog.domain.category.domain;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
+import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
-import com.allog.dallog.domain.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,6 +59,17 @@ class CategoryTest {
         // when & then
         assertThatThrownBy(() -> 내_일정.changeName("바꿀 이름"))
                 .isInstanceOf(InvalidCategoryException.class);
+    }
+
+    @DisplayName("normal 카테고리가 아니면 예외를 던진다.")
+    @Test
+    void normal_카테고리가_아니면_예외를_던진다() {
+        // given
+        Category 내_일정 = 내_일정(매트());
+
+        // when & then
+        assertThatThrownBy(내_일정::validateNormalCategory)
+                .isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("제공된 멤버의 ID와 카테고리를 생성한 멤버의 ID가 일치하지 않으면 false를 반환한다.")

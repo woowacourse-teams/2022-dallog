@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.category.domain;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
@@ -88,6 +89,12 @@ public class Category extends BaseEntity {
     public void validateNotExternalCategory() {
         if (categoryType == GOOGLE) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
+        }
+    }
+
+    public void validateNormalCategory() {
+        if (categoryType != NORMAL) {
+            throw new NoPermissionException("기본 카테고리가 아니면 조회할 수 없습니다.");
         }
     }
 
