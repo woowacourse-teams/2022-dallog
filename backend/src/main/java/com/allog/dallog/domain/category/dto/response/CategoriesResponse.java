@@ -6,14 +6,12 @@ import java.util.stream.Collectors;
 
 public class CategoriesResponse {
 
-    private int page;
     private List<CategoryResponse> categories;
 
-    public CategoriesResponse() {
+    private CategoriesResponse() {
     }
 
-    public CategoriesResponse(final int page, final List<Category> categories) {
-        this.page = page;
+    public CategoriesResponse(final List<Category> categories) {
         this.categories = toResponses(categories);
     }
 
@@ -21,10 +19,6 @@ public class CategoriesResponse {
         return categories.stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    public int getPage() {
-        return page;
     }
 
     public List<CategoryResponse> getCategories() {

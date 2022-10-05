@@ -4,14 +4,16 @@ import com.allog.dallog.domain.category.domain.Category;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CategoriesNoPageResponse {
+public class CategoriesWithPageResponse {
 
+    private int page;
     private List<CategoryResponse> categories;
 
-    private CategoriesNoPageResponse() {
+    public CategoriesWithPageResponse() {
     }
 
-    public CategoriesNoPageResponse(final List<Category> categories) {
+    public CategoriesWithPageResponse(final int page, final List<Category> categories) {
+        this.page = page;
         this.categories = toResponses(categories);
     }
 
@@ -19,6 +21,10 @@ public class CategoriesNoPageResponse {
         return categories.stream()
                 .map(CategoryResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public int getPage() {
+        return page;
     }
 
     public List<CategoryResponse> getCategories() {

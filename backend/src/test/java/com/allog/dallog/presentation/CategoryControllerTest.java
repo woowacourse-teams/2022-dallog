@@ -44,8 +44,8 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
-import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
@@ -163,8 +163,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
@@ -192,8 +192,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
@@ -222,8 +222,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
@@ -250,7 +250,7 @@ class CategoryControllerTest extends ControllerTest {
     void 내가_일정을_편집할_수_있는_카테고리를_전부_조회한다() throws Exception {
         // given
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesNoPageResponse categoriesResponse = new CategoriesNoPageResponse(일정_목록);
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
         given(categoryService.findScheduleEditableCategories(any())).willReturn(categoriesResponse);
 
         // when & then
@@ -273,7 +273,7 @@ class CategoryControllerTest extends ControllerTest {
     void 내가_ADMIN으로_있는_카테고리를_전부_조회한다() throws Exception {
         // given
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesNoPageResponse categoriesResponse = new CategoriesNoPageResponse(일정_목록);
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
         given(categoryService.findAdminCategories(any())).willReturn(categoriesResponse);
 
         // when & then
@@ -299,8 +299,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)

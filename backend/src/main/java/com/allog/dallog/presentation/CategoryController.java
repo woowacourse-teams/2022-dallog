@@ -4,8 +4,8 @@ import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
-import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
@@ -49,8 +49,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesResponse> findNormalByName(@RequestParam(defaultValue = "") final String name,
-                                                               final Pageable pageable) {
+    public ResponseEntity<CategoriesWithPageResponse> findNormalByName(
+            @RequestParam(defaultValue = "") final String name,
+            final Pageable pageable) {
         return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
     }
 
@@ -60,20 +61,21 @@ public class CategoryController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<CategoriesResponse> findMyCategories(@AuthenticationPrincipal final LoginMember loginMember,
-                                                               @RequestParam(defaultValue = "") final String name,
-                                                               final Pageable pageable) {
+    public ResponseEntity<CategoriesWithPageResponse> findMyCategories(
+            @AuthenticationPrincipal final LoginMember loginMember,
+            @RequestParam(defaultValue = "") final String name,
+            final Pageable pageable) {
         return ResponseEntity.ok(categoryService.findMyCategories(loginMember.getId(), name, pageable));
     }
 
     @GetMapping("/me/schedule-editable") // 일정 추가, 수정 모달의 카테고리 목록에 사용됨
-    public ResponseEntity<CategoriesNoPageResponse> findScheduleEditableCategories(
+    public ResponseEntity<CategoriesResponse> findScheduleEditableCategories(
             @AuthenticationPrincipal final LoginMember loginMember) {
         return ResponseEntity.ok(categoryService.findScheduleEditableCategories(loginMember.getId()));
     }
 
     @GetMapping("/me/admin") // 카테고리 관리 페이지에 접근할 수 있는지 판단하기 위해 사용됨
-    public ResponseEntity<CategoriesNoPageResponse> findAdminCategories(
+    public ResponseEntity<CategoriesResponse> findAdminCategories(
             @AuthenticationPrincipal final LoginMember loginMember) {
         return ResponseEntity.ok(categoryService.findAdminCategories(loginMember.getId()));
     }

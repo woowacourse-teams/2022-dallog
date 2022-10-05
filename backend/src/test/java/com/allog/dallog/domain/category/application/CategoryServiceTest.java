@@ -37,8 +37,8 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
-import com.allog.dallog.domain.category.dto.response.CategoriesNoPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -232,7 +232,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("일", request);
+        CategoriesWithPageResponse response = categoryService.findNormalByName("일", request);
 
         // then
         assertThat(response.getCategories())
@@ -249,7 +249,7 @@ class CategoryServiceTest extends ServiceTest {
         authService.generateToken(리버_인증_코드_토큰_요청());
 
         // when
-        CategoriesResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
+        CategoriesWithPageResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
 
         // then
         assertThat(response.getCategories()).hasSize(0);
@@ -276,7 +276,7 @@ class CategoryServiceTest extends ServiceTest {
                 new CategoryRoleUpdateRequest(ADMIN));
 
         // when
-        CategoriesNoPageResponse actual = categoryService.findScheduleEditableCategories(관리자.getId());
+        CategoriesResponse actual = categoryService.findScheduleEditableCategories(관리자.getId());
 
         // then
         assertAll(() -> {
@@ -307,7 +307,7 @@ class CategoryServiceTest extends ServiceTest {
                 new CategoryRoleUpdateRequest(ADMIN));
 
         // when
-        CategoriesNoPageResponse actual = categoryService.findAdminCategories(관리자.getId());
+        CategoriesResponse actual = categoryService.findAdminCategories(관리자.getId());
 
         // then
         assertAll(() -> {
@@ -332,7 +332,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(1, 2);
 
         // when
-        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "", request);
+        CategoriesWithPageResponse response = categoryService.findMyCategories(관리자_ID, "", request);
 
         // then
         assertThat(response.getCategories())
@@ -356,7 +356,7 @@ class CategoryServiceTest extends ServiceTest {
         PageRequest request = PageRequest.of(0, 3);
 
         // when
-        CategoriesResponse response = categoryService.findMyCategories(관리자_ID, "일", request);
+        CategoriesWithPageResponse response = categoryService.findMyCategories(관리자_ID, "일", request);
 
         // then
         assertThat(response.getCategories())
