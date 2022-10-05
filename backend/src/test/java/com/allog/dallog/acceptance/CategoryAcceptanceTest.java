@@ -190,7 +190,8 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 내가_등록한_카테고리를_수정한다(accessToken, savedCategory.getId(), newCategoryName);
-        CategoryDetailResponse actual = id를_통해_카테고리를_가져온다(savedCategory.getId()).as(CategoryDetailResponse.class);
+        CategoryDetailResponse actual = id를_통해_카테고리를_가져온다(savedCategory.getId())
+                .as(CategoryDetailResponse.class);
 
         // then
         assertAll(() -> {
