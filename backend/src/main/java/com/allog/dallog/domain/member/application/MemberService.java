@@ -61,7 +61,6 @@ public class MemberService {
 
         List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryId(categoryId);
         return new SubscribersResponse(categoryRoles);
-        // 구독자 목록을 조회할 때 CategoryRoleType도 함께 DTO에 포함해야하므로 CategoryRole 리스트를 가져와 DTO를 생성
     }
 
     @Transactional
