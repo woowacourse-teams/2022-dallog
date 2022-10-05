@@ -2,14 +2,14 @@ package com.allog.dallog.domain.auth.dto.response;
 
 import java.util.Objects;
 
-public class TokenRenewalResponse {
+public class AccessTokenResponse {
 
     private String accessToken;
 
-    private TokenRenewalResponse() {
+    private AccessTokenResponse() {
     }
 
-    public TokenRenewalResponse(final String accessToken) {
+    public AccessTokenResponse(final String accessToken) {
         this.accessToken = accessToken;
     }
 

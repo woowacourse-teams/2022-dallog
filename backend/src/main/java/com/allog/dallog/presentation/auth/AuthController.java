@@ -4,9 +4,9 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
-import com.allog.dallog.domain.auth.dto.response.TokenRenewalResponse;
-import com.allog.dallog.domain.auth.dto.response.TokenResponse;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +35,18 @@ public class AuthController {
     }
 
     @PostMapping("/{oauthProvider}/token")
-    public ResponseEntity<TokenResponse> generateTokens(@PathVariable final String oauthProvider,
-                                                        @Valid @RequestBody final TokenRequest tokenRequest) {
-        TokenResponse tokenResponse = authService.generateToken(tokenRequest);
-        return ResponseEntity.ok(tokenResponse);
+    public ResponseEntity<AccessAndRefreshTokenResponse> generateAccessAndRefreshToken(
+            @PathVariable final String oauthProvider, @Valid @RequestBody final TokenRequest tokenRequest) {
+        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(
+                tokenRequest);
+        return ResponseEntity.ok(accessAndRefreshTokenResponse);
     }
 
     @PostMapping("/token/access")
-    public ResponseEntity<TokenRenewalResponse> generateAccessToken(
+    public ResponseEntity<AccessTokenResponse> generateAccessToken(
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
-        TokenRenewalResponse tokenRenewalResponse = authService.generateAccessToken(tokenRenewalRequest);
-        return ResponseEntity.ok(tokenRenewalResponse);
+        AccessTokenResponse accessTokenResponse = authService.generateAccessToken(tokenRenewalRequest);
+        return ResponseEntity.ok(accessTokenResponse);
     }
 
     @GetMapping("/validate/token")

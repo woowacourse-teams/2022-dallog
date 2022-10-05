@@ -247,8 +247,8 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        authService.generateToken(후디_인증_코드_토큰_요청());
-        authService.generateToken(리버_인증_코드_토큰_요청());
+        authService.generateAccessAndRefreshToken(후디_인증_코드_토큰_요청());
+        authService.generateAccessAndRefreshToken(리버_인증_코드_토큰_요청());
 
         // when
         CategoriesWithPageResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));

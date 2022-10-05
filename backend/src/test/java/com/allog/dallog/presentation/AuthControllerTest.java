@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
-import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.allog.dallog.presentation.auth.AuthController;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +71,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인을_하면_token과_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateToken(any())).willReturn(MEMBER_인증_코드_토큰_응답());
+        given(authService.generateAccessAndRefreshToken(any())).willReturn(MEMBER_인증_코드_토큰_응답());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
@@ -103,7 +102,7 @@ class AuthControllerTest extends ControllerTest {
     @Test
     void OAuth_로그인_과정에서_Resource_Server_에러가_발생하면_상태코드_500을_반환한다() throws Exception {
         // given
-        given(authService.generateToken(any())).willThrow(new OAuthException());
+        given(authService.generateAccessAndRefreshToken(any())).willThrow(new OAuthException());
 
         // when & then
         mockMvc.perform(post("/api/auth/{oauthProvider}/token", OAUTH_PROVIDER)
