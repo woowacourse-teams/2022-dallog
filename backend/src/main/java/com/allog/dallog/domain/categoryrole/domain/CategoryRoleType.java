@@ -15,8 +15,7 @@ import java.util.stream.Collectors;
 
 public enum CategoryRoleType {
     ADMIN(EnumSet.of(UPDATE_CATEGORY, DELETE_CATEGORY, ADD_SCHEDULE, UPDATE_SCHEDULE, DELETE_SCHEDULE,
-            CHANGE_ROLE_OF_SUBSCRIBER,
-            FIND_SUBSCRIBERS)),
+            CHANGE_ROLE_OF_SUBSCRIBER, FIND_SUBSCRIBERS)),
     NONE(Set.of());
 
     private final Set<CategoryAuthority> authorities;
