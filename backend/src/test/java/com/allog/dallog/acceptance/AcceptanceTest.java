@@ -21,12 +21,13 @@ abstract class AcceptanceTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
+    @Autowired
+    private TokenRepository tokenRepository;
+
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
         databaseCleaner.execute();
-
-        TokenRepository tokenRepository = new InMemoryTokenRepository();
         tokenRepository.deleteAll();
     }
 }
