@@ -88,7 +88,7 @@ public class Schedule extends BaseEntity {
     }
 
     private boolean isValidDateTimeRange(final LocalDateTime dateTime) {
-        return dateTime.isBefore(MAX_DATE_TIME) || dateTime.isAfter(MIN_DATE_TIME);
+        return dateTime.isBefore(MIN_DATE_TIME) || dateTime.isAfter(MAX_DATE_TIME);
     }
 
     private void validateMemoLength(final String memo) {
