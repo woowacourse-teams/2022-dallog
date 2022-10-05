@@ -95,6 +95,7 @@ public class SubscriptionService {
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Subscription subscription = subscriptionRepository.getById(id);
+        subscription.validateDeletePossible(memberId);
         subscriptionRepository.deleteById(id);
 
         deleteCategoryRole(memberId, subscription);

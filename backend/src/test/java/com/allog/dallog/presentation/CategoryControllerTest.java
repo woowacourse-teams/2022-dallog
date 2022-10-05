@@ -58,7 +58,7 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
-import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
@@ -628,7 +628,7 @@ class CategoryControllerTest extends ControllerTest {
         Long categoryId = 1L;
         Long memberId = 2L;
 
-        willThrow(new NotAbleToMangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다."))
+        willThrow(new NotAbleToChangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다."))
                 .willDoNothing()
                 .given(categoryRoleService)
                 .updateRole(any(), any(), any(), any());

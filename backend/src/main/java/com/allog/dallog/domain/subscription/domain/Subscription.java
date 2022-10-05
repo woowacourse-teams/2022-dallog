@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.subscription.domain;
 
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.common.BaseEntity;
 import com.allog.dallog.domain.member.domain.Member;
@@ -52,6 +53,12 @@ public class Subscription extends BaseEntity {
     public void change(final Color color, final boolean checked) {
         this.color = color;
         this.checked = checked;
+    }
+
+    public void validateDeletePossible(final Long memberId) {
+        if (!member.getId().equals(memberId)) {
+            throw new NoPermissionException("타인의 구독 정보에 접근할 수 없습니다.");
+        }
     }
 
     public boolean hasInternalCategory() {
