@@ -57,13 +57,20 @@ class CategoryRepositoryTest extends RepositoryTest {
     void 카테고리_이름과_타입과_페이징을_활용하여_해당하는_카테고리를_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-        categoryRepository.save(FE_일정(관리자));
-        categoryRepository.save(매트_아고라(관리자));
-        categoryRepository.save(후디_JPA_스터디(관리자));
-        categoryRepository.save(내_일정(관리자));
-        categoryRepository.save(우아한테크코스_일정(관리자));
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
+        Category BE_일정 = categoryRepository.save(BE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, BE_일정));
+        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, FE_일정));
+        Category 매트_아고라 = categoryRepository.save(매트_아고라(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 매트_아고라));
+        Category 후디_JPA_스터디 = categoryRepository.save(후디_JPA_스터디(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 후디_JPA_스터디));
+        Category 내_일정 = categoryRepository.save(내_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 내_일정));
+        Category 우아한테크코스_일정 = categoryRepository.save(우아한테크코스_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 우아한테크코스_일정));
 
         PageRequest pageRequest = PageRequest.of(0, 5);
 
@@ -81,11 +88,14 @@ class CategoryRepositoryTest extends RepositoryTest {
     void 카테고리_이름_검색_결과가_존재하지_않는_경우_아무것도_조회_하지_않는다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-        categoryRepository.save(FE_일정(관리자));
-        categoryRepository.save(매트_아고라(관리자));
-        categoryRepository.save(후디_JPA_스터디(관리자));
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
+        Category BE_일정 = categoryRepository.save(BE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, BE_일정));
+        Category FE_일정 = categoryRepository.save(FE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, FE_일정));
+        Category 매트_아고라 = categoryRepository.save(매트_아고라(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 매트_아고라));
 
         PageRequest pageRequest = PageRequest.of(0, 5);
 
@@ -103,8 +113,11 @@ class CategoryRepositoryTest extends RepositoryTest {
         Member 관리자 = memberRepository.save(관리자());
 
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
         Category BE_일정 = categoryRepository.save(BE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, BE_일정));
         Category FE_일정 = categoryRepository.save(FE_일정(관리자));
+        subscriptionRepository.save(색상1_구독(관리자, FE_일정));
 
         Member 매트 = memberRepository.save(매트());
         Member 리버 = memberRepository.save(리버());
