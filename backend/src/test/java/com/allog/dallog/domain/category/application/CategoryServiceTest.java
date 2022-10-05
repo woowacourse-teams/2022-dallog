@@ -39,6 +39,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -373,7 +374,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        CategoryResponse 조회한_공통_일정 = categoryService.findById(공통_일정.getId());
+        CategoryDetailResponse 조회한_공통_일정 = categoryService.findDetailCategoryById(공통_일정.getId());
 
         assertAll(() -> {
             assertThat(조회한_공통_일정.getId()).isEqualTo(공통_일정.getId());
@@ -389,7 +390,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.findById(공통_일정.getId() + 1))
+        assertThatThrownBy(() -> categoryService.findDetailCategoryById(공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -611,7 +612,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.delete(관리자.getId(), 우아한테크코스_외부_일정.getId());
 
         // then
-        assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))
+        assertThatThrownBy(() -> categoryService.findDetailCategoryById(우아한테크코스_외부_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 }

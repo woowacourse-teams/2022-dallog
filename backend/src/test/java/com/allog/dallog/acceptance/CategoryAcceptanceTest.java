@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import io.restassured.response.ExtractableResponse;
@@ -189,12 +190,12 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 내가_등록한_카테고리를_수정한다(accessToken, savedCategory.getId(), newCategoryName);
-        CategoryResponse categoryResponse = id를_통해_카테고리를_가져온다(savedCategory.getId()).as(CategoryResponse.class);
+        CategoryDetailResponse actual = id를_통해_카테고리를_가져온다(savedCategory.getId()).as(CategoryDetailResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_204가_반환된다(response);
-            assertThat(categoryResponse.getName()).isEqualTo(newCategoryName);
+            assertThat(actual.getName()).isEqualTo(newCategoryName);
         });
     }
 

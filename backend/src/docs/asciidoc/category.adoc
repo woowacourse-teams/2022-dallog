@@ -72,10 +72,6 @@ include::{snippets}/category/findMineByName/allByNoName/http-response.adoc[]
 
 include::{snippets}/category/findScheduleEditableCategories/http-request.adoc[]
 
-==== Request Parameters
-
-include::{snippets}/category/findScheduleEditableCategories/request-parameters.adoc[]
-
 ==== HTTP Response
 
 include::{snippets}/category/findScheduleEditableCategories/http-response.adoc[]
@@ -86,10 +82,6 @@ include::{snippets}/category/findScheduleEditableCategories/http-response.adoc[]
 
 include::{snippets}/category/findAdminCategories/http-request.adoc[]
 
-==== Request Parameters
-
-include::{snippets}/category/findAdminCategories/request-parameters.adoc[]
-
 ==== HTTP Response
 
 include::{snippets}/category/findAdminCategories/http-response.adoc[]
@@ -98,21 +90,21 @@ include::{snippets}/category/findAdminCategories/http-response.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/category/findById/http-request.adoc[]
+include::{snippets}/category/findDetailCategoryById/http-request.adoc[]
 
 ==== Path Parameters
 
-include::{snippets}/category/findById/path-parameters.adoc[]
+include::{snippets}/category/findDetailCategoryById/path-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/category/findById/http-response.adoc[]
+include::{snippets}/category/findDetailCategoryById/http-response.adoc[]
 
 === ID를 통한 카테고리 단건 조회 (존재하지 않는 경우)
 
 ==== HTTP Response
 
-include::{snippets}/category/findById/failByNoCategory/http-response.adoc[]
+include::{snippets}/category/findDetailCategoryById/failByNoCategory/http-response.adoc[]
 
 === 카테고리 수정
 

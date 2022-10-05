@@ -6,6 +6,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
@@ -56,8 +57,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponse> findById(@PathVariable final Long categoryId) {
-        return ResponseEntity.ok().body(categoryService.findById(categoryId));
+    public ResponseEntity<CategoryDetailResponse> findDetailCategoryById(@PathVariable final Long categoryId) {
+        return ResponseEntity.ok(categoryService.findDetailCategoryById(categoryId));
     }
 
     @GetMapping("/me")
