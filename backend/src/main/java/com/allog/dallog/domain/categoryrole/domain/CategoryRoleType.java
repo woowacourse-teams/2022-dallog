@@ -26,8 +26,13 @@ public enum CategoryRoleType {
 
     public static Set<CategoryRoleType> getHavingAuthorities(final Set<CategoryAuthority> authorities) {
         return Arrays.stream(values())
-                .filter(categoryRoleType -> categoryRoleType.authorities.containsAll(authorities))
+                .filter(categoryRoleType -> isCategoryRoleTypeContainsAuthorities(authorities, categoryRoleType))
                 .collect(Collectors.toSet());
+    }
+
+    private static boolean isCategoryRoleTypeContainsAuthorities(final Set<CategoryAuthority> authorities,
+                                                                 final CategoryRoleType categoryRoleType) {
+        return categoryRoleType.authorities.containsAll(authorities);
     }
 
     public boolean ableTo(final CategoryAuthority authority) {
