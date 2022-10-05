@@ -33,12 +33,14 @@ import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -373,7 +375,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        CategoryResponse 조회한_공통_일정 = categoryService.findById(공통_일정.getId());
+        CategoryDetailResponse 조회한_공통_일정 = categoryService.findDetailCategoryById(공통_일정.getId());
 
         assertAll(() -> {
             assertThat(조회한_공통_일정.getId()).isEqualTo(공통_일정.getId());
@@ -389,8 +391,20 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.findById(공통_일정.getId() + 1))
+        assertThatThrownBy(() -> categoryService.findDetailCategoryById(공통_일정.getId() + 1))
                 .isInstanceOf(NoSuchCategoryException.class);
+    }
+
+    @DisplayName("normal 카테고리가 아닌 카테고리를 조회할 경우 예외를 던진다.")
+    @Test
+    void normal_카테고리가_아닌_카테고리를_조회할_경우_예외를_던진다() {
+        // given
+        Member 매트 = memberRepository.save(매트());
+        CategoryResponse 내_일정 = categoryService.save(매트.getId(), 내_일정_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.findDetailCategoryById(내_일정.getId()))
+                .isInstanceOf(NoPermissionException.class);
     }
 
     @DisplayName("ADMIN 역할의 멤버는 카테고리를 수정할 수 있다.")
@@ -611,7 +625,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.delete(관리자.getId(), 우아한테크코스_외부_일정.getId());
 
         // then
-        assertThatThrownBy(() -> categoryService.findById(우아한테크코스_외부_일정.getId()))
+        assertThatThrownBy(() -> categoryService.findDetailCategoryById(우아한테크코스_외부_일정.getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 }

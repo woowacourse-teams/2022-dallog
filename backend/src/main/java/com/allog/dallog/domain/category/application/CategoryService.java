@@ -15,6 +15,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
@@ -97,7 +98,7 @@ public class CategoryService {
 
     public CategoriesWithPageResponse findNormalByName(final String name, final Pageable pageable) {
         List<Category> categories
-                = categoryRepository.findByNameContainingAndCategoryType(name, NORMAL, pageable).getContent();
+                = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, name, pageable).getContent();
 
         return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
     }
@@ -122,9 +123,12 @@ public class CategoryService {
         return new CategoriesResponse(categories);
     }
 
-    public CategoryResponse findById(final Long id) {
+    public CategoryDetailResponse findDetailCategoryById(final Long id) {
         Category category = categoryRepository.getById(id);
-        return new CategoryResponse(category);
+        category.validateNormalCategory();
+
+        List<Subscription> subscriptions = subscriptionRepository.findByCategoryId(id);
+        return new CategoryDetailResponse(category, subscriptions.size());
     }
 
     @Transactional

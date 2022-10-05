@@ -60,7 +60,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("일", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "일", pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(3)
@@ -82,7 +82,7 @@ class CategoryRepositoryTest extends RepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
 
         // when
-        Slice<Category> actual = categoryRepository.findByNameContainingAndCategoryType("파랑", NORMAL, pageRequest);
+        Slice<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "파랑", pageRequest);
 
         // then
         assertThat(actual.getContent()).hasSize(0);

@@ -2,6 +2,7 @@ package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_세부_응답;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_응답;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
@@ -46,6 +47,7 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
@@ -327,8 +329,8 @@ class CategoryControllerTest extends ControllerTest {
     void 카테고리_ID로_카테고리를_단건_조회한다() throws Exception {
         // given
         Long categoryId = 1L;
-        CategoryResponse BE_일정_응답 = BE_일정_응답(후디_응답);
-        given(categoryService.findById(any())).willReturn(BE_일정_응답);
+        CategoryDetailResponse BE_일정_응답 = BE_일정_세부_응답(후디_응답, 150);
+        given(categoryService.findDetailCategoryById(any())).willReturn(BE_일정_응답);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}", categoryId)
@@ -336,7 +338,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("category/findById",
+                .andDo(document("category/findDetailCategoryById",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -352,7 +354,7 @@ class CategoryControllerTest extends ControllerTest {
     void 카테고리_ID로_카테고리를_단건_조회시_존재하지_않으면_404_Not_Found를_반환한다() throws Exception {
         // given
         Long categoryId = 1L;
-        given(categoryService.findById(any()))
+        given(categoryService.findDetailCategoryById(any()))
                 .willThrow(new NoSuchCategoryException());
 
         // when & then
@@ -361,7 +363,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("category/findById/failByNoCategory",
+                .andDo(document("category/findDetailCategoryById/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
