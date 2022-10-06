@@ -22,7 +22,7 @@ public class Schedule extends BaseEntity {
     private static final int MAX_MEMO_LENGTH = 255;
 
     private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
-    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999);
+    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999000);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
