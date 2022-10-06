@@ -110,7 +110,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleNotSupportedMethod() {
-        ErrorResponse errorResponse = new ErrorResponse("잘못된 HTTP 메소드 요청입니다.");
+        ErrorResponse errorResponse = new ErrorResponse("지원하지 않는 HTTP 메소드 요청입니다.");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
     }
 

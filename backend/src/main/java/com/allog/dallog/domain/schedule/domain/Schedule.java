@@ -82,12 +82,15 @@ public class Schedule extends BaseEntity {
         if (startDateTime.isAfter(endDateTime)) {
             throw new InvalidScheduleException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
-        if (isValidDateTimeRange(startDateTime) && isValidDateTimeRange(endDateTime)) {
-            throw new InvalidScheduleException("가능한 날짜 범위(1000년 - 9999년)를 벗어났습니다.");
+        if (isNotValidDateTimeRange(startDateTime) || isNotValidDateTimeRange(endDateTime)) {
+            throw new InvalidScheduleException(
+                    String.format("일정은 %s부터 %s까지 등록할 수 있습니다.",
+                            MIN_DATE_TIME.toLocalDate(), MAX_DATE_TIME.toLocalDate())
+            );
         }
     }
 
-    private boolean isValidDateTimeRange(final LocalDateTime dateTime) {
+    private boolean isNotValidDateTimeRange(final LocalDateTime dateTime) {
         return dateTime.isBefore(MIN_DATE_TIME) || dateTime.isAfter(MAX_DATE_TIME);
     }
 
