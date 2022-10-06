@@ -37,8 +37,12 @@ public class DallogTokenManager {
         String refreshToken = tokenRepository.getToken(memberId);
 
         DallogToken renewalDallogToken = new DallogToken(refreshToken, accessToken);
-        renewalDallogToken.validateSameRefreshToken(outRefreshToken);
-
+        renewalDallogToken.validateHasSameRefreshToken(outRefreshToken);
         return renewalDallogToken;
+    }
+
+    public Long extractPayload(final String accessToken) {
+        tokenProvider.validateToken(accessToken);
+        return Long.valueOf(tokenProvider.getPayload(accessToken));
     }
 }

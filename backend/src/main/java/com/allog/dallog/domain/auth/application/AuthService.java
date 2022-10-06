@@ -5,7 +5,6 @@ import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 import com.allog.dallog.domain.auth.domain.DallogToken;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
@@ -34,16 +33,13 @@ public class AuthService {
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
-    private final TokenProvider tokenProvider;
     private final ColorPicker colorPicker;
-    private final TokenRepository tokenRepository;
     private final DallogTokenManager dallogTokenManager;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                        final OAuthTokenRepository oAuthTokenRepository,
                        final SubscriptionRepository subscriptionRepository, final OAuthUri oAuthUri,
-                       final OAuthClient oAuthClient, final TokenProvider tokenProvider,
-                       final ColorPicker colorPicker, final TokenRepository tokenRepository,
+                       final OAuthClient oAuthClient, final ColorPicker colorPicker,
                        final DallogTokenManager dallogTokenManager) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
@@ -51,9 +47,7 @@ public class AuthService {
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
-        this.tokenProvider = tokenProvider;
         this.colorPicker = colorPicker;
-        this.tokenRepository = tokenRepository;
         this.dallogTokenManager = dallogTokenManager;
     }
 
@@ -70,7 +64,7 @@ public class AuthService {
         Member foundMember = findMember(oAuthMember);
 
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
-        oAuthToken.change(oAuthMember.getRefreshToken()); // 의견 제시 할 부분!
+        oAuthToken.change(oAuthMember.getRefreshToken());
 
         DallogToken dallogToken = dallogTokenManager.createDallogToken(foundMember.getId());
         return new AccessAndRefreshTokenResponse(dallogToken.getAccessToken(), dallogToken.getRefreshToken());
@@ -108,8 +102,7 @@ public class AuthService {
     }
 
     public Long extractMemberId(final String accessToken) {
-        tokenProvider.validateToken(accessToken);
-        Long memberId = Long.valueOf(tokenProvider.getPayload(accessToken));
+        Long memberId = dallogTokenManager.extractPayload(accessToken);
         memberRepository.validateExistsById(memberId);
         return memberId;
     }

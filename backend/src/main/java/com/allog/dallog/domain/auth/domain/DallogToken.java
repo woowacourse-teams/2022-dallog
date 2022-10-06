@@ -24,7 +24,7 @@ public class DallogToken {
         return refreshToken;
     }
 
-    public void validateSameRefreshToken(String otherRefreshToken) {
+    public void validateHasSameRefreshToken(String otherRefreshToken) {
         if (!refreshToken.equals(otherRefreshToken)) {
             throw new NoSuchTokenException("현재 회원의 리프레시 토큰이 아닙니다.");
         }
