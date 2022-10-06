@@ -31,6 +31,7 @@ import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,14 +114,21 @@ public class CategoryService {
 
     // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
     public CategoriesResponse findScheduleEditableCategories(final Long memberId) {
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(memberId);
         Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));
-        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, roleTypes);
-        return new CategoriesResponse(categories);
+        return new CategoriesResponse(toCategories(categoryRoles, roleTypes));
     }
 
     public CategoriesResponse findAdminCategories(final Long memberId) {
-        List<Category> categories = categoryRepository.findByMemberIdAndCategoryRoleTypes(memberId, Set.of(ADMIN));
-        return new CategoriesResponse(categories);
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(memberId);
+        return new CategoriesResponse(toCategories(categoryRoles, Set.of(ADMIN)));
+    }
+
+    private List<Category> toCategories(final List<CategoryRole> categoryRoles, final Set<CategoryRoleType> roleTypes) {
+        return categoryRoles.stream()
+                .filter(categoryRole -> roleTypes.contains(categoryRole.getCategoryRoleType()))
+                .map(CategoryRole::getCategory)
+                .collect(Collectors.toList());
     }
 
     public CategoryDetailResponse findDetailCategoryById(final Long id) {

@@ -13,6 +13,9 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     @EntityGraph(attributePaths = {"member"})
     List<CategoryRole> findByCategoryId(final Long categoryId);
 
+    @EntityGraph(attributePaths = {"category", "category.member"})
+    List<CategoryRole> findByMemberId(final Long memberId);
+
     int countByCategoryIdAndCategoryRoleType(final Long categoryId, final CategoryRoleType categoryRoleType);
 
     void deleteByCategoryId(final Long categoryId);

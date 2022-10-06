@@ -139,6 +139,7 @@ class CategoryServiceTest extends ServiceTest {
 
         SubscriptionsResponse subscriptions = subscriptionService.findByMemberId(파랑_id);
         List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
+
         // then
         assertThat(actual).hasSize(2);
     }
