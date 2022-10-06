@@ -36,7 +36,7 @@ public class DallogTokenManager {
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
         String refreshToken = tokenRepository.getToken(memberId);
 
-        DallogToken renewalDallogToken = new DallogToken(refreshToken, accessToken);
+        DallogToken renewalDallogToken = new DallogToken(accessToken, refreshToken);
         renewalDallogToken.validateHasSameRefreshToken(outRefreshToken);
         return renewalDallogToken;
     }

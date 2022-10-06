@@ -11,7 +11,8 @@ public class InMemoryDallogTokenRepository implements TokenRepository {
 
     @Override
     public String save(final Long memberId, final String refreshToken) {
-        return TOKEN_REPOSITORY.put(memberId, refreshToken);
+        TOKEN_REPOSITORY.put(memberId, refreshToken);
+        return TOKEN_REPOSITORY.get(memberId);
     }
 
     @Override
