@@ -11,7 +11,6 @@ import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
-import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -104,15 +103,8 @@ public class AuthService {
 
     public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
         String refreshToken = tokenRenewalRequest.getRefreshToken();
-        tokenProvider.validateToken(refreshToken);
-        Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
-
-        String refreshTokenInMemory = tokenRepository.getToken(memberId);
-        if (!refreshTokenInMemory.equals(refreshToken)) {
-            throw new NoSuchTokenException("회원의 리프레시 토큰이 아닙니다.");
-        }
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
-        return new AccessTokenResponse(accessToken);
+        DallogToken dallogToken = dallogTokenManager.renewDallogToken(refreshToken);
+        return new AccessTokenResponse(dallogToken.getAccessToken());
     }
 
     public Long extractMemberId(final String accessToken) {

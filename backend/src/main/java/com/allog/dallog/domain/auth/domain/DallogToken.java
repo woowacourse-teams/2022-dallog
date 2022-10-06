@@ -1,5 +1,7 @@
 package com.allog.dallog.domain.auth.domain;
 
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
+
 public class DallogToken {
 
     private String accessToken;
@@ -10,11 +12,21 @@ public class DallogToken {
         this.refreshToken = refreshToken;
     }
 
+    public DallogToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }
 
     public String getRefreshToken() {
         return refreshToken;
+    }
+
+    public void validateSameRefreshToken(String otherRefreshToken) {
+        if (!refreshToken.equals(otherRefreshToken)) {
+            throw new NoSuchTokenException("현재 회원의 리프레시 토큰이 아닙니다.");
+        }
     }
 }
