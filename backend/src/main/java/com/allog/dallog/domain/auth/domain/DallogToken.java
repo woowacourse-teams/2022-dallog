@@ -12,10 +12,6 @@ public class DallogToken {
         this.refreshToken = refreshToken;
     }
 
-    public DallogToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }
