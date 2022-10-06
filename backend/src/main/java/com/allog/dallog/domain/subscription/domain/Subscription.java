@@ -56,8 +56,8 @@ public class Subscription extends BaseEntity {
     }
 
     public void validateDeletePossible(final Long memberId) {
-        if (category.isCreatorId(memberId)) {
-            throw new NoPermissionException("내가 만든 카테고리는 구독 취소 할 수 없습니다.");
+        if (!member.hasSameId(memberId)) {
+            throw new NoPermissionException("타인의 구독 정보에 접근할 수 없습니다.");
         }
     }
 

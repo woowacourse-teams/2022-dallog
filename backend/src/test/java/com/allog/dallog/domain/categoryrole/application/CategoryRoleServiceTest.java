@@ -1,6 +1,8 @@
 package com.allog.dallog.domain.categoryrole.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
@@ -16,7 +18,7 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
-import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
@@ -139,6 +141,32 @@ class CategoryRoleServiceTest extends ServiceTest {
         // when & then
         CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
         assertThatThrownBy(() -> categoryRoleService.updateRole(관리자.getId(), 관리자.getId(), BE_일정.getId(), request))
-                .isInstanceOf(NotAbleToMangeRoleException.class);
+                .isInstanceOf(NotAbleToChangeRoleException.class);
+    }
+
+    @DisplayName("개인 카테고리에 대한 회원의 역할을 변경할 경우 예외가 발생한다.")
+    @Test
+    void 개인_카테고리에_대한_회원의_역할을_변경할_경우_예외가_발생한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+        CategoryResponse 개인_카테고리 = categoryService.save(후디.getId(), 내_일정_생성_요청);
+
+        // when & then
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
+        assertThatThrownBy(() -> categoryRoleService.updateRole(후디.getId(), 후디.getId(), 개인_카테고리.getId(), request))
+                .isInstanceOf(NotAbleToChangeRoleException.class);
+    }
+
+    @DisplayName("외부 카테고리에 대한 회원의 역할을 변경할 경우 예외가 발생한다.")
+    @Test
+    void 외부_카테고리에_대한_회원의_역할을_변경할_경우_예외가_발생한다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+        CategoryResponse 외부_카테고리 = categoryService.save(후디.getId(), 외부_BE_일정_생성_요청);
+
+        // when & then
+        CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
+        assertThatThrownBy(() -> categoryRoleService.updateRole(후디.getId(), 후디.getId(), 외부_카테고리.getId(), request))
+                .isInstanceOf(NotAbleToChangeRoleException.class);
     }
 }

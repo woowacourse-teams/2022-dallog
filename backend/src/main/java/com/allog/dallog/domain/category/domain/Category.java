@@ -102,6 +102,10 @@ public class Category extends BaseEntity {
         return member.hasSameId(creatorId);
     }
 
+    public boolean isNormal() {
+        return categoryType == NORMAL;
+    }
+
     public boolean isPersonal() {
         return categoryType == PERSONAL;
     }

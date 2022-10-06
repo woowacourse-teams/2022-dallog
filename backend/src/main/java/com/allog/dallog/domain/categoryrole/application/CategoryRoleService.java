@@ -1,11 +1,12 @@
 package com.allog.dallog.domain.categoryrole.application;
 
+import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
-import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class CategoryRoleService {
         validateSoleAdmin(memberId, categoryId);
 
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
+
+        validateCategoryType(categoryRole);
+
         categoryRole.changeRole(roleType);
     }
 
@@ -40,7 +44,15 @@ public class CategoryRoleService {
     private void validateSoleAdmin(final Long memberId, final Long categoryId) {
         boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(memberId, categoryId);
         if (isSoleAdmin) {
-            throw new NotAbleToMangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다.");
+            throw new NotAbleToChangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다.");
+        }
+    }
+
+    private void validateCategoryType(final CategoryRole categoryRole) {
+        Category category = categoryRole.getCategory();
+
+        if (!category.isNormal()) {
+            throw new NotAbleToChangeRoleException("개인 카테고리 또는 외부 카테고리에 대한 회원의 역할을 변경할 수 없습니다.");
         }
     }
 }

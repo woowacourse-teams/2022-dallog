@@ -9,7 +9,7 @@ import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
-import com.allog.dallog.domain.categoryrole.exception.NotAbleToMangeRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
@@ -45,7 +45,7 @@ public class ControllerAdvice {
             InvalidSubscriptionException.class,
             ExistSubscriptionException.class,
             ExistExternalCategoryException.class,
-            NotAbleToMangeRoleException.class
+            NotAbleToChangeRoleException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

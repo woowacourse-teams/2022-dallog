@@ -13,7 +13,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -30,7 +29,6 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
@@ -257,19 +255,6 @@ class SubscriptionServiceTest extends ServiceTest {
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자_id))
-                .isInstanceOf(NoPermissionException.class);
-    }
-
-    @DisplayName("자신이 만든 카테고리에 대한 구독을 삭제할 경우 예외를 던진다")
-    @Test
-    void 자신이_만든_카테고리에_대한_구독을_삭제할_경우_예외를_던진다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-        Subscription 공통_일정_구독 = subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
-
-        // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자.getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 

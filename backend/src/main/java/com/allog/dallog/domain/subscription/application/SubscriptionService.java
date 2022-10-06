@@ -95,13 +95,10 @@ public class SubscriptionService {
     @Transactional
     public void delete(final Long id, final Long memberId) {
         Subscription subscription = subscriptionRepository.getById(id);
-        deleteSubscription(id, memberId, subscription);
-        deleteCategoryRole(memberId, subscription);
-    }
-
-    private void deleteSubscription(final Long id, final Long memberId, final Subscription subscription) {
         subscription.validateDeletePossible(memberId);
         subscriptionRepository.deleteById(id);
+
+        deleteCategoryRole(memberId, subscription);
     }
 
     private void deleteCategoryRole(final Long memberId, final Subscription subscription) {
