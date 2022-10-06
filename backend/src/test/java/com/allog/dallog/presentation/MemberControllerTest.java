@@ -16,6 +16,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +62,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 ID"),
@@ -91,7 +92,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         )
                 ))
                 .andExpect(status().isNotFound());
@@ -118,7 +119,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         ),
                         requestFields(
                                 fieldWithPath("displayName").type(JsonFieldType.STRING).description("수정할 이름")
@@ -126,4 +127,27 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @DisplayName("등록된 회원이 탈퇴한다.")
+    @Test
+    void 등록된_회원이_탈퇴한다() throws Exception {
+        // given
+        willDoNothing()
+                .given(memberService)
+                .deleteById(any());
+
+        // when & then
+        mockMvc.perform(delete("/api/members/me")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("member/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
+                        )))
+                .andExpect(status().isNoContent());
+    }
 }

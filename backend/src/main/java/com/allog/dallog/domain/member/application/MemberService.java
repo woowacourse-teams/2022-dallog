@@ -3,6 +3,7 @@ package com.allog.dallog.domain.member.application;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
 
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
+import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
@@ -30,18 +31,21 @@ public class MemberService {
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final CategoryRoleRepository categoryRoleRepository;
+    private final TokenRepository tokenRepository;
 
     public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                          final ScheduleRepository scheduleRepository,
                          final SubscriptionRepository subscriptionRepository,
                          final OAuthTokenRepository oAuthTokenRepository,
-                         final CategoryRoleRepository categoryRoleRepository) {
+                         final CategoryRoleRepository categoryRoleRepository,
+                         final TokenRepository tokenRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.scheduleRepository = scheduleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.categoryRoleRepository = categoryRoleRepository;
+        this.tokenRepository = tokenRepository;
     }
 
     public MemberResponse findById(final Long id) {
@@ -82,6 +86,7 @@ public class MemberService {
         categoryRoleRepository.deleteByMemberId(id);
 
         oAuthTokenRepository.deleteByMemberId(id);
+        tokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
     }
 }
