@@ -69,6 +69,7 @@ public class ControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse(errorMessage);
         return ResponseEntity.badRequest().body(errorResponse);
     }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch() {
         ErrorResponse errorResponse = new ErrorResponse("잘못된 데이터 타입입니다.");
