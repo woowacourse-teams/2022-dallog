@@ -1,7 +1,6 @@
 package com.allog.dallog.domain.auth.domain;
 
 import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
-import java.util.Objects;
 
 public class DallogToken {
 
