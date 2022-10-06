@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.exception.EmptyAuthorizationHeaderException;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.auth.exception.NoSuchOAuthTokenException;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
@@ -75,6 +76,7 @@ public class ControllerAdvice {
             NoSuchMemberException.class,
             NoSuchSubscriptionException.class,
             NoSuchScheduleException.class,
+            NoSuchTokenException.class,
             NoSuchOAuthTokenException.class,
             NoSuchCategoryRoleException.class
     })
