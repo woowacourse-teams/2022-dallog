@@ -17,9 +17,9 @@ class JwtTokenProviderTest {
     private final JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(JWT_SECRET_KEY,
             JWT_ACCESS_TOKEN_EXPIRE_LENGTH, JWT_REFRESH_TOKEN_EXPIRE_LENGTH);
 
-    @DisplayName("JWT 토큰을 생성한다.")
+    @DisplayName("엑세스 토큰을 생성한다.")
     @Test
-    void JWT_토큰을_생성한다() {
+    void 엑세스_토큰을_생성한다() {
         // given & when
         String actual = jwtTokenProvider.createAccessToken(PAYLOAD);
 
@@ -27,9 +27,19 @@ class JwtTokenProviderTest {
         assertThat(actual.split("\\.")).hasSize(3);
     }
 
-    @DisplayName("JWT 토큰의 Payload를 가져온다.")
+    @DisplayName("리프레시 토큰을 생성한다.")
     @Test
-    void JWT_토큰의_Payload를_가져온다() {
+    void 리프레시_토큰을_생성한다() {
+        // given & when
+        String actual = jwtTokenProvider.createRefreshToken(PAYLOAD);
+
+        // then
+        assertThat(actual.split("\\.")).hasSize(3);
+    }
+
+    @DisplayName("토큰의 Payload를 가져온다.")
+    @Test
+    void 토큰의_Payload를_가져온다() {
         // given
         String token = jwtTokenProvider.createAccessToken(PAYLOAD);
 

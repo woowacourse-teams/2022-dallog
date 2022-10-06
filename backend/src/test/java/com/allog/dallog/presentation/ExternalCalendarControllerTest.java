@@ -65,7 +65,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("external-calendars/get",
+                .andDo(document("externalCalendar/get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -89,7 +89,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(우아한테크코스_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("external-calendars/save",
+                .andDo(document("externalCalendar/save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -118,7 +118,7 @@ class ExternalCalendarControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(우아한테크코스_생성_요청))
                 )
                 .andDo(print())
-                .andDo(document("external-calendars/duplicated-save",
+                .andDo(document("externalCalendar/duplicated-save",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

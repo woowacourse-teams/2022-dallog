@@ -3,14 +3,20 @@ package com.allog.dallog.domain.auth.application;
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.domain.auth.domain.TokenRepository;
+import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
-import com.allog.dallog.domain.auth.dto.response.TokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +28,14 @@ class AuthServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @BeforeEach
+    void setUp() {
+        tokenRepository.deleteAll();
+    }
 
     @DisplayName("구글 로그인을 위한 링크를 생성한다.")
     @Test
@@ -39,7 +53,7 @@ class AuthServiceTest extends ServiceTest {
     void 토큰_생성을_하면_OAuth_서버에서_인증_후_토큰들을_반환한다() {
         // given & when
         TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
-        TokenResponse actual = authService.generateToken(tokenRequest);
+        AccessAndRefreshTokenResponse actual = authService.generateAccessAndRefreshToken(tokenRequest);
 
         // then
         assertAll(() -> {
@@ -53,7 +67,7 @@ class AuthServiceTest extends ServiceTest {
     void Authorization_Code를_받으면_회원이_데이터베이스에_저장된다() {
         // given
         TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
-        authService.generateToken(tokenRequest);
+        authService.generateAccessAndRefreshToken(tokenRequest);
 
         // when & then
         assertThat(memberRepository.existsByEmail(MEMBER_이메일)).isTrue();
@@ -67,10 +81,10 @@ class AuthServiceTest extends ServiceTest {
 
         // given
         TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
-        authService.generateToken(tokenRequest);
+        authService.generateAccessAndRefreshToken(tokenRequest);
 
         // when
-        authService.generateToken(tokenRequest);
+        authService.generateAccessAndRefreshToken(tokenRequest);
         List<Member> actual = memberRepository.findAll();
 
         // then
@@ -84,12 +98,40 @@ class AuthServiceTest extends ServiceTest {
 
         // given
         TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
-        TokenResponse tokenResponse = authService.generateToken(tokenRequest);
+        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(tokenRequest);
 
         // when
-        TokenResponse actual = authService.generateToken(tokenRequest);
+        AccessAndRefreshTokenResponse actual = authService.generateAccessAndRefreshToken(tokenRequest);
 
         // then
-        assertThat(actual.getRefreshToken()).isEqualTo(tokenResponse.getRefreshToken());
+        assertThat(actual.getRefreshToken()).isEqualTo(accessAndRefreshTokenResponse.getRefreshToken());
+    }
+
+    @DisplayName("리프레시 토큰으로 새로운 엑세스 토큰을 발급한다.")
+    @Test
+    void 리프레시_토큰으로_새로운_엑세스_토큰을_발급한다() {
+        // given
+        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
+        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(tokenRequest);
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(accessAndRefreshTokenResponse.getRefreshToken());
+
+        // when
+        AccessTokenResponse accessTokenResponse = authService.generateAccessToken(tokenRenewalRequest);
+
+        // then
+        assertThat(accessTokenResponse.getAccessToken()).isNotEmpty();
+    }
+
+    @DisplayName("리프레시 토큰으로 새로운 엑세스 토큰을 발급 할 때, 리프레시 토큰이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void 리프레시_토큰으로_새로운_엑세스_토큰을_발급_할_때_리프레시_토큰이_존재하지_않으면_예외를_던진다() {
+        // given
+        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
+        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(tokenRequest);
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest("DummyRefreshToken");
+
+        // when & then
+        assertThatThrownBy(() -> authService.generateAccessToken(tokenRenewalRequest))
+                .isInstanceOf(InvalidTokenException.class);
     }
 }

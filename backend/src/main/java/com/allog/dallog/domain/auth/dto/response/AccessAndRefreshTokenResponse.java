@@ -1,14 +1,14 @@
 package com.allog.dallog.domain.auth.dto.response;
 
-public class TokenResponse {
+public class AccessAndRefreshTokenResponse {
 
     private String accessToken;
     private String refreshToken;
 
-    private TokenResponse() {
+    private AccessAndRefreshTokenResponse() {
     }
 
-    public TokenResponse(final String accessToken, final String refreshToken) {
+    public AccessAndRefreshTokenResponse(final String accessToken, final String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

@@ -15,7 +15,7 @@ public class StubTokenProvider implements TokenProvider {
 
     private final SecretKey key;
     private final long accessTokenValidityInMilliseconds = 0;
-    private final long refreshTokenValidityInMilliseconds = 0;
+    private final long refreshTokenValidityInMilliseconds = 360000;
 
     public StubTokenProvider(final String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));

@@ -6,8 +6,11 @@ import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
-import com.allog.dallog.domain.auth.dto.response.TokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -57,7 +60,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse generateToken(final TokenRequest tokenRequest) {
+    public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final TokenRequest tokenRequest) {
         String code = tokenRequest.getCode();
         String redirectUri = tokenRequest.getRedirectUri();
 
@@ -70,18 +73,18 @@ public class AuthService {
         return createTokenResponse(foundMember);
     }
 
-    private TokenResponse createTokenResponse(final Member member) {
+    private AccessAndRefreshTokenResponse createTokenResponse(final Member member) {
         Long memberId = member.getId();
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
 
         if (tokenRepository.exist(memberId)) {
             String refreshToken = tokenRepository.getToken(memberId);
-            return new TokenResponse(accessToken, refreshToken);
+            return new AccessAndRefreshTokenResponse(accessToken, refreshToken);
         }
 
         String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
         tokenRepository.save(memberId, refreshToken);
-        return new TokenResponse(accessToken, refreshToken);
+        return new AccessAndRefreshTokenResponse(accessToken, refreshToken);
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
@@ -120,6 +123,19 @@ public class AuthService {
         }
 
         return oAuthTokenRepository.save(new OAuthToken(foundMember, oAuthMember.getRefreshToken()));
+    }
+
+    public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
+        String refreshToken = tokenRenewalRequest.getRefreshToken();
+        tokenProvider.validateToken(refreshToken);
+        Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
+
+        String refreshTokenInMemory = tokenRepository.getToken(memberId);
+        if (!refreshTokenInMemory.equals(refreshToken)) {
+            throw new NoSuchTokenException("회원의 리프레시 토큰이 아닙니다.");
+        }
+        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
+        return new AccessTokenResponse(accessToken);
     }
 
     public Long extractMemberId(final String accessToken) {
