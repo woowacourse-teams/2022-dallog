@@ -4,6 +4,7 @@ import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
@@ -12,8 +13,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
 
-    // TODO: N + 1 개선 예정
-    // TODO: @EntityGraph(attributePaths = {"category", "category.member"})
+    @EntityGraph(attributePaths = {"category", "category.member"})
     List<Subscription> findByMemberId(final Long memberId);
 
     List<Subscription> findByCategoryId(final Long categoryId);
