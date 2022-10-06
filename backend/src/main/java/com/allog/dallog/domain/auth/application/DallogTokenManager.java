@@ -5,7 +5,7 @@ import com.allog.dallog.domain.auth.domain.TokenRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DallogTokenManager {
+public class DallogTokenManager implements TokenManager {
 
     private final TokenProvider tokenProvider;
     private final TokenRepository tokenRepository;

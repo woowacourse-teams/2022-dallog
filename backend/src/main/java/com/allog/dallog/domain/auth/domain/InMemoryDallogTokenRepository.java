@@ -1,6 +1,8 @@
 package com.allog.dallog.domain.auth.domain;
 
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,7 @@ public class InMemoryDallogTokenRepository implements TokenRepository {
 
     @Override
     public String getToken(final Long memberId) {
-        return TOKEN_REPOSITORY.get(memberId);
+        Optional<String> token = Optional.ofNullable(TOKEN_REPOSITORY.get(memberId));
+        return token.orElseThrow(() -> new NoSuchTokenException("일치하는 토큰이 존재하지 않습니다."));
     }
 }
