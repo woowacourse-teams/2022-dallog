@@ -53,7 +53,7 @@ public class CategoryRole extends BaseEntity {
 
     public void validateAuthority(final CategoryAuthority authority) {
         if (!ableTo(authority)) {
-            throw new NoCategoryAuthorityException(authority);
+            throw new NoCategoryAuthorityException(authority.getName());
         }
     }
 
