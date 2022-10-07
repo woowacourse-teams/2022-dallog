@@ -73,7 +73,7 @@ const renameButtonStyle = ({ colors }: Theme) => css`
   height: 8rem;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 2px ${colors.GRAY_400};
+  box-shadow: 0px 2px 2px ${colors.GRAY_400};
 
   background: ${colors.YELLOW_500};
 
@@ -91,11 +91,13 @@ const renameFieldSetStyle = {
 };
 
 const renameFormStyle = ({ flex }: Theme) => css`
-  ${flex.row};
+  ${flex.row}
 
-  justify-content: center;
   align-items: flex-start;
-  gap: 4rem;
+  justify-content: space-between;
+  gap: 20rem;
+
+  width: 100%;
 `;
 
 const sectionStyle = css`

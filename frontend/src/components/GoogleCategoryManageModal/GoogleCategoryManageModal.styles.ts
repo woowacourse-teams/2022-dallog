@@ -60,11 +60,13 @@ const renameFieldSetStyle = {
 };
 
 const renameFormStyle = ({ flex }: Theme) => css`
-  ${flex.row};
+  ${flex.row}
 
-  justify-content: center;
   align-items: flex-start;
-  gap: 4rem;
+  justify-content: space-between;
+  gap: 20rem;
+
+  width: 100%;
 `;
 
 const sectionStyle = css`

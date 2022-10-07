@@ -113,20 +113,18 @@ function AdminCategoryManageModal({ subscription, closeModal }: AdminCategoryMan
       <section css={sectionStyle}>
         <h2 css={titleStyle}>카테고리 이름 수정</h2>
         <form css={renameFormStyle} onSubmit={handleSubmitCategoryModifyForm}>
-          <div css={spaceBetweenStyle}>
-            <Fieldset
-              placeholder={subscription.category.name}
-              value={categoryValue.inputValue}
-              autoFocus
-              onChange={categoryValue.onChangeValue}
-              isValid={isValidCategory}
-              errorMessage={getCategoryErrorMessage()}
-              cssProp={renameFieldSetStyle}
-            />
-            <Button type="submit" disabled={!isValidCategory} cssProp={renameButtonStyle}>
-              수정
-            </Button>
-          </div>
+          <Fieldset
+            placeholder={subscription.category.name}
+            value={categoryValue.inputValue}
+            autoFocus
+            onChange={categoryValue.onChangeValue}
+            isValid={isValidCategory}
+            errorMessage={getCategoryErrorMessage()}
+            cssProp={renameFieldSetStyle}
+          />
+          <Button type="submit" disabled={!isValidCategory} cssProp={renameButtonStyle}>
+            수정
+          </Button>
         </form>
       </section>
 
