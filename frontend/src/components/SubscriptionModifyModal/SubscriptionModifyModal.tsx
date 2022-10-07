@@ -27,7 +27,7 @@ import {
 } from './SubscriptionModifyModal.styles';
 
 interface SubscriptionModifyModalProps {
-  togglePaletteOpen: () => void;
+  toggleModalOpen: () => void;
   modalPos: ModalPosType;
   subscription: SubscriptionType;
   patchSubscription: UseMutateFunction<
@@ -39,7 +39,7 @@ interface SubscriptionModifyModalProps {
 }
 
 function SubscriptionModifyModal({
-  togglePaletteOpen,
+  toggleModalOpen,
   modalPos,
   subscription,
   patchSubscription,
@@ -61,7 +61,12 @@ function SubscriptionModifyModal({
 
   const handleClickPalette = (checked: boolean, colorCode: string) => {
     patchSubscription({ checked, colorCode });
-    togglePaletteOpen();
+    toggleModalOpen();
+  };
+
+  const closeModals = () => {
+    toggleCategoryManageModalOpen();
+    toggleModalOpen();
   };
 
   const canEditCategories = data.data
@@ -72,7 +77,7 @@ function SubscriptionModifyModal({
 
   return (
     <>
-      <div css={outerStyle} onClick={togglePaletteOpen} />
+      <div css={outerStyle} onClick={toggleModalOpen} />
       <div css={modalPosStyle(theme, modalPos)}>
         {canEditSubscription && (
           <Button cssProp={controlButtonStyle} onClick={handleClickManageButton}>
@@ -95,17 +100,11 @@ function SubscriptionModifyModal({
         </div>
       </div>
 
-      <ModalPortal isOpen={isCategoryManageModalOpen} closeModal={toggleCategoryManageModalOpen}>
+      <ModalPortal isOpen={isCategoryManageModalOpen} closeModal={closeModals}>
         {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE ? (
-          <GoogleCategoryManageModal
-            subscription={subscription}
-            closeModal={toggleCategoryManageModalOpen}
-          />
+          <GoogleCategoryManageModal subscription={subscription} closeModal={closeModals} />
         ) : (
-          <AdminCategoryManageModal
-            subscription={subscription}
-            closeModal={toggleCategoryManageModalOpen}
-          />
+          <AdminCategoryManageModal subscription={subscription} closeModal={closeModals} />
         )}
       </ModalPortal>
     </>
