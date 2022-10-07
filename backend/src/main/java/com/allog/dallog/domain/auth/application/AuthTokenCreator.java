@@ -1,24 +1,24 @@
 package com.allog.dallog.domain.auth.application;
 
-import com.allog.dallog.domain.auth.domain.DallogToken;
+import com.allog.dallog.domain.auth.domain.AuthToken;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DallogTokenManager implements TokenManager {
+public class AuthTokenCreator implements TokenCreator {
 
     private final TokenProvider tokenProvider;
     private final TokenRepository tokenRepository;
 
-    public DallogTokenManager(final TokenProvider tokenProvider, final TokenRepository tokenRepository) {
+    public AuthTokenCreator(final TokenProvider tokenProvider, final TokenRepository tokenRepository) {
         this.tokenProvider = tokenProvider;
         this.tokenRepository = tokenRepository;
     }
 
-    public DallogToken createDallogToken(final Long memberId) {
+    public AuthToken createDallogToken(final Long memberId) {
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
         String refreshToken = createRefreshToken(memberId);
-        return new DallogToken(accessToken, refreshToken);
+        return new AuthToken(accessToken, refreshToken);
     }
 
     private String createRefreshToken(final Long memberId) {
@@ -29,16 +29,16 @@ public class DallogTokenManager implements TokenManager {
         return tokenRepository.save(memberId, refreshToken);
     }
 
-    public DallogToken renewDallogToken(final String outRefreshToken) {
-        tokenProvider.validateToken(outRefreshToken);
-        Long memberId = Long.valueOf(tokenProvider.getPayload(outRefreshToken));
+    public AuthToken renewDallogToken(final String refreshToken) {
+        tokenProvider.validateToken(refreshToken);
+        Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
 
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
-        String refreshToken = tokenRepository.getToken(memberId);
+        String accessTokenForRenew = tokenProvider.createAccessToken(String.valueOf(memberId));
+        String refreshTokenForRenew = tokenRepository.getToken(memberId);
 
-        DallogToken renewalDallogToken = new DallogToken(accessToken, refreshToken);
-        renewalDallogToken.validateHasSameRefreshToken(outRefreshToken);
-        return renewalDallogToken;
+        AuthToken renewalAuthToken = new AuthToken(accessTokenForRenew, refreshTokenForRenew);
+        renewalAuthToken.validateHasSameRefreshToken(refreshToken);
+        return renewalAuthToken;
     }
 
     public Long extractPayload(final String accessToken) {

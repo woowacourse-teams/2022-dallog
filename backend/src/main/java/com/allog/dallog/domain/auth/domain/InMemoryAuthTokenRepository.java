@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InMemoryDallogTokenRepository implements TokenRepository {
+public class InMemoryAuthTokenRepository implements TokenRepository {
 
     private static final Map<Long, String> TOKEN_REPOSITORY = new ConcurrentHashMap<>();
 

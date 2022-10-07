@@ -2,12 +2,12 @@ package com.allog.dallog.domain.auth.domain;
 
 import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 
-public class DallogToken {
+public class AuthToken {
 
     private String accessToken;
     private String refreshToken;
 
-    public DallogToken(final String accessToken, final String refreshToken) {
+    public AuthToken(final String accessToken, final String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

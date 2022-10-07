@@ -2,7 +2,7 @@ package com.allog.dallog.domain.auth.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
-import com.allog.dallog.domain.auth.domain.DallogToken;
+import com.allog.dallog.domain.auth.domain.AuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
@@ -34,13 +34,13 @@ public class AuthService {
     private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final ColorPicker colorPicker;
-    private final TokenManager tokenManager;
+    private final TokenCreator tokenCreator;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                        final SubscriptionRepository subscriptionRepository,
                        final OAuthTokenRepository oAuthTokenRepository, final OAuthUri oAuthUri,
                        final OAuthClient oAuthClient, final ColorPicker colorPicker,
-                       final TokenManager tokenManager) {
+                       final TokenCreator tokenCreator) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.subscriptionRepository = subscriptionRepository;
@@ -48,7 +48,7 @@ public class AuthService {
         this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.colorPicker = colorPicker;
-        this.tokenManager = tokenManager;
+        this.tokenCreator = tokenCreator;
     }
 
     public String generateGoogleLink(final String redirectUri) {
@@ -66,8 +66,8 @@ public class AuthService {
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
 
-        DallogToken dallogToken = tokenManager.createDallogToken(foundMember.getId());
-        return new AccessAndRefreshTokenResponse(dallogToken.getAccessToken(), dallogToken.getRefreshToken());
+        AuthToken authToken = tokenCreator.createDallogToken(foundMember.getId());
+        return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
@@ -97,12 +97,12 @@ public class AuthService {
 
     public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
         String refreshToken = tokenRenewalRequest.getRefreshToken();
-        DallogToken dallogToken = tokenManager.renewDallogToken(refreshToken);
-        return new AccessTokenResponse(dallogToken.getAccessToken());
+        AuthToken authToken = tokenCreator.renewDallogToken(refreshToken);
+        return new AccessTokenResponse(authToken.getAccessToken());
     }
 
     public Long extractMemberId(final String accessToken) {
-        Long memberId = tokenManager.extractPayload(accessToken);
+        Long memberId = tokenCreator.extractPayload(accessToken);
         memberRepository.validateExistsById(memberId);
         return memberId;
     }

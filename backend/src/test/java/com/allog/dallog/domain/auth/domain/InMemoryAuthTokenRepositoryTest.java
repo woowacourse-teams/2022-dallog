@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = ExternalApiConfig.class)
 @ActiveProfiles("test")
-class InMemoryDallogTokenRepositoryTest {
+class InMemoryAuthTokenRepositoryTest {
 
     @Autowired
     private TokenRepository tokenRepository;
