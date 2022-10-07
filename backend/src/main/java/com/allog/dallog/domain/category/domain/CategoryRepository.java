@@ -23,8 +23,14 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Slice<Category> findByCategoryTypeAndNameContaining(final CategoryType categoryType, final String name,
                                                         final Pageable pageable);
 
+    @Query("SELECT c "
+            + "FROM Category c "
+            + "WHERE c.member.id = :memberId AND c.categoryType = :categoryType")
     List<Category> findByMemberIdAndCategoryType(final Long memberId, final CategoryType categoryType);
 
+    @Query("SELECT c "
+            + "FROM Category c "
+            + "WHERE c.member.id = :memberId")
     List<Category> findByMemberId(final Long memberId);
 
     boolean existsByIdAndMemberId(final Long id, final Long memberId);
