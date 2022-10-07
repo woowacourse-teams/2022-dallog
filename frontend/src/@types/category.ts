@@ -2,7 +2,7 @@ import { CATEGORY_TYPE } from '@/constants/category';
 
 import { ProfileType } from './profile';
 
-export type CategoryRoleType = 'NONE' | 'ADMIN';
+type CategoryRoleType = 'NONE' | 'ADMIN';
 
 interface CategoryType {
   id: number;
@@ -22,4 +22,4 @@ interface CategoriesGetResponseType {
   categories: CategoryType[];
 }
 
-export { CategoryType, CategorySubscriberType, CategoriesGetResponseType };
+export { CategoryType, CategoryRoleType, CategorySubscriberType, CategoriesGetResponseType };
