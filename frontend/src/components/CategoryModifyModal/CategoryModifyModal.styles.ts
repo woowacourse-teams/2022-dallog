@@ -47,7 +47,7 @@ const cancelButton = ({ colors }: Theme) => css`
   height: 10rem;
   border: 2px solid ${colors.GRAY_500};
   border-radius: 8px;
-  filter: drop-shadow(0 2px 2px ${colors.GRAY_400});
+  box-shadow: 0px 2px 2px ${colors.GRAY_400};
 
   background: ${colors.WHITE};
 
