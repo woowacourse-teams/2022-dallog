@@ -233,7 +233,7 @@ const spinnerStyle = ({ flex }: Theme) => css`
   width: 100%;
   height: 100%;
 
-  font-size: 2rem;
+  font-size: 3rem;
 `;
 
 const waitingNavStyle = ({ flex }: Theme) => css`

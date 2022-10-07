@@ -9,15 +9,15 @@ import Button from '@/components/@common/Button/Button';
 import { PALETTE } from '@/constants/style';
 
 import { getRandomNumber } from '@/utils';
-import { getISODateString } from '@/utils/date';
 
 import { categoryItem, item, subscribeButton } from './UnsubscribedCategoryItem.styles';
 
 interface UnsubscribedCategoryItemProps {
   category: CategoryType;
+  onClick: () => void;
 }
 
-function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
+function UnsubscribedCategoryItem({ category, onClick }: UnsubscribedCategoryItemProps) {
   const theme = useTheme();
 
   const body = {
@@ -31,8 +31,7 @@ function UnsubscribedCategoryItem({ category }: UnsubscribedCategoryItemProps) {
   };
 
   return (
-    <div css={categoryItem}>
-      <span css={item}>{getISODateString(category.createdAt)}</span>
+    <div css={categoryItem} onClick={onClick}>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>

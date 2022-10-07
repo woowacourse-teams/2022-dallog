@@ -9,16 +9,19 @@ import Button from '@/components/@common/Button/Button';
 
 import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
-import { getISODateString } from '@/utils/date';
-
 import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCategoryItem.styles';
 
 interface SubscribedCategoryItemProps {
   category: CategoryType;
   subscriptionId: number;
+  onClick: () => void;
 }
 
-function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategoryItemProps) {
+function SubscribedCategoryItem({
+  category,
+  subscriptionId,
+  onClick,
+}: SubscribedCategoryItemProps) {
   const theme = useTheme();
 
   const { user } = useUserValue();
@@ -34,8 +37,7 @@ function SubscribedCategoryItem({ category, subscriptionId }: SubscribedCategory
   const canUnsubscribeCategory = category.creator.id !== user.id;
 
   return (
-    <div css={categoryItem}>
-      <span css={item}>{getISODateString(category.createdAt)}</span>
+    <div css={categoryItem} onClick={onClick}>
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>
