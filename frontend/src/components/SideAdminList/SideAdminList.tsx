@@ -21,13 +21,13 @@ import {
   listStyle,
   menuStyle,
   menuTitleStyle,
-} from './SideMyList.styles';
+} from './SideAdminList.styles';
 
-interface SideMyListProps {
+interface SideAdminListProps {
   categories: SubscriptionType[];
 }
 
-function SideMyList({ categories }: SideMyListProps) {
+function SideAdminList({ categories }: SideAdminListProps) {
   const isSideBarOpen = useRecoilValue(sideBarState);
 
   const theme = useTheme();
@@ -44,7 +44,7 @@ function SideMyList({ categories }: SideMyListProps) {
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
         <span css={headerStyle} onClick={toggleMyListOpen}>
-          나의 카테고리
+          관리 카테고리
         </span>
         <Button cssProp={menuStyle}>
           <MdAdd size={20} onClick={handleClickCategoryAddButton} />
@@ -67,4 +67,4 @@ function SideMyList({ categories }: SideMyListProps) {
   );
 }
 
-export default SideMyList;
+export default SideAdminList;
