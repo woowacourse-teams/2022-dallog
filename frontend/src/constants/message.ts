@@ -3,6 +3,9 @@ const CONFIRM_MESSAGE = {
   UNSUBSCRIBE: '구독을 해제하시겠습니까?',
   LOGOUT: '로그아웃하시겠습니까?',
   WITHDRAWAL: '정말 탈퇴하시겠습니까?',
+  ADD_ADMIN: '카테고리 편집 권한을 부여하시겠습니까?',
+  DELETE_ADMIN: '카테고리 편집 권한을 삭제하시겠습니까?',
+  FORGIVE_ADMIN: '정말 카테고리 편집 권한을 포기하시겠습니까?',
 };
 
 const ERROR_MESSAGE = {

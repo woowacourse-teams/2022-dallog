@@ -223,9 +223,10 @@ function usePostCategory({ onSuccess }: usePostCategoryProps) {
     unknown
   >((body) => categoryApi.post(accessToken, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-      queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries([CACHE_KEY.CATEGORIES]);
+      queryClient.invalidateQueries([CACHE_KEY.MY_CATEGORIES]);
+      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
+      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
 
       onSuccess && onSuccess();
     },

@@ -80,7 +80,7 @@ function SideItem({ subscription }: SideItemProps) {
             dimmerBackground={TRANSPARENT}
           >
             <SubscriptionModifyModal
-              togglePaletteOpen={toggleModalOpen}
+              toggleModalOpen={toggleModalOpen}
               modalPos={modalPos}
               subscription={subscription}
               patchSubscription={patchSubscription}

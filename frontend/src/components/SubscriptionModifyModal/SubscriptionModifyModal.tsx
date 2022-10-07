@@ -1,27 +1,22 @@
 import { useTheme } from '@emotion/react';
 import { AxiosResponse } from 'axios';
-import { UseMutateFunction, useMutation, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
+import { UseMutateFunction } from 'react-query';
 
+import { useGetEditableCategories } from '@/hooks/@queries/category';
 import useToggle from '@/hooks/useToggle';
 
 import { ModalPosType } from '@/@types';
 import { SubscriptionType } from '@/@types/subscription';
 
-import { userState } from '@/recoil/atoms';
-
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
-import CategoryModifyModal from '@/components/CategoryModifyModal/CategoryModifyModal';
+import AdminCategoryManageModal from '@/components/AdminCategoryManageModal/AdminCategoryManageModal';
+import GoogleCategoryManageModal from '@/components/GoogleCategoryManageModal/GoogleCategoryManageModal';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
-import { CONFIRM_MESSAGE } from '@/constants/message';
 import { PALETTE } from '@/constants/style';
 
-import categoryApi from '@/api/category';
-
-import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
+import { MdSettings } from 'react-icons/md';
 
 import {
   colorStyle,
@@ -32,7 +27,7 @@ import {
 } from './SubscriptionModifyModal.styles';
 
 interface SubscriptionModifyModalProps {
-  togglePaletteOpen: () => void;
+  toggleModalOpen: () => void;
   modalPos: ModalPosType;
   subscription: SubscriptionType;
   patchSubscription: UseMutateFunction<
@@ -44,65 +39,52 @@ interface SubscriptionModifyModalProps {
 }
 
 function SubscriptionModifyModal({
-  togglePaletteOpen,
+  toggleModalOpen,
   modalPos,
   subscription,
   patchSubscription,
 }: SubscriptionModifyModalProps) {
   const theme = useTheme();
 
-  const user = useRecoilValue(userState);
-
-  const queryClient = useQueryClient();
-
-  const { state: isCategoryModifyModalOpen, toggleState: toggleCategoryModifyModalOpen } =
+  const { state: isCategoryManageModalOpen, toggleState: toggleCategoryManageModalOpen } =
     useToggle();
 
-  const { mutate: deleteSubscription } = useMutation(
-    () => categoryApi.delete(user.accessToken, subscription.category.id),
-    {
-      onSuccess: () => onSuccessDeleteCategory(),
-    }
-  );
+  const { isLoading, data } = useGetEditableCategories({});
 
-  const onSuccessDeleteCategory = () => {
-    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-  };
+  if (isLoading || !data) {
+    return <></>;
+  }
 
-  const handleClickDeleteButton = () => {
-    if (confirm(CONFIRM_MESSAGE.DELETE)) {
-      deleteSubscription();
-    }
+  const handleClickManageButton = () => {
+    toggleCategoryManageModalOpen();
   };
 
   const handleClickPalette = (checked: boolean, colorCode: string) => {
     patchSubscription({ checked, colorCode });
-    togglePaletteOpen();
+    toggleModalOpen();
   };
 
-  const canEditSubscription =
-    subscription.category.categoryType !== CATEGORY_TYPE.PERSONAL &&
-    subscription.category.creator.id === user.id;
+  const closeModals = () => {
+    toggleCategoryManageModalOpen();
+    toggleModalOpen();
+  };
+
+  const canEditCategories = data.data
+    .filter((category) => category.categoryType !== CATEGORY_TYPE.PERSONAL)
+    .map((category) => category.id);
+
+  const canEditSubscription = canEditCategories.includes(subscription.category.id);
 
   return (
     <>
-      <div css={outerStyle} onClick={togglePaletteOpen} />
+      <div css={outerStyle} onClick={toggleModalOpen} />
       <div css={modalPosStyle(theme, modalPos)}>
         {canEditSubscription && (
-          <>
-            <Button cssProp={controlButtonStyle} onClick={toggleCategoryModifyModalOpen}>
-              <MdOutlineModeEdit size={20} />
-              <span>수정</span>
-            </Button>
-            <Button cssProp={controlButtonStyle} onClick={handleClickDeleteButton}>
-              <MdDeleteOutline size={20} />
-              <span>삭제</span>
-            </Button>
-          </>
+          <Button cssProp={controlButtonStyle} onClick={handleClickManageButton}>
+            <MdSettings size={20} />
+            <span>관리</span>
+          </Button>
         )}
-
         <div css={paletteStyle}>
           {PALETTE.map((color) => {
             return (
@@ -117,14 +99,13 @@ function SubscriptionModifyModal({
           })}
         </div>
       </div>
-      <ModalPortal isOpen={isCategoryModifyModalOpen} closeModal={toggleCategoryModifyModalOpen}>
-        <CategoryModifyModal
-          category={subscription.category}
-          closeModal={() => {
-            togglePaletteOpen();
-            toggleCategoryModifyModalOpen();
-          }}
-        />
+
+      <ModalPortal isOpen={isCategoryManageModalOpen} closeModal={closeModals}>
+        {subscription.category.categoryType === CATEGORY_TYPE.GOOGLE ? (
+          <GoogleCategoryManageModal subscription={subscription} closeModal={closeModals} />
+        ) : (
+          <AdminCategoryManageModal subscription={subscription} closeModal={closeModals} />
+        )}
       </ModalPortal>
     </>
   );

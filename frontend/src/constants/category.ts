@@ -4,4 +4,9 @@ const CATEGORY_TYPE = {
   PERSONAL: 'PERSONAL',
 };
 
-export { CATEGORY_TYPE };
+const ROLE = {
+  ADMIN: 'ADMIN',
+  NONE: 'NONE',
+};
+
+export { CATEGORY_TYPE, ROLE };

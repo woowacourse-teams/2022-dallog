@@ -1,8 +1,8 @@
-import { CATEGORY_TYPE } from '@/constants/category';
+import { CATEGORY_TYPE, ROLE } from '@/constants/category';
 
 import { ProfileType } from './profile';
 
-type CategoryRoleType = 'NONE' | 'ADMIN';
+type CategoryRoleType = typeof ROLE[keyof typeof ROLE];
 
 interface CategoryType {
   id: number;
