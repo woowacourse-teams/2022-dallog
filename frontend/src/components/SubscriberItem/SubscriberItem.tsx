@@ -4,6 +4,7 @@ import { ProfileType } from '@/@types/profile';
 
 import Button from '@/components/@common/Button/Button';
 
+import { ROLE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
@@ -24,7 +25,7 @@ function SubscriberItem({ categoryId, subscriber }: SubscriberItemProps) {
   const handleClickAddRoleButton = () => {
     window.confirm(CONFIRM_MESSAGE.ADD_ADMIN) &&
       patchRole({
-        categoryRoleType: 'ADMIN',
+        categoryRoleType: ROLE.ADMIN,
       });
   };
 

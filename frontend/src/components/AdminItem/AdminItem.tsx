@@ -8,6 +8,7 @@ import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
+import { ROLE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { MdPersonOff } from 'react-icons/md';
@@ -30,7 +31,7 @@ function AdminItem({ categoryId, admin }: AdminItemProps) {
   const handleClickDeleteRoleButton = () => {
     window.confirm(CONFIRM_MESSAGE.DELETE_ADMIN) &&
       patchRole({
-        categoryRoleType: 'NONE',
+        categoryRoleType: ROLE.NONE,
       });
   };
 

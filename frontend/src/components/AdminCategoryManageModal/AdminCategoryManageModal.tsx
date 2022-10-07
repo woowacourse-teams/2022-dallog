@@ -19,6 +19,7 @@ import Spinner from '@/components/@common/Spinner/Spinner';
 import AdminItem from '@/components/AdminItem/AdminItem';
 import SubscriberItem from '@/components/SubscriberItem/SubscriberItem';
 
+import { ROLE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { MdClose } from 'react-icons/md';
@@ -96,12 +97,12 @@ function AdminCategoryManageModal({ subscription, closeModal }: AdminCategoryMan
     if (!window.confirm(CONFIRM_MESSAGE.FORGIVE_ADMIN)) return;
 
     patchRole({
-      categoryRoleType: 'NONE',
+      categoryRoleType: ROLE.NONE,
     });
   };
 
-  const admins = data.data.filter((member) => member.categoryRoleType === 'ADMIN');
-  const subscribers = data.data.filter((member) => member.categoryRoleType === 'NONE');
+  const admins = data.data.filter((member) => member.categoryRoleType === ROLE.ADMIN);
+  const subscribers = data.data.filter((member) => member.categoryRoleType === ROLE.NONE);
 
   return (
     <div css={layoutStyle}>
