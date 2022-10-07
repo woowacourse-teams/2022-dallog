@@ -1,20 +1,12 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { usePatchCategoryName } from '@/hooks/@queries/category';
 import useValidateCategory from '@/hooks/useValidateCategory';
 
 import { CategoryType } from '@/@types/category';
 
-import { userState } from '@/recoil/atoms';
-
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
-
-import { CACHE_KEY } from '@/constants/api';
-
-import categoryApi from '@/api/category';
 
 import {
   cancelButton,
@@ -32,35 +24,18 @@ interface CategoryModifyModalProps {
 }
 
 function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory(
     category.name
   );
 
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation<
-    AxiosResponse<Pick<CategoryType, 'name'>>,
-    AxiosError,
-    Pick<CategoryType, 'name'>,
-    unknown
-  >((body) => categoryApi.patch(accessToken, category.id, body), {
-    onSuccess: () => onSuccessPatchCategory(),
-  });
+  const { mutate } = usePatchCategoryName({ categoryId: category.id, onSuccess: closeModl });
 
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     mutate({ name: categoryValue.inputValue });
-  };
-
-  const onSuccessPatchCategory = () => {
-    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-    closeModal();
   };
 
   return (

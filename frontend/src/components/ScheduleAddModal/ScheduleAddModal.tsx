@@ -1,24 +1,17 @@
 import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { useGetMyCategories } from '@/hooks/@queries/category';
 import { usePostSchedule } from '@/hooks/@queries/schedule';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
-
-import { CategoryType } from '@/@types/category';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
-import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
@@ -29,8 +22,6 @@ import {
   getNextDate,
   getStartTime,
 } from '@/utils/date';
-
-import categoryApi from '@/api/category';
 
 import {
   arrow,
@@ -55,16 +46,11 @@ interface ScheduleAddModalProps {
 }
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(true);
 
-  const { isLoading: isGetCategoryLoading, data } = useQuery<
-    AxiosResponse<CategoryType[]>,
-    AxiosError
-  >(CACHE_KEY.MY_CATEGORIES, () => categoryApi.getMy(accessToken));
+  const { isLoading: isGetCategoryLoading, data } = useGetMyCategories();
 
   const categoryId = useControlledInput(String(data?.data[0].id));
 

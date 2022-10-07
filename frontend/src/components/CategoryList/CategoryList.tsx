@@ -1,18 +1,13 @@
-import { AxiosError, AxiosResponse } from 'axios';
 import { Dispatch, SetStateAction } from 'react';
-import { useInfiniteQuery } from 'react-query';
 
+import { useGetEntireCategories } from '@/hooks/@queries/category';
 import { useGetSubscriptions } from '@/hooks/@queries/subscription';
 import useIntersect from '@/hooks/useIntersect';
 
-import { CategoriesGetResponseType, CategoryType } from '@/@types/category';
+import { CategoryType } from '@/@types/category';
 
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
-
-import { API, CACHE_KEY } from '@/constants/api';
-
-import categoryApi from '@/api/category';
 
 import {
   categoryTableHeaderStyle,
@@ -32,17 +27,7 @@ function CategoryList({ keyword, setCategory }: CategoryListProps) {
     data: categoriesGetResponse,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<AxiosResponse<CategoriesGetResponseType>, AxiosError>(
-    [CACHE_KEY.CATEGORIES, keyword],
-    ({ pageParam = 0 }) => categoryApi.getEntire(keyword, pageParam, API.CATEGORY_GET_SIZE),
-    {
-      getNextPageParam: ({ data }) => {
-        if (data.categories.length > 0) {
-          return data.page + 1;
-        }
-      },
-    }
-  );
+  } = useGetEntireCategories({ keyword });
 
   const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useGetSubscriptions({});
 

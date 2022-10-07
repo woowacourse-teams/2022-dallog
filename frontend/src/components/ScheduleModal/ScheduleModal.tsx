@@ -1,21 +1,16 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useQuery } from 'react-query';
 
+import { useGetSingleCategory } from '@/hooks/@queries/category';
 import { useDeleteSchedule } from '@/hooks/@queries/schedule';
 import useUserValue from '@/hooks/useUserValue';
 
 import { ModalPosType } from '@/@types';
-import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
-
-import categoryApi from '@/api/category';
 
 import {
   MdClose,
@@ -55,10 +50,9 @@ function ScheduleModal({
 
   const theme = useTheme();
 
-  const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
-    CACHE_KEY.CATEGORY,
-    () => categoryApi.getSingle(scheduleInfo.categoryId)
-  );
+  const { data: categoryGetResponse } = useGetSingleCategory({
+    categoryId: scheduleInfo.categoryId,
+  });
 
   const { mutate } = useDeleteSchedule({
     scheduleId: scheduleInfo.id,
