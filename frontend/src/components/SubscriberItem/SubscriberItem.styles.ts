@@ -27,7 +27,7 @@ const subscriberItemStyle = ({ colors, flex }: Theme) => css`
 
   height: 7rem;
   padding: 6rem 2rem;
-  box-shadow: 0px 2px 2px ${colors.GRAY_400};
+  box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   font-size: 4rem;
 

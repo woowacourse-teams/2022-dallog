@@ -11,7 +11,7 @@ const closeModalButtonStyle = css`
 const deleteButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0px 2px 2px ${colors.GRAY_400};
+  box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.RED_400};
 
@@ -42,7 +42,7 @@ const renameButtonStyle = ({ colors }: Theme) => css`
   height: 8rem;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0px 2px 2px ${colors.GRAY_400};
+  box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.YELLOW_500};
 
