@@ -1,21 +1,12 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { usePostCategory } from '@/hooks/@queries/category';
 import useValidateCategory from '@/hooks/useValidateCategory';
-
-import { CategoryType } from '@/@types/category';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
-
-import categoryApi from '@/api/category';
 
 import {
   cancelButtonStyle,
@@ -32,34 +23,16 @@ interface CategoryAddModalProps {
 }
 
 function CategoryAddModal({ closeModal }: CategoryAddModalProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory();
 
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation<
-    AxiosResponse<CategoryType>,
-    AxiosError,
-    Pick<CategoryType, 'name' | 'categoryType'>,
-    unknown
-  >((body) => categoryApi.post(accessToken, body), {
-    onSuccess: () => onSuccessPostCategory(),
-  });
+  const { mutate } = usePostCategory({ onSuccess: closeModal });
 
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     mutate({ name: categoryValue.inputValue, categoryType: CATEGORY_TYPE.NORMAL });
-  };
-
-  const onSuccessPostCategory = () => {
-    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-
-    closeModal();
   };
 
   return (

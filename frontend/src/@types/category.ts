@@ -2,6 +2,8 @@ import { CATEGORY_TYPE } from '@/constants/category';
 
 import { ProfileType } from './profile';
 
+type CategoryRoleType = 'NONE' | 'ADMIN';
+
 interface CategoryType {
   id: number;
   name: string;
@@ -10,9 +12,14 @@ interface CategoryType {
   categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
 }
 
+interface CategorySubscriberType {
+  member: ProfileType;
+  categoryRoleType: CategoryRoleType;
+}
+
 interface CategoriesGetResponseType {
   page: number;
   categories: CategoryType[];
 }
 
-export { CategoryType, CategoriesGetResponseType };
+export { CategoryType, CategoryRoleType, CategorySubscriberType, CategoriesGetResponseType };
