@@ -32,6 +32,12 @@ interface useGetEntireCategoriesProps {
   keyword: string;
 }
 
+interface useGetSchedulesWithCategoryProps {
+  categoryId: number;
+  startDateTime: string;
+  endDateTime: string;
+}
+
 interface useGetSingleCategoryProps {
   categoryId: number;
 }
@@ -130,6 +136,22 @@ function useGetMyCategories() {
   return { isLoading, data };
 }
 
+function useGetSchedulesWithCategory({
+  categoryId,
+  startDateTime,
+  endDateTime,
+}: useGetSchedulesWithCategoryProps) {
+  const { isLoading, data } = useQuery(
+    [CACHE_KEY.SCHEDULES, categoryId],
+    () => categoryApi.getSchedules(categoryId, startDateTime, endDateTime),
+    {
+      enabled: !!categoryId,
+    }
+  );
+
+  return { isLoading, data };
+}
+
 function useGetSingleCategory({ categoryId }: useGetSingleCategoryProps) {
   const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
     categoryApi.getSingle(categoryId)
@@ -218,6 +240,7 @@ export {
   useGetEditableCategories,
   useGetEntireCategories,
   useGetMyCategories,
+  useGetSchedulesWithCategory,
   useGetSingleCategory,
   useGetSubscribers,
   usePatchCategoryName,

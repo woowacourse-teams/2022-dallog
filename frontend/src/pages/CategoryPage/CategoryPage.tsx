@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { lazy, Suspense, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
 
+import { useGetSchedulesWithCategory } from '@/hooks/@queries/category';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
@@ -19,13 +19,10 @@ import CategoryListFallback from '@/components/CategoryList/CategoryList.fallbac
 import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
 
 import { CALENDAR } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, DAYS } from '@/constants/date';
 import { SCHEDULE, TRANSPARENT } from '@/constants/style';
 
 import { extractDateTime, getDayOffsetDateTime, getISODateString, getToday } from '@/utils/date';
-
-import categoryApi from '@/api/category';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdSearch } from 'react-icons/md';
 
@@ -86,13 +83,11 @@ function CategoryPage() {
 
   const moreScheduleModal = useModalPosition();
 
-  const { isLoading, data } = useQuery(
-    [CACHE_KEY.SCHEDULES, category],
-    () => categoryApi.getSchedules(category.id, startDateTime, endDateTime),
-    {
-      enabled: !!category.id,
-    }
-  );
+  const { isLoading, data } = useGetSchedulesWithCategory({
+    categoryId: category.id,
+    startDateTime,
+    endDateTime,
+  });
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
