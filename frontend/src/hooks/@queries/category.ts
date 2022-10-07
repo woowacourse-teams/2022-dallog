@@ -122,12 +122,12 @@ function useGetEntireCategories({ keyword }: useGetEntireCategoriesProps) {
 function useGetMyCategories() {
   const { accessToken } = useRecoilValue(userState);
 
-  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
+  const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     CACHE_KEY.MY_CATEGORIES,
     () => categoryApi.getMy(accessToken)
   );
 
-  return { data };
+  return { isLoading, data };
 }
 
 function useGetSingleCategory({ categoryId }: useGetSingleCategoryProps) {

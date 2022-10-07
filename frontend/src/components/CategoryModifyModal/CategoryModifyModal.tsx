@@ -30,7 +30,7 @@ function CategoryModifyModal({ category, closeModal }: CategoryModifyModalProps)
     category.name
   );
 
-  const { mutate } = usePatchCategoryName({ categoryId: category.id, onSuccess: closeModl });
+  const { mutate } = usePatchCategoryName({ categoryId: category.id, onSuccess: closeModal });
 
   const handleSubmitCategoryModifyForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
