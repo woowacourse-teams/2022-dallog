@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -50,6 +51,28 @@ public class ControllerAdvice {
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {
+        FieldError firstFieldError = e.getFieldErrors().get(0);
+        String errorMessage = String.format(INVALID_DTO_FIELD_ERROR_MESSAGE_FORMAT, firstFieldError.getField(),
+                firstFieldError.getDefaultMessage(), firstFieldError.getRejectedValue());
+
+        ErrorResponse errorResponse = new ErrorResponse(errorMessage);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 데이터 타입입니다.");
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
@@ -85,33 +108,17 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleNotSupportedMethod() {
+        ErrorResponse errorResponse = new ErrorResponse("지원하지 않는 HTTP 메소드 요청입니다.");
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
+    }
+
     @ExceptionHandler(OAuthException.class)
     public ResponseEntity<ErrorResponse> handleOAuthException(final RuntimeException e) {
         log.error("OAuth 통신 과정에서 에러가 발생했습니다.", e);
         ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
-        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {
-        FieldError firstFieldError = e.getFieldErrors().get(0);
-        String errorMessage = String.format(INVALID_DTO_FIELD_ERROR_MESSAGE_FORMAT, firstFieldError.getField(),
-                firstFieldError.getDefaultMessage(), firstFieldError.getRejectedValue());
-
-        ErrorResponse errorResponse = new ErrorResponse(errorMessage);
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
-
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch() {
-        ErrorResponse errorResponse = new ErrorResponse("잘못된 데이터 타입입니다.");
-        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

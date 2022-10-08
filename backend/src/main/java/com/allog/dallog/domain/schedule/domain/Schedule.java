@@ -21,6 +21,9 @@ public class Schedule extends BaseEntity {
     private static final int MAX_TITLE_LENGTH = 50;
     private static final int MAX_MEMO_LENGTH = 255;
 
+    private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(1000, 1, 1, 0, 0);
+    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(9999, 12, 31, 11, 59, 59, 999999000);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -79,6 +82,16 @@ public class Schedule extends BaseEntity {
         if (startDateTime.isAfter(endDateTime)) {
             throw new InvalidScheduleException("종료일시가 시작일시보다 이전일 수 없습니다.");
         }
+        if (isNotValidDateTimeRange(startDateTime) || isNotValidDateTimeRange(endDateTime)) {
+            throw new InvalidScheduleException(
+                    String.format("일정은 %s부터 %s까지 등록할 수 있습니다.",
+                            MIN_DATE_TIME.toLocalDate(), MAX_DATE_TIME.toLocalDate())
+            );
+        }
+    }
+
+    private boolean isNotValidDateTimeRange(final LocalDateTime dateTime) {
+        return dateTime.isBefore(MIN_DATE_TIME) || dateTime.isAfter(MAX_DATE_TIME);
     }
 
     private void validateMemoLength(final String memo) {
