@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long> {
 
+    @Query("SELECT cr "
+            + "FROM CategoryRole cr "
+            + "WHERE cr.member.id = :memberId AND cr.category.id = :categoryId")
     Optional<CategoryRole> findByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
     @EntityGraph(attributePaths = {"member"})
