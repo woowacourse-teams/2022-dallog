@@ -1,8 +1,7 @@
 import { useTheme } from '@emotion/react';
 
-import { useGetSingleCategory } from '@/hooks/@queries/category';
+import { useGetEditableCategories, useGetSingleCategory } from '@/hooks/@queries/category';
 import { useDeleteSchedule } from '@/hooks/@queries/schedule';
-import useUserValue from '@/hooks/useUserValue';
 
 import { ModalPosType } from '@/@types';
 import { ScheduleType } from '@/@types/schedule';
@@ -46,13 +45,13 @@ function ScheduleModal({
   toggleScheduleModifyModalOpen,
   closeModal,
 }: ScheduleModalProps) {
-  const { user } = useUserValue();
-
   const theme = useTheme();
 
   const { data: categoryGetResponse } = useGetSingleCategory({
     categoryId: scheduleInfo.categoryId,
   });
+
+  const { data: editableCategoryGetResponse } = useGetEditableCategories({});
 
   const { mutate } = useDeleteSchedule({
     scheduleId: scheduleInfo.id,
@@ -78,10 +77,10 @@ function ScheduleModal({
     return dateTime.replace('T', ' ');
   };
 
-  const canEditSchedule =
-    (scheduleInfo.categoryType === CATEGORY_TYPE.NORMAL ||
-      scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL) &&
-    user.id === categoryGetResponse?.data.creator.id;
+  const canEditSchedule = editableCategoryGetResponse?.data.find(
+    (category) =>
+      category.id === scheduleInfo.categoryId && category.categoryType !== CATEGORY_TYPE.GOOGLE
+  );
 
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>
