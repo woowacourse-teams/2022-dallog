@@ -1,15 +1,12 @@
 import { validateNotEmpty } from '@/validation';
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import {
+  useGetGoogleCalendar,
+  usePostGoogleCalendarCategory,
+} from '@/hooks/@queries/googleCalendar';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateCategory from '@/hooks/useValidateCategory';
-
-import { GoogleCalendarGetResponseType, GoogleCalendarPostBodyType } from '@/@types/googleCalendar';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -20,10 +17,6 @@ import {
   controlButtons,
   saveButtonStyle,
 } from '@/components/CategoryAddModal/CategoryAddModal.styles';
-
-import { CACHE_KEY } from '@/constants/api';
-
-import googleCalendarApi from '@/api/googleCalendar';
 
 import {
   formStyle,
@@ -41,40 +34,17 @@ interface GoogleImportModal {
 function GoogleImportModal({ closeModal }: GoogleImportModal) {
   const theme = useTheme();
 
-  const { accessToken } = useRecoilValue(userState);
-
   const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory();
-
   const { inputValue: googleCalendarInputValue, onChangeValue: onChangeGoogleCalendarInputValue } =
     useControlledInput();
 
-  const queryClient = useQueryClient();
-
-  const { isLoading, data } = useQuery<AxiosResponse<GoogleCalendarGetResponseType>, AxiosError>(
-    CACHE_KEY.GOOGLE_CALENDAR,
-    () => googleCalendarApi.get(accessToken)
-  );
-
-  const { mutate } = useMutation(
-    (body: GoogleCalendarPostBodyType) => googleCalendarApi.post(accessToken, body),
-    {
-      onSuccess: () => onSuccessPostCategory(),
-    }
-  );
+  const { isLoading, data } = useGetGoogleCalendar();
+  const { mutate } = usePostGoogleCalendarCategory({ onSuccess: closeModal });
 
   const handleSubmitCategoryAddForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     mutate({ externalId: googleCalendarInputValue, name: categoryValue.inputValue });
-  };
-
-  const onSuccessPostCategory = () => {
-    queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
-    queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-
-    closeModal();
   };
 
   if (isLoading || data === undefined) {
