@@ -2,7 +2,7 @@ import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { useState } from 'react';
 
-import { useGetMyCategories } from '@/hooks/@queries/category';
+import { useGetEditableCategories } from '@/hooks/@queries/category';
 import { usePostSchedule } from '@/hooks/@queries/schedule';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
@@ -50,7 +50,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
 
   const [isAllDay, setAllDay] = useState(true);
 
-  const { isLoading: isGetCategoryLoading, data } = useGetMyCategories();
+  const { isLoading, data } = useGetEditableCategories({});
 
   const categoryId = useControlledInput(String(data?.data[0].id));
 
@@ -89,7 +89,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     postSchedule(body);
   };
 
-  if (isGetCategoryLoading || data === undefined) {
+  if (isLoading || data === undefined) {
     return <Spinner size={10} />;
   }
 
