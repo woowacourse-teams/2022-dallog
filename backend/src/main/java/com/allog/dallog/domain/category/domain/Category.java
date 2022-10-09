@@ -92,12 +92,6 @@ public class Category extends BaseEntity {
         }
     }
 
-    public void validateNormalCategory() {
-        if (categoryType != NORMAL) {
-            throw new NoPermissionException("기본 카테고리가 아니면 조회할 수 없습니다.");
-        }
-    }
-
     public boolean isCreatorId(final Long creatorId) {
         return member.hasSameId(creatorId);
     }

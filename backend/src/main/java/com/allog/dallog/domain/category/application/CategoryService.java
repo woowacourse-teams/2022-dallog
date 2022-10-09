@@ -133,8 +133,6 @@ public class CategoryService {
 
     public CategoryDetailResponse findDetailCategoryById(final Long id) {
         Category category = categoryRepository.getById(id);
-        category.validateNormalCategory();
-
         List<Subscription> subscriptions = subscriptionRepository.findByCategoryId(id);
         return new CategoryDetailResponse(category, subscriptions.size());
     }
