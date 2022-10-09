@@ -2,7 +2,7 @@ import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
 import { useState } from 'react';
 
-import { useGetMyCategories } from '@/hooks/@queries/category';
+import { useGetEditableCategories } from '@/hooks/@queries/category';
 import { usePatchSchedule } from '@/hooks/@queries/schedule';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
@@ -53,7 +53,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
-  const { data: categoriesGetResponse } = useGetMyCategories();
+  const { data } = useGetEditableCategories({});
 
   const { mutate } = usePatchSchedule({
     scheduleId: scheduleInfo.id,
@@ -61,7 +61,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   });
 
   const categoryId = useControlledInput(
-    categoriesGetResponse?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
+    data?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
   );
 
   const [startDate, startTime] = scheduleInfo.startDateTime.split('T');
@@ -96,8 +96,8 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       memo: validationSchedule.memo.inputValue,
       categoryId:
-        categoriesGetResponse?.data.find((category) => category.name === categoryId.inputValue)
-          ?.id || scheduleInfo.categoryId,
+        data?.data.find((category) => category.name === categoryId.inputValue)?.id ||
+        scheduleInfo.categoryId,
     };
 
     mutate(body);
@@ -107,7 +107,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     setAllDay((prev) => !prev);
   };
 
-  const categories = categoriesGetResponse?.data
+  const categories = data?.data
     .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
     .map((category) => category.name);
 
