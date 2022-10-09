@@ -77,7 +77,7 @@ function ScheduleModal({
     return dateTime.replace('T', ' ');
   };
 
-  const canEditSchedule = editableCategoryGetResponse?.data.find(
+  const canEditSchedule = editableCategoryGetResponse?.data.some(
     (category) =>
       category.id === scheduleInfo.categoryId && category.categoryType !== CATEGORY_TYPE.GOOGLE
   );
