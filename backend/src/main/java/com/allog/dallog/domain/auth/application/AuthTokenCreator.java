@@ -15,7 +15,7 @@ public class AuthTokenCreator implements TokenCreator {
         this.tokenRepository = tokenRepository;
     }
 
-    public AuthToken createDallogToken(final Long memberId) {
+    public AuthToken createAuthToken(final Long memberId) {
         String accessToken = tokenProvider.createAccessToken(String.valueOf(memberId));
         String refreshToken = createRefreshToken(memberId);
         return new AuthToken(accessToken, refreshToken);
@@ -29,7 +29,7 @@ public class AuthTokenCreator implements TokenCreator {
         return tokenRepository.save(memberId, refreshToken);
     }
 
-    public AuthToken renewDallogToken(final String refreshToken) {
+    public AuthToken renewAuthToken(final String refreshToken) {
         tokenProvider.validateToken(refreshToken);
         Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
 

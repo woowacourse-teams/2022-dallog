@@ -20,7 +20,7 @@ class AuthTokenCreatorTest extends ServiceTest {
         Long memberId = 1L;
 
         // when
-        AuthToken authToken = tokenCreator.createDallogToken(memberId);
+        AuthToken authToken = tokenCreator.createAuthToken(memberId);
 
         // then
         assertThat(authToken.getAccessToken()).isNotEmpty();
@@ -32,10 +32,10 @@ class AuthTokenCreatorTest extends ServiceTest {
     void 리프레시_토큰으로_엑세스_토큰을_발급한다() {
         // given
         Long memberId = 1L;
-        AuthToken authToken = tokenCreator.createDallogToken(memberId);
+        AuthToken authToken = tokenCreator.createAuthToken(memberId);
 
         // when
-        AuthToken actual = tokenCreator.renewDallogToken(authToken.getRefreshToken());
+        AuthToken actual = tokenCreator.renewAuthToken(authToken.getRefreshToken());
 
         // then
         assertThat(actual.getAccessToken()).isNotEmpty();
@@ -47,7 +47,7 @@ class AuthTokenCreatorTest extends ServiceTest {
     void 토큰에서_페이로드를_추출한다() {
         // given
         Long memberId = 1L;
-        AuthToken authToken = tokenCreator.createDallogToken(memberId);
+        AuthToken authToken = tokenCreator.createAuthToken(memberId);
 
         // when
         Long actual = tokenCreator.extractPayload(authToken.getAccessToken());

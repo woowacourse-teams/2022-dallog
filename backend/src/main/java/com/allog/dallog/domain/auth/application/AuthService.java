@@ -66,7 +66,7 @@ public class AuthService {
         OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
         oAuthToken.change(oAuthMember.getRefreshToken());
 
-        AuthToken authToken = tokenCreator.createDallogToken(foundMember.getId());
+        AuthToken authToken = tokenCreator.createAuthToken(foundMember.getId());
         return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
     }
 
@@ -97,7 +97,7 @@ public class AuthService {
 
     public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
         String refreshToken = tokenRenewalRequest.getRefreshToken();
-        AuthToken authToken = tokenCreator.renewDallogToken(refreshToken);
+        AuthToken authToken = tokenCreator.renewAuthToken(refreshToken);
         return new AccessTokenResponse(authToken.getAccessToken());
     }
 
