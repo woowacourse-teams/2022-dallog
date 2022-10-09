@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { UseMutateFunction } from 'react-query';
 
 import { useGetEditableCategories } from '@/hooks/@queries/category';
+import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
 import useToggle from '@/hooks/useToggle';
 
 import { ModalPosType } from '@/@types';
@@ -14,9 +15,10 @@ import AdminCategoryManageModal from '@/components/AdminCategoryManageModal/Admi
 import GoogleCategoryManageModal from '@/components/GoogleCategoryManageModal/GoogleCategoryManageModal';
 
 import { CATEGORY_TYPE } from '@/constants/category';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 import { PALETTE } from '@/constants/style';
 
-import { MdSettings } from 'react-icons/md';
+import { MdOutlineDelete, MdSettings } from 'react-icons/md';
 
 import {
   colorStyle,
@@ -51,6 +53,11 @@ function SubscriptionModifyModal({
 
   const { isLoading, data } = useGetEditableCategories({});
 
+  const { mutate } = useDeleteSubscriptions({
+    subscriptionId: subscription.id,
+    onSuccess: toggleModalOpen,
+  });
+
   if (isLoading || !data) {
     return <></>;
   }
@@ -64,6 +71,10 @@ function SubscriptionModifyModal({
     toggleModalOpen();
   };
 
+  const handleClickDeleteSubscription = () => {
+    if (window.confirm(CONFIRM_MESSAGE.UNSUBSCRIBE)) mutate();
+  };
+
   const closeModals = () => {
     toggleCategoryManageModalOpen();
     toggleModalOpen();
@@ -75,6 +86,10 @@ function SubscriptionModifyModal({
 
   const canEditSubscription = canEditCategories.includes(subscription.category.id);
 
+  const canDeleteSubscription =
+    !canEditCategories.includes(subscription.category.id) &&
+    subscription.category.categoryType !== CATEGORY_TYPE.PERSONAL;
+
   return (
     <>
       <div css={outerStyle} onClick={toggleModalOpen} />
@@ -83,6 +98,12 @@ function SubscriptionModifyModal({
           <Button cssProp={controlButtonStyle} onClick={handleClickManageButton}>
             <MdSettings size={20} />
             <span>관리</span>
+          </Button>
+        )}
+        {canDeleteSubscription && (
+          <Button cssProp={controlButtonStyle} onClick={handleClickDeleteSubscription}>
+            <MdOutlineDelete size={20} />
+            <span>구독 해제</span>
           </Button>
         )}
         <div css={paletteStyle}>
