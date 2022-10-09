@@ -1,8 +1,10 @@
 package com.allog.dallog.domain.auth.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.config.ExternalApiConfig;
+import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = ExternalApiConfig.class)
 @ActiveProfiles("test")
-class InMemoryTokenRepositoryTest {
+class InMemoryAuthTokenRepositoryTest {
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -78,5 +80,16 @@ class InMemoryTokenRepositoryTest {
 
         // then
         assertThat(actual).isEqualTo(dummyRefreshToken);
+    }
+
+    @DisplayName("MemberId에 해당하는 토큰이 없으면 예외를 발생한다.")
+    @Test
+    void MemberId에_해당하는_토큰이_없으면_예외를_발생한다() {
+        // given
+        Long dummyMemberId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> tokenRepository.getToken(dummyMemberId))
+                .isInstanceOf(NoSuchTokenException.class);
     }
 }

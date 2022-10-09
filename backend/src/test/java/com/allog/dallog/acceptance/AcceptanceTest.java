@@ -2,7 +2,6 @@ package com.allog.dallog.acceptance;
 
 import com.allog.dallog.common.DatabaseCleaner;
 import com.allog.dallog.common.config.ExternalApiConfig;
-import com.allog.dallog.domain.auth.domain.InMemoryTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;

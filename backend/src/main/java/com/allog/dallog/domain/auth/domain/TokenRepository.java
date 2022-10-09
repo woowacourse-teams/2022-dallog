@@ -2,9 +2,11 @@ package com.allog.dallog.domain.auth.domain;
 
 public interface TokenRepository {
 
-    void save(final Long memberId, final String refreshToken);
+    String save(final Long memberId, final String refreshToken);
 
     void deleteAll();
+
+    void deleteByMemberId(final Long memberId);
 
     boolean exist(final Long memberId);
 
