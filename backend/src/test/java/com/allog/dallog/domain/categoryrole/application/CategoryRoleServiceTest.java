@@ -58,7 +58,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(ADMIN);
         categoryRoleService.updateRole(관리자.getId(), 후디.getId(), BE_일정.getId(), request);
 
-        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), BE_일정.getId()).get();
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), BE_일정.getId());
 
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
@@ -103,7 +103,7 @@ class CategoryRoleServiceTest extends ServiceTest {
 
         // when
         categoryRoleService.updateRole(후디.getId(), 매트.getId(), BE_일정.getId(), new CategoryRoleUpdateRequest(NONE));
-        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(매트.getId(), BE_일정.getId()).get();
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(매트.getId(), BE_일정.getId());
 
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(NONE);
@@ -125,7 +125,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(NONE);
         categoryRoleService.updateRole(관리자.getId(), 관리자.getId(), BE_일정.getId(), request);
 
-        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(관리자.getId(), BE_일정.getId()).get();
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(관리자.getId(), BE_일정.getId());
 
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(NONE);

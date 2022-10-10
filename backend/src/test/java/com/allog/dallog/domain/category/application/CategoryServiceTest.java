@@ -152,7 +152,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse JPA_스터디 = categoryService.save(후디_id, 후디_JPA_스터디_생성_요청);
 
         // when
-        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디_id, JPA_스터디.getId()).get();
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(후디_id, JPA_스터디.getId());
 
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
@@ -580,7 +580,7 @@ class CategoryServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
         subscriptionService.save(후디.getId(), 공통_일정.getId());
 
-        CategoryRole 역할 = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+        CategoryRole 역할 = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
 
         // when
         categoryService.delete(관리자.getId(), 공통_일정.getId());

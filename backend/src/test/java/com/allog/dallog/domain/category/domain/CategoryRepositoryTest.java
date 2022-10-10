@@ -171,6 +171,24 @@ class CategoryRepositoryTest extends RepositoryTest {
         });
     }
 
+    @DisplayName("member id와 categoryType을 기반으로 조회한다.")
+    @Test
+    void member_id와_categoryType을_기반으로_조회한다() {
+        // given
+        Member 매트 = memberRepository.save(매트());
+        categoryRepository.save(공통_일정(매트));
+        categoryRepository.save(BE_일정(매트));
+        categoryRepository.save(FE_일정(매트));
+        categoryRepository.save(매트_아고라(매트));
+        categoryRepository.save(후디_JPA_스터디(매트));
+
+        // when
+        List<Category> actual = categoryRepository.findByMemberIdAndCategoryType(매트.getId(), NORMAL);
+
+        // then
+        assertThat(actual).hasSize(5);
+    }
+
     @DisplayName("특정 멤버가 생성한 카테고리를 조회한다.")
     @Test
     void 특정_멤버가_생성한_카테고리를_조회한다() {

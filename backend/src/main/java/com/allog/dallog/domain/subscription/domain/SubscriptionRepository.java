@@ -19,8 +19,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     @EntityGraph(attributePaths = {"category", "category.member"})
     List<Subscription> findByCategoryId(final Long categoryId);
 
-    List<Subscription> findByMemberIdIn(final List<Long> memberIds);
-
     void deleteByCategoryIdIn(final List<Long> categoryIds);
 
     default Subscription getById(final Long id) {

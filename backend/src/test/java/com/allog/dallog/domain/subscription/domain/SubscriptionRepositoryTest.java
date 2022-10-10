@@ -4,7 +4,6 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
@@ -23,8 +22,6 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,47 +133,6 @@ class SubscriptionRepositoryTest extends RepositoryTest {
 
         // then
         assertThat(subscriptions).isEmpty();
-    }
-
-    @DisplayName("member id 리스트를 기반으로 구독 정보를 조회한다.")
-    @Test
-    void member_id_리스트를_기반으로_구독_정보를_조회한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-
-        Member 매트 = memberRepository.save(매트());
-        Member 리버 = memberRepository.save(리버());
-        Member 파랑 = memberRepository.save(파랑());
-        Member 후디 = memberRepository.save(후디());
-
-        subscriptionRepository.save(색상1_구독(매트, 공통_일정));
-        subscriptionRepository.save(색상1_구독(리버, 공통_일정));
-        subscriptionRepository.save(색상1_구독(파랑, 공통_일정));
-        subscriptionRepository.save(색상1_구독(후디, 공통_일정));
-
-        List<Long> memberIds = Stream.of(매트, 리버, 파랑, 후디)
-                .map(Member::getId)
-                .collect(Collectors.toList());
-
-        // when
-        List<Subscription> actual = subscriptionRepository.findByMemberIdIn(memberIds);
-
-        // then
-        assertThat(actual).hasSize(4);
-    }
-
-    @DisplayName("member id 리스트가 비어있는 경우 빈 리스트를 반환한다.")
-    @Test
-    void member_id_리스트가_비어있는_경우_빈_리스트를_반환한다() {
-        // given
-        List<Long> memberIds = List.of();
-
-        // when
-        List<Subscription> actual = subscriptionRepository.findByMemberIdIn(memberIds);
-
-        // then
-        assertThat(actual).isEmpty();
     }
 
     @DisplayName("특정 카테고리들에 속한 구독을 전부 삭제한다")

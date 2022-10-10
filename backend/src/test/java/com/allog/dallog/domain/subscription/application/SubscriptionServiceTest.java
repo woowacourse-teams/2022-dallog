@@ -26,6 +26,7 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -269,7 +270,7 @@ class SubscriptionServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
         subscriptionService.save(후디.getId(), 공통_일정.getId());
 
-        CategoryRole actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
 
         // then
         assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
@@ -287,10 +288,10 @@ class SubscriptionServiceTest extends ServiceTest {
 
         // when
         subscriptionService.delete(공통_일정_구독.getId(), 후디.getId());
-        boolean actual = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).isPresent();
 
         // then
-        assertThat(actual).isFalse();
+        assertThatThrownBy(() -> categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()))
+                .isInstanceOf(NoSuchCategoryRoleException.class);
     }
 
     @Transactional
@@ -304,7 +305,7 @@ class SubscriptionServiceTest extends ServiceTest {
         Member 후디 = memberRepository.save(후디());
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
 
-        CategoryRole 역할 = categoryRoleRepository.findByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()).get();
+        CategoryRole 역할 = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
         역할.changeRole(CategoryRoleType.ADMIN);
 
         // when & then
