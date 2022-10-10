@@ -15,53 +15,53 @@ import { API, CACHE_KEY } from '@/constants/api';
 
 import categoryApi from '@/api/category';
 
-interface useDeleteCategoryProps {
+interface UseDeleteCategoryParams {
   categoryId: number;
   onSuccess?: () => void;
 }
 
-interface useGetAdminCategoriesProps {
+interface UseGetAdminCategoriesParams {
   enabled?: boolean;
 }
 
-interface useGetEditableCategoriesProps {
+interface UseGetEditableCategoriesParams {
   enabled?: boolean;
 }
 
-interface useGetEntireCategoriesProps {
+interface UseGetEntireCategoriesParams {
   keyword: string;
 }
 
-interface useGetSchedulesWithCategoryProps {
+interface UseGetSchedulesWithCategoryParams {
   categoryId: number;
   startDateTime: string;
   endDateTime: string;
 }
 
-interface useGetSingleCategoryProps {
+interface UseGetSingleCategoryParams {
   categoryId: number;
 }
 
-interface useGetSubscribersProps {
+interface UseGetSubscribersParams {
   categoryId: number;
 }
 
-interface usePatchCategoryRoleProps {
+interface UsePatchCategoryRoleParams {
   categoryId: number;
   memberId: number;
   onSuccess?: () => void;
 }
 
-interface usePostCategoryProps {
-  onSuccess?: () => void;
-}
-
-interface usePatchCategoryNameProps {
+interface UsePatchCategoryNameParams {
   categoryId: number;
   onSuccess?: () => void;
 }
 
-function useDeleteCategory({ categoryId, onSuccess }: useDeleteCategoryProps) {
+interface UsePostCategoryParams {
+  onSuccess?: () => void;
+}
+
+function useDeleteCategory({ categoryId, onSuccess }: UseDeleteCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -78,7 +78,7 @@ function useDeleteCategory({ categoryId, onSuccess }: useDeleteCategoryProps) {
   return { mutate };
 }
 
-function useGetAdminCategories({ enabled }: useGetAdminCategoriesProps) {
+function useGetAdminCategories({ enabled }: UseGetAdminCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
@@ -92,7 +92,7 @@ function useGetAdminCategories({ enabled }: useGetAdminCategoriesProps) {
   return { isLoading, data };
 }
 
-function useGetEditableCategories({ enabled }: useGetEditableCategoriesProps) {
+function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
@@ -106,7 +106,7 @@ function useGetEditableCategories({ enabled }: useGetEditableCategoriesProps) {
   return { isLoading, data };
 }
 
-function useGetEntireCategories({ keyword }: useGetEntireCategoriesProps) {
+function useGetEntireCategories({ keyword }: UseGetEntireCategoriesParams) {
   const { error, data, fetchNextPage, hasNextPage } = useInfiniteQuery<
     AxiosResponse<CategoriesGetResponseType>,
     AxiosError
@@ -140,7 +140,7 @@ function useGetSchedulesWithCategory({
   categoryId,
   startDateTime,
   endDateTime,
-}: useGetSchedulesWithCategoryProps) {
+}: UseGetSchedulesWithCategoryParams) {
   const { isLoading, data } = useQuery(
     [CACHE_KEY.SCHEDULES, categoryId],
     () => categoryApi.getSchedules(categoryId, startDateTime, endDateTime),
@@ -152,7 +152,7 @@ function useGetSchedulesWithCategory({
   return { isLoading, data };
 }
 
-function useGetSingleCategory({ categoryId }: useGetSingleCategoryProps) {
+function useGetSingleCategory({ categoryId }: UseGetSingleCategoryParams) {
   const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
     categoryApi.getSingle(categoryId)
   );
@@ -160,7 +160,7 @@ function useGetSingleCategory({ categoryId }: useGetSingleCategoryProps) {
   return { data };
 }
 
-function useGetSubscribers({ categoryId }: useGetSubscribersProps) {
+function useGetSubscribers({ categoryId }: UseGetSubscribersParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategorySubscriberType[]>, AxiosError>(
@@ -171,7 +171,7 @@ function useGetSubscribers({ categoryId }: useGetSubscribersProps) {
   return { isLoading, data };
 }
 
-function usePatchCategoryName({ categoryId, onSuccess }: usePatchCategoryNameProps) {
+function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNameParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -193,7 +193,7 @@ function usePatchCategoryName({ categoryId, onSuccess }: usePatchCategoryNamePro
   return { mutate };
 }
 
-function usePatchCategoryRole({ categoryId, memberId, onSuccess }: usePatchCategoryRoleProps) {
+function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCategoryRoleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -212,7 +212,7 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: usePatchCateg
   return { mutate };
 }
 
-function usePostCategory({ onSuccess }: usePostCategoryProps) {
+function usePostCategory({ onSuccess }: UsePostCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 

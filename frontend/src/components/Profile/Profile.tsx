@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
+import { usePatchProfile } from '@/hooks/@queries/profile';
 import useToggle from '@/hooks/useToggle';
 import useUserValue from '@/hooks/useUserValue';
 
@@ -11,13 +11,10 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import WithdrawalModal from '@/components/WithdrawalModal/WithdrawalModal';
 
 import { PATH } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { createPostBody } from '@/utils';
 import { removeAccessToken } from '@/utils/storage';
-
-import profileApi from '@/api/profile';
 
 import { MdOutlineCheck, MdOutlineModeEdit } from 'react-icons/md';
 
@@ -46,18 +43,9 @@ function Profile() {
     displayName: useRef<HTMLInputElement>(null),
   };
 
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation(
-    (body: { displayName: string }) => profileApi.patch(user.accessToken, body),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(CACHE_KEY.PROFILE);
-        queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-      },
-    }
-  );
-
   const { state: isWithdrawalModalOpen, toggleState: toggleWithdrawalModalOpen } = useToggle();
+
+  const { mutate } = usePatchProfile({ accessToken: user.accessToken });
 
   const handleClickModifyButton = () => {
     setEditingName(true);
