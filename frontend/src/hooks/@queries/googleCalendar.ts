@@ -10,7 +10,7 @@ import { CACHE_KEY } from '@/constants/api';
 
 import googleCalendarApi from '@/api/googleCalendar';
 
-interface usePostGoogleCalendarCategoryProps {
+interface UsePostGoogleCalendarCategoryParams {
   onSuccess?: () => void;
 }
 
@@ -25,7 +25,7 @@ function useGetGoogleCalendar() {
   return { isLoading, data };
 }
 
-function usePostGoogleCalendarCategory({ onSuccess }: usePostGoogleCalendarCategoryProps) {
+function usePostGoogleCalendarCategory({ onSuccess }: UsePostGoogleCalendarCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 

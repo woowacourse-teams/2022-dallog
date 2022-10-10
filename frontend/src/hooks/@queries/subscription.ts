@@ -10,26 +10,26 @@ import { CACHE_KEY } from '@/constants/api';
 
 import subscriptionApi from '@/api/subscription';
 
-interface useDeleteSubscriptionProps {
+interface UseDeleteSubscriptionParams {
   subscriptionId: number;
   onSuccess?: () => void;
 }
 
-interface useGetSubscriptionsProps {
+interface UseGetSubscriptionsParams {
   enabled?: boolean;
 }
 
-interface usePatchSubscriptionProps {
+interface UsePatchSubscriptionParams {
   subscriptionId: number;
   onSuccess?: () => void;
 }
 
-interface usePostSubscriptionProps {
+interface UsePostSubscriptionParams {
   categoryId: number;
   onSuccess?: () => void;
 }
 
-function useDeleteSubscriptions({ subscriptionId, onSuccess }: useDeleteSubscriptionProps) {
+function useDeleteSubscriptions({ subscriptionId, onSuccess }: UseDeleteSubscriptionParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -43,7 +43,7 @@ function useDeleteSubscriptions({ subscriptionId, onSuccess }: useDeleteSubscrip
   return { mutate };
 }
 
-function useGetSubscriptions({ enabled }: useGetSubscriptionsProps) {
+function useGetSubscriptions({ enabled }: UseGetSubscriptionsParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, error, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
@@ -57,7 +57,7 @@ function useGetSubscriptions({ enabled }: useGetSubscriptionsProps) {
   return { isLoading, error, data };
 }
 
-function usePatchSubscription({ subscriptionId, onSuccess }: usePatchSubscriptionProps) {
+function usePatchSubscription({ subscriptionId, onSuccess }: UsePatchSubscriptionParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -75,7 +75,7 @@ function usePatchSubscription({ subscriptionId, onSuccess }: usePatchSubscriptio
   return { isLoading, mutate };
 }
 
-function usePostSubscription({ categoryId, onSuccess }: usePostSubscriptionProps) {
+function usePostSubscription({ categoryId, onSuccess }: UsePostSubscriptionParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 

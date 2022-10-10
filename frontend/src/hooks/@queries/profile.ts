@@ -11,15 +11,15 @@ import { removeAccessToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 
-interface useDeleteProfileProps {
+interface UseDeleteProfileParams {
   onSuccess?: () => void;
 }
 
-interface usePatchProfileProps {
+interface UsePatchProfileParams {
   accessToken: string;
 }
 
-function useDeleteProfile({ onSuccess }: useDeleteProfileProps) {
+function useDeleteProfile({ onSuccess }: UseDeleteProfileParams) {
   const navigate = useNavigate();
 
   const { accessToken } = useRecoilValue(userState);
@@ -36,7 +36,7 @@ function useDeleteProfile({ onSuccess }: useDeleteProfileProps) {
   return { mutate };
 }
 
-function usePatchProfile({ accessToken }: usePatchProfileProps) {
+function usePatchProfile({ accessToken }: UsePatchProfileParams) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(

@@ -10,27 +10,27 @@ import { CACHE_KEY } from '@/constants/api';
 
 import scheduleApi from '@/api/schedule';
 
-interface useGetSchedulesProps {
+interface UseGetSchedulesParams {
   startDateTime: string;
   endDateTime: string;
 }
 
-interface useDeleteScheduleProps {
+interface UseDeleteScheduleParams {
   scheduleId: string;
   onSuccess?: () => void;
 }
 
-interface usePatchScheduleProps {
+interface UsePatchScheduleParams {
   scheduleId: string;
   onSuccess?: () => void;
 }
 
-interface usePostScheduleProps {
+interface UsePostScheduleParams {
   categoryId: string;
   onSuccess?: () => void;
 }
 
-function useDeleteSchedule({ scheduleId, onSuccess }: useDeleteScheduleProps) {
+function useDeleteSchedule({ scheduleId, onSuccess }: UseDeleteScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -47,7 +47,7 @@ function useDeleteSchedule({ scheduleId, onSuccess }: useDeleteScheduleProps) {
   return { mutate };
 }
 
-function useGetSchedules({ startDateTime, endDateTime }: useGetSchedulesProps) {
+function useGetSchedules({ startDateTime, endDateTime }: UseGetSchedulesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<ScheduleResponseType>, AxiosError>(
@@ -61,7 +61,7 @@ function useGetSchedules({ startDateTime, endDateTime }: useGetSchedulesProps) {
   };
 }
 
-function usePatchSchedule({ scheduleId, onSuccess }: usePatchScheduleProps) {
+function usePatchSchedule({ scheduleId, onSuccess }: UsePatchScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
@@ -80,7 +80,7 @@ function usePatchSchedule({ scheduleId, onSuccess }: usePatchScheduleProps) {
   return { mutate };
 }
 
-function usePostSchedule({ categoryId, onSuccess }: usePostScheduleProps) {
+function usePostSchedule({ categoryId, onSuccess }: UsePostScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
 
