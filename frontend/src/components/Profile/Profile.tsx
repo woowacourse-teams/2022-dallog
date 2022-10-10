@@ -14,7 +14,7 @@ import { PATH } from '@/constants';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { createPostBody } from '@/utils';
-import { removeAccessToken } from '@/utils/storage';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
 import { MdOutlineCheck, MdOutlineModeEdit } from 'react-icons/md';
 
@@ -69,6 +69,7 @@ function Profile() {
   const handleClickLogoutButton = () => {
     if (window.confirm(CONFIRM_MESSAGE.LOGOUT)) {
       removeAccessToken();
+      removeRefreshToken();
       navigate(PATH.MAIN);
       location.reload();
     }

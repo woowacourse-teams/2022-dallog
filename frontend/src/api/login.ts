@@ -25,7 +25,7 @@ const loginApi = {
       redirectUri: location.href.split('?')[0],
     });
 
-    return data.accessToken;
+    return data;
   },
 
   validate: async (accessToken: string) => {

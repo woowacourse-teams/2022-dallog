@@ -3,12 +3,17 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { sideBarState, userState } from '@/recoil/atoms';
+import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
 import { CACHE_KEY } from '@/constants/api';
 
-import { removeAccessToken, setAccessToken } from '@/utils/storage';
+import {
+  removeAccessToken,
+  removeRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/utils/storage';
 
 import loginApi from '@/api/login';
 
@@ -16,18 +21,21 @@ function useAuth(code: string | null) {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
 
-  const { mutate } = useMutation<string, AxiosError>(() => loginApi.auth(code), {
+  const { mutate } = useMutation<UserStateType, AxiosError>(() => loginApi.auth(code), {
     onError: () => onErrorAuth(),
-    onSuccess: (data) => onSuccessAuth(data),
+    onSuccess: ({ accessToken, refreshToken }) => {
+      onSuccessAuth(accessToken, refreshToken);
+    },
   });
 
   const onErrorAuth = () => {
     navigate(PATH.MAIN);
   };
 
-  const onSuccessAuth = (accessToken: string) => {
-    setUser({ ...user, accessToken });
+  const onSuccessAuth = (accessToken: string, refreshToken: string) => {
+    setUser({ ...user, accessToken, refreshToken });
     setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
 
     navigate(PATH.MAIN);
   };
@@ -69,9 +77,10 @@ function useLoginValidate() {
   );
 
   const onErrorValidate = () => {
-    setUser({ accessToken: '' });
+    setUser({ accessToken: '', refreshToken: '' });
     setSideBarOpen(false);
     removeAccessToken();
+    removeRefreshToken();
   };
 
   return {

@@ -9,6 +9,8 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 import { VALIDATION_STRING } from '@/constants/validate';
 
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
+
 import {
   headerStyle,
   layoutStyle,
@@ -29,6 +31,14 @@ function WithdrawalModal({ closeModal }: WithdrawalModalProps) {
     if (window.confirm(CONFIRM_MESSAGE.WITHDRAWAL)) {
       mutate();
     }
+  };
+
+  const onSuccessWithdrawalUser = () => {
+    closeModal();
+    removeAccessToken();
+    removeRefreshToken();
+    navigate(PATH.MAIN);
+    location.reload();
   };
 
   return (
