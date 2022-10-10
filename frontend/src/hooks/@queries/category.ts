@@ -52,12 +52,12 @@ interface UsePatchCategoryRoleParams {
   onSuccess?: () => void;
 }
 
-interface UsePostCategoryParams {
+interface UsePatchCategoryNameParams {
+  categoryId: number;
   onSuccess?: () => void;
 }
 
-interface UsePatchCategoryNameParams {
-  categoryId: number;
+interface UsePostCategoryParams {
   onSuccess?: () => void;
 }
 

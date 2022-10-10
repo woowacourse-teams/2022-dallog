@@ -10,14 +10,14 @@ import { CACHE_KEY } from '@/constants/api';
 
 import scheduleApi from '@/api/schedule';
 
-interface UseGetSchedulesParams {
-  startDateTime: string;
-  endDateTime: string;
-}
-
 interface UseDeleteScheduleParams {
   scheduleId: string;
   onSuccess?: () => void;
+}
+
+interface UseGetSchedulesParams {
+  startDateTime: string;
+  endDateTime: string;
 }
 
 interface UsePatchScheduleParams {
