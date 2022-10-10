@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
@@ -39,6 +39,27 @@ function useAuth(code: string | null) {
 
     navigate(PATH.MAIN);
   };
+
+  return {
+    mutate,
+  };
+}
+
+function useLoginAgain() {
+  const { refreshToken } = useRecoilValue(userState);
+  const navigate = useNavigate();
+
+  const { mutate } = useMutation<string, AxiosError>(() => loginApi.again(refreshToken), {
+    onSuccess: (data) => {
+      setAccessToken(data);
+    },
+    onError: () => {
+      removeAccessToken();
+      removeRefreshToken();
+      navigate(PATH.MAIN);
+      location.reload();
+    },
+  });
 
   return {
     mutate,
@@ -89,4 +110,4 @@ function useLoginValidate() {
   };
 }
 
-export { useAuth, useGetLoginUrl, useLoginValidate };
+export { useAuth, useGetLoginUrl, useLoginAgain, useLoginValidate };

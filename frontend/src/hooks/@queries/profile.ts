@@ -7,7 +7,7 @@ import { userState } from '@/recoil/atoms';
 import { PATH } from '@/constants';
 import { CACHE_KEY } from '@/constants/api';
 
-import { removeAccessToken } from '@/utils/storage';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 
@@ -28,6 +28,7 @@ function useDeleteProfile({ onSuccess }: UseDeleteProfileParams) {
     onSuccess: () => {
       onSuccess && onSuccess();
       removeAccessToken();
+      removeRefreshToken();
       navigate(PATH.MAIN);
       location.reload();
     },

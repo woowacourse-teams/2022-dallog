@@ -5,6 +5,7 @@ const loginApi = {
     googleEntry: '/api/auth/google/oauth-uri',
     googleToken: '/api/auth/google/token',
     validate: '/api/auth/validate/token',
+    again: '/api/auth/token/access',
   },
   headers: {
     'Content-Type': 'application/json',
@@ -26,6 +27,14 @@ const loginApi = {
     });
 
     return data;
+  },
+
+  again: async (refreshToken: string | null) => {
+    const { data } = await dallogApi.post(loginApi.endPoint.again, {
+      refreshToken,
+    });
+
+    return data.accessToken;
   },
 
   validate: async (accessToken: string) => {
