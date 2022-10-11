@@ -85,7 +85,14 @@ public class MemberService {
                 .collect(Collectors.toList());
 
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
-        subscriptionRepository.deleteByCategoryIdIn(categoryIds);
+
+        List<Long> subscriptionIds = subscriptionRepository.findByMemberId(id)
+                .stream()
+                .map(Subscription::getId)
+                .collect(Collectors.toList());
+
+        subscriptionRepository.deleteByIdIn(subscriptionIds);
+
         categoryRoleRepository.deleteByMemberId(id);
         categoryRepository.deleteByMemberId(id);
 
