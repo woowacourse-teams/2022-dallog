@@ -70,7 +70,7 @@ function useLoginAgain() {
 
   const navigate = useNavigate();
 
-  const { mutate } = useMutation<string, AxiosError>(() => loginApi.again(user.refreshToken), {
+  const { mutate } = useMutation<string, AxiosError>(() => loginApi.relogin(user.refreshToken), {
     onSuccess: (data) => {
       setAccessToken(data);
       setUser({ ...user, accessToken: data });

@@ -29,7 +29,7 @@ const loginApi = {
     return data;
   },
 
-  again: async (refreshToken: string | null) => {
+  relogin: async (refreshToken: string | null) => {
     const { data } = await dallogApi.post(loginApi.endPoint.again, {
       refreshToken,
     });
