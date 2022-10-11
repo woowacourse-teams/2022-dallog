@@ -16,6 +16,8 @@ public interface ExternalCategoryDetailRepository extends JpaRepository<External
 
     void deleteByCategoryId(final Long categoryId);
 
+    void deleteByCategoryIdIn(final List<Long> categoryIds);
+
     default ExternalCategoryDetail getByCategory(final Category category) {
         return this.findByCategory(category)
                 .orElseThrow(NoSuchExternalCategoryDetailException::new);

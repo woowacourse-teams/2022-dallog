@@ -1,5 +1,6 @@
 package com.allog.dallog.domain.member.application;
 
+import static com.allog.dallog.common.fixtures.AuthFixtures.더미_리프레시_토큰;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
@@ -18,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
+import com.allog.dallog.domain.auth.domain.OAuthToken;
+import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -33,6 +36,7 @@ import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.stream.Collectors;
@@ -62,6 +66,9 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
+
+    @Autowired
+    private OAuthTokenRepository oAuthTokenRepository;
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
@@ -114,9 +121,9 @@ class MemberServiceTest extends ServiceTest {
         assertThat(actual.getDisplayName()).isEqualTo(패트_이름);
     }
 
-    @DisplayName("회원을 제거한다.")
+    @DisplayName("회원을 삭제한다.")
     @Test
-    void 회원을_제거한다() {
+    void 회원을_삭제한다() {
         // given
         Long 후디_id = parseMemberId(AuthFixtures.후디_인증_코드_토큰_요청());
 
@@ -125,6 +132,24 @@ class MemberServiceTest extends ServiceTest {
 
         // then
         assertThatThrownBy(() -> memberService.findById(후디_id))
+                .isInstanceOf(NoSuchMemberException.class);
+    }
+
+    @DisplayName("회원을 삭제할때, 관련된 데이터도 모두 삭제한다.")
+    @Test
+    void 회원을_삭제할때_관련된_데이터도_모두_삭제한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        CategoryRole 역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 관리자, CategoryRoleType.ADMIN));
+        Subscription 색상1_구독 = subscriptionRepository.save(new Subscription(관리자, 공통_일정, Color.COLOR_1));
+        OAuthToken 외부_토큰 = oAuthTokenRepository.save(new OAuthToken(관리자, 더미_리프레시_토큰));
+
+        // when
+        memberService.deleteById(관리자.getId());
+
+        // then
+        assertThatThrownBy(() -> memberService.findById(관리자.getId()))
                 .isInstanceOf(NoSuchMemberException.class);
     }
 
