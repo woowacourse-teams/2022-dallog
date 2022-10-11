@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { usePatchProfile } from '@/hooks/@queries/profile';
 import useToggle from '@/hooks/useToggle';
-import useUserValue from '@/hooks/useUserValue';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -14,7 +16,7 @@ import { PATH } from '@/constants';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { createPostBody } from '@/utils';
-import { removeAccessToken } from '@/utils/storage';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
 import { MdOutlineCheck, MdOutlineModeEdit } from 'react-icons/md';
 
@@ -35,7 +37,7 @@ import {
 function Profile() {
   const navigate = useNavigate();
 
-  const { user } = useUserValue();
+  const user = useRecoilValue(userState);
 
   const [isEditingName, setEditingName] = useState(false);
 
@@ -69,6 +71,7 @@ function Profile() {
   const handleClickLogoutButton = () => {
     if (window.confirm(CONFIRM_MESSAGE.LOGOUT)) {
       removeAccessToken();
+      removeRefreshToken();
       navigate(PATH.MAIN);
       location.reload();
     }

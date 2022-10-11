@@ -1,9 +1,11 @@
 import { useTheme } from '@emotion/react';
+import { useRecoilValue } from 'recoil';
 
 import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
-import useUserValue from '@/hooks/useUserValue';
 
 import { CategoryType } from '@/@types/category';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 
@@ -24,7 +26,7 @@ function SubscribedCategoryItem({
 }: SubscribedCategoryItemProps) {
   const theme = useTheme();
 
-  const { user } = useUserValue();
+  const user = useRecoilValue(userState);
 
   const { mutate } = useDeleteSubscriptions({ subscriptionId });
 

@@ -10,7 +10,7 @@ import { sideBarState, userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants/api';
 
-import { removeAccessToken } from '@/utils/storage';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
 import profileApi from '@/api/profile';
 
@@ -34,9 +34,10 @@ function useUserValue() {
   );
 
   const onErrorValidate = () => {
-    setUser({ accessToken: '' });
+    setUser({ accessToken: '', refreshToken: '' });
     setSideBarOpen(false);
     removeAccessToken();
+    removeRefreshToken();
   };
 
   return { isAuthenticating: isLoading, user };

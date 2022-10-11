@@ -15,6 +15,7 @@ const SELECTOR_KEY = {
 
 const STORAGE_KEY = {
   ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
 };
 
 const PATH = {

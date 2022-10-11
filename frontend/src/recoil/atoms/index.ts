@@ -4,10 +4,11 @@ import { ProfileType } from '@/@types/profile';
 
 import { ATOM_KEY } from '@/constants';
 
-import { getAccessToken } from '@/utils/storage';
+import { getAccessToken, getRefreshToken } from '@/utils/storage';
 
 interface UserStateType extends Partial<ProfileType> {
   accessToken: string;
+  refreshToken: string;
 }
 
 const sideBarState = atom({
@@ -19,6 +20,7 @@ const userState = atom<UserStateType>({
   key: ATOM_KEY.USER,
   default: {
     accessToken: getAccessToken() ?? '',
+    refreshToken: getRefreshToken() ?? '',
   },
 });
 
@@ -29,4 +31,4 @@ const snackBarState = atom({
   },
 });
 
-export { snackBarState, sideBarState, userState };
+export { snackBarState, sideBarState, userState, UserStateType };

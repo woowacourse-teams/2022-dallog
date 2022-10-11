@@ -3,12 +3,19 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { sideBarState, userState } from '@/recoil/atoms';
+import useSnackBar from '@/hooks/useSnackBar';
+
+import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
+import { CACHE_KEY, RESPONSE } from '@/constants/api';
 
-import { removeAccessToken, setAccessToken } from '@/utils/storage';
+import {
+  removeAccessToken,
+  removeRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/utils/storage';
 
 import loginApi from '@/api/login';
 
@@ -16,18 +23,21 @@ function useAuth(code: string | null) {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
 
-  const { mutate } = useMutation<string, AxiosError>(() => loginApi.auth(code), {
+  const { mutate } = useMutation<UserStateType, AxiosError>(() => loginApi.auth(code), {
     onError: () => onErrorAuth(),
-    onSuccess: (data) => onSuccessAuth(data),
+    onSuccess: ({ accessToken, refreshToken }) => {
+      onSuccessAuth(accessToken, refreshToken);
+    },
   });
 
   const onErrorAuth = () => {
     navigate(PATH.MAIN);
   };
 
-  const onSuccessAuth = (accessToken: string) => {
-    setUser({ ...user, accessToken });
+  const onSuccessAuth = (accessToken: string, refreshToken: string) => {
+    setUser({ ...user, accessToken, refreshToken });
     setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
 
     navigate(PATH.MAIN);
   };
@@ -53,25 +63,57 @@ function useGetLoginUrl() {
   };
 }
 
+function useLoginAgain() {
+  const [user, setUser] = useRecoilState(userState);
+
+  const navigate = useNavigate();
+
+  const { mutate } = useMutation<string, AxiosError>(() => loginApi.relogin(user.refreshToken), {
+    onSuccess: (data) => {
+      setAccessToken(data);
+      setUser({ ...user, accessToken: data });
+    },
+    onError: () => {
+      removeAccessToken();
+      removeRefreshToken();
+      navigate(PATH.MAIN);
+      location.reload();
+    },
+  });
+
+  return {
+    mutate,
+  };
+}
+
 function useLoginValidate() {
   const [user, setUser] = useRecoilState(userState);
   const setSideBarOpen = useSetRecoilState(sideBarState);
 
+  const { mutate } = useLoginAgain();
+
   const { isLoading, isSuccess } = useQuery<AxiosResponse, AxiosError>(
-    CACHE_KEY.VALIDATE,
+    [CACHE_KEY.VALIDATE, user.accessToken],
     () => loginApi.validate(user.accessToken),
     {
-      onError: () => onErrorValidate(),
+      onError: (error: unknown) => onErrorValidate(error),
       retry: false,
       useErrorBoundary: false,
       enabled: !!user.accessToken,
     }
   );
 
-  const onErrorValidate = () => {
-    setUser({ accessToken: '' });
+  const onErrorValidate = (error: unknown) => {
+    if (error instanceof AxiosError && error.response?.status === RESPONSE.STATUS.UNAUTHORIZED) {
+      mutate();
+
+      return;
+    }
+
+    setUser({ accessToken: '', refreshToken: '' });
     setSideBarOpen(false);
     removeAccessToken();
+    removeRefreshToken();
   };
 
   return {
@@ -80,4 +122,4 @@ function useLoginValidate() {
   };
 }
 
-export { useAuth, useGetLoginUrl, useLoginValidate };
+export { useAuth, useGetLoginUrl, useLoginAgain, useLoginValidate };
