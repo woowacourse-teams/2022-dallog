@@ -1,12 +1,15 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+
+import useSnackBar from '@/hooks/useSnackBar';
 
 import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
+import { CACHE_KEY, RESPONSE } from '@/constants/api';
+import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import {
   removeAccessToken,
@@ -45,27 +48,6 @@ function useAuth(code: string | null) {
   };
 }
 
-function useLoginAgain() {
-  const { refreshToken } = useRecoilValue(userState);
-  const navigate = useNavigate();
-
-  const { mutate } = useMutation<string, AxiosError>(() => loginApi.again(refreshToken), {
-    onSuccess: (data) => {
-      setAccessToken(data);
-    },
-    onError: () => {
-      removeAccessToken();
-      removeRefreshToken();
-      navigate(PATH.MAIN);
-      location.reload();
-    },
-  });
-
-  return {
-    mutate,
-  };
-}
-
 function useGetLoginUrl() {
   const { error, refetch } = useQuery<string>(CACHE_KEY.ENTER, loginApi.getUrl, {
     enabled: false,
@@ -82,22 +64,55 @@ function useGetLoginUrl() {
   };
 }
 
+function useLoginAgain() {
+  const [user, setUser] = useRecoilState(userState);
+  const { openSnackBar } = useSnackBar();
+
+  const navigate = useNavigate();
+
+  const { mutate } = useMutation<string, AxiosError>(() => loginApi.again(user.refreshToken), {
+    onSuccess: (data) => {
+      setAccessToken(data);
+      setUser({ ...user, accessToken: data });
+      openSnackBar(SUCCESS_MESSAGE.LOGIN_AGAIN);
+    },
+    onError: () => {
+      removeAccessToken();
+      removeRefreshToken();
+      navigate(PATH.MAIN);
+      location.reload();
+    },
+  });
+
+  return {
+    mutate,
+  };
+}
+
 function useLoginValidate() {
   const [user, setUser] = useRecoilState(userState);
   const setSideBarOpen = useSetRecoilState(sideBarState);
 
+  const { mutate } = useLoginAgain();
+
   const { isLoading, isSuccess } = useQuery<AxiosResponse, AxiosError>(
-    CACHE_KEY.VALIDATE,
+    [CACHE_KEY.VALIDATE, user.accessToken],
     () => loginApi.validate(user.accessToken),
     {
-      onError: () => onErrorValidate(),
+      onError: (error: unknown) => onErrorValidate(error),
       retry: false,
       useErrorBoundary: false,
       enabled: !!user.accessToken,
     }
   );
 
-  const onErrorValidate = () => {
+  const onErrorValidate = (error: unknown) => {
+    if (error instanceof AxiosError && error.response?.status === RESPONSE.STATUS.UNAUTHORIZED) {
+      mutate();
+
+      return;
+    }
+
     setUser({ accessToken: '', refreshToken: '' });
     setSideBarOpen(false);
     removeAccessToken();

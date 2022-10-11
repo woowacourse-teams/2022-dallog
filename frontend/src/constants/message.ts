@@ -12,9 +12,13 @@ const ERROR_MESSAGE = {
   DEFAULT: '에러가 발생했습니다. 잠시 후에 다시 시도해주세요.',
 };
 
+const SUCCESS_MESSAGE = {
+  LOGIN_AGAIN: '로그인 만료시간이 되어 다시 로그인했습니다.',
+};
+
 const TOOLTIP_MESSAGE = {
   CANNOT_UNSUBSCRIBE_MINE: '나의 카테고리는 구독 취소할 수 없습니다.',
   CANNOT_EDIT_DELETE_DEFAULT_CATEGORY: '기본 카테고리는 수정/삭제가 불가능합니다.',
 };
 
-export { CONFIRM_MESSAGE, ERROR_MESSAGE, TOOLTIP_MESSAGE };
+export { CONFIRM_MESSAGE, ERROR_MESSAGE, SUCCESS_MESSAGE, TOOLTIP_MESSAGE };
