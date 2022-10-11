@@ -9,7 +9,6 @@ import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
 import { CACHE_KEY, RESPONSE } from '@/constants/api';
-import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import {
   removeAccessToken,
@@ -66,7 +65,6 @@ function useGetLoginUrl() {
 
 function useLoginAgain() {
   const [user, setUser] = useRecoilState(userState);
-  const { openSnackBar } = useSnackBar();
 
   const navigate = useNavigate();
 
@@ -74,7 +72,6 @@ function useLoginAgain() {
     onSuccess: (data) => {
       setAccessToken(data);
       setUser({ ...user, accessToken: data });
-      openSnackBar(SUCCESS_MESSAGE.LOGIN_AGAIN);
     },
     onError: () => {
       removeAccessToken();
