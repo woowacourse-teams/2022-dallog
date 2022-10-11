@@ -84,14 +84,25 @@ public class MemberService {
                 .map(Category::getId)
                 .collect(Collectors.toList());
 
+        //TODO 내 카테고리를 구독한 사람들의 구독 데이터와 카테고리권한 데이터를 삭제하는 로직 => 수정 필요
+        for (Long categoryId : categoryIds) {
+            List<Subscription> subscriptions = subscriptionRepository.findByCategoryId(categoryId);
+
+            //TODO 내 카테고리를 구독한 사람들의 구독 데이터 삭제
+            List<Long> subscriptionIds = subscriptions.stream()
+                    .map(Subscription::getId)
+                    .collect(Collectors.toList());
+            subscriptionRepository.deleteByIdIn(subscriptionIds);
+
+            //TODO 내 카테고리에 대한 다른 사람들의 카테고리권한 데이터 삭제
+            List<Member> members = subscriptions.stream()
+                    .map(Subscription::getMember)
+                    .collect(Collectors.toList());
+
+            members.forEach(member -> categoryRoleRepository.deleteByMemberId(member.getId()));
+        }
+
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
-
-        List<Long> subscriptionIds = subscriptionRepository.findByMemberId(id)
-                .stream()
-                .map(Subscription::getId)
-                .collect(Collectors.toList());
-
-        subscriptionRepository.deleteByIdIn(subscriptionIds);
 
         categoryRoleRepository.deleteByMemberId(id);
         categoryRepository.deleteByMemberId(id);
