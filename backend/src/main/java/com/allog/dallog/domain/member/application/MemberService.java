@@ -6,6 +6,7 @@ import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -27,6 +28,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
     private final ScheduleRepository scheduleRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
@@ -34,6 +36,7 @@ public class MemberService {
     private final TokenRepository tokenRepository;
 
     public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
+                         final ExternalCategoryDetailRepository externalCategoryDetailRepository,
                          final ScheduleRepository scheduleRepository,
                          final SubscriptionRepository subscriptionRepository,
                          final OAuthTokenRepository oAuthTokenRepository,
@@ -41,6 +44,7 @@ public class MemberService {
                          final TokenRepository tokenRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
         this.scheduleRepository = scheduleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
@@ -82,8 +86,8 @@ public class MemberService {
 
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
         subscriptionRepository.deleteByCategoryIdIn(categoryIds);
-        categoryRepository.deleteByMemberId(id);
         categoryRoleRepository.deleteByMemberId(id);
+        categoryRepository.deleteByMemberId(id);
 
         oAuthTokenRepository.deleteByMemberId(id);
         tokenRepository.deleteByMemberId(id);
