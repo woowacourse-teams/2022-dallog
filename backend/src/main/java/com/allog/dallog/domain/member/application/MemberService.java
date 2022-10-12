@@ -98,42 +98,44 @@ public class MemberService {
             }
         }
 
-        List<Long> categoryIds = categoryRoles.stream()
+        List<Long> adminCategoryIds = categoryRoles.stream()
+                .filter(CategoryRole::isAdmin)
                 .map(CategoryRole::getCategory)
                 .map(Category::getId)
                 .collect(Collectors.toList());
 
-        //TODO 내 카테고리를 구독한 사람들의 구독 데이터와 카테고리권한 데이터를 삭제하는 로직 => 수정 필요
-        for (Long categoryId : categoryIds) {
-            List<Subscription> subscriptions = subscriptionRepository.findByCategoryId(categoryId);
-
-            //TODO 내 카테고리를 구독한 사람들의 구독 데이터 삭제
-            List<Long> subscriptionIds = subscriptions.stream()
-                    .map(Subscription::getId)
-                    .collect(Collectors.toList());
-
-            //TODO 내 카테고리에 대한 다른 사람들의 카테고리권한 데이터 삭제
-            List<Member> members = subscriptions.stream()
-                    .map(Subscription::getMember)
-                    .collect(Collectors.toList());
-
-            subscriptionRepository.deleteByIdIn(subscriptionIds);
-            members.forEach(member -> categoryRoleRepository.deleteByMemberId(member.getId()));
+        for (Long adminCategoryId : adminCategoryIds) {
+            Category category = categoryRepository.getById(adminCategoryId);
+            if (category.isPersonal()) {
+                scheduleRepository.deleteByCategoryId(category.getId());
+                subscriptionRepository.deleteByCategoryId(category.getId());
+                categoryRoleRepository.deleteById(id);
+                categoryRepository.deleteById(category.getId());
+            }
+            if (category.isExternal()) {
+                subscriptionRepository.deleteById(category.getId());
+                externalCategoryDetailRepository.deleteByCategoryId(category.getId());
+                categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
+                categoryRepository.deleteById(category.getId());
+            }
+            if (category.isInternal() && !category.isPersonal()) {
+                subscriptionRepository.deleteByMemberId(id);
+                categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
+            }
         }
 
-        scheduleRepository.deleteByCategoryIdIn(categoryIds);
+        List<Long> noneCategoryIds = categoryRoles.stream()
+                .filter(CategoryRole::isNone)
+                .map(CategoryRole::getCategory)
+                .map(Category::getId)
+                .collect(Collectors.toList());
 
-        subscriptionRepository.deleteByMemberId(id);
+        for (Long noneCategoryId : noneCategoryIds) {
+            Category category = categoryRepository.getById(noneCategoryId);
+            subscriptionRepository.deleteByMemberId(id);
+            categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
+        }
 
-        externalCategoryDetailRepository.deleteByCategoryIdIn(categoryIds);
-
-        categoryRoleRepository.deleteByCategoryIdIn(categoryIds);
-        categoryRoleRepository.deleteByMemberId(id);
-
-        List<Category> categories = categoryRepository.findByMemberId(id);
-        categories.forEach(category -> category.setMember(null));
-
-        categoryRepository.deleteByIdIn(categoryIds);
         oAuthTokenRepository.deleteByMemberId(id);
         tokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);

@@ -183,25 +183,6 @@ class MemberServiceTest extends ServiceTest {
                 .isInstanceOf(InvalidMemberException.class);
     }
 
-    @DisplayName("회원 삭제 시 카테고리 권한을 포기해도, 카테고리가 삭제된다.")
-    @Test
-    void 회원_삭제_시_카테고리_권한을_포기해도_카테고리가_삭제된다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Member 후디 = memberRepository.save(후디());
-
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-
-        Subscription 관리자_구독 = subscriptionRepository.save(new Subscription(관리자, 공통_일정, Color.COLOR_1));
-        Subscription 후디_구독 = subscriptionRepository.save(new Subscription(후디, 공통_일정, Color.COLOR_1));
-
-        CategoryRole 관리자_역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 관리자, CategoryRoleType.NONE));
-        CategoryRole 후디_역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 후디, CategoryRoleType.ADMIN));
-
-        // when
-        memberService.deleteById(관리자.getId());
-    }
-
     @DisplayName("특정 카테고리의 구독자 목록을 반환한다.")
     @Test
     void 특정_카테고리의_구독자_목록을_반환한다() {
