@@ -82,7 +82,7 @@ public class CategoryService {
     }
 
     private void validateManagingCategoryLimit(final Long memberId) {
-        int memberAdminCount = categoryRoleRepository.countAdminByMemberId(memberId);
+        int memberAdminCount = categoryRoleRepository.countByMemberIdAndCategoryRoleType(memberId, ADMIN);
 
         if (memberAdminCount >= CategoryRole.MAX_MANAGING_CATEGORY_COUNT) {
             throw new ManagingCategoryLimitExcessException();
