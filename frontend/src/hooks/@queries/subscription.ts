@@ -65,8 +65,9 @@ function usePatchSubscription({ subscriptionId, onSuccess }: UsePatchSubscriptio
     (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
       subscriptionApi.patch(accessToken, subscriptionId, body),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries();
+      onSuccess: async () => {
+        await queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
+        await queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
         onSuccess && onSuccess();
       },
     }
