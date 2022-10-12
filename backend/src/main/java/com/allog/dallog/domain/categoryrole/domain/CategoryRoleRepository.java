@@ -39,4 +39,9 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
 
         return categoryRole.isAdmin() && adminCount == 1;
     }
+
+    default CategoryRole getByCategoryId(final Long categoryId) {
+        List<CategoryRole> categoryRoles = findByCategoryId(categoryId);
+        return categoryRoles.get(0);
+    }
 }

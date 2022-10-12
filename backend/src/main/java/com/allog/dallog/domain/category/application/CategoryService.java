@@ -133,6 +133,12 @@ public class CategoryService {
 
     public CategoryDetailResponse findDetailCategoryById(final Long id) {
         Category category = categoryRepository.getById(id);
+
+        //TODO : 프론트 코드에서 memberId가 필요하기 때문에 들어간 불필요한 레거시 코드 입니다.
+        CategoryRole categoryRole = categoryRoleRepository.getByCategoryId(id);
+        Member member = categoryRole.getMember();
+        category.setMember(member);
+
         List<Subscription> subscriptions = subscriptionRepository.findByCategoryId(id);
         return new CategoryDetailResponse(category, subscriptions.size());
     }

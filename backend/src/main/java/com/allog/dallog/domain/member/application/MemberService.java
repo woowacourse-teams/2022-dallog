@@ -90,6 +90,9 @@ public class MemberService {
             if (category.isPersonal()) {
                 continue;
             }
+            if (category.isExternal()) {
+                continue;
+            }
             if (categoryRoleRepository.isMemberSoleAdminInCategory(id, category.getId())) {
                 throw new InvalidMemberException("회원의 카테고리 중 유일한 편집자 권한이 아닌 카테고리가 있습니다.");
             }
