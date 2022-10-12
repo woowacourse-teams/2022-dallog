@@ -153,8 +153,9 @@ function useGetSchedulesWithCategory({
 }
 
 function useGetSingleCategory({ categoryId }: UseGetSingleCategoryParams) {
-  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(CACHE_KEY.CATEGORY, () =>
-    categoryApi.getSingle(categoryId)
+  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
+    [CACHE_KEY.CATEGORY, categoryId],
+    () => categoryApi.getSingle(categoryId)
   );
 
   return { data };
