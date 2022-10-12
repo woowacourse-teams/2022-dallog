@@ -14,6 +14,7 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
+import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
@@ -79,8 +80,21 @@ public class MemberService {
 
     @Transactional
     public void deleteById(final Long id) {
-        List<Long> categoryIds = categoryRepository.findByMemberId(id)
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(id)
                 .stream()
+                .filter(CategoryRole::isAdmin)
+                .collect(Collectors.toList());
+
+        for (CategoryRole categoryRole : categoryRoles) {
+            Category category = categoryRole.getCategory();
+            if (!categoryRoleRepository.isMemberSoleAdminInCategory(id, category.getId())) {
+                throw new InvalidMemberException("회원의 카테고리 중 유일한 편집자 권한이 아닌 카테고리가 있습니다.");
+            }
+        }
+
+        List<Long> categoryIds = categoryRoles
+                .stream()
+                .map(CategoryRole::getCategory)
                 .map(Category::getId)
                 .collect(Collectors.toList());
 
@@ -92,21 +106,29 @@ public class MemberService {
             List<Long> subscriptionIds = subscriptions.stream()
                     .map(Subscription::getId)
                     .collect(Collectors.toList());
-            subscriptionRepository.deleteByIdIn(subscriptionIds);
 
             //TODO 내 카테고리에 대한 다른 사람들의 카테고리권한 데이터 삭제
             List<Member> members = subscriptions.stream()
                     .map(Subscription::getMember)
                     .collect(Collectors.toList());
 
+            subscriptionRepository.deleteByIdIn(subscriptionIds);
             members.forEach(member -> categoryRoleRepository.deleteByMemberId(member.getId()));
         }
 
         scheduleRepository.deleteByCategoryIdIn(categoryIds);
 
-        categoryRoleRepository.deleteByMemberId(id);
-        categoryRepository.deleteByMemberId(id);
+        subscriptionRepository.deleteByMemberId(id);
 
+        externalCategoryDetailRepository.deleteByCategoryIdIn(categoryIds);
+
+        categoryRoleRepository.deleteByCategoryIdIn(categoryIds);
+        categoryRoleRepository.deleteByMemberId(id);
+
+        List<Category> categories = categoryRepository.findByMemberId(id);
+        categories.forEach(category -> category.setMember(null));
+
+        categoryRepository.deleteByIdIn(categoryIds);
         oAuthTokenRepository.deleteByMemberId(id);
         tokenRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
