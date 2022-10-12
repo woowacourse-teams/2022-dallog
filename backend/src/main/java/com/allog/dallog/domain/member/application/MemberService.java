@@ -87,13 +87,15 @@ public class MemberService {
 
         for (CategoryRole categoryRole : categoryRoles) {
             Category category = categoryRole.getCategory();
-            if (!categoryRoleRepository.isMemberSoleAdminInCategory(id, category.getId())) {
+            if (category.isPersonal()) {
+                continue;
+            }
+            if (categoryRoleRepository.isMemberSoleAdminInCategory(id, category.getId())) {
                 throw new InvalidMemberException("회원의 카테고리 중 유일한 편집자 권한이 아닌 카테고리가 있습니다.");
             }
         }
 
-        List<Long> categoryIds = categoryRoles
-                .stream()
+        List<Long> categoryIds = categoryRoles.stream()
                 .map(CategoryRole::getCategory)
                 .map(Category::getId)
                 .collect(Collectors.toList());
