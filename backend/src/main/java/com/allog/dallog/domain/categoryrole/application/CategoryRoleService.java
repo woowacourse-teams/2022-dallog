@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CategoryRoleService {
 
+    private static final int MAX_MANAGING_CATEGORY_COUNT = 50;
+
     private final CategoryRoleRepository categoryRoleRepository;
 
     public CategoryRoleService(final CategoryRoleRepository categoryRoleRepository) {
@@ -58,7 +60,7 @@ public class CategoryRoleService {
                 .filter(CategoryRole::isAdmin)
                 .count();
 
-        if (roleType.equals(ADMIN) && memberAdminCount >= 50) {
+        if (roleType.equals(ADMIN) && memberAdminCount >= MAX_MANAGING_CATEGORY_COUNT) {
             throw new ManagingCategoryLimitExcessException();
         }
     }
