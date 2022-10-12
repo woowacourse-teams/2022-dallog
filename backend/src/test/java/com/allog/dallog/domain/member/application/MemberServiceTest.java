@@ -4,6 +4,7 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.더미_리프레시_
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
@@ -34,6 +35,7 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
+import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Color;
@@ -69,6 +71,21 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private OAuthTokenRepository oAuthTokenRepository;
+
+    @Test
+    void 탈퇴한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+
+        categoryService.save(관리자.getId(), 내_일정_생성_요청);
+
+        // when
+        memberService.deleteById(관리자.getId());
+
+        Member 재가입_관리자 = memberRepository.save(관리자());
+        categoryService.save(재가입_관리자.getId(), 내_일정_생성_요청);
+        memberService.deleteById(재가입_관리자.getId());
+    }
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
@@ -145,12 +162,9 @@ class MemberServiceTest extends ServiceTest {
         Subscription 색상1_구독 = subscriptionRepository.save(new Subscription(관리자, 공통_일정, Color.COLOR_1));
         OAuthToken 외부_토큰 = oAuthTokenRepository.save(new OAuthToken(관리자, 더미_리프레시_토큰));
 
-        // when
-        memberService.deleteById(관리자.getId());
-
-        // then
-        assertThatThrownBy(() -> memberService.findById(관리자.getId()))
-                .isInstanceOf(NoSuchMemberException.class);
+        // when & then
+        assertThatThrownBy(() -> memberService.deleteById(관리자.getId()))
+                .isInstanceOf(InvalidMemberException.class);
     }
 
     @DisplayName("회원 삭제 시 연관된 카테고리 역할 엔티티도 모두 제거된다.")
@@ -164,12 +178,9 @@ class MemberServiceTest extends ServiceTest {
 
         CategoryRole 역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 후디, CategoryRoleType.ADMIN));
 
-        // when
-        memberService.deleteById(후디.getId());
-        boolean actual = categoryRoleRepository.findById(역할.getId()).isPresent();
-
-        // then
-        assertThat(actual).isFalse();
+        // when & then
+        assertThatThrownBy(() -> memberService.deleteById(후디.getId()))
+                .isInstanceOf(InvalidMemberException.class);
     }
 
     @DisplayName("회원 삭제 시 카테고리 권한을 포기해도, 카테고리가 삭제된다.")
@@ -181,8 +192,8 @@ class MemberServiceTest extends ServiceTest {
 
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
 
-        Subscription 관리자_구독 = subscriptionRepository.save(new Subscription(관리자, 공통_일정,Color.COLOR_1));
-        Subscription 후디_구독 = subscriptionRepository.save(new Subscription(후디, 공통_일정,Color.COLOR_1));
+        Subscription 관리자_구독 = subscriptionRepository.save(new Subscription(관리자, 공통_일정, Color.COLOR_1));
+        Subscription 후디_구독 = subscriptionRepository.save(new Subscription(후디, 공통_일정, Color.COLOR_1));
 
         CategoryRole 관리자_역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 관리자, CategoryRoleType.NONE));
         CategoryRole 후디_역할 = categoryRoleRepository.save(new CategoryRole(공통_일정, 후디, CategoryRoleType.ADMIN));
