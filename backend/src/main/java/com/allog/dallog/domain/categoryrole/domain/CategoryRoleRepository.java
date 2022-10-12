@@ -20,13 +20,12 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     @EntityGraph(attributePaths = {"category", "category.member"})
     List<CategoryRole> findByMemberId(final Long memberId);
 
+    List<CategoryRole> findByCategoryIdAndCategoryRoleType(final Long categoryId,
+                                                           final CategoryRoleType categoryRoleType);
+
     int countByCategoryIdAndCategoryRoleType(final Long categoryId, final CategoryRoleType categoryRoleType);
 
     void deleteByCategoryId(final Long categoryId);
-
-    void deleteByMemberId(final Long memberId);
-
-    void deleteByCategoryIdIn(final List<Long> categoryIds);
 
     void deleteByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
@@ -40,10 +39,5 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
         int adminCount = countByCategoryIdAndCategoryRoleType(categoryId, CategoryRoleType.ADMIN);
 
         return categoryRole.isAdmin() && adminCount == 1;
-    }
-
-    default CategoryRole getByCategoryId(final Long categoryId) {
-        List<CategoryRole> categoryRoles = findByCategoryId(categoryId);
-        return categoryRoles.get(0);
     }
 }

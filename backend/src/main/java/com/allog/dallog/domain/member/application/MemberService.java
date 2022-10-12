@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.member.application;
 
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
@@ -80,12 +81,12 @@ public class MemberService {
 
     @Transactional
     public void deleteById(final Long id) {
-        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(id)
+        List<CategoryRole> adminCategoryRoles = categoryRoleRepository.findByMemberId(id)
                 .stream()
                 .filter(CategoryRole::isAdmin)
                 .collect(Collectors.toList());
 
-        for (CategoryRole categoryRole : categoryRoles) {
+        for (CategoryRole categoryRole : adminCategoryRoles) {
             Category category = categoryRole.getCategory();
             if (category.isPersonal()) {
                 continue;
@@ -98,8 +99,7 @@ public class MemberService {
             }
         }
 
-        List<Long> adminCategoryIds = categoryRoles.stream()
-                .filter(CategoryRole::isAdmin)
+        List<Long> adminCategoryIds = adminCategoryRoles.stream()
                 .map(CategoryRole::getCategory)
                 .map(Category::getId)
                 .collect(Collectors.toList());
@@ -119,21 +119,61 @@ public class MemberService {
                 categoryRepository.deleteById(category.getId());
             }
             if (category.isInternal() && !category.isPersonal()) {
-                subscriptionRepository.deleteByMemberId(id);
+                // TODO: 로직 마지막 Member 삭제시 외래키 연관관계가 있는 카테고리들이 있어서 Member 삭제가 안되는 에러가 있습니다.
+                // TODO: 그래서, ADMIN이 2명 이상인 경우 Category의 member_id를 변경해주기 위한 로직입니다. Category에서 member가 사라지면 삭제해야할 로직입니다.
+                List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryIdAndCategoryRoleType(
+                        category.getId(), ADMIN);
+                Member member = memberRepository.getById(id);
+                Member otherMember = memberRepository.getById(categoryRoles.get(0).getMember().getId());
+                if (!member.hasSameId(otherMember.getId())) {
+                    category.setMember(otherMember);
+                }
+                if (member.hasSameId(otherMember.getId())) {
+                    otherMember = memberRepository.getById(categoryRoles.get(1).getMember().getId());
+                    category.setMember(otherMember);
+                }
+
+                subscriptionRepository.deleteByMemberIdAndCategoryId(id, category.getId());
                 categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
             }
         }
 
-        List<Long> noneCategoryIds = categoryRoles.stream()
+        List<CategoryRole> noneCategoryRoles = categoryRoleRepository.findByMemberId(id)
+                .stream()
                 .filter(CategoryRole::isNone)
+                .collect(Collectors.toList());
+
+        List<Long> noneCategoryIds = noneCategoryRoles.stream()
                 .map(CategoryRole::getCategory)
                 .map(Category::getId)
                 .collect(Collectors.toList());
 
         for (Long noneCategoryId : noneCategoryIds) {
             Category category = categoryRepository.getById(noneCategoryId);
-            subscriptionRepository.deleteByMemberId(id);
+
+            // TODO: 로직 마지막 Member 삭제시 외래키 연관관계가 있는 카테고리들이 있어서 Member 삭제가 안되는 에러가 있습니다.
+            // TODO: 그래서, ADMIN이 2명 이상인 경우 Category의 member_id를 변경해주기 위한 로직입니다. Category에서 member가 사라지면 삭제해야할 로직입니다.
+            List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryIdAndCategoryRoleType(
+                    category.getId(), ADMIN);
+            Member member = memberRepository.getById(categoryRoles.get(0).getMember().getId());
+            category.setMember(member);
+
+            subscriptionRepository.deleteByMemberIdAndCategoryId(id, category.getId());
             categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
+        }
+
+        // TODO : 내가 만든 카테고리 일때 구독 해제를 하면, 구독과 카테고리 권한에 대한 데이터가 사라집니다.
+        // TODO : 이런 경우에도 Member 삭제시 외래키 연관관계가 있는 카테고리들이 발생할수 있어서 이를 처리하기 위한 로직입니다.
+        List<Category> creatorCategories = categoryRepository.findByMemberId(id)
+                .stream()
+                .filter(category -> category.isCreatorId(id))
+                .collect(Collectors.toList());
+
+        for (Category creatorCategory : creatorCategories) {
+            List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryIdAndCategoryRoleType(
+                    creatorCategory.getId(), ADMIN);
+            Member member = memberRepository.getById(categoryRoles.get(0).getMember().getId());
+            creatorCategory.setMember(member);
         }
 
         oAuthTokenRepository.deleteByMemberId(id);
