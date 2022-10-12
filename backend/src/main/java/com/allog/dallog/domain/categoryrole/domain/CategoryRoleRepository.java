@@ -1,5 +1,9 @@
 package com.allog.dallog.domain.categoryrole.domain;
 
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
+
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import java.util.List;
 import java.util.Optional;
@@ -45,5 +49,13 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
         int adminCount = countByCategoryIdAndCategoryRoleType(categoryId, CategoryRoleType.ADMIN);
 
         return categoryRole.isAdmin() && adminCount == 1;
+    }
+
+    default void validateManagingCategoryLimit(final Long memberId, final CategoryRoleType categoryRoleType) {
+        int memberAdminCount = countByMemberIdAndCategoryRoleType(memberId, ADMIN);
+
+        if (!categoryRoleType.equals(NONE) && memberAdminCount >= CategoryRole.MAX_MANAGING_CATEGORY_COUNT) {
+            throw new ManagingCategoryLimitExcessException();
+        }
     }
 }
