@@ -1,11 +1,14 @@
 package com.allog.dallog.domain.categoryrole.application;
 
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
+
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,7 @@ public class CategoryRoleService {
 
         validateAuthority(loginMemberId, categoryId);
         validateSoleAdmin(memberId, categoryId);
+        validateManagingCategoryLimit(memberId, roleType);
 
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
 
@@ -45,6 +49,17 @@ public class CategoryRoleService {
         boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(memberId, categoryId);
         if (isSoleAdmin) {
             throw new NotAbleToChangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다.");
+        }
+    }
+
+    private void validateManagingCategoryLimit(final Long memberId, final CategoryRoleType roleType) {
+        long memberAdminCount = categoryRoleRepository.findByMemberId(memberId)
+                .stream()
+                .filter(CategoryRole::isAdmin)
+                .count();
+
+        if (roleType.equals(ADMIN) && memberAdminCount >= 50) {
+            throw new ManagingCategoryLimitExcessException();
         }
     }
 
