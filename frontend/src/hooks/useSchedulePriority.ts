@@ -3,7 +3,7 @@ import { ScheduleType } from '@/@types/schedule';
 import { CALENDAR } from '@/constants';
 import { DATE_TIME } from '@/constants/date';
 
-import { getDayOffsetDateTime, getISODateString } from '@/utils/date';
+import { getDayOffsetDateTime, getISODateString, getISOTimeString } from '@/utils/date';
 
 function useSchedulePriority(calendar: string[]) {
   const calendarWithPriority = calendar.reduce(
@@ -23,14 +23,27 @@ function useSchedulePriority(calendar: string[]) {
   const getLongTermSchedulesWithPriority = (longTerms: Array<ScheduleType>) =>
     longTerms.map((schedule) => {
       const startDate = getISODateString(schedule.startDateTime);
-      if (!calendarWithPriority.hasOwnProperty(startDate)) {
+      const endDate = getISODateString(
+        getISOTimeString(schedule.endDateTime).startsWith(DATE_TIME.END)
+          ? getDayOffsetDateTime(schedule.endDateTime, -1)
+          : schedule.endDateTime
+      );
+
+      const calendarStartDate = calendar.find((el) => startDate <= el && el <= endDate);
+
+      if (
+        !calendarStartDate ||
+        !calendarWithPriority.hasOwnProperty(getISODateString(calendarStartDate))
+      ) {
         return {
           schedule,
           priority: null,
         };
       }
 
-      const priority = calendarWithPriority[startDate].findIndex((el) => !el);
+      const priority = calendarWithPriority[getISODateString(calendarStartDate)].findIndex(
+        (el) => !el
+      );
 
       if (priority === -1) {
         return {
@@ -39,11 +52,6 @@ function useSchedulePriority(calendar: string[]) {
         };
       }
 
-      const endDate = getISODateString(
-        schedule.endDateTime.endsWith(DATE_TIME.END)
-          ? getDayOffsetDateTime(schedule.endDateTime, -1)
-          : schedule.endDateTime
-      );
       const scheduleRange = calendar
         .filter((dateTime) => {
           const date = getISODateString(dateTime);
