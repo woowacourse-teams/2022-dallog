@@ -37,6 +37,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     void deleteByMemberId(final Long memberId);
 
+    void deleteByIdIn(final List<Long> ids);
+
     default Category getById(final Long id) {
         return this.findById(id)
                 .orElseThrow(NoSuchCategoryException::new);

@@ -35,7 +35,7 @@ public class Category extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "members_id", nullable = false)
+    @JoinColumn(name = "members_id")
     private Member member;
 
     @Enumerated(value = EnumType.STRING)
@@ -126,5 +126,9 @@ public class Category extends BaseEntity {
 
     public CategoryType getCategoryType() {
         return categoryType;
+    }
+
+    public void setMember(final Member member) {
+        this.member = member;
     }
 }
