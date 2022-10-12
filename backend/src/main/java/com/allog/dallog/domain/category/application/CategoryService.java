@@ -22,6 +22,7 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
@@ -64,6 +65,8 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
+        validateManagingCategoryLimit(memberId);
+
         Member member = memberRepository.getById(memberId);
         Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
@@ -76,6 +79,14 @@ public class CategoryService {
     private void subscribeCategory(final Member member, final Category category) {
         Color color = Color.pick(colorPicker.pickNumber());
         subscriptionRepository.save(new Subscription(member, category, color));
+    }
+
+    private void validateManagingCategoryLimit(final Long memberId) {
+        int memberAdminCount = categoryRoleRepository.countAdminByMemberId(memberId);
+
+        if (memberAdminCount >= CategoryRole.MAX_MANAGING_CATEGORY_COUNT) {
+            throw new ManagingCategoryLimitExcessException();
+        }
     }
 
     private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {

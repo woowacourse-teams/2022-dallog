@@ -23,6 +23,11 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     List<CategoryRole> findByCategoryIdAndCategoryRoleType(final Long categoryId,
                                                            final CategoryRoleType categoryRoleType);
 
+    @Query("SELECT count(cr) "
+            + "FROM CategoryRole cr "
+            + "WHERE cr.categoryRoleType = 'ADMIN' AND cr.member.id = :memberId")
+    int countAdminByMemberId(final Long memberId);
+
     int countByCategoryIdAndCategoryRoleType(final Long categoryId, final CategoryRoleType categoryRoleType);
 
     void deleteByCategoryId(final Long categoryId);

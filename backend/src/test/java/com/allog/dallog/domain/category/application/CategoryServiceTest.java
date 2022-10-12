@@ -48,6 +48,7 @@ import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
@@ -517,6 +518,21 @@ class CategoryServiceTest extends ServiceTest {
         assertThatThrownBy(
                 () -> categoryService.delete(관리자.getId(), 공통_일정.getId()))
                 .isInstanceOf(NoCategoryAuthorityException.class);
+    }
+
+    @DisplayName("카테고리를 생성 시 이미 관리자로 참여중인 카테고리 개수가 50개 이상이면 예외를 던진다.")
+    @Test
+    void 카테고리를_생성_시_이미_관리자로_참여중인_카테고리_개수가_50개_이상이면_예외를_던진다() {
+        // given
+        Member 후디 = memberRepository.save(후디());
+        for (int i = 0; i < 50; i++) {
+            CategoryCreateRequest request = new CategoryCreateRequest("카테고리 " + i, NORMAL);
+            categoryService.save(후디.getId(), request);
+        }
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.save(후디.getId(), BE_일정_생성_요청))
+                .isInstanceOf(ManagingCategoryLimitExcessException.class);
     }
 
     @DisplayName("존재하지 않는 카테고리를 삭제할 경우 예외를 던진다.")
