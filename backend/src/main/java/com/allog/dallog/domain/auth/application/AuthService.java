@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.auth.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 
 import com.allog.dallog.domain.auth.domain.AuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
@@ -12,6 +13,8 @@ import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.application.ColorPicker;
@@ -29,6 +32,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final OAuthUri oAuthUri;
@@ -37,12 +41,14 @@ public class AuthService {
     private final TokenCreator tokenCreator;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
+                       final CategoryRoleRepository categoryRoleRepository,
                        final SubscriptionRepository subscriptionRepository,
                        final OAuthTokenRepository oAuthTokenRepository, final OAuthUri oAuthUri,
                        final OAuthClient oAuthClient, final ColorPicker colorPicker,
                        final TokenCreator tokenCreator) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.oAuthUri = oAuthUri;
@@ -81,6 +87,9 @@ public class AuthService {
     private Member saveMember(final OAuthMember oAuthMember) {
         Member savedMember = memberRepository.save(oAuthMember.toMember());
         Category savedCategory = categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, savedMember, PERSONAL));
+        
+        CategoryRole categoryRole = new CategoryRole(savedCategory, savedMember, ADMIN);
+        categoryRoleRepository.save(categoryRole);
 
         Color randomColor = Color.pick(colorPicker.pickNumber());
         subscriptionRepository.save(new Subscription(savedMember, savedCategory, randomColor));
