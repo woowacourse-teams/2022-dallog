@@ -1,5 +1,12 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  QueryKey,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import {
@@ -7,6 +14,7 @@ import {
   CategoryRoleType,
   CategorySubscriberType,
   CategoryType,
+  SingleCategoryType,
 } from '@/@types/category';
 
 import { userState } from '@/recoil/atoms';
@@ -38,7 +46,16 @@ interface UseGetSchedulesWithCategoryParams {
   endDateTime: string;
 }
 
-interface UseGetSingleCategoryParams {
+interface UseGetSingleCategoryParams
+  extends Omit<
+    UseQueryOptions<
+      AxiosResponse<SingleCategoryType>,
+      AxiosError<unknown>,
+      AxiosResponse<SingleCategoryType>,
+      QueryKey
+    >,
+    'queryKey' | 'queryFn'
+  > {
   categoryId: number;
 }
 
@@ -152,10 +169,11 @@ function useGetSchedulesWithCategory({
   return { isLoading, data };
 }
 
-function useGetSingleCategory({ categoryId }: UseGetSingleCategoryParams) {
-  const { data } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
+function useGetSingleCategory({ categoryId, ...options }: UseGetSingleCategoryParams) {
+  const { data } = useQuery<AxiosResponse<SingleCategoryType>, AxiosError>(
     [CACHE_KEY.CATEGORY, categoryId],
-    () => categoryApi.getSingle(categoryId)
+    () => categoryApi.getSingle(categoryId),
+    { ...options }
   );
 
   return { data };

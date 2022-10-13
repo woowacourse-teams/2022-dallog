@@ -9,6 +9,10 @@ const CALENDAR = {
   EMPTY_TITLE: '제목 없음',
 };
 
+const EVENT = {
+  MOUSE_ENTER: 'mouseenter',
+};
+
 const SELECTOR_KEY = {
   SIDE_BAR: 'sideBarSelector',
 };
@@ -25,4 +29,4 @@ const PATH = {
   POLICY: '/policy',
 };
 
-export { ATOM_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };
+export { ATOM_KEY, CALENDAR, EVENT, SELECTOR_KEY, STORAGE_KEY, PATH };
