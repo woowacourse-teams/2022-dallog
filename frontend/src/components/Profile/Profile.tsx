@@ -31,7 +31,6 @@ import {
   menuTitle,
   nameButtonStyle,
   nameStyle,
-  withdrawalButtonStyle,
 } from './Profile.styles';
 
 function Profile() {
@@ -44,8 +43,6 @@ function Profile() {
   const inputRef = {
     displayName: useRef<HTMLInputElement>(null),
   };
-
-  const { state: isWithdrawalModalOpen, toggleState: toggleWithdrawalModalOpen } = useToggle();
 
   const { mutate } = usePatchProfile({ accessToken: user.accessToken });
 
@@ -113,14 +110,6 @@ function Profile() {
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
       </Button>
-
-      <Button cssProp={withdrawalButtonStyle} onClick={toggleWithdrawalModalOpen}>
-        회원 탈퇴
-      </Button>
-
-      <ModalPortal isOpen={isWithdrawalModalOpen} closeModal={toggleWithdrawalModalOpen}>
-        <WithdrawalModal closeModal={toggleWithdrawalModalOpen} />
-      </ModalPortal>
     </div>
   );
 }
