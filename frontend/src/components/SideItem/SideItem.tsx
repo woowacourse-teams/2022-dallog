@@ -1,11 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
-
+import { usePatchSubscription } from '@/hooks/@queries/subscription';
 import useModalPosition from '@/hooks/useModalPosition';
 
 import { SubscriptionType } from '@/@types/subscription';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
@@ -13,8 +9,6 @@ import Spinner from '@/components/@common/Spinner/Spinner';
 import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/SubscriptionModifyModal';
 
 import { TRANSPARENT } from '@/constants/style';
-
-import subscriptionApi from '@/api/subscription';
 
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdMoreVert } from 'react-icons/md';
 
@@ -31,24 +25,11 @@ interface SideItemProps {
 }
 
 function SideItem({ subscription }: SideItemProps) {
-  const user = useRecoilValue(userState);
+  const { isLoading, mutate: patchSubscription } = usePatchSubscription({
+    subscriptionId: subscription.id,
+  });
 
-  const queryClient = useQueryClient();
-
-  const { isLoading, mutate: patchSubscription } = useMutation(
-    (body: Pick<SubscriptionType, 'colorCode'> | Pick<SubscriptionType, 'checked'>) =>
-      subscriptionApi.patch(user.accessToken, subscription.id, body),
-    {
-      onSuccess: () => queryClient.invalidateQueries(),
-    }
-  );
-
-  const {
-    state: isPaletteOpen,
-    toggleState: togglePaletteOpen,
-    handleClickOpenButton,
-    modalPos,
-  } = useModalPosition();
+  const { isModalOpen, toggleModalOpen, handleClickOpen, modalPos } = useModalPosition();
 
   const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
     patchSubscription({
@@ -90,16 +71,16 @@ function SideItem({ subscription }: SideItemProps) {
       </div>
       <div css={modalLayoutStyle}>
         <Button cssProp={iconStyle}>
-          <MdMoreVert size={20} onClick={handleClickOpenButton} />
+          <MdMoreVert size={20} onClick={handleClickOpen} />
         </Button>
-        {isPaletteOpen && (
+        {isModalOpen && (
           <ModalPortal
-            isOpen={isPaletteOpen}
-            closeModal={togglePaletteOpen}
+            isOpen={isModalOpen}
+            closeModal={toggleModalOpen}
             dimmerBackground={TRANSPARENT}
           >
             <SubscriptionModifyModal
-              togglePaletteOpen={togglePaletteOpen}
+              toggleModalOpen={toggleModalOpen}
               modalPos={modalPos}
               subscription={subscription}
               patchSubscription={patchSubscription}

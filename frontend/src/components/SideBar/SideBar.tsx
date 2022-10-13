@@ -1,21 +1,17 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useQuery } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
-import { SubscriptionType } from '@/@types/subscription';
+import { useGetEditableCategories } from '@/hooks/@queries/category';
+import { useGetSubscriptions } from '@/hooks/@queries/subscription';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
 import Spinner from '@/components/@common/Spinner/Spinner';
+import SideAdminList from '@/components/SideAdminList/SideAdminList';
 import SideGoogleList from '@/components/SideGoogleList/SideGoogleList';
-import SideMyList from '@/components/SideMyList/SideMyList';
 import SideSubscribedList from '@/components/SideSubscribedList/SideSubscribedList';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
-
-import subscriptionApi from '@/api/subscription';
 
 import { sideBar } from './SideBar.styles';
 
@@ -25,33 +21,52 @@ function SideBar() {
 
   const theme = useTheme();
 
-  const { isLoading, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
-    CACHE_KEY.SUBSCRIPTIONS,
-    () => subscriptionApi.get(user.accessToken),
-    {
+  const { isLoading: isGetEditableCategoriesLoading, data: getEditableCategoriesResponse } =
+    useGetEditableCategories({
       enabled: isSideBarOpen && !!user.accessToken,
-    }
-  );
+    });
 
-  if (!user.accessToken || isLoading || data === undefined) {
+  const { isLoading: isGetSubscriptionsLoading, data: getSubscriptionsResponse } =
+    useGetSubscriptions({
+      enabled: isSideBarOpen && !!user.accessToken,
+    });
+
+  if (
+    !user.accessToken ||
+    isGetEditableCategoriesLoading ||
+    !getEditableCategoriesResponse ||
+    isGetSubscriptionsLoading ||
+    !getSubscriptionsResponse
+  ) {
     return (
       <div css={sideBar(theme, isSideBarOpen)}>
-        <Spinner />
+        <Spinner size={10} />
       </div>
     );
   }
 
-  const subscribedList = data.data.filter((el) => el.category.creator.id !== user.id);
+  const canEditCategories = getEditableCategoriesResponse.data.map((category) => category.id);
 
-  const myList = data.data.filter(
-    (el) => el.category.categoryType !== CATEGORY_TYPE.GOOGLE && el.category.creator.id === user.id
+  const adminList = getSubscriptionsResponse.data.filter(
+    (el) =>
+      (canEditCategories.includes(el.category.id) &&
+        el.category.categoryType !== CATEGORY_TYPE.GOOGLE) ||
+      el.category.categoryType === CATEGORY_TYPE.PERSONAL
   );
 
-  const googleList = data.data.filter((el) => el.category.categoryType === CATEGORY_TYPE.GOOGLE);
+  const subscribedList = getSubscriptionsResponse.data.filter(
+    (el) =>
+      !canEditCategories.includes(el.category.id) &&
+      el.category.categoryType === CATEGORY_TYPE.NORMAL
+  );
+
+  const googleList = getSubscriptionsResponse.data.filter(
+    (el) => el.category.categoryType === CATEGORY_TYPE.GOOGLE
+  );
 
   return (
     <div css={sideBar(theme, isSideBarOpen)}>
-      <SideMyList categories={myList} />
+      <SideAdminList categories={adminList} />
       <SideSubscribedList categories={subscribedList} />
       <SideGoogleList categories={googleList} />
     </div>

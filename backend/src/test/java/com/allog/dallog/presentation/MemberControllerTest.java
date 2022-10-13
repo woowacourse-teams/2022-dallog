@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.member.application.MemberService;
-import com.allog.dallog.domain.member.dto.MemberUpdateRequest;
+import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("회원 ID"),
@@ -92,7 +92,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         )
                 ))
                 .andExpect(status().isNotFound());
@@ -119,7 +119,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         ),
                         requestFields(
                                 fieldWithPath("displayName").type(JsonFieldType.STRING).description("수정할 이름")
@@ -127,9 +127,9 @@ class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @DisplayName("등록된 회원이 회원탈퇴 한다.")
+    @DisplayName("등록된 회원이 탈퇴한다.")
     @Test
-    void 등록된_회원이_회원탈퇴_한다() throws Exception {
+    void 등록된_회원이_탈퇴한다() throws Exception {
         // given
         willDoNothing()
                 .given(memberService)
@@ -138,6 +138,7 @@ class MemberControllerTest extends ControllerTest {
         // when & then
         mockMvc.perform(delete("/api/members/me")
                         .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())
@@ -145,7 +146,7 @@ class MemberControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName("Authorization").description("JWT 토큰")
+                                headerWithName("Authorization").description("JWT 엑세스 토큰")
                         )))
                 .andExpect(status().isNoContent());
     }

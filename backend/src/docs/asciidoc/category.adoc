@@ -66,25 +66,45 @@ include::{snippets}/category/findMineByName/allByNoName/request-parameters.adoc[
 
 include::{snippets}/category/findMineByName/allByNoName/http-response.adoc[]
 
+=== 자신이 일정을 추가/수정/삭제할 수 있는 카테고리 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/category/findScheduleEditableCategories/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/findScheduleEditableCategories/http-response.adoc[]
+
+=== 자신이 ADMIN으로 있는 카테고리 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/category/findAdminCategories/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/findAdminCategories/http-response.adoc[]
+
 === ID를 통한 카테고리 단건 조회
 
 ==== HTTP Request
 
-include::{snippets}/category/findById/http-request.adoc[]
+include::{snippets}/category/findDetailCategoryById/http-request.adoc[]
 
 ==== Path Parameters
 
-include::{snippets}/category/findById/path-parameters.adoc[]
+include::{snippets}/category/findDetailCategoryById/path-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/category/findById/http-response.adoc[]
+include::{snippets}/category/findDetailCategoryById/http-response.adoc[]
 
 === ID를 통한 카테고리 단건 조회 (존재하지 않는 경우)
 
 ==== HTTP Response
 
-include::{snippets}/category/findById/failByNoCategory/http-response.adoc[]
+include::{snippets}/category/findDetailCategoryById/failByNoCategory/http-response.adoc[]
 
 === 카테고리 수정
 
@@ -131,3 +151,63 @@ include::{snippets}/category/delete/http-response.adoc[]
 ==== HTTP Response
 
 include::{snippets}/category/delete/failByNoCategory/http-response.adoc[]
+
+=== 카테고리 역할 수정
+
+역할이 ADMIN인 회원은 카테고리 구독자(일반 구독자, 관리자, 자기자신 모두 포함)의 역할을 수정할 수 있습니다.
+
+==== HTTP Request
+
+include::{snippets}/category/updateRole/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/category/updateRole/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/updateRole/http-response.adoc[]
+
+=== 카테고리 역할 수정 (권한이 없는 경우)
+
+역할이 ADMIN인 경우만 구독자의 역할을 수정할 수 있습니다.
+
+==== HTTP Response
+
+include::{snippets}/category/updateRole/failByNoPermission/http-response.adoc[]
+
+=== 카테고리 역할 수정 (구독을 하지 않은 경우)
+
+카테고리 역할 수정 대상의 회원이 해당 카테고리를 구독하지 않은 상태인경우 역할 또한 존재하지 않으므로 역할을 찾을 수 없습니다.
+
+==== HTTP Response
+
+include::{snippets}/category/updateRole/failByCategoryRoleNotFound/http-response.adoc[]
+
+=== 카테고리 역할 수정 (자신의 역할 수정시, 자신이 유일한 ADMIN인 경우)
+
+자기자신의 카테고리 역할 수정시 자신이 해당 카테고리의 유일한 ADMIN인 경우 역할을 변경할 수 없습니다.
+
+==== HTTP Response
+
+include::{snippets}/category/updateRole/failBySoleAdmin/http-response.adoc[]
+
+=== 카테고리 구독자 목록 조회
+
+==== Request
+
+include::{snippets}/category/findSubscribers/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/category/findSubscribers/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/category/findSubscribers/http-response.adoc[]
+
+=== 카테고리 구독자 목록 조회 (호출자가 ADMIN이 아닌 경우)
+
+==== HTTP Response
+
+include::{snippets}/category/findSubscribers/failByNoAuthority/http-response.adoc[]

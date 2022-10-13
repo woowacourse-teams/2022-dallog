@@ -1,6 +1,8 @@
-import { CATEGORY_TYPE } from '@/constants/category';
+import { CATEGORY_TYPE, ROLE } from '@/constants/category';
 
 import { ProfileType } from './profile';
+
+type CategoryRoleType = typeof ROLE[keyof typeof ROLE];
 
 interface CategoryType {
   id: number;
@@ -10,9 +12,24 @@ interface CategoryType {
   categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
 }
 
+interface CategorySubscriberType {
+  member: ProfileType;
+  categoryRoleType: CategoryRoleType;
+}
+
 interface CategoriesGetResponseType {
   page: number;
   categories: CategoryType[];
 }
 
-export { CategoryType, CategoriesGetResponseType };
+interface SingleCategoryType extends CategoryType {
+  subscriberCount: number;
+}
+
+export {
+  CategoryType,
+  CategoryRoleType,
+  CategorySubscriberType,
+  CategoriesGetResponseType,
+  SingleCategoryType,
+};

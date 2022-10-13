@@ -1,15 +1,12 @@
 import { useTheme } from '@emotion/react';
-import { useQuery } from 'react-query';
+
+import { useGetLoginUrl } from '@/hooks/@queries/login';
 
 import Button from '@/components/@common/Button/Button';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Footer from '@/components/Footer/Footer';
 
-import { CACHE_KEY } from '@/constants/api';
-
 import { getThisDate } from '@/utils/date';
-
-import loginApi from '@/api/login';
 
 import { FcGoogle } from 'react-icons/fc';
 
@@ -33,14 +30,7 @@ import {
 function StartPage() {
   const theme = useTheme();
 
-  const { error, refetch } = useQuery<string>(CACHE_KEY.ENTER, loginApi.getUrl, {
-    enabled: false,
-    onSuccess: (data) => onSuccessGetLoginUrl(data),
-  });
-
-  const onSuccessGetLoginUrl = (loginUrl: string) => {
-    location.href = loginUrl;
-  };
+  const { error, refetch } = useGetLoginUrl();
 
   const handleClickGoogleLoginButton = () => {
     refetch();

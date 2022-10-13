@@ -12,7 +12,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구독;
+import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -23,10 +23,13 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
@@ -34,12 +37,14 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import com.allog.dallog.domain.subscription.exception.NotAbleToUnsubscribeException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class SubscriptionServiceTest extends ServiceTest {
 
@@ -57,6 +62,9 @@ class SubscriptionServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRoleRepository categoryRoleRepository;
 
     @DisplayName("새로운 구독을 생성한다.")
     @Test
@@ -251,16 +259,57 @@ class SubscriptionServiceTest extends ServiceTest {
                 .isInstanceOf(NoPermissionException.class);
     }
 
-    @DisplayName("자신이 만든 카테고리에 대한 구독을 삭제할 경우 예외를 던진다")
+    @DisplayName("카테고리를 구독하면 카테고리에 대한 NONE 역할이 생성된다")
     @Test
-    void 자신이_만든_카테고리에_대한_구독을_삭제할_경우_예외를_던진다() {
+    void 카테고리를_구독하면_카테고리에_대한_NONE_역할이_생성된다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-        Subscription 공통_일정_구독 = subscriptionRepository.save(색상1_구독(관리자, 공통_일정));
+
+        // when
+        Member 후디 = memberRepository.save(후디());
+        subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
+
+        // then
+        assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
+    }
+
+    @DisplayName("카테고리를 구독 해제하면 카테고리에 대한 역할이 제거된다")
+    @Test
+    void 카테고리를_구독_해제하면_카테고리에_대한_역할이_제거된다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 후디 = memberRepository.save(후디());
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        // when
+        subscriptionService.delete(공통_일정_구독.getId(), 후디.getId());
+
+        // then
+        assertThatThrownBy(() -> categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()))
+                .isInstanceOf(NoSuchCategoryRoleException.class);
+    }
+
+    @Transactional
+    @DisplayName("카테고리 역할이 NONE이 아닌 경우 카테고리를 구독 해제할 수 없다")
+    @Test
+    void 카테고리_역할이_NONE이_아닌_경우_카테고리를_구독_해제할_수_없다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+
+        Member 후디 = memberRepository.save(후디());
+        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+
+        CategoryRole 역할 = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
+        역할.changeRole(CategoryRoleType.ADMIN);
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자.getId()))
-                .isInstanceOf(NoPermissionException.class);
+        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 후디.getId()))
+                .isInstanceOf(NotAbleToUnsubscribeException.class);
     }
 }

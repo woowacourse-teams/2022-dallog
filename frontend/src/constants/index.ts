@@ -5,8 +5,12 @@ const ATOM_KEY = {
 };
 
 const CALENDAR = {
-  MAX_VIEW: 10,
+  MAX_SCHEDULE_COUNT: 10,
   EMPTY_TITLE: '제목 없음',
+};
+
+const EVENT = {
+  MOUSE_ENTER: 'mouseenter',
 };
 
 const SELECTOR_KEY = {
@@ -15,6 +19,7 @@ const SELECTOR_KEY = {
 
 const STORAGE_KEY = {
   ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
 };
 
 const PATH = {
@@ -24,4 +29,4 @@ const PATH = {
   POLICY: '/policy',
 };
 
-export { ATOM_KEY, CALENDAR, SELECTOR_KEY, STORAGE_KEY, PATH };
+export { ATOM_KEY, CALENDAR, EVENT, SELECTOR_KEY, STORAGE_KEY, PATH };

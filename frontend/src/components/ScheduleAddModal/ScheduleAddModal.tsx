@@ -1,32 +1,21 @@
 import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { useGetEditableCategories } from '@/hooks/@queries/category';
+import { usePostSchedule } from '@/hooks/@queries/schedule';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
-
-import { CalendarType } from '@/@types/calendar';
-import { CategoryType } from '@/@types/category';
-import { ScheduleType } from '@/@types/schedule';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
-import { CACHE_KEY } from '@/constants/api';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { getDate, getEndTime, getISODateString, getNextDate, getStartTime } from '@/utils/date';
-
-import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
+import { getDayOffsetDateTime, getEndTime, getISODateString, getStartTime } from '@/utils/date';
 
 import {
   arrow,
@@ -46,41 +35,28 @@ import {
 } from './ScheduleAddModal.styles';
 
 interface ScheduleAddModalProps {
-  dateInfo: Omit<CalendarType, 'day'>;
+  dateInfo: string;
   closeModal: () => void;
 }
 
 function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(true);
 
-  const queryClient = useQueryClient();
-
-  const { isLoading: isGetCategoryLoading, data } = useQuery<
-    AxiosResponse<CategoryType[]>,
-    AxiosError
-  >(CACHE_KEY.MY_CATEGORIES, () => categoryApi.getMy(accessToken));
+  const { isLoading, data } = useGetEditableCategories({});
 
   const categoryId = useControlledInput(String(data?.data[0].id));
 
-  const { mutate: postSchedule } = useMutation<
-    AxiosResponse<{ schedules: ScheduleType[] }>,
-    AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
-    unknown
-  >((body) => scheduleApi.post(accessToken, Number(categoryId.inputValue), body), {
-    onSuccess: () => {
-      onSuccessPostSchedule();
-    },
+  const { mutate: postSchedule } = usePostSchedule({
+    categoryId: categoryId.inputValue,
+    onSuccess: () => closeModal(),
   });
 
   const validationSchedule = useValidateSchedule({
-    initialStartDate: getDate(dateInfo),
+    initialStartDate: getISODateString(dateInfo),
     initialStartTime: isAllDay ? DATE_TIME.START : getStartTime(),
-    initialEndDate: getDate(dateInfo),
+    initialEndDate: getISODateString(dateInfo),
     initialEndTime: isAllDay ? DATE_TIME.END : getEndTime(),
   });
 
@@ -96,9 +72,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       startDateTime: `${validationSchedule.startDate.inputValue}T${validationSchedule.startTime.inputValue}`,
       endDateTime: `${
         isAllDay
-          ? getISODateString(
-              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
-            )
+          ? getISODateString(getDayOffsetDateTime(validationSchedule.endDate.inputValue, 1))
           : validationSchedule.endDate.inputValue
       }T${validationSchedule.endTime.inputValue}`,
       memo: validationSchedule.memo.inputValue,
@@ -107,13 +81,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     postSchedule(body);
   };
 
-  const onSuccessPostSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-
-    closeModal();
-  };
-
-  if (isGetCategoryLoading || data === undefined) {
+  if (isLoading || data === undefined) {
     return <Spinner size={10} />;
   }
 

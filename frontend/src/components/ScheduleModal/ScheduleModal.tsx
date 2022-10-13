@@ -1,21 +1,15 @@
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import useUserValue from '@/hooks/useUserValue';
+import { useGetEditableCategories, useGetSingleCategory } from '@/hooks/@queries/category';
+import { useDeleteSchedule } from '@/hooks/@queries/schedule';
 
 import { ModalPosType } from '@/@types';
-import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
-
-import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
 
 import {
   MdClose,
@@ -51,28 +45,18 @@ function ScheduleModal({
   toggleScheduleModifyModalOpen,
   closeModal,
 }: ScheduleModalProps) {
-  const { user } = useUserValue();
-
   const theme = useTheme();
 
-  const queryClient = useQueryClient();
-  const { data: categoryGetResponse } = useQuery<AxiosResponse<CategoryType>, AxiosError>(
-    CACHE_KEY.CATEGORY,
-    () => categoryApi.getSingle(scheduleInfo.categoryId)
-  );
+  const { data: categoryGetResponse } = useGetSingleCategory({
+    categoryId: scheduleInfo.categoryId,
+  });
 
-  const { mutate } = useMutation<AxiosResponse, AxiosError>(
-    () => scheduleApi.delete(user.accessToken, scheduleInfo.id),
-    {
-      onSuccess: () => onSuccessDeleteSchedule(),
-    }
-  );
+  const { data: editableCategoryGetResponse } = useGetEditableCategories({});
 
-  const onSuccessDeleteSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-
-    closeModal();
-  };
+  const { mutate } = useDeleteSchedule({
+    scheduleId: scheduleInfo.id,
+    onSuccess: () => closeModal(),
+  });
 
   const handleClickModifyButton = () => {
     closeModal();
@@ -93,10 +77,10 @@ function ScheduleModal({
     return dateTime.replace('T', ' ');
   };
 
-  const canEditSchedule =
-    (scheduleInfo.categoryType === CATEGORY_TYPE.NORMAL ||
-      scheduleInfo.categoryType === CATEGORY_TYPE.PERSONAL) &&
-    user.id === categoryGetResponse?.data.creator.id;
+  const canEditSchedule = editableCategoryGetResponse?.data.some(
+    (category) =>
+      category.id === scheduleInfo.categoryId && category.categoryType !== CATEGORY_TYPE.GOOGLE
+  );
 
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>

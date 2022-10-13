@@ -2,31 +2,23 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useQuery } from 'react-query';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
+import { useLoginValidate } from '@/hooks/@queries/login';
+
 import { ProfileType } from '@/@types/profile';
 
 import { sideBarState, userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants/api';
 
-import { removeAccessToken } from '@/utils/storage';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
-import loginApi from '@/api/login';
 import profileApi from '@/api/profile';
 
 function useUserValue() {
   const [user, setUser] = useRecoilState(userState);
   const setSideBarOpen = useSetRecoilState(sideBarState);
 
-  const { isLoading, isSuccess } = useQuery<AxiosResponse, AxiosError>(
-    CACHE_KEY.VALIDATE,
-    () => loginApi.validate(user.accessToken),
-    {
-      onError: () => onErrorValidate(),
-      retry: false,
-      useErrorBoundary: false,
-      enabled: !!user.accessToken,
-    }
-  );
+  const { isLoading, isSuccess } = useLoginValidate();
 
   useQuery<AxiosResponse<ProfileType>, AxiosError>(
     CACHE_KEY.PROFILE,
@@ -42,9 +34,10 @@ function useUserValue() {
   );
 
   const onErrorValidate = () => {
-    setUser({ accessToken: '' });
+    setUser({ accessToken: '', refreshToken: '' });
     setSideBarOpen(false);
     removeAccessToken();
+    removeRefreshToken();
   };
 
   return { isAuthenticating: isLoading, user };

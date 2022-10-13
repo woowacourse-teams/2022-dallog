@@ -1,9 +1,10 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_토큰을_반환한다;
+import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.구독_목록을_조회한다;
+import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.카테고리를_구독한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_CREATOR_인증_코드;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
@@ -35,8 +36,8 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_카테고리를_구독하면_201을_반환한다() {
         // given
-        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
         CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
 
         // when
@@ -56,8 +57,8 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_구독_목록을_조회하면_200을_반환한다() {
         // given
-        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
         CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
         CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
@@ -82,8 +83,8 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 인증된_회원이_자신의_구독_정보를_수정할_경우_204를_반환한다() {
         // given
-        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
         CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
 
@@ -120,8 +121,8 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
     @Test
     void 구독을_취소할_경우_204를_반환한다() {
         // given
-        String memberToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
+        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
 
         CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
         CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
@@ -153,16 +154,5 @@ public class SubscriptionAcceptanceTest extends AcceptanceTest {
                 .then().log().all()
                 .extract()
                 .as(CategoryResponse.class);
-    }
-
-    private SubscriptionResponse 카테고리를_구독한다(final String accessToken, final Long categoryId) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/api/members/me/categories/{categoryId}/subscriptions", categoryId)
-                .then().log().all()
-                .statusCode(HttpStatus.CREATED.value())
-                .extract()
-                .as(SubscriptionResponse.class);
     }
 }

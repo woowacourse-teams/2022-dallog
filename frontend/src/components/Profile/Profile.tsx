@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
+import { usePatchProfile } from '@/hooks/@queries/profile';
 import useToggle from '@/hooks/useToggle';
-import useUserValue from '@/hooks/useUserValue';
+
+import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
@@ -11,13 +13,10 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import WithdrawalModal from '@/components/WithdrawalModal/WithdrawalModal';
 
 import { PATH } from '@/constants';
-import { CACHE_KEY } from '@/constants/api';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { createPostBody } from '@/utils';
-import { removeAccessToken } from '@/utils/storage';
-
-import profileApi from '@/api/profile';
+import { removeAccessToken, removeRefreshToken } from '@/utils/storage';
 
 import { MdOutlineCheck, MdOutlineModeEdit } from 'react-icons/md';
 
@@ -32,13 +31,12 @@ import {
   menuTitle,
   nameButtonStyle,
   nameStyle,
-  withdrawalButtonStyle,
 } from './Profile.styles';
 
 function Profile() {
   const navigate = useNavigate();
 
-  const { user } = useUserValue();
+  const user = useRecoilValue(userState);
 
   const [isEditingName, setEditingName] = useState(false);
 
@@ -46,18 +44,7 @@ function Profile() {
     displayName: useRef<HTMLInputElement>(null),
   };
 
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation(
-    (body: { displayName: string }) => profileApi.patch(user.accessToken, body),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(CACHE_KEY.PROFILE);
-        queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
-      },
-    }
-  );
-
-  const { state: isWithdrawalModalOpen, toggleState: toggleWithdrawalModalOpen } = useToggle();
+  const { mutate } = usePatchProfile({ accessToken: user.accessToken });
 
   const handleClickModifyButton = () => {
     setEditingName(true);
@@ -81,6 +68,7 @@ function Profile() {
   const handleClickLogoutButton = () => {
     if (window.confirm(CONFIRM_MESSAGE.LOGOUT)) {
       removeAccessToken();
+      removeRefreshToken();
       navigate(PATH.MAIN);
       location.reload();
     }
@@ -122,14 +110,6 @@ function Profile() {
       <Button cssProp={logoutButtonStyle} onClick={handleClickLogoutButton}>
         로그아웃
       </Button>
-
-      <Button cssProp={withdrawalButtonStyle} onClick={toggleWithdrawalModalOpen}>
-        회원 탈퇴
-      </Button>
-
-      <ModalPortal isOpen={isWithdrawalModalOpen} closeModal={toggleWithdrawalModalOpen}>
-        <WithdrawalModal closeModal={toggleWithdrawalModalOpen} />
-      </ModalPortal>
     </div>
   );
 }

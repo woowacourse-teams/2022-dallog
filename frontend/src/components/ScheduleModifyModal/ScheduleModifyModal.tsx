@@ -1,31 +1,28 @@
 import { validateLength } from '@/validation';
 import { useTheme } from '@emotion/react';
-import { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useRecoilValue } from 'recoil';
 
+import { useGetEditableCategories } from '@/hooks/@queries/category';
+import { usePatchSchedule } from '@/hooks/@queries/schedule';
 import useControlledInput from '@/hooks/useControlledInput';
 import useValidateSchedule from '@/hooks/useValidateSchedule';
 
-import { CategoryType } from '@/@types/category';
 import { ScheduleType } from '@/@types/schedule';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
 
-import { CACHE_KEY } from '@/constants/api';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import { checkAllDay, getBeforeDate, getISODateString, getNextDate } from '@/utils/date';
-
-import categoryApi from '@/api/category';
-import scheduleApi from '@/api/schedule';
+import {
+  checkAllDay,
+  getDayOffsetDateTime,
+  getISODateString,
+  getISOTimeString,
+} from '@/utils/date';
 
 import {
   arrowStyle,
@@ -49,51 +46,31 @@ interface ScheduleModifyModalProps {
 }
 
 function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalProps) {
-  const { accessToken } = useRecoilValue(userState);
-
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(
-    !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
+    checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
-  const queryClient = useQueryClient();
+  const { data } = useGetEditableCategories({});
 
-  const { data: categoriesGetResponse } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    CACHE_KEY.MY_CATEGORIES,
-    () => categoryApi.getMy(accessToken)
-  );
-
-  const { mutate } = useMutation<
-    AxiosResponse,
-    AxiosError,
-    Omit<ScheduleType, 'id' | 'categoryId' | 'colorCode' | 'categoryType'>,
-    unknown
-  >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleInfo.id, body), {
-    onSuccess: () => onSuccessPatchSchedule(),
+  const { mutate } = usePatchSchedule({
+    scheduleId: scheduleInfo.id,
+    onSuccess: () => closeModal(),
   });
 
   const categoryId = useControlledInput(
-    categoriesGetResponse?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
+    data?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
   );
-
-  const onSuccessPatchSchedule = () => {
-    queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
-    closeModal();
-  };
-
-  const [startDate, startTime] = scheduleInfo.startDateTime.split('T');
-  const [endDate, endTime] = scheduleInfo.endDateTime.split('T');
 
   const validationSchedule = useValidateSchedule({
     initialTitle: scheduleInfo.title,
-    initialStartDate: startDate,
-    initialStartTime: startTime.slice(0, 5),
-    initialEndDate:
-      isAllDay && endTime.slice(0, 5) === DATE_TIME.END
-        ? getISODateString(getBeforeDate(new Date(endDate), 1).toISOString())
-        : endDate,
-    initialEndTime: endTime.slice(0, 5),
+    initialStartDate: getISODateString(scheduleInfo.startDateTime),
+    initialStartTime: getISOTimeString(scheduleInfo.startDateTime).slice(0, 5),
+    initialEndDate: getISODateString(
+      isAllDay ? getDayOffsetDateTime(scheduleInfo.endDateTime, -1) : scheduleInfo.endDateTime
+    ),
+    initialEndTime: getISOTimeString(scheduleInfo.endDateTime).slice(0, 5),
     initialMemo: scheduleInfo.memo,
   });
 
@@ -107,15 +84,15 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       endDateTime: `${
         isAllDay
-          ? `${getISODateString(
-              getNextDate(new Date(validationSchedule.endDate.inputValue), 1).toISOString()
-            )}T${DATE_TIME.END}`
+          ? `${getISODateString(getDayOffsetDateTime(validationSchedule.endDate.inputValue, 1))}T${
+              DATE_TIME.END
+            }`
           : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
       memo: validationSchedule.memo.inputValue,
       categoryId:
-        categoriesGetResponse?.data.find((category) => category.name === categoryId.inputValue)
-          ?.id || scheduleInfo.categoryId,
+        data?.data.find((category) => category.name === categoryId.inputValue)?.id ||
+        scheduleInfo.categoryId,
     };
 
     mutate(body);
@@ -125,7 +102,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     setAllDay((prev) => !prev);
   };
 
-  const categories = categoriesGetResponse?.data
+  const categories = data?.data
     .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
     .map((category) => category.name);
 

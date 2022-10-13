@@ -22,6 +22,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByCategoriesAndBetween(final List<Category> categories, final LocalDateTime startDate,
                                               final LocalDateTime endDate);
 
+    void deleteByCategoryId(final Long id);
+
+
     default Schedule getById(final Long id) {
         return this.findById(id)
                 .orElseThrow(NoSuchScheduleException::new);

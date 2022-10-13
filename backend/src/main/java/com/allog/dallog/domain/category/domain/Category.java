@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.category.domain;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
@@ -34,7 +35,7 @@ public class Category extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "members_id", nullable = false)
+    @JoinColumn(name = "members_id")
     private Member member;
 
     @Enumerated(value = EnumType.STRING)
@@ -85,17 +86,18 @@ public class Category extends BaseEntity {
         }
     }
 
-    public void validateCanAddSchedule(final Member member) {
+    public void validateNotExternalCategory() {
         if (categoryType == GOOGLE) {
             throw new NoPermissionException("외부 연동 카테고리에는 일정을 추가할 수 없습니다.");
-        }
-        if (!this.member.equals(member)) {
-            throw new NoPermissionException();
         }
     }
 
     public boolean isCreatorId(final Long creatorId) {
         return member.hasSameId(creatorId);
+    }
+
+    public boolean isNormal() {
+        return categoryType == NORMAL;
     }
 
     public boolean isPersonal() {
@@ -124,5 +126,9 @@ public class Category extends BaseEntity {
 
     public CategoryType getCategoryType() {
         return categoryType;
+    }
+
+    public void setMember(final Member member) {
+        this.member = member;
     }
 }

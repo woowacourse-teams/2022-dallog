@@ -1,138 +1,108 @@
 import { ScheduleType } from '@/@types/schedule';
 
 import { CALENDAR } from '@/constants';
-import { DATE_TIME } from '@/constants/date';
 
-import { getFormattedDate, getISODateString, getISOTimeString } from '@/utils/date';
+import { checkAllDay, getDayOffsetDateTime, getISODateString } from '@/utils/date';
 
-interface DateType {
-  year: number;
-  month: number;
-  date: number;
-  day: number;
-}
-
-function useSchedulePriority(calendarMonth: DateType[]) {
-  const calendarInfoWithPriority = calendarMonth.reduce(
+function useSchedulePriority(calendar: string[]) {
+  const calendarWithPriority = calendar.reduce(
     (
       acc: {
         [key: string]: Array<boolean>;
       },
-      cur: DateType
+      cur
     ) => {
-      const { year, month, date } = cur;
-
-      acc[getFormattedDate(year, month, date)] = new Array(CALENDAR.MAX_VIEW).fill(false);
+      acc[getISODateString(cur)] = new Array(CALENDAR.MAX_SCHEDULE_COUNT).fill(false);
 
       return acc;
     },
     {}
   );
 
-  const getLongTermsPriority = (longTerms: Array<ScheduleType>) =>
-    longTerms.map((el) => {
-      const startDate = getISODateString(el.startDateTime);
-      const endDate = getISODateString(el.endDateTime);
-      const isAllDay = getISOTimeString(el.endDateTime).startsWith(DATE_TIME.END);
-      const scheduleRange = calendarMonth
-
-        .filter((el) => {
-          const date = getFormattedDate(el.year, el.month, el.date);
-
-          return startDate <= date && (date < endDate || (date == endDate && !isAllDay));
-        })
-        .map((el) => getFormattedDate(el.year, el.month, el.date));
-
-      if (!calendarInfoWithPriority.hasOwnProperty(scheduleRange[0])) {
-        return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
-        };
-      }
-
-      const priorityPosition = calendarInfoWithPriority[scheduleRange[0]].findIndex(
-        (el) => el === false
+  const getLongTermSchedulesWithPriority = (longTerms: Array<ScheduleType>) =>
+    longTerms.map((schedule) => {
+      const startDate = getISODateString(schedule.startDateTime);
+      const endDate = getISODateString(
+        checkAllDay(schedule.startDateTime, schedule.endDateTime)
+          ? getDayOffsetDateTime(schedule.endDateTime, -1)
+          : schedule.endDateTime
       );
 
-      if (priorityPosition === -1) {
+      const calendarStartDate = calendar.find((el) => startDate <= el && el <= endDate);
+
+      if (
+        !calendarStartDate ||
+        !calendarWithPriority.hasOwnProperty(getISODateString(calendarStartDate))
+      ) {
         return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
+          schedule,
+          priority: null,
         };
       }
 
-      scheduleRange.forEach((el) => {
-        if (calendarInfoWithPriority.hasOwnProperty(el)) {
-          calendarInfoWithPriority[el][priorityPosition] = true;
+      const priority = calendarWithPriority[getISODateString(calendarStartDate)].findIndex(
+        (el) => !el
+      );
+
+      if (priority === -1) {
+        return {
+          schedule,
+          priority: null,
+        };
+      }
+
+      const scheduleRange = calendar
+        .filter((dateTime) => {
+          const date = getISODateString(dateTime);
+
+          return startDate <= date && date <= endDate;
+        })
+        .map((dateTime) => dateTime.split('T')[0]);
+
+      scheduleRange.forEach((dateTime) => {
+        if (calendarWithPriority.hasOwnProperty(dateTime)) {
+          calendarWithPriority[dateTime][priority] = true;
         }
       });
 
       return {
-        schedule: el,
-        priority: priorityPosition + 1,
+        schedule,
+        priority: priority + 1,
       };
     });
 
-  const getAllDaysPriority = (allDays: Array<ScheduleType>) =>
-    allDays.map((el) => {
-      const startDate = getISODateString(el.startDateTime);
+  const getSingleSchedulesWithPriority = (singleSchedules: Array<ScheduleType>) =>
+    singleSchedules.map((schedule) => {
+      const startDate = getISODateString(schedule.startDateTime);
 
-      if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
+      if (!calendarWithPriority.hasOwnProperty(startDate)) {
         return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
+          schedule,
+          priority: null,
         };
       }
 
-      const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
+      const priority = calendarWithPriority[startDate].findIndex((el) => !el);
 
-      if (priorityPosition === -1) {
+      if (priority === -1) {
         return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
+          schedule,
+          priority: null,
         };
       }
 
-      calendarInfoWithPriority[startDate][priorityPosition] = true;
+      calendarWithPriority[startDate][priority] = true;
 
       return {
-        schedule: el,
-        priority: priorityPosition + 1,
-      };
-    });
-
-  const getFewHoursPriority = (fewHours: Array<ScheduleType>) =>
-    fewHours.map((el) => {
-      const startDate = getISODateString(el.startDateTime);
-
-      if (!calendarInfoWithPriority.hasOwnProperty(startDate)) {
-        return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
-        };
-      }
-
-      const priorityPosition = calendarInfoWithPriority[startDate].findIndex((el) => el === false);
-
-      if (priorityPosition === -1) {
-        return {
-          schedule: el,
-          priority: CALENDAR.MAX_VIEW + 1,
-        };
-      }
-
-      calendarInfoWithPriority[startDate][priorityPosition] = true;
-
-      return {
-        schedule: el,
-        priority: priorityPosition + 1,
+        schedule,
+        priority: priority + 1,
       };
     });
 
   return {
-    getLongTermsPriority,
-    getAllDaysPriority,
-    getFewHoursPriority,
+    calendarWithPriority,
+    getLongTermSchedulesWithPriority,
+    getSingleSchedulesWithPriority,
   };
 }
 

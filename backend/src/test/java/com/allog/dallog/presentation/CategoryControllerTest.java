@@ -2,6 +2,7 @@ package com.allog.dallog.presentation;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_세부_응답;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_응답;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정;
@@ -9,10 +10,13 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
+import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_응답;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.NONE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -42,9 +46,21 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
+import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
+import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
+import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
+import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
+import com.allog.dallog.domain.member.application.MemberService;
+import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +82,12 @@ class CategoryControllerTest extends ControllerTest {
 
     @MockBean
     private CategoryService categoryService;
+
+    @MockBean
+    private CategoryRoleService categoryRoleService;
+
+    @MockBean
+    private MemberService memberService;
 
     @DisplayName("카테고리를 생성한다.")
     @Test
@@ -143,8 +165,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
@@ -172,8 +194,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
@@ -202,8 +224,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
@@ -225,6 +247,52 @@ class CategoryControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @DisplayName("내가 일정을 편집할 수 있는 카테고리를 전부 조회한다.")
+    @Test
+    void 내가_일정을_편집할_수_있는_카테고리를_전부_조회한다() throws Exception {
+        // given
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
+        given(categoryService.findScheduleEditableCategories(any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories/me/schedule-editable")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/findScheduleEditableCategories",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                )
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("내가 ADMIN으로 있는 카테고리를 전부 조회한다.")
+    @Test
+    void 내가_ADMIN으로_있는_카테고리를_전부_조회한다() throws Exception {
+        // given
+        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
+        given(categoryService.findAdminCategories(any())).willReturn(categoriesResponse);
+
+        // when & then
+        mockMvc.perform(get("/api/categories/me/admin")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/findAdminCategories",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint())
+                        )
+                )
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("내 카테고리를 제목을 활용하여 조회한다.")
     @Test
     void 내_카테고리를_제목을_활용하여_조회한다() throws Exception {
@@ -233,8 +301,8 @@ class CategoryControllerTest extends ControllerTest {
         int size = 10;
 
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesResponse categoriesResponse = new CategoriesResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesResponse);
+        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
+        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
 
         // when & then
         mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)
@@ -261,8 +329,8 @@ class CategoryControllerTest extends ControllerTest {
     void 카테고리_ID로_카테고리를_단건_조회한다() throws Exception {
         // given
         Long categoryId = 1L;
-        CategoryResponse BE_일정_응답 = BE_일정_응답(후디_응답);
-        given(categoryService.findById(any())).willReturn(BE_일정_응답);
+        CategoryDetailResponse BE_일정_응답 = BE_일정_세부_응답(후디_응답, 150);
+        given(categoryService.findDetailCategoryById(any())).willReturn(BE_일정_응답);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}", categoryId)
@@ -270,7 +338,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("category/findById",
+                .andDo(document("category/findDetailCategoryById",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -286,7 +354,7 @@ class CategoryControllerTest extends ControllerTest {
     void 카테고리_ID로_카테고리를_단건_조회시_존재하지_않으면_404_Not_Found를_반환한다() throws Exception {
         // given
         Long categoryId = 1L;
-        given(categoryService.findById(any()))
+        given(categoryService.findDetailCategoryById(any()))
                 .willThrow(new NoSuchCategoryException());
 
         // when & then
@@ -295,7 +363,7 @@ class CategoryControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("category/findById/failByNoCategory",
+                .andDo(document("category/findDetailCategoryById/failByNoCategory",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 pathParameters(
@@ -448,5 +516,203 @@ class CategoryControllerTest extends ControllerTest {
                         )
                 )
                 .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("ADMIN은 다른 구독자의 카테고리 역할을 변경할 수 있다.")
+    @Test
+    void ADMIN은_다른_구독자의_카테고리_역할을_변경할_수_있다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+        willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                ),
+                                requestFields(
+                                        fieldWithPath("categoryRoleType").description("역할 (ADMIN | NONE)")
+                                )
+                        )
+                )
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("ADMIN이 아닌 회원은 다른 구독자의 카테고리 역할을 변경하면 403 Forbidden이 발생한다.")
+    @Test
+    void ADMIN이_아닌_회원은_다른_구독자의_카테고리_역할을_변경하면_403_Forbidden이_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NoCategoryAuthorityException(CategoryAuthority.CHANGE_ROLE_OF_SUBSCRIBER.getName()))
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failByNoPermission",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("카테고리 역할이 변경될 회원이 해당 카테고리를 구독하지 않은 상황이라면 404 NotFound가 발생한다.")
+    @Test
+    void 카테고리_역할이_변경될_회원이_해당_카테고리를_구독하지_않은_상황이라면_404_NotFound가_발생한다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NoSuchCategoryRoleException())
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failByCategoryRoleNotFound",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("자기 자신이 유일한 ADMIN이라면 자신의 역할을 변경할 수 없다.")
+    @Test
+    void 자기_자신이_유일한_ADMIN이라면_자신의_역할을_변경할_수_없다() throws Exception {
+        // given
+        Long categoryId = 1L;
+        Long memberId = 2L;
+
+        willThrow(new NotAbleToChangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다."))
+                .willDoNothing()
+                .given(categoryRoleService)
+                .updateRole(any(), any(), any(), any());
+
+        CategoryRoleUpdateRequest 역할_수정_요청 = new CategoryRoleUpdateRequest(CategoryRoleType.ADMIN);
+
+        // when & then
+        mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/updateRole/failBySoleAdmin",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID"),
+                                        parameterWithName("memberId").description("회원 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("특정 카테고리의 구독자 목록을 조회한다.")
+    @Test
+    void 특정_카테고리의_구독자_목록을_조회한다() throws Exception {
+        // given
+        long categoryId = 10;
+
+        Category 카테고리 = 공통_일정(관리자());
+        List<CategoryRole> categoryRoles = List.of(
+                new CategoryRole(카테고리, 매트(), NONE),
+                new CategoryRole(카테고리, 리버(), NONE),
+                new CategoryRole(카테고리, 파랑(), NONE),
+                new CategoryRole(카테고리, 후디(), NONE)
+        );
+
+        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(categoryRoles));
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/findSubscribers",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 유저가 조회하는 경우 403에러가 발생한다.")
+    @Test
+    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_유저가_조회하는_경우_403에러가_발생한다() throws Exception {
+        // given
+        long categoryId = 10;
+
+        given(memberService.findSubscribers(any(), any()))
+                .willThrow(new NoCategoryAuthorityException("카테고리 구독자 조회 권한이 없습니다."));
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                )
+                .andDo(print())
+                .andDo(document("category/findSubscribers/failByNoAuthority",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("categoryId").description("카테고리 ID")
+                                )
+                        )
+                )
+                .andExpect(status().isForbidden());
     }
 }

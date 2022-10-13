@@ -1,6 +1,6 @@
 import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
-import { DATE_TIME } from '@/constants/date';
+import { getDayOffsetDateTime } from '@/utils/date';
 
 import dallogApi from './';
 
@@ -16,9 +16,11 @@ const scheduleApi = {
     Accept: 'application/json',
   },
 
-  get: async (accessToken: string, startDate: string, endDate: string) => {
+  get: async (accessToken: string, startDateTime: string, endDateTime: string) => {
     const response = await dallogApi.get<ScheduleResponseType>(
-      `${scheduleApi.endpoint.get}?startDateTime=${startDate}T${DATE_TIME.START}&endDateTime=${endDate}T${DATE_TIME.END}`,
+      `${
+        scheduleApi.endpoint.get
+      }?startDateTime=${startDateTime}&endDateTime=${getDayOffsetDateTime(endDateTime, 1)}`,
       {
         headers: { ...scheduleApi.headers, Authorization: `Bearer ${accessToken}` },
       }

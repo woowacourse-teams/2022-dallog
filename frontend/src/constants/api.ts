@@ -15,7 +15,10 @@ const CACHE_KEY = {
   SCHEDULE: 'schedule',
   SCHEDULES: 'schedules',
   SUBSCRIPTIONS: 'subscriptions',
+  SUBSCRIBERS: 'subscribers',
   VALIDATE: 'validate',
+  ADMIN_CATEGORIES: 'adminCategories',
+  EDITABLE_CATEGORIES: 'editableCategories',
 };
 
 const RESPONSE = {

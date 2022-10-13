@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +28,35 @@ public class ScheduleTest {
         // when & then
         assertDoesNotThrow(() -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모));
     }
+
+    @DisplayName("일정 시작 일시가 가능한 범위를 벗어나는 경우 예외를 던진다.")
+    @Test
+    void 일정_시작_일시가_가능한_범위를_벗어나는_경우_예외를_던진다() {
+        //given
+        Category BE_일정_카테고리 = BE_일정(관리자());
+        LocalDateTime 잘못된_시작_일시 = LocalDateTime.MIN;
+
+        // when & then
+        assertThatThrownBy(
+                () -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목,
+                        잘못된_시작_일시, 알록달록_회의_종료일시, 알록달록_회의_메모)
+        ).isInstanceOf(InvalidScheduleException.class);
+    }
+
+    @DisplayName("일정 종료 일시가 가능한 범위를 벗어나는 경우 예외를 던진다.")
+    @Test
+    void 일정_종료_일시가_가능한_범위를_벗어나는_경우_예외를_던진다() {
+        //given
+        Category BE_일정_카테고리 = BE_일정(관리자());
+        LocalDateTime 잘못된_종료_일시 = LocalDateTime.MAX;
+
+        // when & then
+        assertThatThrownBy(
+                () -> new Schedule(BE_일정_카테고리, 알록달록_회의_제목,
+                        알록달록_회의_시작일시, 잘못된_종료_일시, 알록달록_회의_메모)
+        ).isInstanceOf(InvalidScheduleException.class);
+    }
+
 
     @DisplayName("일정 제목의 길이가 50을 초과하는 경우 예외를 던진다.")
     @ParameterizedTest

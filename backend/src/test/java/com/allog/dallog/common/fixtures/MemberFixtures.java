@@ -3,7 +3,7 @@ package com.allog.dallog.common.fixtures;
 import static com.allog.dallog.domain.member.domain.SocialType.GOOGLE;
 
 import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.dto.MemberResponse;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
 
 public class MemberFixtures {
 

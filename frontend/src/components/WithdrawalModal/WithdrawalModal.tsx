@@ -1,22 +1,13 @@
 import { validateWithdrawalCondition } from '@/validation';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 
+import { useDeleteProfile } from '@/hooks/@queries/profile';
 import useControlledInput from '@/hooks/useControlledInput';
-
-import { userState } from '@/recoil/atoms';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 
-import { PATH } from '@/constants';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 import { VALIDATION_STRING } from '@/constants/validate';
-
-import { removeAccessToken } from '@/utils/storage';
-
-import profileApi from '@/api/profile';
 
 import {
   headerStyle,
@@ -30,27 +21,14 @@ interface WithdrawalModalProps {
 }
 
 function WithdrawalModal({ closeModal }: WithdrawalModalProps) {
-  const navigate = useNavigate();
-
-  const { accessToken } = useRecoilValue(userState);
-
   const { inputValue, onChangeValue } = useControlledInput();
 
-  const { mutate } = useMutation(() => profileApi.delete(accessToken), {
-    onSuccess: () => onSuccessWithdrawalUser(),
-  });
+  const { mutate } = useDeleteProfile({ onSuccess: closeModal });
 
   const handleClickWithdrawalButton = () => {
     if (window.confirm(CONFIRM_MESSAGE.WITHDRAWAL)) {
       mutate();
     }
-  };
-
-  const onSuccessWithdrawalUser = () => {
-    closeModal();
-    removeAccessToken();
-    navigate(PATH.MAIN);
-    location.reload();
   };
 
   return (
