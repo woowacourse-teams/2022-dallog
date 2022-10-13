@@ -7,16 +7,6 @@ import { zeroFill } from '.';
 const checkAllDay = (startDateTime: string, endDateTime: string) =>
   startDateTime < endDateTime && getISOTimeString(endDateTime).startsWith(DATE_TIME.END);
 
-const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
-  if (!dateInfo) {
-    return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
-  }
-
-  const { year, month, date } = dateInfo;
-
-  return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
-};
-
 const getDateTime = (dateInfo?: Omit<CalendarType, 'day'>) => {
   if (!dateInfo) {
     return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
@@ -51,10 +41,6 @@ const getEndTime = (startTime?: string) => {
 
 const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
   return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
-};
-
-const getKoreaISOString = (time: number) => {
-  return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
 };
 
 const getNextDate = (targetDay: Date, offset: number) =>
@@ -138,7 +124,6 @@ export {
   checkAllDay,
   extractDateTime,
   getCurrentCalendar,
-  getDate,
   getDateTime,
   getDayOffsetDateTime,
   getEndTime,
@@ -146,7 +131,6 @@ export {
   getISODateString,
   getISOString,
   getISOTimeString,
-  getKoreaISOString,
   getMonthOffsetDateTime,
   getNextDate,
   getStartTime,
