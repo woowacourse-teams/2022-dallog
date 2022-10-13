@@ -224,6 +224,8 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
   >((body) => categoryApi.patchRole(accessToken, categoryId, memberId, body), {
     onSuccess: () => {
       queryClient.invalidateQueries([CACHE_KEY.SUBSCRIBERS]);
+      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
+      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
       onSuccess && onSuccess();
     },
   });
