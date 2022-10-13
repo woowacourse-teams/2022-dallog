@@ -23,9 +23,9 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     void deleteByCategoryId(final Long id);
 
-    void deleteByIdIn(final List<Long> categoryIds);
-
     void deleteByCategoryIdIn(final List<Long> id);
+
+    void deleteByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
     default Subscription getById(final Long id) {
         return findById(id)
