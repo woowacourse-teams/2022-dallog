@@ -7,9 +7,6 @@ import { zeroFill } from '.';
 const checkAllDay = (startDateTime: string, endDateTime: string) =>
   startDateTime < endDateTime && getISOTimeString(endDateTime).startsWith(DATE_TIME.END);
 
-const getBeforeDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() - offset));
-
 const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
   if (!dateInfo) {
     return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
@@ -140,7 +137,6 @@ const getToday = () => {
 export {
   checkAllDay,
   extractDateTime,
-  getBeforeDate,
   getCurrentCalendar,
   getDate,
   getDateTime,
