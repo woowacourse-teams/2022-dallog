@@ -108,12 +108,12 @@ public class MemberService {
             Category category = categoryRepository.getById(adminCategoryId);
             if (category.isPersonal()) {
                 scheduleRepository.deleteByCategoryId(category.getId());
-                subscriptionRepository.deleteByCategoryId(category.getId());
-                categoryRoleRepository.deleteById(id);
+                subscriptionRepository.deleteByMemberIdAndCategoryId(id, category.getId());
+                categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
                 categoryRepository.deleteById(category.getId());
             }
             if (category.isExternal()) {
-                subscriptionRepository.deleteById(category.getId());
+                subscriptionRepository.deleteByMemberIdAndCategoryId(id, category.getId());
                 externalCategoryDetailRepository.deleteByCategoryId(category.getId());
                 categoryRoleRepository.deleteByMemberIdAndCategoryId(id, category.getId());
                 categoryRepository.deleteById(category.getId());
