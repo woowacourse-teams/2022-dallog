@@ -21,9 +21,7 @@ import {
   checkAllDay,
   getDayOffsetDateTime,
   getISODateString,
-  getISOString,
   getISOTimeString,
-  getNextDate,
 } from '@/utils/date';
 
 import {
@@ -88,9 +86,9 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       endDateTime: `${
         isAllDay
-          ? `${getISODateString(
-              getISOString(getNextDate(new Date(validationSchedule.endDate.inputValue), 1))
-            )}T${DATE_TIME.END}`
+          ? `${getISODateString(getDayOffsetDateTime(validationSchedule.endDate.inputValue, 1))}T${
+              DATE_TIME.END
+            }`
           : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
       memo: validationSchedule.memo.inputValue,

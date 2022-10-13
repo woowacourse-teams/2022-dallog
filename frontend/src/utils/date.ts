@@ -26,9 +26,6 @@ const getEndTime = (startTime?: string) => {
   return nowHour < '23' ? `${zeroFill(+nowHour + 1)}:${nowMinute}` : `00:${nowMinute}`;
 };
 
-const getNextDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() + offset));
-
 const getThisDate = () => {
   return new Date().getDate();
 };
@@ -113,7 +110,6 @@ export {
   getISOString,
   getISOTimeString,
   getMonthOffsetDateTime,
-  getNextDate,
   getStartTime,
   getThisDate,
   getThisMonth,
