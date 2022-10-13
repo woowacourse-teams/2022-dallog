@@ -19,10 +19,16 @@ import CategoryListFallback from '@/components/CategoryList/CategoryList.fallbac
 import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
 
 import { CALENDAR } from '@/constants';
-import { DATE_TIME, DAYS } from '@/constants/date';
+import { DAYS } from '@/constants/date';
 import { SCHEDULE, TRANSPARENT } from '@/constants/style';
 
-import { extractDateTime, getDayOffsetDateTime, getISODateString, getToday } from '@/utils/date';
+import {
+  checkAllDay,
+  extractDateTime,
+  getDayOffsetDateTime,
+  getISODateString,
+  getToday,
+} from '@/utils/date';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdSearch } from 'react-icons/md';
 
@@ -280,7 +286,7 @@ function CategoryPage() {
                     {longTermSchedulesWithPriority.map(({ schedule, priority }) => {
                       const startDate = getISODateString(schedule.startDateTime);
                       const endDate = getISODateString(
-                        schedule.endDateTime.endsWith(DATE_TIME.END)
+                        checkAllDay(schedule.startDateTime, schedule.endDateTime)
                           ? getDayOffsetDateTime(schedule.endDateTime, -1)
                           : schedule.endDateTime
                       );

@@ -14,13 +14,7 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
-import {
-  extractDateTime,
-  getFormattedDate,
-  getISODateString,
-  getThisDate,
-  getThisMonth,
-} from '@/utils/date';
+import { extractDateTime, getISODateString, getThisDate, getThisMonth } from '@/utils/date';
 
 import {
   dateTextStyle,
@@ -81,7 +75,8 @@ function MoreScheduleModal({
     return position;
   };
 
-  const { year, month, date, day } = extractDateTime(moreScheduleDateTime);
+  const { month, date, day } = extractDateTime(moreScheduleDateTime);
+  const nowDate = getISODateString(moreScheduleDateTime);
 
   return (
     <div css={moreScheduleModalStyle(theme, moreScheduleModalPos)}>
@@ -95,7 +90,6 @@ function MoreScheduleModal({
       {longTermSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
         const endDate = getISODateString(el.schedule.endDateTime);
-        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate <= nowDate &&
@@ -113,7 +107,6 @@ function MoreScheduleModal({
 
       {allDaySchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate === nowDate && (
@@ -130,7 +123,6 @@ function MoreScheduleModal({
 
       {fewHourSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getFormattedDate(year, month, date);
 
         return (
           startDate === nowDate && (

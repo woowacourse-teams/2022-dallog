@@ -1,54 +1,20 @@
-import { CalendarType } from '@/@types/calendar';
-
 import { DATE_TIME } from '@/constants/date';
 
 import { zeroFill } from '.';
 
-const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
-  if (startDateTime === undefined || endDateTime === undefined || startDateTime === endDateTime) {
-    return null;
-  }
-
-  return (
-    startDateTime.startsWith(DATE_TIME.START, DATE_TIME.START_INDEX) &&
-    endDateTime.startsWith(DATE_TIME.END, DATE_TIME.START_INDEX)
-  );
-};
-
-const getBeforeDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() - offset));
-
-const getDate = (dateInfo?: Omit<CalendarType, 'day'>) => {
-  if (!dateInfo) {
-    return getISODateString(new Date(+new Date() + 3240 * 10000).toISOString());
-  }
-
-  const { year, month, date } = dateInfo;
-
-  return getISODateString(new Date(+new Date(year, month - 1, date) + 3240 * 10000).toISOString());
-};
-
-const getDateTime = (dateInfo?: Omit<CalendarType, 'day'>) => {
-  if (!dateInfo) {
-    return new Date(+new Date() + 3240 * 10000).toISOString().replace(/\..*/, '').slice(0, -3);
-  }
-
-  const { year, month, date } = dateInfo;
-
-  return new Date(+new Date(year, month - 1, date) + 3240 * 10000)
-    .toISOString()
-    .replace(/\..*/, '')
-    .slice(0, -3);
-};
+const checkAllDay = (startDateTime: string, endDateTime: string) =>
+  startDateTime < endDateTime && getISOTimeString(endDateTime).startsWith(DATE_TIME.END);
 
 const getStartTime = () => {
-  const [nowHour, nowMinute] = getDateTime().split('T')[1].split(':');
+  const nowDateTime = new Date();
+  const nowHour = nowDateTime.getHours();
+  const nowMinute = nowDateTime.getMinutes();
 
-  if (nowMinute === '00' || nowMinute === '30') return `${zeroFill(nowHour)}:${nowMinute}`;
+  if (nowMinute === 0 || nowMinute === 30) return `${zeroFill(nowHour)}:${zeroFill(nowMinute)}`;
 
-  if (nowMinute < '30') return `${zeroFill(nowHour)}:30`;
+  if (nowMinute < 30) return `${zeroFill(nowHour)}:30`;
 
-  if (nowHour >= '23') return '00:00';
+  if (nowHour >= 23) return '00:00';
 
   return `${zeroFill(+nowHour + 1)}:00`;
 };
@@ -57,51 +23,14 @@ const getEndTime = (startTime?: string) => {
   const [nowHour, nowMinute] =
     startTime === undefined ? getStartTime().split(':') : startTime.split(':');
 
-  return nowHour < '23' ? `${zeroFill(+nowHour + 1)}:${nowMinute}` : `00:${nowMinute}`;
+  return nowHour < '23'
+    ? `${zeroFill(+nowHour + 1)}:${zeroFill(nowMinute)}`
+    : `00:${zeroFill(nowMinute)}`;
 };
 
-const getFormattedDate = (year: number | string, month: number | string, date: number | string) => {
-  return `${year}-${zeroFill(month.toString())}-${zeroFill(date.toString())}`;
-};
+const getThisDate = () => new Date().getDate();
 
-const getKoreaISOString = (time: number) => {
-  return new Date(time - new Date().getTimezoneOffset() * 60000).toISOString();
-};
-
-const getNextDate = (targetDay: Date, offset: number) =>
-  new Date(targetDay.setDate(targetDay.getDate() + offset));
-
-const getOneHourEarlierISOString = (ISOString: string) => {
-  const hour = getISOTimeString(ISOString).split(':')[0];
-
-  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) - 1))
-    .replace(/\..*/, '')
-    .slice(0, -3);
-
-  return oneHourEarlierISOString;
-};
-
-const getOneHourLaterISOString = (ISOString: string) => {
-  const hour = getISOTimeString(ISOString).split(':')[0];
-
-  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) + 1))
-    .replace(/\..*/, '')
-    .slice(0, -3);
-
-  return oneHourEarlierISOString;
-};
-
-const getThisDate = () => {
-  return new Date().getDate();
-};
-
-const getThisMonth = () => {
-  return new Date().getMonth() + 1;
-};
-
-const getThisYear = () => {
-  return new Date().getFullYear();
-};
+const getThisMonth = () => new Date().getMonth() + 1;
 
 const extractDateTime = (dateTime: string) => {
   const dateTimeObject = new Date(dateTime);
@@ -172,24 +101,15 @@ const getToday = () => {
 export {
   checkAllDay,
   extractDateTime,
-  getBeforeDate,
   getCurrentCalendar,
-  getDate,
-  getDateTime,
   getDayOffsetDateTime,
   getEndTime,
-  getFormattedDate,
   getISODateString,
   getISOString,
   getISOTimeString,
-  getKoreaISOString,
   getMonthOffsetDateTime,
-  getNextDate,
-  getOneHourEarlierISOString,
-  getOneHourLaterISOString,
   getStartTime,
   getThisDate,
   getThisMonth,
-  getThisYear,
   getToday,
 };

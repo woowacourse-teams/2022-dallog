@@ -1,9 +1,8 @@
 import { ScheduleType } from '@/@types/schedule';
 
 import { CALENDAR } from '@/constants';
-import { DATE_TIME } from '@/constants/date';
 
-import { getDayOffsetDateTime, getISODateString, getISOTimeString } from '@/utils/date';
+import { checkAllDay, getDayOffsetDateTime, getISODateString } from '@/utils/date';
 
 function useSchedulePriority(calendar: string[]) {
   const calendarWithPriority = calendar.reduce(
@@ -24,7 +23,7 @@ function useSchedulePriority(calendar: string[]) {
     longTerms.map((schedule) => {
       const startDate = getISODateString(schedule.startDateTime);
       const endDate = getISODateString(
-        getISOTimeString(schedule.endDateTime).startsWith(DATE_TIME.END)
+        checkAllDay(schedule.startDateTime, schedule.endDateTime)
           ? getDayOffsetDateTime(schedule.endDateTime, -1)
           : schedule.endDateTime
       );

@@ -19,10 +19,9 @@ import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
 import {
   checkAllDay,
-  getBeforeDate,
+  getDayOffsetDateTime,
   getISODateString,
-  getISOString,
-  getNextDate,
+  getISOTimeString,
 } from '@/utils/date';
 
 import {
@@ -50,7 +49,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(
-    !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
+    checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
   const { data } = useGetEditableCategories({});
@@ -64,18 +63,14 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     data?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
   );
 
-  const [startDate, startTime] = scheduleInfo.startDateTime.split('T');
-  const [endDate, endTime] = scheduleInfo.endDateTime.split('T');
-
   const validationSchedule = useValidateSchedule({
     initialTitle: scheduleInfo.title,
-    initialStartDate: startDate,
-    initialStartTime: startTime.slice(0, 5),
-    initialEndDate:
-      isAllDay && endTime.slice(0, 5) === DATE_TIME.END
-        ? getISODateString(getISOString(getBeforeDate(new Date(endDate), 1)))
-        : endDate,
-    initialEndTime: endTime.slice(0, 5),
+    initialStartDate: getISODateString(scheduleInfo.startDateTime),
+    initialStartTime: getISOTimeString(scheduleInfo.startDateTime).slice(0, 5),
+    initialEndDate: getISODateString(
+      isAllDay ? getDayOffsetDateTime(scheduleInfo.endDateTime, -1) : scheduleInfo.endDateTime
+    ),
+    initialEndTime: getISOTimeString(scheduleInfo.endDateTime).slice(0, 5),
     initialMemo: scheduleInfo.memo,
   });
 
@@ -89,9 +84,9 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       endDateTime: `${
         isAllDay
-          ? `${getISODateString(
-              getISOString(getNextDate(new Date(validationSchedule.endDate.inputValue), 1))
-            )}T${DATE_TIME.END}`
+          ? `${getISODateString(getDayOffsetDateTime(validationSchedule.endDate.inputValue, 1))}T${
+              DATE_TIME.END
+            }`
           : `${validationSchedule.endDate.inputValue}T${validationSchedule.endTime.inputValue}`
       }`,
       memo: validationSchedule.memo.inputValue,

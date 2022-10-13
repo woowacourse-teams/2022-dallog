@@ -15,13 +15,7 @@ import Spinner from '@/components/@common/Spinner/Spinner';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
-import {
-  getEndTime,
-  getISODateString,
-  getISOString,
-  getNextDate,
-  getStartTime,
-} from '@/utils/date';
+import { getDayOffsetDateTime, getEndTime, getISODateString, getStartTime } from '@/utils/date';
 
 import {
   arrow,
@@ -78,9 +72,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
       startDateTime: `${validationSchedule.startDate.inputValue}T${validationSchedule.startTime.inputValue}`,
       endDateTime: `${
         isAllDay
-          ? getISODateString(
-              getISOString(getNextDate(new Date(validationSchedule.endDate.inputValue), 1))
-            )
+          ? getISODateString(getDayOffsetDateTime(validationSchedule.endDate.inputValue, 1))
           : validationSchedule.endDate.inputValue
       }T${validationSchedule.endTime.inputValue}`,
       memo: validationSchedule.memo.inputValue,
