@@ -63,36 +63,12 @@ const getKoreaISOString = (time: number) => {
 const getNextDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() + offset));
 
-const getOneHourEarlierISOString = (ISOString: string) => {
-  const hour = getISOTimeString(ISOString).split(':')[0];
-
-  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) - 1))
-    .replace(/\..*/, '')
-    .slice(0, -3);
-
-  return oneHourEarlierISOString;
-};
-
-const getOneHourLaterISOString = (ISOString: string) => {
-  const hour = getISOTimeString(ISOString).split(':')[0];
-
-  const oneHourEarlierISOString = getKoreaISOString(new Date(ISOString).setHours(Number(hour) + 1))
-    .replace(/\..*/, '')
-    .slice(0, -3);
-
-  return oneHourEarlierISOString;
-};
-
 const getThisDate = () => {
   return new Date().getDate();
 };
 
 const getThisMonth = () => {
   return new Date().getMonth() + 1;
-};
-
-const getThisYear = () => {
-  return new Date().getFullYear();
 };
 
 const extractDateTime = (dateTime: string) => {
@@ -177,11 +153,8 @@ export {
   getKoreaISOString,
   getMonthOffsetDateTime,
   getNextDate,
-  getOneHourEarlierISOString,
-  getOneHourLaterISOString,
   getStartTime,
   getThisDate,
   getThisMonth,
-  getThisYear,
   getToday,
 };
