@@ -19,6 +19,8 @@ import javax.persistence.Table;
 @Entity
 public class CategoryRole extends BaseEntity {
 
+    public static final int MAX_MANAGING_CATEGORY_COUNT = 50;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

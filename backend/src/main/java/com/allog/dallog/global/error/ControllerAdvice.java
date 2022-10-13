@@ -8,6 +8,7 @@ import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
@@ -47,7 +48,8 @@ public class ControllerAdvice {
             InvalidSubscriptionException.class,
             ExistSubscriptionException.class,
             ExistExternalCategoryException.class,
-            NotAbleToChangeRoleException.class
+            NotAbleToChangeRoleException.class,
+            ManagingCategoryLimitExcessException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.categoryrole.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
@@ -13,10 +14,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.application.CategoryService;
+import com.allog.dallog.domain.category.domain.CategoryType;
+import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import com.allog.dallog.domain.member.domain.Member;
@@ -42,6 +46,26 @@ class CategoryRoleServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @DisplayName("관리자(NONE 이상) 역할로 변경하려는 대상이 이미 50개 이상의 카테고리에서 관리자로 참여하고 있는 경우 예외가 발생한다.")
+    @Test
+    void 관리자_역할로_변경하려는_대상이_이미_50개_이상의_카테고리에서_관리자로_참여하고_있는_경우_예외가_발생한다() {
+        // given
+        Member 관리자 = memberRepository.save(관리자());
+        CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
+
+        Member 후디 = memberRepository.save(후디());
+        for (int i = 0; i < 50; i++) {
+            CategoryCreateRequest request = new CategoryCreateRequest("카테고리 " + i, CategoryType.NORMAL);
+            categoryService.save(후디.getId(), request);
+        } // 후디는 이미 50개의 카테고리를 관리하고 있음
+
+        subscriptionService.save(후디.getId(), 공통_일정.getId()); // 후디가 공통 일정을 구독함
+
+        assertThatThrownBy(() -> categoryRoleService.updateRole(관리자.getId(), 후디.getId(), 공통_일정.getId(),
+                new CategoryRoleUpdateRequest(ADMIN)))
+                .isInstanceOf(ManagingCategoryLimitExcessException.class);
+    }
 
     @DisplayName("ADMIN 회원이 구독자의 역할을 변경할 수 있다")
     @Test

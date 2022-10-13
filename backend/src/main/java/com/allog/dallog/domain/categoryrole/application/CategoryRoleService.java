@@ -27,6 +27,7 @@ public class CategoryRoleService {
 
         validateAuthority(loginMemberId, categoryId);
         validateSoleAdmin(memberId, categoryId);
+        categoryRoleRepository.validateManagingCategoryLimit(memberId, roleType);
 
         CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
 

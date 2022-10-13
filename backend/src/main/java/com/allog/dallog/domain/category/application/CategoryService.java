@@ -64,6 +64,8 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse save(final Long memberId, final CategoryCreateRequest request) {
+        categoryRoleRepository.validateManagingCategoryLimit(memberId, ADMIN);
+
         Member member = memberRepository.getById(memberId);
         Category category = request.toEntity(member);
         Category savedCategory = categoryRepository.save(category);
