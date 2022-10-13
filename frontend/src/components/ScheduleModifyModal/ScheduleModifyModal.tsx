@@ -50,7 +50,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   const theme = useTheme();
 
   const [isAllDay, setAllDay] = useState(
-    !!checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
+    checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
   );
 
   const { data } = useGetEditableCategories({});

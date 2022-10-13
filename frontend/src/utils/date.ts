@@ -4,16 +4,8 @@ import { DATE_TIME } from '@/constants/date';
 
 import { zeroFill } from '.';
 
-const checkAllDay = (startDateTime?: string, endDateTime?: string) => {
-  if (startDateTime === undefined || endDateTime === undefined || startDateTime === endDateTime) {
-    return null;
-  }
-
-  return (
-    startDateTime.startsWith(DATE_TIME.START, DATE_TIME.START_INDEX) &&
-    endDateTime.startsWith(DATE_TIME.END, DATE_TIME.START_INDEX)
-  );
-};
+const checkAllDay = (startDateTime: string, endDateTime: string) =>
+  startDateTime < endDateTime && getISOTimeString(endDateTime).startsWith(DATE_TIME.END);
 
 const getBeforeDate = (targetDay: Date, offset: number) =>
   new Date(targetDay.setDate(targetDay.getDate() - offset));
