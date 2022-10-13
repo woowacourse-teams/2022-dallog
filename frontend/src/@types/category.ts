@@ -22,4 +22,14 @@ interface CategoriesGetResponseType {
   categories: CategoryType[];
 }
 
-export { CategoryType, CategoryRoleType, CategorySubscriberType, CategoriesGetResponseType };
+interface SingleCategoryType extends CategoryType {
+  subscriberCount: number;
+}
+
+export {
+  CategoryType,
+  CategoryRoleType,
+  CategorySubscriberType,
+  CategoriesGetResponseType,
+  SingleCategoryType,
+};

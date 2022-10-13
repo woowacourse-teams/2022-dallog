@@ -4,6 +4,7 @@ const categoryItem = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
   justify-content: space-around;
+  position: relative;
 
   height: 20rem;
   border-bottom: 1px solid ${colors.GRAY_400};
@@ -62,4 +63,35 @@ const menuTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-export { categoryItem, item, menuTitle, unsubscribeButton };
+const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
+  position: absolute;
+  top: ${hoveringUpside && '120%'};
+  bottom: ${!hoveringUpside && '120%'};
+  z-index: 10;
+
+  width: max-content;
+  padding: 4rem 6rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px ${colors.GRAY_500};
+
+  background: ${colors.BLUE_500};
+
+  color: ${colors.WHITE};
+
+  &::after {
+    position: absolute;
+    top: ${hoveringUpside ? '-40%' : '100%'};
+    left: 50%;
+
+    margin-left: -10px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: ${hoveringUpside
+      ? `transparent transparent ${colors.BLUE_500}`
+      : `${colors.BLUE_500} transparent transparent`};
+
+    content: '';
+  }
+`;
+
+export { categoryItem, detailStyle, item, menuTitle, unsubscribeButton };

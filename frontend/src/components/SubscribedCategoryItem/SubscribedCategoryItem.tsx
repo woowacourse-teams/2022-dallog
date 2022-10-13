@@ -1,7 +1,9 @@
 import { useTheme } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 
+import { useGetSingleCategory } from '@/hooks/@queries/category';
 import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
+import useHoverCategoryItem from '@/hooks/useHoverCategoryItem';
 
 import { CategoryType } from '@/@types/category';
 
@@ -11,7 +13,15 @@ import Button from '@/components/@common/Button/Button';
 
 import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
 
-import { categoryItem, item, menuTitle, unsubscribeButton } from './SubscribedCategoryItem.styles';
+import { getISODateString } from '@/utils/date';
+
+import {
+  categoryItem,
+  detailStyle,
+  item,
+  menuTitle,
+  unsubscribeButton,
+} from './SubscribedCategoryItem.styles';
 
 interface SubscribedCategoryItemProps {
   category: CategoryType;
@@ -28,6 +38,13 @@ function SubscribedCategoryItem({
 
   const user = useRecoilValue(userState);
 
+  const { hoveringPosY, handleHoverCategoryItem } = useHoverCategoryItem();
+
+  const { data } = useGetSingleCategory({
+    categoryId: category.id,
+    enabled: !!hoveringPosY,
+  });
+
   const { mutate } = useDeleteSubscriptions({ subscriptionId });
 
   const handleClickUnsubscribeButton = () => {
@@ -39,7 +56,12 @@ function SubscribedCategoryItem({
   const canUnsubscribeCategory = category.creator.id !== user.id;
 
   return (
-    <div css={categoryItem} onClick={onClick}>
+    <div
+      css={categoryItem}
+      onClick={onClick}
+      onMouseEnter={handleHoverCategoryItem}
+      onMouseLeave={handleHoverCategoryItem}
+    >
       <span css={item}>{category.name}</span>
       <span css={item}>{category.creator.displayName}</span>
       <div css={item}>
@@ -56,6 +78,13 @@ function SubscribedCategoryItem({
           )}
         </Button>
       </div>
+      {hoveringPosY !== null && (
+        <div css={detailStyle(theme, hoveringPosY < innerHeight / 2)}>
+          {`구독자 ${data?.data.subscriberCount ?? '-'}명 • 개설일 ${getISODateString(
+            category.createdAt
+          )}`}
+        </div>
+      )}
     </div>
   );
 }
