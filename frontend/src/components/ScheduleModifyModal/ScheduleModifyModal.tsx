@@ -68,9 +68,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
     initialStartDate: getISODateString(scheduleInfo.startDateTime),
     initialStartTime: getISOTimeString(scheduleInfo.startDateTime).slice(0, 5),
     initialEndDate: getISODateString(
-      checkAllDay(scheduleInfo.startDateTime, scheduleInfo.endDateTime)
-        ? getDayOffsetDateTime(scheduleInfo.endDateTime, -1)
-        : scheduleInfo.endDateTime
+      isAllDay ? getDayOffsetDateTime(scheduleInfo.endDateTime, -1) : scheduleInfo.endDateTime
     ),
     initialEndTime: getISOTimeString(scheduleInfo.endDateTime).slice(0, 5),
     initialMemo: scheduleInfo.memo,

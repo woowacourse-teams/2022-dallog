@@ -76,6 +76,7 @@ function MoreScheduleModal({
   };
 
   const { month, date, day } = extractDateTime(moreScheduleDateTime);
+  const nowDate = getISODateString(moreScheduleDateTime);
 
   return (
     <div css={moreScheduleModalStyle(theme, moreScheduleModalPos)}>
@@ -89,7 +90,6 @@ function MoreScheduleModal({
       {longTermSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
         const endDate = getISODateString(el.schedule.endDateTime);
-        const nowDate = getISODateString(moreScheduleDateTime);
 
         return (
           startDate <= nowDate &&
@@ -107,7 +107,6 @@ function MoreScheduleModal({
 
       {allDaySchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getISODateString(moreScheduleDateTime);
 
         return (
           startDate === nowDate && (
@@ -124,7 +123,6 @@ function MoreScheduleModal({
 
       {fewHourSchedulesWithPriority.map((el) => {
         const startDate = getISODateString(el.schedule.startDateTime);
-        const nowDate = getISODateString(moreScheduleDateTime);
 
         return (
           startDate === nowDate && (

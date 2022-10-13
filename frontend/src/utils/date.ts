@@ -6,11 +6,11 @@ const checkAllDay = (startDateTime: string, endDateTime: string) =>
   startDateTime < endDateTime && getISOTimeString(endDateTime).startsWith(DATE_TIME.END);
 
 const getStartTime = () => {
-  const nowDateTime = new Date(+new Date() + 3240 * 10000);
-  const nowHour = nowDateTime.getUTCHours();
-  const nowMinute = nowDateTime.getUTCMinutes();
+  const nowDateTime = new Date();
+  const nowHour = nowDateTime.getHours();
+  const nowMinute = nowDateTime.getMinutes();
 
-  if (nowMinute === 0 || nowMinute === 30) return `${zeroFill(nowHour)}:${nowMinute}`;
+  if (nowMinute === 0 || nowMinute === 30) return `${zeroFill(nowHour)}:${zeroFill(nowMinute)}`;
 
   if (nowMinute < 30) return `${zeroFill(nowHour)}:30`;
 
@@ -23,16 +23,14 @@ const getEndTime = (startTime?: string) => {
   const [nowHour, nowMinute] =
     startTime === undefined ? getStartTime().split(':') : startTime.split(':');
 
-  return nowHour < '23' ? `${zeroFill(+nowHour + 1)}:${nowMinute}` : `00:${nowMinute}`;
+  return nowHour < '23'
+    ? `${zeroFill(+nowHour + 1)}:${zeroFill(nowMinute)}`
+    : `00:${zeroFill(nowMinute)}`;
 };
 
-const getThisDate = () => {
-  return new Date().getDate();
-};
+const getThisDate = () => new Date().getDate();
 
-const getThisMonth = () => {
-  return new Date().getMonth() + 1;
-};
+const getThisMonth = () => new Date().getMonth() + 1;
 
 const extractDateTime = (dateTime: string) => {
   const dateTimeObject = new Date(dateTime);
