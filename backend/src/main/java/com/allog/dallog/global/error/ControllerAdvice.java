@@ -19,6 +19,7 @@ import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
+import com.allog.dallog.domain.subscription.exception.NotAbleToUnsubscribeException;
 import com.allog.dallog.global.error.dto.ErrorReportRequest;
 import com.allog.dallog.global.error.dto.ErrorResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
@@ -49,7 +50,8 @@ public class ControllerAdvice {
             ExistSubscriptionException.class,
             ExistExternalCategoryException.class,
             NotAbleToChangeRoleException.class,
-            ManagingCategoryLimitExcessException.class
+            ManagingCategoryLimitExcessException.class,
+            NotAbleToUnsubscribeException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
