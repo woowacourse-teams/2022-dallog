@@ -32,10 +32,20 @@ class MemberTest {
                 .isInstanceOf(InvalidMemberException.class);
     }
 
-    @DisplayName("회원의 이름이 1 ~ 10 사이가 아닌 경우 예외를 던진다.")
+    @DisplayName("회원의 이름이 1 ~ 100 사이가 아닌 경우 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"", "일이삼사오육칠팔구십일"})
-    void 회원의_이름이_1_에서_10_사이가_아닌_경우_예외를_던진다(final String displayName) {
+    @ValueSource(strings = {"",
+            "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십일"})
+    void 회원의_이름이_1_에서_100_사이가_아닌_경우_예외를_던진다(final String displayName) {
         // given & when & then
         assertThatThrownBy(() -> new Member(파랑_이메일, displayName, 파랑_프로필, SocialType.GOOGLE))
                 .isInstanceOf(InvalidMemberException.class);
@@ -55,10 +65,20 @@ class MemberTest {
         assertThat(member.getDisplayName()).isEqualTo(패트_이름);
     }
 
-    @DisplayName("변경하기 위한 회원의 이름이 1 ~ 10 사이가 아닌 경우 예외를 던진다.")
+    @DisplayName("변경하기 위한 회원의 이름이 1 ~ 100 사이가 아닌 경우 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"", "일이삼사오육칠팔구십일"})
-    void 변경하기_위한_회원의_이름이_1_에서_10_사이가_아닌_경우_예외를_던진다(final String displayName) {
+    @ValueSource(strings = {"",
+            "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십"
+                    + "일이삼사오육칠팔구십일"})
+    void 변경하기_위한_회원의_이름이_1_에서_100_사이가_아닌_경우_예외를_던진다(final String displayName) {
         // given
         Member member = 매트();
 
