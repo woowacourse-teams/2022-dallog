@@ -3,7 +3,6 @@ package com.allog.dallog.domain.schedule.domain;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,9 +32,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     default List<IntegrationSchedule> getByCategoriesAndBetween(final List<Category> categories,
                                                                 final LocalDateTime startDateTime,
                                                                 final LocalDateTime endDateTime) {
-        if (categories.isEmpty()) {
-            return new ArrayList<>();
-        }
+//        if (categories.isEmpty()) {
+//            return new ArrayList<>();
+//        }
 
         List<Schedule> schedules = findByCategoriesAndBetween(categories, startDateTime, endDateTime);
         return schedules.stream()
