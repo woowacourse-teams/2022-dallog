@@ -8,7 +8,6 @@ import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
@@ -27,11 +26,8 @@ import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
-import com.allog.dallog.presentation.MemberController;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,18 +86,13 @@ public class ScheduleService {
         List<IntegrationSchedule> schedules = toIntegrationSchedules(categories, startDateTime, endDateTime);
 
         String refreshToken = toRefreshToken(memberId);
-        List<ExternalCategoryDetail> externalCategoryDetails = toCategoryDetails(subscriptions);
 
-        return new MaterialToFindSchedules(subscriptions, schedules, refreshToken, externalCategoryDetails);
+        return new MaterialToFindSchedules(subscriptions, schedules, refreshToken, List.of());
     }
 
     private String toRefreshToken(final Long memberId) {
         OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
         return oAuthToken.getRefreshToken();
-    }
-
-    private List<ExternalCategoryDetail> toCategoryDetails(final Subscriptions subscriptions) {
-        return externalCategoryDetailRepository.findByCategoryIn(subscriptions.findExternalCategory());
     }
 
     public IntegrationScheduleResponses findByCategoryIdAndDateRange(final Long categoryId,
