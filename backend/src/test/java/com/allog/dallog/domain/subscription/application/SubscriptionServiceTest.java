@@ -30,7 +30,6 @@ import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleExceptio
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
@@ -56,9 +55,6 @@ class SubscriptionServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private MemberRepository memberRepository;
