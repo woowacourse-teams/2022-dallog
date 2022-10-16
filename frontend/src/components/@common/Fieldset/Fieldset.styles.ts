@@ -1,9 +1,9 @@
 import { css, Theme } from '@emotion/react';
 
 const fieldsetStyle = ({ flex }: Theme) => css`
-  ${flex.column}
+  ${flex.column};
 
-  position:relative;
+  position: relative;
   align-items: flex-start;
   gap: 2.5rem;
 
