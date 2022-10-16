@@ -6,7 +6,7 @@ const ATOM_KEY = {
 
 const CALENDAR = {
   MAX_SCHEDULE_COUNT: 10,
-  EMPTY_TITLE: '제목 없음',
+  EMPTY_TITLE: '(제목 없음)',
 };
 
 const EVENT = {

@@ -99,7 +99,7 @@ function MoreScheduleModal({
               css={itemWithBackgroundStyle(el.schedule.colorCode)}
               onClick={(e) => handleClickSchedule(e, el.schedule)}
             >
-              {el.schedule.title || CALENDAR.EMPTY_TITLE}
+              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
@@ -115,7 +115,7 @@ function MoreScheduleModal({
               css={itemWithBackgroundStyle(el.schedule.colorCode)}
               onClick={(e) => handleClickSchedule(e, el.schedule)}
             >
-              {el.schedule.title || CALENDAR.EMPTY_TITLE}
+              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
@@ -131,7 +131,7 @@ function MoreScheduleModal({
               css={itemWithoutBackgroundStyle(theme, el.schedule.colorCode)}
               onClick={(e) => handleClickSchedule(e, el.schedule)}
             >
-              {el.schedule.title || CALENDAR.EMPTY_TITLE}
+              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
