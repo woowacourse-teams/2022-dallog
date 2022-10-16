@@ -7,6 +7,7 @@ import {
   usePatchCategoryRole,
 } from '@/hooks/@queries/category';
 import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
+import useSnackBar from '@/hooks/useSnackBar';
 import useValidateCategory from '@/hooks/useValidateCategory';
 
 import { SubscriptionType } from '@/@types/subscription';
@@ -20,7 +21,7 @@ import AdminItem from '@/components/AdminItem/AdminItem';
 import SubscriberItem from '@/components/SubscriberItem/SubscriberItem';
 
 import { ROLE } from '@/constants/category';
-import { CONFIRM_MESSAGE } from '@/constants/message';
+import { CONFIRM_MESSAGE, SUCCESS_MESSAGE } from '@/constants/message';
 
 import { MdClose } from 'react-icons/md';
 
@@ -47,6 +48,8 @@ interface AdminCategoryManageModalProps {
 }
 
 function AdminCategoryManageModal({ subscription, closeModal }: AdminCategoryManageModalProps) {
+  const { openSnackBar } = useSnackBar();
+
   const { id } = useRecoilValue(userState);
 
   const { categoryValue, getCategoryErrorMessage, isValidCategory } = useValidateCategory(
@@ -57,6 +60,7 @@ function AdminCategoryManageModal({ subscription, closeModal }: AdminCategoryMan
 
   const { mutate: patchCategoryName } = usePatchCategoryName({
     categoryId: subscription.category.id,
+    onSuccess: () => openSnackBar(SUCCESS_MESSAGE.EDIT_CATEGORY),
   });
 
   const { mutate: deleteCategory } = useDeleteCategory({
