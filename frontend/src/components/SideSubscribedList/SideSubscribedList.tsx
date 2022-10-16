@@ -57,7 +57,7 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
           )}
         </Button>
       </div>
-      <div css={contentStyle(isSubscribedListOpen, categories.length)}>
+      <div css={contentStyle(theme, isSubscribedListOpen, categories.length)}>
         {categories.map((el) => {
           return <SideItem key={el.category.id} subscription={el} />;
         })}
