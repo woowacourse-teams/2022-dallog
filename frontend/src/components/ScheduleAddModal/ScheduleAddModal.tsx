@@ -13,6 +13,7 @@ import Select from '@/components/@common/Select/Select';
 import SelectWithId from '@/components/@common/SelectWithId/SelectWithId';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
+import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
@@ -85,12 +86,14 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     return <Spinner size={10} />;
   }
 
-  const categories = data.data.map((category) => {
-    return {
-      id: category.id,
-      name: category.name,
-    };
-  });
+  const categories = data.data
+    .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
+    .map((category) => {
+      return {
+        id: category.id,
+        name: category.name,
+      };
+    });
 
   return (
     <div css={scheduleAddModal}>
