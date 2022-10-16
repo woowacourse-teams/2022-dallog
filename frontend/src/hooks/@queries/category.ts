@@ -99,7 +99,7 @@ function useGetAdminCategories({ enabled }: UseGetAdminCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    [CACHE_KEY.ADMIN_CATEGORIES],
+    CACHE_KEY.ADMIN_CATEGORIES,
     () => categoryApi.getAdmin(accessToken),
     {
       enabled,
@@ -113,7 +113,7 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    [CACHE_KEY.EDITABLE_CATEGORIES],
+    CACHE_KEY.EDITABLE_CATEGORIES,
     () => categoryApi.getEditable(accessToken),
     {
       enabled,
@@ -223,9 +223,9 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
     unknown
   >((body) => categoryApi.patchRole(accessToken, categoryId, memberId, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIBERS]);
-      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIBERS);
+      queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       onSuccess && onSuccess();
     },
   });
@@ -244,10 +244,10 @@ function usePostCategory({ onSuccess }: UsePostCategoryParams) {
     unknown
   >((body) => categoryApi.post(accessToken, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.MY_CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
-      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
+      queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
 
       onSuccess && onSuccess();
     },
