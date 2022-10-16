@@ -39,7 +39,7 @@ const inputStyle = ({ colors }: Theme, isValid?: boolean) => css`
 const errorMessageStyle = ({ colors }: Theme, isValid?: boolean) => css`
   display: ${isValid ? 'none' : 'block'};
   position: absolute;
-  top: 105%;
+  top: 110%;
 
   font-size: 3rem;
   color: ${colors.RED_400};
