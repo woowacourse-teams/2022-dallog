@@ -41,6 +41,7 @@ function usePostGoogleCalendarCategory({ onSuccess }: UsePostGoogleCalendarCateg
         queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
         queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
         queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+        queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
 
         openSnackBar(SUCCESS_MESSAGE.POST_CATEGORY);
         onSuccess && onSuccess();
