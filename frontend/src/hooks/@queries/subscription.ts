@@ -36,6 +36,7 @@ function useDeleteSubscriptions({ subscriptionId, onSuccess }: UseDeleteSubscrip
   const { mutate } = useMutation(() => subscriptionApi.delete(accessToken, subscriptionId), {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
       onSuccess && onSuccess();
     },
   });
@@ -88,6 +89,7 @@ function usePostSubscription({ categoryId, onSuccess }: UsePostSubscriptionParam
   >((body) => subscriptionApi.post(accessToken, categoryId, body), {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
       onSuccess && onSuccess();
     },
   });
