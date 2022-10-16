@@ -28,20 +28,13 @@ const titleStyle = css`
   font-size: 4rem;
 `;
 
-const googleSelectStyle = ({ colors }: Theme) => css`
-  padding: 3rem;
-  border: 1px solid ${colors.GRAY_400};
-  border-radius: 8px;
-
-  font-size: 4rem;
-`;
-
 const googleSelectBoxStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
   align-items: flex-start;
-
   gap: 2rem;
+
+  width: 100%;
 
   font-size: 4rem;
 `;
@@ -55,4 +48,4 @@ const formStyle = ({ flex }: Theme) => css`
   height: 100%;
 `;
 
-export { formStyle, googleSelectBoxStyle, googleSelectStyle, headerStyle, layoutStyle, titleStyle };
+export { formStyle, googleSelectBoxStyle, headerStyle, layoutStyle, titleStyle };

@@ -12,6 +12,7 @@ import { ScheduleType } from '@/@types/schedule';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
+import SelectWithId from '@/components/@common/SelectWithId/SelectWithId';
 
 import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
@@ -60,7 +61,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   });
 
   const categoryId = useControlledInput(
-    data?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
+    String(data?.data.find((category) => category.id === scheduleInfo.categoryId)?.id)
   );
 
   const validationSchedule = useValidateSchedule({
@@ -91,7 +92,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       memo: validationSchedule.memo.inputValue,
       categoryId:
-        data?.data.find((category) => category.name === categoryId.inputValue)?.id ||
+        data?.data.find((category) => category.id === Number(categoryId.inputValue))?.id ||
         scheduleInfo.categoryId,
     };
 
@@ -104,7 +105,12 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
 
   const categories = data?.data
     .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
-    .map((category) => category.name);
+    .map((category) => {
+      return {
+        id: category.id,
+        name: category.name,
+      };
+    });
 
   return (
     <div css={modalStyle}>
@@ -176,7 +182,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
         {categories && (
           <div css={categoryBoxStyle}>
             <div css={labelStyle}>카테고리</div>
-            <Select
+            <SelectWithId
               options={categories}
               value={categoryId.inputValue}
               onChange={categoryId.onChangeValue}

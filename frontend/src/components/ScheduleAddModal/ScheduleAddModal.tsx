@@ -10,6 +10,7 @@ import useValidateSchedule from '@/hooks/useValidateSchedule';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
+import SelectWithId from '@/components/@common/SelectWithId/SelectWithId';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
 import { DATE_TIME, TIMES } from '@/constants/date';
@@ -20,7 +21,6 @@ import { getDayOffsetDateTime, getEndTime, getISODateString, getStartTime } from
 import {
   arrow,
   cancelButton,
-  categorySelect,
   checkboxStyle,
   controlButtons,
   dateFieldsetStyle,
@@ -84,6 +84,13 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
   if (isLoading || data === undefined) {
     return <Spinner size={10} />;
   }
+
+  const categories = data.data.map((category) => {
+    return {
+      id: category.id,
+      name: category.name,
+    };
+  });
 
   return (
     <div css={scheduleAddModal}>
@@ -154,17 +161,11 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         </div>
         <div css={selectBoxStyle}>
           <span css={labelStyle}>카테고리</span>
-          <select
-            css={categorySelect}
+          <SelectWithId
+            options={categories}
             value={categoryId.inputValue}
             onChange={categoryId.onChangeValue}
-          >
-            {data?.data.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <Fieldset
           placeholder="메모를 추가하세요."

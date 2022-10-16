@@ -87,15 +87,6 @@ const selectBoxStyle = ({ flex }: Theme) => css`
   width: 100%;
 `;
 
-const categorySelect = ({ colors }: Theme) => css`
-  width: 100%;
-  padding: 3rem;
-  border: 1px solid ${colors.GRAY_400};
-  border-radius: 8px;
-
-  font-size: 4rem;
-`;
-
 const controlButtons = ({ flex }: Theme) => css`
   ${flex.row}
 
@@ -163,7 +154,6 @@ const selectTimeStyle = {
 
 export {
   arrow,
-  categorySelect,
   cancelButton,
   checkboxStyle,
   controlButtons,
