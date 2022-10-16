@@ -9,7 +9,12 @@ import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 
-import { adminButtonStyle, profileImageStyle, subscriberItemStyle } from './SubscriberItem.styles';
+import {
+  adminButtonStyle,
+  displayNameStyle,
+  profileImageStyle,
+  subscriberItemStyle,
+} from './SubscriberItem.styles';
 
 interface SubscriberItemProps {
   categoryId: number;
@@ -32,7 +37,7 @@ function SubscriberItem({ categoryId, subscriber }: SubscriberItemProps) {
   return (
     <div key={subscriber.id} css={subscriberItemStyle}>
       <img src={subscriber.profileImageUrl} alt="프로필 이미지" css={profileImageStyle} />
-      <span>{subscriber.displayName}</span>
+      <span css={displayNameStyle}>{subscriber.displayName}</span>
       <Button cssProp={adminButtonStyle} onClick={handleClickAddRoleButton}>
         <MdOutlineAdminPanelSettings />
       </Button>

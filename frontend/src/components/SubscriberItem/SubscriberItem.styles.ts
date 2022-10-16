@@ -12,6 +12,12 @@ const adminButtonStyle = css`
   }
 `;
 
+const displayNameStyle = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const profileImageStyle = css`
   width: 7rem;
   height: 7rem;
@@ -36,4 +42,4 @@ const subscriberItemStyle = ({ colors, flex }: Theme) => css`
   }
 `;
 
-export { adminButtonStyle, profileImageStyle, subscriberItemStyle };
+export { adminButtonStyle, displayNameStyle, profileImageStyle, subscriberItemStyle };
