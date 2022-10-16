@@ -85,10 +85,10 @@ function CalendarPage() {
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
   useLayoutEffect(() => {
-    if (!dateRef.current) return;
+    if (!(dateRef.current instanceof HTMLDivElement)) return;
 
     setDateHeight(dateRef.current.clientHeight);
-  }, [dateRef.current]);
+  });
 
   const MAX_SCHEDULE_COUNT = Math.floor(
     (dateHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
