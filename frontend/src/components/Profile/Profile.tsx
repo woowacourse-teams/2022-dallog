@@ -49,7 +49,7 @@ function Profile() {
 
   const handleClickCompleteButton = () => {
     mutate({
-      displayName: editDisplayName.inputValue,
+      displayName: editDisplayName.inputValue.trim(),
     });
 
     setEditingName(false);
@@ -78,7 +78,7 @@ function Profile() {
               cssProp={inputStyle}
               autoFocus={true}
               isValid={validateLength(
-                editDisplayName.inputValue,
+                editDisplayName.inputValue.trim(),
                 VALIDATION_SIZE.MIN_LENGTH,
                 VALIDATION_SIZE.DISPLAY_NAME_MAX_LENGTH
               )}
@@ -93,7 +93,7 @@ function Profile() {
               onClick={handleClickCompleteButton}
               disabled={
                 !validateLength(
-                  editDisplayName.inputValue,
+                  editDisplayName.inputValue.trim(),
                   VALIDATION_SIZE.MIN_LENGTH,
                   VALIDATION_SIZE.DISPLAY_NAME_MAX_LENGTH
                 )
