@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
@@ -54,9 +54,9 @@ import {
 
 function CalendarPage() {
   const theme = useTheme();
-
   const dateRef = useRef<HTMLDivElement>(null);
 
+  const [dateHeight, setDateHeight] = useState(0);
   const [hoveringId, setHoveringId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
@@ -83,6 +83,16 @@ function CalendarPage() {
   const moreScheduleModal = useModalPosition();
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
+
+  useLayoutEffect(() => {
+    if (!dateRef.current) return;
+
+    setDateHeight(dateRef.current.clientHeight);
+  }, [dateRef.current]);
+
+  const MAX_SCHEDULE_COUNT = Math.floor(
+    (dateHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
+  );
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
@@ -169,13 +179,6 @@ function CalendarPage() {
   const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
   const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);
   const fewHourSchedulesWithPriority = getSingleSchedulesWithPriority(data.data.fewHours);
-
-  const MAX_SCHEDULE_COUNT =
-    dateRef.current !== null
-      ? Math.floor(
-          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
-        )
-      : CALENDAR.MAX_SCHEDULE_COUNT;
 
   const onMouseEnter = (scheduleId: string) => {
     setHoveringId(scheduleId);
