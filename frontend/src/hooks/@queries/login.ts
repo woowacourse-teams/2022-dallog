@@ -9,6 +9,7 @@ import { sideBarState, userState, UserStateType } from '@/recoil/atoms';
 
 import { PATH } from '@/constants';
 import { CACHE_KEY, RESPONSE } from '@/constants/api';
+import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import {
   removeAccessToken,
@@ -22,11 +23,13 @@ import loginApi from '@/api/login';
 function useAuth(code: string | null) {
   const [user, setUser] = useRecoilState(userState);
   const navigate = useNavigate();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<UserStateType, AxiosError>(() => loginApi.auth(code), {
     onError: () => onErrorAuth(),
     onSuccess: ({ accessToken, refreshToken }) => {
       onSuccessAuth(accessToken, refreshToken);
+      openSnackBar(SUCCESS_MESSAGE.POST_LOGIN);
     },
   });
 

@@ -9,6 +9,8 @@ import {
 } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useSnackBar from '@/hooks/useSnackBar';
+
 import {
   CategoriesGetResponseType,
   CategoryRoleType,
@@ -20,6 +22,7 @@ import {
 import { userState } from '@/recoil/atoms';
 
 import { API, CACHE_KEY } from '@/constants/api';
+import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
 
@@ -81,6 +84,7 @@ interface UsePostCategoryParams {
 function useDeleteCategory({ categoryId, onSuccess }: UseDeleteCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation(() => categoryApi.delete(accessToken, categoryId), {
     onSuccess: () => {
@@ -88,6 +92,7 @@ function useDeleteCategory({ categoryId, onSuccess }: UseDeleteCategoryParams) {
       queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
+      openSnackBar(SUCCESS_MESSAGE.DELETE_CATEGORY);
       onSuccess && onSuccess();
     },
   });
@@ -193,6 +198,7 @@ function useGetSubscribers({ categoryId }: UseGetSubscribersParams) {
 function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNameParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<Pick<CategoryType, 'name'>>,
@@ -205,6 +211,7 @@ function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNamePar
       queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
+      openSnackBar(SUCCESS_MESSAGE.PATCH_CATEGORY_NAME);
       onSuccess && onSuccess();
     },
   });
@@ -215,6 +222,7 @@ function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNamePar
 function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCategoryRoleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<{ categoryRoleType: CategoryRoleType }>,
@@ -236,6 +244,7 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
 function usePostCategory({ onSuccess }: UsePostCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<CategoryType>,
@@ -249,6 +258,7 @@ function usePostCategory({ onSuccess }: UsePostCategoryParams) {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
 
+      openSnackBar(SUCCESS_MESSAGE.POST_CATEGORY);
       onSuccess && onSuccess();
     },
   });

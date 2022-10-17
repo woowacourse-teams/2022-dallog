@@ -13,7 +13,17 @@ const ERROR_MESSAGE = {
 };
 
 const SUCCESS_MESSAGE = {
-  EDIT_CATEGORY: '카테고리 이름이 변경되었습니다.',
+  DELETE_CATEGORY: '카테고리를 삭제했습니다.',
+  DELETE_PROFILE: '회원 탈퇴되었습니다.',
+  DELETE_SCHEDULE: '일정을 삭제했습니다.',
+  PATCH_CATEGORY_NAME: '카테고리 이름이 변경되었습니다.',
+  PATCH_CATEGORY_ROLE: '편집 권한을 변경하였습니다.',
+  PATCH_PROFILE_NAME: '이름을 변경하였습니다.',
+  PATCH_SCHEDULE: '일정을 변경하였습니다.',
+
+  POST_CATEGORY: '카테고리를 생성하였습니다.',
+  POST_LOGIN: '로그인에 성공했습니다.',
+  POST_SCHEDULE: '일정을 생성했습니다.',
 };
 
 const TOOLTIP_MESSAGE = {
