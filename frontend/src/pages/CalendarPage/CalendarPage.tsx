@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
@@ -54,9 +54,9 @@ import {
 
 function CalendarPage() {
   const theme = useTheme();
-
   const dateRef = useRef<HTMLDivElement>(null);
 
+  const [maxScheduleCount, setMaxScheduleCount] = useState(0);
   const [hoveringId, setHoveringId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
@@ -83,6 +83,16 @@ function CalendarPage() {
   const moreScheduleModal = useModalPosition();
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
+
+  useLayoutEffect(() => {
+    if (!(dateRef.current instanceof HTMLDivElement)) return;
+
+    setMaxScheduleCount(
+      Math.floor(
+        (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
+      )
+    );
+  }, [dateRef.current]);
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
@@ -170,13 +180,6 @@ function CalendarPage() {
   const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);
   const fewHourSchedulesWithPriority = getSingleSchedulesWithPriority(data.data.fewHours);
 
-  const MAX_SCHEDULE_COUNT =
-    dateRef.current !== null
-      ? Math.floor(
-          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
-        )
-      : CALENDAR.MAX_SCHEDULE_COUNT;
-
   const onMouseEnter = (scheduleId: string) => {
     setHoveringId(scheduleId);
   };
@@ -246,7 +249,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           currentDate === endDate
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -273,7 +276,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           true
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -300,7 +303,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           false
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -315,7 +318,7 @@ function CalendarPage() {
                   })}
 
                   {calendarWithPriority[getISODateString(dateTime)].findIndex((el) => !el) + 1 >
-                    MAX_SCHEDULE_COUNT && (
+                    maxScheduleCount && (
                     <span
                       css={moreStyle}
                       onClick={(e) =>
