@@ -8,6 +8,7 @@ import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
 import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CheckedSchedulesFinder {
@@ -21,6 +22,7 @@ public class CheckedSchedulesFinder {
         this.externalCalendarClient = externalCalendarClient;
     }
 
+    @Transactional
     public IntegrationScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request) {
         MaterialToFindSchedules material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
 
