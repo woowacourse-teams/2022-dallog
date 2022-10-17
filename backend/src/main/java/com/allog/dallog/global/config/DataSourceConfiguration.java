@@ -82,14 +82,17 @@ public class DataSourceConfiguration {
 
             if (isReadOnly) {
                 if (replica2) {
+                    System.out.println("레플1");
                     replica2 = true;
                     return REPLICA_SERVER;
-                } else {
-                    replica2 = false;
-                    return REPLICA_2_SERVER;
                 }
+
+                System.out.println("레플2");
+                replica2 = false;
+                return REPLICA_2_SERVER;
             }
 
+            System.out.println("소스");
             return SOURCE_SERVER;
         }
     }
