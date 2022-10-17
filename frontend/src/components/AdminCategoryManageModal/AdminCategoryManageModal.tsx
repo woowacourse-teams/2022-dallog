@@ -27,6 +27,7 @@ import { MdClose } from 'react-icons/md';
 import {
   closeModalButtonStyle,
   deleteButtonStyle,
+  errorMessageStyle,
   forgiveButtonStyle,
   headerStyle,
   layoutStyle,
@@ -179,10 +180,17 @@ function AdminCategoryManageModal({ subscription, closeModal }: AdminCategoryMan
         <h2 css={titleStyle}>관리 권한 포기</h2>
         <div css={spaceBetweenStyle}>
           <span>일정 추가/삭제/수정 및 카테고리 수정/삭제 권한을 포기합니다.</span>
-          <Button cssProp={forgiveButtonStyle} onClick={handleClickForgiveAdminButton}>
+          <Button
+            cssProp={forgiveButtonStyle}
+            onClick={handleClickForgiveAdminButton}
+            disabled={admins.length === 1}
+          >
             포기
           </Button>
         </div>
+        {admins.length === 1 && (
+          <span css={errorMessageStyle}>권한을 본인만 가지고 있다면 포기할 수 없습니다.</span>
+        )}
       </section>
     </div>
   );
