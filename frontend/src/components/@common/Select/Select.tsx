@@ -37,7 +37,7 @@ function Select({ options, value, onChange, cssProp, description = '옵션 선�
 
   const { state: isSelectOpen, toggleState: toggleSelectOpen } = useToggle(false);
 
-  const selectedPosition = options.findIndex((opt) => opt.id == value);
+  const selectedPosition = options.findIndex((opt) => String(opt.id) === value);
 
   useEffect(() => {
     ref.current?.scrollTo(0, selectedPosition * OPTION_HEIGHT);
@@ -52,13 +52,13 @@ function Select({ options, value, onChange, cssProp, description = '옵션 선�
     <div css={[layoutStyle, cssProp?.select]}>
       <div css={dimmerStyle(isSelectOpen)} onClick={handleClickDimmer}></div>
       <div css={selectStyle} onClick={toggleSelectOpen}>
-        {options.find((option) => option.id == value)?.name || description}
+        {options.find((opt) => String(opt.id) === value)?.name || description}
       </div>
       <div css={relativeStyle}>
         <div css={[optionLayoutStyle(theme, isSelectOpen), cssProp?.optionBox]} ref={ref}>
           {isSelectOpen &&
             options.map((opt, index) => (
-              <div key={index} css={optionStyle(theme, opt.id == value)}>
+              <div key={index} css={optionStyle(theme, String(opt.id) === value)}>
                 <input
                   type="radio"
                   id={`${opt.name}#${opt.id}`}
