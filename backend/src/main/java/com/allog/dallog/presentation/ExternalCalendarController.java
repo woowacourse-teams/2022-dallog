@@ -8,6 +8,7 @@ import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarServ
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class ExternalCalendarController {
 
     @PostMapping
     public ResponseEntity<CategoryResponse> save(@AuthenticationPrincipal final LoginMember loginMember,
-                                                 @RequestBody final ExternalCategoryCreateRequest request) {
+                                                 @Valid @RequestBody final ExternalCategoryCreateRequest request) {
         CategoryResponse response = categoryService.save(loginMember.getId(), request);
         return ResponseEntity.created(URI.create("/api/categories/" + response.getId())).body(response);
     }

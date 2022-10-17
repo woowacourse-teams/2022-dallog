@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 public class SubscriptionUpdateRequest {
 
-    @NotBlank(message = "공백일 수 없습니다.")
+    @NotBlank(message = "컬러 코드가 공백일 수 없습니다.")
     private String colorCode;
     private boolean checked;
 
