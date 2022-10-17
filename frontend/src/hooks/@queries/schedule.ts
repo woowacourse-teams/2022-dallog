@@ -38,7 +38,7 @@ function useDeleteSchedule({ scheduleId, onSuccess }: UseDeleteScheduleParams) {
     () => scheduleApi.delete(accessToken, scheduleId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+        queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
         onSuccess && onSuccess();
       },
     }
@@ -72,7 +72,7 @@ function usePatchSchedule({ scheduleId, onSuccess }: UsePatchScheduleParams) {
     unknown
   >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleId, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
       onSuccess && onSuccess();
     },
   });
@@ -91,7 +91,7 @@ function usePostSchedule({ categoryId, onSuccess }: UsePostScheduleParams) {
     unknown
   >((body) => scheduleApi.post(accessToken, Number(categoryId), body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
       onSuccess && onSuccess();
     },
   });
