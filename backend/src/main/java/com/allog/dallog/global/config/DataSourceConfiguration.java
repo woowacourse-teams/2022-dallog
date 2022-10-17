@@ -74,7 +74,7 @@ public class DataSourceConfiguration {
 
     public static class RoutingDataSource extends AbstractRoutingDataSource {
 
-        private boolean replica2 = false;
+        private static boolean replica2 = false;
 
         @Override
         protected Object determineCurrentLookupKey() {
