@@ -1,8 +1,9 @@
 import { css, Theme } from '@emotion/react';
 
 const fieldsetStyle = ({ flex }: Theme) => css`
-  ${flex.column}
+  ${flex.column};
 
+  position: relative;
   align-items: flex-start;
   gap: 2.5rem;
 
@@ -37,6 +38,8 @@ const inputStyle = ({ colors }: Theme, isValid?: boolean) => css`
 
 const errorMessageStyle = ({ colors }: Theme, isValid?: boolean) => css`
   display: ${isValid ? 'none' : 'block'};
+  position: absolute;
+  top: 110%;
 
   font-size: 3rem;
   color: ${colors.RED_400};

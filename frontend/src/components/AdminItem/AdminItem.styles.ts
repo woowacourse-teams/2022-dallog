@@ -29,6 +29,11 @@ const adminItemStyle = ({ colors, flex }: Theme) => css`
     background: ${colors.GRAY_100};
   }
 `;
+const displayNameStyle = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const profileImageStyle = css`
   width: 7rem;
@@ -36,4 +41,4 @@ const profileImageStyle = css`
   border-radius: 50%;
 `;
 
-export { adminButtonStyle, adminItemStyle, profileImageStyle };
+export { adminButtonStyle, adminItemStyle, displayNameStyle, profileImageStyle };

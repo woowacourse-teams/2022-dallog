@@ -13,7 +13,12 @@ import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { MdPersonOff } from 'react-icons/md';
 
-import { adminButtonStyle, adminItemStyle, profileImageStyle } from './AdminItem.styles';
+import {
+  adminButtonStyle,
+  adminItemStyle,
+  displayNameStyle,
+  profileImageStyle,
+} from './AdminItem.styles';
 
 interface AdminItemProps {
   categoryId: number;
@@ -38,7 +43,7 @@ function AdminItem({ categoryId, admin }: AdminItemProps) {
   return (
     <div key={admin.id} css={adminItemStyle}>
       <img src={admin.profileImageUrl} alt="프로필 이미지" css={profileImageStyle} />
-      <span>{admin.displayName}</span>
+      <span css={displayNameStyle}>{admin.displayName}</span>
       {admin.id !== id && (
         <Button cssProp={adminButtonStyle} onClick={handleClickDeleteRoleButton}>
           <MdPersonOff />
