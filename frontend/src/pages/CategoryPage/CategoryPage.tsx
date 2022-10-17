@@ -309,7 +309,7 @@ function CategoryPage() {
                           )}
                         >
                           {(startDate === currentDate || currentDay === 0) &&
-                            (schedule.title || CALENDAR.EMPTY_TITLE)}
+                            (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
                         </div>
                       );
                     })}
@@ -329,7 +329,7 @@ function CategoryPage() {
                             true
                           )}
                         >
-                          {schedule.title || CALENDAR.EMPTY_TITLE}
+                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                         </div>
                       );
                     })}
@@ -350,7 +350,7 @@ function CategoryPage() {
                             false
                           )}
                         >
-                          {schedule.title || CALENDAR.EMPTY_TITLE}
+                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                         </div>
                       );
                     })}

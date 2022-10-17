@@ -259,7 +259,7 @@ function CalendarPage() {
                         onMouseLeave={onMouseLeave}
                       >
                         {(startDate === currentDate || currentDay === 0) &&
-                          (schedule.title || CALENDAR.EMPTY_TITLE)}
+                          (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
                       </div>
                     );
                   })}
@@ -285,7 +285,7 @@ function CalendarPage() {
                         }
                         onMouseLeave={onMouseLeave}
                       >
-                        {schedule.title || CALENDAR.EMPTY_TITLE}
+                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                       </div>
                     );
                   })}
@@ -312,7 +312,7 @@ function CalendarPage() {
                         }
                         onMouseLeave={onMouseLeave}
                       >
-                        {schedule.title || CALENDAR.EMPTY_TITLE}
+                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                       </div>
                     );
                   })}
