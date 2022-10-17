@@ -234,6 +234,8 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIBERS);
       queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+
+      openSnackBar(SUCCESS_MESSAGE.PATCH_CATEGORY_ROLE);
       onSuccess && onSuccess();
     },
   });
