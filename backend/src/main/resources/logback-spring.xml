@@ -55,28 +55,14 @@
     </springProfile>
 
     <springProfile name="dev">
-        <logger level="INFO" name="org.springframework.boot">
+        <root level="INFO">
             <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </logger>
-        <logger level="INFO" name="com.allog.dallog">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </logger>
-        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
-            <appender-ref ref="ASYNC_DISCORD"/>
-        </logger>
+        </root>
     </springProfile>
 
     <springProfile name="prod">
-        <logger level="WARN" name="org.springframework.boot">
-            <appender-ref ref="FILE"/>
-        </logger>
-        <logger level="WARN" name="com.allog.dallog">
-            <appender-ref ref="FILE"/>
-        </logger>
-        <logger level="ERROR" name="com.allog.dallog.global.error.ControllerAdvice">
-            <appender-ref ref="ASYNC_DISCORD"/>
-        </logger>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
     </springProfile>
 </configuration>
