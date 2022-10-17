@@ -12,7 +12,6 @@ import { ScheduleType } from '@/@types/schedule';
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
-import SelectWithId from '@/components/@common/SelectWithId/SelectWithId';
 
 import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
@@ -112,6 +111,13 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       };
     });
 
+  const selectTimes = TIMES.map((time) => {
+    return {
+      id: time,
+      name: time,
+    };
+  });
+
   return (
     <div css={modalStyle}>
       <form css={formStyle} onSubmit={handleSubmitScheduleModifyForm}>
@@ -152,7 +158,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.startTime.inputValue}
                 onChange={validationSchedule.startTime.onChangeValue}
                 cssProp={selectTimeStyle}
@@ -171,7 +177,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.endTime.inputValue}
                 onChange={validationSchedule.endTime.onChangeValue}
                 cssProp={selectTimeStyle}
@@ -182,7 +188,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
         {categories && (
           <div css={categoryBoxStyle}>
             <div css={labelStyle}>카테고리</div>
-            <SelectWithId
+            <Select
               options={categories}
               value={categoryId.inputValue}
               onChange={categoryId.onChangeValue}

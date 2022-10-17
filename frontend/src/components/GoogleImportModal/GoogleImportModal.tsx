@@ -10,7 +10,7 @@ import useValidateCategory from '@/hooks/useValidateCategory';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
-import SelectWithId from '@/components/@common/SelectWithId/SelectWithId';
+import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import {
   cancelButtonStyle,
@@ -64,7 +64,7 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
       <form css={formStyle} onSubmit={handleSubmitCategoryAddForm}>
         <div css={googleSelectBoxStyle}>
           <div css={titleStyle}>구글 캘린더 목록</div>
-          <SelectWithId
+          <Select
             options={googleCalendars}
             value={googleCalendarInputValue}
             description="구글 캘린더 선택 (필수)"
