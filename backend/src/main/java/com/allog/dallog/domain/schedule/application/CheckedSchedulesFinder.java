@@ -39,7 +39,7 @@ public class CheckedSchedulesFinder {
 
         List<IntegrationSchedule> schedules = material.getSchedules();
 
-        Thread.sleep(1000);
+//        Thread.sleep(1000);
 
 //        String refreshToken = material.getRefreshToken();
 //        String accessToken = toAccessToken(refreshToken);
