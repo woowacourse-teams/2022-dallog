@@ -37,6 +37,7 @@ function useDeleteSubscriptions({ subscriptionId, onSuccess }: UseDeleteSubscrip
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+      queryClient.invalidateQueries(CACHE_KEY.CATEGORY);
 
       onSuccess && onSuccess();
     },
@@ -92,6 +93,8 @@ function usePostSubscription({ categoryId, onSuccess }: UsePostSubscriptionParam
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+      queryClient.invalidateQueries([CACHE_KEY.CATEGORY, categoryId]);
+
       onSuccess && onSuccess();
     },
   });
