@@ -81,14 +81,14 @@ public class DataSourceConfiguration {
             boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
             if (isReadOnly) {
-                if (replica2) {
-                    System.out.println("레플1");
+                if (RoutingDataSource.replica2) {
+                    System.out.println("레플1" + RoutingDataSource.replica2);
                     replica2 = true;
                     return REPLICA_SERVER;
                 }
 
-                System.out.println("레플2");
-                replica2 = false;
+                System.out.println("레플2" + RoutingDataSource.replica2);
+                RoutingDataSource.replica2 = false;
                 return REPLICA_2_SERVER;
             }
 
