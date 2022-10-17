@@ -57,7 +57,11 @@ function NavBar() {
     <div css={navBar}>
       <div css={menus}>
         {accessToken && (
-          <Button cssProp={menu(theme)} onClick={handleClickSideBarButton}>
+          <Button
+            cssProp={menu(theme)}
+            onClick={handleClickSideBarButton}
+            aria-label={isSideBarOpen ? '사이드바 닫기' : '사이드바 열기'}
+          >
             {isSideBarOpen ? <MdMenuOpen size={28} /> : <MdMenu size={28} />}
             <span css={menuTitle}>메뉴</span>
           </Button>
@@ -70,15 +74,24 @@ function NavBar() {
       <div css={menus}>
         {accessToken && (
           <>
-            <Button cssProp={menu(theme)} onClick={handleClickMainButton}>
+            <Button cssProp={menu(theme)} onClick={handleClickMainButton} aria-label="달력">
               <MdCalendarToday />
               <span css={menuTitle}>달력</span>
             </Button>
-            <Button cssProp={menu(theme)} onClick={handleClickCategoryMenuButton}>
+            <Button
+              cssProp={menu(theme)}
+              onClick={handleClickCategoryMenuButton}
+              aria-label="카테고리"
+            >
               <MdOutlineCategory />
               <span css={menuTitle}>카테고리</span>
             </Button>
-            <Button cssProp={menu(theme)} onClick={handleClickProfileMenuButton}>
+            <Button
+              cssProp={menu(theme)}
+              onClick={handleClickProfileMenuButton}
+              aria-label="프로필"
+              aria-expanded={isProfileModalOpen}
+            >
               <MdPersonOutline />
               <span css={menuTitle}>프로필</span>
             </Button>
