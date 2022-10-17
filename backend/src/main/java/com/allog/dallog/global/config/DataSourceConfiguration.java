@@ -8,13 +8,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Configuration
-@Profile({"prod", "dev"})
 public class DataSourceConfiguration {
 
     private static final String SOURCE_SERVER = "SOURCE";
@@ -44,8 +42,8 @@ public class DataSourceConfiguration {
         RoutingDataSource routingDataSource = new RoutingDataSource();
 
         HashMap<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put("source", sourceDataSource);
-        dataSourceMap.put("replica", replicaDataSource);
+        dataSourceMap.put(SOURCE_SERVER, sourceDataSource);
+        dataSourceMap.put(REPLICA_SERVER, replicaDataSource);
 
         routingDataSource.setTargetDataSources(dataSourceMap);
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);
@@ -67,10 +65,10 @@ public class DataSourceConfiguration {
             boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
             if (isReadOnly) {
-                return "replica";
+                return REPLICA_SERVER;
             }
 
-            return "source";
+            return SOURCE_SERVER;
         }
     }
 }
