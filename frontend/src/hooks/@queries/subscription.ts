@@ -37,6 +37,7 @@ function useDeleteSubscriptions({ subscriptionId, onSuccess }: UseDeleteSubscrip
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
       queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
       onSuccess && onSuccess();
     },
   });
@@ -69,6 +70,7 @@ function usePatchSubscription({ subscriptionId, onSuccess }: UsePatchSubscriptio
       onSuccess: async () => {
         await queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
         await queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
         onSuccess && onSuccess();
       },
     }
