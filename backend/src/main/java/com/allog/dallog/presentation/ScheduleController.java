@@ -45,7 +45,8 @@ public class ScheduleController {
 
     @GetMapping("/members/me/schedules")
     public ResponseEntity<IntegrationScheduleResponses> findMyCheckedSchedules(
-            @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request) {
+            @AuthenticationPrincipal final LoginMember loginMember, @ModelAttribute DateRangeRequest request)
+            throws InterruptedException {
         IntegrationScheduleResponses response = checkedSchedulesFinder.findMyCheckedSchedules(loginMember.getId(),
                 request);
         return ResponseEntity.ok(response);

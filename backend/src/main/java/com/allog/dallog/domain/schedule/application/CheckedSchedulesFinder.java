@@ -33,16 +33,19 @@ public class CheckedSchedulesFinder {
         this.externalCalendarClient = externalCalendarClient;
     }
 
-    public IntegrationScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request) {
+    public IntegrationScheduleResponses findMyCheckedSchedules(final Long memberId, final DateRangeRequest request)
+            throws InterruptedException {
         MaterialToFindSchedules material = scheduleService.findInternalByMemberIdAndDateRange(memberId, request);
 
         List<IntegrationSchedule> schedules = material.getSchedules();
 
-        String refreshToken = material.getRefreshToken();
-        String accessToken = toAccessToken(refreshToken);
+        Thread.sleep(1000);
 
-        List<IntegrationSchedule> externalSchedules = toExternalSchedules(request, material, accessToken);
-        schedules.addAll(externalSchedules);
+//        String refreshToken = material.getRefreshToken();
+//        String accessToken = toAccessToken(refreshToken);
+//
+//        List<IntegrationSchedule> externalSchedules = toExternalSchedules(request, material, accessToken);
+//        schedules.addAll(externalSchedules);
 
         return new IntegrationScheduleResponses(material.getSubscriptions(), new TypedSchedules(schedules));
     }
