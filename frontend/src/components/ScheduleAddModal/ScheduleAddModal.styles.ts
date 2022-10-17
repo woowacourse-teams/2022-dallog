@@ -11,7 +11,7 @@ const scheduleAddModal = ({ colors }: Theme) => css`
 const form = ({ flex }: Theme) => css`
   ${flex.column};
 
-  gap: 6rem;
+  gap: 8rem;
 
   height: 100%;
 `;
@@ -32,6 +32,7 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
   top: 0;
   right: 1rem;
   gap: 2rem;
+  z-index: 10;
 
   font-size: 4rem;
   color: ${colors.GRAY_700};

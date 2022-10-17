@@ -40,6 +40,7 @@ const errorMessageStyle = ({ colors }: Theme, isValid?: boolean) => css`
   display: ${isValid ? 'none' : 'block'};
   position: absolute;
   top: 110%;
+  left: 1%;
 
   font-size: 3rem;
   color: ${colors.RED_400};
