@@ -92,7 +92,7 @@ function CalendarPage() {
         (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
       )
     );
-  });
+  }, [dateRef.current]);
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
