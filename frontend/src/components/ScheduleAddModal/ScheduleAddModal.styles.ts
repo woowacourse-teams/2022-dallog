@@ -11,7 +11,7 @@ const scheduleAddModal = ({ colors }: Theme) => css`
 const form = ({ flex }: Theme) => css`
   ${flex.column};
 
-  gap: 6rem;
+  gap: 8rem;
 
   height: 100%;
 `;
@@ -32,6 +32,7 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
   top: 0;
   right: 1rem;
   gap: 2rem;
+  z-index: 10;
 
   font-size: 4rem;
   color: ${colors.GRAY_700};
@@ -85,15 +86,6 @@ const selectBoxStyle = ({ flex }: Theme) => css`
   gap: 2.5rem;
 
   width: 100%;
-`;
-
-const categorySelect = ({ colors }: Theme) => css`
-  width: 100%;
-  padding: 3rem;
-  border: 1px solid ${colors.GRAY_400};
-  border-radius: 8px;
-
-  font-size: 4rem;
 `;
 
 const controlButtons = ({ flex }: Theme) => css`
@@ -163,7 +155,6 @@ const selectTimeStyle = {
 
 export {
   arrow,
-  categorySelect,
   cancelButton,
   checkboxStyle,
   controlButtons,

@@ -11,7 +11,7 @@ const modalStyle = ({ colors }: Theme) => css`
 const formStyle = ({ flex }: Theme) => css`
   ${flex.column};
 
-  gap: 6rem;
+  gap: 8rem;
 `;
 
 const dateFieldsetStyle = (isAllDay: boolean) => {
@@ -50,6 +50,7 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
   top: 0;
   right: 1rem;
   gap: 2rem;
+  z-index: 10;
 
   font-size: 4rem;
   color: ${colors.GRAY_700};

@@ -10,6 +10,7 @@ import useValidateCategory from '@/hooks/useValidateCategory';
 
 import Button from '@/components/@common/Button/Button';
 import Fieldset from '@/components/@common/Fieldset/Fieldset';
+import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import {
   cancelButtonStyle,
@@ -21,7 +22,6 @@ import {
 import {
   formStyle,
   googleSelectBoxStyle,
-  googleSelectStyle,
   headerStyle,
   layoutStyle,
   titleStyle,
@@ -51,26 +51,25 @@ function GoogleImportModal({ closeModal }: GoogleImportModal) {
     return <Spinner size={10} />;
   }
 
+  const googleCalendars = data.data.externalCalendars.map((google) => {
+    return {
+      id: google.calendarId,
+      name: google.summary,
+    };
+  });
+
   return (
     <div css={layoutStyle}>
       <div css={headerStyle}>구글 캘린더 가져오기</div>
       <form css={formStyle} onSubmit={handleSubmitCategoryAddForm}>
         <div css={googleSelectBoxStyle}>
           <div css={titleStyle}>구글 캘린더 목록</div>
-          <select
+          <Select
+            options={googleCalendars}
             value={googleCalendarInputValue}
-            css={googleSelectStyle}
+            description="구글 캘린더 선택 (필수)"
             onChange={onChangeGoogleCalendarInputValue}
-          >
-            <option value="" disabled>
-              구글 캘린더 선택 (필수)
-            </option>
-            {data.data.externalCalendars.map((el) => (
-              <option key={el.calendarId} value={el.calendarId}>
-                {el.summary}
-              </option>
-            ))}
-          </select>
+          />
         </div>
 
         <div css={content}>

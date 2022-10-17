@@ -18,23 +18,26 @@ import {
   selectStyle,
 } from './Select.styles';
 
+type OptionsType = { id: number | string; name: number | string };
+
 interface SelectProps {
-  options: string[];
+  options: Array<OptionsType>;
   value: string;
   onChange: ({
     target,
   }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void;
   cssProp?: SelectCssPropType;
+  description?: string;
 }
 
-function Select({ options, value, onChange, cssProp }: SelectProps) {
+function Select({ options, value, onChange, cssProp, description = '옵션 선택' }: SelectProps) {
   const theme = useTheme();
 
   const ref = useRef<HTMLDivElement>(null);
 
   const { state: isSelectOpen, toggleState: toggleSelectOpen } = useToggle(false);
 
-  const selectedPosition = options.findIndex((opt) => opt === value);
+  const selectedPosition = options.findIndex((opt) => String(opt.id) === value);
 
   useEffect(() => {
     ref.current?.scrollTo(0, selectedPosition * OPTION_HEIGHT);
@@ -49,25 +52,24 @@ function Select({ options, value, onChange, cssProp }: SelectProps) {
     <div css={[layoutStyle, cssProp?.select]}>
       <div css={dimmerStyle(isSelectOpen)} onClick={handleClickDimmer}></div>
       <div css={selectStyle} onClick={toggleSelectOpen}>
-        {value || '옵션 선택'}
+        {options.find((opt) => String(opt.id) === value)?.name || description}
       </div>
       <div css={relativeStyle}>
         <div css={[optionLayoutStyle(theme, isSelectOpen), cssProp?.optionBox]} ref={ref}>
           {isSelectOpen &&
             options.map((opt, index) => (
-              <div key={index} css={optionStyle(theme, opt === value)}>
+              <div key={index} css={optionStyle(theme, String(opt.id) === value)}>
                 <input
                   type="radio"
-                  id={opt}
-                  value={opt}
+                  id={`${opt.name}#${opt.id}`}
+                  value={opt.id}
                   onChange={onChange}
                   name="option-picker"
                   css={hiddenStyle}
                   onClick={toggleSelectOpen}
                 />
-
-                <label htmlFor={opt} css={[labelStyle, cssProp?.option]}>
-                  {opt}
+                <label htmlFor={`${opt.name}#${opt.id}`} css={[labelStyle, cssProp?.option]}>
+                  {opt.name}
                 </label>
               </div>
             ))}

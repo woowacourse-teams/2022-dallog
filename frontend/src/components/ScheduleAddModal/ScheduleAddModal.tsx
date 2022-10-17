@@ -12,6 +12,7 @@ import Fieldset from '@/components/@common/Fieldset/Fieldset';
 import Select from '@/components/@common/Select/Select';
 import Spinner from '@/components/@common/Spinner/Spinner';
 
+import { CATEGORY_TYPE } from '@/constants/category';
 import { DATE_TIME, TIMES } from '@/constants/date';
 import { VALIDATION_MESSAGE, VALIDATION_SIZE } from '@/constants/validate';
 
@@ -20,7 +21,6 @@ import { getDayOffsetDateTime, getEndTime, getISODateString, getStartTime } from
 import {
   arrow,
   cancelButton,
-  categorySelect,
   checkboxStyle,
   controlButtons,
   dateFieldsetStyle,
@@ -85,6 +85,22 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
     return <Spinner size={10} />;
   }
 
+  const categories = data.data
+    .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
+    .map((category) => {
+      return {
+        id: category.id,
+        name: category.name,
+      };
+    });
+
+  const selectTimes = TIMES.map((time) => {
+    return {
+      id: time,
+      name: time,
+    };
+  });
+
   return (
     <div css={scheduleAddModal}>
       <form css={form} onSubmit={handleSubmitScheduleAddForm}>
@@ -126,7 +142,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.startTime.inputValue}
                 onChange={validationSchedule.startTime.onChangeValue}
                 cssProp={selectTimeStyle}
@@ -144,7 +160,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.endTime.inputValue}
                 onChange={validationSchedule.endTime.onChangeValue}
                 cssProp={selectTimeStyle}
@@ -154,17 +170,11 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
         </div>
         <div css={selectBoxStyle}>
           <span css={labelStyle}>카테고리</span>
-          <select
-            css={categorySelect}
+          <Select
+            options={categories}
             value={categoryId.inputValue}
             onChange={categoryId.onChangeValue}
-          >
-            {data?.data.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <Fieldset
           placeholder="메모를 추가하세요."
