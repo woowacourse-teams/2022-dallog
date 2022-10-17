@@ -6,7 +6,7 @@ const itemStyle = ({ colors, flex }: Theme) => css`
   justify-content: space-between;
 
   width: 100%;
-  height: 8rem;
+  height: 7rem;
 
   &:hover {
     background-color: ${colors.GRAY_100};
