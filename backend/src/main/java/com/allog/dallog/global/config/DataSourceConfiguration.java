@@ -82,14 +82,14 @@ public class DataSourceConfiguration {
 
             if (isReadOnly) {
                 if (RoutingDataSource.replica2) {
-                    System.out.println("레플1" + RoutingDataSource.replica2);
-                    replica2 = true;
-                    return REPLICA_SERVER;
+                    System.out.println("레플2" + RoutingDataSource.replica2);
+                    RoutingDataSource.replica2 = false;
+                    return REPLICA_2_SERVER;
                 }
 
-                System.out.println("레플2" + RoutingDataSource.replica2);
-                RoutingDataSource.replica2 = false;
-                return REPLICA_2_SERVER;
+                System.out.println("레플1" + RoutingDataSource.replica2);
+                RoutingDataSource.replica2 = true;
+                return REPLICA_SERVER;
             }
 
             System.out.println("소스");
