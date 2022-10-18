@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -11,19 +10,19 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const prod = process.env.NODE_ENV === 'production';
 module.exports = {
   mode: prod ? 'production' : 'development',
-  devtool: prod ? 'hidden-source-map' : 'eval',
+  devtool: prod ? 'hidden-nosources-source-map' : 'eval',
   entry: './src/index.tsx',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src/'),
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.ts', '.tsx'],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'ts-loader'],
+        use: prod ? ['babel-loader'] : ['babel-loader', 'ts-loader'],
       },
       {
         test: /\\.css$/,
@@ -35,7 +34,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'images/[hash]-[name].[ext]',
+              name: 'images/[contenthash]-[name].[ext]',
             },
           },
         ],
@@ -44,7 +43,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: 'bundle.js',
+    filename: 'bundle.[contenthash].js',
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -54,7 +53,6 @@ module.exports = {
       template: './src/index.html',
       favicon: './src/assets/dallog_color.png',
     }),
-    new CleanWebpackPlugin(),
     new Dotenv(),
     new MiniCssExtractPlugin(),
     new BundleAnalyzerPlugin({
