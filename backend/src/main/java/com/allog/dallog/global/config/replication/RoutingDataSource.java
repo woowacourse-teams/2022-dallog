@@ -12,11 +12,15 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     @Override
     protected Object determineCurrentLookupKey() {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+        System.out.println("isReadOnly = " + isReadOnly);
 
         if (isReadOnly) {
-            return circularReplicaKeyList.next();
+            DataSourceKey next = circularReplicaKeyList.next();
+            System.out.println("next = " + next);
+            return next;
         }
 
+        System.out.println("source");
         return SOURCE;
     }
 }
