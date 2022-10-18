@@ -74,14 +74,14 @@ function NavBar() {
       <div css={menus}>
         {accessToken && (
           <>
-            <Button cssProp={menu(theme)} onClick={handleClickMainButton} aria-label="달력">
+            <Button cssProp={menu(theme)} onClick={handleClickMainButton} aria-label="달력 메뉴">
               <MdCalendarToday />
               <span css={menuTitle}>달력</span>
             </Button>
             <Button
               cssProp={menu(theme)}
               onClick={handleClickCategoryMenuButton}
-              aria-label="카테고리"
+              aria-label="카테고리 메뉴"
             >
               <MdOutlineCategory />
               <span css={menuTitle}>카테고리</span>
@@ -89,7 +89,7 @@ function NavBar() {
             <Button
               cssProp={menu(theme)}
               onClick={handleClickProfileMenuButton}
-              aria-label="프로필"
+              aria-label="프로필 메뉴"
               aria-expanded={isProfileModalOpen}
             >
               <MdPersonOutline />

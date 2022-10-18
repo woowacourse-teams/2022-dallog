@@ -149,7 +149,7 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
               />
             )}
           </div>
-          <p css={arrow} aria-label="종료 날짜 입력">
+          <p css={arrow} aria-hidden>
             ↓
           </p>
           <div css={dateTimePickerStyle}>
