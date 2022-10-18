@@ -14,7 +14,7 @@ function ScheduleAddButton({ onClick }: ScheduleAddButtonProps) {
   const theme = useTheme();
 
   return (
-    <Button cssProp={scheduleAddButton(theme)} onClick={onClick}>
+    <Button cssProp={scheduleAddButton(theme)} onClick={onClick} aria-label="일정 추가">
       <MdEditCalendar />
     </Button>
   );

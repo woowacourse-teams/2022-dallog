@@ -149,7 +149,9 @@ function ScheduleAddModal({ dateInfo, closeModal }: ScheduleAddModalProps) {
               />
             )}
           </div>
-          <p css={arrow}>↓</p>
+          <p css={arrow} aria-hidden>
+            ↓
+          </p>
           <div css={dateTimePickerStyle}>
             <Fieldset
               type="date"

@@ -65,7 +65,7 @@ function SideBar() {
   );
 
   return (
-    <div css={sideBar(theme, isSideBarOpen)}>
+    <div css={sideBar(theme, isSideBarOpen)} tabIndex={10}>
       <SideAdminList categories={adminList} />
       <SideSubscribedList categories={subscribedList} />
       <SideGoogleList categories={googleList} />
