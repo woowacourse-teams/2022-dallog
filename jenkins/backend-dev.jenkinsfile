@@ -36,8 +36,47 @@ pipeline {
             steps {
                 dir('backend/build/libs') {
                     sshagent(credentials: ['key-dallog']) {
-                        sh "scp -o StrictHostKeyChecking=no backend-0.0.1-SNAPSHOT.jar ubuntu@${env.BACKEND_DEV_IP}:/home/ubuntu"
-                        sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.BACKEND_DEV_IP} 'sh run.sh' &"
+                        sh '''#!/bin/bash
+                        if curl -s "http://${BACKEND_DEV_PUBLIC_IP}:${BLUE_PORT}" > /dev/null
+                        then
+                            target_port=$GREEN_PORT
+                        else
+                            target_port=$BLUE_PORT
+                        fi
+
+                        scp -o StrictHostKeyChecking=no backend-0.0.1-SNAPSHOT.jar ubuntu@${BACKEND_DEV_IP}:/home/ubuntu
+                        ssh ubuntu@${BACKEND_DEV_IP} "sh run.sh ${target_port}" &
+
+                        for retry_count in \$(seq 10)
+                        do
+                            if curl -s "http://${BACKEND_DEV_PUBLIC_IP}:${target_port}" > /dev/null
+                            then
+                                echo "Health check success ✅ port number: ${target_port}"
+                                break
+                            fi
+
+                            if [ $retry_count -eq 10 ]
+                            then
+                                echo "Health check failed ❌ port number: ${target_port}"
+                                exit 1
+                            fi
+
+                            echo "The server is not alive yet. Retry health check in 20 seconds... retry count: ${retry_count}"
+                            sleep 20
+                        done
+
+                        ssh ubuntu@${BACKEND_DEV_IP} "echo 'set \\\$service_port ${target_port};' | sudo tee /etc/nginx/conf.d/service-port.inc && sudo service nginx reload"
+                        echo "Switch the reverse proxy direction of nginx to ${target_port} 🔄"
+
+                        if [ "${target_port}" == "${BLUE_PORT}" ]
+                        then
+                            ssh ubuntu@${BACKEND_DEV_IP} "fuser -s -k ${GREEN_PORT}/tcp"
+                        else
+                            ssh ubuntu@${BACKEND_DEV_IP} "fuser -s -k ${BLUE_PORT}/tcp"
+                        fi
+
+                        echo "Kill the process on the opposite server. 🔪"
+                        '''
                     }
                 }
             }
