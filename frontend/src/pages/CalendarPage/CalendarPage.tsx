@@ -123,14 +123,14 @@ function CalendarPage() {
                 일정을 가져오고 있습니다.
               </div>
               <div css={monthPicker}>
-                <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달로 이동">
+                <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달">
                   <MdKeyboardArrowLeft />
                   <span css={navButtonTitle}>전 달</span>
                 </Button>
-                <Button cssProp={todayButton} onClick={moveToToday} aria-label="이번 달로 이동">
+                <Button cssProp={todayButton} onClick={moveToToday} aria-label="이번 달">
                   오늘
                 </Button>
-                <Button cssProp={navButton} onClick={moveToNextMonth} aria-label="다음 달로 이동">
+                <Button cssProp={navButton} onClick={moveToNextMonth} aria-label="다음 달">
                   <MdKeyboardArrowRight />
                   <span css={navButtonTitle}>다음 달</span>
                 </Button>
