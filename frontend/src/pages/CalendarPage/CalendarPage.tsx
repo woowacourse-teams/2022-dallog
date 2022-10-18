@@ -116,21 +116,21 @@ function CalendarPage() {
       <PageLayout>
         <div css={calendarPage}>
           <div css={calendarHeader}>
-            {currentYear}년 {currentMonth}월
+            {`${currentYear}년 ${currentMonth}월`}
             <div css={waitingNavStyle}>
               <div css={spinnerStyle}>
                 <Spinner size={4} />
                 일정을 가져오고 있습니다.
               </div>
               <div css={monthPicker}>
-                <Button cssProp={navButton} onClick={moveToBeforeMonth}>
+                <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달로 이동">
                   <MdKeyboardArrowLeft />
                   <span css={navButtonTitle}>전 달</span>
                 </Button>
-                <Button cssProp={todayButton} onClick={moveToToday}>
+                <Button cssProp={todayButton} onClick={moveToToday} aria-label="이번 달로 이동">
                   오늘
                 </Button>
-                <Button cssProp={navButton} onClick={moveToNextMonth}>
+                <Button cssProp={navButton} onClick={moveToNextMonth} aria-label="다음 달로 이동">
                   <MdKeyboardArrowRight />
                   <span css={navButtonTitle}>다음 달</span>
                 </Button>
