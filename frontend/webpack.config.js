@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const prod = process.env.NODE_ENV === 'production';
 module.exports = {
@@ -59,10 +60,12 @@ module.exports = {
       analyzerMode: 'disabled',
       generateStatsFile: true,
     }),
+    new CompressionPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
     port: 3000,
+    open: true,
     hot: true,
   },
   optimization: {
