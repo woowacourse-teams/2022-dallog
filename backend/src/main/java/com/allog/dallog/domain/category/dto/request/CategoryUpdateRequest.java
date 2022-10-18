@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class CategoryUpdateRequest {
 
-    @NotBlank(message = "공백일 수 없습니다.")
+    @NotBlank(message = "카테고리 이름이 공백일 수 없습니다.")
     private String name;
 
     private CategoryUpdateRequest() {

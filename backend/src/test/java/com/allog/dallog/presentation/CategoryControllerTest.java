@@ -605,7 +605,7 @@ class CategoryControllerTest extends ControllerTest {
         mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .content(objectMapper.writeValueAsBytes(역할_수정_요청))
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())

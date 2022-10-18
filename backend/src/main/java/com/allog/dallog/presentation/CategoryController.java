@@ -84,7 +84,7 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long categoryId,
-                                       @RequestBody final CategoryUpdateRequest request) {
+                                       @Valid @RequestBody final CategoryUpdateRequest request) {
         categoryService.update(loginMember.getId(), categoryId, request);
         return ResponseEntity.noContent().build();
     }
