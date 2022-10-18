@@ -12,11 +12,6 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
-
     hibernate:
       ddl-auto: none
 
