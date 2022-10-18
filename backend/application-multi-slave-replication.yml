@@ -17,7 +17,7 @@ spring:
       password: dkffhrekffhr1!
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://192.168.4.170:3306/dallog
-    replica:
+    replica1:
       username: dallog
       password: dkffhrekffhr1!
       driver-class-name: com.mysql.cj.jdbc.Driver
