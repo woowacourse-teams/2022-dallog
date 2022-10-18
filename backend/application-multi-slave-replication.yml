@@ -1,0 +1,65 @@
+spring:
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+  datasource:
+    source:
+      username: dallog
+      password: dkffhrekffhr1!
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://139.162.116.225:3306/dallog
+    replica:
+      username: dallog
+      password: dkffhrekffhr1!
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://139.162.88.13:3306/dallog
+    replica2:
+      username: dallog
+      password: dkffhrekffhr1!
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://172.104.111.180:3306/dallog
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+    hibernate:
+      ddl-auto: none
+
+    open-in-view: false
+
+cors:
+  allow-origin:
+    urls: http://localhost:3000, https://dallog-oauth-test.surge.sh, https://dev.dallog.me
+
+security:
+  jwt:
+    token:
+      secret-key: dajsjkgjbadfgaksffbhjafskasjsdsdsdsfsdfsfsdfsdfsdfsdffgc
+      access:
+        expire-length: 8640000000000
+      refresh:
+        expire-length: 12100000000000
+
+oauth:
+  google:
+    client-id: 988206409807-vg01e67923hd1phko6ul7r6reoa8gojo.apps.googleusercontent.com
+    client-secret: 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
+    oauth-end-point: https://accounts.google.com/o/oauth2/v2/auth
+    response-type: code
+    scopes:
+      - https://www.googleapis.com/auth/userinfo.profile
+      - https://www.googleapis.com/auth/userinfo.email
+      - https://www.googleapis.com/auth/calendar.readonly
+    token-uri: https://oauth2.googleapis.com/token
+    access-type: offline
+
+report:
+  discord:
+    username: DALLOG-DEV
+    webhook-uri: https://discord.com/api/webhooks/1002548534354120785/rY_x28hQ3_OnL6fisQNmK2pE2_rpnNF-gOeW75I7z1_fPwpmRRiXjvJwB8Xs9_WpfLmQ
