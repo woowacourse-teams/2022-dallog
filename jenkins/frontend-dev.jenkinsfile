@@ -16,7 +16,7 @@ pipeline {
                     nodejs(nodeJSInstallationName: 'NodeJS 16.14.0') {
                         sh "npm install -g yarn"
                         sh "yarn"
-                        sh "yarn prod-build"
+                        sh "yarn dev-build"
                     }
                 }
             }
