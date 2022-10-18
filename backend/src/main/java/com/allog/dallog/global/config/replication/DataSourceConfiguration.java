@@ -1,6 +1,5 @@
-package com.allog.dallog.global.config;
+package com.allog.dallog.global.config.replication;
 
-import com.allog.dallog.global.config.replication.RoutingDataSource;
 import java.util.HashMap;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
