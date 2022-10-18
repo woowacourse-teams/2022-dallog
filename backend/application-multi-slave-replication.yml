@@ -9,17 +9,17 @@ spring:
       username: dallog
       password: dkffhrekffhr1!
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://139.162.116.225:3306/dallog
+      jdbc-url: jdbc:mysql://192.168.4.170:3306/dallog
     replica:
       username: dallog
       password: dkffhrekffhr1!
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://139.162.88.13:3306/dallog
+      jdbc-url: jdbc:mysql://192.168.4.140:3306/dallog
     replica2:
       username: dallog
       password: dkffhrekffhr1!
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://172.104.111.180:3306/dallog
+      jdbc-url: jdbc:mysql://192.168.4.156:3306/dallog
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect

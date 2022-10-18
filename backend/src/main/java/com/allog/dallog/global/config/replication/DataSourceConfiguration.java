@@ -1,5 +1,6 @@
 package com.allog.dallog.global.config;
 
+import com.allog.dallog.global.config.replication.RoutingDataSource;
 import java.util.HashMap;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Configuration
 @Profile({"prod", "dev"})
@@ -58,19 +57,5 @@ public class DataSourceConfiguration {
     public DataSource dataSource() {
         DataSource determinedDataSource = routingDataSource(sourceDataSource(), replicaDataSource());
         return new LazyConnectionDataSourceProxy(determinedDataSource);
-    }
-
-    public static class RoutingDataSource extends AbstractRoutingDataSource {
-
-        @Override
-        protected Object determineCurrentLookupKey() {
-            boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
-
-            if (isReadOnly) {
-                return REPLICA_SERVER;
-            }
-
-            return SOURCE_SERVER;
-        }
     }
 }
