@@ -1,3 +1,10 @@
+server:
+  tomcat:
+    accept-count: 10
+    max-connections: 8192
+    threads:
+      max: 10
+
 spring:
   data:
     web:
