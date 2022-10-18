@@ -27,7 +27,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
                                                                   final String startDateTime,
                                                                   final String endDateTime) {
         try {
-            Thread.sleep(150);
+            Thread.sleep(15);
         } catch (final InterruptedException e) {
         }
 
