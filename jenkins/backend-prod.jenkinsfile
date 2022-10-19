@@ -49,7 +49,7 @@ pipeline {
                             sleep 20
                         done
 
-                        ssh ubuntu@${BACKEND_PROD_IP} "echo 'set \\\$service_port ${target_port};' | sudo tee /etc/nginx/conf.d/service-port.inc && sudo service nginx reload"
+                        ssh -o StrictHostKeyChecking=no ubuntu@${BACKEND_WS_IP} "echo 'set \\\$service_port ${target_port};' | sudo tee /etc/nginx/conf.d/service-port.inc && sudo service nginx reload"
                         echo "Switch the reverse proxy direction of nginx to ${target_port} 🔄"
 
                         if [ "${target_port}" == "${BLUE_PORT}" ]
