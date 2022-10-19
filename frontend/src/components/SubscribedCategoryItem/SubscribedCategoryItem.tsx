@@ -8,7 +8,7 @@ import { CategoryType } from '@/@types/category';
 
 import Button from '@/components/@common/Button/Button';
 
-import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 
@@ -16,7 +16,6 @@ import {
   categoryItem,
   detailStyle,
   item,
-  menuTitle,
   unsubscribeButton,
 } from './SubscribedCategoryItem.styles';
 
@@ -69,12 +68,7 @@ function SubscribedCategoryItem({
           onClick={handleClickUnsubscribeButton}
           disabled={!canUnsubscribeCategory}
         >
-          <p>구독중</p>
-          {!canUnsubscribeCategory ? (
-            <span css={menuTitle}>{TOOLTIP_MESSAGE.CANNOT_UNSUBSCRIBE_EDITABLE_CATEGORY}</span>
-          ) : (
-            <></>
-          )}
+          구독중
         </Button>
       </div>
       {hoveringPosY !== null && (
