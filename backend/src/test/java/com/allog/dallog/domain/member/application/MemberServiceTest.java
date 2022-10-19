@@ -73,21 +73,6 @@ class MemberServiceTest extends ServiceTest {
     @Autowired
     private OAuthTokenRepository oAuthTokenRepository;
 
-    @Test
-    void 탈퇴한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-
-        categoryService.save(관리자.getId(), 내_일정_생성_요청);
-
-        // when
-        memberService.deleteById(관리자.getId());
-
-        Member 재가입_관리자 = memberRepository.save(관리자());
-        categoryService.save(재가입_관리자.getId(), 내_일정_생성_요청);
-        memberService.deleteById(재가입_관리자.getId());
-    }
-
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
     void id를_통해_회원을_단건_조회한다() {
@@ -139,7 +124,7 @@ class MemberServiceTest extends ServiceTest {
         assertThat(actual.getDisplayName()).isEqualTo(패트_이름);
     }
 
-    @DisplayName("회원 탈퇴를 한다.")
+    /*@DisplayName("회원 탈퇴를 한다.")
     @Test
     void 회원_탈퇴를_한다() {
         // given
@@ -290,7 +275,7 @@ class MemberServiceTest extends ServiceTest {
         // then
         assertThatThrownBy(() -> memberService.findById(관리자.getId()))
                 .isInstanceOf(NoSuchMemberException.class);
-    }
+    }*/
 
     @DisplayName("특정 카테고리의 구독자 목록을 반환한다.")
     @Test
