@@ -126,7 +126,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성_시_자동으로_구독한다() {
         // given
-        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
 
         // when
         categoryService.save(파랑_id, 공통_일정_생성_요청);
@@ -142,7 +142,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성_시_생성자에_대한_카테고리_역할을_ADMIN으로_생성한다() {
         // given
-        Long 후디_id = parseMemberId(AuthFixtures.후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(AuthFixtures.후디_인증_코드_토큰_요청());
 
         CategoryResponse JPA_스터디 = categoryService.save(후디_id, 후디_JPA_스터디_생성_요청);
 
@@ -202,7 +202,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 외부_카테고리_생성_시_자동으로_구독한다() {
         // given
-        Long 파랑_id = parseMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
 
         // when
         categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);

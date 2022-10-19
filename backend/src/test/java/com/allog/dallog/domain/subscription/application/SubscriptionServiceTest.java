@@ -66,10 +66,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 새로운_구독을_생성한다() {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
 
         // when
         SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
@@ -82,10 +82,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 자신이_생성하지_않은_개인_카테고리를_구독시_예외가_발생한다() {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디_id, 내_일정_생성_요청);
 
-        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.save(매트_id, 후디_개인_학습_일정.getId()))
@@ -97,7 +97,7 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 이미_존재하는_구독_정보를_저장할_경우_예외를_던진다() {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
         // when & then
@@ -109,10 +109,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독_id를_기반으로_단건_조회한다() {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
         SubscriptionResponse 빨간색_구독 = subscriptionService.save(리버_id, BE_일정.getId());
 
         // when
@@ -137,14 +137,14 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 회원_정보를_기반으로_구독_정보를_조회한다() {
         // given
-        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
-        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 관리자_id = toMemberId(관리자_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
         CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
         CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
         CategoryResponse FE_일정 = categoryService.save(리버_id, FE_일정_생성_요청);
 
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         subscriptionService.save(후디_id, 공통_일정.getId());
         subscriptionService.save(후디_id, BE_일정.getId());
         subscriptionService.save(후디_id, FE_일정.getId());
@@ -161,10 +161,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void category_id를_기반으로_구독_정보를_조회한다() {
         // given
-        Long 매트_id = parseMemberId(매트_인증_코드_토큰_요청());
-        Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(파랑_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
 
         CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
         subscriptionService.save(파랑_id, BE_일정.getId());
@@ -182,10 +182,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독_정보를_수정한다() {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
         SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
         Color color = Color.COLOR_1;
 
@@ -205,10 +205,10 @@ class SubscriptionServiceTest extends ServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#", "#00FF00"})
     void 구독_정보_수정_시_존재하지_않는_색상인_경우_예외를_던진다(final String colorCode) {
         // given
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
         SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
 
         // when
@@ -223,12 +223,12 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
+        Long 관리자_id = toMemberId(관리자_인증_코드_토큰_요청());
         CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
         CategoryResponse BE_일정 = categoryService.save(관리자_id, BE_일정_생성_요청);
         CategoryResponse FE_일정 = categoryService.save(관리자_id, FE_일정_생성_요청);
 
-        Long 후디_id = parseMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
         SubscriptionResponse response = subscriptionService.save(후디_id, 공통_일정.getId());
         subscriptionService.save(후디_id, BE_일정.getId());
         subscriptionService.save(후디_id, FE_일정.getId());
@@ -244,8 +244,8 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
         // given
-        Long 관리자_id = parseMemberId(관리자_인증_코드_토큰_요청());
-        Long 파랑_id = parseMemberId(파랑_인증_코드_토큰_요청());
+        Long 관리자_id = toMemberId(관리자_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(파랑_인증_코드_토큰_요청());
 
         CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
         SubscriptionResponse 공통_일정_구독 = subscriptionService.save(파랑_id, 공통_일정.getId());

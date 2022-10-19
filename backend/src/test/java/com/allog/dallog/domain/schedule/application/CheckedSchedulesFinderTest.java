@@ -53,7 +53,7 @@ class CheckedSchedulesFinderTest extends ServiceTest {
     @Test
     void 시작일시와_종료일시로_유저의_달력을_일정_유형에_따라_분류하고_정렬하여_반환한다() {
         // given
-        Long memberId = parseMemberId(MEMBER_인증_코드_토큰_요청());
+        Long memberId = toMemberId(MEMBER_인증_코드_토큰_요청());
 
         CategoryResponse BE_일정_응답 = categoryService.save(memberId, BE_일정_생성_요청);
         Category BE_일정 = categoryRepository.getById(BE_일정_응답.getId());

@@ -1,8 +1,6 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_FE_일정_생성_요청;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +34,7 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     @Test
     void 월별_일정_조회_시_유저_ID로_해당하는_외부_연동_카테고리의_전체를_조회한다() {
         // given
-        Long 리버_id = parseMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
 
         CategoryResponse 외부_BE_일정_응답 = categoryService.save(리버_id, 외부_BE_일정_생성_요청);
         Category 외부_BE_일정 = categoryRepository.getById(외부_BE_일정_응답.getId());

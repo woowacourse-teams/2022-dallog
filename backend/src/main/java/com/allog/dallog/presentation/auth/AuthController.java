@@ -1,7 +1,9 @@
 package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.application.OAuthClient;
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
+    private final OAuthClient oAuthClient;
     private final AuthService authService;
 
-    public AuthController(final AuthService authService) {
+    public AuthController(final OAuthClient oAuthClient, final AuthService authService) {
+        this.oAuthClient = oAuthClient;
         this.authService = authService;
     }
 
@@ -37,9 +41,9 @@ public class AuthController {
     @PostMapping("/{oauthProvider}/token")
     public ResponseEntity<AccessAndRefreshTokenResponse> generateAccessAndRefreshToken(
             @PathVariable final String oauthProvider, @Valid @RequestBody final TokenRequest tokenRequest) {
-        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(
-                tokenRequest);
-        return ResponseEntity.ok(accessAndRefreshTokenResponse);
+        OAuthMember oAuthMember = oAuthClient.getOAuthMember(tokenRequest.getCode(), tokenRequest.getRedirectUri());
+        AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(oAuthMember);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/token/access")

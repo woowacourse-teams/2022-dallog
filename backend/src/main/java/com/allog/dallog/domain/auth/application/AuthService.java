@@ -76,6 +76,17 @@ public class AuthService {
         return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
     }
 
+    @Transactional
+    public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final OAuthMember oAuthMember) {
+        Member foundMember = findMember(oAuthMember);
+
+        OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
+        oAuthToken.change(oAuthMember.getRefreshToken());
+
+        AuthToken authToken = tokenCreator.createAuthToken(foundMember.getId());
+        return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
+    }
+
     private Member findMember(final OAuthMember oAuthMember) {
         String email = oAuthMember.getEmail();
         if (memberRepository.existsByEmail(email)) {
@@ -87,7 +98,7 @@ public class AuthService {
     private Member saveMember(final OAuthMember oAuthMember) {
         Member savedMember = memberRepository.save(oAuthMember.toMember());
         Category savedCategory = categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, savedMember, PERSONAL));
-        
+
         CategoryRole categoryRole = new CategoryRole(savedCategory, savedMember, ADMIN);
         categoryRoleRepository.save(categoryRole);
 

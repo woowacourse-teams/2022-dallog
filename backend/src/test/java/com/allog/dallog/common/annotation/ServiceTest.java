@@ -25,8 +25,8 @@ public class ServiceTest {
         databaseCleaner.execute();
     }
 
-    protected Long parseMemberId(final TokenRequest tokenRequest) {
-        AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = authService.generateAccessAndRefreshToken(tokenRequest);
-        return authService.extractMemberId(accessAndRefreshTokenResponse.getAccessToken());
+    protected Long toMemberId(final TokenRequest tokenRequest) {
+        AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(tokenRequest);
+        return authService.extractMemberId(response.getAccessToken());
     }
 }
