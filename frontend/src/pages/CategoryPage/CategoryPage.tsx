@@ -45,6 +45,7 @@ import {
   dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
+  hintStyle,
   itemWithBackgroundStyle,
   itemWithoutBackgroundStyle,
   monthPickerStyle,
@@ -141,10 +142,9 @@ function CategoryPage() {
             </Suspense>
           </div>
           <div css={calendarStyle}>
+            {!category.id && <div css={hintStyle}>클릭한 카테고리의 일정을 확인할 수 있어요</div>}
             <div css={calendarHeaderStyle}>
-              {currentYear}년 {currentMonth}월
-              {!category.id &&
-                '\u00A0\u00A0☾\u00A0\u00A0카테고리를 클릭하면 일정을 확인할 수 있습니다.'}
+              {`${currentYear}년 ${currentMonth}월`}
               <div css={waitingNavStyle}>
                 {isLoading && (
                   <div css={spinnerStyle}>
@@ -242,7 +242,7 @@ function CategoryPage() {
         </div>
         <div css={calendarStyle}>
           <div css={calendarHeaderStyle}>
-            {currentYear}년 {currentMonth}월 &nbsp;☾&nbsp; {category.name}
+            {`${currentYear}년 ${currentMonth}월 \u00A0☾\u00A0 ${category.name}`}
             <div css={monthPickerStyle}>
               <Button cssProp={navButtonStyle} onClick={moveToBeforeMonth}>
                 <MdKeyboardArrowLeft />
@@ -277,7 +277,8 @@ function CategoryPage() {
                         theme,
                         day,
                         currentMonth === month,
-                        dateTime === getToday()
+                        dateTime === getToday(),
+                        true
                       )}
                     >
                       {date}
@@ -309,7 +310,7 @@ function CategoryPage() {
                           )}
                         >
                           {(startDate === currentDate || currentDay === 0) &&
-                            (schedule.title || CALENDAR.EMPTY_TITLE)}
+                            (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
                         </div>
                       );
                     })}
@@ -329,7 +330,7 @@ function CategoryPage() {
                             true
                           )}
                         >
-                          {schedule.title || CALENDAR.EMPTY_TITLE}
+                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                         </div>
                       );
                     })}
@@ -350,7 +351,7 @@ function CategoryPage() {
                             false
                           )}
                         >
-                          {schedule.title || CALENDAR.EMPTY_TITLE}
+                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                         </div>
                       );
                     })}

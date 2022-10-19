@@ -1,13 +1,12 @@
 package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
-import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.id를_통해_카테고리를_가져온다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.id를_통해_카테고리를_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_삭제한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_수정한다;
-import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.내가_등록한_카테고리를_제목과_페이징을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
-import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_제목과_페이징을_통해_조회한다;
-import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.카테고리를_페이징을_통해_조회한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.전체_카테고리를_제목_검색을_통해_조회한다;
+import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.전체_카테고리를_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.회원의_카테고리_역할을_변경한다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
@@ -27,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.fixtures.OAuthFixtures;
-import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
+import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
@@ -65,9 +64,9 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         상태코드_201이_반환된다(response);
     }
 
-    @DisplayName("카테고리를 등록하고 페이징을 통해 나누어 조회한다.")
+    @DisplayName("카테고리를 등록하고 일반 카테고리 전체를 조회한다.")
     @Test
-    void 카테고리를_등록하고_페이징을_통해_나누어_조회한다() {
+    void 카테고리를_등록하고_일반_카테고리_전체를_조회한다() {
         // given
         String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
@@ -77,20 +76,19 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, 후디_JPA_스터디_생성_요청);
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_페이징을_통해_조회한다(1, 3);
-        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
+        ExtractableResponse<Response> response = 전체_카테고리를_조회한다();
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(1);
-            assertThat(categoriesWithPageResponse.getCategories()).hasSize(2);
+            assertThat(categoriesResponse.getCategories()).hasSize(5);
         });
     }
 
-    @DisplayName("카테고리를 등록하고 카테고리 제목과 페이징을 통해 나누어 조회한다.")
+    @DisplayName("카테고리를 등록하고 제목 검색을 통해 해당하는 카테고리를 조회한다.")
     @Test
-    void 카테고리를_등록하고_카테고리_제목과_페이징을_통해_나누어_조회한다() {
+    void 카테고리를_등록하고_제목_검색을_통해_해당하는_카테고리를_조회한다() {
         // given
         String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
@@ -100,14 +98,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, 후디_JPA_스터디_생성_요청);
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("일", 0, 3);
-        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
+        ExtractableResponse<Response> response = 전체_카테고리를_제목_검색을_통해_조회한다("일");
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
+            assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }
 
@@ -124,59 +121,13 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
         새로운_카테고리를_등록한다(accessToken, 내_일정_생성_요청);
 
         // when
-        ExtractableResponse<Response> response = 카테고리를_제목과_페이징을_통해_조회한다("", 0, 10);
-        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
+        ExtractableResponse<Response> response = 전체_카테고리를_제목_검색을_통해_조회한다("");
+        CategoriesResponse categoriesResponse = response.as(CategoriesResponse.class);
 
         // then
         assertAll(() -> {
             상태코드_200이_반환된다(response);
-            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
-        });
-    }
-
-    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 페이징을 통해 나누어 조회한다.")
-    @Test
-    void 카테고리를_등록하고_내가_등록한_카테고리를_페이징을_통해_나누어_조회한다() {
-        // given
-        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
-
-        // when
-        ExtractableResponse<Response> response
-                = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "", 0, 3);
-        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
-
-        // then
-        assertAll(() -> {
-            상태코드_200이_반환된다(response);
-            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesWithPageResponse.getCategories()).hasSize(3);
-        });
-    }
-
-    @DisplayName("카테고리를 등록하고 내가 등록한 카테고리를 제목과 페이징을 통해 나누어 조회한다.")
-    @Test
-    void 카테고리를_등록하고_내가_등록한_카테고리를_제목과_페이징을_통해_나누어_조회한다() {
-        // given
-        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        새로운_카테고리를_등록한다(accessToken, 공통_일정_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, BE_일정_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, FE_일정_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, 매트_아고라_생성_요청);
-        새로운_카테고리를_등록한다(accessToken, 후디_JPA_스터디_생성_요청);
-
-        // when
-        ExtractableResponse<Response> response
-                = 내가_등록한_카테고리를_제목과_페이징을_통해_조회한다(accessToken, "일", 0, 2);
-        CategoriesWithPageResponse categoriesWithPageResponse = response.as(CategoriesWithPageResponse.class);
-
-        // then
-        assertAll(() -> {
-            상태코드_200이_반환된다(response);
-            assertThat(categoriesWithPageResponse.getPage()).isEqualTo(0);
-            assertThat(categoriesWithPageResponse.getCategories()).hasSize(2);
+            assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }
 
@@ -190,7 +141,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> response = 내가_등록한_카테고리를_수정한다(accessToken, savedCategory.getId(), newCategoryName);
-        CategoryDetailResponse actual = id를_통해_카테고리를_가져온다(savedCategory.getId())
+        CategoryDetailResponse actual = id를_통해_카테고리를_조회한다(savedCategory.getId())
                 .as(CategoryDetailResponse.class);
 
         // then

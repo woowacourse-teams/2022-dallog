@@ -19,6 +19,10 @@ const deleteButtonStyle = ({ colors }: Theme) => css`
   color: ${colors.WHITE};
 `;
 
+const errorMessageStyle = ({ colors }: Theme) => css`
+  color: ${colors.RED_400};
+`;
+
 const headerStyle = css`
   font-size: 6rem;
 `;
@@ -137,6 +141,7 @@ const titleStyle = css`
 export {
   closeModalButtonStyle,
   deleteButtonStyle,
+  errorMessageStyle,
   forgiveButtonStyle,
   headerStyle,
   layoutStyle,

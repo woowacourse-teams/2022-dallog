@@ -60,7 +60,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
   });
 
   const categoryId = useControlledInput(
-    data?.data.find((category) => category.id === scheduleInfo.categoryId)?.name
+    String(data?.data.find((category) => category.id === scheduleInfo.categoryId)?.id)
   );
 
   const validationSchedule = useValidateSchedule({
@@ -91,7 +91,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
       }`,
       memo: validationSchedule.memo.inputValue,
       categoryId:
-        data?.data.find((category) => category.name === categoryId.inputValue)?.id ||
+        data?.data.find((category) => category.id === Number(categoryId.inputValue))?.id ||
         scheduleInfo.categoryId,
     };
 
@@ -104,7 +104,19 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
 
   const categories = data?.data
     .filter((category) => category.categoryType !== CATEGORY_TYPE.GOOGLE)
-    .map((category) => category.name);
+    .map((category) => {
+      return {
+        id: category.id,
+        name: category.name,
+      };
+    });
+
+  const selectTimes = TIMES.map((time) => {
+    return {
+      id: time,
+      name: time,
+    };
+  });
 
   return (
     <div css={modalStyle}>
@@ -146,7 +158,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.startTime.inputValue}
                 onChange={validationSchedule.startTime.onChangeValue}
                 cssProp={selectTimeStyle}
@@ -165,7 +177,7 @@ function ScheduleModifyModal({ scheduleInfo, closeModal }: ScheduleModifyModalPr
             />
             {!isAllDay && (
               <Select
-                options={TIMES}
+                options={selectTimes}
                 value={validationSchedule.endTime.inputValue}
                 onChange={validationSchedule.endTime.onChangeValue}
                 cssProp={selectTimeStyle}

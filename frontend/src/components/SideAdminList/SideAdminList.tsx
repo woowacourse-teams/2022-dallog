@@ -55,7 +55,7 @@ function SideAdminList({ categories }: SideAdminListProps) {
         </Button>
       </div>
 
-      <div css={contentStyle(isMyListOpen, categories.length)}>
+      <div css={contentStyle(theme, isMyListOpen, categories.length)}>
         {categories.map((el) => {
           return <SideItem key={el.category.id} subscription={el} />;
         })}

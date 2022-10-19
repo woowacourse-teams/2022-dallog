@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
@@ -30,8 +29,6 @@ import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 
 class CategoryRepositoryTest extends RepositoryTest {
 
@@ -42,14 +39,11 @@ class CategoryRepositoryTest extends RepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    @DisplayName("카테고리 이름과 타입과 페이징을 활용하여 해당하는 카테고리를 조회한다.")
+    @DisplayName("카테고리 제목과 타입을 통해 해당하는 카테고리를 조회한다.")
     @Test
-    void 카테고리_이름과_타입과_페이징을_활용하여_해당하는_카테고리를_조회한다() {
+    void 카테고리_제목과_타입을_통해_해당하는_카테고리를_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
@@ -67,13 +61,11 @@ class CategoryRepositoryTest extends RepositoryTest {
         Category 우아한테크코스_일정 = categoryRepository.save(우아한테크코스_일정(관리자));
         subscriptionRepository.save(색상1_구독(관리자, 우아한테크코스_일정));
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-
         // when
-        Slice<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "일", pageRequest);
+        List<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "일");
 
         // then
-        assertThat(actual.getContent()).hasSize(3)
+        assertThat(actual).hasSize(3)
                 .extracting(Category::getName)
                 .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
     }
@@ -92,13 +84,11 @@ class CategoryRepositoryTest extends RepositoryTest {
         Category 매트_아고라 = categoryRepository.save(매트_아고라(관리자));
         subscriptionRepository.save(색상1_구독(관리자, 매트_아고라));
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-
         // when
-        Slice<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "파랑", pageRequest);
+        List<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "파랑");
 
         // then
-        assertThat(actual.getContent()).hasSize(0);
+        assertThat(actual).hasSize(0);
     }
 
     @DisplayName("구독자수가 많은 순서로 정렬하여 반환한다.")
@@ -128,47 +118,12 @@ class CategoryRepositoryTest extends RepositoryTest {
         subscriptionRepository.save(색상1_구독(리버, BE_일정));
         subscriptionRepository.save(색상1_구독(후디, BE_일정));
 
-        PageRequest pageRequest = PageRequest.of(0, 10);
-
         // when
-        List<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "", pageRequest)
-                .getContent();
+        List<Category> actual = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, "");
 
         // then
         assertThat(actual).hasSize(3)
                 .containsExactlyInAnyOrder(공통_일정, BE_일정, FE_일정);
-    }
-
-    @DisplayName("특정 멤버가 생성한 카테고리를 카테고리 이름과 페이징을 통해 조회한다.")
-    @Test
-    void 특정_멤버가_생성한_카테고리를_카테고리_이름과_페이징을_통해_조회한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-        categoryRepository.save(FE_일정(관리자));
-        categoryRepository.save(매트_아고라(관리자));
-        categoryRepository.save(후디_JPA_스터디(관리자));
-
-        Member 후디 = memberRepository.save(후디());
-        categoryRepository.save(후디_JPA_스터디(후디));
-
-        PageRequest pageRequest = PageRequest.of(0, 8);
-
-        // when
-        Slice<Category> categories = categoryRepository.findByMemberIdAndNameContaining(관리자.getId(), "일", pageRequest);
-
-        // then
-        assertAll(() -> {
-            assertThat(categories.getContent()).hasSize(3)
-                    .extracting(Category::getName)
-                    .containsExactlyInAnyOrder(공통_일정_이름, BE_일정_이름, FE_일정_이름);
-            assertThat(
-                    categories.getContent().stream()
-                            .map(Category::getCreatedAt)
-                            .allMatch(Objects::nonNull))
-                    .isTrue();
-        });
     }
 
     @DisplayName("member id와 categoryType을 기반으로 조회한다.")
@@ -253,13 +208,11 @@ class CategoryRepositoryTest extends RepositoryTest {
         categoryRepository.save(공통_일정(관리자));
         categoryRepository.save(BE_일정(관리자));
 
-        PageRequest pageRequest = PageRequest.of(0, 2);
-
         // when
         categoryRepository.deleteByMemberId(관리자.getId());
 
         // then
-        assertThat(categoryRepository.findByMemberIdAndNameContaining(관리자.getId(), "", pageRequest))
+        assertThat(categoryRepository.findByMemberId(관리자.getId()))
                 .hasSize(0);
     }
 }

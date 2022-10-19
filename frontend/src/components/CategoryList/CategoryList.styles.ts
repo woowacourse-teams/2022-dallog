@@ -22,13 +22,9 @@ const categoryTableHeaderStyle = ({ flex, colors }: Theme) => css`
   font-weight: 700;
 `;
 
-const intersectTargetStyle = css`
-  height: 1rem;
-`;
-
 const itemStyle = css`
   flex: 1 1 0;
   text-align: center;
 `;
 
-export { categoryTableHeaderStyle, categoryTableStyle, intersectTargetStyle, itemStyle };
+export { categoryTableHeaderStyle, categoryTableStyle, itemStyle };

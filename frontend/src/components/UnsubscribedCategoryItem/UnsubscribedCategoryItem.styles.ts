@@ -20,7 +20,11 @@ const categoryItem = ({ colors, flex }: Theme) => css`
 
 const item = css`
   flex: 1 1 0;
+
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const subscribeButton = ({ colors }: Theme) => css`

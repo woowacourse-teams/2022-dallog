@@ -7,6 +7,7 @@ import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,8 @@ public class SubscriptionController {
     }
 
     @GetMapping("/subscriptions")
-    public ResponseEntity<SubscriptionsResponse> findByMemberId(@AuthenticationPrincipal final LoginMember loginMember) {
+    public ResponseEntity<SubscriptionsResponse> findByMemberId(
+            @AuthenticationPrincipal final LoginMember loginMember) {
         SubscriptionsResponse response = subscriptionService.findByMemberId(loginMember.getId());
         return ResponseEntity.ok(response);
     }
@@ -45,7 +47,7 @@ public class SubscriptionController {
     @PatchMapping("/subscriptions/{subscriptionId}")
     public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long subscriptionId,
-                                       @RequestBody final SubscriptionUpdateRequest request) {
+                                       @Valid @RequestBody final SubscriptionUpdateRequest request) {
         subscriptionService.update(subscriptionId, loginMember.getId(), request);
         return ResponseEntity.noContent().build();
     }

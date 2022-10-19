@@ -14,7 +14,6 @@ import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
-import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -32,7 +31,6 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,19 +97,9 @@ public class CategoryService {
         return response;
     }
 
-    public CategoriesWithPageResponse findNormalByName(final String name, final Pageable pageable) {
-        List<Category> categories = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, name, pageable)
-                .getContent();
-
-        return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
-    }
-
-    public CategoriesWithPageResponse findMyCategories(final Long memberId, final String name,
-                                                       final Pageable pageable) {
-        List<Category> categories
-                = categoryRepository.findByMemberIdAndNameContaining(memberId, name, pageable).getContent();
-
-        return new CategoriesWithPageResponse(pageable.getPageNumber(), categories);
+    public CategoriesResponse findNormalByName(final String name) {
+        List<Category> categories = categoryRepository.findByCategoryTypeAndNameContaining(NORMAL, name);
+        return new CategoriesResponse(categories);
     }
 
     // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함

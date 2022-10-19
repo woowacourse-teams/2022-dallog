@@ -1,16 +1,10 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import {
-  QueryKey,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryOptions,
-} from 'react-query';
+import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useSnackBar from '@/hooks/useSnackBar';
+
 import {
-  CategoriesGetResponseType,
   CategoryRoleType,
   CategorySubscriberType,
   CategoryType,
@@ -19,7 +13,8 @@ import {
 
 import { userState } from '@/recoil/atoms';
 
-import { API, CACHE_KEY } from '@/constants/api';
+import { CACHE_KEY } from '@/constants/api';
+import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
 
@@ -81,6 +76,7 @@ interface UsePostCategoryParams {
 function useDeleteCategory({ categoryId, onSuccess }: UseDeleteCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation(() => categoryApi.delete(accessToken, categoryId), {
     onSuccess: () => {
@@ -88,6 +84,7 @@ function useDeleteCategory({ categoryId, onSuccess }: UseDeleteCategoryParams) {
       queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
+      openSnackBar(SUCCESS_MESSAGE.DELETE_CATEGORY);
       onSuccess && onSuccess();
     },
   });
@@ -99,7 +96,7 @@ function useGetAdminCategories({ enabled }: UseGetAdminCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    [CACHE_KEY.ADMIN_CATEGORIES],
+    CACHE_KEY.ADMIN_CATEGORIES,
     () => categoryApi.getAdmin(accessToken),
     {
       enabled,
@@ -113,7 +110,7 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
-    [CACHE_KEY.EDITABLE_CATEGORIES],
+    CACHE_KEY.EDITABLE_CATEGORIES,
     () => categoryApi.getEditable(accessToken),
     {
       enabled,
@@ -124,22 +121,12 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
 }
 
 function useGetEntireCategories({ keyword }: UseGetEntireCategoriesParams) {
-  const { error, data, fetchNextPage, hasNextPage } = useInfiniteQuery<
-    AxiosResponse<CategoriesGetResponseType>,
-    AxiosError
-  >(
+  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     [CACHE_KEY.CATEGORIES, keyword],
-    ({ pageParam = 0 }) => categoryApi.getEntire(keyword, pageParam, API.CATEGORY_GET_SIZE),
-    {
-      getNextPageParam: ({ data }) => {
-        if (data.categories.length > 0) {
-          return data.page + 1;
-        }
-      },
-    }
+    () => categoryApi.getEntire(keyword)
   );
 
-  return { error, data, fetchNextPage, hasNextPage };
+  return { data };
 }
 
 function useGetMyCategories() {
@@ -193,6 +180,7 @@ function useGetSubscribers({ categoryId }: UseGetSubscribersParams) {
 function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNameParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<Pick<CategoryType, 'name'>>,
@@ -205,6 +193,7 @@ function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNamePar
       queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
 
+      openSnackBar(SUCCESS_MESSAGE.PATCH_CATEGORY_NAME);
       onSuccess && onSuccess();
     },
   });
@@ -215,6 +204,7 @@ function usePatchCategoryName({ categoryId, onSuccess }: UsePatchCategoryNamePar
 function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCategoryRoleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<{ categoryRoleType: CategoryRoleType }>,
@@ -223,9 +213,11 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
     unknown
   >((body) => categoryApi.patchRole(accessToken, categoryId, memberId, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIBERS]);
-      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIBERS);
+      queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+
+      openSnackBar(SUCCESS_MESSAGE.PATCH_CATEGORY_ROLE);
       onSuccess && onSuccess();
     },
   });
@@ -236,6 +228,7 @@ function usePatchCategoryRole({ categoryId, memberId, onSuccess }: UsePatchCateg
 function usePostCategory({ onSuccess }: UsePostCategoryParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<CategoryType>,
@@ -244,11 +237,12 @@ function usePostCategory({ onSuccess }: UsePostCategoryParams) {
     unknown
   >((body) => categoryApi.post(accessToken, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.MY_CATEGORIES]);
-      queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
-      queryClient.invalidateQueries([CACHE_KEY.EDITABLE_CATEGORIES]);
+      queryClient.invalidateQueries(CACHE_KEY.CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.MY_CATEGORIES);
+      queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.EDITABLE_CATEGORIES);
 
+      openSnackBar(SUCCESS_MESSAGE.POST_CATEGORY);
       onSuccess && onSuccess();
     },
   });

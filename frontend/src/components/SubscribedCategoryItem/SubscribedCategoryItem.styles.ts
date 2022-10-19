@@ -20,7 +20,11 @@ const categoryItem = ({ colors, flex }: Theme) => css`
 
 const item = css`
   flex: 1 1 0;
+
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const unsubscribeButton = ({ colors }: Theme) => css`
@@ -40,27 +44,6 @@ const unsubscribeButton = ({ colors }: Theme) => css`
   &:hover {
     filter: none;
   }
-
-  &:hover span {
-    visibility: visible;
-  }
-`;
-
-const menuTitle = ({ colors }: Theme) => css`
-  visibility: hidden;
-  position: absolute;
-  top: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-
-  padding: 2rem 3rem;
-
-  background: ${colors.GRAY_700}ee;
-
-  font-size: 3rem;
-  font-weight: normal;
-  color: ${colors.WHITE};
-  white-space: nowrap;
 `;
 
 const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
@@ -94,4 +77,4 @@ const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
   }
 `;
 
-export { categoryItem, detailStyle, item, menuTitle, unsubscribeButton };
+export { categoryItem, detailStyle, item, unsubscribeButton };

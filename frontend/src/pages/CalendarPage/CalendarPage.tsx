@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
@@ -54,9 +54,9 @@ import {
 
 function CalendarPage() {
   const theme = useTheme();
-
   const dateRef = useRef<HTMLDivElement>(null);
 
+  const [maxScheduleCount, setMaxScheduleCount] = useState(0);
   const [hoveringId, setHoveringId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
@@ -84,6 +84,16 @@ function CalendarPage() {
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
+  useLayoutEffect(() => {
+    if (!(dateRef.current instanceof HTMLDivElement)) return;
+
+    setMaxScheduleCount(
+      Math.floor(
+        (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
+      )
+    );
+  }, [startDateTime]);
+
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
 
@@ -106,21 +116,21 @@ function CalendarPage() {
       <PageLayout>
         <div css={calendarPage}>
           <div css={calendarHeader}>
-            {currentYear}년 {currentMonth}월
+            {`${currentYear}년 ${currentMonth}월`}
             <div css={waitingNavStyle}>
               <div css={spinnerStyle}>
                 <Spinner size={4} />
                 일정을 가져오고 있습니다.
               </div>
               <div css={monthPicker}>
-                <Button cssProp={navButton} onClick={moveToBeforeMonth}>
+                <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달">
                   <MdKeyboardArrowLeft />
                   <span css={navButtonTitle}>전 달</span>
                 </Button>
-                <Button cssProp={todayButton} onClick={moveToToday}>
+                <Button cssProp={todayButton} onClick={moveToToday} aria-label="이번 달">
                   오늘
                 </Button>
-                <Button cssProp={navButton} onClick={moveToNextMonth}>
+                <Button cssProp={navButton} onClick={moveToNextMonth} aria-label="다음 달">
                   <MdKeyboardArrowRight />
                   <span css={navButtonTitle}>다음 달</span>
                 </Button>
@@ -139,12 +149,8 @@ function CalendarPage() {
               const { month, date, day } = extractDateTime(dateTime);
 
               return (
-                <div key={dateTime}>
-                  <div
-                    css={dateBorder(theme, day)}
-                    onClick={(e) => handleClickDate(e, dateTime)}
-                    ref={dateRef}
-                  >
+                <div key={dateTime} ref={dateRef}>
+                  <div css={dateBorder(theme, day)} onClick={(e) => handleClickDate(e, dateTime)}>
                     <span
                       css={dateText(theme, day, currentMonth === month, dateTime === getToday())}
                     >
@@ -169,13 +175,6 @@ function CalendarPage() {
   const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
   const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);
   const fewHourSchedulesWithPriority = getSingleSchedulesWithPriority(data.data.fewHours);
-
-  const MAX_SCHEDULE_COUNT =
-    dateRef.current !== null
-      ? Math.floor(
-          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
-        )
-      : CALENDAR.MAX_SCHEDULE_COUNT;
 
   const onMouseEnter = (scheduleId: string) => {
     setHoveringId(scheduleId);
@@ -246,7 +245,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           currentDate === endDate
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -256,7 +255,7 @@ function CalendarPage() {
                         onMouseLeave={onMouseLeave}
                       >
                         {(startDate === currentDate || currentDay === 0) &&
-                          (schedule.title || CALENDAR.EMPTY_TITLE)}
+                          (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
                       </div>
                     );
                   })}
@@ -273,7 +272,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           true
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -282,7 +281,7 @@ function CalendarPage() {
                         }
                         onMouseLeave={onMouseLeave}
                       >
-                        {schedule.title || CALENDAR.EMPTY_TITLE}
+                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                       </div>
                     );
                   })}
@@ -300,7 +299,7 @@ function CalendarPage() {
                           priority,
                           schedule.colorCode,
                           hoveringId === schedule.id,
-                          MAX_SCHEDULE_COUNT,
+                          maxScheduleCount,
                           false
                         )}
                         onMouseEnter={() => onMouseEnter(schedule.id)}
@@ -309,13 +308,13 @@ function CalendarPage() {
                         }
                         onMouseLeave={onMouseLeave}
                       >
-                        {schedule.title || CALENDAR.EMPTY_TITLE}
+                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                       </div>
                     );
                   })}
 
                   {calendarWithPriority[getISODateString(dateTime)].findIndex((el) => !el) + 1 >
-                    MAX_SCHEDULE_COUNT && (
+                    maxScheduleCount && (
                     <span
                       css={moreStyle}
                       onClick={(e) =>

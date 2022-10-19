@@ -1,6 +1,10 @@
 import { css, Theme } from '@emotion/react';
 
-const contentStyle = css`
+const contentStyle = ({ flex }: Theme) => css`
+  ${flex.column};
+
+  gap: 3rem;
+
   width: 100%;
 
   text-align: center;
@@ -18,11 +22,6 @@ const imageStyle = css`
 `;
 
 const inputStyle = {
-  div: css`
-    height: 3rem;
-
-    font-size: 3rem;
-  `,
   input: css`
     height: 3rem;
 

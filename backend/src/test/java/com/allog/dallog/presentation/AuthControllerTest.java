@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.application.OAuthUri;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import com.allog.dallog.presentation.auth.AuthController;
@@ -41,11 +42,14 @@ class AuthControllerTest extends ControllerTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private OAuthUri oAuthUri;
+
     @DisplayName("OAuth 소셜 로그인을 위한 링크와 상태코드 200을 반환한다.")
     @Test
     void OAuth_소셜_로그인을_위한_링크와_상태코드_200을_반환한다() throws Exception {
         // given
-        given(authService.generateGoogleLink(any())).willReturn(OAuth_로그인_링크);
+        given(oAuthUri.generate(any())).willReturn(OAuth_로그인_링크);
 
         // when & then
         mockMvc.perform(get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", GOOGLE_PROVIDER,

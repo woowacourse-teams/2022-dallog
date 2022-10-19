@@ -46,7 +46,6 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
-import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
@@ -161,26 +160,19 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 생성된_카테고리를_전부_조회한다() throws Exception {
         // given
-        int page = 0;
-        int size = 10;
-
         List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()), 후디_JPA_스터디(후디()), 매트_아고라(매트()));
-        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
+        given(categoryService.findNormalByName(any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories?page={page}&size={size}", page, size)
+        mockMvc.perform(get("/api/categories")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andDo(document("category/findAllByName/allByNoName",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
-                                )
+                                preprocessResponse(prettyPrint())
                         )
                 )
                 .andExpect(status().isOk());
@@ -190,57 +182,21 @@ class CategoryControllerTest extends ControllerTest {
     @Test
     void 카테고리_제목을_활용하여_조회한다() throws Exception {
         // given
-        int page = 0;
-        int size = 10;
-
         List<Category> 일정_목록 = List.of(BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
-        given(categoryService.findNormalByName(any(), any())).willReturn(categoriesWithPageResponse);
+        CategoriesResponse categoriesResponse = new CategoriesResponse(일정_목록);
+        given(categoryService.findNormalByName(any())).willReturn(categoriesResponse);
 
         // when & then
-        mockMvc.perform(get("/api/categories?name={name}&page={page}&size={size}", "E", page, size)
+        mockMvc.perform(get("/api/categories?name={name}", "E")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
-                .andDo(document("category/findAllByName/fileterByName",
+                .andDo(document("category/findAllByName/filterByName",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
-                                        parameterWithName("name").description("카테고리 검색어"),
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
-                                )
-                        )
-                )
-                .andExpect(status().isOk());
-    }
-
-    @DisplayName("내 카테고리를 전부 조회한다.")
-    @Test
-    void 내_카테고리를_전부_조회한다() throws Exception {
-        // given
-        int page = 0;
-        int size = 10;
-
-        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
-
-        // when & then
-        mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "", page, size)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                )
-                .andDo(print())
-                .andDo(document("category/findMineByName/allByNoName",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("name").description("카테고리 검색어"),
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
+                                        parameterWithName("name").description("카테고리 검색어")
                                 )
                         )
                 )
@@ -288,37 +244,6 @@ class CategoryControllerTest extends ControllerTest {
                 .andDo(document("category/findAdminCategories",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint())
-                        )
-                )
-                .andExpect(status().isOk());
-    }
-
-    @DisplayName("내 카테고리를 제목을 활용하여 조회한다.")
-    @Test
-    void 내_카테고리를_제목을_활용하여_조회한다() throws Exception {
-        // given
-        int page = 0;
-        int size = 10;
-
-        List<Category> 일정_목록 = List.of(공통_일정(관리자()), BE_일정(관리자()), FE_일정(관리자()));
-        CategoriesWithPageResponse categoriesWithPageResponse = new CategoriesWithPageResponse(page, 일정_목록);
-        given(categoryService.findMyCategories(any(), any(), any())).willReturn(categoriesWithPageResponse);
-
-        // when & then
-        mockMvc.perform(get("/api/categories/me?name={name}&page={page}&size={size}", "E", page, size)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                )
-                .andDo(print())
-                .andDo(document("category/findMineByName/fileterByName",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestParameters(
-                                        parameterWithName("name").description("카테고리 검색어"),
-                                        parameterWithName("page").description("페이지 번호"),
-                                        parameterWithName("size").description("페이지 크기")
-                                )
                         )
                 )
                 .andExpect(status().isOk());
@@ -605,7 +530,7 @@ class CategoryControllerTest extends ControllerTest {
         mockMvc.perform(patch("/api/categories/{categoryId}/subscribers/{memberId}/role", categoryId, memberId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(역할_수정_요청))
+                        .content(objectMapper.writeValueAsBytes(역할_수정_요청))
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                 )
                 .andDo(print())

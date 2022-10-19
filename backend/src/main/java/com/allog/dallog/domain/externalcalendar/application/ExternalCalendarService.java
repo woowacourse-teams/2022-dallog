@@ -5,9 +5,7 @@ import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly = true)
 @Service
 public class ExternalCalendarService {
 
@@ -25,8 +23,7 @@ public class ExternalCalendarService {
     public ExternalCalendarsResponse findByMemberId(final Long memberId) {
         OAuthToken oAuthToken = oAuthTokenRepository.getByMemberId(memberId);
 
-        String oAuthAccessToken = oAuthClient.getAccessToken(oAuthToken.getRefreshToken())
-                .getAccessToken();
+        String oAuthAccessToken = oAuthClient.getAccessToken(oAuthToken.getRefreshToken()).getAccessToken();
 
         return new ExternalCalendarsResponse(externalCalendarClient.getExternalCalendars(oAuthAccessToken));
     }

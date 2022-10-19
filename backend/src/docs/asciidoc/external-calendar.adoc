@@ -4,11 +4,11 @@
 
 ==== HTTP Request
 
-include::{snippets}/externalCalendar/getExternalCalendar/http-request.adoc[]
+include::{snippets}/externalCalendar/get/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/externalCalendar/getExternalCalendar/http-response.adoc[]
+include::{snippets}/externalCalendar/get/http-response.adoc[]
 
 === 자신의 외부 캘린더 저장
 
@@ -28,4 +28,4 @@ include::{snippets}/externalCalendar/save/http-response.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/externalCalendar/save/failByDuplicate/http-response.adoc[]
+include::{snippets}/externalCalendar/duplicated-save/http-response.adoc[]

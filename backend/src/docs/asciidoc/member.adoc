@@ -33,13 +33,3 @@ include::{snippets}/member/update/request-fields.adoc[]
 ==== HTTP Response
 
 include::{snippets}/member/update/http-response.adoc[]
-
-=== 회원 탈퇴
-
-==== HTTP Request
-
-include::{snippets}/member/delete/http-request.adoc[]
-
-==== HTTP Response
-
-include::{snippets}/member/delete/http-response.adoc[]

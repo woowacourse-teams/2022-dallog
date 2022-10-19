@@ -36,6 +36,9 @@ function useDeleteSubscriptions({ subscriptionId, onSuccess }: UseDeleteSubscrip
   const { mutate } = useMutation(() => subscriptionApi.delete(accessToken, subscriptionId), {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+      queryClient.invalidateQueries(CACHE_KEY.CATEGORY);
+
       onSuccess && onSuccess();
     },
   });
@@ -47,7 +50,7 @@ function useGetSubscriptions({ enabled }: UseGetSubscriptionsParams) {
   const { accessToken } = useRecoilValue(userState);
 
   const { isLoading, error, data } = useQuery<AxiosResponse<SubscriptionType[]>, AxiosError>(
-    [CACHE_KEY.SUBSCRIPTIONS],
+    CACHE_KEY.SUBSCRIPTIONS,
     () => subscriptionApi.get(accessToken),
     {
       enabled,
@@ -66,8 +69,9 @@ function usePatchSubscription({ subscriptionId, onSuccess }: UsePatchSubscriptio
       subscriptionApi.patch(accessToken, subscriptionId, body),
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries([CACHE_KEY.SUBSCRIPTIONS]);
-        await queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+        await queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+        await queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
         onSuccess && onSuccess();
       },
     }
@@ -88,6 +92,9 @@ function usePostSubscription({ categoryId, onSuccess }: UsePostSubscriptionParam
   >((body) => subscriptionApi.post(accessToken, categoryId, body), {
     onSuccess: () => {
       queryClient.invalidateQueries(CACHE_KEY.SUBSCRIPTIONS);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+      queryClient.invalidateQueries([CACHE_KEY.CATEGORY, categoryId]);
+
       onSuccess && onSuccess();
     },
   });

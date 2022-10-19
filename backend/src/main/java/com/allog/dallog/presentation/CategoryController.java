@@ -5,7 +5,6 @@ import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
-import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
@@ -15,7 +14,6 @@ import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,23 +48,13 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoriesWithPageResponse> findNormalByName(
-            @RequestParam(defaultValue = "") final String name,
-            final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
+    public ResponseEntity<CategoriesResponse> findNormalByName(@RequestParam(defaultValue = "") final String name) {
+        return ResponseEntity.ok(categoryService.findNormalByName(name));
     }
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDetailResponse> findDetailCategoryById(@PathVariable final Long categoryId) {
         return ResponseEntity.ok(categoryService.findDetailCategoryById(categoryId));
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<CategoriesWithPageResponse> findMyCategories(
-            @AuthenticationPrincipal final LoginMember loginMember,
-            @RequestParam(defaultValue = "") final String name,
-            final Pageable pageable) {
-        return ResponseEntity.ok(categoryService.findMyCategories(loginMember.getId(), name, pageable));
     }
 
     @GetMapping("/me/schedule-editable") // 일정 추가, 수정 모달의 카테고리 목록에 사용됨
@@ -84,7 +72,7 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseEntity<Void> update(@AuthenticationPrincipal final LoginMember loginMember,
                                        @PathVariable final Long categoryId,
-                                       @RequestBody final CategoryUpdateRequest request) {
+                                       @Valid @RequestBody final CategoryUpdateRequest request) {
         categoryService.update(loginMember.getId(), categoryId, request);
         return ResponseEntity.noContent().build();
     }

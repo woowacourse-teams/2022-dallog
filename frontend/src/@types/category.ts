@@ -17,19 +17,8 @@ interface CategorySubscriberType {
   categoryRoleType: CategoryRoleType;
 }
 
-interface CategoriesGetResponseType {
-  page: number;
-  categories: CategoryType[];
-}
-
 interface SingleCategoryType extends CategoryType {
   subscriberCount: number;
 }
 
-export {
-  CategoryType,
-  CategoryRoleType,
-  CategorySubscriberType,
-  CategoriesGetResponseType,
-  SingleCategoryType,
-};
+export { CategoryType, CategoryRoleType, CategorySubscriberType, SingleCategoryType };

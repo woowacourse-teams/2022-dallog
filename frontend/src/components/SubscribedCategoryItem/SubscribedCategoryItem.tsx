@@ -1,17 +1,14 @@
 import { useTheme } from '@emotion/react';
-import { useRecoilValue } from 'recoil';
 
-import { useGetSingleCategory } from '@/hooks/@queries/category';
+import { useGetEditableCategories, useGetSingleCategory } from '@/hooks/@queries/category';
 import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
 import useHoverCategoryItem from '@/hooks/useHoverCategoryItem';
 
 import { CategoryType } from '@/@types/category';
 
-import { userState } from '@/recoil/atoms';
-
 import Button from '@/components/@common/Button/Button';
 
-import { CONFIRM_MESSAGE, TOOLTIP_MESSAGE } from '@/constants/message';
+import { CONFIRM_MESSAGE } from '@/constants/message';
 
 import { getISODateString } from '@/utils/date';
 
@@ -19,7 +16,6 @@ import {
   categoryItem,
   detailStyle,
   item,
-  menuTitle,
   unsubscribeButton,
 } from './SubscribedCategoryItem.styles';
 
@@ -36,14 +32,14 @@ function SubscribedCategoryItem({
 }: SubscribedCategoryItemProps) {
   const theme = useTheme();
 
-  const user = useRecoilValue(userState);
-
   const { hoveringPosY, handleHoverCategoryItem } = useHoverCategoryItem();
 
-  const { data } = useGetSingleCategory({
+  const { data: getSingleCategoryResponse } = useGetSingleCategory({
     categoryId: category.id,
     enabled: !!hoveringPosY,
   });
+
+  const { data: getEditableCategoriesResponse } = useGetEditableCategories({});
 
   const { mutate } = useDeleteSubscriptions({ subscriptionId });
 
@@ -53,7 +49,9 @@ function SubscribedCategoryItem({
     }
   };
 
-  const canUnsubscribeCategory = category.creator.id !== user.id;
+  const canUnsubscribeCategory = !getEditableCategoriesResponse?.data.some(
+    (el) => el.id === category.id
+  );
 
   return (
     <div
@@ -70,19 +68,14 @@ function SubscribedCategoryItem({
           onClick={handleClickUnsubscribeButton}
           disabled={!canUnsubscribeCategory}
         >
-          <p>구독중</p>
-          {!canUnsubscribeCategory ? (
-            <span css={menuTitle}>{TOOLTIP_MESSAGE.CANNOT_UNSUBSCRIBE_MINE}</span>
-          ) : (
-            <></>
-          )}
+          구독중
         </Button>
       </div>
       {hoveringPosY !== null && (
         <div css={detailStyle(theme, hoveringPosY < innerHeight / 2)}>
-          {`구독자 ${data?.data.subscriberCount ?? '-'}명 • 개설일 ${getISODateString(
-            category.createdAt
-          )}`}
+          {`구독자 ${
+            getSingleCategoryResponse?.data.subscriberCount ?? '-'
+          }명 • 개설일 ${getISODateString(category.createdAt)}`}
         </div>
       )}
     </div>

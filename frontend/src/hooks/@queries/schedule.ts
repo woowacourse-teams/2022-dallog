@@ -2,11 +2,14 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
+import useSnackBar from '@/hooks/useSnackBar';
+
 import { ScheduleResponseType, ScheduleType } from '@/@types/schedule';
 
 import { userState } from '@/recoil/atoms';
 
 import { CACHE_KEY } from '@/constants/api';
+import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import scheduleApi from '@/api/schedule';
 
@@ -33,12 +36,15 @@ interface UsePostScheduleParams {
 function useDeleteSchedule({ scheduleId, onSuccess }: UseDeleteScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<AxiosResponse, AxiosError>(
     () => scheduleApi.delete(accessToken, scheduleId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+        queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
+        openSnackBar(SUCCESS_MESSAGE.DELETE_SCHEDULE);
         onSuccess && onSuccess();
       },
     }
@@ -64,6 +70,7 @@ function useGetSchedules({ startDateTime, endDateTime }: UseGetSchedulesParams) 
 function usePatchSchedule({ scheduleId, onSuccess }: UsePatchScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse,
@@ -72,7 +79,9 @@ function usePatchSchedule({ scheduleId, onSuccess }: UsePatchScheduleParams) {
     unknown
   >(CACHE_KEY.SCHEDULE, (body) => scheduleApi.patch(accessToken, scheduleId, body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
+      openSnackBar(SUCCESS_MESSAGE.PATCH_SCHEDULE);
       onSuccess && onSuccess();
     },
   });
@@ -83,6 +92,7 @@ function usePatchSchedule({ scheduleId, onSuccess }: UsePatchScheduleParams) {
 function usePostSchedule({ categoryId, onSuccess }: UsePostScheduleParams) {
   const { accessToken } = useRecoilValue(userState);
   const queryClient = useQueryClient();
+  const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<
     AxiosResponse<{ schedules: ScheduleType[] }>,
@@ -91,7 +101,9 @@ function usePostSchedule({ categoryId, onSuccess }: UsePostScheduleParams) {
     unknown
   >((body) => scheduleApi.post(accessToken, Number(categoryId), body), {
     onSuccess: () => {
-      queryClient.invalidateQueries([CACHE_KEY.SCHEDULES]);
+      queryClient.invalidateQueries(CACHE_KEY.SCHEDULES);
+
+      openSnackBar(SUCCESS_MESSAGE.POST_SCHEDULE);
       onSuccess && onSuccess();
     },
   });

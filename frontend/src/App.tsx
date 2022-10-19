@@ -7,18 +7,17 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import useSnackBar from '@/hooks/useSnackBar';
 
 import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
+import NavBar from '@/components/NavBar/NavBar';
+import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
+import SnackBar from '@/components/SnackBar/SnackBar';
+import CategoryPage from '@/pages/CategoryPage/CategoryPage';
+import MainPage from '@/pages/MainPage/MainPage';
 
 import { PATH } from '@/constants';
+import { ERROR_MESSAGE } from '@/constants/message';
 
-import { ERROR_MESSAGE } from './constants/message';
-
-const NavBar = lazy(() => import('@/components/NavBar/NavBar'));
-const ProtectRoute = lazy(() => import('@/components/ProtectRoute/ProtectRoute'));
-const SideBar = lazy(() => import('@/components/SideBar/SideBar'));
-const SnackBar = lazy(() => import('@/components/SnackBar/SnackBar'));
 const AuthPage = lazy(() => import('@/pages/AuthPage/AuthPage'));
-const CategoryPage = lazy(() => import('@/pages/CategoryPage/CategoryPage'));
-const MainPage = lazy(() => import('@/pages/MainPage/MainPage'));
+const SideBar = lazy(() => import('@/components/SideBar/SideBar'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage/PrivacyPolicyPage'));
 
@@ -48,8 +47,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <Router>
+      <Router>
+        <ErrorBoundary>
           <Suspense fallback={<></>}>
             <NavBar />
             <SideBar />
@@ -64,8 +63,8 @@ function App() {
             </Routes>
           </Suspense>
           <SnackBar />
-        </Router>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </Router>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

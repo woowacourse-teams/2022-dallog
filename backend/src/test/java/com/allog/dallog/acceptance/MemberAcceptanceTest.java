@@ -64,17 +64,4 @@ public class MemberAcceptanceTest extends AcceptanceTest {
         // then
         상태코드_204가_반환된다(response);
     }
-
-    @DisplayName("등록된 회원이 성공적으로 회원 탈퇴하면 상태코드 204를 반환한다.")
-    @Test
-    void 등록된_회원이_성공적으로_회원_탈퇴하면_상태코드_204를_반환한다() {
-        // given
-        String accessToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-
-        // when
-        ExtractableResponse<Response> response = 회원_탈퇴_한다(accessToken);
-
-        // then
-        상태코드_204가_반환된다(response);
-    }
 }
