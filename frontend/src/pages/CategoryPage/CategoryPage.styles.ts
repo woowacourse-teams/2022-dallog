@@ -43,6 +43,7 @@ const searchFormStyle = css`
 
 const searchButtonStyle = css`
   position: absolute;
+  z-index: 10;
 
   top: 50%;
   transform: translateY(-50%);
