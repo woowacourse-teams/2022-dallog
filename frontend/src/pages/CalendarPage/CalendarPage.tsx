@@ -92,7 +92,7 @@ function CalendarPage() {
         (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
       )
     );
-  }, [dateRef.current]);
+  }, [startDateTime]);
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
@@ -149,12 +149,8 @@ function CalendarPage() {
               const { month, date, day } = extractDateTime(dateTime);
 
               return (
-                <div key={dateTime}>
-                  <div
-                    css={dateBorder(theme, day)}
-                    onClick={(e) => handleClickDate(e, dateTime)}
-                    ref={dateRef}
-                  >
+                <div key={dateTime} ref={dateRef}>
+                  <div css={dateBorder(theme, day)} onClick={(e) => handleClickDate(e, dateTime)}>
                     <span
                       css={dateText(theme, day, currentMonth === month, dateTime === getToday())}
                     >
