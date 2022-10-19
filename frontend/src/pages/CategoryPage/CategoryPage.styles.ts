@@ -84,7 +84,7 @@ const calendarStyle = css`
   width: 100%;
 `;
 
-const alertStyle = ({ colors }: Theme) => css`
+const hintStyle = ({ colors }: Theme) => css`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -332,7 +332,6 @@ const moreStyle = ({ colors }: Theme) => css`
 `;
 
 export {
-  alertStyle,
   buttonStyle,
   calendarGridStyle,
   calendarHeaderStyle,
@@ -345,6 +344,7 @@ export {
   dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
+  hintStyle,
   itemWithBackgroundStyle,
   itemWithoutBackgroundStyle,
   monthPickerStyle,

@@ -33,7 +33,6 @@ import {
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdSearch } from 'react-icons/md';
 
 import {
-  alertStyle,
   buttonStyle,
   calendarGridStyle,
   calendarHeaderStyle,
@@ -46,6 +45,7 @@ import {
   dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
+  hintStyle,
   itemWithBackgroundStyle,
   itemWithoutBackgroundStyle,
   monthPickerStyle,
@@ -142,7 +142,7 @@ function CategoryPage() {
             </Suspense>
           </div>
           <div css={calendarStyle}>
-            {!category.id && <div css={alertStyle}>클릭한 카테고리의 일정을 확인할 수 있어요</div>}
+            {!category.id && <div css={hintStyle}>클릭한 카테고리의 일정을 확인할 수 있어요</div>}
             <div css={calendarHeaderStyle}>
               {`${currentYear}년 ${currentMonth}월`}
               <div css={waitingNavStyle}>
