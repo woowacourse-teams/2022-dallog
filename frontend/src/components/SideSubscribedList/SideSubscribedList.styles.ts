@@ -35,11 +35,13 @@ const headerStyle = ({ flex }: Theme) => css`
 const contentStyle = ({ flex }: Theme, isListOpen: boolean, listLength: number) => css`
   ${flex.column};
 
+  justify-content: flex-start;
+  align-items: flex-start;
   gap: 2rem;
   overflow: hidden;
 
   width: 100%;
-  height: ${isListOpen ? `${9 * (listLength + 1)}rem` : 0};
+  height: ${isListOpen ? `${9 * listLength}rem` : 0};
   margin-bottom: 5rem;
 
   transition: height 0.3s ease-in-out;

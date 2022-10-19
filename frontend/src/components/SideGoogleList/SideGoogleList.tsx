@@ -53,7 +53,9 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
           {isGoogleListOpen ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
         </Button>
       </div>
-      <div css={contentStyle(theme, isGoogleListOpen, categories.length)}>
+      <div
+        css={contentStyle(theme, isGoogleListOpen, categories.length === 0 ? 1 : categories.length)}
+      >
         {categories.map((el) => {
           return <SideItem key={el.category.id} subscription={el} />;
         })}
