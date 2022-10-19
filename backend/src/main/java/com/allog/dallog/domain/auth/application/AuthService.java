@@ -8,7 +8,6 @@ import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.category.domain.Category;
@@ -35,45 +34,21 @@ public class AuthService {
     private final CategoryRoleRepository categoryRoleRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
-    private final OAuthUri oAuthUri;
-    private final OAuthClient oAuthClient;
     private final ColorPicker colorPicker;
     private final TokenCreator tokenCreator;
 
     public AuthService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
                        final CategoryRoleRepository categoryRoleRepository,
                        final SubscriptionRepository subscriptionRepository,
-                       final OAuthTokenRepository oAuthTokenRepository, final OAuthUri oAuthUri,
-                       final OAuthClient oAuthClient, final ColorPicker colorPicker,
+                       final OAuthTokenRepository oAuthTokenRepository, final ColorPicker colorPicker,
                        final TokenCreator tokenCreator) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.categoryRoleRepository = categoryRoleRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
-        this.oAuthUri = oAuthUri;
-        this.oAuthClient = oAuthClient;
         this.colorPicker = colorPicker;
         this.tokenCreator = tokenCreator;
-    }
-
-    public String generateGoogleLink(final String redirectUri) {
-        return oAuthUri.generate(redirectUri);
-    }
-
-    @Transactional
-    public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final TokenRequest tokenRequest) {
-        String code = tokenRequest.getCode();
-        String redirectUri = tokenRequest.getRedirectUri();
-
-        OAuthMember oAuthMember = oAuthClient.getOAuthMember(code, redirectUri);
-        Member foundMember = findMember(oAuthMember);
-
-        OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
-        oAuthToken.change(oAuthMember.getRefreshToken());
-
-        AuthToken authToken = tokenCreator.createAuthToken(foundMember.getId());
-        return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
     }
 
     @Transactional

@@ -1,11 +1,11 @@
 package com.allog.dallog.domain.schedule.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
-import static com.allog.dallog.common.fixtures.AuthFixtures.매트_인증_코드_토큰_요청;
-import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_생성_요청;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_15일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_1일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
@@ -80,7 +80,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void ADMIN_역할의_멤버는_카테고리에_새로운_일정을_생성할_수_있다() {
         // given & when
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -92,10 +92,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_생성할_시_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(매트_id, BE_일정.getId());
 
         // when & then
@@ -107,10 +107,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_생성할_시_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
-        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(매트_id, BE_일정.getId());
 
         categoryRoleService.updateRole(후디_id, 매트_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
@@ -125,7 +125,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_일정_제목의_길이가_50을_초과하는_경우_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
         String 잘못된_일정_제목 = "일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일";
@@ -141,7 +141,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_일정_메모의_길이가_255를_초과하는_경우_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
         String 잘못된_일정_메모 = "1".repeat(256);
@@ -157,7 +157,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_종료일시가_시작일시_이전이라면_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
@@ -173,7 +173,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정_생성시_전달한_카테고리가_존재하지_않는다면_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
         LocalDateTime 종료일시 = 날짜_2022년_7월_31일_0시_0분;
@@ -188,7 +188,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정_생성시_전달한_카테고리가_외부_연동_카테고리라면_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse 대한민국_공휴일 = categoryService.save(후디_id, 대한민국_공휴일_생성_요청);
 
         LocalDateTime 시작일시 = 날짜_2022년_7월_15일_16시_0분;
@@ -204,7 +204,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정의_ID로_단건_일정을_조회한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -225,7 +225,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 존재하지_않는_일정_ID로_단건_일정을_조회하면_예외를_던진다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
         Long 잘못된_아이디 = 0L;
@@ -238,7 +238,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 월별_일정_조회_시_통합일정_정보를_반환한다() {
         // given
-        Long 리버_id = toMemberId(리버_인증_코드_토큰_요청());
+        Long 리버_id = toMemberId(리버.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(리버_id, BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(리버_id, BE_일정.getId(), 알록달록_회의_생성_요청);
         ScheduleResponse 알록달록_회식 = scheduleService.save(리버_id, BE_일정.getId(), 알록달록_회식_생성_요청);
@@ -263,7 +263,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_별_통합_일정_정보를_조회한다() {
         // given
-        Long 매트_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
 
         /* 장기간 일정 */
@@ -304,7 +304,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정을_수정한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -331,11 +331,11 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_수정할_시_예외가_발생한다() {
         // given
-        Long 카테고리_관리자_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 카테고리_관리자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(카테고리_관리자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        Long 카테고리_구독자_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 카테고리_구독자_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(카테고리_구독자_id, BE_일정.getId());
 
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(BE_일정.getId(), 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시,
@@ -350,11 +350,11 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_수정할_시_예외가_발생한다() {
         // given
-        Long 카테고리_생성자_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 카테고리_생성자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_생성자_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(카테고리_생성자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        Long 카테고리_관리자_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 카테고리_관리자_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(카테고리_관리자_id, BE_일정.getId());
 
         categoryRoleService.updateRole(카테고리_생성자_id, 카테고리_관리자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
@@ -372,7 +372,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정_수정_시_존재하지_않은_일정일_경우_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -388,7 +388,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정의_카테고리도_수정한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -417,7 +417,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void AMDIN_역할의_멤버는_카테고리의_일정을_삭제할_수_있다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
@@ -433,11 +433,11 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_삭제할_시_예외가_발생한다() {
         // given
-        Long 카테고리_관리자_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 카테고리_관리자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(카테고리_관리자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        Long 카테고리_구독자_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 카테고리_구독자_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(카테고리_구독자_id, BE_일정.getId());
 
         // when & then
@@ -449,11 +449,11 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_ADMIN_역할이_아니라면_새로운_일정을_삭제할_시_예외가_발생한다() {
         // given
-        Long 카테고리_생성자_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 카테고리_생성자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_생성자_id, BE_일정_생성_요청);
         ScheduleResponse 기존_일정 = scheduleService.save(카테고리_생성자_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 
-        Long 카테고리_관리자_id = toMemberId(매트_인증_코드_토큰_요청());
+        Long 카테고리_관리자_id = toMemberId(매트.getOAuthMember());
         subscriptionService.save(카테고리_관리자_id, BE_일정.getId());
 
         categoryRoleService.updateRole(카테고리_생성자_id, 카테고리_관리자_id, BE_일정.getId(), new CategoryRoleUpdateRequest(ADMIN));
@@ -468,7 +468,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정_삭제_시_존재하지_않은_일정일_경우_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
         ScheduleResponse 알록달록_회의 = scheduleService.save(후디_id, BE_일정.getId(), 알록달록_회의_생성_요청);
 

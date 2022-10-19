@@ -1,8 +1,8 @@
 package com.allog.dallog.domain.schedule.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_외부_일정_생성_요청;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.MEMBER;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_네번째_일정;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_두번째_일정;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.몇시간_세번째_일정;
@@ -53,7 +53,7 @@ class CheckedSchedulesFinderTest extends ServiceTest {
     @Test
     void 시작일시와_종료일시로_유저의_달력을_일정_유형에_따라_분류하고_정렬하여_반환한다() {
         // given
-        Long memberId = toMemberId(MEMBER_인증_코드_토큰_요청());
+        Long memberId = toMemberId(MEMBER.getOAuthMember());
 
         CategoryResponse BE_일정_응답 = categoryService.save(memberId, BE_일정_생성_요청);
         Category BE_일정 = categoryRepository.getById(BE_일정_응답.getId());

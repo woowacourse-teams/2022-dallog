@@ -14,12 +14,13 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디_이름;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.application.CategoryService;
@@ -91,7 +92,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void id를_통해_회원을_단건_조회한다() {
         // given
-        Long 파랑_id = toMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(파랑.getOAuthMember());
 
         // when & then
         assertThat(memberService.findById(파랑_id).getId())
@@ -102,7 +103,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 구독_id를_기반으로_member_정보를_조회한다() {
         // given
-        Long 매트_id = toMemberId(AuthFixtures.매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트.getOAuthMember());
         Member 매트 = memberRepository.getById(매트_id);
 
         Category BE_일정 = categoryRepository.save(BE_일정(매트));
@@ -125,7 +126,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 회원의_이름을_수정한다() {
         // given
-        Long 매트_id = toMemberId(AuthFixtures.매트_인증_코드_토큰_요청());
+        Long 매트_id = toMemberId(매트.getOAuthMember());
 
         String 패트_이름 = "패트";
         MemberUpdateRequest 매트_수정_요청 = new MemberUpdateRequest(패트_이름);

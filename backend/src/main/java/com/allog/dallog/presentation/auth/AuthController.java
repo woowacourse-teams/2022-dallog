@@ -2,6 +2,7 @@ package com.allog.dallog.presentation.auth;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.application.OAuthClient;
+import com.allog.dallog.domain.auth.application.OAuthUri;
 import com.allog.dallog.domain.auth.dto.LoginMember;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
+    private final OAuthUri oAuthUri;
     private final OAuthClient oAuthClient;
     private final AuthService authService;
 
-    public AuthController(final OAuthClient oAuthClient, final AuthService authService) {
+    public AuthController(final OAuthUri oAuthUri, final OAuthClient oAuthClient, final AuthService authService) {
+        this.oAuthUri = oAuthUri;
         this.oAuthClient = oAuthClient;
         this.authService = authService;
     }
@@ -34,7 +37,7 @@ public class AuthController {
     @GetMapping("/{oauthProvider}/oauth-uri")
     public ResponseEntity<OAuthUriResponse> generateLink(@PathVariable final String oauthProvider,
                                                          @RequestParam final String redirectUri) {
-        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(authService.generateGoogleLink(redirectUri));
+        OAuthUriResponse oAuthUriResponse = new OAuthUriResponse(oAuthUri.generate(redirectUri));
         return ResponseEntity.ok(oAuthUriResponse);
     }
 
@@ -49,8 +52,8 @@ public class AuthController {
     @PostMapping("/token/access")
     public ResponseEntity<AccessTokenResponse> generateAccessToken(
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
-        AccessTokenResponse accessTokenResponse = authService.generateAccessToken(tokenRenewalRequest);
-        return ResponseEntity.ok(accessTokenResponse);
+        AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/validate/token")

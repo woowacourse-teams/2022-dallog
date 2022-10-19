@@ -1,7 +1,5 @@
 package com.allog.dallog.domain.category.application;
 
-import static com.allog.dallog.common.fixtures.AuthFixtures.리버_인증_코드_토큰_요청;
-import static com.allog.dallog.common.fixtures.AuthFixtures.후디_인증_코드_토큰_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
@@ -19,6 +17,9 @@ import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한�
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
+import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회식_생성_요청;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
@@ -30,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.common.fixtures.AuthFixtures;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.category.domain.Category;
@@ -126,7 +126,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성_시_자동으로_구독한다() {
         // given
-        Long 파랑_id = toMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(파랑.getOAuthMember());
 
         // when
         categoryService.save(파랑_id, 공통_일정_생성_요청);
@@ -142,7 +142,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성_시_생성자에_대한_카테고리_역할을_ADMIN으로_생성한다() {
         // given
-        Long 후디_id = toMemberId(AuthFixtures.후디_인증_코드_토큰_요청());
+        Long 후디_id = toMemberId(후디.getOAuthMember());
 
         CategoryResponse JPA_스터디 = categoryService.save(후디_id, 후디_JPA_스터디_생성_요청);
 
@@ -202,7 +202,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 외부_카테고리_생성_시_자동으로_구독한다() {
         // given
-        Long 파랑_id = toMemberId(AuthFixtures.파랑_인증_코드_토큰_요청());
+        Long 파랑_id = toMemberId(파랑.getOAuthMember());
 
         // when
         categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);
@@ -240,8 +240,8 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        authService.generateAccessAndRefreshToken(후디_인증_코드_토큰_요청());
-        authService.generateAccessAndRefreshToken(리버_인증_코드_토큰_요청());
+        authService.generateAccessAndRefreshToken(후디.getOAuthMember());
+        authService.generateAccessAndRefreshToken(리버.getOAuthMember());
 
         // when
         CategoriesResponse response = categoryService.findNormalByName("");

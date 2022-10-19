@@ -3,7 +3,7 @@ package com.allog.dallog.common.annotation;
 import com.allog.dallog.common.DatabaseCleaner;
 import com.allog.dallog.common.config.ExternalApiConfig;
 import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
+import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class ServiceTest {
         databaseCleaner.execute();
     }
 
-    protected Long toMemberId(final TokenRequest tokenRequest) {
-        AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(tokenRequest);
-        return authService.extractMemberId(response.getAccessToken());
+    protected Long toMemberId(final OAuthMember oAuthMember) {
+        AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(oAuthMember);
+        return authService.extractMemberId(response.getRefreshToken());
     }
 }
