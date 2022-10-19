@@ -48,8 +48,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <Router>
+      <Router>
+        <ErrorBoundary>
           <Suspense fallback={<></>}>
             <NavBar />
             <SideBar />
@@ -64,8 +64,8 @@ function App() {
             </Routes>
           </Suspense>
           <SnackBar />
-        </Router>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </Router>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
