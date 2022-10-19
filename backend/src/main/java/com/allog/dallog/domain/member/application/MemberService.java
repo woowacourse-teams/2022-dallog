@@ -1,11 +1,6 @@
 package com.allog.dallog.domain.member.application;
 
-import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.*;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
 
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
@@ -21,6 +16,9 @@ import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Service
@@ -36,10 +34,12 @@ public class MemberService {
     private final TokenRepository tokenRepository;
 
     public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-        final ExternalCategoryDetailRepository externalCategoryDetailRepository,
-        final ScheduleRepository scheduleRepository, final SubscriptionRepository subscriptionRepository,
-        final OAuthTokenRepository oAuthTokenRepository, final CategoryRoleRepository categoryRoleRepository,
-        final TokenRepository tokenRepository) {
+                         final ExternalCategoryDetailRepository externalCategoryDetailRepository,
+                         final ScheduleRepository scheduleRepository,
+                         final SubscriptionRepository subscriptionRepository,
+                         final OAuthTokenRepository oAuthTokenRepository,
+                         final CategoryRoleRepository categoryRoleRepository,
+                         final TokenRepository tokenRepository) {
         this.memberRepository = memberRepository;
         this.categoryRepository = categoryRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;

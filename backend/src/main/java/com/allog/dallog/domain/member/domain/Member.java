@@ -1,9 +1,10 @@
 package com.allog.dallog.domain.member.domain;
 
+import com.allog.dallog.domain.common.BaseEntity;
+import com.allog.dallog.domain.member.exception.InvalidMemberException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,9 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.allog.dallog.domain.common.BaseEntity;
-import com.allog.dallog.domain.member.exception.InvalidMemberException;
 
 @Table(name = "members")
 @Entity
@@ -44,7 +42,7 @@ public class Member extends BaseEntity {
     }
 
     public Member(final String email, final String displayName, final String profileImageUrl,
-        final SocialType socialType) {
+                  final SocialType socialType) {
         validateEmail(email);
         validateDisplayName(displayName);
 
