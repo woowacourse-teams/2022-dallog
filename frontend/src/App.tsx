@@ -10,13 +10,13 @@ import ErrorBoundary from '@/components/@common/ErrorBoundary/ErrorBoundary';
 import NavBar from '@/components/NavBar/NavBar';
 import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
 import SnackBar from '@/components/SnackBar/SnackBar';
-import AuthPage from '@/pages/AuthPage/AuthPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import MainPage from '@/pages/MainPage/MainPage';
 
 import { PATH } from '@/constants';
 import { ERROR_MESSAGE } from '@/constants/message';
 
+const AuthPage = lazy(() => import('@/pages/AuthPage/AuthPage'));
 const SideBar = lazy(() => import('@/components/SideBar/SideBar'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage/NotFoundPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage/PrivacyPolicyPage'));
