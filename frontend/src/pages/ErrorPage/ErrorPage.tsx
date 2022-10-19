@@ -20,7 +20,7 @@ function ErrorPage() {
 
   return (
     <div css={layoutStyle}>
-      <span css={textStyle(theme, '40rem')}>((⊙_⊙)？)</span>
+      <span css={textStyle(theme, '40rem')}>((⊙_⊙);)</span>
       <span css={textStyle(theme, '10rem')}>{ERROR_MESSAGE.DEFAULT}</span>
 
       <Button cssProp={buttonStyle(theme)} onClick={handleClickReturnButton}>
