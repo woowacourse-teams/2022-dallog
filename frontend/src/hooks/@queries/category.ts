@@ -1,18 +1,10 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import {
-  QueryKey,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryOptions,
-} from 'react-query';
+import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from 'react-query';
 import { useRecoilValue } from 'recoil';
 
 import useSnackBar from '@/hooks/useSnackBar';
 
 import {
-  CategoriesGetResponseType,
   CategoryRoleType,
   CategorySubscriberType,
   CategoryType,
@@ -21,7 +13,7 @@ import {
 
 import { userState } from '@/recoil/atoms';
 
-import { API, CACHE_KEY } from '@/constants/api';
+import { CACHE_KEY } from '@/constants/api';
 import { SUCCESS_MESSAGE } from '@/constants/message';
 
 import categoryApi from '@/api/category';
@@ -129,22 +121,12 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
 }
 
 function useGetEntireCategories({ keyword }: UseGetEntireCategoriesParams) {
-  const { error, data, fetchNextPage, hasNextPage } = useInfiniteQuery<
-    AxiosResponse<CategoriesGetResponseType>,
-    AxiosError
-  >(
+  const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     [CACHE_KEY.CATEGORIES, keyword],
-    ({ pageParam = 0 }) => categoryApi.getEntire(keyword, pageParam, API.CATEGORY_GET_SIZE),
-    {
-      getNextPageParam: ({ data }) => {
-        if (data.categories.length > 0) {
-          return data.page + 1;
-        }
-      },
-    }
+    () => categoryApi.getEntire(keyword)
   );
 
-  return { error, data, fetchNextPage, hasNextPage };
+  return { data };
 }
 
 function useGetMyCategories() {
