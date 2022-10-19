@@ -20,7 +20,7 @@ function NotFoundPage() {
   return (
     <PageLayout>
       <div css={layoutStyle}>
-        <span css={textStyle(theme, '40rem')}>(⊙_⊙;)</span>
+        <span css={textStyle(theme, '40rem')}>(⊙_⊙?)</span>
         <span css={textStyle(theme, '10rem')}>
           죄송합니다. <br /> 요청하신 페이지를 찾을 수가 없어요.
         </span>

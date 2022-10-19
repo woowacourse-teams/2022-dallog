@@ -1,11 +1,9 @@
 import { Component } from 'react';
 
-import PageLayout from '@/components/@common/PageLayout/PageLayout';
-
-import { ERROR_MESSAGE } from '@/constants/message';
+import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 
 interface Props {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 interface State {
@@ -22,12 +20,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public render() {
-    if (this.state.hasError)
-      return (
-        <PageLayout>
-          <span>{ERROR_MESSAGE.DEFAULT}</span>
-        </PageLayout>
-      );
+    if (this.state.hasError) return <ErrorPage />;
 
     return this.props.children;
   }
