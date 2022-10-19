@@ -215,6 +215,8 @@ const moreStyle = ({ colors }: Theme) => css`
   font-size: 2.75rem;
   line-height: 2.75rem;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 200;
   color: ${colors.GRAY_500};
 
