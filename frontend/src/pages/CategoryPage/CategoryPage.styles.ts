@@ -79,7 +79,26 @@ const buttonStyle = ({ colors }: Theme) => css`
 `;
 
 const calendarStyle = css`
+  position: relative;
+
   width: 100%;
+`;
+
+const alertStyle = ({ colors }: Theme) => css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 10;
+
+  padding: 4rem 6rem;
+  border-radius: 4px;
+
+  background: ${colors.ORANGE_500};
+
+  font-size: 4rem;
+  font-weight: 500;
+  color: ${colors.WHITE};
 `;
 
 const calendarHeaderStyle = ({ colors, flex }: Theme) => css`
@@ -209,7 +228,8 @@ const dateTextStyle = (
   { colors }: Theme,
   day: number,
   isThisMonth: boolean,
-  isToday: boolean
+  isToday: boolean,
+  isCategorySelected?: boolean
 ) => css`
   position: absolute;
   top: 1rem;
@@ -220,7 +240,7 @@ const dateTextStyle = (
   padding: 1rem;
   border-radius: 50%;
 
-  background: ${isToday && colors.YELLOW_500};
+  background: ${isToday && (isCategorySelected ? colors.YELLOW_500 : colors.GRAY_300)};
 
   font-size: 2.5rem;
   text-align: center;
@@ -312,6 +332,7 @@ const moreStyle = ({ colors }: Theme) => css`
 `;
 
 export {
+  alertStyle,
   buttonStyle,
   calendarGridStyle,
   calendarHeaderStyle,
