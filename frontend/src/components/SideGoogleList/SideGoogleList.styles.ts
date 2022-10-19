@@ -39,7 +39,7 @@ const contentStyle = ({ flex }: Theme, isListOpen: boolean, listLength: number) 
   overflow: hidden;
 
   width: 100%;
-  height: ${isListOpen ? `${9 * listLength}rem` : 0};
+  height: ${isListOpen ? `${9 * (listLength + 1)}rem` : 0};
   margin-bottom: 5rem;
 
   transition: height 0.3s ease-in-out;
