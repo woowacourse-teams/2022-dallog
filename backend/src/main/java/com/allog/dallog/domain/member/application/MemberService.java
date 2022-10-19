@@ -74,8 +74,4 @@ public class MemberService {
 		Member member = memberRepository.getById(id);
 		member.change(request.getDisplayName());
 	}
-
-	@Transactional
-	public void deleteById(final Long id) {
-	}
 }
