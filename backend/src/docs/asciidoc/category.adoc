@@ -30,10 +30,6 @@ include::{snippets}/category/save/failByInvalidNameFormat/http-response.adoc[]
 
 include::{snippets}/category/findAllByName/allByNoName/http-request.adoc[]
 
-==== Request Parameters
-
-include::{snippets}/category/findAllByName/allByNoName/request-parameters.adoc[]
-
 ==== HTTP Response
 
 include::{snippets}/category/findAllByName/allByNoName/http-response.adoc[]
@@ -42,29 +38,15 @@ include::{snippets}/category/findAllByName/allByNoName/http-response.adoc[]
 
 ==== HTTP Request
 
-include::{snippets}/category/findAllByName/fileterByName/http-request.adoc[]
+include::{snippets}/category/findAllByName/filterByName/http-request.adoc[]
 
 ==== Request Parameters
 
-include::{snippets}/category/findAllByName/fileterByName/request-parameters.adoc[]
+include::{snippets}/category/findAllByName/filterByName/request-parameters.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/category/findAllByName/fileterByName/http-response.adoc[]
-
-=== 자신이 생성한 카테고리 조회
-
-==== HTTP Request
-
-include::{snippets}/category/findMineByName/allByNoName/http-request.adoc[]
-
-==== Request Parameters
-
-include::{snippets}/category/findMineByName/allByNoName/request-parameters.adoc[]
-
-==== HTTP Response
-
-include::{snippets}/category/findMineByName/allByNoName/http-response.adoc[]
+include::{snippets}/category/findAllByName/filterByName/http-response.adoc[]
 
 === 자신이 일정을 추가/수정/삭제할 수 있는 카테고리 목록 조회
 

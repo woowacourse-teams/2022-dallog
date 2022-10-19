@@ -38,7 +38,6 @@ import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
-import com.allog.dallog.domain.category.dto.response.CategoriesWithPageResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
@@ -50,7 +49,6 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExcessException;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
-import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
@@ -67,7 +65,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
 class CategoryServiceTest extends ServiceTest {
 
@@ -79,9 +76,6 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private ScheduleService scheduleService;
-
-    @Autowired
-    private MemberService memberService;
 
     @Autowired
     private AuthService authService;
@@ -220,9 +214,9 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    @DisplayName("페이지와 제목을 받아 해당하는 구간의 카테고리를 가져온다.")
+    @DisplayName("검색어를 받아 제목에 검색어가 포함된 카테고리를 가져온다.")
     @Test
-    void 페이지와_제목을_받아_해당하는_구간의_카테고리를_가져온다() {
+    void 검색어를_받아_제목에_검색어가_포함됨_카테고리를_가져온다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Long 관리자_ID = 관리자.getId();
@@ -232,10 +226,8 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.save(관리자_ID, 매트_아고라_생성_요청);
         categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
 
-        PageRequest request = PageRequest.of(0, 3);
-
         // when
-        CategoriesWithPageResponse response = categoryService.findNormalByName("일", request);
+        CategoriesResponse response = categoryService.findNormalByName("일");
 
         // then
         assertThat(response.getCategories())
@@ -252,7 +244,7 @@ class CategoryServiceTest extends ServiceTest {
         authService.generateAccessAndRefreshToken(리버_인증_코드_토큰_요청());
 
         // when
-        CategoriesWithPageResponse response = categoryService.findNormalByName("", PageRequest.of(0, 10));
+        CategoriesResponse response = categoryService.findNormalByName("");
 
         // then
         assertThat(response.getCategories()).hasSize(0);
@@ -318,54 +310,6 @@ class CategoryServiceTest extends ServiceTest {
             assertThat(actual.getCategories().stream().map(CategoryResponse::getName).collect(Collectors.toList()))
                     .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
         });
-    }
-
-    @DisplayName("회원 id와 페이지를 기반으로 카테고리를 가져온다.")
-    @Test
-    void 회원_id와_페이지를_기반으로_카테고리를_가져온다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
-
-        PageRequest request = PageRequest.of(1, 2);
-
-        // when
-        CategoriesWithPageResponse response = categoryService.findMyCategories(관리자_ID, "", request);
-
-        // then
-        assertThat(response.getCategories())
-                .hasSize(2)
-                .extracting(CategoryResponse::getName)
-                .contains(FE_일정_이름, 매트_아고라_이름);
-    }
-
-    @DisplayName("회원 id와 제목과 페이지를 받아 해당하는 구간의 카테고리를 가져온다.")
-    @Test
-    void 회원_id와_제목과_페이지를_받아_해당하는_구간의_카테고리를_가져온다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Long 관리자_ID = 관리자.getId();
-        categoryService.save(관리자_ID, 공통_일정_생성_요청);
-        categoryService.save(관리자_ID, BE_일정_생성_요청);
-        categoryService.save(관리자_ID, FE_일정_생성_요청);
-        categoryService.save(관리자_ID, 매트_아고라_생성_요청);
-        categoryService.save(관리자_ID, 후디_JPA_스터디_생성_요청);
-
-        PageRequest request = PageRequest.of(0, 3);
-
-        // when
-        CategoriesWithPageResponse response = categoryService.findMyCategories(관리자_ID, "일", request);
-
-        // then
-        assertThat(response.getCategories())
-                .hasSize(3)
-                .extracting(CategoryResponse::getName)
-                .contains(공통_일정_이름, BE_일정_이름, FE_일정_이름);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")
