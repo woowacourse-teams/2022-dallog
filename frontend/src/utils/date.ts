@@ -81,10 +81,10 @@ const getDayOffsetDateTime = (dateTime: string, offset: number) =>
 const getISODateString = (ISOString: string) => ISOString.split('T')[0];
 
 const getISOString = (date: Date) => {
-  const offset = 1000 * 60 * 60 * 9;
-  const koreaDateTime = new Date(date.getTime() + offset);
+  const offset = 1000 * 60 * new Date().getTimezoneOffset();
+  const localeDateTime = new Date(date.getTime() - offset);
 
-  return koreaDateTime.toISOString().split('.')[0].slice(0, -3);
+  return localeDateTime.toISOString().split('.')[0].slice(0, -3);
 };
 
 const getISOTimeString = (ISOString: string) => ISOString.split('T')[1];
