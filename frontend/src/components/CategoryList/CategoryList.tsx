@@ -2,19 +2,13 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { useGetEntireCategories } from '@/hooks/@queries/category';
 import { useGetSubscriptions } from '@/hooks/@queries/subscription';
-import useIntersect from '@/hooks/useIntersect';
 
 import { CategoryType } from '@/@types/category';
 
 import SubscribedCategoryItem from '@/components/SubscribedCategoryItem/SubscribedCategoryItem';
 import UnsubscribedCategoryItem from '@/components/UnsubscribedCategoryItem/UnsubscribedCategoryItem';
 
-import {
-  categoryTableHeaderStyle,
-  categoryTableStyle,
-  intersectTargetStyle,
-  itemStyle,
-} from './CategoryList.styles';
+import { categoryTableHeaderStyle, categoryTableStyle, itemStyle } from './CategoryList.styles';
 
 interface CategoryListProps {
   keyword: string;
@@ -22,24 +16,9 @@ interface CategoryListProps {
 }
 
 function CategoryList({ keyword, setCategory }: CategoryListProps) {
-  const {
-    error: categoriesGetError,
-    data: categoriesGetResponse,
-    fetchNextPage,
-    hasNextPage,
-  } = useGetEntireCategories({ keyword });
+  const { data: categoriesGetResponse } = useGetEntireCategories({ keyword });
+  const { data: subscriptionsGetResponse } = useGetSubscriptions({});
 
-  const { error: subscriptionsGetError, data: subscriptionsGetResponse } = useGetSubscriptions({});
-
-  const ref = useIntersect(() => {
-    hasNextPage && fetchNextPage();
-  });
-
-  if (categoriesGetError || subscriptionsGetError) {
-    return <>Error</>;
-  }
-
-  const categoryList = categoriesGetResponse?.pages.flatMap(({ data }) => data.categories);
   const subscriptionList = subscriptionsGetResponse?.data.map((el) => {
     return {
       subscriptionId: el.id,
@@ -59,7 +38,7 @@ function CategoryList({ keyword, setCategory }: CategoryListProps) {
         <span css={itemStyle}>구독</span>
       </div>
       <div css={categoryTableStyle}>
-        {categoryList?.map((category) => {
+        {categoriesGetResponse?.data.map((category) => {
           const subscribedCategoryInfo = subscriptionList?.find(
             (el) => el.categoryId === category.id
           );
@@ -83,7 +62,6 @@ function CategoryList({ keyword, setCategory }: CategoryListProps) {
             />
           );
         })}
-        <div ref={ref} css={intersectTargetStyle} />
       </div>
     </>
   );

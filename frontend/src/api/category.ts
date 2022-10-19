@@ -1,9 +1,4 @@
-import {
-  CategoriesGetResponseType,
-  CategoryRoleType,
-  CategorySubscriberType,
-  CategoryType,
-} from '@/@types/category';
+import { CategoryRoleType, CategorySubscriberType, CategoryType } from '@/@types/category';
 
 import dallogApi from './';
 
@@ -41,19 +36,12 @@ const categoryApi = {
     return response;
   },
 
-  getEntire: async (name: string, page: number, size: number) => {
-    const response = await dallogApi.get<CategoriesGetResponseType>(
-      categoryApi.endpoint.entire,
-      name === ''
-        ? {
-            params: { page, size },
-            headers: categoryApi.headers,
-          }
-        : {
-            params: { name, page, size },
-            headers: categoryApi.headers,
-          }
-    );
+  getEntire: async (name: string) => {
+    const response = await dallogApi.get<CategoryType[]>(categoryApi.endpoint.entire, {
+      params: { name },
+      headers: categoryApi.headers,
+      transformResponse: (res) => JSON.parse(res).categories,
+    });
 
     return response;
   },
