@@ -92,11 +92,7 @@ const getISOTimeString = (ISOString: string) => ISOString.split('T')[1];
 const getMonthOffsetDateTime = (dateTime: string, offset: number) =>
   getISOString(new Date(new Date(dateTime).setMonth(extractDateTime(dateTime).month + offset - 1)));
 
-const getToday = () => {
-  const offset = new Date().getTimezoneOffset() * 60 * 1000;
-
-  return `${getISODateString(getISOString(new Date(Date.now() - offset)))}T${DATE_TIME.START}`;
-};
+const getToday = () => `${getISODateString(getISOString(new Date()))}T${DATE_TIME.START}`;
 
 export {
   checkAllDay,
