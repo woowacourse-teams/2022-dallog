@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class CheckedSchedulesFinder {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
