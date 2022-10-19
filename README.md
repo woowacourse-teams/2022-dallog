@@ -3,7 +3,7 @@
 
 달력이 기록을 공유할 때, 달록 🌙
 
-[<img src="https://img.shields.io/badge/-dallog.me-important?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.me) [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.github.io) [<img src="https://img.shields.io/badge/release-v1.1.2-critical?style=flat&logo=google-chrome&logoColor=white" />](https://github.com/woowacourse-teams/2022-dallog/releases/tag/v1.1.2)
+[<img src="https://img.shields.io/badge/-dallog.me-important?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.me) [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.github.io) [<img src="https://img.shields.io/badge/release-v1.1.3-critical?style=flat&logo=google-chrome&logoColor=white" />](https://github.com/woowacourse-teams/2022-dallog/releases/tag/v1.1.3)
 
 [](https://dallog.me)
 
