@@ -7,7 +7,6 @@ import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,12 +33,6 @@ public class MemberController {
     public ResponseEntity<Void> update(@AuthenticationPrincipal LoginMember loginMember,
                                        @Valid @RequestBody final MemberUpdateRequest request) {
         memberService.update(loginMember.getId(), request);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/me")
-    public ResponseEntity<Void> delete(@AuthenticationPrincipal final LoginMember loginMember) {
-        memberService.deleteById(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }

@@ -20,7 +20,6 @@ public class Member extends BaseEntity {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-z0-9._-]+@[a-z]+[.]+[a-z]{2,3}$");
     private static final int MAX_DISPLAY_NAME_LENGTH = 100;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
