@@ -45,7 +45,7 @@ public class CategoryRoleService {
     private void validateSoleAdmin(final Long memberId, final Long categoryId) {
         boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(memberId, categoryId);
         if (isSoleAdmin) {
-            throw new NotAbleToChangeRoleException("변경 대상 회원이 유일한 ADMIN이므로 다른 역할로 변경할 수 없습니다.");
+            throw new NotAbleToChangeRoleException("변경 대상 회원이 유일한 관리자이므로 다른 역할로 변경할 수 없습니다.");
         }
     }
 
