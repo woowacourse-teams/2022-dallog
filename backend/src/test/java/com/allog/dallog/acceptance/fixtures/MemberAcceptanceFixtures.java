@@ -17,12 +17,4 @@ public class MemberAcceptanceFixtures {
                 .statusCode(HttpStatus.OK.value())
                 .extract();
     }
-
-    public static ExtractableResponse<Response> 회원_탈퇴_한다(final String token) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(token)
-                .when().delete("/api/members/me")
-                .then().log().all()
-                .extract();
-    }
 }
