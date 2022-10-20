@@ -124,11 +124,11 @@ public class Category extends BaseEntity {
         return member;
     }
 
-    public CategoryType getCategoryType() {
-        return categoryType;
-    }
-
     public void setMember(final Member member) {
         this.member = member;
+    }
+
+    public CategoryType getCategoryType() {
+        return categoryType;
     }
 }
