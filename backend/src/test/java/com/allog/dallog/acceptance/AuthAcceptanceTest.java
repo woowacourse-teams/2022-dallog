@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.config.TokenConfig;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
-import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +75,8 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         // given
         ExtractableResponse<Response> response = 자체_토큰을_생성한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
         AccessAndRefreshTokenResponse accessAndRefreshTokenResponse = response.as(AccessAndRefreshTokenResponse.class);
-        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(accessAndRefreshTokenResponse.getRefreshToken());
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(
+                accessAndRefreshTokenResponse.getRefreshToken());
 
         // when
         ExtractableResponse<Response> actual = 리프레시_토큰을_통해_새로운_엑세스_토큰을_생성한다(tokenRenewalRequest);

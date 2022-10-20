@@ -18,12 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
@@ -57,12 +55,6 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
-    private OAuthTokenRepository oAuthTokenRepository;
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
