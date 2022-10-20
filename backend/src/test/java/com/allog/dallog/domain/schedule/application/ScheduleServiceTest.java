@@ -76,9 +76,9 @@ class ScheduleServiceTest extends ServiceTest {
     @Autowired
     private CategoryRoleService categoryRoleService;
 
-    @DisplayName("ADMIN 역할의 멤버는 카테고리에 새로운 일정을 생성할 수 있다.")
+    @DisplayName("ADMIN 역할의 회원은 카테고리에 새로운 일정을 생성할 수 있다.")
     @Test
-    void ADMIN_역할의_멤버는_카테고리에_새로운_일정을_생성할_수_있다() {
+    void ADMIN_역할의_회원은_카테고리에_새로운_일정을_생성할_수_있다() {
         // given & when
         Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
@@ -88,9 +88,9 @@ class ScheduleServiceTest extends ServiceTest {
         assertThat(알록달록_회의.getTitle()).isEqualTo(알록달록_회의_제목);
     }
 
-    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 생성할 시 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 회원이 카테고리에 새로운 일정을 생성할 시 예외가 발생한다.")
     @Test
-    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_생성할_시_예외가_발생한다() {
+    void ADMIN_역할이_아닌_회원이_카테고리에_새로운_일정을_생성할_시_예외가_발생한다() {
         // given
         Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
@@ -327,9 +327,9 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 수정할 시 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 회원이 카테고리에 새로운 일정을 수정할 시 예외가 발생한다.")
     @Test
-    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_수정할_시_예외가_발생한다() {
+    void ADMIN_역할이_아닌_회원이_카테고리에_새로운_일정을_수정할_시_예외가_발생한다() {
         // given
         Long 카테고리_관리자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);
@@ -413,9 +413,9 @@ class ScheduleServiceTest extends ServiceTest {
         );
     }
 
-    @DisplayName("ADMIN 역할의 멤버는 카테고리의 일정을 삭제할 수 있다.")
+    @DisplayName("ADMIN 역할의 회원은 카테고리의 일정을 삭제할 수 있다.")
     @Test
-    void AMDIN_역할의_멤버는_카테고리의_일정을_삭제할_수_있다() {
+    void AMDIN_역할의_회원은_카테고리의_일정을_삭제할_수_있다() {
         // given
         Long 후디_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
@@ -429,9 +429,9 @@ class ScheduleServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchScheduleException.class);
     }
 
-    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리에 새로운 일정을 삭제할 시 예외가 발생한다.")
+    @DisplayName("ADMIN 역할이 아닌 회원이 카테고리에 새로운 일정을 삭제할 시 예외가 발생한다.")
     @Test
-    void ADMIN_역할이_아닌_멤버가_카테고리에_새로운_일정을_삭제할_시_예외가_발생한다() {
+    void ADMIN_역할이_아닌_회원이_카테고리에_새로운_일정을_삭제할_시_예외가_발생한다() {
         // given
         Long 카테고리_관리자_id = toMemberId(후디.getOAuthMember());
         CategoryResponse BE_일정 = categoryService.save(카테고리_관리자_id, BE_일정_생성_요청);

@@ -250,9 +250,9 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(response.getCategories()).hasSize(0);
     }
 
-    @DisplayName("멤버가 일정을 추가/수정/삭제할 수 있는 카테고리 목록을 조회한다.")
+    @DisplayName("회원이 일정을 추가/수정/삭제할 수 있는 카테고리 목록을 조회한다.")
     @Test
-    void 멤버가_일정을_추가_수정_삭제할_수_있는_카테고리_목록을_조회한다() {
+    void 회원이_일정을_추가_수정_삭제할_수_있는_카테고리_목록을_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         categoryService.save(관리자.getId(), 공통_일정_생성_요청);
@@ -281,9 +281,9 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("멤버가 ADMIN으로 있는 카테고리 목록을 조회한다.")
+    @DisplayName("회원이 ADMIN으로 있는 카테고리 목록을 조회한다.")
     @Test
-    void 멤버가_ADMIN으로_있는_카테고리_목록을_조회한다() {
+    void 회원이_ADMIN으로_있는_카테고리_목록을_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         categoryService.save(관리자.getId(), 공통_일정_생성_요청);
@@ -340,9 +340,9 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("ADMIN 역할의 멤버는 카테고리를 수정할 수 있다.")
+    @DisplayName("ADMIN 역할의 회원은 카테고리를 수정할 수 있다.")
     @Test
-    void ADMIN_역할의_멤버는_카테고리를_수정할_수_있다() {
+    void ADMIN_역할의_회원은_카테고리를_수정할_수_있다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
@@ -358,9 +358,9 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(category.getName()).isEqualTo(우테코_공통_일정_이름);
     }
 
-    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리를 수정할 경우 예외를 던진다.")
+    @DisplayName("ADMIN 역할이 아닌 회원이 카테고리를 수정할 경우 예외를 던진다.")
     @Test
-    void ADMIN_역할이_아닌_멤버가_카테고리를_수정할_경우_예외를_던진다() {
+    void ADMIN_역할이_아닌_회원이_카테고리를_수정할_경우_예외를_던진다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
@@ -429,9 +429,9 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("ADMIN 역할이 아닌 멤버가 카테고리를 삭제할 경우 예외를 던진다.")
+    @DisplayName("ADMIN 역할이 아닌 회원이 카테고리를 삭제할 경우 예외를 던진다.")
     @Test
-    void ADMIN_역할이_아닌_멤버가_카테고리를_삭제할_경우_예외를_던진다() {
+    void ADMIN_역할이_아닌_회원이_카테고리를_삭제할_경우_예외를_던진다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse 공통_일정 = categoryService.save(관리자.getId(), 공통_일정_생성_요청);
