@@ -71,7 +71,7 @@ public class GoogleOAuthClient implements OAuthClient {
             final HttpEntity<MultiValueMap<String, String>> request) {
         try {
             return restTemplate.postForEntity(properties.getTokenUri(), request, GoogleTokenResponse.class);
-        } catch (RestClientException e) {
+        } catch (final RestClientException e) {
             throw new OAuthException(e);
         }
     }
@@ -84,7 +84,7 @@ public class GoogleOAuthClient implements OAuthClient {
         String decodedPayload = decodeJwtPayload(payload);
         try {
             return objectMapper.readValue(decodedPayload, UserInfo.class);
-        } catch (JsonProcessingException e) {
+        } catch (final JsonProcessingException e) {
             throw new OAuthException("id 토큰을 읽을 수 없습니다.", e);
         }
     }
@@ -116,7 +116,7 @@ public class GoogleOAuthClient implements OAuthClient {
             final HttpEntity<MultiValueMap<String, String>> request) {
         try {
             return restTemplate.postForEntity(properties.getTokenUri(), request, OAuthAccessTokenResponse.class);
-        } catch (RestClientException e) {
+        } catch (final RestClientException e) {
             throw new OAuthException(e);
         }
     }

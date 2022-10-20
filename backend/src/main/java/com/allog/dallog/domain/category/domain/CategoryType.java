@@ -9,7 +9,7 @@ public enum CategoryType {
     public static CategoryType from(final String value) {
         try {
             return CategoryType.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw new NoSuchCategoryException("(" + value + ")는 존재하지 않는 카테고리 타입입니다.");
         }
     }
