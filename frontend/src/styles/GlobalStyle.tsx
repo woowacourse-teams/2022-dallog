@@ -12,6 +12,10 @@ const global = ({ colors }: Theme) => css`
     box-sizing: border-box;
   }
 
+  html {
+    font-size: 4px;
+  }
+
   body {
     overflow: overlay;
 
