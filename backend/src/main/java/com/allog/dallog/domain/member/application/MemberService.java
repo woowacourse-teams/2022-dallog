@@ -2,10 +2,6 @@ package com.allog.dallog.domain.member.application;
 
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
 
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.auth.domain.TokenRepository;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -13,7 +9,6 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
-import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
@@ -25,29 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final CategoryRepository categoryRepository;
-    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
-    private final ScheduleRepository scheduleRepository;
     private final SubscriptionRepository subscriptionRepository;
-    private final OAuthTokenRepository oAuthTokenRepository;
     private final CategoryRoleRepository categoryRoleRepository;
-    private final TokenRepository tokenRepository;
 
-    public MemberService(final MemberRepository memberRepository, final CategoryRepository categoryRepository,
-                         final ExternalCategoryDetailRepository externalCategoryDetailRepository,
-                         final ScheduleRepository scheduleRepository,
+    public MemberService(final MemberRepository memberRepository,
                          final SubscriptionRepository subscriptionRepository,
-                         final OAuthTokenRepository oAuthTokenRepository,
-                         final CategoryRoleRepository categoryRoleRepository,
-                         final TokenRepository tokenRepository) {
+                         final CategoryRoleRepository categoryRoleRepository) {
         this.memberRepository = memberRepository;
-        this.categoryRepository = categoryRepository;
-        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
-        this.scheduleRepository = scheduleRepository;
         this.subscriptionRepository = subscriptionRepository;
-        this.oAuthTokenRepository = oAuthTokenRepository;
         this.categoryRoleRepository = categoryRoleRepository;
-        this.tokenRepository = tokenRepository;
     }
 
     public MemberResponse findById(final Long id) {
