@@ -85,7 +85,7 @@ public class GoogleOAuthClient implements OAuthClient {
         try {
             return objectMapper.readValue(decodedPayload, UserInfo.class);
         } catch (JsonProcessingException e) {
-            throw new OAuthException("id 토큰을 읽을 수 없습니다.");
+            throw new OAuthException("id 토큰을 읽을 수 없습니다.", e);
         }
     }
 

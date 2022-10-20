@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,8 +48,10 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         try {
             return restTemplate.exchange(CALENDAR_LIST_REQUEST_URI, HttpMethod.GET, request,
                     GoogleCalendarListResponse.class);
-        } catch (RestClientException e) {
-            throw new OAuthException(e);
+        } catch (final HttpClientErrorException e) {
+            throw new OAuthException("외부 캘린더에 대한 권한이 없습니다.", e);
+        } catch (final RestClientException e) {
+            throw new OAuthException("외부 캘린더를 가져올 수 없습니다.", e);
         }
     }
 
@@ -90,8 +93,10 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
         try {
             return restTemplate.exchange(CALENDAR_EVENTS_REQUEST_URI, HttpMethod.GET, request,
                     GoogleCalendarEventsResponse.class, uriVariables);
-        } catch (RestClientException e) {
-            throw new OAuthException(e);
+        } catch (final HttpClientErrorException e) {
+            throw new OAuthException("외부 일정에 대한 권한이 없습니다.", e);
+        } catch (final RestClientException e) {
+            throw new OAuthException("외부 일정을 가져올 수 없습니다.", e);
         }
     }
 }
