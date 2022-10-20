@@ -1,8 +1,8 @@
 import { css, Global, Theme } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 
-const global = ({ colors }: Theme) => css`
-  ${emotionReset}
+const global = ({ colors, mq }: Theme) => css`
+  ${emotionReset};
 
   *,
   *::after,
@@ -13,7 +13,15 @@ const global = ({ colors }: Theme) => css`
   }
 
   html {
-    font-size: 4px;
+    ${mq?.laptop} {
+      font-size: 4px;
+    }
+    ${mq?.tablet} {
+      font-size: 3px;
+    }
+    ${mq?.mobile} {
+      font-size: 2px;
+    }
   }
 
   body {
