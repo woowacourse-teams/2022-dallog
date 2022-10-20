@@ -10,16 +10,16 @@ public enum DataSourceKey {
     REPLICA_2(KeyName.REPLICA_2_NAME, true);
 
     private final String key;
-    private final boolean isSlave;
+    private final boolean isReplica;
 
-    DataSourceKey(final String key, final boolean isSlave) {
+    DataSourceKey(final String key, final boolean isReplica) {
         this.key = key;
-        this.isSlave = isSlave;
+        this.isReplica = isReplica;
     }
 
     public static List<DataSourceKey> getReplicas() {
         return Arrays.stream(values())
-                .filter(key -> key.isSlave)
+                .filter(key -> key.isReplica)
                 .collect(Collectors.toList());
     }
 
