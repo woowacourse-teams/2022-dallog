@@ -68,6 +68,7 @@ function useGetLoginUrl() {
 
 function useLoginAgain() {
   const [user, setUser] = useRecoilState(userState);
+  const { openSnackBar } = useSnackBar();
 
   const navigate = useNavigate();
 
@@ -76,6 +77,8 @@ function useLoginAgain() {
     onSuccess: (data) => {
       setAccessToken(data);
       setUser({ ...user, accessToken: data });
+
+      openSnackBar(SUCCESS_MESSAGE.POST_LOGIN_AGAIN);
     },
     onError: () => {
       removeAccessToken();

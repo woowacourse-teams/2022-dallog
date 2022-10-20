@@ -32,6 +32,7 @@ function App() {
   const onError = (error: unknown) => {
     if (error instanceof AxiosError && error.response?.status === RESPONSE.STATUS.UNAUTHORIZED) {
       !isMutatingLoginAgain && mutate();
+
       return;
     }
 

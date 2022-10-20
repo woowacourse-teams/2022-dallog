@@ -24,6 +24,7 @@ const SUCCESS_MESSAGE = {
   POST_CATEGORY: '카테고리를 생성하였습니다.',
   POST_LOGIN: '로그인에 성공했습니다.',
   POST_SCHEDULE: '일정을 생성했습니다.',
+  POST_LOGIN_AGAIN: '다시 로그인했습니다.',
 };
 
 const TOOLTIP_MESSAGE = {
