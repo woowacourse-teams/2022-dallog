@@ -13,7 +13,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     @Override
     public List<ExternalCalendar> getExternalCalendars(final String accessToken) {
         try {
-            Thread.sleep(150);
+            Thread.sleep(100);
         } catch (final InterruptedException e) {
         }
 
@@ -27,7 +27,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
                                                                   final String startDateTime,
                                                                   final String endDateTime) {
         try {
-            Thread.sleep(15);
+            Thread.sleep(100);
         } catch (final InterruptedException e) {
         }
 
