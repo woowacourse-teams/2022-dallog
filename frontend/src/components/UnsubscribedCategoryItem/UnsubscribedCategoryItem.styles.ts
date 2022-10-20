@@ -28,7 +28,7 @@ const item = css`
 `;
 
 const subscribeButton = ({ colors }: Theme) => css`
-  width: 15rem;
+  width: 18rem;
   height: 8rem;
   border-radius: 3px;
 

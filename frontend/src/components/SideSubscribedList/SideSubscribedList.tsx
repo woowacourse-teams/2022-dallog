@@ -13,6 +13,8 @@ import SideItem from '@/components/SideItem/SideItem';
 
 import { PATH } from '@/constants';
 
+import { getRootFontSize } from '@/utils';
+
 import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 import {
@@ -39,6 +41,8 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
 
   const handleClickCategoryAddButton = () => navigate(PATH.CATEGORY);
 
+  const rootFontSize = getRootFontSize();
+
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
@@ -46,14 +50,14 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
           구독 카테고리
         </span>
         <Button cssProp={menuStyle}>
-          <MdAdd size={20} onClick={handleClickCategoryAddButton} />
+          <MdAdd size={rootFontSize * 5} onClick={handleClickCategoryAddButton} />
           <span css={menuTitleStyle}>카테고리 구독</span>
         </Button>
         <Button onClick={toggleSubscribedListOpen}>
           {isSubscribedListOpen ? (
-            <MdKeyboardArrowUp size={20} />
+            <MdKeyboardArrowUp size={rootFontSize * 5} />
           ) : (
-            <MdKeyboardArrowDown size={20} />
+            <MdKeyboardArrowDown size={rootFontSize * 5} />
           )}
         </Button>
       </div>

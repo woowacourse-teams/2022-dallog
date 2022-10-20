@@ -30,7 +30,7 @@ const item = css`
 const unsubscribeButton = ({ colors }: Theme) => css`
   position: relative;
 
-  width: 15rem;
+  width: 18rem;
   height: 8rem;
   border-radius: 3px;
 
