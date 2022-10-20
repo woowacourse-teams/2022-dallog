@@ -53,6 +53,7 @@ public class CategoryController {
     public ResponseEntity<CategoriesWithPageResponse> findNormalByName(
             @RequestParam(defaultValue = "") final String name,
             final Pageable pageable) {
+        System.out.println("요청 받음");
         return ResponseEntity.ok(categoryService.findNormalByName(name, pageable));
     }
 
