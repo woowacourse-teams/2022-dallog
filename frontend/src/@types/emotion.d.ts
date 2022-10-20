@@ -1,14 +1,21 @@
 import { SerializedStyles } from '@emotion/react';
 
-interface Colors {
+interface ColorsType {
   [key: string]: string;
 }
 
-type Flex = Record<'row' | 'column', SerializedStyles>;
+type FlexType = Record<'row' | 'column', SerializedStyles>;
+
+interface MQType {
+  laptop: string;
+  tablet: string;
+  mobile: string;
+}
 
 declare module '@emotion/react' {
   export interface Theme {
-    colors: Colors;
-    flex: Flex;
+    colors: ColorsType;
+    flex: FlexType;
+    mq?: MQType;
   }
 }

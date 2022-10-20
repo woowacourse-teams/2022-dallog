@@ -27,6 +27,24 @@ const PALETTE = [
   '#A79B8E',
 ];
 
+const RESPONSIVE = {
+  LAPTOP: {
+    DEVICE: 'laptop',
+    FONT_SIZE: 4,
+    MIN_WIDTH: 1024,
+  },
+  TABLET: {
+    DEVICE: 'tablet',
+    FONT_SIZE: 3,
+    MAX_WIDTH: 1023,
+  },
+  MOBILE: {
+    DEVICE: 'mobile',
+    FONT_SIZE: 2,
+    MAX_WIDTH: 767,
+  },
+};
+
 const SCHEDULE = {
   HEIGHT: 5,
   HEIGHT_WITH_MARGIN: 5.5,
@@ -34,4 +52,4 @@ const SCHEDULE = {
 
 const TRANSPARENT = 'transparent';
 
-export { OPTION_HEIGHT, PALETTE, SCHEDULE, TRANSPARENT };
+export { OPTION_HEIGHT, PALETTE, RESPONSIVE, SCHEDULE, TRANSPARENT };
