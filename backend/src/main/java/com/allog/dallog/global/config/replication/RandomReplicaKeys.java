@@ -1,24 +1,22 @@
 package com.allog.dallog.global.config.replication;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class CircularReplicaKeys {
+public class RandomReplicaKeys {
 
-    private static final int NEXT_INDEX = 1;
+    private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     private final List<DataSourceKey> dataSourceKeys;
     private final int size;
 
-    private int cursor = 0;
-
-    public CircularReplicaKeys() {
+    public RandomReplicaKeys() {
         this.dataSourceKeys = List.copyOf(DataSourceKey.getReplicas());
         this.size = dataSourceKeys.size();
     }
 
     public DataSourceKey next() {
-        DataSourceKey dataSourceKey = dataSourceKeys.get(cursor);
-        cursor = (cursor + NEXT_INDEX) % size;
-        return dataSourceKey;
+        int currentDataSourceIndex = random.nextInt(size);
+        return dataSourceKeys.get(currentDataSourceIndex);
     }
 }

@@ -7,14 +7,14 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class RoutingDataSource extends AbstractRoutingDataSource {
 
-    private final CircularReplicaKeys circularReplicaKeys = new CircularReplicaKeys();
+    private final RandomReplicaKeys randomReplicaKeys = new RandomReplicaKeys();
 
     @Override
     protected Object determineCurrentLookupKey() {
         boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
 
         if (isReadOnly) {
-            return circularReplicaKeys.next();
+            return randomReplicaKeys.next();
         }
 
         return SOURCE;
