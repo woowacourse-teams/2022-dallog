@@ -19,6 +19,7 @@ const CACHE_KEY = {
   VALIDATE: 'validate',
   ADMIN_CATEGORIES: 'adminCategories',
   EDITABLE_CATEGORIES: 'editableCategories',
+  LOGIN_AGAIN: 'loginAgain',
 };
 
 const RESPONSE = {

@@ -614,9 +614,9 @@ class CategoryControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 유저가 조회하는 경우 403에러가 발생한다.")
+    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 회원이 조회하는 경우 403에러가 발생한다.")
     @Test
-    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_유저가_조회하는_경우_403에러가_발생한다() throws Exception {
+    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_회원이_조회하는_경우_403에러가_발생한다() throws Exception {
         // given
         long categoryId = 10;
 

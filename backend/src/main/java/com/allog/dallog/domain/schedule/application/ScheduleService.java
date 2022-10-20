@@ -12,7 +12,6 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.domain.schedule.domain.Schedule;
 import com.allog.dallog.domain.schedule.domain.ScheduleRepository;
@@ -27,11 +26,8 @@ import com.allog.dallog.domain.subscription.application.ColorPicker;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.domain.Subscriptions;
-import com.allog.dallog.presentation.MemberController;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,14 +38,13 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryRoleRepository categoryRoleRepository;
-    private final MemberRepository memberRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
     private final ColorPicker colorPicker;
 
     public ScheduleService(final ScheduleRepository scheduleRepository, final CategoryRepository categoryRepository,
-                           final CategoryRoleRepository categoryRoleRepository, final MemberRepository memberRepository,
+                           final CategoryRoleRepository categoryRoleRepository,
                            final SubscriptionRepository subscriptionRepository,
                            final OAuthTokenRepository oAuthTokenRepository,
                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
@@ -57,7 +52,6 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
         this.categoryRepository = categoryRepository;
         this.categoryRoleRepository = categoryRoleRepository;
-        this.memberRepository = memberRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.oAuthTokenRepository = oAuthTokenRepository;
         this.externalCategoryDetailRepository = externalCategoryDetailRepository;

@@ -49,9 +49,9 @@ class CheckedSchedulesFinderTest extends ServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @DisplayName("시작일시와 종료일시로 유저의 달력을 일정 유형에 따라 분류하고 정렬하여 반환한다.")
+    @DisplayName("시작일시와 종료일시로 회원의 달력을 일정 유형에 따라 분류하고 정렬하여 반환한다.")
     @Test
-    void 시작일시와_종료일시로_유저의_달력을_일정_유형에_따라_분류하고_정렬하여_반환한다() {
+    void 시작일시와_종료일시로_회원의_달력을_일정_유형에_따라_분류하고_정렬하여_반환한다() {
         // given
         Long memberId = toMemberId(MEMBER.getOAuthMember());
 

@@ -1,7 +1,9 @@
 API_URL = "https://api.dallog.me"
 
 pipeline {
-    agent any
+    agent {
+        label 'Frontend'
+    }
     
     stages {
         stage('Github') {

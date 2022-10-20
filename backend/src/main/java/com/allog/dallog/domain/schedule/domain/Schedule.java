@@ -74,7 +74,7 @@ public class Schedule extends BaseEntity {
 
     private void validateTitleLength(final String title) {
         if (title.length() > MAX_TITLE_LENGTH) {
-            throw new InvalidScheduleException("일정 제목의 길이는 20을 초과할 수 없습니다.");
+            throw new InvalidScheduleException(String.format("일정 제목의 길이는 %d을 초과할 수 없습니다.", MAX_TITLE_LENGTH));
         }
     }
 
@@ -96,7 +96,7 @@ public class Schedule extends BaseEntity {
 
     private void validateMemoLength(final String memo) {
         if (memo.length() > MAX_MEMO_LENGTH) {
-            throw new InvalidScheduleException("일정 메모의 길이는 255를 초과할 수 없습니다.");
+            throw new InvalidScheduleException(String.format("일정 메모의 길이는 %d를 초과할 수 없습니다.", MAX_MEMO_LENGTH));
         }
     }
 

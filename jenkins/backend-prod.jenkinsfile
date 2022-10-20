@@ -1,5 +1,8 @@
 pipeline {
-    agent any
+    agent {
+        label 'Backend'
+    }
+    
     stages {
         stage('Github') {
             steps {

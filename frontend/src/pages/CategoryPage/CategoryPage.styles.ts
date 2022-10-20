@@ -4,11 +4,9 @@ import { DAYS } from '@/constants/date';
 import { SCHEDULE } from '@/constants/style';
 
 const categoryPageStyle = ({ flex }: Theme) => css`
-  ${flex.row}
+  ${flex.row};
 
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 8rem;
+  justify-content: space-around;
 
   padding: 5rem;
 `;
@@ -82,7 +80,7 @@ const buttonStyle = ({ colors }: Theme) => css`
 const calendarStyle = css`
   position: relative;
 
-  width: 100%;
+  width: 65%;
 `;
 
 const hintStyle = ({ colors }: Theme) => css`

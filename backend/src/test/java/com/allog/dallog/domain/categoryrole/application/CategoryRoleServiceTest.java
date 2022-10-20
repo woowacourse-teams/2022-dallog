@@ -88,30 +88,30 @@ class CategoryRoleServiceTest extends ServiceTest {
         assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
     }
 
-    @DisplayName("ADMIN 유저가 아닌 경우 구독자의 역할을 변경할 수 없다")
+    @DisplayName("ADMIN 회원이 아닌 경우 구독자의 역할을 변경할 수 없다")
     @Test
-    void ADMIN_유저가_아닌_경우_구독자의_역할을_변경할_수_없다() {
+    void ADMIN_회원이_아닌_경우_구독자의_역할을_변경할_수_없다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
-        Member 관리자가_아닌_유저 = memberRepository.save(매트());
+        Member 관리자가_아닌_회원 = memberRepository.save(매트());
         Member 구독자 = memberRepository.save(후디());
 
         CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);
 
-        subscriptionService.save(관리자가_아닌_유저.getId(), BE_일정.getId());
+        subscriptionService.save(관리자가_아닌_회원.getId(), BE_일정.getId());
         subscriptionService.save(구독자.getId(), BE_일정.getId());
 
         CategoryRoleUpdateRequest request = new CategoryRoleUpdateRequest(ADMIN);
 
         // when & then
         assertThatThrownBy(
-                () -> categoryRoleService.updateRole(관리자가_아닌_유저.getId(), 구독자.getId(), BE_일정.getId(), request))
+                () -> categoryRoleService.updateRole(관리자가_아닌_회원.getId(), 구독자.getId(), BE_일정.getId(), request))
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
-    @DisplayName("ADMIN 회원이 다른 관리자 유저의 역할을 변경할 수 있다")
+    @DisplayName("ADMIN 회원이 다른 관리자 회원의 역할을 변경할 수 있다")
     @Test
-    void ADMIN_회원이_다른_관리자_유저의_역할을_변경할_수_있다() {
+    void ADMIN_회원이_다른_관리자_회원의_역할을_변경할_수_있다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         CategoryResponse BE_일정 = categoryService.save(관리자.getId(), BE_일정_생성_요청);

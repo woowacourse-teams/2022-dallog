@@ -1,11 +1,7 @@
 package com.allog.dallog.domain.member.application;
 
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.우아한테크코스_일정;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.리버;
@@ -22,24 +18,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.SubscriptionFixtures;
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
-import com.allog.dallog.domain.member.exception.InvalidMemberException;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.stream.Collectors;
@@ -66,12 +55,6 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
-    private OAuthTokenRepository oAuthTokenRepository;
 
     @DisplayName("id를 통해 회원을 단건 조회한다.")
     @Test
@@ -152,9 +135,9 @@ class MemberServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 유저가 호출하면 예외가 발생한다.")
+    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 회원이 호출하면 예외가 발생한다.")
     @Test
-    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_유저가_호출하면_예외가_발생한다() {
+    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_회원이_호출하면_예외가_발생한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Member 후디 = memberRepository.save(후디());

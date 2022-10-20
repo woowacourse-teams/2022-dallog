@@ -104,7 +104,7 @@ public class CategoryFixtures {
             idField.setAccessible(true);
             idField.set(category, id);
             return category;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (final NoSuchFieldException | IllegalAccessException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }

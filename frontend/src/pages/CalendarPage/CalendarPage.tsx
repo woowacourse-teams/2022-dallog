@@ -214,6 +214,12 @@ function CalendarPage() {
           {calendar.map((dateTime) => {
             const { month, date, day } = extractDateTime(dateTime);
             const currentDate = getISODateString(dateTime);
+            const priorityPosition = calendarWithPriority[getISODateString(dateTime)].findIndex(
+              (priority) => !priority
+            );
+
+            const hasMoreSchedule =
+              priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
 
             return (
               <div key={dateTime}>
@@ -313,8 +319,7 @@ function CalendarPage() {
                     );
                   })}
 
-                  {calendarWithPriority[getISODateString(dateTime)].findIndex((el) => !el) + 1 >
-                    maxScheduleCount && (
+                  {hasMoreSchedule && (
                     <span
                       css={moreStyle}
                       onClick={(e) =>

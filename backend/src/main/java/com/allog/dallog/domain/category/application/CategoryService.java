@@ -102,7 +102,7 @@ public class CategoryService {
         return new CategoriesResponse(categories);
     }
 
-    // 멤버가 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
+    // 회원이 ADMIN이 아니어도 일정 추가/제거/수정이 가능하므로, findAdminCategories와 별도의 메소드로 분리해야함
     public CategoriesResponse findScheduleEditableCategories(final Long memberId) {
         List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(memberId);
         Set<CategoryRoleType> roleTypes = CategoryRoleType.getHavingAuthorities(Set.of(ADD_SCHEDULE, UPDATE_SCHEDULE));

@@ -120,8 +120,8 @@ public class ControllerAdvice {
 
     @ExceptionHandler(OAuthException.class)
     public ResponseEntity<ErrorResponse> handleOAuthException(final RuntimeException e) {
-        log.error("OAuth 통신 과정에서 에러가 발생했습니다.", e);
-        ErrorResponse errorResponse = new ErrorResponse("OAuth 통신 과정에서 에러가 발생했습니다.");
+        log.error(e.getMessage(), e);
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 
