@@ -7,7 +7,7 @@ import static com.allog.dallog.global.config.replication.DataSourceKey.REPLICA_1
 import static com.allog.dallog.global.config.replication.DataSourceKey.REPLICA_2;
 import static com.allog.dallog.global.config.replication.DataSourceKey.SOURCE;
 
-import java.util.HashMap;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -52,14 +52,12 @@ public class DataSourceConfiguration {
             @Qualifier(REPLICA_1_NAME) DataSource replica1DataSource,
             @Qualifier(REPLICA_2_NAME) DataSource replica2DataSource
     ) {
+        Map<Object, Object> dataSources = Map.of(
+                SOURCE, sourceDataSource, REPLICA_1, replica1DataSource, REPLICA_2, replica2DataSource
+        );
+
         RoutingDataSource routingDataSource = new RoutingDataSource();
-
-        HashMap<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(SOURCE, sourceDataSource);
-        dataSourceMap.put(REPLICA_1, replica1DataSource);
-        dataSourceMap.put(REPLICA_2, replica2DataSource);
-
-        routingDataSource.setTargetDataSources(dataSourceMap);
+        routingDataSource.setTargetDataSources(dataSources);
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);
 
         return routingDataSource;

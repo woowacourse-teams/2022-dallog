@@ -2,7 +2,7 @@ package com.allog.dallog.global.config.replication;
 
 import java.util.List;
 
-public class CircularReplicaKeyList {
+public class CircularReplicaKeys {
 
     private static final int NEXT_INDEX = 1;
 
@@ -11,7 +11,7 @@ public class CircularReplicaKeyList {
 
     private int cursor = 0;
 
-    public CircularReplicaKeyList() {
+    public CircularReplicaKeys() {
         this.dataSourceKeys = List.copyOf(DataSourceKey.getReplicas());
         this.size = dataSourceKeys.size();
     }
