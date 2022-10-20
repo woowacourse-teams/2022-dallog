@@ -61,7 +61,7 @@ public class Member extends BaseEntity {
 
     private void validateDisplayName(final String displayName) {
         if (displayName.isEmpty() || displayName.length() > MAX_DISPLAY_NAME_LENGTH) {
-            throw new InvalidMemberException("이름 형식이 올바르지 않습니다.");
+            throw new InvalidMemberException(String.format("이름은 1자 이상 1자 %d이하여야 합니다.", MAX_DISPLAY_NAME_LENGTH));
         }
     }
 

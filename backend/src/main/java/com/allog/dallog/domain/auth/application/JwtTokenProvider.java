@@ -71,7 +71,7 @@ public class JwtTokenProvider implements TokenProvider {
             claims.getBody()
                     .getExpiration()
                     .before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (final JwtException | IllegalArgumentException e) {
             throw new InvalidTokenException("권한이 없습니다.");
         }
     }

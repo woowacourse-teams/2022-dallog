@@ -152,9 +152,9 @@ class MemberServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 유저가 호출하면 예외가 발생한다.")
+    @DisplayName("특정 카테고리의 구독자 목록을 ADMIN이 아닌 회원이 호출하면 예외가 발생한다.")
     @Test
-    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_유저가_호출하면_예외가_발생한다() {
+    void 특정_카테고리의_구독자_목록을_ADMIN이_아닌_회원이_호출하면_예외가_발생한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         Member 후디 = memberRepository.save(후디());

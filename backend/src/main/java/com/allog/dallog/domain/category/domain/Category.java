@@ -67,7 +67,7 @@ public class Category extends BaseEntity {
 
     private void validatePersonal() {
         if (isPersonal()) {
-            throw new InvalidCategoryException("내 일정은 수정할 수 없습니다.");
+            throw new InvalidCategoryException("'내 일정' 카테고리는 수정할 수 없습니다.");
         }
     }
 
@@ -76,7 +76,7 @@ public class Category extends BaseEntity {
             throw new InvalidCategoryException("카테고리 이름은 공백일 수 없습니다.");
         }
         if (name.length() > MAX_NAME_LENGTH) {
-            throw new InvalidCategoryException("카테고리 이름의 길이는 20을 초과할 수 없습니다.");
+            throw new InvalidCategoryException(String.format("카테고리 이름의 길이는 %d을 초과할 수 없습니다.", MAX_NAME_LENGTH));
         }
     }
 

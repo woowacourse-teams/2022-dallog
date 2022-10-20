@@ -59,9 +59,9 @@ class CategoryTest {
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
-    @DisplayName("제공된 멤버의 ID와 카테고리를 생성한 멤버의 ID가 일치하지 않으면 false를 반환한다.")
+    @DisplayName("제공된 회원의 ID와 카테고리를 생성한 회원의 ID가 일치하지 않으면 false를 반환한다.")
     @Test
-    void 제공된_멤버의_ID와_카테고리를_생성한_멤버의_ID가_일치하지_않으면_false를_반환한다() {
+    void 제공된_회원의_ID와_카테고리를_생성한_회원의_ID가_일치하지_않으면_false를_반환한다() {
         // given
         Category BE_일정 = BE_일정(관리자());
 

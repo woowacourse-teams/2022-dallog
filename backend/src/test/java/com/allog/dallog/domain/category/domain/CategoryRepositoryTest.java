@@ -144,9 +144,9 @@ class CategoryRepositoryTest extends RepositoryTest {
         assertThat(actual).hasSize(5);
     }
 
-    @DisplayName("특정 멤버가 생성한 카테고리를 조회한다.")
+    @DisplayName("특정 회원이 생성한 카테고리를 조회한다.")
     @Test
-    void 특정_멤버가_생성한_카테고리를_조회한다() {
+    void 특정_회원이_생성한_카테고리를_조회한다() {
         // given
         Member 관리자 = memberRepository.save(관리자());
         categoryRepository.save(공통_일정(관리자));

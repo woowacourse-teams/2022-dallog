@@ -153,7 +153,6 @@ class SubscriptionServiceTest extends ServiceTest {
         SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디_id);
 
         // then
-        // TODO: 개인 일정 구독 정보를 포함하여 3 + 1 = 4개, N + 1 문제 개선 예정
         assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4);
     }
 
