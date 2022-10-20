@@ -71,7 +71,6 @@ function Profile() {
         {isEditingName ? (
           <form css={nameButtonStyle}>
             <Fieldset
-              defaultValue={user.displayName}
               placeholder={user.displayName}
               value={editDisplayName.inputValue}
               onChange={editDisplayName.onChangeValue}
