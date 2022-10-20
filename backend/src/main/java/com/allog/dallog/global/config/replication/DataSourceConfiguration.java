@@ -23,6 +23,14 @@ import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 public class DataSourceConfiguration {
 
     @Bean
+    @Primary
+    public DataSource dataSource() {
+        DataSource determinedDataSource = routingDataSource(sourceDataSource(), replica1DataSource(),
+                replica2DataSource());
+        return new LazyConnectionDataSourceProxy(determinedDataSource);
+    }
+
+    @Bean
     @Qualifier(SOURCE_NAME)
     @ConfigurationProperties(prefix = "spring.datasource.source")
     public DataSource sourceDataSource() {
@@ -61,13 +69,5 @@ public class DataSourceConfiguration {
         routingDataSource.setDefaultTargetDataSource(sourceDataSource);
 
         return routingDataSource;
-    }
-
-    @Bean
-    @Primary
-    public DataSource dataSource() {
-        DataSource determinedDataSource = routingDataSource(sourceDataSource(), replica1DataSource(),
-                replica2DataSource());
-        return new LazyConnectionDataSourceProxy(determinedDataSource);
     }
 }
