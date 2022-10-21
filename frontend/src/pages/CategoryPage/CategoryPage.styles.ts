@@ -67,7 +67,7 @@ const searchInputStyle = css`
 const buttonStyle = ({ colors }: Theme) => css`
   width: 20rem;
   height: 12rem;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${colors.GRAY_500};
 
   background: ${colors.YELLOW_500};
@@ -99,7 +99,7 @@ const hintStyle = ({ colors }: Theme) => css`
   z-index: 10;
 
   padding: 4rem 6rem;
-  border-radius: 4px;
+  border-radius: 7px;
 
   background: ${colors.ORANGE_500};
 

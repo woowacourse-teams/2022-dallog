@@ -163,7 +163,7 @@ const googleLoginButton = ({ colors, flex }: Theme) => css`
   width: 75rem;
   height: 15rem;
   padding: 4rem;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${colors.GRAY_400};
   box-shadow: 2px 2px 2px ${colors.GRAY_400};
 

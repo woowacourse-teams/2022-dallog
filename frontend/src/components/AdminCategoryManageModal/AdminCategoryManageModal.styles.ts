@@ -10,7 +10,7 @@ const closeModalButtonStyle = css`
 
 const deleteButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.RED_400};
@@ -29,7 +29,7 @@ const headerStyle = css`
 
 const forgiveButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.RED_400};
@@ -48,7 +48,7 @@ const layoutStyle = ({ flex, colors }: Theme) => css`
 
   max-height: 100vh;
   padding: 12.5rem;
-  border-radius: 12px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 `;
@@ -76,7 +76,7 @@ const listSectionStyle = ({ flex }: Theme) => css`
 const renameButtonStyle = ({ colors }: Theme) => css`
   height: 8rem;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.YELLOW_500};

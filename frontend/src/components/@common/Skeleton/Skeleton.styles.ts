@@ -23,7 +23,7 @@ const skeletonStyle = ({ colors }: Theme, width: string, height: string) => css`
 
   width: ${width};
   height: ${height};
-  border-radius: 4px;
+  border-radius: 7px;
 
   animation: skeleton 2s infinite ease-out;
 `;

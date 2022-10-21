@@ -19,7 +19,7 @@ const moreScheduleModalStyle = (
   width: 50rem;
   max-height: 50%;
   padding: 4rem;
-  border-radius: 4px;
+  border-radius: 7px;
   box-shadow: 0 0 5px ${colors.GRAY_500};
 
   background: ${colors.WHITE};

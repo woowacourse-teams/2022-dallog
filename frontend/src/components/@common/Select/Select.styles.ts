@@ -24,7 +24,7 @@ const dimmerStyle = (isSelectOpen: boolean) => css`
 const selectStyle = ({ colors }: Theme) => css`
   width: 100%;
   height: 11.75rem;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${colors.GRAY_400};
 
   font-size: 4rem;
@@ -47,7 +47,7 @@ const optionLayoutStyle = ({ colors }: Theme, isSelectOpen: boolean) => css`
   width: 100%;
   max-height: ${isSelectOpen ? '50rem' : 0};
   border: ${isSelectOpen && `1px solid ${colors.GRAY_400}`};
-  border-radius: 8px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 

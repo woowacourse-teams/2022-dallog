@@ -37,7 +37,7 @@ const global = ({ colors, mq }: Theme) => css`
     }
 
     *::-webkit-scrollbar-thumb {
-      border-radius: 10px;
+      border-radius: 7px;
       background-clip: padding-box;
       border: 2px solid transparent;
 
@@ -45,7 +45,7 @@ const global = ({ colors, mq }: Theme) => css`
     }
 
     *::-webkit-scrollbar-track {
-      border-radius: 10px;
+      border-radius: 7px;
       box-shadow: inset 0 0 5px white;
 
       background: ${colors.GRAY_200};

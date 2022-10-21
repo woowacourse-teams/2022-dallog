@@ -8,7 +8,7 @@ const scheduleModalStyle = ({ colors, mq }: Theme, scheduleModalPos: ModalPosTyp
   bottom: ${scheduleModalPos.bottom ? `${scheduleModalPos.bottom + 20}px` : 'none'};
 
   padding: 5rem 5rem 10rem 10rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 0 30px ${colors.GRAY_500};
 
   background: ${colors.WHITE};

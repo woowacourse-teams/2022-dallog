@@ -41,7 +41,7 @@ const layoutStyle = ({ flex, colors }: Theme) => css`
   width: 60rem;
   padding: 5rem;
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 
@@ -51,7 +51,7 @@ const layoutStyle = ({ flex, colors }: Theme) => css`
 const logoutButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem 3rem;
   border: 1px solid ${colors.GRAY_400};
-  border-radius: 3px;
+  border-radius: 7px;
 
   font-size: 3rem;
 `;
@@ -59,7 +59,7 @@ const logoutButtonStyle = ({ colors }: Theme) => css`
 const withdrawalButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem 3rem;
   border: 1px solid ${colors.RED_400};
-  border-radius: 3px;
+  border-radius: 7px;
 
   font-size: 3rem;
   color: ${colors.RED_400};
