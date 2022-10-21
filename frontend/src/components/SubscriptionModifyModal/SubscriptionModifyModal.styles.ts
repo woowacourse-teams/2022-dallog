@@ -43,7 +43,7 @@ const modalPosStyle = ({ colors, flex }: Theme, modalPos: ModalPosType) => css`
   left: ${modalPos.left ? `${modalPos.left}px` : 'none'};
 
   border: 1px solid ${colors.GRAY_300};
-  border-radius: 4px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 `;

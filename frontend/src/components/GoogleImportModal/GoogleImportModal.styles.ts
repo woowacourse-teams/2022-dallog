@@ -10,7 +10,7 @@ const layoutStyle = ({ colors, flex }: Theme) => css`
   width: 120rem;
   height: 120rem;
   padding: 12.5rem;
-  border-radius: 12px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 

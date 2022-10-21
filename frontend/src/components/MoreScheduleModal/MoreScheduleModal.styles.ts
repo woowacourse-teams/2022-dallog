@@ -2,25 +2,37 @@ import { css, Theme } from '@emotion/react';
 
 import { ModalPosType } from '@/@types';
 
-const moreScheduleModalStyle = ({ colors, flex }: Theme, moreScheduleModalPos: ModalPosType) => css`
-  ${flex.column}
+const moreScheduleModalStyle = (
+  { colors, flex, mq }: Theme,
+  moreScheduleModalPos: ModalPosType
+) => css`
+  ${flex.column};
 
+  overflow-x: hidden;
   justify-content: flex-start;
   overflow-y: auto;
   position: absolute;
   top: ${moreScheduleModalPos.top ? `${moreScheduleModalPos.top + 20}px` : 'none'};
-  right: ${moreScheduleModalPos.right ? `${moreScheduleModalPos.right + 20}px` : 'none'};
   bottom: ${moreScheduleModalPos.bottom ? `${moreScheduleModalPos.bottom + 20}px` : 'none'};
-  left: ${moreScheduleModalPos.left ? `${moreScheduleModalPos.left + 20}px` : 'none'};
   gap: 1rem;
 
   width: 50rem;
   max-height: 50%;
   padding: 4rem;
-  border-radius: 4px;
+  border-radius: 7px;
   box-shadow: 0 0 5px ${colors.GRAY_500};
 
   background: ${colors.WHITE};
+
+  ${mq?.laptop} {
+    right: ${moreScheduleModalPos.right ? `${moreScheduleModalPos.right + 20}px` : 'none'};
+    left: ${moreScheduleModalPos.left ? `${moreScheduleModalPos.left + 20}px` : 'none'};
+  }
+
+  ${mq?.tablet || mq?.mobile} {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const headerStyle = ({ flex }: Theme) => css`
@@ -55,6 +67,8 @@ const dateTextStyle = ({ colors }: Theme, day: number, isToday: boolean) => css`
 `;
 
 const itemWithBackgroundStyle = (colorCode: string) => css`
+  overflow: hidden;
+
   width: 100%;
   height: 5rem;
   padding: 1rem;
@@ -65,6 +79,7 @@ const itemWithBackgroundStyle = (colorCode: string) => css`
   color: white;
   white-space: nowrap;
   line-height: 2.75rem;
+  text-overflow: ellipsis;
 
   &:hover {
     cursor: pointer;

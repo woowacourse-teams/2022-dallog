@@ -11,8 +11,12 @@ const categoryPageStyle = ({ flex }: Theme) => css`
   padding: 5rem;
 `;
 
-const categoryStyle = css`
+const categoryStyle = ({ mq }: Theme) => css`
   width: 30%;
+
+  ${mq?.tablet || mq?.mobile} {
+    width: 100%;
+  }
 `;
 
 const categoryHeaderStyle = ({ colors }: Theme) => css`
@@ -63,7 +67,7 @@ const searchInputStyle = css`
 const buttonStyle = ({ colors }: Theme) => css`
   width: 20rem;
   height: 12rem;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${colors.GRAY_500};
 
   background: ${colors.YELLOW_500};
@@ -77,10 +81,14 @@ const buttonStyle = ({ colors }: Theme) => css`
   }
 `;
 
-const calendarStyle = css`
+const calendarStyle = ({ mq }: Theme) => css`
   position: relative;
 
   width: 65%;
+
+  ${mq?.tablet || mq?.mobile} {
+    display: none;
+  }
 `;
 
 const hintStyle = ({ colors }: Theme) => css`
@@ -91,7 +99,7 @@ const hintStyle = ({ colors }: Theme) => css`
   z-index: 10;
 
   padding: 4rem 6rem;
-  border-radius: 4px;
+  border-radius: 7px;
 
   background: ${colors.ORANGE_500};
 
@@ -137,7 +145,7 @@ const monthPickerStyle = ({ flex }: Theme) => css`
 `;
 
 const todayButtonStyle = ({ colors }: Theme) => css`
-  width: 12rem;
+  width: 15rem;
   height: 8rem;
 
   padding: auto 0;

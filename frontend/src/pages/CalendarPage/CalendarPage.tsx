@@ -12,6 +12,7 @@ import { ScheduleType } from '@/@types/schedule';
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
+import Responsive from '@/components/@common/Responsive/Responsive';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
@@ -21,8 +22,9 @@ import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModify
 
 import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
-import { SCHEDULE, TRANSPARENT } from '@/constants/style';
+import { RESPONSIVE, SCHEDULE, TRANSPARENT } from '@/constants/style';
 
+import { getRootFontSize } from '@/utils';
 import {
   checkAllDay,
   extractDateTime,
@@ -84,12 +86,15 @@ function CalendarPage() {
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
+  const rootFontSize = getRootFontSize();
+
   useLayoutEffect(() => {
     if (!(dateRef.current instanceof HTMLDivElement)) return;
 
     setMaxScheduleCount(
       Math.floor(
-        (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
+        (Math.floor(dateRef.current.clientHeight / 10) * 10 - SCHEDULE.HEIGHT * rootFontSize) /
+          (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
       )
     );
   }, [startDateTime]);
@@ -119,8 +124,10 @@ function CalendarPage() {
             {`${currentYear}년 ${currentMonth}월`}
             <div css={waitingNavStyle}>
               <div css={spinnerStyle}>
-                <Spinner size={4} />
-                일정을 가져오고 있습니다.
+                <Spinner size={rootFontSize} />
+                <Responsive type={RESPONSIVE.LAPTOP.DEVICE}>
+                  <span>일정을 가져오고 있습니다.</span>
+                </Responsive>
               </div>
               <div css={monthPicker}>
                 <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달">

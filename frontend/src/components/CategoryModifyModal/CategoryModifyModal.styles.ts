@@ -6,7 +6,7 @@ const modal = ({ colors, flex }: Theme) => css`
   width: 120rem;
   height: 90rem;
   padding: 12.5rem;
-  border-radius: 12px;
+  border-radius: 7px;
   justify-content: space-between;
 
   background: ${colors.WHITE};
@@ -46,7 +46,7 @@ const cancelButton = ({ colors }: Theme) => css`
   width: 22.5rem;
   height: 10rem;
   border: 2px solid ${colors.GRAY_500};
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.WHITE};
@@ -58,7 +58,7 @@ const cancelButton = ({ colors }: Theme) => css`
 const saveButton = ({ colors }: Theme) => css`
   width: 22.5rem;
   height: 10rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.YELLOW_500};

@@ -10,6 +10,8 @@ import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/Subscr
 
 import { TRANSPARENT } from '@/constants/style';
 
+import { getRootFontSize } from '@/utils';
+
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdMoreVert } from 'react-icons/md';
 
 import {
@@ -38,6 +40,8 @@ function SideItem({ subscription }: SideItemProps) {
     });
   };
 
+  const rootFontSize = getRootFontSize();
+
   return (
     <div css={itemStyle}>
       <div css={checkBoxNameStyle}>
@@ -45,7 +49,7 @@ function SideItem({ subscription }: SideItemProps) {
           <Spinner />
         ) : subscription.checked ? (
           <MdCheckBox
-            size={20}
+            size={rootFontSize * 5}
             color={subscription.colorCode}
             onClick={() => {
               handleClickCategoryItem(subscription.checked, subscription.colorCode);
@@ -53,7 +57,7 @@ function SideItem({ subscription }: SideItemProps) {
           />
         ) : (
           <MdCheckBoxOutlineBlank
-            size={20}
+            size={rootFontSize * 5}
             color={subscription.colorCode}
             onClick={() => {
               handleClickCategoryItem(subscription.checked, subscription.colorCode);
@@ -71,7 +75,7 @@ function SideItem({ subscription }: SideItemProps) {
       </div>
       <div css={modalLayoutStyle}>
         <Button cssProp={iconStyle}>
-          <MdMoreVert size={20} onClick={handleClickOpen} />
+          <MdMoreVert size={rootFontSize * 5} onClick={handleClickOpen} />
         </Button>
         {isModalOpen && (
           <ModalPortal

@@ -22,6 +22,7 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { SCHEDULE, TRANSPARENT } from '@/constants/style';
 
+import { getRootFontSize } from '@/utils';
 import {
   checkAllDay,
   extractDateTime,
@@ -113,6 +114,8 @@ function CategoryPage() {
     toggleCategoryAddModalOpen();
   };
 
+  const rootFontSize = getRootFontSize();
+
   if (!category.id || isLoading || data === undefined) {
     return (
       <PageLayout>
@@ -125,7 +128,7 @@ function CategoryPage() {
             <div css={controlStyle}>
               <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
                 <Button type="submit" cssProp={searchButtonStyle}>
-                  <MdSearch size={20} />
+                  <MdSearch size={rootFontSize * 5} />
                 </Button>
                 <Fieldset
                   placeholder="제목 찾기"
@@ -209,7 +212,8 @@ function CategoryPage() {
   const MAX_SCHEDULE_COUNT =
     dateRef.current !== null
       ? Math.floor(
-          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * 4) / (SCHEDULE.HEIGHT_WITH_MARGIN * 4)
+          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * rootFontSize) /
+            (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
         )
       : CALENDAR.MAX_SCHEDULE_COUNT;
 
@@ -224,7 +228,7 @@ function CategoryPage() {
           <div css={controlStyle}>
             <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
               <Button type="submit" cssProp={searchButtonStyle}>
-                <MdSearch size={20} />
+                <MdSearch size={rootFontSize * 5} />
               </Button>
               <Fieldset
                 placeholder="제목 찾기"

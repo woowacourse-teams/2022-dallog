@@ -18,7 +18,7 @@ const layoutStyle = ({ colors, flex }: Theme) => css`
 
   width: 100rem;
   padding: 12.5rem;
-  border-radius: 12px;
+  border-radius: 7px;
 
   font-size: 4rem;
   line-height: 6rem;
@@ -32,7 +32,7 @@ const withdrawalButtonStyle = ({ colors }: Theme) => css`
 
   padding: 2rem 3rem;
   border: 1px solid ${colors.RED_400};
-  border-radius: 3px;
+  border-radius: 7px;
 
   font-size: 3rem;
   color: ${colors.RED_400};

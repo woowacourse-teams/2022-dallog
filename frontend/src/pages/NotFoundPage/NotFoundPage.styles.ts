@@ -11,7 +11,7 @@ const layoutStyle = ({ flex }: Theme) => css`
 const buttonStyle = ({ colors }: Theme) => css`
   padding: 3rem 6rem;
   border: 1px solid ${colors.GRAY_800};
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 
   font-size: 5rem;

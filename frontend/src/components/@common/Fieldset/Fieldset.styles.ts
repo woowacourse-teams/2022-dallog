@@ -23,7 +23,7 @@ const inputStyle = ({ colors }: Theme, isValid?: boolean) => css`
   padding: 3rem;
 
   width: 100%;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${isValid === false ? colors.RED_400 : colors.GRAY_400};
 
   font-family: inherit;

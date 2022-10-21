@@ -12,6 +12,8 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import SideItem from '@/components/SideItem/SideItem';
 
+import { getRootFontSize } from '@/utils';
+
 import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 import {
@@ -40,6 +42,8 @@ function SideAdminList({ categories }: SideAdminListProps) {
     toggleCategoryAddModalOpen();
   };
 
+  const rootFontSize = getRootFontSize();
+
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
@@ -47,11 +51,15 @@ function SideAdminList({ categories }: SideAdminListProps) {
           관리 카테고리
         </span>
         <Button cssProp={menuStyle}>
-          <MdAdd size={20} onClick={handleClickCategoryAddButton} />
+          <MdAdd size={rootFontSize * 5} onClick={handleClickCategoryAddButton} />
           <span css={menuTitleStyle}>카테고리 추가</span>
         </Button>
         <Button onClick={toggleMyListOpen}>
-          {isMyListOpen ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
+          {isMyListOpen ? (
+            <MdKeyboardArrowUp size={rootFontSize * 5} />
+          ) : (
+            <MdKeyboardArrowDown size={rootFontSize * 5} />
+          )}
         </Button>
       </div>
 

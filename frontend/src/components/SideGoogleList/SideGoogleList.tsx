@@ -12,6 +12,8 @@ import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import GoogleImportModal from '@/components/GoogleImportModal/GoogleImportModal';
 import SideItem from '@/components/SideItem/SideItem';
 
+import { getRootFontSize } from '@/utils';
+
 import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
 import {
@@ -39,6 +41,7 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
     toggleGoogleImportModalOpen();
   };
 
+  const rootFontSize = getRootFontSize();
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
@@ -46,11 +49,15 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
           구글 카테고리
         </span>
         <Button cssProp={menuStyle}>
-          <MdAdd size={20} onClick={handleClickGoogleImportButton} />
+          <MdAdd size={rootFontSize * 5} onClick={handleClickGoogleImportButton} />
           <span css={menuTitleStyle}>구글 카테고리 추가</span>
         </Button>
         <Button onClick={toggleGoogleListOpen}>
-          {isGoogleListOpen ? <MdKeyboardArrowUp size={20} /> : <MdKeyboardArrowDown size={20} />}
+          {isGoogleListOpen ? (
+            <MdKeyboardArrowUp size={rootFontSize * 5} />
+          ) : (
+            <MdKeyboardArrowDown size={rootFontSize * 5} />
+          )}
         </Button>
       </div>
       <div
