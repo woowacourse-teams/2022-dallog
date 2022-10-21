@@ -86,6 +86,9 @@ const scheduleInfoStyle = ({ flex }: Theme) => css`
 
   align-items: flex-start;
   gap: 3rem;
+
+  word-wrap: break-word;
+  word-break: break-all;
 `;
 
 const scheduleTitleStyle = css`
