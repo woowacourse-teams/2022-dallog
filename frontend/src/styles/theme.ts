@@ -1,5 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
+import { RESPONSIVE } from '../constants/style';
+
 const colors = {
   YELLOW_000: '#fff9db',
   YELLOW_100: '#fff3bf',
@@ -53,9 +55,16 @@ const flex = {
   `,
 };
 
+const mq = {
+  laptop: `@media screen and (min-width: ${RESPONSIVE.LAPTOP.MIN_WIDTH}px)`,
+  tablet: `@media screen and (max-width: ${RESPONSIVE.TABLET.MAX_WIDTH}px)`,
+  mobile: `@media screen and (max-width: ${RESPONSIVE.MOBILE.MAX_WIDTH}px)`,
+};
+
 const theme: Theme = {
   colors,
   flex,
+  mq,
 };
 
 export default theme;

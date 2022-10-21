@@ -54,7 +54,7 @@ function NavBar() {
   };
 
   return (
-    <div css={navBar}>
+    <nav css={navBar}>
       <div css={menus}>
         {accessToken && (
           <Button
@@ -107,7 +107,7 @@ function NavBar() {
           </>
         )}
       </div>
-    </div>
+    </nav>
   );
 }
 

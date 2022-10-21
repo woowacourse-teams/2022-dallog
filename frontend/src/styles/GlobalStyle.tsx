@@ -1,8 +1,8 @@
 import { css, Global, Theme } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 
-const global = ({ colors }: Theme) => css`
-  ${emotionReset}
+const global = ({ colors, mq }: Theme) => css`
+  ${emotionReset};
 
   *,
   *::after,
@@ -10,6 +10,18 @@ const global = ({ colors }: Theme) => css`
     margin: 0;
 
     box-sizing: border-box;
+  }
+
+  html {
+    ${mq?.laptop} {
+      font-size: 4px;
+    }
+    ${mq?.tablet} {
+      font-size: 3px;
+    }
+    ${mq?.mobile} {
+      font-size: 2px;
+    }
   }
 
   body {
@@ -25,7 +37,7 @@ const global = ({ colors }: Theme) => css`
     }
 
     *::-webkit-scrollbar-thumb {
-      border-radius: 10px;
+      border-radius: 7px;
       background-clip: padding-box;
       border: 2px solid transparent;
 
@@ -33,7 +45,7 @@ const global = ({ colors }: Theme) => css`
     }
 
     *::-webkit-scrollbar-track {
-      border-radius: 10px;
+      border-radius: 7px;
       box-shadow: inset 0 0 5px white;
 
       background: ${colors.GRAY_200};

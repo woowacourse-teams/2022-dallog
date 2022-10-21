@@ -30,9 +30,9 @@ const item = css`
 const unsubscribeButton = ({ colors }: Theme) => css`
   position: relative;
 
-  width: 15rem;
+  width: 18rem;
   height: 8rem;
-  border-radius: 3px;
+  border-radius: 7px;
 
   background-color: ${colors.GRAY_500};
 
@@ -54,27 +54,12 @@ const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
 
   width: max-content;
   padding: 4rem 6rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 5px ${colors.GRAY_500};
 
   background: ${colors.BLUE_500};
 
   color: ${colors.WHITE};
-
-  &::after {
-    position: absolute;
-    top: ${hoveringUpside ? '-40%' : '100%'};
-    left: 50%;
-
-    margin-left: -10px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: ${hoveringUpside
-      ? `transparent transparent ${colors.BLUE_500}`
-      : `${colors.BLUE_500} transparent transparent`};
-
-    content: '';
-  }
 `;
 
 export { categoryItem, detailStyle, item, unsubscribeButton };

@@ -27,7 +27,7 @@ const monthPicker = ({ flex }: Theme) => css`
 `;
 
 const todayButton = ({ colors }: Theme) => css`
-  width: 12rem;
+  width: 15rem;
   height: 8rem;
 
   padding: auto 0;
@@ -122,7 +122,6 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
   top: 1rem;
   right: 1rem;
 
-  width: 5rem;
   height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   border-radius: 50%;
@@ -130,7 +129,7 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
   background: ${isToday && colors.YELLOW_500};
 
   font-size: 2.5rem;
-  text-align: center;
+  text-align: right;
   line-height: 3rem;
   font-weight: 500;
   color: ${isToday
@@ -238,6 +237,10 @@ const spinnerStyle = ({ flex }: Theme) => css`
   font-size: 3rem;
 `;
 
+const waitingTextStyle = () => css`
+  //
+`;
+
 const waitingNavStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
@@ -261,4 +264,5 @@ export {
   spinnerStyle,
   todayButton,
   waitingNavStyle,
+  waitingTextStyle,
 };

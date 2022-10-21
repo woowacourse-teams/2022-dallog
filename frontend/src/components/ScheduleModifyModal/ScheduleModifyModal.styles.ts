@@ -3,7 +3,7 @@ import { css, Theme } from '@emotion/react';
 const modalStyle = ({ colors }: Theme) => css`
   width: 120rem;
   padding: 12.5rem;
-  border-radius: 12px;
+  border-radius: 7px;
 
   background: ${colors.WHITE};
 `;
@@ -61,7 +61,7 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
     width: 4rem;
     height: 4rem;
     border: 1px solid ${colors.YELLOW_500};
-    border-radius: 2px;
+    border-radius: 7px;
 
     &:hover {
       cursor: pointer;
@@ -77,7 +77,7 @@ const checkboxStyle = ({ colors, flex }: Theme) => css`
 
     width: 4rem;
     height: 4rem;
-    border-radius: 2px;
+    border-radius: 7px;
 
     background: ${colors.YELLOW_500};
 
@@ -108,7 +108,7 @@ const cancelButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem 3rem;
   box-sizing: border-box;
   border: 1px solid ${colors.GRAY_500};
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.WHITE};
@@ -120,7 +120,7 @@ const cancelButtonStyle = ({ colors }: Theme) => css`
 const saveButtonStyle = ({ colors }: Theme) => css`
   padding: 2rem 3rem;
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 2px ${colors.GRAY_400};
 
   background: ${colors.YELLOW_500};

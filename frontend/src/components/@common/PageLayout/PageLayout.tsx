@@ -1,3 +1,4 @@
+import { useTheme } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 
 import { sideBarState } from '@/recoil/atoms';
@@ -9,9 +10,11 @@ interface PageLayoutProps {
 }
 
 function PageLayout({ children }: PageLayoutProps) {
+  const theme = useTheme();
+
   const isSideBarOpen = useRecoilValue(sideBarState);
 
-  return <div css={pageLayout(isSideBarOpen)}>{children}</div>;
+  return <div css={pageLayout(theme, isSideBarOpen)}>{children}</div>;
 }
 
 export default PageLayout;

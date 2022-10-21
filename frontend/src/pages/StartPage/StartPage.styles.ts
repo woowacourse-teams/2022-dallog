@@ -1,5 +1,13 @@
 import { css, Theme } from '@emotion/react';
 
+const contentStyle = ({ flex }: Theme) => css`
+  ${flex.row};
+
+  width: 100%;
+  height: 100%;
+  padding: 0 25rem;
+`;
+
 const calendarStyle = ({ flex, colors }: Theme) => css`
   ${flex.column};
 
@@ -100,6 +108,22 @@ const thirdItemStyle = ({ colors }: Theme) => css`
   animation-delay: 1.5s;
 `;
 
+const introductionStyle = ({ flex, mq }: Theme) => css`
+  ${flex.column}
+
+  align-items: flex-start;
+  gap: 15rem;
+
+  width: 100%;
+
+  ${mq?.laptop} {
+    align-items: flex-end;
+    gap: 6rem;
+
+    text-align: right;
+  }
+`;
+
 const blackTextStyle = ({ colors }: Theme) => css`
   width: 100%;
 
@@ -120,16 +144,10 @@ const whiteTextStyle = ({ colors }: Theme) => css`
   text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
 `;
 
-const introductionStyle = css`
-  width: 100%;
-  margin: 20rem 20rem 0 0;
-
-  text-align: right;
-`;
-
 const detailTextStyle = ({ colors }: Theme) => css`
-  font-size: 3.5rem;
+  font-size: 4rem;
   color: ${colors.GRAY_500};
+  line-height: 120%;
 `;
 
 const loginText = css`
@@ -145,7 +163,7 @@ const googleLoginButton = ({ colors, flex }: Theme) => css`
   width: 75rem;
   height: 15rem;
   padding: 4rem;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 1px solid ${colors.GRAY_400};
   box-shadow: 2px 2px 2px ${colors.GRAY_400};
 
@@ -160,17 +178,8 @@ const googleLoginButton = ({ colors, flex }: Theme) => css`
   }
 `;
 
-const mainContentStyle = ({ flex }: Theme) => css`
-  ${flex.column};
-
-  align-items: flex-end;
-  gap: 6rem;
-`;
-
-const sectionStyle = ({ flex }: Theme) => css`
-  ${flex.row};
-
-  align-items: flex-start;
+const iconStyle = css`
+  font-size: 5rem;
 `;
 
 const secondSectionStyle = ({ flex, colors }: Theme) => css`
@@ -188,24 +197,19 @@ const secondSectionStyle = ({ flex, colors }: Theme) => css`
   background: ${colors.GRAY_200};
 `;
 
-const pageStyle = ({ flex }: Theme) => css`
-  ${flex.column};
-`;
-
 export {
   blackTextStyle,
   calendarStyle,
+  contentStyle,
   detailTextStyle,
   dateItemStyle,
   firstItemStyle,
   googleLoginButton,
-  loginText,
+  iconStyle,
   introductionStyle,
-  mainContentStyle,
-  pageStyle,
+  loginText,
   secondItemStyle,
   secondSectionStyle,
-  sectionStyle,
   thirdItemStyle,
   whiteTextStyle,
 };

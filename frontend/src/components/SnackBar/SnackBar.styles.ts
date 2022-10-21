@@ -10,7 +10,7 @@ const snackBarStyle = ({ colors }: Theme, isOpen: boolean) => css`
         transform: translateX(-50%);
 
         padding: 4rem;
-        border-radius: 3px;
+        border-radius: 7px;
 
         background: ${colors.YELLOW_500};
         opacity: 0;

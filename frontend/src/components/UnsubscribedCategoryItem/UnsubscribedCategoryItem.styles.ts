@@ -28,9 +28,9 @@ const item = css`
 `;
 
 const subscribeButton = ({ colors }: Theme) => css`
-  width: 15rem;
+  width: 18rem;
   height: 8rem;
-  border-radius: 3px;
+  border-radius: 7px;
 
   background-color: ${colors.YELLOW_500};
 
@@ -48,7 +48,7 @@ const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
 
   width: max-content;
   padding: 4rem 6rem;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 2px 5px ${colors.GRAY_500};
 
   background: ${colors.BLUE_500};

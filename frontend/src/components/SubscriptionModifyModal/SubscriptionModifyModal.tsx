@@ -18,6 +18,8 @@ import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 import { PALETTE } from '@/constants/style';
 
+import { getRootFontSize } from '@/utils';
+
 import { MdOutlineDelete, MdSettings } from 'react-icons/md';
 
 import {
@@ -90,19 +92,21 @@ function SubscriptionModifyModal({
     !canEditCategories.includes(subscription.category.id) &&
     subscription.category.categoryType !== CATEGORY_TYPE.PERSONAL;
 
+  const rootFontSize = getRootFontSize();
+
   return (
     <>
       <div css={outerStyle} onClick={toggleModalOpen} />
       <div css={modalPosStyle(theme, modalPos)}>
         {canEditSubscription && (
           <Button cssProp={controlButtonStyle} onClick={handleClickManageButton}>
-            <MdSettings size={20} />
+            <MdSettings size={rootFontSize * 5} />
             <span>관리</span>
           </Button>
         )}
         {canDeleteSubscription && (
           <Button cssProp={controlButtonStyle} onClick={handleClickDeleteSubscription}>
-            <MdOutlineDelete size={20} />
+            <MdOutlineDelete size={rootFontSize * 5} />
             <span>구독 해제</span>
           </Button>
         )}

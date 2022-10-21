@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 const footerStyle = ({ colors, flex }: Theme) => css`
-  ${flex.column}
+  ${flex.column};
 
   width: 100%;
   height: 40rem;

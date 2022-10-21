@@ -146,7 +146,7 @@ function useGetSchedulesWithCategory({
   endDateTime,
 }: UseGetSchedulesWithCategoryParams) {
   const { isLoading, data } = useQuery(
-    [CACHE_KEY.SCHEDULES, categoryId],
+    [CACHE_KEY.SCHEDULES, categoryId, startDateTime, endDateTime],
     () => categoryApi.getSchedules(categoryId, startDateTime, endDateTime),
     {
       enabled: !!categoryId,
