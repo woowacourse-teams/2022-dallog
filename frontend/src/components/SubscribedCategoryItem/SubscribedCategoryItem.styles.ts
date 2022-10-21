@@ -60,21 +60,6 @@ const detailStyle = ({ colors }: Theme, hoveringUpside: boolean) => css`
   background: ${colors.BLUE_500};
 
   color: ${colors.WHITE};
-
-  &::after {
-    position: absolute;
-    top: ${hoveringUpside ? '-40%' : '100%'};
-    left: 50%;
-
-    margin-left: -10px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: ${hoveringUpside
-      ? `transparent transparent ${colors.BLUE_500}`
-      : `${colors.BLUE_500} transparent transparent`};
-
-    content: '';
-  }
 `;
 
 export { categoryItem, detailStyle, item, unsubscribeButton };
