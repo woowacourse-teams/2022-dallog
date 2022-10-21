@@ -1,6 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
-const scheduleAddButton = ({ colors }: Theme) => css`
+const scheduleAddButton = ({ colors, flex }: Theme) => css`
+  ${flex.row};
+
   position: fixed;
   right: 7rem;
   bottom: 7rem;
