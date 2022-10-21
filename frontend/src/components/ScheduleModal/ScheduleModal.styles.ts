@@ -2,18 +2,26 @@ import { css, Theme } from '@emotion/react';
 
 import { ModalPosType } from '@/@types';
 
-const scheduleModalStyle = ({ colors }: Theme, scheduleModalPos: ModalPosType) => css`
+const scheduleModalStyle = ({ colors, mq }: Theme, scheduleModalPos: ModalPosType) => css`
   position: absolute;
   top: ${scheduleModalPos.top ? `${scheduleModalPos.top + 20}px` : 'none'};
-  right: ${scheduleModalPos.right ? `${scheduleModalPos.right + 20}px` : 'none'};
   bottom: ${scheduleModalPos.bottom ? `${scheduleModalPos.bottom + 20}px` : 'none'};
-  left: ${scheduleModalPos.left ? `${scheduleModalPos.left + 20}px` : 'none'};
 
   padding: 5rem 5rem 10rem 10rem;
   border-radius: 8px;
   box-shadow: 0 0 30px ${colors.GRAY_500};
 
   background: ${colors.WHITE};
+
+  ${mq?.laptop} {
+    right: ${scheduleModalPos.right ? `${scheduleModalPos.right + 20}px` : 'none'};
+    left: ${scheduleModalPos.left ? `${scheduleModalPos.left + 20}px` : 'none'};
+  }
+
+  ${mq?.tablet || mq?.mobile} {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const headerStyle = ({ flex }: Theme) => css`
