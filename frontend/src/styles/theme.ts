@@ -1,6 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
-import { RESPONSIVE } from '@/constants/style';
+import { RESPONSIVE } from '../constants/style';
 
 const colors = {
   YELLOW_000: '#fff9db',
