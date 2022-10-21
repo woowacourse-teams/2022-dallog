@@ -74,7 +74,7 @@ function ScheduleModal({
       return;
     }
 
-    return dateTime.replace('T', ' ');
+    return dateTime.replace('T', ' ').slice(0, -3);
   };
 
   const canEditSchedule = editableCategoryGetResponse?.data.some(
