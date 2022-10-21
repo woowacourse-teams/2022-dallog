@@ -307,8 +307,8 @@ function CategoryPage() {
                         <div
                           key={`${currentDate}#${schedule.id}#longTerms`}
                           css={itemWithBackgroundStyle(
+                            theme,
                             priority,
-                            schedule.colorCode,
                             MAX_SCHEDULE_COUNT,
                             currentDate === endDate
                           )}
@@ -327,12 +327,7 @@ function CategoryPage() {
                       return (
                         <div
                           key={`${currentDate}#${schedule.id}#allDays`}
-                          css={itemWithBackgroundStyle(
-                            priority,
-                            schedule.colorCode,
-                            MAX_SCHEDULE_COUNT,
-                            true
-                          )}
+                          css={itemWithBackgroundStyle(theme, priority, MAX_SCHEDULE_COUNT, true)}
                         >
                           {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
                         </div>
@@ -350,7 +345,6 @@ function CategoryPage() {
                           css={itemWithoutBackgroundStyle(
                             theme,
                             priority,
-                            schedule.colorCode,
                             MAX_SCHEDULE_COUNT,
                             false
                           )}

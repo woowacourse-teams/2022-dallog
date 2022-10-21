@@ -265,8 +265,8 @@ const dateTextStyle = (
 `;
 
 const itemWithBackgroundStyle = (
+  { colors }: Theme,
   priority: number | null,
-  color: string,
   maxView: number,
   isEndDate: boolean
 ) => css`
@@ -285,7 +285,7 @@ const itemWithBackgroundStyle = (
     border-bottom-right-radius: 4px;
   `}
 
-  background: ${color};
+  background: ${colors.ORANGE_500};
 
   font-size: 2.75rem;
   line-height: 2.75rem;
@@ -297,19 +297,18 @@ const itemWithBackgroundStyle = (
 `;
 
 const itemWithoutBackgroundStyle = (
-  { colors }: Theme,
+  theme: Theme,
   priority: number | null,
-  color: string,
   maxView: number,
   isEndDate: boolean
 ) => css`
-  ${itemWithBackgroundStyle(priority, color, maxView, isEndDate)};
+  ${itemWithBackgroundStyle(theme, priority, maxView, isEndDate)};
 
   overflow: hidden;
 
-  border-left: 3px solid ${color};
+  border-left: 3px solid ${theme.colors.ORANGE_500};
 
-  background: ${colors.WHITE};
+  background: ${theme.colors.WHITE};
 
   color: black;
 
