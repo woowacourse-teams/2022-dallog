@@ -93,7 +93,7 @@ function CalendarPage() {
 
     setMaxScheduleCount(
       Math.floor(
-        (dateRef.current.clientHeight - SCHEDULE.HEIGHT * rootFontSize) /
+        (Math.floor(dateRef.current.clientHeight / 10) * 10 - SCHEDULE.HEIGHT * rootFontSize) /
           (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
       )
     );
