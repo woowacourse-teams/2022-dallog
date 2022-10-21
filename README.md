@@ -1,9 +1,9 @@
 <div align="center">
 <img src="https://user-images.githubusercontent.com/11745691/185735071-5eb23eaa-745b-4d69-a336-b64e5a6f011e.png" />
 
-달력이 기록을 공유할 때, 달록 🌙
+### 달력이 기록을 공유할 때, 달록 🌙
 
-[<img src="https://img.shields.io/badge/-dallog.me-important?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.me) [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.github.io) [<img src="https://img.shields.io/badge/release-v1.1.3-critical?style=flat&logo=google-chrome&logoColor=white" />](https://github.com/woowacourse-teams/2022-dallog/releases/tag/v1.1.3)
+[<img src="https://img.shields.io/badge/-dallog.me-important?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.me) [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />](https://dallog.github.io) [<img src="https://img.shields.io/badge/release-v1.1.5-critical?style=flat&logo=google-chrome&logoColor=white" />](https://github.com/woowacourse-teams/2022-dallog/releases/tag/v1.1.5)
 
 [](https://dallog.me)
 
@@ -13,6 +13,8 @@
 
 달록은 우아한테크코스 공유 캘린더입니다. 우아한테크코스 공식 일정, 데일리 팀, 스터디 등 파편화된 여러 일정을 모아 달록에서 관리할 수 있습니다. 사용자는 관심있는 일정 카테고리를 구독하여 개인화된 캘린더를 사용할 수 있습니다.
 
+**[달록을 더 자세히 알아보고 싶다면, 여기로!](https://sites.google.com/woowahan.com/woowacourse-demo-4th/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EB%8B%AC%EB%A1%9D)**
+
 ## 🖥 서비스 화면
 
 ![](https://user-images.githubusercontent.com/11745691/194251748-1a5f5819-7ae8-4648-a45e-6c02399af812.png)
@@ -21,15 +23,19 @@
 
 ### Front-end
 
-![](https://user-images.githubusercontent.com/11745691/188255671-080e1818-dadc-43d1-91f0-911f7b12add5.png)
+![](https://user-images.githubusercontent.com/11745691/197112888-c634aecc-fe5b-4087-94f9-cd4d0c4ab553.png)
 
 ### Back-end
 
-![](https://user-images.githubusercontent.com/11745691/188255703-966c55f6-b868-49c2-a915-8e6fc84ce287.png)
+![](https://user-images.githubusercontent.com/11745691/197112828-fd63411d-f7be-4501-b13e-5b450ccf0c40.png)
 
 ## ⚙️ Infrastructure
 
-![](https://user-images.githubusercontent.com/11745691/185746996-8c2ec104-95a4-472e-9ad0-27a2a22ce821.png)
+![](https://user-images.githubusercontent.com/11745691/197112936-d3b80ed4-f0fb-477a-8099-2600f36e9061.png)
+
+## 🔀 CI/CD Pipeline
+
+![](https://user-images.githubusercontent.com/11745691/197113000-dc562bfa-c1ad-4500-91d9-908b2d7c7014.png)
 
 ## 🌈 알록달록하게 일을 더 잘하는 9가지 방법
 
