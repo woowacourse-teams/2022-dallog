@@ -52,6 +52,9 @@ function useValidateSchedule({
 
     if (startDate.inputValue > endDate.inputValue) {
       endDate.setInputValue(startDate.inputValue);
+      endTime.setInputValue(startTime.inputValue);
+
+      return;
     }
 
     if (startTime.inputValue >= '23:00') {
