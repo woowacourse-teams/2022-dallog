@@ -3,11 +3,11 @@ import { css, Theme } from '@emotion/react';
 import { DAYS } from '@/constants/date';
 import { SCHEDULE } from '@/constants/style';
 
-const calendarPage = css`
+const calendarPageStyle = css`
   padding: 0 5rem 5rem;
 `;
 
-const calendarHeader = ({ colors, flex }: Theme) => css`
+const calendarHeaderStyle = ({ colors, flex }: Theme) => css`
   ${flex.row}
 
   justify-content: space-between;
@@ -20,25 +20,40 @@ const calendarHeader = ({ colors, flex }: Theme) => css`
   color: ${colors.GRAY_700};
 `;
 
-const monthPicker = ({ flex }: Theme) => css`
+const navStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  gap: 4rem;
+`;
+
+const spinnerStyle = ({ flex }: Theme) => css`
+  ${flex.row}
+
+  gap: 2rem;
+
+  width: 100%;
+  height: 100%;
+
+  font-size: 3rem;
+`;
+
+const monthPickerStyle = ({ flex }: Theme) => css`
   ${flex.row}
 
   justify-content: space-around;
 `;
 
-const todayButton = ({ colors }: Theme) => css`
+const todayButtonStyle = ({ colors }: Theme) => css`
   width: 15rem;
   height: 8rem;
 
-  padding: auto 0;
-
   font-size: 4rem;
-  line-height: 4rem;
   font-weight: 500;
   color: ${colors.GRAY_700};
+  line-height: 4rem;
 `;
 
-const navButton = ({ colors }: Theme) => css`
+const navButtonStyle = ({ colors }: Theme) => css`
   position: relative;
 
   width: 8rem;
@@ -62,7 +77,7 @@ const navButton = ({ colors }: Theme) => css`
   }
 `;
 
-const navButtonTitle = ({ colors }: Theme) => css`
+const navButtonTitleStyle = ({ colors }: Theme) => css`
   visibility: hidden;
   position: absolute;
 
@@ -80,36 +95,36 @@ const navButtonTitle = ({ colors }: Theme) => css`
   white-space: nowrap;
 `;
 
-const navBarGrid = css`
+const dayGridStyle = css`
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
 
   height: 7rem;
 `;
 
-const calendarGrid = (rowNum: number) => css`
-  display: grid;
-  grid-template-columns: repeat(7, calc(100% / 7));
-  grid-auto-rows: calc(calc(100vh - 42rem) / ${rowNum});
-`;
-
-const dayBar = ({ colors }: Theme, day: string) => css`
-  padding: 2rem 3rem;
+const dayStyle = ({ colors }: Theme, day: string) => css`
+  padding: 2rem;
   border-top: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};
   border-left: ${day === DAYS[0] && `1px solid ${colors.GRAY_300}`};
 
   font-size: 3rem;
-  text-align: right;
   color: ${day === DAYS[0] && colors.RED_400};
+  text-align: right;
 `;
 
-const dateBorder = ({ colors }: Theme, day: number) => css`
+const calendarGridStyle = (rowNum: number) => css`
+  display: grid;
+  grid-template-columns: repeat(7, calc(100% / 7));
+  grid-auto-rows: calc(calc(100vh - 42rem) / ${rowNum});
+`;
+
+const dateCellStyle = ({ colors }: Theme, day: number) => css`
   position: relative;
 
   height: 100%;
-  border-bottom: 1px solid ${colors.GRAY_300};
   border-right: 1px solid ${colors.GRAY_300};
+  border-bottom: 1px solid ${colors.GRAY_300};
   border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
 
   &:hover {
@@ -117,7 +132,12 @@ const dateBorder = ({ colors }: Theme, day: number) => css`
   }
 `;
 
-const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday: boolean) => css`
+const dateTextStyle = (
+  { colors }: Theme,
+  day: number,
+  isThisMonth: boolean,
+  isToday: boolean
+) => css`
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -129,18 +149,14 @@ const dateText = ({ colors }: Theme, day: number, isThisMonth: boolean, isToday:
   background: ${isToday && colors.YELLOW_500};
 
   font-size: 2.5rem;
-  text-align: right;
-  line-height: 3rem;
   font-weight: 500;
   color: ${isToday
     ? colors.WHITE
     : day === 0
-    ? isThisMonth
-      ? colors.RED_400
-      : `${colors.RED_400}80`
-    : isThisMonth
-    ? colors.GRAY_700
-    : `${colors.GRAY_700}80`};
+    ? `${colors.RED_400}${isThisMonth ? '' : '80'}`
+    : `${colors.GRAY_700}${isThisMonth ? '' : '80'}`};
+  text-align: right;
+  line-height: 3rem;
 `;
 
 const itemWithBackgroundStyle = (
@@ -150,13 +166,12 @@ const itemWithBackgroundStyle = (
   maxView: number,
   isEndDate: boolean
 ) => css`
+  display: ${priority && priority >= maxView ? 'none' : 'block'};
   overflow: hidden;
   position: absolute;
   top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
 
-  display: ${priority && priority >= maxView ? 'none' : 'block'};
-
-  width: ${isEndDate ? '96%' : '100%'};
+  width: ${isEndDate ? '97%' : '100%'};
   height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   ${isEndDate &&
@@ -168,10 +183,10 @@ const itemWithBackgroundStyle = (
   background: ${color};
 
   font-size: 2.75rem;
-  line-height: 2.75rem;
+  color: white;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: white;
+  line-height: 2.75rem;
 
   cursor: pointer;
   filter: ${isHovering && 'brightness(0.95)'};
@@ -189,21 +204,19 @@ const itemWithoutBackgroundStyle = (
 ) => css`
   ${itemWithBackgroundStyle(priority, color, isHovering, maxView, isEndDate)};
 
-  overflow: hidden;
-
   border-left: 3px solid ${color};
 
   background: ${isHovering ? colors.GRAY_000 : colors.WHITE};
 
   color: black;
 
-  cursor: pointer;
   filter: none;
 
   transition: background-color 0.3s;
 `;
 
 const moreStyle = ({ colors }: Theme) => css`
+  overflow: hidden;
   position: absolute;
   bottom: 0;
 
@@ -212,12 +225,11 @@ const moreStyle = ({ colors }: Theme) => css`
   padding: 1rem;
 
   font-size: 2.75rem;
-  line-height: 2.75rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-weight: 200;
   color: ${colors.GRAY_500};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 2.75rem;
 
   cursor: pointer;
 
@@ -226,43 +238,21 @@ const moreStyle = ({ colors }: Theme) => css`
   }
 `;
 
-const spinnerStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-
-  gap: 2rem;
-
-  width: 100%;
-  height: 100%;
-
-  font-size: 3rem;
-`;
-
-const waitingTextStyle = () => css`
-  //
-`;
-
-const waitingNavStyle = ({ flex }: Theme) => css`
-  ${flex.row}
-
-  gap:4rem;
-`;
-
 export {
-  calendarGrid,
-  calendarHeader,
-  calendarPage,
-  dayBar,
-  dateBorder,
-  dateText,
-  itemWithoutBackgroundStyle,
+  calendarGridStyle,
+  calendarHeaderStyle,
+  calendarPageStyle,
+  dateCellStyle,
+  dateTextStyle,
+  dayGridStyle,
+  dayStyle,
   itemWithBackgroundStyle,
-  monthPicker,
+  itemWithoutBackgroundStyle,
+  monthPickerStyle,
   moreStyle,
-  navBarGrid,
-  navButton,
-  navButtonTitle,
+  navButtonStyle,
+  navButtonTitleStyle,
+  navStyle,
   spinnerStyle,
-  todayButton,
-  waitingNavStyle,
-  waitingTextStyle,
+  todayButtonStyle,
 };

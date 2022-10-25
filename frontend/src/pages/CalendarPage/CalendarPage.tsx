@@ -37,22 +37,22 @@ import getSchedulePriority from '@/domains/schedule';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import {
-  calendarGrid,
-  calendarHeader,
-  calendarPage,
-  dateBorder,
-  dateText,
-  dayBar,
+  calendarGridStyle,
+  calendarHeaderStyle,
+  calendarPageStyle,
+  dateCellStyle,
+  dateTextStyle,
+  dayGridStyle,
+  dayStyle,
   itemWithBackgroundStyle,
   itemWithoutBackgroundStyle,
-  monthPicker,
+  monthPickerStyle,
   moreStyle,
-  navBarGrid,
-  navButton,
-  navButtonTitle,
+  navButtonStyle,
+  navButtonTitleStyle,
+  navStyle,
   spinnerStyle,
-  todayButton,
-  waitingNavStyle,
+  todayButtonStyle,
 } from './CalendarPage.styles';
 
 function CalendarPage() {
@@ -117,51 +117,54 @@ function CalendarPage() {
   if (isLoading || data === undefined) {
     return (
       <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
-        <div css={calendarPage}>
-          <div css={calendarHeader}>
+        <div css={calendarPageStyle}>
+          <div css={calendarHeaderStyle}>
             {`${currentYear}년 ${currentMonth}월`}
-            <div css={waitingNavStyle}>
+            <div css={navStyle}>
               <div css={spinnerStyle}>
                 <Spinner size={rootFontSize} />
                 <Responsive type={RESPONSIVE.LAPTOP.DEVICE}>
                   <span>일정을 가져오고 있습니다.</span>
                 </Responsive>
               </div>
-              <div css={monthPicker}>
-                <Button cssProp={navButton} onClick={moveToBeforeMonth} aria-label="이전 달">
+              <div css={monthPickerStyle}>
+                <Button cssProp={navButtonStyle} onClick={moveToBeforeMonth} aria-label="이전 달">
                   <MdKeyboardArrowLeft />
-                  <span css={navButtonTitle}>전 달</span>
+                  <span css={navButtonTitleStyle}>전 달</span>
                 </Button>
-                <Button cssProp={todayButton} onClick={moveToToday} aria-label="이번 달">
+                <Button cssProp={todayButtonStyle} onClick={moveToToday} aria-label="이번 달">
                   오늘
                 </Button>
-                <Button cssProp={navButton} onClick={moveToNextMonth} aria-label="다음 달">
+                <Button cssProp={navButtonStyle} onClick={moveToNextMonth} aria-label="다음 달">
                   <MdKeyboardArrowRight />
-                  <span css={navButtonTitle}>다음 달</span>
+                  <span css={navButtonTitleStyle}>다음 달</span>
                 </Button>
               </div>
             </div>
           </div>
-          <div css={navBarGrid}>
+          <div css={dayGridStyle}>
             {DAYS.map((day) => (
-              <span key={`day#${day}`} css={dayBar(theme, day)}>
+              <span key={`day#${day}`} css={dayStyle(theme, day)}>
                 {day}
               </span>
             ))}
           </div>
-          <div css={calendarGrid(rowNum)}>
+          <div css={calendarGridStyle(rowNum)}>
             {calendar.map((dateTime) => {
               const { month, date, day } = extractDateTime(dateTime);
 
               return (
-                <div key={dateTime} ref={dateRef}>
-                  <div css={dateBorder(theme, day)} onClick={(e) => handleClickDate(e, dateTime)}>
-                    <span
-                      css={dateText(theme, day, currentMonth === month, dateTime === getToday())}
-                    >
-                      {date}
-                    </span>
-                  </div>
+                <div
+                  key={dateTime}
+                  css={dateCellStyle(theme, day)}
+                  onClick={(e) => handleClickDate(e, dateTime)}
+                  ref={dateRef}
+                >
+                  <span
+                    css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}
+                  >
+                    {date}
+                  </span>
                 </div>
               );
             })}
@@ -194,31 +197,31 @@ function CalendarPage() {
 
   return (
     <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
-      <div css={calendarPage}>
-        <div css={calendarHeader}>
-          {currentYear}년 {currentMonth}월
-          <div css={monthPicker}>
-            <Button cssProp={navButton} onClick={moveToBeforeMonth}>
+      <div css={calendarPageStyle}>
+        <div css={calendarHeaderStyle}>
+          {`${currentYear}년 ${currentMonth}월`}
+          <div css={monthPickerStyle}>
+            <Button cssProp={navButtonStyle} onClick={moveToBeforeMonth}>
               <MdKeyboardArrowLeft />
-              <span css={navButtonTitle}>전 달</span>
+              <span css={navButtonTitleStyle}>전 달</span>
             </Button>
-            <Button cssProp={todayButton} onClick={moveToToday}>
+            <Button cssProp={todayButtonStyle} onClick={moveToToday}>
               오늘
             </Button>
-            <Button cssProp={navButton} onClick={moveToNextMonth}>
+            <Button cssProp={navButtonStyle} onClick={moveToNextMonth}>
               <MdKeyboardArrowRight />
-              <span css={navButtonTitle}>다음 달</span>
+              <span css={navButtonTitleStyle}>다음 달</span>
             </Button>
           </div>
         </div>
-        <div css={navBarGrid}>
+        <div css={dayGridStyle}>
           {DAYS.map((day) => (
-            <span key={`${day}#day`} css={dayBar(theme, day)}>
+            <span key={`${day}#day`} css={dayStyle(theme, day)}>
               {day}
             </span>
           ))}
         </div>
-        <div css={calendarGrid(rowNum)}>
+        <div css={calendarGridStyle(rowNum)}>
           {calendar.map((dateTime) => {
             const { month, date, day } = extractDateTime(dateTime);
             const currentDate = getISODateString(dateTime);
@@ -230,116 +233,115 @@ function CalendarPage() {
               priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
 
             return (
-              <div key={dateTime}>
-                <div
-                  css={dateBorder(theme, day)}
-                  onClick={(e) => handleClickDate(e, dateTime)}
-                  ref={dateRef}
+              <div
+                key={dateTime}
+                css={dateCellStyle(theme, day)}
+                onClick={(e) => handleClickDate(e, dateTime)}
+                ref={dateRef}
+              >
+                <span
+                  css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}
                 >
-                  <span css={dateText(theme, day, currentMonth === month, dateTime === getToday())}>
-                    {date}
-                  </span>
+                  {date}
+                </span>
 
-                  {longTermSchedulesWithPriority.map(({ schedule, priority }) => {
-                    const startDate = getISODateString(schedule.startDateTime);
-                    const endDate = getISODateString(
-                      checkAllDay(schedule.startDateTime, schedule.endDateTime)
-                        ? getDayOffsetDateTime(schedule.endDateTime, -1)
-                        : schedule.endDateTime
-                    );
-                    const { day: currentDay } = extractDateTime(dateTime);
+                {longTermSchedulesWithPriority.map(({ schedule, priority }) => {
+                  const startDate = getISODateString(schedule.startDateTime);
+                  const endDate = getISODateString(
+                    checkAllDay(schedule.startDateTime, schedule.endDateTime)
+                      ? getDayOffsetDateTime(schedule.endDateTime, -1)
+                      : schedule.endDateTime
+                  );
+                  const { day: currentDay } = extractDateTime(dateTime);
 
-                    if (!(startDate <= currentDate && currentDate <= endDate) || priority === null)
-                      return;
+                  if (!(startDate <= currentDate && currentDate <= endDate) || priority === null)
+                    return;
 
-                    return (
-                      <div
-                        key={`${currentDate}#${schedule.id}#longTerms`}
-                        css={itemWithBackgroundStyle(
-                          priority,
-                          schedule.colorCode,
-                          hoveringId === schedule.id,
-                          maxScheduleCount,
-                          currentDate === endDate
-                        )}
-                        onMouseEnter={() => onMouseEnter(schedule.id)}
-                        onClick={(e) =>
-                          scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                        }
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {(startDate === currentDate || currentDay === 0) &&
-                          (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
-                      </div>
-                    );
-                  })}
-
-                  {allDaySchedulesWithPriority.map(({ schedule, priority }) => {
-                    const startDate = getISODateString(schedule.startDateTime);
-
-                    if (startDate !== currentDate || priority === null) return;
-
-                    return (
-                      <div
-                        key={`${currentDate}#${schedule.id}#allDays`}
-                        css={itemWithBackgroundStyle(
-                          priority,
-                          schedule.colorCode,
-                          hoveringId === schedule.id,
-                          maxScheduleCount,
-                          true
-                        )}
-                        onMouseEnter={() => onMouseEnter(schedule.id)}
-                        onClick={(e) =>
-                          scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                        }
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                      </div>
-                    );
-                  })}
-
-                  {fewHourSchedulesWithPriority.map(({ schedule, priority }) => {
-                    const startDate = getISODateString(schedule.startDateTime);
-
-                    if (startDate !== currentDate || priority === null) return;
-
-                    return (
-                      <div
-                        key={`${currentDate}#${schedule.id}#fewHours`}
-                        css={itemWithoutBackgroundStyle(
-                          theme,
-                          priority,
-                          schedule.colorCode,
-                          hoveringId === schedule.id,
-                          maxScheduleCount,
-                          false
-                        )}
-                        onMouseEnter={() => onMouseEnter(schedule.id)}
-                        onClick={(e) =>
-                          scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                        }
-                        onMouseLeave={onMouseLeave}
-                      >
-                        {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                      </div>
-                    );
-                  })}
-
-                  {hasMoreSchedule && (
-                    <span
-                      css={moreStyle}
+                  return (
+                    <div
+                      key={`${currentDate}#${schedule.id}#longTerms`}
+                      css={itemWithBackgroundStyle(
+                        priority,
+                        schedule.colorCode,
+                        hoveringId === schedule.id,
+                        maxScheduleCount,
+                        currentDate === endDate
+                      )}
+                      onMouseEnter={() => onMouseEnter(schedule.id)}
                       onClick={(e) =>
-                        moreScheduleModal.handleClickOpen(e, () =>
-                          setMoreScheduleDateTime(dateTime)
-                        )
+                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
                       }
+                      onMouseLeave={onMouseLeave}
                     >
-                      일정 더보기
-                    </span>
-                  )}
-                </div>
+                      {(startDate === currentDate || currentDay === 0) &&
+                        (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
+                    </div>
+                  );
+                })}
+
+                {allDaySchedulesWithPriority.map(({ schedule, priority }) => {
+                  const startDate = getISODateString(schedule.startDateTime);
+
+                  if (startDate !== currentDate || priority === null) return;
+
+                  return (
+                    <div
+                      key={`${currentDate}#${schedule.id}#allDays`}
+                      css={itemWithBackgroundStyle(
+                        priority,
+                        schedule.colorCode,
+                        hoveringId === schedule.id,
+                        maxScheduleCount,
+                        true
+                      )}
+                      onMouseEnter={() => onMouseEnter(schedule.id)}
+                      onClick={(e) =>
+                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
+                      }
+                      onMouseLeave={onMouseLeave}
+                    >
+                      {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+                    </div>
+                  );
+                })}
+
+                {fewHourSchedulesWithPriority.map(({ schedule, priority }) => {
+                  const startDate = getISODateString(schedule.startDateTime);
+
+                  if (startDate !== currentDate || priority === null) return;
+
+                  return (
+                    <div
+                      key={`${currentDate}#${schedule.id}#fewHours`}
+                      css={itemWithoutBackgroundStyle(
+                        theme,
+                        priority,
+                        schedule.colorCode,
+                        hoveringId === schedule.id,
+                        maxScheduleCount,
+                        false
+                      )}
+                      onMouseEnter={() => onMouseEnter(schedule.id)}
+                      onClick={(e) =>
+                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
+                      }
+                      onMouseLeave={onMouseLeave}
+                    >
+                      {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+                    </div>
+                  );
+                })}
+
+                {hasMoreSchedule && (
+                  <span
+                    css={moreStyle}
+                    onClick={(e) =>
+                      moreScheduleModal.handleClickOpen(e, () => setMoreScheduleDateTime(dateTime))
+                    }
+                  >
+                    일정 더보기
+                  </span>
+                )}
 
                 {dateTime === moreScheduleDateTime && (
                   <ModalPortal
