@@ -5,7 +5,6 @@ import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
 import useRootFontSize from '@/hooks/useRootFontSize';
-import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
 import { ScheduleType } from '@/@types/schedule';
@@ -32,6 +31,8 @@ import {
   getISODateString,
   getToday,
 } from '@/utils/date';
+
+import getSchedulePriority from '@/domains/schedule';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
@@ -75,9 +76,6 @@ function CalendarPage() {
   } = useCalendar();
 
   const rootFontSize = useRootFontSize();
-
-  const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
-    useSchedulePriority(calendar);
 
   const { state: isScheduleAddModalOpen, toggleState: toggleScheduleAddModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
@@ -178,6 +176,9 @@ function CalendarPage() {
       </PageLayout>
     );
   }
+
+  const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
+    getSchedulePriority(calendar);
 
   const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
   const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);

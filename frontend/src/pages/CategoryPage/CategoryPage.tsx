@@ -5,7 +5,6 @@ import { useGetSchedulesWithCategory } from '@/hooks/@queries/category';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
 import useRootFontSize from '@/hooks/useRootFontSize';
-import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
 import { CategoryType } from '@/@types/category';
@@ -30,6 +29,8 @@ import {
   getISODateString,
   getToday,
 } from '@/utils/date';
+
+import getSchedulePriority from '@/domains/schedule';
 
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdSearch } from 'react-icons/md';
 
@@ -87,9 +88,6 @@ function CategoryPage() {
     startDateTime,
     endDateTime,
   } = useCalendar();
-
-  const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
-    useSchedulePriority(calendar);
 
   const moreScheduleModal = useModalPosition();
 
@@ -204,6 +202,9 @@ function CategoryPage() {
       </PageLayout>
     );
   }
+
+  const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
+    getSchedulePriority(calendar);
 
   const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
   const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);

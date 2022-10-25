@@ -4,7 +4,7 @@ import { CALENDAR } from '@/constants';
 
 import { checkAllDay, getDayOffsetDateTime, getISODateString } from '@/utils/date';
 
-function useSchedulePriority(calendar: string[]) {
+function getSchedulePriority(calendar: string[]) {
   const calendarWithPriority = calendar.reduce(
     (
       acc: {
@@ -106,4 +106,4 @@ function useSchedulePriority(calendar: string[]) {
   };
 }
 
-export default useSchedulePriority;
+export default getSchedulePriority;
