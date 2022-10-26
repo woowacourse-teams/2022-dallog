@@ -8,6 +8,7 @@ import useSnackBar from '@/hooks/useSnackBar';
 
 import NavBar from '@/components/NavBar/NavBar';
 import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
+import SideBarFallback from '@/components/SideBar/SideBar.fallback';
 import SnackBar from '@/components/SnackBar/SnackBar';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -56,9 +57,11 @@ function App() {
   });
 
   return (
-    <Suspense fallback={<></>}>
+    <>
       <NavBar />
-      <SideBar />
+      <Suspense fallback={<SideBarFallback />}>
+        <SideBar />
+      </Suspense>
       <Routes>
         <Route path={PATH.MAIN} element={<MainPage />} />
         <Route path={PATH.AUTH} element={<AuthPage />} />
@@ -69,7 +72,7 @@ function App() {
         </Route>
       </Routes>
       <SnackBar />
-    </Suspense>
+    </>
   );
 }
 
