@@ -13,10 +13,6 @@ interface ScheduleType {
   categoryType: ValueOf<typeof CATEGORY_TYPE>;
 }
 
-interface ScheduleResponseType {
-  longTerms: Array<ScheduleType>;
-  allDays: Array<ScheduleType>;
-  fewHours: Array<ScheduleType>;
-}
+type ScheduleResponseType = Record<'longTerms' | 'allDays' | 'fewHours', Array<ScheduleType>>;
 
 export { ScheduleResponseType, ScheduleType };
