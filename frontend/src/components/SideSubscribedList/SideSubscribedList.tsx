@@ -2,6 +2,7 @@ import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
+import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
 
 import { SubscriptionType } from '@/@types/subscription';
@@ -12,8 +13,6 @@ import Button from '@/components/@common/Button/Button';
 import SideItem from '@/components/SideItem/SideItem';
 
 import { PATH } from '@/constants';
-
-import { getRootFontSize } from '@/utils';
 
 import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
@@ -31,6 +30,8 @@ interface SideSubscribedListProps {
 }
 
 function SideSubscribedList({ categories }: SideSubscribedListProps) {
+  const rootFontSize = useRootFontSize();
+
   const isSideBarOpen = useRecoilValue(sideBarState);
 
   const { state: isSubscribedListOpen, toggleState: toggleSubscribedListOpen } = useToggle(true);
@@ -40,8 +41,6 @@ function SideSubscribedList({ categories }: SideSubscribedListProps) {
   const navigate = useNavigate();
 
   const handleClickCategoryAddButton = () => navigate(PATH.CATEGORY);
-
-  const rootFontSize = getRootFontSize();
 
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
