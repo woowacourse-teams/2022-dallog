@@ -1,12 +1,10 @@
-import { RESPONSIVE } from '@/constants/style';
-
 const debounce = <F extends (...params: any[]) => void>(callback: F, delay = 100) => {
-  let timer: number;
+  let timer: NodeJS.Timeout;
 
   return function (...args: any[]) {
     clearTimeout(timer);
 
-    timer = window.setTimeout(() => callback.call(args), delay);
+    timer = setTimeout(() => callback.call(args), delay);
   } as F;
 };
 
