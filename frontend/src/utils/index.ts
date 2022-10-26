@@ -1,5 +1,15 @@
 import { RESPONSIVE } from '@/constants/style';
 
+const debounce = <F extends (...params: any[]) => void>(callback: F, delay = 100) => {
+  let timer: number;
+
+  return function (...args: any[]) {
+    clearTimeout(timer);
+
+    timer = window.setTimeout(() => callback.call(args), delay);
+  } as F;
+};
+
 const getRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -20,4 +30,4 @@ const zeroFill = (str: string | number) => {
   return str.toString().padStart(2, '0');
 };
 
-export { getRandomNumber, getRootFontSize, getSearchParam, zeroFill };
+export { debounce, getRandomNumber, getRootFontSize, getSearchParam, zeroFill };
