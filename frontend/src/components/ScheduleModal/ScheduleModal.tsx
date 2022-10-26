@@ -37,6 +37,7 @@ interface ScheduleModalProps {
   scheduleInfo: ScheduleType;
   toggleScheduleModifyModalOpen: () => void;
   closeModal: () => void;
+  readonly?: boolean;
 }
 
 function ScheduleModal({
@@ -44,6 +45,7 @@ function ScheduleModal({
   scheduleInfo,
   toggleScheduleModifyModalOpen,
   closeModal,
+  readonly = false,
 }: ScheduleModalProps) {
   const theme = useTheme();
 
@@ -77,10 +79,12 @@ function ScheduleModal({
     return dateTime.replace('T', ' ').slice(0, -3);
   };
 
-  const canEditSchedule = editableCategoryGetResponse?.data.some(
-    (category) =>
-      category.id === scheduleInfo.categoryId && category.categoryType !== CATEGORY_TYPE.GOOGLE
-  );
+  const canEditSchedule =
+    !readonly &&
+    editableCategoryGetResponse?.data.some(
+      (category) =>
+        category.id === scheduleInfo.categoryId && category.categoryType !== CATEGORY_TYPE.GOOGLE
+    );
 
   return (
     <div css={scheduleModalStyle(theme, scheduleModalPos)}>

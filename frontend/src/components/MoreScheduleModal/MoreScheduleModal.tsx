@@ -39,6 +39,7 @@ interface MoreScheduleModalProps {
   longTermSchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
   allDaySchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
   fewHourSchedulesWithPriority: { schedule: ScheduleType; priority: number | null }[];
+  readonly?: boolean;
 }
 
 function MoreScheduleModal({
@@ -47,6 +48,7 @@ function MoreScheduleModal({
   longTermSchedulesWithPriority,
   allDaySchedulesWithPriority,
   fewHourSchedulesWithPriority,
+  readonly = false,
 }: MoreScheduleModalProps) {
   const theme = useTheme();
 
@@ -82,7 +84,7 @@ function MoreScheduleModal({
           nowDate <= endDate && (
             <div
               key={`modal-${nowDate}#${schedule.id}`}
-              css={itemWithBackgroundStyle(schedule.colorCode)}
+              css={itemWithBackgroundStyle(theme, readonly ? '' : schedule.colorCode)}
               onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
               {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
@@ -98,7 +100,7 @@ function MoreScheduleModal({
           startDate === nowDate && (
             <div
               key={`modal-${nowDate}#${schedule.id}`}
-              css={itemWithBackgroundStyle(schedule.colorCode)}
+              css={itemWithBackgroundStyle(theme, readonly ? '' : schedule.colorCode)}
               onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
               {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
@@ -114,7 +116,7 @@ function MoreScheduleModal({
           startDate === nowDate && (
             <div
               key={`modal-${nowDate}#${schedule.id}`}
-              css={itemWithoutBackgroundStyle(theme, schedule.colorCode)}
+              css={itemWithoutBackgroundStyle(theme, readonly ? '' : schedule.colorCode)}
               onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
               {schedule.title.trim() || CALENDAR.EMPTY_TITLE}

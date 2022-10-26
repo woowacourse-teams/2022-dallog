@@ -1,9 +1,8 @@
 import { useTheme } from '@emotion/react';
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedulesWithCategory } from '@/hooks/@queries/category';
 import useCalendar from '@/hooks/useCalendar';
-import useModalPosition from '@/hooks/useModalPosition';
 import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
 
@@ -16,19 +15,12 @@ import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
 import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
 import CategoryListFallback from '@/components/CategoryList/CategoryList.fallback';
-import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
+import DateCell from '@/components/DateCell/DateCell';
 
-import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
-import { PAGE_LAYOUT, SCHEDULE, TRANSPARENT } from '@/constants/style';
+import { PAGE_LAYOUT, SCHEDULE } from '@/constants/style';
 
-import {
-  checkAllDay,
-  extractDateTime,
-  getDayOffsetDateTime,
-  getISODateString,
-  getToday,
-} from '@/utils/date';
+import { extractDateTime } from '@/utils/date';
 
 import getSchedulePriority from '@/domains/schedule';
 
@@ -43,15 +35,10 @@ import {
   categoryPageStyle,
   categoryStyle,
   controlStyle,
-  dateStyle,
-  dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
   hintStyle,
-  itemWithBackgroundStyle,
-  itemWithoutBackgroundStyle,
   monthPickerStyle,
-  moreStyle,
   navButtonStyle,
   navButtonTitleStyle,
   searchButtonStyle,
@@ -68,14 +55,15 @@ const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList')
 function CategoryPage() {
   const theme = useTheme();
 
-  const rootFontSize = useRootFontSize();
-
   const keywordRef = useRef<HTMLInputElement>(null);
-  const dateRef = useRef<HTMLDivElement>(null);
+  const dateCellRef = useRef<HTMLDivElement>(null);
 
+  const [maxScheduleCount, setMaxScheduleCount] = useState(0);
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState<Pick<CategoryType, 'id' | 'name'>>({ id: 0, name: '' });
-  const [moreScheduleDateTime, setMoreScheduleDateTime] = useState('');
+  const [hoveringScheduleId, setHoveringScheduleId] = useState('0');
+
+  const rootFontSize = useRootFontSize();
 
   const { state: isCategoryAddModalOpen, toggleState: toggleCategoryAddModalOpen } = useToggle();
 
@@ -89,13 +77,22 @@ function CategoryPage() {
     endDateTime,
   } = useCalendar();
 
-  const moreScheduleModal = useModalPosition();
-
   const { isLoading, data } = useGetSchedulesWithCategory({
     categoryId: category.id,
     startDateTime,
     endDateTime,
   });
+
+  useLayoutEffect(() => {
+    if (!(dateCellRef.current instanceof HTMLDivElement)) return;
+
+    setMaxScheduleCount(
+      Math.floor(
+        (Math.floor(dateCellRef.current.clientHeight / 10) * 10 - SCHEDULE.HEIGHT * rootFontSize) /
+          (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
+      )
+    );
+  }, [startDateTime, rootFontSize]);
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
@@ -177,23 +174,14 @@ function CategoryPage() {
             </div>
             <div css={calendarGridStyle(rowNum)}>
               {calendar.map((dateTime) => {
-                const { month, date, day } = extractDateTime(dateTime);
-
                 return (
-                  <div key={dateTime}>
-                    <div css={dateStyle(theme, day)} ref={dateRef}>
-                      <span
-                        css={dateTextStyle(
-                          theme,
-                          day,
-                          currentMonth === month,
-                          dateTime === getToday()
-                        )}
-                      >
-                        {date}
-                      </span>
-                    </div>
-                  </div>
+                  <DateCell
+                    key={dateTime}
+                    dateTime={dateTime}
+                    currentMonth={currentMonth}
+                    dateCellRef={dateCellRef}
+                    readonly
+                  />
                 );
               })}
             </div>
@@ -206,17 +194,11 @@ function CategoryPage() {
   const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
     getSchedulePriority(calendar);
 
-  const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
-  const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);
-  const fewHourSchedulesWithPriority = getSingleSchedulesWithPriority(data.data.fewHours);
-
-  const MAX_SCHEDULE_COUNT =
-    dateRef.current !== null
-      ? Math.floor(
-          (dateRef.current.clientHeight - SCHEDULE.HEIGHT * rootFontSize) /
-            (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
-        )
-      : CALENDAR.MAX_SCHEDULE_COUNT;
+  const schedulesWithPriority = {
+    longTermSchedulesWithPriority: getLongTermSchedulesWithPriority(data.data.longTerms),
+    allDaySchedulesWithPriority: getSingleSchedulesWithPriority(data.data.allDays),
+    fewHourSchedulesWithPriority: getSingleSchedulesWithPriority(data.data.fewHours),
+  };
 
   return (
     <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
@@ -271,120 +253,19 @@ function CategoryPage() {
           </div>
           <div css={calendarGridStyle(rowNum)}>
             {calendar.map((dateTime) => {
-              const { month, date, day } = extractDateTime(dateTime);
-              const currentDate = getISODateString(dateTime);
-
               return (
-                <div key={dateTime}>
-                  <div css={dateStyle(theme, day)}>
-                    <span
-                      css={dateTextStyle(
-                        theme,
-                        day,
-                        currentMonth === month,
-                        dateTime === getToday(),
-                        true
-                      )}
-                    >
-                      {date}
-                    </span>
-
-                    {longTermSchedulesWithPriority.map(({ schedule, priority }) => {
-                      const startDate = getISODateString(schedule.startDateTime);
-                      const endDate = getISODateString(
-                        checkAllDay(schedule.startDateTime, schedule.endDateTime)
-                          ? getDayOffsetDateTime(schedule.endDateTime, -1)
-                          : schedule.endDateTime
-                      );
-                      const { day: currentDay } = extractDateTime(dateTime);
-
-                      if (
-                        !(startDate <= currentDate && currentDate <= endDate) ||
-                        priority === null
-                      )
-                        return;
-
-                      return (
-                        <div
-                          key={`${currentDate}#${schedule.id}#longTerms`}
-                          css={itemWithBackgroundStyle(
-                            theme,
-                            priority,
-                            MAX_SCHEDULE_COUNT,
-                            currentDate === endDate
-                          )}
-                        >
-                          {(startDate === currentDate || currentDay === 0) &&
-                            (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
-                        </div>
-                      );
-                    })}
-
-                    {allDaySchedulesWithPriority.map(({ schedule, priority }) => {
-                      const startDate = getISODateString(schedule.startDateTime);
-
-                      if (startDate !== currentDate || priority === null) return;
-
-                      return (
-                        <div
-                          key={`${currentDate}#${schedule.id}#allDays`}
-                          css={itemWithBackgroundStyle(theme, priority, MAX_SCHEDULE_COUNT, true)}
-                        >
-                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                        </div>
-                      );
-                    })}
-
-                    {fewHourSchedulesWithPriority.map(({ schedule, priority }) => {
-                      const startDate = getISODateString(schedule.startDateTime);
-
-                      if (startDate !== currentDate || priority === null) return;
-
-                      return (
-                        <div
-                          key={`${currentDate}#${schedule.id}#fewHours`}
-                          css={itemWithoutBackgroundStyle(
-                            theme,
-                            priority,
-                            MAX_SCHEDULE_COUNT,
-                            false
-                          )}
-                        >
-                          {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                        </div>
-                      );
-                    })}
-
-                    {calendarWithPriority[getISODateString(dateTime)].findIndex((el) => !el) + 1 >
-                      MAX_SCHEDULE_COUNT && (
-                      <span
-                        css={moreStyle}
-                        onClick={(e) =>
-                          moreScheduleModal.handleClickOpen(e, () =>
-                            setMoreScheduleDateTime(dateTime)
-                          )
-                        }
-                      >
-                        일정 더보기
-                      </span>
-                    )}
-                  </div>
-                  {dateTime === moreScheduleDateTime && (
-                    <ModalPortal
-                      isOpen={moreScheduleModal.isModalOpen}
-                      closeModal={moreScheduleModal.toggleModalOpen}
-                      dimmerBackground={TRANSPARENT}
-                    >
-                      <MoreScheduleModal
-                        moreScheduleModalPos={moreScheduleModal.modalPos}
-                        moreScheduleDateTime={moreScheduleDateTime}
-                        longTermSchedulesWithPriority={longTermSchedulesWithPriority}
-                        allDaySchedulesWithPriority={allDaySchedulesWithPriority}
-                        fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
-                      />
-                    </ModalPortal>
-                  )}
-                </div>
+                <DateCell
+                  key={dateTime}
+                  dateTime={dateTime}
+                  currentMonth={currentMonth}
+                  dateCellRef={dateCellRef}
+                  hoveringScheduleId={hoveringScheduleId}
+                  setHoveringScheduleId={setHoveringScheduleId}
+                  maxScheduleCount={maxScheduleCount}
+                  calendarWithPriority={calendarWithPriority}
+                  schedulesWithPriority={schedulesWithPriority}
+                  readonly
+                />
               );
             })}
           </div>

@@ -35,10 +35,9 @@ interface DateCellProps {
   dateTime: string;
   currentMonth: number;
   dateCellRef: React.RefObject<HTMLDivElement>;
-  setDateInfo: React.Dispatch<React.SetStateAction<string>>;
-  toggleScheduleAddModalOpen: () => void;
   hoveringScheduleId?: string;
   setHoveringScheduleId?: React.Dispatch<React.SetStateAction<string>>;
+  maxScheduleCount?: number;
   calendarWithPriority?: Record<string, boolean[]>;
   schedulesWithPriority?: Record<
     | 'longTermSchedulesWithPriority'
@@ -49,20 +48,23 @@ interface DateCellProps {
       priority: null | number;
     }[]
   >;
-  maxScheduleCount?: number;
+  setDateInfo?: React.Dispatch<React.SetStateAction<string>>;
+  toggleScheduleAddModalOpen?: () => void;
+  readonly?: boolean;
 }
 
 function DateCell({
   dateTime,
   currentMonth,
   dateCellRef,
-  setDateInfo,
-  toggleScheduleAddModalOpen,
   hoveringScheduleId,
   setHoveringScheduleId,
+  maxScheduleCount,
   calendarWithPriority,
   schedulesWithPriority,
-  maxScheduleCount,
+  setDateInfo,
+  toggleScheduleAddModalOpen,
+  readonly = false,
 }: DateCellProps) {
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
   const [moreScheduleDateTime, setMoreScheduleDateTime] = useState('');
@@ -75,25 +77,22 @@ function DateCell({
 
   const { month, date, day } = extractDateTime(dateTime);
 
+  const isSchedulesLoaded = calendarWithPriority && schedulesWithPriority && maxScheduleCount;
+
   const handleClickDate = (e: React.MouseEvent, info: string) => {
     if (e.target !== e.currentTarget) {
       return;
     }
 
-    setDateInfo(info);
-    toggleScheduleAddModalOpen();
+    setDateInfo && setDateInfo(info);
+    toggleScheduleAddModalOpen && toggleScheduleAddModalOpen();
   };
 
-  if (
-    !setHoveringScheduleId ||
-    !calendarWithPriority ||
-    !schedulesWithPriority ||
-    !maxScheduleCount
-  ) {
+  if (!isSchedulesLoaded) {
     return (
       <div
-        css={dateCellStyle(theme, day)}
-        onClick={(e) => handleClickDate(e, dateTime)}
+        css={dateCellStyle(theme, day, readonly)}
+        {...(!readonly && { onClick: (e) => handleClickDate(e, dateTime) })}
         ref={dateCellRef}
       >
         <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
@@ -116,16 +115,19 @@ function DateCell({
   );
   const hasMoreSchedule = priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
 
-  const onMouseEnter = (scheduleId: string) => {
-    setHoveringScheduleId(scheduleId);
+  const handleMouseEnterSchedule = (scheduleId: string) => {
+    setHoveringScheduleId && setHoveringScheduleId(scheduleId);
   };
 
-  const onMouseLeave = () => {
-    setHoveringScheduleId('0');
+  const handleMouseLeaveSchedule = () => {
+    setHoveringScheduleId && setHoveringScheduleId('0');
   };
 
   return (
-    <div css={dateCellStyle(theme, day)} onClick={(e) => handleClickDate(e, dateTime)}>
+    <div
+      css={dateCellStyle(theme, day, readonly)}
+      {...(!readonly && { onClick: (e) => handleClickDate(e, dateTime) })}
+    >
       <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
         {date}
       </span>
@@ -145,15 +147,16 @@ function DateCell({
           <div
             key={`${currentDate}#${schedule.id}#longTerms`}
             css={itemWithBackgroundStyle(
+              theme,
               priority,
-              schedule.colorCode,
-              hoveringScheduleId === schedule.id,
               maxScheduleCount,
-              currentDate === endDate
+              currentDate === endDate,
+              hoveringScheduleId === schedule.id,
+              readonly || schedule.colorCode
             )}
-            onMouseEnter={() => onMouseEnter(schedule.id)}
+            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={onMouseLeave}
+            onMouseLeave={handleMouseLeaveSchedule}
           >
             {(startDate === currentDate || currentDay === 0) &&
               (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
@@ -170,15 +173,16 @@ function DateCell({
           <div
             key={`${currentDate}#${schedule.id}#allDays`}
             css={itemWithBackgroundStyle(
+              theme,
               priority,
-              schedule.colorCode,
-              hoveringScheduleId === schedule.id,
               maxScheduleCount,
-              true
+              true,
+              hoveringScheduleId === schedule.id,
+              readonly || schedule.colorCode
             )}
-            onMouseEnter={() => onMouseEnter(schedule.id)}
+            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={onMouseLeave}
+            onMouseLeave={handleMouseLeaveSchedule}
           >
             {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
           </div>
@@ -196,14 +200,14 @@ function DateCell({
             css={itemWithoutBackgroundStyle(
               theme,
               priority,
-              schedule.colorCode,
-              hoveringScheduleId === schedule.id,
               maxScheduleCount,
-              false
+              false,
+              hoveringScheduleId === schedule.id,
+              readonly || schedule.colorCode
             )}
-            onMouseEnter={() => onMouseEnter(schedule.id)}
+            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={onMouseLeave}
+            onMouseLeave={handleMouseLeaveSchedule}
           >
             {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
           </div>
@@ -233,6 +237,7 @@ function DateCell({
             longTermSchedulesWithPriority={longTermSchedulesWithPriority}
             allDaySchedulesWithPriority={allDaySchedulesWithPriority}
             fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
+            readonly={readonly}
           />
         </ModalPortal>
       )}
@@ -249,17 +254,20 @@ function DateCell({
               scheduleInfo={scheduleInfo}
               toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
               closeModal={scheduleModal.toggleModalOpen}
+              readonly={readonly}
             />
           </ModalPortal>
-          <ModalPortal
-            isOpen={isScheduleModifyModalOpen}
-            closeModal={toggleScheduleModifyModalOpen}
-          >
-            <ScheduleModifyModal
-              scheduleInfo={scheduleInfo}
+          {!readonly && (
+            <ModalPortal
+              isOpen={isScheduleModifyModalOpen}
               closeModal={toggleScheduleModifyModalOpen}
-            />
-          </ModalPortal>
+            >
+              <ScheduleModifyModal
+                scheduleInfo={scheduleInfo}
+                closeModal={toggleScheduleModifyModalOpen}
+              />
+            </ModalPortal>
+          )}
         </>
       )}
     </div>

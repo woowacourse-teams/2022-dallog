@@ -2,7 +2,7 @@ import { css, Theme } from '@emotion/react';
 
 import { SCHEDULE } from '@/constants/style';
 
-const dateCellStyle = ({ colors }: Theme, day: number) => css`
+const dateCellStyle = ({ colors }: Theme, day: number, readonly: boolean) => css`
   position: relative;
 
   height: 100%;
@@ -10,9 +10,12 @@ const dateCellStyle = ({ colors }: Theme, day: number) => css`
   border-bottom: 1px solid ${colors.GRAY_300};
   border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
 
-  &:hover {
-    background: ${colors.GRAY_000};
-  }
+  ${!readonly &&
+  css`
+    &:hover {
+      background: ${colors.GRAY_000};
+    }
+  `}
 `;
 
 const dateTextStyle = (
@@ -43,13 +46,14 @@ const dateTextStyle = (
 `;
 
 const itemWithBackgroundStyle = (
+  { colors }: Theme,
   priority: number | null,
-  color: string,
+  maxScheduleCount: number,
+  isEndDate: boolean,
   isHovering: boolean,
-  maxView: number,
-  isEndDate: boolean
+  colorCode: string | boolean
 ) => css`
-  display: ${priority && priority >= maxView ? 'none' : 'block'};
+  display: ${priority && priority >= maxScheduleCount ? 'none' : 'block'};
   overflow: hidden;
   position: absolute;
   top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
@@ -63,7 +67,7 @@ const itemWithBackgroundStyle = (
     border-bottom-right-radius: 4px;
   `}
 
-  background: ${color};
+  background: ${typeof colorCode === 'string' ? colorCode : colors.ORANGE_500};
 
   font-size: 2.75rem;
   color: white;
@@ -78,18 +82,18 @@ const itemWithBackgroundStyle = (
 `;
 
 const itemWithoutBackgroundStyle = (
-  { colors }: Theme,
+  theme: Theme,
   priority: number | null,
-  color: string,
+  maxScheduleCount: number,
+  isEndDate: boolean,
   isHovering: boolean,
-  maxView: number,
-  isEndDate: boolean
+  colorCode: string | boolean
 ) => css`
-  ${itemWithBackgroundStyle(priority, color, isHovering, maxView, isEndDate)};
+  ${itemWithBackgroundStyle(theme, priority, maxScheduleCount, isEndDate, isHovering, colorCode)};
 
-  border-left: 3px solid ${color};
+  border-left: 3px solid ${typeof colorCode === 'string' ? colorCode : theme.colors.ORANGE_500};
 
-  background: ${isHovering ? colors.GRAY_000 : colors.WHITE};
+  background: ${isHovering ? theme.colors.GRAY_000 : theme.colors.WHITE};
 
   color: black;
 

@@ -1,7 +1,6 @@
 import { css, Theme } from '@emotion/react';
 
 import { DAYS } from '@/constants/date';
-import { SCHEDULE } from '@/constants/style';
 
 const categoryPageStyle = ({ flex }: Theme) => css`
   ${flex.row};
@@ -222,121 +221,6 @@ const calendarGridStyle = (rowNum: number) => css`
   grid-auto-rows: calc(calc(100vh - 44rem) / ${rowNum});
 `;
 
-const dateStyle = ({ colors }: Theme, day: number) => css`
-  position: relative;
-
-  height: 100%;
-  border-bottom: 1px solid ${colors.GRAY_300};
-  border-right: 1px solid ${colors.GRAY_300};
-  border-left: ${day === 0 && `1px solid ${colors.GRAY_300}`};
-`;
-
-const dateTextStyle = (
-  { colors }: Theme,
-  day: number,
-  isThisMonth: boolean,
-  isToday: boolean,
-  isCategorySelected?: boolean
-) => css`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-
-  width: 5rem;
-  height: ${SCHEDULE.HEIGHT}rem;
-  padding: 1rem;
-  border-radius: 50%;
-
-  background: ${isToday && (isCategorySelected ? colors.YELLOW_500 : colors.GRAY_300)};
-
-  font-size: 2.5rem;
-  text-align: center;
-  line-height: 3rem;
-  font-weight: 500;
-  color: ${isToday
-    ? colors.WHITE
-    : day === 0
-    ? isThisMonth
-      ? colors.RED_400
-      : `${colors.RED_400}80`
-    : isThisMonth
-    ? colors.GRAY_700
-    : `${colors.GRAY_700}80`};
-`;
-
-const itemWithBackgroundStyle = (
-  { colors }: Theme,
-  priority: number | null,
-  maxView: number,
-  isEndDate: boolean
-) => css`
-  overflow: hidden;
-  position: absolute;
-  top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
-
-  display: ${priority && priority >= maxView ? 'none' : 'block'};
-
-  width: ${isEndDate ? '96%' : '100%'};
-  height: ${SCHEDULE.HEIGHT}rem;
-  padding: 1rem;
-  ${isEndDate &&
-  css`
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  `}
-
-  background: ${colors.ORANGE_500};
-
-  font-size: 2.75rem;
-  line-height: 2.75rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: white;
-
-  cursor: pointer;
-`;
-
-const itemWithoutBackgroundStyle = (
-  theme: Theme,
-  priority: number | null,
-  maxView: number,
-  isEndDate: boolean
-) => css`
-  ${itemWithBackgroundStyle(theme, priority, maxView, isEndDate)};
-
-  overflow: hidden;
-
-  border-left: 3px solid ${theme.colors.ORANGE_500};
-
-  background: ${theme.colors.WHITE};
-
-  color: black;
-
-  cursor: pointer;
-  filter: none;
-`;
-
-const moreStyle = ({ colors }: Theme) => css`
-  position: absolute;
-  bottom: 0;
-
-  width: 100%;
-  height: ${SCHEDULE.HEIGHT}rem;
-  padding: 1rem;
-
-  font-size: 2.75rem;
-  line-height: 2.75rem;
-  white-space: nowrap;
-  font-weight: 200;
-  color: ${colors.GRAY_500};
-
-  cursor: pointer;
-
-  &:hover {
-    color: ${colors.BLACK};
-  }
-`;
-
 export {
   buttonStyle,
   calendarGridStyle,
@@ -346,15 +230,10 @@ export {
   categoryPageStyle,
   categoryStyle,
   controlStyle,
-  dateStyle,
-  dateTextStyle,
   dayBarGridStyle,
   dayBarStyle,
   hintStyle,
-  itemWithBackgroundStyle,
-  itemWithoutBackgroundStyle,
   monthPickerStyle,
-  moreStyle,
   navButtonStyle,
   navButtonTitleStyle,
   searchButtonStyle,
