@@ -114,6 +114,7 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
     () => categoryApi.getEditable(accessToken),
     {
       enabled,
+      suspense: true,
     }
   );
 
