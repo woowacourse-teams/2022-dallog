@@ -124,7 +124,10 @@ function useGetEditableCategories({ enabled }: UseGetEditableCategoriesParams) {
 function useGetEntireCategories({ keyword }: UseGetEntireCategoriesParams) {
   const { data } = useQuery<AxiosResponse<CategoryType[]>, AxiosError>(
     [CACHE_KEY.CATEGORIES, keyword],
-    () => categoryApi.getEntire(keyword)
+    () => categoryApi.getEntire(keyword),
+    {
+      suspense: true,
+    }
   );
 
   return { data };
