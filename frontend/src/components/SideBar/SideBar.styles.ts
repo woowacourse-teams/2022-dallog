@@ -19,4 +19,8 @@ const sideBar = ({ colors }: Theme, isSideBarOpen: boolean) => css`
   }
 `;
 
-export { sideBar };
+const skeletonItemStyle = css`
+  margin: 3rem;
+`;
+
+export { skeletonItemStyle, sideBar };
