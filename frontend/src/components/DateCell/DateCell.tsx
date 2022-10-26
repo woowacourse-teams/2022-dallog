@@ -34,11 +34,11 @@ import {
 interface DateCellProps {
   dateTime: string;
   currentMonth: number;
-  dateRef: React.RefObject<HTMLDivElement>;
+  dateCellRef: React.RefObject<HTMLDivElement>;
   setDateInfo: React.Dispatch<React.SetStateAction<string>>;
   toggleScheduleAddModalOpen: () => void;
-  hoveringId?: string;
-  setHoveringId?: React.Dispatch<React.SetStateAction<string>>;
+  hoveringScheduleId?: string;
+  setHoveringScheduleId?: React.Dispatch<React.SetStateAction<string>>;
   calendarWithPriority?: Record<string, boolean[]>;
   schedulesWithPriority?: Record<
     | 'longTermSchedulesWithPriority'
@@ -55,14 +55,14 @@ interface DateCellProps {
 function DateCell({
   dateTime,
   currentMonth,
-  dateRef,
+  dateCellRef,
   setDateInfo,
   toggleScheduleAddModalOpen,
-  hoveringId,
-  setHoveringId,
-  maxScheduleCount,
+  hoveringScheduleId,
+  setHoveringScheduleId,
   calendarWithPriority,
   schedulesWithPriority,
+  maxScheduleCount,
 }: DateCellProps) {
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
   const [moreScheduleDateTime, setMoreScheduleDateTime] = useState('');
@@ -84,12 +84,17 @@ function DateCell({
     toggleScheduleAddModalOpen();
   };
 
-  if (!schedulesWithPriority || !calendarWithPriority || !maxScheduleCount || !setHoveringId) {
+  if (
+    !setHoveringScheduleId ||
+    !calendarWithPriority ||
+    !schedulesWithPriority ||
+    !maxScheduleCount
+  ) {
     return (
       <div
         css={dateCellStyle(theme, day)}
         onClick={(e) => handleClickDate(e, dateTime)}
-        ref={dateRef}
+        ref={dateCellRef}
       >
         <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
           {date}
@@ -112,11 +117,11 @@ function DateCell({
   const hasMoreSchedule = priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
 
   const onMouseEnter = (scheduleId: string) => {
-    setHoveringId(scheduleId);
+    setHoveringScheduleId(scheduleId);
   };
 
   const onMouseLeave = () => {
-    setHoveringId('0');
+    setHoveringScheduleId('0');
   };
 
   return (
@@ -142,7 +147,7 @@ function DateCell({
             css={itemWithBackgroundStyle(
               priority,
               schedule.colorCode,
-              hoveringId === schedule.id,
+              hoveringScheduleId === schedule.id,
               maxScheduleCount,
               currentDate === endDate
             )}
@@ -167,7 +172,7 @@ function DateCell({
             css={itemWithBackgroundStyle(
               priority,
               schedule.colorCode,
-              hoveringId === schedule.id,
+              hoveringScheduleId === schedule.id,
               maxScheduleCount,
               true
             )}
@@ -192,7 +197,7 @@ function DateCell({
               theme,
               priority,
               schedule.colorCode,
-              hoveringId === schedule.id,
+              hoveringScheduleId === schedule.id,
               maxScheduleCount,
               false
             )}

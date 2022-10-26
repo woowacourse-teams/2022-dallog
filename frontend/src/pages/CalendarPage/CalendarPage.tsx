@@ -41,10 +41,10 @@ import {
 function CalendarPage() {
   const theme = useTheme();
 
-  const dateRef = useRef<HTMLDivElement>(null);
+  const dateCellRef = useRef<HTMLDivElement>(null);
 
   const [maxScheduleCount, setMaxScheduleCount] = useState(0);
-  const [hoveringId, setHoveringId] = useState('0');
+  const [hoveringScheduleId, setHoveringScheduleId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
 
   const rootFontSize = useRootFontSize();
@@ -64,11 +64,11 @@ function CalendarPage() {
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
   useLayoutEffect(() => {
-    if (!(dateRef.current instanceof HTMLDivElement)) return;
+    if (!(dateCellRef.current instanceof HTMLDivElement)) return;
 
     setMaxScheduleCount(
       Math.floor(
-        (Math.floor(dateRef.current.clientHeight / 10) * 10 - SCHEDULE.HEIGHT * rootFontSize) /
+        (Math.floor(dateCellRef.current.clientHeight / 10) * 10 - SCHEDULE.HEIGHT * rootFontSize) /
           (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
       )
     );
@@ -124,7 +124,7 @@ function CalendarPage() {
                   key={dateTime}
                   dateTime={dateTime}
                   currentMonth={currentMonth}
-                  dateRef={dateRef}
+                  dateCellRef={dateCellRef}
                   setDateInfo={setDateInfo}
                   toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
                 />
@@ -184,11 +184,11 @@ function CalendarPage() {
                 key={dateTime}
                 dateTime={dateTime}
                 currentMonth={currentMonth}
-                dateRef={dateRef}
+                dateCellRef={dateCellRef}
                 setDateInfo={setDateInfo}
                 toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
-                hoveringId={hoveringId}
-                setHoveringId={setHoveringId}
+                hoveringScheduleId={hoveringScheduleId}
+                setHoveringScheduleId={setHoveringScheduleId}
                 maxScheduleCount={maxScheduleCount}
                 calendarWithPriority={calendarWithPriority}
                 schedulesWithPriority={schedulesWithPriority}
