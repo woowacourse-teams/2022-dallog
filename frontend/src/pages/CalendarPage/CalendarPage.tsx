@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
+import useRootFontSize from '@/hooks/useRootFontSize';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
@@ -24,7 +25,6 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { RESPONSIVE, SCHEDULE, TRANSPARENT } from '@/constants/style';
 
-import { getRootFontSize } from '@/utils';
 import {
   checkAllDay,
   extractDateTime,
@@ -74,6 +74,8 @@ function CalendarPage() {
     endDateTime,
   } = useCalendar();
 
+  const rootFontSize = useRootFontSize();
+
   const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
     useSchedulePriority(calendar);
 
@@ -86,8 +88,6 @@ function CalendarPage() {
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
-  const rootFontSize = getRootFontSize();
-
   useLayoutEffect(() => {
     if (!(dateRef.current instanceof HTMLDivElement)) return;
 
@@ -97,7 +97,7 @@ function CalendarPage() {
           (SCHEDULE.HEIGHT_WITH_MARGIN * rootFontSize)
       )
     );
-  }, [startDateTime]);
+  }, [startDateTime, rootFontSize]);
 
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);

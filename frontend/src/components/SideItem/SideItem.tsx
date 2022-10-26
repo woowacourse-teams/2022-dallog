@@ -1,5 +1,6 @@
 import { usePatchSubscription } from '@/hooks/@queries/subscription';
 import useModalPosition from '@/hooks/useModalPosition';
+import useRootFontSize from '@/hooks/useRootFontSize';
 
 import { SubscriptionType } from '@/@types/subscription';
 
@@ -9,8 +10,6 @@ import Spinner from '@/components/@common/Spinner/Spinner';
 import SubscriptionModifyModal from '@/components/SubscriptionModifyModal/SubscriptionModifyModal';
 
 import { TRANSPARENT } from '@/constants/style';
-
-import { getRootFontSize } from '@/utils';
 
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdMoreVert } from 'react-icons/md';
 
@@ -31,6 +30,8 @@ function SideItem({ subscription }: SideItemProps) {
     subscriptionId: subscription.id,
   });
 
+  const rootFontSize = useRootFontSize();
+
   const { isModalOpen, toggleModalOpen, handleClickOpen, modalPos } = useModalPosition();
 
   const handleClickCategoryItem = (checked: boolean, colorCode: string) => {
@@ -39,8 +40,6 @@ function SideItem({ subscription }: SideItemProps) {
       colorCode,
     });
   };
-
-  const rootFontSize = getRootFontSize();
 
   return (
     <div css={itemStyle}>

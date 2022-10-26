@@ -4,6 +4,7 @@ import { lazy, Suspense, useRef, useState } from 'react';
 import { useGetSchedulesWithCategory } from '@/hooks/@queries/category';
 import useCalendar from '@/hooks/useCalendar';
 import useModalPosition from '@/hooks/useModalPosition';
+import useRootFontSize from '@/hooks/useRootFontSize';
 import useSchedulePriority from '@/hooks/useSchedulePriority';
 import useToggle from '@/hooks/useToggle';
 
@@ -22,7 +23,6 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { SCHEDULE, TRANSPARENT } from '@/constants/style';
 
-import { getRootFontSize } from '@/utils';
 import {
   checkAllDay,
   extractDateTime,
@@ -66,6 +66,8 @@ const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList')
 
 function CategoryPage() {
   const theme = useTheme();
+
+  const rootFontSize = useRootFontSize();
 
   const keywordRef = useRef<HTMLInputElement>(null);
   const dateRef = useRef<HTMLDivElement>(null);
@@ -113,8 +115,6 @@ function CategoryPage() {
   const handleClickCategoryAddButton = () => {
     toggleCategoryAddModalOpen();
   };
-
-  const rootFontSize = getRootFontSize();
 
   if (!category.id || isLoading || data === undefined) {
     return (

@@ -4,6 +4,7 @@ import { UseMutateFunction } from 'react-query';
 
 import { useGetEditableCategories } from '@/hooks/@queries/category';
 import { useDeleteSubscriptions } from '@/hooks/@queries/subscription';
+import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
 
 import { ModalPosType } from '@/@types';
@@ -17,8 +18,6 @@ import GoogleCategoryManageModal from '@/components/GoogleCategoryManageModal/Go
 import { CATEGORY_TYPE } from '@/constants/category';
 import { CONFIRM_MESSAGE } from '@/constants/message';
 import { PALETTE } from '@/constants/style';
-
-import { getRootFontSize } from '@/utils';
 
 import { MdOutlineDelete, MdSettings } from 'react-icons/md';
 
@@ -49,6 +48,8 @@ function SubscriptionModifyModal({
   patchSubscription,
 }: SubscriptionModifyModalProps) {
   const theme = useTheme();
+
+  const rootFontSize = useRootFontSize();
 
   const { state: isCategoryManageModalOpen, toggleState: toggleCategoryManageModalOpen } =
     useToggle();
@@ -91,8 +92,6 @@ function SubscriptionModifyModal({
   const canDeleteSubscription =
     !canEditCategories.includes(subscription.category.id) &&
     subscription.category.categoryType !== CATEGORY_TYPE.PERSONAL;
-
-  const rootFontSize = getRootFontSize();
 
   return (
     <>
