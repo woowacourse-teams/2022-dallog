@@ -33,15 +33,15 @@ const global = ({ colors, mq }: Theme) => css`
     font-size: 3rem;
 
     *::-webkit-scrollbar {
-      width: 2rem;
+      width: 1rem;
     }
 
     *::-webkit-scrollbar-thumb {
       border-radius: 7px;
       background-clip: padding-box;
-      border: 2px solid transparent;
+      border: 1px solid transparent;
 
-      background: ${colors.YELLOW_500};
+      background: ${colors.GRAY_400};
     }
 
     *::-webkit-scrollbar-track {
