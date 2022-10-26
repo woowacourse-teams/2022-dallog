@@ -3,34 +3,22 @@ import { useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedules } from '@/hooks/@queries/schedule';
 import useCalendar from '@/hooks/useCalendar';
-import useModalPosition from '@/hooks/useModalPosition';
 import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
-
-import { ScheduleType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Responsive from '@/components/@common/Responsive/Responsive';
 import Spinner from '@/components/@common/Spinner/Spinner';
-import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
+import DateCell from '@/components/DateCell/DateCell';
 import ScheduleAddButton from '@/components/ScheduleAddButton/ScheduleAddButton';
 import ScheduleAddModal from '@/components/ScheduleAddModal/ScheduleAddModal';
-import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
-import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
 
-import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
-import { PAGE_LAYOUT, RESPONSIVE, SCHEDULE, TRANSPARENT } from '@/constants/style';
+import { PAGE_LAYOUT, RESPONSIVE, SCHEDULE } from '@/constants/style';
 
-import {
-  checkAllDay,
-  extractDateTime,
-  getDayOffsetDateTime,
-  getISODateString,
-  getToday,
-} from '@/utils/date';
+import { extractDateTime, getToday } from '@/utils/date';
 
 import getSchedulePriority from '@/domains/schedule';
 
@@ -40,14 +28,9 @@ import {
   calendarGridStyle,
   calendarHeaderStyle,
   calendarPageStyle,
-  dateCellStyle,
-  dateTextStyle,
   dayGridStyle,
   dayStyle,
-  itemWithBackgroundStyle,
-  itemWithoutBackgroundStyle,
   monthPickerStyle,
-  moreStyle,
   navButtonStyle,
   navButtonTitleStyle,
   navStyle,
@@ -57,13 +40,14 @@ import {
 
 function CalendarPage() {
   const theme = useTheme();
+
   const dateRef = useRef<HTMLDivElement>(null);
 
   const [maxScheduleCount, setMaxScheduleCount] = useState(0);
   const [hoveringId, setHoveringId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
-  const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
-  const [moreScheduleDateTime, setMoreScheduleDateTime] = useState('');
+
+  const rootFontSize = useRootFontSize();
 
   const {
     calendar,
@@ -75,14 +59,7 @@ function CalendarPage() {
     endDateTime,
   } = useCalendar();
 
-  const rootFontSize = useRootFontSize();
-
   const { state: isScheduleAddModalOpen, toggleState: toggleScheduleAddModalOpen } = useToggle();
-  const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
-    useToggle();
-
-  const scheduleModal = useModalPosition();
-  const moreScheduleModal = useModalPosition();
 
   const { isLoading, data } = useGetSchedules({ startDateTime, endDateTime });
 
@@ -102,15 +79,6 @@ function CalendarPage() {
 
   const handleClickScheduleAddButton = () => {
     setDateInfo(getToday());
-    toggleScheduleAddModalOpen();
-  };
-
-  const handleClickDate = (e: React.MouseEvent, info: string) => {
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
-    setDateInfo(info);
     toggleScheduleAddModalOpen();
   };
 
@@ -151,21 +119,15 @@ function CalendarPage() {
           </div>
           <div css={calendarGridStyle(rowNum)}>
             {calendar.map((dateTime) => {
-              const { month, date, day } = extractDateTime(dateTime);
-
               return (
-                <div
+                <DateCell
                   key={dateTime}
-                  css={dateCellStyle(theme, day)}
-                  onClick={(e) => handleClickDate(e, dateTime)}
-                  ref={dateRef}
-                >
-                  <span
-                    css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}
-                  >
-                    {date}
-                  </span>
-                </div>
+                  dateTime={dateTime}
+                  currentMonth={currentMonth}
+                  dateRef={dateRef}
+                  setDateInfo={setDateInfo}
+                  toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
+                />
               );
             })}
           </div>
@@ -183,16 +145,10 @@ function CalendarPage() {
   const { calendarWithPriority, getLongTermSchedulesWithPriority, getSingleSchedulesWithPriority } =
     getSchedulePriority(calendar);
 
-  const longTermSchedulesWithPriority = getLongTermSchedulesWithPriority(data.data.longTerms);
-  const allDaySchedulesWithPriority = getSingleSchedulesWithPriority(data.data.allDays);
-  const fewHourSchedulesWithPriority = getSingleSchedulesWithPriority(data.data.fewHours);
-
-  const onMouseEnter = (scheduleId: string) => {
-    setHoveringId(scheduleId);
-  };
-
-  const onMouseLeave = () => {
-    setHoveringId('0');
+  const schedulesWithPriority = {
+    longTermSchedulesWithPriority: getLongTermSchedulesWithPriority(data.data.longTerms),
+    allDaySchedulesWithPriority: getSingleSchedulesWithPriority(data.data.allDays),
+    fewHourSchedulesWithPriority: getSingleSchedulesWithPriority(data.data.fewHours),
   };
 
   return (
@@ -223,142 +179,20 @@ function CalendarPage() {
         </div>
         <div css={calendarGridStyle(rowNum)}>
           {calendar.map((dateTime) => {
-            const { month, date, day } = extractDateTime(dateTime);
-            const currentDate = getISODateString(dateTime);
-            const priorityPosition = calendarWithPriority[getISODateString(dateTime)].findIndex(
-              (priority) => !priority
-            );
-
-            const hasMoreSchedule =
-              priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
-
             return (
-              <div
+              <DateCell
                 key={dateTime}
-                css={dateCellStyle(theme, day)}
-                onClick={(e) => handleClickDate(e, dateTime)}
-                ref={dateRef}
-              >
-                <span
-                  css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}
-                >
-                  {date}
-                </span>
-
-                {longTermSchedulesWithPriority.map(({ schedule, priority }) => {
-                  const startDate = getISODateString(schedule.startDateTime);
-                  const endDate = getISODateString(
-                    checkAllDay(schedule.startDateTime, schedule.endDateTime)
-                      ? getDayOffsetDateTime(schedule.endDateTime, -1)
-                      : schedule.endDateTime
-                  );
-                  const { day: currentDay } = extractDateTime(dateTime);
-
-                  if (!(startDate <= currentDate && currentDate <= endDate) || priority === null)
-                    return;
-
-                  return (
-                    <div
-                      key={`${currentDate}#${schedule.id}#longTerms`}
-                      css={itemWithBackgroundStyle(
-                        priority,
-                        schedule.colorCode,
-                        hoveringId === schedule.id,
-                        maxScheduleCount,
-                        currentDate === endDate
-                      )}
-                      onMouseEnter={() => onMouseEnter(schedule.id)}
-                      onClick={(e) =>
-                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                      }
-                      onMouseLeave={onMouseLeave}
-                    >
-                      {(startDate === currentDate || currentDay === 0) &&
-                        (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
-                    </div>
-                  );
-                })}
-
-                {allDaySchedulesWithPriority.map(({ schedule, priority }) => {
-                  const startDate = getISODateString(schedule.startDateTime);
-
-                  if (startDate !== currentDate || priority === null) return;
-
-                  return (
-                    <div
-                      key={`${currentDate}#${schedule.id}#allDays`}
-                      css={itemWithBackgroundStyle(
-                        priority,
-                        schedule.colorCode,
-                        hoveringId === schedule.id,
-                        maxScheduleCount,
-                        true
-                      )}
-                      onMouseEnter={() => onMouseEnter(schedule.id)}
-                      onClick={(e) =>
-                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                      }
-                      onMouseLeave={onMouseLeave}
-                    >
-                      {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                    </div>
-                  );
-                })}
-
-                {fewHourSchedulesWithPriority.map(({ schedule, priority }) => {
-                  const startDate = getISODateString(schedule.startDateTime);
-
-                  if (startDate !== currentDate || priority === null) return;
-
-                  return (
-                    <div
-                      key={`${currentDate}#${schedule.id}#fewHours`}
-                      css={itemWithoutBackgroundStyle(
-                        theme,
-                        priority,
-                        schedule.colorCode,
-                        hoveringId === schedule.id,
-                        maxScheduleCount,
-                        false
-                      )}
-                      onMouseEnter={() => onMouseEnter(schedule.id)}
-                      onClick={(e) =>
-                        scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))
-                      }
-                      onMouseLeave={onMouseLeave}
-                    >
-                      {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-                    </div>
-                  );
-                })}
-
-                {hasMoreSchedule && (
-                  <span
-                    css={moreStyle}
-                    onClick={(e) =>
-                      moreScheduleModal.handleClickOpen(e, () => setMoreScheduleDateTime(dateTime))
-                    }
-                  >
-                    일정 더보기
-                  </span>
-                )}
-
-                {dateTime === moreScheduleDateTime && (
-                  <ModalPortal
-                    isOpen={moreScheduleModal.isModalOpen}
-                    closeModal={moreScheduleModal.toggleModalOpen}
-                    dimmerBackground={TRANSPARENT}
-                  >
-                    <MoreScheduleModal
-                      moreScheduleModalPos={moreScheduleModal.modalPos}
-                      moreScheduleDateTime={moreScheduleDateTime}
-                      longTermSchedulesWithPriority={longTermSchedulesWithPriority}
-                      allDaySchedulesWithPriority={allDaySchedulesWithPriority}
-                      fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
-                    />
-                  </ModalPortal>
-                )}
-              </div>
+                dateTime={dateTime}
+                currentMonth={currentMonth}
+                dateRef={dateRef}
+                setDateInfo={setDateInfo}
+                toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
+                hoveringId={hoveringId}
+                setHoveringId={setHoveringId}
+                maxScheduleCount={maxScheduleCount}
+                calendarWithPriority={calendarWithPriority}
+                schedulesWithPriority={schedulesWithPriority}
+              />
             );
           })}
         </div>
@@ -368,32 +202,6 @@ function CalendarPage() {
           </ModalPortal>
         )}
         <ScheduleAddButton onClick={handleClickScheduleAddButton} />
-
-        {scheduleInfo && (
-          <>
-            <ModalPortal
-              isOpen={scheduleModal.isModalOpen}
-              closeModal={scheduleModal.toggleModalOpen}
-              dimmerBackground={TRANSPARENT}
-            >
-              <ScheduleModal
-                scheduleModalPos={scheduleModal.modalPos}
-                scheduleInfo={scheduleInfo}
-                toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
-                closeModal={scheduleModal.toggleModalOpen}
-              />
-            </ModalPortal>
-            <ModalPortal
-              isOpen={isScheduleModifyModalOpen}
-              closeModal={toggleScheduleModifyModalOpen}
-            >
-              <ScheduleModifyModal
-                scheduleInfo={scheduleInfo}
-                closeModal={toggleScheduleModifyModalOpen}
-              />
-            </ModalPortal>
-          </>
-        )}
       </div>
     </PageLayout>
   );
