@@ -47,8 +47,6 @@ const global = ({ colors, mq }: Theme) => css`
     *::-webkit-scrollbar-track {
       border-radius: 7px;
       box-shadow: inset 0 0 5px white;
-
-      background: ${colors.GRAY_200};
     }
   }
 `;
