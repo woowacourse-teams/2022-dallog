@@ -1,5 +1,6 @@
 const debounce = <F extends (...params: any[]) => void>(callback: F, delay = 100) => {
   let timer: NodeJS.Timeout;
+
   return function (...args: any[]) {
     if (timer) clearTimeout(timer);
 
