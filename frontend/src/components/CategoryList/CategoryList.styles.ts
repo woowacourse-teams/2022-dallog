@@ -1,10 +1,14 @@
 import { css, Theme } from '@emotion/react';
 
 const categoryTableStyle = css`
-  overflow: hidden overlay;
+  overflow: hidden;
 
   width: 100%;
   height: calc(100vh - 66rem);
+
+  &:hover {
+    overflow-y: overlay;
+  }
 `;
 
 const categoryTableHeaderStyle = ({ flex, colors }: Theme) => css`
