@@ -1,15 +1,22 @@
 import { useTheme } from '@emotion/react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+
+import { sideBarSelector } from '@/recoil/selectors';
 
 import Button from '@/components/@common/Button/Button';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 
 import { PATH } from '@/constants';
+import { PAGE_LAYOUT } from '@/constants/style';
 
 import { buttonStyle, layoutStyle, textStyle } from './NotFoundPage.styles';
 
 function NotFoundPage() {
   const theme = useTheme();
+
+  const toggleSideBarOpen = useSetRecoilState(sideBarSelector);
 
   const navigation = useNavigate();
 
@@ -17,8 +24,12 @@ function NotFoundPage() {
     navigation(PATH.MAIN);
   };
 
+  useEffect(() => {
+    toggleSideBarOpen(false);
+  }, []);
+
   return (
-    <PageLayout>
+    <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
       <div css={layoutStyle}>
         <span css={textStyle(theme, '40rem')}>(⊙_⊙?)</span>
         <span css={textStyle(theme, '10rem')}>
