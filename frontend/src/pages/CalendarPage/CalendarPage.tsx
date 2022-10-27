@@ -185,13 +185,13 @@ function CalendarPage() {
                 dateTime={dateTime}
                 currentMonth={currentMonth}
                 dateCellRef={dateCellRef}
-                setDateInfo={setDateInfo}
-                toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
                 hoveringScheduleId={hoveringScheduleId}
                 setHoveringScheduleId={setHoveringScheduleId}
                 maxScheduleCount={maxScheduleCount}
                 calendarWithPriority={calendarWithPriority}
                 schedulesWithPriority={schedulesWithPriority}
+                setDateInfo={setDateInfo}
+                toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
               />
             );
           })}
