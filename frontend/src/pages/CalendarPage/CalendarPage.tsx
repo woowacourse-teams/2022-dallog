@@ -126,7 +126,7 @@ function CalendarPage() {
                   currentMonth={currentMonth}
                   dateCellRef={dateCellRef}
                   setDateInfo={setDateInfo}
-                  toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
+                  onClick={toggleScheduleAddModalOpen}
                 />
               );
             })}
@@ -191,7 +191,7 @@ function CalendarPage() {
                 calendarWithPriority={calendarWithPriority}
                 schedulesWithPriority={schedulesWithPriority}
                 setDateInfo={setDateInfo}
-                toggleScheduleAddModalOpen={toggleScheduleAddModalOpen}
+                onClick={toggleScheduleAddModalOpen}
               />
             );
           })}

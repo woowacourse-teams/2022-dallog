@@ -49,7 +49,7 @@ interface DateCellProps {
     }[]
   >;
   setDateInfo?: React.Dispatch<React.SetStateAction<string>>;
-  toggleScheduleAddModalOpen?: () => void;
+  onClick?: () => void;
   readonly?: boolean;
 }
 
@@ -63,7 +63,7 @@ function DateCell({
   calendarWithPriority,
   schedulesWithPriority,
   setDateInfo,
-  toggleScheduleAddModalOpen,
+  onClick,
   readonly = false,
 }: DateCellProps) {
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
@@ -79,20 +79,20 @@ function DateCell({
 
   const isSchedulesLoaded = calendarWithPriority && schedulesWithPriority && maxScheduleCount;
 
-  const handleClickDate = (e: React.MouseEvent, info: string) => {
+  const handleClickDateCell = (e: React.MouseEvent, info: string) => {
     if (e.target !== e.currentTarget) {
       return;
     }
 
     setDateInfo && setDateInfo(info);
-    toggleScheduleAddModalOpen && toggleScheduleAddModalOpen();
+    onClick && onClick();
   };
 
   if (!isSchedulesLoaded) {
     return (
       <div
         css={dateCellStyle(theme, day, readonly)}
-        {...(!readonly && { onClick: (e) => handleClickDate(e, dateTime) })}
+        {...(!readonly && { onClick: (e) => handleClickDateCell(e, dateTime) })}
         ref={dateCellRef}
       >
         <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
@@ -126,7 +126,7 @@ function DateCell({
   return (
     <div
       css={dateCellStyle(theme, day, readonly)}
-      {...(!readonly && { onClick: (e) => handleClickDate(e, dateTime) })}
+      {...(!readonly && { onClick: (e) => handleClickDateCell(e, dateTime) })}
     >
       <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
         {date}
