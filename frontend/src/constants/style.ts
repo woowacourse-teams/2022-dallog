@@ -1,5 +1,10 @@
 const OPTION_HEIGHT = 36;
 
+const PAGE_LAYOUT = {
+  DEFAULT: 'default',
+  SIDEBAR: 'sidebar',
+};
+
 const PALETTE = [
   '#AD1457',
   '#D81B60',
@@ -52,4 +57,4 @@ const SCHEDULE = {
 
 const TRANSPARENT = 'transparent';
 
-export { OPTION_HEIGHT, PALETTE, RESPONSIVE, SCHEDULE, TRANSPARENT };
+export { OPTION_HEIGHT, PAGE_LAYOUT, PALETTE, RESPONSIVE, SCHEDULE, TRANSPARENT };
