@@ -21,7 +21,7 @@ import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal'
 
 import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
-import { SCHEDULE, TRANSPARENT } from '@/constants/style';
+import { PAGE_LAYOUT, SCHEDULE, TRANSPARENT } from '@/constants/style';
 
 import {
   checkAllDay,
@@ -118,7 +118,7 @@ function CategoryPage() {
 
   if (!category.id || isLoading || data === undefined) {
     return (
-      <PageLayout>
+      <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
         <div css={categoryPageStyle}>
           <div css={categoryStyle}>
             <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
@@ -218,7 +218,7 @@ function CategoryPage() {
       : CALENDAR.MAX_SCHEDULE_COUNT;
 
   return (
-    <PageLayout>
+    <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
       <div css={categoryPageStyle}>
         <div css={categoryStyle}>
           <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
