@@ -13,7 +13,7 @@ interface UserStateType extends Partial<ProfileType> {
 
 const sideBarState = atom({
   key: ATOM_KEY.SIDE_BAR,
-  default: false,
+  default: true,
 });
 
 const userState = atom<UserStateType>({
