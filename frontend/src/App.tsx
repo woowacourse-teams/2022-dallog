@@ -62,7 +62,6 @@ function App() {
         <Route element={<ProtectRoute />}>
           <Route path={PATH.MAIN} element={<CalendarPage />} />
           <Route path={PATH.CATEGORY} element={<CategoryPage />} />
-          <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route path={PATH.MAIN} element={<StartPage />} />
         <Route path={PATH.AUTH} element={<AuthPage />} />
