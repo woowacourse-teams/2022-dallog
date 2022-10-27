@@ -13,14 +13,10 @@ const global = ({ colors, mq }: Theme) => css`
   }
 
   html {
-    ${mq?.laptop} {
-      font-size: 4px;
-    }
-    ${mq?.tablet} {
-      font-size: 3px;
-    }
+    font-size: 4px;
+
     ${mq?.mobile} {
-      font-size: 2px;
+      font-size: 3.5px;
     }
   }
 
