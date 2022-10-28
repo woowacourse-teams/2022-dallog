@@ -58,7 +58,7 @@ const itemWithBackgroundStyle = (
   position: absolute;
   top: ${priority && priority * SCHEDULE.HEIGHT_WITH_MARGIN + 1}rem;
 
-  width: ${isEndDate ? '97%' : '100%'};
+  width: ${isEndDate ? '96%' : '100%'};
   height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   ${isEndDate &&
