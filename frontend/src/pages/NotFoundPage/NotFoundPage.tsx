@@ -9,7 +9,6 @@ import Button from '@/components/@common/Button/Button';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 
 import { PATH } from '@/constants';
-import { PAGE_LAYOUT } from '@/constants/style';
 
 import { buttonStyle, layoutStyle, textStyle } from './NotFoundPage.styles';
 
@@ -29,7 +28,7 @@ function NotFoundPage() {
   }, []);
 
   return (
-    <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
+    <PageLayout>
       <div css={layoutStyle}>
         <span css={textStyle(theme, '40rem')}>(⊙_⊙?)</span>
         <span css={textStyle(theme, '10rem')}>
