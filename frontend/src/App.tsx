@@ -11,7 +11,6 @@ import ProtectRoute from '@/components/ProtectRoute/ProtectRoute';
 import SnackBar from '@/components/SnackBar/SnackBar';
 import CalendarPage from '@/pages/CalendarPage/CalendarPage';
 import CategoryPage from '@/pages/CategoryPage/CategoryPage';
-import StartPage from '@/pages/StartPage/StartPage';
 
 import { PATH } from '@/constants';
 import { CACHE_KEY, RESPONSE } from '@/constants/api';
@@ -63,7 +62,6 @@ function App() {
           <Route path={PATH.MAIN} element={<CalendarPage />} />
           <Route path={PATH.CATEGORY} element={<CategoryPage />} />
         </Route>
-        <Route path={PATH.MAIN} element={<StartPage />} />
         <Route path={PATH.AUTH} element={<AuthPage />} />
         <Route path={PATH.POLICY} element={<PrivacyPolicyPage />} />
         <Route path="*" element={<NotFoundPage />} />
