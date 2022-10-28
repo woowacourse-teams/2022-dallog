@@ -10,11 +10,11 @@ import { PAGE_LAYOUT } from '@/constants/style';
 import { pageLayout } from './PageLayout.styles';
 
 interface PageLayoutProps {
-  type?: ValueOf<typeof PAGE_LAYOUT>;
   children: JSX.Element | JSX.Element[];
+  type?: ValueOf<typeof PAGE_LAYOUT>;
 }
 
-function PageLayout({ type = PAGE_LAYOUT.DEFAULT, children }: PageLayoutProps) {
+function PageLayout({ children, type = PAGE_LAYOUT.DEFAULT }: PageLayoutProps) {
   const theme = useTheme();
 
   const isSideBarOpen = useRecoilValue(sideBarState);
