@@ -225,23 +225,6 @@ function DateCell({
         </span>
       )}
 
-      {dateTime === moreScheduleDateTime && (
-        <ModalPortal
-          isOpen={moreScheduleModal.isModalOpen}
-          closeModal={moreScheduleModal.toggleModalOpen}
-          dimmerBackground={TRANSPARENT}
-        >
-          <MoreScheduleModal
-            moreScheduleModalPos={moreScheduleModal.modalPos}
-            moreScheduleDateTime={moreScheduleDateTime}
-            longTermSchedulesWithPriority={longTermSchedulesWithPriority}
-            allDaySchedulesWithPriority={allDaySchedulesWithPriority}
-            fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
-            readonly={readonly}
-          />
-        </ModalPortal>
-      )}
-
       {scheduleInfo && (
         <>
           <ModalPortal
@@ -270,6 +253,21 @@ function DateCell({
           )}
         </>
       )}
+
+      <ModalPortal
+        isOpen={moreScheduleModal.isModalOpen}
+        closeModal={moreScheduleModal.toggleModalOpen}
+        dimmerBackground={TRANSPARENT}
+      >
+        <MoreScheduleModal
+          moreScheduleModalPos={moreScheduleModal.modalPos}
+          moreScheduleDateTime={moreScheduleDateTime}
+          longTermSchedulesWithPriority={longTermSchedulesWithPriority}
+          allDaySchedulesWithPriority={allDaySchedulesWithPriority}
+          fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
+          readonly={readonly}
+        />
+      </ModalPortal>
     </div>
   );
 }
