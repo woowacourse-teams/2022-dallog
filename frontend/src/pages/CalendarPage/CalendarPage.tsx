@@ -23,7 +23,7 @@ import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModify
 
 import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
-import { RESPONSIVE, SCHEDULE, TRANSPARENT } from '@/constants/style';
+import { PAGE_LAYOUT, RESPONSIVE, SCHEDULE, TRANSPARENT } from '@/constants/style';
 
 import {
   checkAllDay,
@@ -118,7 +118,7 @@ function CalendarPage() {
 
   if (isLoading || data === undefined) {
     return (
-      <PageLayout>
+      <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
         <div css={calendarPage}>
           <div css={calendarHeader}>
             {`${currentYear}년 ${currentMonth}월`}
@@ -192,7 +192,7 @@ function CalendarPage() {
   };
 
   return (
-    <PageLayout>
+    <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
       <div css={calendarPage}>
         <div css={calendarHeader}>
           {currentYear}년 {currentMonth}월

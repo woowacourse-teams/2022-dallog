@@ -1,3 +1,5 @@
+import { ValueOf } from '@/@types/util';
+
 import { CATEGORY_TYPE } from '@/constants/category';
 
 interface ScheduleType {
@@ -8,7 +10,7 @@ interface ScheduleType {
   endDateTime: string;
   memo: string;
   colorCode: string;
-  categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
+  categoryType: ValueOf<typeof CATEGORY_TYPE>;
 }
 
 interface ScheduleResponseType {

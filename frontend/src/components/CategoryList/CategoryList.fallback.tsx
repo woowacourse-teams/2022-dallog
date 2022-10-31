@@ -10,18 +10,16 @@ function CategoryListFallback() {
   return (
     <div>
       <div css={categoryTableHeaderStyle}>
-        <span css={itemStyle}>생성 날짜</span>
-        <span css={itemStyle}>카테고리 이름</span>
-        <span css={itemStyle}>생성자</span>
-        <span css={itemStyle}>구독 상태</span>
+        <span css={itemStyle}>제목</span>
+        <span css={itemStyle}>개설자</span>
+        <span css={itemStyle}>구독</span>
       </div>
       <div css={categoryTableStyle}>
-        {new Array(6).fill(0).map((el, index) => (
+        {new Array(10).fill(0).map((el, index) => (
           <div css={categoryItem} key={index}>
-            <Skeleton cssProp={item} width="25rem" height="5rem" />
-            <Skeleton cssProp={item} width="35rem" height="5rem" />
-            <Skeleton cssProp={item} width="20rem" height="5rem" />
-            <Skeleton cssProp={item} width="15rem" height="5rem" />
+            <Skeleton cssProp={item} width="60%" height="6rem" />
+            <Skeleton cssProp={item} width="60%" height="6rem" />
+            <Skeleton cssProp={item} width="60%" height="6rem" />
           </div>
         ))}
       </div>
