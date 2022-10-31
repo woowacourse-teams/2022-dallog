@@ -28,6 +28,7 @@ const dateTextStyle = (
   top: 1rem;
   right: 1rem;
 
+  width: ${SCHEDULE.HEIGHT}rem;
   height: ${SCHEDULE.HEIGHT}rem;
   padding: 1rem;
   border-radius: 50%;
@@ -41,7 +42,7 @@ const dateTextStyle = (
     : day === 0
     ? `${colors.RED_400}${isThisMonth ? '' : '80'}`
     : `${colors.GRAY_700}${isThisMonth ? '' : '80'}`};
-  text-align: right;
+  text-align: ${isToday ? 'center' : 'right'};
   line-height: 3rem;
 `;
 
