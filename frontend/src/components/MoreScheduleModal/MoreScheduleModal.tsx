@@ -14,7 +14,14 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
-import { extractDateTime, getISODateString, getThisDate, getThisMonth } from '@/utils/date';
+import {
+  checkAllDay,
+  extractDateTime,
+  getDayOffsetDateTime,
+  getISODateString,
+  getThisDate,
+  getThisMonth,
+} from '@/utils/date';
 
 import {
   dateTextStyle,
@@ -87,51 +94,55 @@ function MoreScheduleModal({
         </span>
       </div>
 
-      {longTermSchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
-        const endDate = getISODateString(el.schedule.endDateTime);
+      {longTermSchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
+        const endDate = getISODateString(
+          checkAllDay(schedule.startDateTime, schedule.endDateTime)
+            ? getDayOffsetDateTime(schedule.endDateTime, -1)
+            : schedule.endDateTime
+        );
 
         return (
           startDate <= nowDate &&
           nowDate <= endDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithBackgroundStyle(el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithBackgroundStyle(schedule.colorCode)}
+              onClick={(e) => handleClickSchedule(e, schedule)}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
       })}
 
-      {allDaySchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
+      {allDaySchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
 
         return (
           startDate === nowDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithBackgroundStyle(el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithBackgroundStyle(schedule.colorCode)}
+              onClick={(e) => handleClickSchedule(e, schedule)}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
       })}
 
-      {fewHourSchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
+      {fewHourSchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
 
         return (
           startDate === nowDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithoutBackgroundStyle(theme, el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithoutBackgroundStyle(theme, schedule.colorCode)}
+              onClick={(e) => handleClickSchedule(e, schedule)}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
