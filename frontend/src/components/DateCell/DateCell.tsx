@@ -152,7 +152,7 @@ function DateCell({
               maxScheduleCount,
               currentDate === endDate,
               hoveringScheduleId === schedule.id,
-              readonly || schedule.colorCode
+              readonly ? '' : schedule.colorCode
             )}
             onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
@@ -178,7 +178,7 @@ function DateCell({
               maxScheduleCount,
               true,
               hoveringScheduleId === schedule.id,
-              readonly || schedule.colorCode
+              readonly ? '' : schedule.colorCode
             )}
             onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
@@ -203,7 +203,7 @@ function DateCell({
               maxScheduleCount,
               false,
               hoveringScheduleId === schedule.id,
-              readonly || schedule.colorCode
+              readonly ? '' : schedule.colorCode
             )}
             onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
             onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}

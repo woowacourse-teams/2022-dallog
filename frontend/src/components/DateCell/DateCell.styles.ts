@@ -51,7 +51,7 @@ const itemWithBackgroundStyle = (
   maxScheduleCount: number,
   isEndDate: boolean,
   isHovering: boolean,
-  colorCode: string | boolean
+  colorCode: string
 ) => css`
   display: ${priority && priority >= maxScheduleCount ? 'none' : 'block'};
   overflow: hidden;
@@ -67,7 +67,7 @@ const itemWithBackgroundStyle = (
     border-bottom-right-radius: 4px;
   `}
 
-  background: ${typeof colorCode === 'string' ? colorCode : colors.ORANGE_500};
+  background: ${colorCode === '' ? colors.ORANGE_500 : colorCode};
 
   font-size: 2.75rem;
   color: white;
@@ -87,11 +87,11 @@ const itemWithoutBackgroundStyle = (
   maxScheduleCount: number,
   isEndDate: boolean,
   isHovering: boolean,
-  colorCode: string | boolean
+  colorCode: string
 ) => css`
   ${itemWithBackgroundStyle(theme, priority, maxScheduleCount, isEndDate, isHovering, colorCode)};
 
-  border-left: 3px solid ${typeof colorCode === 'string' ? colorCode : theme.colors.ORANGE_500};
+  border-left: 3px solid ${colorCode === '' ? theme.colors.ORANGE_500 : colorCode};
 
   background: ${isHovering ? theme.colors.GRAY_000 : theme.colors.WHITE};
 
