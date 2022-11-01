@@ -8,13 +8,14 @@ import { ScheduleResponseKeyType, ScheduleType } from '@/@types/schedule';
 
 import { scheduleState } from '@/recoil/atoms';
 
+import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
+import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
+import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
+
 import { CALENDAR } from '@/constants';
 import { SCHEDULE } from '@/constants/schedule';
 import { TRANSPARENT } from '@/constants/style';
 
-import ModalPortal from '../@common/ModalPortal/ModalPortal';
-import ScheduleModal from '../ScheduleModal/ScheduleModal';
-import ScheduleModifyModal from '../ScheduleModifyModal/ScheduleModifyModal';
 import { itemWithBackgroundStyle, itemWithoutBackgroundStyle } from './Schedule.styles';
 
 interface ScheduleProps {
