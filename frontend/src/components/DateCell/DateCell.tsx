@@ -91,8 +91,8 @@ function DateCell({
     return (
       <div
         css={dateCellStyle(theme, day, readonly)}
-        {...(!readonly && { onClick: (e) => handleClickDateCell(e, dateTime) })}
         ref={dateCellRef}
+        {...(!readonly && { onClick: (e) => handleClickDateCell(e, dateTime) })}
       >
         <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
           {date}
@@ -125,6 +125,7 @@ function DateCell({
   return (
     <div
       css={dateCellStyle(theme, day, readonly)}
+      ref={dateCellRef}
       {...(!readonly && { onClick: (e) => handleClickDateCell(e, dateTime) })}
     >
       <span css={dateTextStyle(theme, day, currentMonth === month, dateTime === getToday())}>
