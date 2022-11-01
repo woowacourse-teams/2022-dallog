@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, memo, Suspense, useRef, useState } from 'react';
 
 import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
@@ -83,4 +83,4 @@ function CategoryControl({ setCategory }: CategoryControlProps) {
   );
 }
 
-export default CategoryControl;
+export default memo(CategoryControl);

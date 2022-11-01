@@ -1,4 +1,4 @@
-import { Dispatch, memo, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { useGetEntireCategories } from '@/hooks/@queries/category';
 import { useGetSubscriptions } from '@/hooks/@queries/subscription';
@@ -67,4 +67,4 @@ function CategoryList({ keyword, setCategory }: CategoryListProps) {
   );
 }
 
-export default memo(CategoryList);
+export default CategoryList;
