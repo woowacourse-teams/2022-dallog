@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
 import useModalPosition from '@/hooks/useModalPosition';
-import useToggle from '@/hooks/useToggle';
 
 import { ScheduleType } from '@/@types/schedule';
 
@@ -9,10 +6,9 @@ import theme from '@/styles/theme';
 
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import MoreScheduleModal from '@/components/MoreScheduleModal/MoreScheduleModal';
-import ScheduleModal from '@/components/ScheduleModal/ScheduleModal';
-import ScheduleModifyModal from '@/components/ScheduleModifyModal/ScheduleModifyModal';
+import Schedule from '@/components/Schedule/Schedule';
 
-import { CALENDAR } from '@/constants';
+import { SCHEDULE } from '@/constants/schedule';
 import { TRANSPARENT } from '@/constants/style';
 
 import {
@@ -23,20 +19,12 @@ import {
   getToday,
 } from '@/utils/date';
 
-import {
-  dateCellStyle,
-  dateTextStyle,
-  itemWithBackgroundStyle,
-  itemWithoutBackgroundStyle,
-  moreStyle,
-} from './DateCell.styles';
+import { dateCellStyle, dateTextStyle, moreStyle } from './DateCell.styles';
 
 interface DateCellProps {
   dateTime: string;
   currentMonth: number;
   dateCellRef: React.RefObject<HTMLDivElement>;
-  hoveringScheduleId?: string;
-  setHoveringScheduleId?: React.Dispatch<React.SetStateAction<string>>;
   maxScheduleCount?: number;
   calendarWithPriority?: Record<string, boolean[]>;
   schedulesWithPriority?: Record<
@@ -57,8 +45,6 @@ function DateCell({
   dateTime,
   currentMonth,
   dateCellRef,
-  hoveringScheduleId,
-  setHoveringScheduleId,
   maxScheduleCount,
   calendarWithPriority,
   schedulesWithPriority,
@@ -66,12 +52,6 @@ function DateCell({
   onClick,
   readonly = false,
 }: DateCellProps) {
-  const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
-
-  const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
-    useToggle();
-
-  const scheduleModal = useModalPosition();
   const moreScheduleModal = useModalPosition();
 
   const { month, date, day } = extractDateTime(dateTime);
@@ -114,14 +94,6 @@ function DateCell({
   );
   const hasMoreSchedule = priorityPosition === -1 || priorityPosition + 1 > maxScheduleCount;
 
-  const handleMouseEnterSchedule = (scheduleId: string) => {
-    setHoveringScheduleId && setHoveringScheduleId(scheduleId);
-  };
-
-  const handleMouseLeaveSchedule = () => {
-    setHoveringScheduleId && setHoveringScheduleId('0');
-  };
-
   return (
     <div
       css={dateCellStyle(theme, day, readonly)}
@@ -144,23 +116,16 @@ function DateCell({
         if (!(startDate <= currentDate && currentDate <= endDate) || priority === null) return;
 
         return (
-          <div
-            key={`${currentDate}#${schedule.id}#longTerms`}
-            css={itemWithBackgroundStyle(
-              theme,
-              priority,
-              maxScheduleCount,
-              currentDate === endDate,
-              hoveringScheduleId === schedule.id,
-              readonly ? '' : schedule.colorCode
-            )}
-            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
-            onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={handleMouseLeaveSchedule}
-          >
-            {(startDate === currentDate || currentDay === 0) &&
-              (schedule.title.trim() || CALENDAR.EMPTY_TITLE)}
-          </div>
+          <Schedule
+            key={`${SCHEDULE.RESPONSE_TYPE.LONG_TERMS}#${currentDate}#${schedule.id}`}
+            type={SCHEDULE.RESPONSE_TYPE.LONG_TERMS}
+            schedule={schedule}
+            priority={priority}
+            maxScheduleCount={maxScheduleCount}
+            isEndDate={currentDate === endDate}
+            isTitleVisible={startDate === currentDate || currentDay === 0}
+            readonly={readonly}
+          />
         );
       })}
 
@@ -170,22 +135,14 @@ function DateCell({
         if (startDate !== currentDate || priority === null) return;
 
         return (
-          <div
-            key={`${currentDate}#${schedule.id}#allDays`}
-            css={itemWithBackgroundStyle(
-              theme,
-              priority,
-              maxScheduleCount,
-              true,
-              hoveringScheduleId === schedule.id,
-              readonly ? '' : schedule.colorCode
-            )}
-            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
-            onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={handleMouseLeaveSchedule}
-          >
-            {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-          </div>
+          <Schedule
+            key={`${SCHEDULE.RESPONSE_TYPE.ALL_DAYS}#${currentDate}#${schedule.id}`}
+            type={SCHEDULE.RESPONSE_TYPE.ALL_DAYS}
+            schedule={schedule}
+            priority={priority}
+            maxScheduleCount={maxScheduleCount}
+            isEndDate={true}
+          />
         );
       })}
 
@@ -195,22 +152,14 @@ function DateCell({
         if (startDate !== currentDate || priority === null) return;
 
         return (
-          <div
-            key={`${currentDate}#${schedule.id}#fewHours`}
-            css={itemWithoutBackgroundStyle(
-              theme,
-              priority,
-              maxScheduleCount,
-              false,
-              hoveringScheduleId === schedule.id,
-              readonly ? '' : schedule.colorCode
-            )}
-            onMouseEnter={() => handleMouseEnterSchedule(schedule.id)}
-            onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
-            onMouseLeave={handleMouseLeaveSchedule}
-          >
-            {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
-          </div>
+          <Schedule
+            key={`${SCHEDULE.RESPONSE_TYPE.FEW_HOURS}#${currentDate}#${schedule.id}`}
+            type={SCHEDULE.RESPONSE_TYPE.FEW_HOURS}
+            schedule={schedule}
+            priority={priority}
+            maxScheduleCount={maxScheduleCount}
+            isEndDate={false}
+          />
         );
       })}
 
@@ -218,35 +167,6 @@ function DateCell({
         <span css={moreStyle} onClick={moreScheduleModal.handleClickOpen}>
           일정 더보기
         </span>
-      )}
-
-      {scheduleInfo && (
-        <>
-          <ModalPortal
-            isOpen={scheduleModal.isModalOpen}
-            closeModal={scheduleModal.toggleModalOpen}
-            dimmerBackground={TRANSPARENT}
-          >
-            <ScheduleModal
-              scheduleModalPos={scheduleModal.modalPos}
-              scheduleInfo={scheduleInfo}
-              toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
-              closeModal={scheduleModal.toggleModalOpen}
-              readonly={readonly}
-            />
-          </ModalPortal>
-          {!readonly && (
-            <ModalPortal
-              isOpen={isScheduleModifyModalOpen}
-              closeModal={toggleScheduleModifyModalOpen}
-            >
-              <ScheduleModifyModal
-                scheduleInfo={scheduleInfo}
-                closeModal={toggleScheduleModifyModalOpen}
-              />
-            </ModalPortal>
-          )}
-        </>
       )}
 
       <ModalPortal

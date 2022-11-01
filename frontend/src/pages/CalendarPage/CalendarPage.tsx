@@ -44,7 +44,6 @@ function CalendarPage() {
   const dateCellRef = useRef<HTMLDivElement>(null);
 
   const [maxScheduleCount, setMaxScheduleCount] = useState(0);
-  const [hoveringScheduleId, setHoveringScheduleId] = useState('0');
   const [dateInfo, setDateInfo] = useState('');
 
   const rootFontSize = useRootFontSize();
@@ -185,8 +184,6 @@ function CalendarPage() {
                 dateTime={dateTime}
                 currentMonth={currentMonth}
                 dateCellRef={dateCellRef}
-                hoveringScheduleId={hoveringScheduleId}
-                setHoveringScheduleId={setHoveringScheduleId}
                 maxScheduleCount={maxScheduleCount}
                 calendarWithPriority={calendarWithPriority}
                 schedulesWithPriority={schedulesWithPriority}

@@ -61,7 +61,6 @@ function CategoryPage() {
   const [maxScheduleCount, setMaxScheduleCount] = useState(0);
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState<Pick<CategoryType, 'id' | 'name'>>({ id: 0, name: '' });
-  const [hoveringScheduleId, setHoveringScheduleId] = useState('0');
 
   const rootFontSize = useRootFontSize();
 
@@ -259,8 +258,6 @@ function CategoryPage() {
                   dateTime={dateTime}
                   currentMonth={currentMonth}
                   dateCellRef={dateCellRef}
-                  hoveringScheduleId={hoveringScheduleId}
-                  setHoveringScheduleId={setHoveringScheduleId}
                   maxScheduleCount={maxScheduleCount}
                   calendarWithPriority={calendarWithPriority}
                   schedulesWithPriority={schedulesWithPriority}

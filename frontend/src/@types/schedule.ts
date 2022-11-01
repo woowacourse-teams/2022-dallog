@@ -1,6 +1,14 @@
 import { ValueOf } from '@/@types/util';
 
 import { CATEGORY_TYPE } from '@/constants/category';
+import { SCHEDULE } from '@/constants/schedule';
+
+type ScheduleResponseKeyType =
+  | typeof SCHEDULE.RESPONSE_TYPE.LONG_TERMS
+  | typeof SCHEDULE.RESPONSE_TYPE.ALL_DAYS
+  | typeof SCHEDULE.RESPONSE_TYPE.FEW_HOURS;
+
+type ScheduleResponseType = Record<ScheduleResponseKeyType, Array<ScheduleType>>;
 
 interface ScheduleType {
   id: string;
@@ -13,6 +21,4 @@ interface ScheduleType {
   categoryType: ValueOf<typeof CATEGORY_TYPE>;
 }
 
-type ScheduleResponseType = Record<'longTerms' | 'allDays' | 'fewHours', Array<ScheduleType>>;
-
-export { ScheduleResponseType, ScheduleType };
+export { ScheduleResponseKeyType, ScheduleResponseType, ScheduleType };
