@@ -3,10 +3,7 @@ import { ValueOf } from '@/@types/util';
 import { CATEGORY_TYPE } from '@/constants/category';
 import { SCHEDULE } from '@/constants/schedule';
 
-type ScheduleResponseKeyType =
-  | typeof SCHEDULE.RESPONSE_TYPE.LONG_TERMS
-  | typeof SCHEDULE.RESPONSE_TYPE.ALL_DAYS
-  | typeof SCHEDULE.RESPONSE_TYPE.FEW_HOURS;
+type ScheduleResponseKeyType = ValueOf<typeof SCHEDULE.RESPONSE_TYPE>;
 
 type ScheduleResponseType = Record<ScheduleResponseKeyType, Array<ScheduleType>>;
 
