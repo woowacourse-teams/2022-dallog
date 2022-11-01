@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { useState } from 'react';
 
+import useModalPosition from '@/hooks/useModalPosition';
 import useToggle from '@/hooks/useToggle';
 
 import { ModalPosType } from '@/@types';
@@ -14,7 +15,14 @@ import { CALENDAR } from '@/constants';
 import { DAYS } from '@/constants/date';
 import { TRANSPARENT } from '@/constants/style';
 
-import { extractDateTime, getISODateString, getThisDate, getThisMonth } from '@/utils/date';
+import {
+  checkAllDay,
+  extractDateTime,
+  getDayOffsetDateTime,
+  getISODateString,
+  getThisDate,
+  getThisMonth,
+} from '@/utils/date';
 
 import {
   dateTextStyle,
@@ -42,38 +50,12 @@ function MoreScheduleModal({
 }: MoreScheduleModalProps) {
   const theme = useTheme();
 
-  const [scheduleModalPos, setScheduleModalPos] = useState<ModalPosType>({});
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
 
-  const { state: isScheduleModalOpen, toggleState: toggleScheduleModalOpen } = useToggle();
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
 
-  const handleClickSchedule = (e: React.MouseEvent, info: ScheduleType) => {
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
-    setScheduleModalPos(calculateModalPos(e.clientX, e.clientY));
-    setScheduleInfo(info);
-    toggleScheduleModalOpen();
-  };
-
-  const calculateModalPos = (clickX: number, clickY: number) => {
-    const position = { top: clickY, right: 0, bottom: 0, left: clickX };
-
-    if (clickX > innerWidth / 2) {
-      position.right = innerWidth - clickX;
-      position.left = 0;
-    }
-
-    if (clickY > innerHeight / 2) {
-      position.bottom = innerHeight - clickY;
-      position.top = 0;
-    }
-
-    return position;
-  };
+  const scheduleModal = useModalPosition();
 
   const { month, date, day } = extractDateTime(moreScheduleDateTime);
   const nowDate = getISODateString(moreScheduleDateTime);
@@ -87,68 +69,72 @@ function MoreScheduleModal({
         </span>
       </div>
 
-      {longTermSchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
-        const endDate = getISODateString(el.schedule.endDateTime);
+      {longTermSchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
+        const endDate = getISODateString(
+          checkAllDay(schedule.startDateTime, schedule.endDateTime)
+            ? getDayOffsetDateTime(schedule.endDateTime, -1)
+            : schedule.endDateTime
+        );
 
         return (
           startDate <= nowDate &&
           nowDate <= endDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithBackgroundStyle(el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithBackgroundStyle(schedule.colorCode)}
+              onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
       })}
 
-      {allDaySchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
+      {allDaySchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
 
         return (
           startDate === nowDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithBackgroundStyle(el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithBackgroundStyle(schedule.colorCode)}
+              onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
       })}
 
-      {fewHourSchedulesWithPriority.map((el) => {
-        const startDate = getISODateString(el.schedule.startDateTime);
+      {fewHourSchedulesWithPriority.map(({ schedule }) => {
+        const startDate = getISODateString(schedule.startDateTime);
 
         return (
           startDate === nowDate && (
             <div
-              key={`modal-${nowDate}#${el.schedule.id}`}
-              css={itemWithoutBackgroundStyle(theme, el.schedule.colorCode)}
-              onClick={(e) => handleClickSchedule(e, el.schedule)}
+              key={`modal-${nowDate}#${schedule.id}`}
+              css={itemWithoutBackgroundStyle(theme, schedule.colorCode)}
+              onClick={(e) => scheduleModal.handleClickOpen(e, () => setScheduleInfo(schedule))}
             >
-              {el.schedule.title.trim() || CALENDAR.EMPTY_TITLE}
+              {schedule.title.trim() || CALENDAR.EMPTY_TITLE}
             </div>
           )
         );
       })}
 
-      {scheduleInfo ? (
+      {scheduleInfo && (
         <>
           <ModalPortal
-            isOpen={isScheduleModalOpen}
-            closeModal={toggleScheduleModalOpen}
+            isOpen={scheduleModal.isModalOpen}
+            closeModal={scheduleModal.toggleModalOpen}
             dimmerBackground={TRANSPARENT}
           >
             <ScheduleModal
-              scheduleModalPos={scheduleModalPos}
+              scheduleModalPos={scheduleModal.modalPos}
               scheduleInfo={scheduleInfo}
               toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
-              closeModal={toggleScheduleModalOpen}
+              closeModal={scheduleModal.toggleModalOpen}
             />
           </ModalPortal>
           <ModalPortal
@@ -161,8 +147,6 @@ function MoreScheduleModal({
             />
           </ModalPortal>
         </>
-      ) : (
-        <></>
       )}
     </div>
   );
