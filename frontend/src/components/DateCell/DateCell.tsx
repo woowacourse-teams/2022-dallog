@@ -67,7 +67,6 @@ function DateCell({
   readonly = false,
 }: DateCellProps) {
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleType | null>(null);
-  const [moreScheduleDateTime, setMoreScheduleDateTime] = useState('');
 
   const { state: isScheduleModifyModalOpen, toggleState: toggleScheduleModifyModalOpen } =
     useToggle();
@@ -215,12 +214,7 @@ function DateCell({
       })}
 
       {hasMoreSchedule && (
-        <span
-          css={moreStyle}
-          onClick={(e) =>
-            moreScheduleModal.handleClickOpen(e, () => setMoreScheduleDateTime(dateTime))
-          }
-        >
+        <span css={moreStyle} onClick={moreScheduleModal.handleClickOpen}>
           일정 더보기
         </span>
       )}
@@ -261,7 +255,7 @@ function DateCell({
       >
         <MoreScheduleModal
           moreScheduleModalPos={moreScheduleModal.modalPos}
-          moreScheduleDateTime={moreScheduleDateTime}
+          moreScheduleDateTime={dateTime}
           longTermSchedulesWithPriority={longTermSchedulesWithPriority}
           allDaySchedulesWithPriority={allDaySchedulesWithPriority}
           fewHourSchedulesWithPriority={fewHourSchedulesWithPriority}
