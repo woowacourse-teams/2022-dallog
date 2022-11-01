@@ -1,20 +1,16 @@
 import { useTheme } from '@emotion/react';
-import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { useGetSchedulesWithCategory } from '@/hooks/@queries/category';
 import useCalendar from '@/hooks/useCalendar';
 import useRootFontSize from '@/hooks/useRootFontSize';
-import useToggle from '@/hooks/useToggle';
 
 import { CategoryType } from '@/@types/category';
 
 import Button from '@/components/@common/Button/Button';
-import Fieldset from '@/components/@common/Fieldset/Fieldset';
-import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import PageLayout from '@/components/@common/PageLayout/PageLayout';
 import Spinner from '@/components/@common/Spinner/Spinner';
-import CategoryAddModal from '@/components/CategoryAddModal/CategoryAddModal';
-import CategoryListFallback from '@/components/CategoryList/CategoryList.fallback';
+import CategoryControl from '@/components/CategoryControl/CategoryControl';
 import DateCell from '@/components/DateCell/DateCell';
 
 import { DAYS } from '@/constants/date';
@@ -24,47 +20,33 @@ import { extractDateTime } from '@/utils/date';
 
 import getSchedulePriority from '@/domains/schedule';
 
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdSearch } from 'react-icons/md';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import {
-  buttonStyle,
   calendarGridStyle,
   calendarHeaderStyle,
   calendarStyle,
-  categoryHeaderStyle,
   categoryPageStyle,
-  categoryStyle,
-  controlStyle,
   dayBarGridStyle,
   dayBarStyle,
   hintStyle,
   monthPickerStyle,
   navButtonStyle,
   navButtonTitleStyle,
-  searchButtonStyle,
-  searchFieldsetStyle,
-  searchFormStyle,
-  searchInputStyle,
   spinnerStyle,
   todayButtonStyle,
   waitingNavStyle,
 } from './CategoryPage.styles';
 
-const CategoryList = lazy(() => import('@/components/CategoryList/CategoryList'));
-
 function CategoryPage() {
   const theme = useTheme();
 
-  const keywordRef = useRef<HTMLInputElement>(null);
   const dateCellRef = useRef<HTMLDivElement>(null);
 
   const [maxScheduleCount, setMaxScheduleCount] = useState(0);
-  const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState<Pick<CategoryType, 'id' | 'name'>>({ id: 0, name: '' });
 
   const rootFontSize = useRootFontSize();
-
-  const { state: isCategoryAddModalOpen, toggleState: toggleCategoryAddModalOpen } = useToggle();
 
   const {
     calendar,
@@ -96,48 +78,11 @@ function CategoryPage() {
   const { year: currentYear, month: currentMonth } = extractDateTime(currentDateTime);
   const rowNum = Math.ceil(calendar.length / 7);
 
-  const handleSubmitCategorySearchForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!(keywordRef.current instanceof HTMLInputElement)) {
-      return;
-    }
-
-    setKeyword((keywordRef.current as HTMLInputElement).value);
-  };
-
-  const handleClickCategoryAddButton = () => {
-    toggleCategoryAddModalOpen();
-  };
-
   if (!category.id || isLoading || data === undefined) {
     return (
       <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
         <div css={categoryPageStyle}>
-          <div css={categoryStyle}>
-            <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
-              <CategoryAddModal closeModal={toggleCategoryAddModalOpen} />
-            </ModalPortal>
-            <h1 css={categoryHeaderStyle}>카테고리</h1>
-            <div css={controlStyle}>
-              <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
-                <Button type="submit" cssProp={searchButtonStyle}>
-                  <MdSearch size={rootFontSize * 5} />
-                </Button>
-                <Fieldset
-                  placeholder="제목 찾기"
-                  cssProp={{ div: searchFieldsetStyle, input: searchInputStyle }}
-                  refProp={keywordRef}
-                />
-              </form>
-              <Button cssProp={buttonStyle(theme)} onClick={handleClickCategoryAddButton}>
-                추가
-              </Button>
-            </div>
-            <Suspense fallback={<CategoryListFallback />}>
-              <CategoryList keyword={keyword} setCategory={setCategory} />
-            </Suspense>
-          </div>
+          <CategoryControl setCategory={setCategory} />
           <div css={calendarStyle}>
             {!category.id && <div css={hintStyle}>클릭한 카테고리의 일정을 확인할 수 있어요</div>}
             <div css={calendarHeaderStyle}>
@@ -202,30 +147,7 @@ function CategoryPage() {
   return (
     <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
       <div css={categoryPageStyle}>
-        <div css={categoryStyle}>
-          <ModalPortal isOpen={isCategoryAddModalOpen} closeModal={toggleCategoryAddModalOpen}>
-            <CategoryAddModal closeModal={toggleCategoryAddModalOpen} />
-          </ModalPortal>
-          <h1 css={categoryHeaderStyle}>카테고리</h1>
-          <div css={controlStyle}>
-            <form css={searchFormStyle} onSubmit={handleSubmitCategorySearchForm}>
-              <Button type="submit" cssProp={searchButtonStyle}>
-                <MdSearch size={rootFontSize * 5} />
-              </Button>
-              <Fieldset
-                placeholder="제목 찾기"
-                cssProp={{ div: searchFieldsetStyle, input: searchInputStyle }}
-                refProp={keywordRef}
-              />
-            </form>
-            <Button cssProp={buttonStyle(theme)} onClick={handleClickCategoryAddButton}>
-              추가
-            </Button>
-          </div>
-          <Suspense fallback={<CategoryListFallback />}>
-            <CategoryList keyword={keyword} setCategory={setCategory} />
-          </Suspense>
-        </div>
+        <CategoryControl setCategory={setCategory} />
         <div css={calendarStyle}>
           <div css={calendarHeaderStyle}>
             {`${currentYear}년 ${currentMonth}월 \u00A0☾\u00A0 ${category.name}`}
