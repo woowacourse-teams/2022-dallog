@@ -1,6 +1,8 @@
 import { css, Theme } from '@emotion/react';
 
 const categoryStyle = ({ mq }: Theme) => css`
+  align-self: center;
+
   width: 30%;
 
   ${mq?.tablet || mq?.mobile} {
