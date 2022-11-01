@@ -142,6 +142,7 @@ function DateCell({
             priority={priority}
             maxScheduleCount={maxScheduleCount}
             isEndDate={true}
+            readonly={readonly}
           />
         );
       })}
@@ -159,6 +160,7 @@ function DateCell({
             priority={priority}
             maxScheduleCount={maxScheduleCount}
             isEndDate={false}
+            readonly={readonly}
           />
         );
       })}

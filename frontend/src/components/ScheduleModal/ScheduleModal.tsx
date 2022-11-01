@@ -120,7 +120,7 @@ function ScheduleModal({
           </div>
         </div>
         <div css={contentBlockStyle}>
-          <div css={colorStyle(scheduleInfo.colorCode)} />
+          <div css={colorStyle(theme, readonly ? '' : scheduleInfo.colorCode)} />
           <span>
             {categoryGetResponse?.data.name}
             <span css={grayTextStyle}>

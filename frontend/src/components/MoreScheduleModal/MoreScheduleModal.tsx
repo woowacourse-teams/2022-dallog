@@ -137,17 +137,20 @@ function MoreScheduleModal({
               scheduleInfo={scheduleInfo}
               toggleScheduleModifyModalOpen={toggleScheduleModifyModalOpen}
               closeModal={scheduleModal.toggleModalOpen}
+              readonly={readonly}
             />
           </ModalPortal>
-          <ModalPortal
-            isOpen={isScheduleModifyModalOpen}
-            closeModal={toggleScheduleModifyModalOpen}
-          >
-            <ScheduleModifyModal
-              scheduleInfo={scheduleInfo}
+          {!readonly && (
+            <ModalPortal
+              isOpen={isScheduleModifyModalOpen}
               closeModal={toggleScheduleModifyModalOpen}
-            />
-          </ModalPortal>
+            >
+              <ScheduleModifyModal
+                scheduleInfo={scheduleInfo}
+                closeModal={toggleScheduleModifyModalOpen}
+              />
+            </ModalPortal>
+          )}
         </>
       )}
     </div>
