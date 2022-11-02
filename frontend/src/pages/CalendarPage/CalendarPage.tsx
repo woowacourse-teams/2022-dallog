@@ -35,7 +35,7 @@ function CalendarPage() {
   return (
     <PageLayout type={PAGE_LAYOUT.SIDEBAR}>
       <div css={calendarPageStyle}>
-        {(isLoading || data === undefined) && (
+        {isLoading && (
           <CalendarFallback
             calendarController={calendarController}
             setDateInfo={setDateInfo}

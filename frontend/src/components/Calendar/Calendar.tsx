@@ -3,7 +3,6 @@ import { AxiosResponse } from 'axios';
 
 import { CalendarControllerType } from '@/hooks/useCalendar';
 
-import { CategoryType } from '@/@types/category';
 import { ScheduleResponseType } from '@/@types/schedule';
 
 import Button from '@/components/@common/Button/Button';
@@ -31,7 +30,7 @@ interface CalendarProps {
   scheduleResponse: AxiosResponse<ScheduleResponseType>;
   setDateInfo?: React.Dispatch<React.SetStateAction<string>>;
   handleClickDateCell?: () => void;
-  category?: Pick<CategoryType, 'id' | 'name'>;
+  categoryName?: string;
   readonly?: boolean;
 }
 
@@ -40,7 +39,7 @@ function Calendar({
   scheduleResponse,
   setDateInfo,
   handleClickDateCell,
-  category,
+  categoryName,
   readonly,
 }: CalendarProps) {
   const theme = useTheme();
@@ -71,7 +70,9 @@ function Calendar({
   return (
     <>
       <div css={calendarHeaderStyle}>
-        {`${currentYear}년 ${currentMonth}월${category ? ` \u00A0☾\u00A0 ${category.name}` : ''}`}
+        {`${currentYear}년 ${currentMonth}월${
+          categoryName ? ` \u00A0☾\u00A0 ${categoryName}` : ''
+        }`}
         <div css={monthPickerStyle}>
           <Button cssProp={navButtonStyle} onClick={moveToBeforeMonth} aria-label="이전 달">
             <MdKeyboardArrowLeft />

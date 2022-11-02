@@ -1,8 +1,6 @@
 import { CalendarControllerType } from '@/hooks/useCalendar';
 import useRootFontSize from '@/hooks/useRootFontSize';
 
-import { CategoryType } from '@/@types/category';
-
 import theme from '@/styles/theme';
 
 import Button from '@/components/@common/Button/Button';
@@ -20,7 +18,6 @@ import {
   calendarHeaderStyle,
   dayGridStyle,
   dayStyle,
-  hintStyle,
   monthPickerStyle,
   navButtonStyle,
   navButtonTitleStyle,
@@ -33,7 +30,8 @@ interface CalendarFallbackProps {
   calendarController: CalendarControllerType;
   setDateInfo?: React.Dispatch<React.SetStateAction<string>>;
   handleClickDateCell?: () => void;
-  category?: Pick<CategoryType, 'id' | 'name'>;
+  categoryName?: string;
+  isLoading?: boolean;
   readonly?: boolean;
 }
 
@@ -41,7 +39,8 @@ function CalendarFallback({
   calendarController,
   setDateInfo,
   handleClickDateCell,
-  category,
+  categoryName,
+  isLoading = true,
   readonly = false,
 }: CalendarFallbackProps) {
   const rootFontSize = useRootFontSize();
@@ -59,15 +58,12 @@ function CalendarFallback({
 
   return (
     <>
-      {category && !category.id && (
-        <div css={hintStyle}>클릭한 카테고리의 일정을 확인할 수 있어요</div>
-      )}
       <div css={calendarHeaderStyle}>
         {`${currentYear}년 ${currentMonth}월${
-          category && category.id ? ` \u00A0☾\u00A0 ${category?.name}` : ''
+          categoryName ? ` \u00A0☾\u00A0 ${categoryName}` : ''
         }`}
         <div css={navStyle}>
-          {category?.id !== 0 && (
+          {isLoading && (
             <div css={spinnerStyle}>
               <Spinner size={rootFontSize} />
               <Responsive type={RESPONSIVE.LAPTOP.DEVICE}>
