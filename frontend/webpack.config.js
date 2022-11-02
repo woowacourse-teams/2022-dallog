@@ -7,8 +7,10 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require('compression-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const prod = process.env.NODE_ENV === 'production';
+
 module.exports = {
   mode: prod ? 'production' : 'development',
   devtool: prod ? 'hidden-nosources-source-map' : 'eval',
@@ -23,7 +25,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: prod ? ['babel-loader'] : ['babel-loader', 'ts-loader'],
+        use: 'babel-loader',
       },
       {
         test: /\\.css$/,
@@ -61,6 +63,7 @@ module.exports = {
       generateStatsFile: true,
     }),
     new CompressionPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
