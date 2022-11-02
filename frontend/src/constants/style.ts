@@ -40,12 +40,12 @@ const RESPONSIVE = {
   },
   TABLET: {
     DEVICE: 'tablet',
-    FONT_SIZE: 3,
+    FONT_SIZE: 4,
     MAX_WIDTH: 1023,
   },
   MOBILE: {
     DEVICE: 'mobile',
-    FONT_SIZE: 2,
+    FONT_SIZE: 3.5,
     MAX_WIDTH: 767,
   },
 };

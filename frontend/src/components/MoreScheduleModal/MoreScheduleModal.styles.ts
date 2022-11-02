@@ -66,14 +66,14 @@ const dateTextStyle = ({ colors }: Theme, day: number, isToday: boolean) => css`
   line-height: 3rem;
 `;
 
-const itemWithBackgroundStyle = (colorCode: string) => css`
+const itemWithBackgroundStyle = ({ colors }: Theme, colorCode: string) => css`
   overflow: hidden;
 
   width: 100%;
   height: 5rem;
   padding: 1rem;
 
-  background: ${colorCode};
+  background: ${colorCode === '' ? colors.ORANGE_500 : colorCode};
 
   font-size: 2.75rem;
   color: white;
@@ -87,19 +87,19 @@ const itemWithBackgroundStyle = (colorCode: string) => css`
   }
 `;
 
-const itemWithoutBackgroundStyle = ({ colors }: Theme, colorCode: string) => css`
-  ${itemWithBackgroundStyle(colorCode)};
+const itemWithoutBackgroundStyle = (theme: Theme, colorCode: string) => css`
+  ${itemWithBackgroundStyle(theme, colorCode)};
 
   overflow: hidden;
 
-  border-left: 3px solid ${colorCode};
+  border-left: 3px solid ${colorCode === '' ? theme.colors.ORANGE_500 : colorCode};
 
-  background: ${colors.WHITE};
+  background: ${theme.colors.WHITE};
 
   color: black;
 
   &:hover {
-    background: ${colors.GRAY_000};
+    background: ${theme.colors.GRAY_000};
     filter: none;
   }
 `;

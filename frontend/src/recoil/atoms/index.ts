@@ -11,9 +11,21 @@ interface UserStateType extends Partial<ProfileType> {
   refreshToken: string;
 }
 
+const scheduleState = atom({
+  key: ATOM_KEY.SCHEDULE,
+  default: '',
+});
+
 const sideBarState = atom({
   key: ATOM_KEY.SIDE_BAR,
   default: true,
+});
+
+const snackBarState = atom({
+  key: ATOM_KEY.SNACK_BAR,
+  default: {
+    text: '',
+  },
 });
 
 const userState = atom<UserStateType>({
@@ -24,11 +36,4 @@ const userState = atom<UserStateType>({
   },
 });
 
-const snackBarState = atom({
-  key: ATOM_KEY.SNACK_BAR,
-  default: {
-    text: '',
-  },
-});
-
-export { snackBarState, sideBarState, userState, UserStateType };
+export { scheduleState, sideBarState, snackBarState, userState, UserStateType };

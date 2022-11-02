@@ -1,6 +1,7 @@
 const ATOM_KEY = {
-  SNACK_BAR: 'snackBarState',
+  SCHEDULE: 'scheduleState',
   SIDE_BAR: 'sideBarState',
+  SNACK_BAR: 'snackBarState',
   USER: 'userState',
 };
 
