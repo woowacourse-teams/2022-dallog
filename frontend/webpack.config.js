@@ -13,7 +13,7 @@ const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: prod ? 'production' : 'development',
-  devtool: prod ? 'hidden-nosources-source-map' : 'eval',
+  devtool: prod ? 'none' : 'eval',
   entry: './src/index.tsx',
   resolve: {
     alias: {
