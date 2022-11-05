@@ -34,7 +34,7 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     @Test
     void 월별_일정_조회_시_회원_ID로_해당하는_외부_연동_카테고리의_전체를_조회한다() {
         // given
-        Long 리버_id = toMemberId(리버.getOAuthMember());
+        Long 리버_id = toMemberId(리버.OAuth_인증을_한다());
 
         CategoryResponse 외부_BE_일정_응답 = categoryService.save(리버_id, 외부_BE_일정_생성_요청);
         Category 외부_BE_일정 = categoryRepository.getById(외부_BE_일정_응답.getId());

@@ -60,7 +60,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void id를_통해_회원을_단건_조회한다() {
         // given
-        Long 파랑_id = toMemberId(파랑.getOAuthMember());
+        Long 파랑_id = toMemberId(파랑.OAuth_인증을_한다());
 
         // when & then
         assertThat(memberService.findById(파랑_id).getId())
@@ -71,7 +71,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 구독_id를_기반으로_member_정보를_조회한다() {
         // given
-        Long 매트_id = toMemberId(매트.getOAuthMember());
+        Long 매트_id = toMemberId(매트.OAuth_인증을_한다());
         Member 매트 = memberRepository.getById(매트_id);
 
         Category BE_일정 = categoryRepository.save(BE_일정(매트));
@@ -94,7 +94,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 회원의_이름을_수정한다() {
         // given
-        Long 매트_id = toMemberId(매트.getOAuthMember());
+        Long 매트_id = toMemberId(매트.OAuth_인증을_한다());
 
         String 패트_이름 = "패트";
         MemberUpdateRequest 매트_수정_요청 = new MemberUpdateRequest(패트_이름);

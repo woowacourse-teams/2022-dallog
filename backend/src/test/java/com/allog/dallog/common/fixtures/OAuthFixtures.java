@@ -33,9 +33,9 @@ public enum OAuthFixtures {
     private static OAuthMember 관리자() {
         String 관리자_이메일 = "dallog.admin@gmail.com";
         String 관리자_이름 = "관리자";
-        String 관리자_프로필 = "/admin.png";
+        String 관리자_프로필_URL = "/admin.png";
         String 관리자_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
-        return new OAuthMember(관리자_이메일, 관리자_이름, 관리자_프로필, 관리자_REFRESH_TOKEN);
+        return new OAuthMember(관리자_이메일, 관리자_이름, 관리자_프로필_URL, 관리자_REFRESH_TOKEN);
     }
 
     private static OAuthMember 파랑() {
@@ -86,11 +86,11 @@ public enum OAuthFixtures {
         return new OAuthMember(CREATOR_이메일, CREATOR_이름, CREATOR_프로필, CREATOR_REFRESH_TOKEN);
     }
 
-    public String getCode() {
-        return code;
+    public OAuthMember OAuth_인증을_한다() {
+        return oAuthMember;
     }
 
-    public OAuthMember getOAuthMember() {
-        return oAuthMember;
+    public String getCode() {
+        return code;
     }
 }
