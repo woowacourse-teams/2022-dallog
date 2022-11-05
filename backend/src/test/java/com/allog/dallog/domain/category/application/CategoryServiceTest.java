@@ -14,7 +14,7 @@ import static com.allog.dallog.common.Constants.외부_카테고리_ID;
 import static com.allog.dallog.common.Constants.외부_카테고리_이름;
 import static com.allog.dallog.common.Constants.취업_일정_메모;
 import static com.allog.dallog.common.Constants.취업_일정_시작일;
-import static com.allog.dallog.common.Constants.취업_일정_이름;
+import static com.allog.dallog.common.Constants.취업_일정_제목;
 import static com.allog.dallog.common.Constants.취업_일정_종료일;
 import static com.allog.dallog.common.Constants.취업_카테고리_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
@@ -406,7 +406,7 @@ class CategoryServiceTest extends ServiceTest {
         // given
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL)
-                .일정을_등록한다(취업_일정_이름, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
+                .일정을_등록한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // when
         categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
