@@ -30,30 +30,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class AuthServiceTest extends ServiceTest {
 
-    private final AuthService authService;
-    private final TokenProvider tokenProvider;
-    private final TokenRepository tokenRepository;
-    private final MemberRepository memberRepository;
-    private final CategoryRepository categoryRepository;
-    private final CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
-    public AuthServiceTest(final AuthService authService,
-                           final TokenProvider tokenProvider,
-                           final TokenRepository tokenRepository,
-                           final MemberRepository memberRepository,
-                           final CategoryRepository categoryRepository,
-                           final CategoryRoleRepository categoryRoleRepository) {
-        this.authService = authService;
-        this.tokenProvider = tokenProvider;
-        this.tokenRepository = tokenRepository;
-        this.memberRepository = memberRepository;
-        this.categoryRepository = categoryRepository;
-        this.categoryRoleRepository = categoryRoleRepository;
-    }
-
     private final OAuthMember oAuthMember = new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL,
             MEMBER_REFRESH_TOKEN);
+
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryRoleRepository categoryRoleRepository;
+
     private User 회원;
 
     @BeforeEach
@@ -153,13 +150,9 @@ class AuthServiceTest extends ServiceTest {
                 .isInstanceOf(InvalidTokenException.class);
     }
 
-    class User {
+    private final class User {
 
         private Member member;
-
-        User() {
-
-        }
 
         public User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, GOOGLE);
