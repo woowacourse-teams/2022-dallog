@@ -13,6 +13,7 @@ import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.domain.auth.event.MemberSavedEvent;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
@@ -26,7 +27,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
+@RecordApplicationEvents
 class AuthServiceTest extends ServiceTest {
 
     @Autowired
@@ -44,10 +48,8 @@ class AuthServiceTest extends ServiceTest {
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
 
-    @BeforeEach
-    void setUp() {
-        tokenRepository.deleteAll();
-    }
+    @Autowired
+    private ApplicationEvents events;
 
     @DisplayName("토큰 생성을 하면 OAuth 서버에서 인증 후 토큰을 반환한다")
     @Test
@@ -88,6 +90,7 @@ class AuthServiceTest extends ServiceTest {
         // then
         assertAll(() -> {
             assertThat(actual.getName()).isEqualTo("내 일정");
+            assertThat(events.stream(MemberSavedEvent.class).count()).isEqualTo(1);
         });
     }
 
@@ -105,6 +108,7 @@ class AuthServiceTest extends ServiceTest {
         assertAll(() -> {
             assertThat(actual).hasSize(1);
             assertThat(actual.iterator().next().getCategory().getName()).isEqualTo("내 일정");
+            assertThat(events.stream(MemberSavedEvent.class).count()).isEqualTo(1);
         });
     }
 
