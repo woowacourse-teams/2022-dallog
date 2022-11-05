@@ -1,6 +1,5 @@
 package com.allog.dallog.domain.member.application;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자_이름;
@@ -17,10 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.common.fixtures.SubscriptionFixtures;
 import com.allog.dallog.domain.category.application.CategoryService;
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.member.domain.Member;
@@ -29,8 +25,6 @@ import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
 import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
-import com.allog.dallog.domain.subscription.domain.Subscription;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,13 +39,7 @@ class MemberServiceTest extends ServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
-    @Autowired
     private SubscriptionService subscriptionService;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Autowired
     private CategoryService categoryService;
@@ -65,29 +53,6 @@ class MemberServiceTest extends ServiceTest {
         // when & then
         assertThat(memberService.findById(파랑_id).getId())
                 .isEqualTo(파랑_id);
-    }
-
-    @DisplayName("구독 id를 기반으로 member 정보를 조회한다.")
-    @Test
-    void 구독_id를_기반으로_member_정보를_조회한다() {
-        // given
-        Long 매트_id = toMemberId(매트.getOAuthMember());
-        Member 매트 = memberRepository.getById(매트_id);
-
-        Category BE_일정 = categoryRepository.save(BE_일정(매트));
-        Subscription 색상_1_BE_일정_구독 = subscriptionRepository.save(SubscriptionFixtures.색상1_구독(매트, BE_일정));
-
-        // when
-        MemberResponse actual = memberService.findBySubscriptionId(색상_1_BE_일정_구독.getId());
-
-        // then
-        assertAll(() -> {
-            assertThat(actual.getId()).isEqualTo(매트.getId());
-            assertThat(actual.getEmail()).isEqualTo(매트.getEmail());
-            assertThat(actual.getDisplayName()).isEqualTo(매트.getDisplayName());
-            assertThat(actual.getProfileImageUrl()).isEqualTo(매트.getProfileImageUrl());
-            assertThat(actual.getSocialType()).isEqualTo(매트.getSocialType());
-        });
     }
 
     @DisplayName("회원의 이름을 수정한다.")
