@@ -6,7 +6,9 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.exception.CategoryRoleConcurrencyException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +25,21 @@ public class CategoryRoleService {
     @Transactional
     public void updateRole(final Long loginMemberId, final Long memberId, final Long categoryId,
                            final CategoryRoleUpdateRequest request) {
-        CategoryRoleType roleType = request.getCategoryRoleType();
+        try {
+            CategoryRoleType roleType = request.getCategoryRoleType();
 
-        validateAuthority(loginMemberId, categoryId);
-        validateSoleAdmin(memberId, categoryId);
-        categoryRoleRepository.validateManagingCategoryLimit(memberId, roleType);
+            validateAuthority(loginMemberId, categoryId);
+            validateSoleAdmin(memberId, categoryId);
+            categoryRoleRepository.validateManagingCategoryLimit(memberId, roleType);
 
-        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
+            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
 
-        validateCategoryType(categoryRole);
+            validateCategoryType(categoryRole);
 
-        categoryRole.changeRole(roleType);
+            categoryRole.changeRole(roleType);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new CategoryRoleConcurrencyException();
+        }
     }
 
     private void validateAuthority(final Long loginMemberId, final Long categoryId) {

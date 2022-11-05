@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Table(name = "category_roles")
 @Entity
@@ -35,6 +36,9 @@ public class CategoryRole extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private CategoryRoleType categoryRoleType;
+
+    @Version
+    private Long version;
 
     protected CategoryRole() {
     }
