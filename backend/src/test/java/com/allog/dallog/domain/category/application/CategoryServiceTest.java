@@ -55,9 +55,9 @@ import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
@@ -74,6 +74,9 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -114,7 +117,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         CategoryResponse 내_일정_응답 = categoryService.save(후디.getId(), 내_일정_생성_요청);
-        Category 내_일정 = categoryRepository.findById(내_일정_응답.getId()).get();
+        Category 내_일정 = categoryRepository.getById(내_일정_응답.getId());
 
         // then
         assertAll(() -> {
@@ -176,7 +179,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         CategoryResponse 후디_대한민국_공휴일_카테고리_응답 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
-        Category 후디_대한민국_공휴일_카테고리 = categoryRepository.findById(후디_대한민국_공휴일_카테고리_응답.getId()).get();
+        Category 후디_대한민국_공휴일_카테고리 = categoryRepository.getById(후디_대한민국_공휴일_카테고리_응답.getId());
 
         // then
         assertAll(() -> {
@@ -528,8 +531,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
-        assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
-                .isInstanceOf(NoSuchSubscriptionException.class);
+        assertThat(subscriptionRepository.existsById(구독.getId())).isFalse();
     }
 
     @Transactional

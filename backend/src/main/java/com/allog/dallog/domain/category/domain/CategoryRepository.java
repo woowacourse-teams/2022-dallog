@@ -25,10 +25,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             + "WHERE c.member.id = :memberId")
     List<Category> findByMemberId(final Long memberId);
 
-    boolean existsByIdAndMemberId(final Long id, final Long memberId);
-
-    void deleteByMemberId(final Long memberId);
-
     default Category getById(final Long id) {
         return this.findById(id)
                 .orElseThrow(NoSuchCategoryException::new);

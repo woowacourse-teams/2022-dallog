@@ -30,12 +30,13 @@ import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleExceptio
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import com.allog.dallog.domain.subscription.exception.NotAbleToUnsubscribeException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -52,6 +53,9 @@ class SubscriptionServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -116,21 +120,13 @@ class SubscriptionServiceTest extends ServiceTest {
         SubscriptionResponse 빨간색_구독 = subscriptionService.save(리버_id, BE_일정.getId());
 
         // when
-        SubscriptionResponse foundResponse = subscriptionService.findById(빨간색_구독.getId());
+        Subscription subscription = subscriptionRepository.getById(빨간색_구독.getId());
 
         // then
         assertAll(() -> {
-            assertThat(foundResponse.getId()).isEqualTo(빨간색_구독.getId());
-            assertThat(foundResponse.getCategory().getId()).isEqualTo(BE_일정.getId());
+            assertThat(subscription.getId()).isEqualTo(빨간색_구독.getId());
+            assertThat(subscription.getCategory().getId()).isEqualTo(BE_일정.getId());
         });
-    }
-
-    @DisplayName("존재하지 않는 구독 정보인 경우 예외를 던진다.")
-    @Test
-    void 존재하지_않는_구독_정보인_경우_예외를_던진다() {
-        // given & when & then
-        assertThatThrownBy(() -> subscriptionService.findById(0L))
-                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 
     @DisplayName("회원 정보를 기반으로 구독 정보를 조회한다.")
@@ -171,7 +167,7 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.save(후디_id, BE_일정.getId());
 
         // when
-        List<SubscriptionResponse> actual = subscriptionService.findByCategoryId(BE_일정.getId());
+        List<Subscription> actual = subscriptionRepository.findByCategoryId(BE_일정.getId());
 
         // then
         assertThat(actual).hasSize(4);

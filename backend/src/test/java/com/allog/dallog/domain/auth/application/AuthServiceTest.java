@@ -1,7 +1,6 @@
 package com.allog.dallog.domain.auth.application;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.MEMBER_이메일;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.OAuthFixtures.MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -10,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.auth.event.MemberSavedEvent;
@@ -23,7 +21,6 @@ import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.subscription.domain.Subscription;
 import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +78,7 @@ class AuthServiceTest extends ServiceTest {
         // given
         authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
 
-        Member member = memberRepository.findByEmail(MEMBER_이메일).get();
+        Member member = memberRepository.getByEmail(MEMBER_이메일);
         List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
 
         // when
@@ -99,7 +96,7 @@ class AuthServiceTest extends ServiceTest {
     void Authorization_Code를_받으면_회원_개인_카테고리에_대한_CategoryRole을_생성한다() {
         // given
         authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
-        Member member = memberRepository.findByEmail(MEMBER_이메일).get();
+        Member member = memberRepository.getByEmail(MEMBER_이메일);
 
         // when
         List<CategoryRole> actual = categoryRoleRepository.findByMemberId(member.getId());
@@ -147,7 +144,6 @@ class AuthServiceTest extends ServiceTest {
     @Test
     void 리프레시_토큰으로_새로운_엑세스_토큰을_발급한다() {
         // given
-        TokenRequest tokenRequest = new TokenRequest(STUB_MEMBER_인증_코드, "https://dallog.me/oauth");
         AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
         TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(response.getRefreshToken());
 

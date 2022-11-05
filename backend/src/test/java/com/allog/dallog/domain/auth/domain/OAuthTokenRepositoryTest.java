@@ -25,9 +25,7 @@ class OAuthTokenRepositoryTest extends RepositoryTest {
     void member_id의_OAuthToken이_존재할_경우_true를_반환한다() {
         // given
         Member 매트 = memberRepository.save(매트());
-
-        String refreshToken = REFRESH_TOKEN;
-        oAuthTokenRepository.save(new OAuthToken(매트, refreshToken));
+        oAuthTokenRepository.save(new OAuthToken(매트, REFRESH_TOKEN));
 
         // when
         boolean actual = oAuthTokenRepository.existsByMemberId(매트.getId());
@@ -51,9 +49,7 @@ class OAuthTokenRepositoryTest extends RepositoryTest {
     void member_id의_OAuthToken이_존재할_경우_Optional은_비어있지_않다() {
         // given
         Member 매트 = memberRepository.save(매트());
-
-        String refreshToken = REFRESH_TOKEN;
-        oAuthTokenRepository.save(new OAuthToken(매트, refreshToken));
+        oAuthTokenRepository.save(new OAuthToken(매트, REFRESH_TOKEN));
 
         // when
         Optional<OAuthToken> actual = oAuthTokenRepository.findByMemberId(매트.getId());
@@ -69,23 +65,6 @@ class OAuthTokenRepositoryTest extends RepositoryTest {
         Optional<OAuthToken> actual = oAuthTokenRepository.findByMemberId(0L);
 
         // then
-        assertThat(actual).isEmpty();
-    }
-
-    @DisplayName("member id의 OAuthToke을 삭제한다.")
-    @Test
-    void member_id의_OAuthToken을_삭제한다() {
-        // given
-        Member 매트 = memberRepository.save(매트());
-
-        String refreshToken = REFRESH_TOKEN;
-        oAuthTokenRepository.save(new OAuthToken(매트, refreshToken));
-
-        // when
-        oAuthTokenRepository.deleteByMemberId(매트.getId());
-
-        // then
-        Optional<OAuthToken> actual = oAuthTokenRepository.findByMemberId(매트.getId());
         assertThat(actual).isEmpty();
     }
 }
