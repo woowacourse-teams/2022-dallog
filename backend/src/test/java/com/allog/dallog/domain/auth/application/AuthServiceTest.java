@@ -51,11 +51,11 @@ class AuthServiceTest extends ServiceTest {
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
 
-    private User 회원;
+    private User 구구;
 
     @BeforeEach
     void setUp() {
-        회원 = new User();
+        구구 = new User();
         tokenRepository.deleteAll();
     }
 
@@ -126,10 +126,10 @@ class AuthServiceTest extends ServiceTest {
     @Test
     void 회원의_토큰을_재발급_한다() {
         // given
-        회원.회원_가입을_한다(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL)
+        구구.회원_가입을_한다(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL)
                 .리프레시_토큰을_발급받는다();
 
-        TokenRenewalRequest 토큰_재발급_요청 = new TokenRenewalRequest(회원.리프레시_토큰());
+        TokenRenewalRequest 토큰_재발급_요청 = new TokenRenewalRequest(구구.리프레시_토큰());
 
         // when
         AccessTokenResponse actual = authService.generateAccessToken(토큰_재발급_요청);

@@ -37,22 +37,22 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private User 회원;
+    private User 네오;
 
     @BeforeEach
     void setUp() {
-        회원 = new User();
+        네오 = new User();
     }
 
     @DisplayName("월별 일정 조회 시, 회원 ID로 해당하는 외부 연동 카테고리 전체를 조회한다.")
     @Test
     void 월별_일정_조회_시_회원_ID로_해당하는_외부_연동_카테고리의_전체를_조회한다() {
         // given
-        회원.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
+        네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
                 .외부_카테고리를_등록한다(외부_카테고리_이름, GOOGLE);
 
         // when
-        List<ExternalCategoryDetail> actual = externalCategoryDetailService.findByMemberId(회원.계정().getId());
+        List<ExternalCategoryDetail> actual = externalCategoryDetailService.findByMemberId(네오.계정().getId());
 
         // then
         assertThat(actual).hasSize(1);

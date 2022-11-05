@@ -13,6 +13,10 @@ public class Constants {
     public static final String 네오_이름 = "neo";
     public static final String 네오_프로필_URL = "/neo.png";
 
+    public static final String 포비_이메일 = "pobi@email.com";
+    public static final String 포비_이름 = "pobi";
+    public static final String 포비_프로필_URL = "/pobi.png";
+
     public static final String 외부_카테고리_이름 = "외부 카테고리";
     public static final String 외부_카테고리_ID = "example@email.com";
 
