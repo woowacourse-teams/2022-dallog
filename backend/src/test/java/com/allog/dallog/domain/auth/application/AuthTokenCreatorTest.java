@@ -13,14 +13,13 @@ class AuthTokenCreatorTest extends ServiceTest {
     @Autowired
     private TokenCreator tokenCreator;
 
+    private final Long 회원_아이디 = 1L;
+
     @DisplayName("엑세스 토큰과 리프레시 토큰을 발급한다.")
     @Test
     void 엑세스_토큰과_리프레시_토큰을_발급한다() {
-        // given
-        Long memberId = 1L;
-
-        // when
-        AuthToken authToken = tokenCreator.createAuthToken(memberId);
+        // given & when
+        AuthToken authToken = tokenCreator.createAuthToken(회원_아이디);
 
         // then
         assertThat(authToken.getAccessToken()).isNotEmpty();
@@ -31,8 +30,7 @@ class AuthTokenCreatorTest extends ServiceTest {
     @Test
     void 리프레시_토큰으로_엑세스_토큰을_발급한다() {
         // given
-        Long memberId = 1L;
-        AuthToken authToken = tokenCreator.createAuthToken(memberId);
+        AuthToken authToken = tokenCreator.createAuthToken(회원_아이디);
 
         // when
         AuthToken actual = tokenCreator.renewAuthToken(authToken.getRefreshToken());
@@ -46,13 +44,12 @@ class AuthTokenCreatorTest extends ServiceTest {
     @Test
     void 토큰에서_페이로드를_추출한다() {
         // given
-        Long memberId = 1L;
-        AuthToken authToken = tokenCreator.createAuthToken(memberId);
+        AuthToken authToken = tokenCreator.createAuthToken(회원_아이디);
 
         // when
         Long actual = tokenCreator.extractPayload(authToken.getAccessToken());
 
         // then
-        assertThat(actual).isEqualTo(memberId);
+        assertThat(actual).isEqualTo(회원_아이디);
     }
 }
