@@ -254,6 +254,7 @@ class SubscriptionServiceTest extends ServiceTest {
                 .isInstanceOf(NoPermissionException.class);
     }
 
+    @Transactional
     @DisplayName("카테고리를 구독하면 카테고리에 대한 NONE 역할이 생성된다")
     @Test
     void 카테고리를_구독하면_카테고리에_대한_NONE_역할이_생성된다() {
@@ -271,6 +272,7 @@ class SubscriptionServiceTest extends ServiceTest {
         assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
     }
 
+    @Transactional
     @DisplayName("카테고리를 구독 해제하면 카테고리에 대한 역할이 제거된다")
     @Test
     void 카테고리를_구독_해제하면_카테고리에_대한_역할이_제거된다() {
