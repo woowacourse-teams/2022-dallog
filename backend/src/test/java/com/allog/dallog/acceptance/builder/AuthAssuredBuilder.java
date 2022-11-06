@@ -1,12 +1,10 @@
 package com.allog.dallog.acceptance.builder;
 
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateNotFoundStatus;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateOkStatus;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateUnauthorizedStatus;
 import static com.allog.dallog.acceptance.fixtures.RestAssuredFixtures.get;
 import static com.allog.dallog.acceptance.fixtures.RestAssuredFixtures.getWithToken;
 import static com.allog.dallog.acceptance.fixtures.RestAssuredFixtures.post;
-import static com.allog.dallog.acceptance.fixtures.RestAssuredFixtures.postWithToken;
+import static com.allog.dallog.acceptance.fixtures.StatusCodeValidateFixtures.validateOkStatus;
+import static com.allog.dallog.acceptance.fixtures.StatusCodeValidateFixtures.validateUnauthorizedStatus;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -32,17 +30,14 @@ public class AuthAssuredBuilder {
         private ExtractableResponse<Response> response;
 
         public AuthRequestBuilder OAuth_인증_URI을_요청한다(final String oauthProvider) {
-            String url = "/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}";
-            String firstParam = oauthProvider;
-            String secondParam = "https://dallog.me/oauth";
-            response = get(url, firstParam, secondParam);
+            response = get("/api/auth/{oauthProvider}/oauth-uri?redirectUri={redirectUri}", oauthProvider,
+                    "https://dallog.me/oauth");
             return this;
         }
 
         public AuthRequestBuilder 회원가입_한다(String oauthProvider, String code) {
-            String url = "/api/auth/{oauthProvider}/token";
             Object body = new TokenRequest(code, "https://dallog.me/oauth");
-            response = post(url, oauthProvider, body);
+            response = post("/api/auth/{oauthProvider}/token", body, oauthProvider);
             return this;
         }
 
@@ -52,16 +47,14 @@ public class AuthAssuredBuilder {
         }
 
         public AuthRequestBuilder 만료된_토큰으로_API를_요청한다() {
-            String url = "/api/auth/validate/token";
             String accessToken = response.as(AccessAndRefreshTokenResponse.class).getAccessToken();
-            response = getWithToken(url, accessToken);
+            response = getWithToken("/api/auth/validate/token", accessToken);
             return this;
         }
 
         public AuthRequestBuilder 엑세스_토큰_재발급을_요청한다() {
-            String url = "/api/auth/token/access";
             Object body = new TokenRenewalRequest(response.as(AccessAndRefreshTokenResponse.class).getRefreshToken());
-            response = postWithToken(url, body);
+            response = post("/api/auth/token/access", body);
             return this;
         }
 
@@ -107,6 +100,10 @@ public class AuthAssuredBuilder {
             AccessTokenResponse actual = response.as(AccessTokenResponse.class);
             assertThat(actual.getAccessToken()).isNotEmpty();
             return this;
+        }
+
+        public String accessToken() {
+            return response.as(AccessAndRefreshTokenResponse.class).getAccessToken();
         }
     }
 }

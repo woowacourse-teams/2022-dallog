@@ -1,158 +1,97 @@
 package com.allog.dallog.acceptance;
 
-import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
-import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.구독_목록을_조회한다;
-import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.카테고리를_구독한다;
+import static com.allog.dallog.common.Constants.대학입시_카테고리_이름;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
-import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_CREATOR_인증_코드;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
+import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.acceptance.builder.AuthAssuredBuilder;
+import com.allog.dallog.acceptance.builder.AuthAssuredBuilder.AuthResponseBuilder;
+import com.allog.dallog.acceptance.builder.CategoryAssuredBuilder;
+import com.allog.dallog.acceptance.builder.CategoryAssuredBuilder.CategoryReqeustBuilder;
+import com.allog.dallog.acceptance.builder.SubscritptionAssuredBuilder;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 @DisplayName("구독 관련 기능")
 public class SubscriptionAcceptanceTest extends AcceptanceTest {
 
-    @DisplayName("인증된 회원이 카테고리를 구독하면 201을 반환한다.")
+    private final CategoryCreateRequest 대학입시_카테고리_생성_요청 = new CategoryCreateRequest(대학입시_카테고리_이름, NORMAL);
+    private final SubscriptionUpdateRequest 구독_카테고리_색상_변경_요청 = new SubscriptionUpdateRequest(COLOR_1, true);
+
+    @DisplayName("카테고리를 구독하면 상태코드 200을 받는다.")
     @Test
-    void 인증된_회원이_카테고리를_구독하면_201을_반환한다() {
-        // given
-        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
+    void 카테고리를_구독하면_상태코드_200을_받는다() {
+        AuthResponseBuilder 관리자 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, "creator authorization code")
+                .응답()
+                .토큰들을_발급_받는다();
 
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(memberToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/api/members/me/categories/{categoryId}/subscriptions", 공통_일정.getId())
-                .then().log().all()
-                .statusCode(HttpStatus.CREATED.value())
-                .extract();
+        CategoryReqeustBuilder 대학입시_카테고리 = CategoryAssuredBuilder.요청()
+                .카테고리를_등록한다(관리자.accessToken(), 대학입시_카테고리_생성_요청);
 
-        // then
-        상태코드_201이_반환된다(response);
+        AuthResponseBuilder 회원 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드)
+                .응답()
+                .상태코드_200을_받는다()
+                .토큰들을_발급_받는다();
+
+        SubscritptionAssuredBuilder.요청()
+                .카테고리를_구독한다(회원.accessToken(), 대학입시_카테고리.getId())
+                .응답()
+                .상태코드_201을_받는다();
     }
 
-    @DisplayName("인증된 회원이 구독 목록을 조회하면 200을 반환한다.")
+    @DisplayName("자신의 구독 정보를 수정하면 상태코드 204를 받는다.")
     @Test
-    void 인증된_회원이_구독_목록을_조회하면_200을_반환한다() {
-        // given
-        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+    void 자신의_구독_정보를_수정하면_상태코드_204를_받는다() {
+        AuthResponseBuilder 관리자 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, "creator authorization code")
+                .응답()
+                .토큰들을_발급_받는다();
 
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(creatorToken, FE_일정_생성_요청);
+        CategoryReqeustBuilder 대학입시_카테고리 = CategoryAssuredBuilder.요청()
+                .카테고리를_등록한다(관리자.accessToken(), 대학입시_카테고리_생성_요청);
 
-        카테고리를_구독한다(memberToken, 공통_일정.getId());
-        카테고리를_구독한다(memberToken, BE_일정.getId());
-        카테고리를_구독한다(memberToken, FE_일정.getId());
+        AuthResponseBuilder 회원 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드)
+                .응답()
+                .상태코드_200을_받는다()
+                .토큰들을_발급_받는다();
 
-        // when
-        ExtractableResponse<Response> response = 구독_목록을_조회한다(memberToken);
-        SubscriptionsResponse subscriptionsResponse = response.as(SubscriptionsResponse.class);
-
-        // then
-        assertAll(() -> {
-            assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4); // 개인 카테고리 1 + given에서 등록한 카테고리 3
-        });
+        SubscritptionAssuredBuilder.요청()
+                .카테고리를_구독한다(회원.accessToken(), 대학입시_카테고리.getId())
+                .구독_정보를_변경한다(회원.accessToken(), 구독_카테고리_색상_변경_요청)
+                .응답()
+                .상태코드_204을_받는다();
     }
 
-    @DisplayName("인증된 회원이 자신의 구독 정보를 수정할 경우 204를 반환한다.")
+    @DisplayName("구독을 취소하면 상태코드 204를 받는다.")
     @Test
-    void 인증된_회원이_자신의_구독_정보를_수정할_경우_204를_반환한다() {
-        // given
-        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
+    void 구독을_취소하면_상태코드_204를_받는다() {
+        AuthResponseBuilder 관리자 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, "creator authorization code")
+                .응답()
+                .토큰들을_발급_받는다();
 
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
+        CategoryReqeustBuilder 대학입시_카테고리 = CategoryAssuredBuilder.요청()
+                .카테고리를_등록한다(관리자.accessToken(), 대학입시_카테고리_생성_요청);
 
-        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(memberToken, 공통_일정.getId());
-        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(Color.COLOR_1, true);
+        AuthResponseBuilder 회원 = AuthAssuredBuilder.요청()
+                .회원가입_한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드)
+                .응답()
+                .상태코드_200을_받는다()
+                .토큰들을_발급_받는다();
 
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(memberToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(request)
-                .when().patch("/api/members/me/subscriptions/{subscriptionId}", subscriptionResponse.getId())
-                .then().log().all()
-                .statusCode(HttpStatus.NO_CONTENT.value())
-                .extract();
-
-        SubscriptionsResponse subscriptionsResponse = 구독_목록을_조회한다(memberToken).as(SubscriptionsResponse.class);
-
-        // then
-        List<SubscriptionResponse> subscriptions = subscriptionsResponse.getSubscriptions();
-        SubscriptionResponse foundSubscriptionResponse = subscriptions.stream()
-                .filter(subscription -> subscriptionResponse.getId().equals(subscription.getId()))
-                .findAny()
-                .get();
-
-        assertAll(() -> {
-            상태코드_204가_반환된다(response);
-            assertThat(foundSubscriptionResponse.getColorCode()).isEqualTo(request.getColorCode());
-            assertThat(foundSubscriptionResponse.isChecked()).isTrue();
-        });
-    }
-
-    @DisplayName("구독을 취소할 경우 204를 반환한다.")
-    @Test
-    void 구독을_취소할_경우_204를_반환한다() {
-        // given
-        String memberToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_MEMBER_인증_코드);
-        String creatorToken = 자체_토큰을_생성하고_엑세스_토큰을_반환한다(GOOGLE_PROVIDER, STUB_CREATOR_인증_코드);
-
-        CategoryResponse 공통_일정 = 새로운_카테고리를_등록한다(creatorToken, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = 새로운_카테고리를_등록한다(creatorToken, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = 새로운_카테고리를_등록한다(creatorToken, FE_일정_생성_요청);
-
-        SubscriptionResponse subscriptionResponse = 카테고리를_구독한다(memberToken, 공통_일정.getId());
-        카테고리를_구독한다(memberToken, BE_일정.getId());
-        카테고리를_구독한다(memberToken, FE_일정.getId());
-
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .auth().oauth2(memberToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().delete("/api/members/me/subscriptions/{subscriptionId}", subscriptionResponse.getId())
-                .then().log().all()
-                .statusCode(HttpStatus.NO_CONTENT.value())
-                .extract();
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
-    }
-
-    private CategoryResponse 새로운_카테고리를_등록한다(final String accessToken, final CategoryCreateRequest request) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(accessToken)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(request)
-                .when().post("/api/categories")
-                .then().log().all()
-                .extract()
-                .as(CategoryResponse.class);
+        SubscritptionAssuredBuilder.요청()
+                .카테고리를_구독한다(회원.accessToken(), 대학입시_카테고리.getId())
+                .구독을_취소한다(회원.accessToken())
+                .응답()
+                .상태코드_204을_받는다();
     }
 }
