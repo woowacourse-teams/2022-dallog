@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
@@ -24,7 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class AuthServiceTest extends ServiceTest {
+class AuthServiceTest extends IntegrationTest {
 
     @Autowired
     private AuthService authService;

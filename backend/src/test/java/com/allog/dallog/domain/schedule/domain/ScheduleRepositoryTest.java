@@ -34,7 +34,7 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.member.domain.Member;
@@ -46,7 +46,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ScheduleRepositoryTest extends RepositoryTest {
+class ScheduleRepositoryTest extends IntegrationTest {
 
     @Autowired
     private ScheduleRepository scheduleRepository;

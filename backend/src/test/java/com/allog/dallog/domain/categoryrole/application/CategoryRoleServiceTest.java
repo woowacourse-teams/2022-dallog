@@ -21,7 +21,7 @@ import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class CategoryRoleServiceTest extends ServiceTest {
+class CategoryRoleServiceTest extends IntegrationTest {
 
     private final CategoryRoleUpdateRequest 카테고리_관리권한_부여_요청 = new CategoryRoleUpdateRequest(ADMIN);
     private final CategoryRoleUpdateRequest 카테고리_관리권한_해제_요청 = new CategoryRoleUpdateRequest(NONE);

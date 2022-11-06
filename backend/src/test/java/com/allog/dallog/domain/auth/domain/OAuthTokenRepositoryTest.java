@@ -4,7 +4,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.OAuthTokenFixtures.REFRESH_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class OAuthTokenRepositoryTest extends RepositoryTest {
+class OAuthTokenRepositoryTest extends IntegrationTest {
 
     @Autowired
     private MemberRepository memberRepository;

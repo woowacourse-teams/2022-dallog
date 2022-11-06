@@ -9,7 +9,7 @@ import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ExternalCategoryDetailServiceTest extends ServiceTest {
+class ExternalCategoryDetailServiceTest extends IntegrationTest {
 
     @Autowired
     private ExternalCategoryDetailService externalCategoryDetailService;

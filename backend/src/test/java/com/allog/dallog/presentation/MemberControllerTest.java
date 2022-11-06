@@ -31,17 +31,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(MemberController.class)
 class MemberControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private MemberService memberService;
 
     @DisplayName("자신의 회원 정보를 조회한다.")
     @Test

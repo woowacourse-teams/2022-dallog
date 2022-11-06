@@ -6,7 +6,7 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchExternalCategoryDetailException;
 import com.allog.dallog.domain.member.domain.Member;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ExternalCategoryDetailRepositoryTest extends RepositoryTest {
+public class ExternalCategoryDetailRepositoryTest extends IntegrationTest {
 
     @Autowired
     private ExternalCategoryDetailRepository externalCategoryDetailRepository;

@@ -5,8 +5,6 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.acceptance.builder.AuthAssuredBuilder;
 import com.allog.dallog.acceptance.builder.AuthAssuredBuilder.AuthResponseBuilder;

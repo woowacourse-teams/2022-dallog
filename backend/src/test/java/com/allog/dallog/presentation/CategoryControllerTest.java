@@ -68,25 +68,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-@WebMvcTest(CategoryController.class)
 class CategoryControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
     private static final String INVALID_CATEGORY_NAME = "20글자를 초과하는 유효하지 않은 카테고리 이름";
     private static final String CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE = "카테고리 이름의 길이는 20을 초과할 수 없습니다.";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private CategoryService categoryService;
-
-    @MockBean
-    private CategoryRoleService categoryRoleService;
-
-    @MockBean
-    private MemberService memberService;
 
     @DisplayName("카테고리를 생성한다.")
     @Test

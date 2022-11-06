@@ -47,20 +47,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-@WebMvcTest(ScheduleController.class)
 class ScheduleControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private ScheduleService scheduleService;
-
-    @MockBean
-    private CheckedSchedulesFinder checkedSchedulesFinder;
 
     @DisplayName("일정 정보를 등록하면 상태코드 201을 반환한다.")
     @Test

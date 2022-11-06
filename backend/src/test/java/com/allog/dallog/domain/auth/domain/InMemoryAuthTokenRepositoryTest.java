@@ -3,19 +3,14 @@ package com.allog.dallog.domain.auth.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.common.config.ExternalApiConfig;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(classes = ExternalApiConfig.class)
-@ActiveProfiles("test")
-class InMemoryAuthTokenRepositoryTest {
+class InMemoryAuthTokenRepositoryTest extends IntegrationTest {
 
     @Autowired
     private TokenRepository tokenRepository;

@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -63,7 +63,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class CategoryServiceTest extends ServiceTest {
+class CategoryServiceTest extends IntegrationTest {
 
     private final CategoryCreateRequest 취업_카테고리_생성_요청 = new CategoryCreateRequest(취업_카테고리_이름, NORMAL);
     private final CategoryCreateRequest 개인_카테고리_생성_요청 = new CategoryCreateRequest(개인_카테고리_이름, PERSONAL);

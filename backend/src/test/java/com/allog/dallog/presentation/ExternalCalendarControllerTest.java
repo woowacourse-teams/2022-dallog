@@ -36,20 +36,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(ExternalCalendarController.class)
 class ExternalCalendarControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private ExternalCalendarService externalCalendarService;
-
-    @MockBean
-    private CategoryService categoryService;
 
     @DisplayName("외부 캘린더의 일정을 조회하면 상태코드 200을 반환한다.")
     @Test

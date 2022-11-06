@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
@@ -67,7 +67,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ScheduleServiceTest extends ServiceTest {
+class ScheduleServiceTest extends IntegrationTest {
 
     private final ScheduleCreateRequest 취업_일정_생성_요청 = new ScheduleCreateRequest(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일,
             취업_일정_메모);

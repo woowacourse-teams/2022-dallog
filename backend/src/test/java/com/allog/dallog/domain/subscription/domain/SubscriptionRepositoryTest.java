@@ -13,7 +13,7 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상3_구�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.common.annotation.RepositoryTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class SubscriptionRepositoryTest extends RepositoryTest {
+class SubscriptionRepositoryTest extends IntegrationTest {
 
     @Autowired
     private MemberRepository memberRepository;

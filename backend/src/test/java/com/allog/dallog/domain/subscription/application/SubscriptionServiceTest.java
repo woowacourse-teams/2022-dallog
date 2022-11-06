@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
@@ -51,7 +51,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-class SubscriptionServiceTest extends ServiceTest {
+class SubscriptionServiceTest extends IntegrationTest {
 
     private final SubscriptionUpdateRequest 구독_정보_변경_요청 = new SubscriptionUpdateRequest(COLOR_1, true);
 

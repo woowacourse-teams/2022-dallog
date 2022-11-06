@@ -20,7 +20,7 @@ import static com.allog.dallog.domain.member.domain.SocialType.GOOGLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.common.annotation.IntegrationTest;
 import com.allog.dallog.domain.auth.domain.OAuthToken;
 import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.domain.category.application.CategoryService;
@@ -36,7 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class CheckedSchedulesFinderTest extends ServiceTest {
+class CheckedSchedulesFinderTest extends IntegrationTest {
 
     @Autowired
     private CheckedSchedulesFinder checkedSchedulesFinder;
