@@ -54,6 +54,7 @@ function useGetSubscriptions({ enabled }: UseGetSubscriptionsParams) {
     () => subscriptionApi.get(accessToken),
     {
       enabled,
+      suspense: true,
     }
   );
 

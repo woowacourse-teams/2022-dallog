@@ -1,15 +1,16 @@
+import { ProfileType } from '@/@types/profile';
+import { ValueOf } from '@/@types/util';
+
 import { CATEGORY_TYPE, ROLE } from '@/constants/category';
 
-import { ProfileType } from './profile';
-
-type CategoryRoleType = typeof ROLE[keyof typeof ROLE];
+type CategoryRoleType = ValueOf<typeof ROLE>;
 
 interface CategoryType {
   id: number;
   name: string;
   creator: ProfileType;
   createdAt: string;
-  categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
+  categoryType: ValueOf<typeof CATEGORY_TYPE>;
 }
 
 interface CategorySubscriberType {

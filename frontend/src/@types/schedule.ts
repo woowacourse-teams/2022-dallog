@@ -1,4 +1,11 @@
+import { ValueOf } from '@/@types/util';
+
 import { CATEGORY_TYPE } from '@/constants/category';
+import { SCHEDULE } from '@/constants/schedule';
+
+type ScheduleResponseKeyType = ValueOf<typeof SCHEDULE.RESPONSE_TYPE>;
+
+type ScheduleResponseType = Record<ScheduleResponseKeyType, Array<ScheduleType>>;
 
 interface ScheduleType {
   id: string;
@@ -8,13 +15,7 @@ interface ScheduleType {
   endDateTime: string;
   memo: string;
   colorCode: string;
-  categoryType: typeof CATEGORY_TYPE[keyof typeof CATEGORY_TYPE];
+  categoryType: ValueOf<typeof CATEGORY_TYPE>;
 }
 
-interface ScheduleResponseType {
-  longTerms: Array<ScheduleType>;
-  allDays: Array<ScheduleType>;
-  fewHours: Array<ScheduleType>;
-}
-
-export { ScheduleResponseType, ScheduleType };
+export { ScheduleResponseKeyType, ScheduleResponseType, ScheduleType };

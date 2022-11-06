@@ -1,15 +1,15 @@
-import { RESPONSIVE } from '@/constants/style';
+const debounce = <F extends (...params: any[]) => void>(callback: F, delay = 100) => {
+  let timer: NodeJS.Timeout;
+
+  return function (...args: any[]) {
+    if (timer) clearTimeout(timer);
+
+    timer = setTimeout(() => callback.call(args), delay);
+  } as F;
+};
 
 const getRandomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min)) + min;
-};
-
-const getRootFontSize = () => {
-  if (innerWidth >= RESPONSIVE.LAPTOP.MIN_WIDTH) return RESPONSIVE.LAPTOP.FONT_SIZE;
-
-  if (innerWidth > RESPONSIVE.MOBILE.MAX_WIDTH) return RESPONSIVE.TABLET.FONT_SIZE;
-
-  return RESPONSIVE.MOBILE.FONT_SIZE;
 };
 
 const getSearchParam = (key: string) => {
@@ -20,4 +20,4 @@ const zeroFill = (str: string | number) => {
   return str.toString().padStart(2, '0');
 };
 
-export { getRandomNumber, getRootFontSize, getSearchParam, zeroFill };
+export { debounce, getRandomNumber, getSearchParam, zeroFill };

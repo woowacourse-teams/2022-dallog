@@ -1,5 +1,10 @@
 const OPTION_HEIGHT = 36;
 
+const PAGE_LAYOUT = {
+  DEFAULT: 'default',
+  SIDEBAR: 'sidebar',
+};
+
 const PALETTE = [
   '#AD1457',
   '#D81B60',
@@ -35,12 +40,12 @@ const RESPONSIVE = {
   },
   TABLET: {
     DEVICE: 'tablet',
-    FONT_SIZE: 3,
+    FONT_SIZE: 4,
     MAX_WIDTH: 1023,
   },
   MOBILE: {
     DEVICE: 'mobile',
-    FONT_SIZE: 2,
+    FONT_SIZE: 3.5,
     MAX_WIDTH: 767,
   },
 };
@@ -52,4 +57,4 @@ const SCHEDULE = {
 
 const TRANSPARENT = 'transparent';
 
-export { OPTION_HEIGHT, PALETTE, RESPONSIVE, SCHEDULE, TRANSPARENT };
+export { OPTION_HEIGHT, PAGE_LAYOUT, PALETTE, RESPONSIVE, SCHEDULE, TRANSPARENT };

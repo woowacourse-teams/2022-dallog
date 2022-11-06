@@ -103,12 +103,12 @@ const scheduleTitleStyle = css`
   font-size: 6rem;
 `;
 
-const colorStyle = (colorCode: string | undefined) => css`
+const colorStyle = ({ colors }: Theme, colorCode: string) => css`
   width: 4rem;
   height: 4rem;
   border-radius: 25%;
 
-  background: ${colorCode};
+  background: ${colorCode === '' ? colors.ORANGE_500 : colorCode};
 `;
 
 const grayTextStyle = ({ colors }: Theme) => css`

@@ -5,5 +5,14 @@ module.exports = {
     '@babel/preset-typescript',
     '@emotion/babel-preset-css-prop',
   ],
-  plugins: ['@emotion'],
+  plugins: [
+    '@emotion',
+    [
+      '@babel/plugin-transform-runtime',
+      {
+        corejs: 3,
+        proposals: true,
+      },
+    ],
+  ],
 };

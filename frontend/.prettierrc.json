@@ -17,6 +17,7 @@
     "@/(components/@common/|components/|pages/)(.*)$",
     "@/constants",
     "@/utils",
+    "@/domains",
     "@/(api|mocks)/(.*)$",
     "react-icons",
     "^[./]"

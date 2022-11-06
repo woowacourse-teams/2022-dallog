@@ -1,8 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 const sideBar = ({ colors }: Theme, isSideBarOpen: boolean) => css`
-  overflow-y: overlay;
-  overflow-x: hidden;
+  overflow: hidden;
   position: fixed;
   z-index: 10;
 
@@ -14,6 +13,14 @@ const sideBar = ({ colors }: Theme, isSideBarOpen: boolean) => css`
   background: ${colors.WHITE};
 
   transition: width 0.3s;
+
+  &:hover {
+    overflow-y: overlay;
+  }
 `;
 
-export { sideBar };
+const skeletonItemStyle = css`
+  margin: 3rem;
+`;
+
+export { skeletonItemStyle, sideBar };

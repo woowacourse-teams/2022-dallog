@@ -4,20 +4,12 @@ import { CALENDAR } from '@/constants';
 
 import { checkAllDay, getDayOffsetDateTime, getISODateString } from '@/utils/date';
 
-function useSchedulePriority(calendar: string[]) {
-  const calendarWithPriority = calendar.reduce(
-    (
-      acc: {
-        [key: string]: Array<boolean>;
-      },
-      cur
-    ) => {
-      acc[getISODateString(cur)] = new Array(CALENDAR.MAX_SCHEDULE_COUNT).fill(false);
+function getSchedulePriority(calendar: string[]) {
+  const calendarWithPriority = calendar.reduce((acc: Record<string, boolean[]>, cur) => {
+    acc[getISODateString(cur)] = new Array(CALENDAR.MAX_SCHEDULE_COUNT).fill(false);
 
-      return acc;
-    },
-    {}
-  );
+    return acc;
+  }, {});
 
   const getLongTermSchedulesWithPriority = (longTerms: Array<ScheduleType>) =>
     longTerms.map((schedule) => {
@@ -106,4 +98,4 @@ function useSchedulePriority(calendar: string[]) {
   };
 }
 
-export default useSchedulePriority;
+export default getSchedulePriority;

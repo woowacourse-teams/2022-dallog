@@ -13,14 +13,10 @@ const global = ({ colors, mq }: Theme) => css`
   }
 
   html {
-    ${mq?.laptop} {
-      font-size: 4px;
-    }
-    ${mq?.tablet} {
-      font-size: 3px;
-    }
+    font-size: 4px;
+
     ${mq?.mobile} {
-      font-size: 2px;
+      font-size: 3.5px;
     }
   }
 
@@ -33,22 +29,20 @@ const global = ({ colors, mq }: Theme) => css`
     font-size: 3rem;
 
     *::-webkit-scrollbar {
-      width: 2rem;
+      width: 1rem;
     }
 
     *::-webkit-scrollbar-thumb {
       border-radius: 7px;
       background-clip: padding-box;
-      border: 2px solid transparent;
+      border: 1px solid transparent;
 
-      background: ${colors.YELLOW_500};
+      background: ${colors.GRAY_400};
     }
 
     *::-webkit-scrollbar-track {
       border-radius: 7px;
       box-shadow: inset 0 0 5px white;
-
-      background: ${colors.GRAY_200};
     }
   }
 `;

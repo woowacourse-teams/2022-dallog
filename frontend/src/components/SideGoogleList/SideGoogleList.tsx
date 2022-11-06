@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { useRecoilValue } from 'recoil';
 
+import useRootFontSize from '@/hooks/useRootFontSize';
 import useToggle from '@/hooks/useToggle';
 
 import { SubscriptionType } from '@/@types/subscription';
@@ -11,8 +12,6 @@ import Button from '@/components/@common/Button/Button';
 import ModalPortal from '@/components/@common/ModalPortal/ModalPortal';
 import GoogleImportModal from '@/components/GoogleImportModal/GoogleImportModal';
 import SideItem from '@/components/SideItem/SideItem';
-
-import { getRootFontSize } from '@/utils';
 
 import { MdAdd, MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 
@@ -34,6 +33,8 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
 
   const theme = useTheme();
 
+  const rootFontSize = useRootFontSize();
+
   const { state: isGoogleListOpen, toggleState: toggleGoogleListOpen } = useToggle(true);
   const { state: isGoogleImportModalOpen, toggleState: toggleGoogleImportModalOpen } = useToggle();
 
@@ -41,7 +42,6 @@ function SideGoogleList({ categories }: SideGoogleListProps) {
     toggleGoogleImportModalOpen();
   };
 
-  const rootFontSize = getRootFontSize();
   return (
     <div css={listStyle(theme, isSideBarOpen)}>
       <div css={headerLayoutStyle}>
