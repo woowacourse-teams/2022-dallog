@@ -1,7 +1,7 @@
 package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateOkStatus;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
@@ -41,7 +41,7 @@ class ExternalCalendarAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(() -> {
-            상태코드_200이_반환된다(response);
+            validateOkStatus(response);
             assertThat(externalCalendarsResponse.getExternalCalendars()).hasSize(3);
         });
     }

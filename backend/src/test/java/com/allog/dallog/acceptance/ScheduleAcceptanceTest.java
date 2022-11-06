@@ -2,7 +2,7 @@ package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.새로운_카테고리를_등록한다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateOkStatus;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.ScheduleAcceptanceFixtures.새로운_일정을_등록한다;
@@ -87,7 +87,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
                 "2022-08-15T23:59");
 
         // then
-        상태코드_200이_반환된다(response);
+        validateOkStatus(response);
     }
 
     @DisplayName("일정 ID로 일정을 단건조회_하면 상태코드 200을 반환한다.")
@@ -102,7 +102,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 일정_아이디로_일정을_단건_조회한다(accessToken, 알록달록_회의.getId());
 
         // then
-        상태코드_200이_반환된다(response);
+        validateOkStatus(response);
     }
 
     @DisplayName("일정을 수정하면 상태코드 204를 반환한다.")

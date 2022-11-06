@@ -6,6 +6,7 @@ import static com.allog.dallog.common.Constants.네오_프로필_URL;
 import static com.allog.dallog.common.Constants.외부_카테고리_ID;
 import static com.allog.dallog.common.Constants.외부_카테고리_이름;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
+import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
@@ -17,6 +18,8 @@ import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.domain.SocialType;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +39,9 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     private User 네오;
 
@@ -62,21 +68,23 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
 
         private Member member;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             return this;
         }
 
-        public User 외부_카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private User 외부_카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             Category category = new Category(categoryName, this.member, categoryType);
             ExternalCategoryDetail externalCategoryDetail = new ExternalCategoryDetail(category, 외부_카테고리_ID);
+            Subscription subscription = new Subscription(this.member, category, COLOR_1);
             categoryRepository.save(category);
             externalCategoryDetailRepository.save(externalCategoryDetail);
+            subscriptionRepository.save(subscription);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
     }

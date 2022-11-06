@@ -1,7 +1,7 @@
 package com.allog.dallog.acceptance;
 
 import static com.allog.dallog.acceptance.fixtures.AuthAcceptanceFixtures.자체_토큰을_생성하고_엑세스_토큰을_반환한다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateOkStatus;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
@@ -36,7 +36,7 @@ public class MemberAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(() -> {
-            상태코드_200이_반환된다(response);
+            validateOkStatus(response);
             assertThat(memberResponse.getEmail()).isEqualTo(MEMBER_이메일);
             assertThat(memberResponse.getDisplayName()).isEqualTo(MEMBER_이름);
             assertThat(memberResponse.getProfileImageUrl()).isEqualTo(MEMBER_프로필);

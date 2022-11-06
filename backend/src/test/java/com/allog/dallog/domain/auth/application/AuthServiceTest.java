@@ -1,17 +1,13 @@
 package com.allog.dallog.domain.auth.application;
 
-import static com.allog.dallog.common.Constants.MEMBER_REFRESH_TOKEN;
-import static com.allog.dallog.common.Constants.MEMBER_이름;
 import static com.allog.dallog.common.Constants.MEMBER_이메일;
-import static com.allog.dallog.common.Constants.MEMBER_프로필_URL;
-import static com.allog.dallog.domain.member.domain.SocialType.GOOGLE;
+import static com.allog.dallog.common.Constants.oAuthMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
-import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
@@ -30,14 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class AuthServiceTest extends ServiceTest {
 
-    private final OAuthMember oAuthMember = new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL,
-            MEMBER_REFRESH_TOKEN);
-
     @Autowired
     private AuthService authService;
-
-    @Autowired
-    private TokenProvider tokenProvider;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -51,11 +41,8 @@ class AuthServiceTest extends ServiceTest {
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
 
-    private User 구구;
-
     @BeforeEach
     void setUp() {
-        구구 = new User();
         tokenRepository.deleteAll();
     }
 
@@ -126,10 +113,8 @@ class AuthServiceTest extends ServiceTest {
     @Test
     void 회원의_토큰을_재발급_한다() {
         // given
-        구구.회원_가입을_한다(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL)
-                .리프레시_토큰을_발급받는다();
-
-        TokenRenewalRequest 토큰_재발급_요청 = new TokenRenewalRequest(구구.리프레시_토큰());
+        AccessAndRefreshTokenResponse tokens = authService.generateAccessAndRefreshToken(oAuthMember);
+        TokenRenewalRequest 토큰_재발급_요청 = new TokenRenewalRequest(tokens.getRefreshToken());
 
         // when
         AccessTokenResponse actual = authService.generateAccessToken(토큰_재발급_요청);
@@ -148,26 +133,5 @@ class AuthServiceTest extends ServiceTest {
         // when & then
         assertThatThrownBy(() -> authService.generateAccessToken(토큰_재발급_요청))
                 .isInstanceOf(InvalidTokenException.class);
-    }
-
-    private final class User {
-
-        private Member member;
-
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
-            this.member = new Member(email, name, profile, GOOGLE);
-            memberRepository.save(member);
-            return this;
-        }
-
-        public void 리프레시_토큰을_발급받는다() {
-            String payload = String.valueOf(member.getId());
-            String refreshToken = tokenProvider.createRefreshToken(payload);
-            tokenRepository.save(member.getId(), refreshToken);
-        }
-
-        public String 리프레시_토큰() {
-            return tokenRepository.getToken(member.getId());
-        }
     }
 }

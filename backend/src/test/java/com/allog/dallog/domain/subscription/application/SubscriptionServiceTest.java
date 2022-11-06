@@ -236,7 +236,8 @@ class SubscriptionServiceTest extends ServiceTest {
         subscriptionService.delete(포비.구독().getId(), 포비.계정().getId());
 
         // then
-        assertThat(subscriptionService.findByMemberId(네오.구독().getId()).getSubscriptions()).hasSize(1);
+        assertThatThrownBy(() -> subscriptionRepository.getById(포비.구독().getId()))
+                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 
     @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")
@@ -313,13 +314,13 @@ class SubscriptionServiceTest extends ServiceTest {
         private Category category;
         private Subscription subscription;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             return this;
         }
 
-        public User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             this.category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
             this.subscription = new Subscription(this.member, category, COLOR_1);
@@ -329,7 +330,7 @@ class SubscriptionServiceTest extends ServiceTest {
             return this;
         }
 
-        public User 카테고리를_구독한다(final Category category) {
+        private User 카테고리를_구독한다(final Category category) {
             this.subscription = new Subscription(this.member, category, COLOR_1);
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
             subscriptionRepository.save(subscription);
@@ -337,22 +338,22 @@ class SubscriptionServiceTest extends ServiceTest {
             return this;
         }
 
-        public User 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private User 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
 
-        public Category 카테고리() {
+        private Category 카테고리() {
             return category;
         }
 
-        public Subscription 구독() {
+        private Subscription 구독() {
             return subscription;
         }
     }

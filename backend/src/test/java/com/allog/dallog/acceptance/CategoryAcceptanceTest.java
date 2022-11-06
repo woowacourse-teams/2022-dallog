@@ -8,7 +8,7 @@ import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.�
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.전체_카테고리를_제목_검색을_통해_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.전체_카테고리를_조회한다;
 import static com.allog.dallog.acceptance.fixtures.CategoryAcceptanceFixtures.회원의_카테고리_역할을_변경한다;
-import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_200이_반환된다;
+import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.validateOkStatus;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_201이_반환된다;
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
@@ -81,7 +81,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(() -> {
-            상태코드_200이_반환된다(response);
+            validateOkStatus(response);
             assertThat(categoriesResponse.getCategories()).hasSize(5);
         });
     }
@@ -103,7 +103,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(() -> {
-            상태코드_200이_반환된다(response);
+            validateOkStatus(response);
             assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }
@@ -126,7 +126,7 @@ public class CategoryAcceptanceTest extends AcceptanceTest {
 
         // then
         assertAll(() -> {
-            상태코드_200이_반환된다(response);
+            validateOkStatus(response);
             assertThat(categoriesResponse.getCategories()).hasSize(3);
         });
     }

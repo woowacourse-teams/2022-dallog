@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 public class CommonAcceptanceFixtures {
 
-    public static void 상태코드_200이_반환된다(final ExtractableResponse<Response> response) {
+    public static void validateOkStatus(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
@@ -20,11 +20,11 @@ public class CommonAcceptanceFixtures {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
-    public static void 상태코드_404가_반환된다(final ExtractableResponse<Response> response) {
+    public static void validateNotFoundStatus(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
-    public static void 상태코드_401이_반환된다(final ExtractableResponse<Response> response) {
+    public static void validateUnauthorizedStatus(final ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }

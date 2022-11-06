@@ -461,17 +461,16 @@ class ScheduleServiceTest extends ServiceTest {
 
         private Member member;
         private Category category;
-        private Subscription subscription;
         private Schedule schedule;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             oAuthTokenRepository.save(new OAuthToken(this.member, "oAuthToken"));
             return this;
         }
 
-        public User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             this.category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
             Subscription subscription = new Subscription(this.member, category, COLOR_1);
@@ -481,44 +480,44 @@ class ScheduleServiceTest extends ServiceTest {
             return this;
         }
 
-        public User 카테고리를_구독한다(final Category category) {
-            this.subscription = new Subscription(this.member, category, COLOR_1);
+        private User 카테고리를_구독한다(final Category category) {
+            Subscription subscription = new Subscription(this.member, category, COLOR_1);
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
             subscriptionRepository.save(subscription);
             categoryRoleRepository.save(categoryRole);
             return this;
         }
 
-        public User 카테고리_관리_권한을_부여한다(final Member otherMember, final Category category) {
+        private User 카테고리_관리_권한을_부여한다(final Member otherMember, final Category category) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
             return this;
         }
 
-        public User 카테고리_관리_권한을_해제한다(final Member otherMember, final Category category) {
+        private User 카테고리_관리_권한을_해제한다(final Member otherMember, final Category category) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(NONE);
             return this;
         }
 
-        public User 카테고리에_일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
+        private User 카테고리에_일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
                                    final String memo) {
             this.schedule = new Schedule(this.category, title, start, end, memo);
             scheduleRepository.save(schedule);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
 
-        public Category 카테고리() {
+        private Category 카테고리() {
             return category;
         }
 
-        public Schedule 일정() {
+        private Schedule 일정() {
             return schedule;
         }
     }

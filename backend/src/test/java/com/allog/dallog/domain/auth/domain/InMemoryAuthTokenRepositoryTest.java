@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.allog.dallog.common.config.ExternalApiConfig;
 import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ class InMemoryAuthTokenRepositoryTest {
     @Autowired
     private TokenRepository tokenRepository;
 
-    @AfterEach
+    @BeforeEach
     void setUp() {
         tokenRepository.deleteAll();
     }

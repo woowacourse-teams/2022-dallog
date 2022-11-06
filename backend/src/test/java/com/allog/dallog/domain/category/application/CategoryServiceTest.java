@@ -224,7 +224,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_등록한다(스터디_카테고리_이름, NORMAL);
 
         // when
-        CategoriesResponse actual = categoryService.findNormalByName("스");
+        CategoriesResponse actual = categoryService.findNormalByName("취업");
 
         // then
         assertThat(actual.getCategories()).hasSize(1);
@@ -251,7 +251,6 @@ class CategoryServiceTest extends ServiceTest {
     void 관리권한이_ADMIN인_카테고리_목록을_조회한다() {
         // given
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
-                .카테고리를_등록한다(취업_카테고리_이름, GOOGLE)
                 .카테고리를_등록한다(스터디_카테고리_이름, NORMAL);
 
         제이슨.회원_가입을_한다(MEMBER_이메일, MEMBER_이름, MEMBER_프로필_URL)
@@ -341,7 +340,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
 
         // when & then
-        assertThatThrownBy(() -> categoryService.update(네오.계정().getId(), 1L, 카테고리_수정_요청))
+        assertThatThrownBy(() -> categoryService.update(네오.계정().getId(), -1L, 카테고리_수정_요청))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -396,7 +395,7 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(네오.계정().getId(), 1L))
+        assertThatThrownBy(() -> categoryService.delete(네오.계정().getId(), -1L))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -488,23 +487,23 @@ class CategoryServiceTest extends ServiceTest {
         private Subscription subscription;
         private Schedule schedule;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             return this;
         }
 
-        public User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             this.category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
+            this.subscription = new Subscription(this.member, category, COLOR_1);
             categoryRepository.save(category);
             categoryRoleRepository.save(categoryRole);
             subscriptionRepository.save(subscription);
             return this;
         }
 
-        public User 카테고리를_구독한다(final Category category) {
+        private User 카테고리를_구독한다(final Category category) {
             this.subscription = new Subscription(this.member, category, COLOR_1);
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
             subscriptionRepository.save(subscription);
@@ -512,33 +511,33 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        public User 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private User 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
             return this;
         }
 
-        public User 일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
+        private User 일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
                              final String memo) {
             this.schedule = new Schedule(this.category, title, start, end, memo);
             scheduleRepository.save(schedule);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
 
-        public Category 카테고리() {
+        private Category 카테고리() {
             return category;
         }
 
-        public Subscription 구독() {
+        private Subscription 구독() {
             return subscription;
         }
 
-        public Schedule 카테고리_일정() {
+        private Schedule 카테고리_일정() {
             return schedule;
         }
     }

@@ -146,13 +146,13 @@ class MemberServiceTest extends ServiceTest {
         private Category category;
         private Subscription subscription;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             return this;
         }
 
-        public User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             this.category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
             this.subscription = new Subscription(this.member, category, COLOR_1);
@@ -162,23 +162,23 @@ class MemberServiceTest extends ServiceTest {
             return this;
         }
 
-        public User 카테고리를_구독한다(final Category category) {
+        private User 카테고리를_구독한다(final Category category) {
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
+            this.subscription = new Subscription(this.member, category, COLOR_1);
             categoryRoleRepository.save(categoryRole);
             subscriptionRepository.save(subscription);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
 
-        public Category 카테고리() {
+        private Category 카테고리() {
             return category;
         }
 
-        public Subscription 구독() {
+        private Subscription 구독() {
             return subscription;
         }
     }

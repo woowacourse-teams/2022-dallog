@@ -27,7 +27,7 @@ class ExternalCalendarServiceTest extends ServiceTest {
 
     @Autowired
     private OAuthTokenRepository oAuthTokenRepository;
-    
+
     private User 네오;
 
     @BeforeEach
@@ -54,13 +54,13 @@ class ExternalCalendarServiceTest extends ServiceTest {
 
         private Member member;
 
-        public User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private User 회원_가입을_한다(final String email, final String name, final String profile) {
             this.member = new Member(email, name, profile, SocialType.GOOGLE);
             memberRepository.save(member);
             return this;
         }
 
-        public Member 계정() {
+        private Member 계정() {
             return member;
         }
     }

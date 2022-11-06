@@ -3,20 +3,25 @@ package com.allog.dallog.common;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.metamodel.Type;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class DatabaseCleaner {
+@Profile("test")
+public class DatabaseCleaner implements InitializingBean {
 
-    private final EntityManager entityManager;
-    private final List<String> tableNames;
+    @PersistenceContext
+    private EntityManager entityManager;
+    private List<String> tableNames;
 
-    public DatabaseCleaner(final EntityManager entityManager) {
-        this.entityManager = entityManager;
-        this.tableNames = entityManager.getMetamodel()
+    @Override
+    public void afterPropertiesSet() {
+        tableNames = entityManager.getMetamodel()
                 .getEntities()
                 .stream()
                 .map(Type::getJavaType)
@@ -32,6 +37,8 @@ public class DatabaseCleaner {
 
         for (String tableName : tableNames) {
             entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
+            entityManager.createNativeQuery("ALTER TABLE " + tableName + " AUTO_INCREMENT = 1" )
+                    .executeUpdate();
         }
 
         entityManager.createNativeQuery("SET foreign_key_checks = 1").executeUpdate();

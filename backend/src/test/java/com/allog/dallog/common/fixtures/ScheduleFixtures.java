@@ -90,15 +90,4 @@ public class ScheduleFixtures {
     public static final ScheduleCreateRequest 몇시간_네번째_일정 = new ScheduleCreateRequest("몇시간 네번째", 날짜_2022년_7월_16일_18시_0분,
             날짜_2022년_7월_16일_18시_0분, "");
 
-    public static Schedule 알록달록_회의(final Category category) {
-        return new Schedule(category, 알록달록_회의_제목, 알록달록_회의_시작일시, 알록달록_회의_종료일시, 알록달록_회의_메모);
-    }
-
-    public static Schedule 알록달록_회식(final Category category) {
-        return new Schedule(category, 알록달록_회식_제목, 알록달록_회식_시작일시, 알록달록_회식_종료일시, 알록달록_회식_메모);
-    }
-
-    public static Schedule 레벨_인터뷰(final Category category) {
-        return new Schedule(category, 레벨_인터뷰_제목, 레벨_인터뷰_시작일시, 레벨_인터뷰_종료일시, 레벨_인터뷰_메모);
-    }
 }
