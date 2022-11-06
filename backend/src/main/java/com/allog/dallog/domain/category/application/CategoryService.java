@@ -103,7 +103,7 @@ public class CategoryService {
     }
 
     @Transactional
-    @EventListener(MemberSavedEvent.class)
+    @EventListener
     public void savePersonalCategory(final MemberSavedEvent event) {
         Member member = memberRepository.getById(event.getMemberId());
         Category category = categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, member, PERSONAL));

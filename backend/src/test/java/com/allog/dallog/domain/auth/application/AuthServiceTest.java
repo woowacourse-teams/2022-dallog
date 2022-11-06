@@ -7,19 +7,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
 import com.allog.dallog.domain.auth.event.MemberSavedEvent;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.subscription.domain.Subscription;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,15 +31,6 @@ class AuthServiceTest extends ServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private TokenRepository tokenRepository;
-
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
-    @Autowired
-    private CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
     private ApplicationEvents events;
 
     @DisplayName("토큰 생성을 하면 OAuth 서버에서 인증 후 토큰을 반환한다")
@@ -58,53 +43,22 @@ class AuthServiceTest extends ServiceTest {
         assertAll(() -> {
             assertThat(actual.getAccessToken()).isNotEmpty();
             assertThat(actual.getRefreshToken()).isNotEmpty();
+            assertThat(events.stream(MemberSavedEvent.class).count()).isEqualTo(1);
         });
     }
 
     @DisplayName("Authorization Code를 받으면 회원이 데이터베이스에 저장된다.")
     @Test
     void Authorization_Code를_받으면_회원이_데이터베이스에_저장된다() {
-        // given
+        // given & when
         authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
 
-        // when & then
+        // then
         assertThat(memberRepository.existsByEmail(MEMBER_이메일)).isTrue();
-        // SutbOAuthClient가 반환하는 OAuthMember의 이메일
-    }
 
-    @DisplayName("Authorization Code를 받으면 회원 개인 카테고리를 생성한다.")
-    @Test
-    void Authorization_Code를_받으면_회원_개인_카테고리를_생성한다() {
-        // given
-        authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
-
-        Member member = memberRepository.getByEmail(MEMBER_이메일);
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(member.getId());
-
-        // when
-        Category actual = subscriptions.iterator().next().getCategory();
-
-        // then
         assertAll(() -> {
-            assertThat(actual.getName()).isEqualTo("내 일정");
-            assertThat(events.stream(MemberSavedEvent.class).count()).isEqualTo(1);
-        });
-    }
-
-    @DisplayName("Authorization Code를 받으면 회원 개인 카테고리에 대한 CategoryRole을 생성한다.")
-    @Test
-    void Authorization_Code를_받으면_회원_개인_카테고리에_대한_CategoryRole을_생성한다() {
-        // given
-        authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
-        Member member = memberRepository.getByEmail(MEMBER_이메일);
-
-        // when
-        List<CategoryRole> actual = categoryRoleRepository.findByMemberId(member.getId());
-
-        // then
-        assertAll(() -> {
-            assertThat(actual).hasSize(1);
-            assertThat(actual.iterator().next().getCategory().getName()).isEqualTo("내 일정");
+            // SutbOAuthClient가 반환하는 OAuthMember의 이메일
+            assertThat(memberRepository.existsByEmail(MEMBER_이메일)).isTrue();
             assertThat(events.stream(MemberSavedEvent.class).count()).isEqualTo(1);
         });
     }
