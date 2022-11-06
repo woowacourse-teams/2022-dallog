@@ -10,7 +10,7 @@ module.exports = {
     [
       '@babel/plugin-transform-runtime',
       {
-        'core-js': 3,
+        corejs: 3,
         proposals: true,
       },
     ],
