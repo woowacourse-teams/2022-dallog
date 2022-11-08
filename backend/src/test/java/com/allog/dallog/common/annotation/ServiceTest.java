@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@Import({ExternalApiConfig.class, JpaConfig.class})
+@Import({ExternalApiConfig.class})
 @ActiveProfiles("test")
 public class ServiceTest {
 
