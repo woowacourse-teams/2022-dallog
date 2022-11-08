@@ -52,10 +52,10 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
-import com.allog.dallog.domain.member.dto.response.SubscribersResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -575,7 +575,8 @@ class CategoryControllerTest extends ControllerTest {
                 new CategoryRole(카테고리, 후디(), NONE)
         );
 
-        given(memberService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(categoryRoles));
+        given(categoryRoleService.findSubscribers(any(), any()))
+                .willReturn(new SubscribersResponse(categoryRoles));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)
@@ -601,7 +602,7 @@ class CategoryControllerTest extends ControllerTest {
         // given
         long categoryId = 10;
 
-        given(memberService.findSubscribers(any(), any()))
+        given(categoryRoleService.findSubscribers(any(), any()))
                 .willThrow(new NoCategoryAuthorityException("카테고리 구독자 조회 권한이 없습니다."));
 
         // when & then

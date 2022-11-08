@@ -4,6 +4,7 @@ import com.allog.dallog.common.DatabaseCleaner;
 import com.allog.dallog.common.config.ExternalApiConfig;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,8 +29,11 @@ abstract class AcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+    }
+
+    @AfterEach
+    void afterEach() {
         databaseCleaner.execute();
         tokenRepository.deleteAll();
     }
 }
-
