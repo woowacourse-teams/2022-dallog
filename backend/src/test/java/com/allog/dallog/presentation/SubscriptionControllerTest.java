@@ -46,17 +46,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(SubscriptionController.class)
 class SubscriptionControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaa.bbbbb.ccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private SubscriptionService subscriptionService;
 
     @DisplayName("회원과 카테고리 정보를 기반으로 구독한다.")
     @Test

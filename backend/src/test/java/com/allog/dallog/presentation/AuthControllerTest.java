@@ -36,14 +36,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(AuthController.class)
 class AuthControllerTest extends ControllerTest {
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private OAuthUri oAuthUri;
 
     @DisplayName("OAuth 소셜 로그인을 위한 링크와 상태코드 200을 반환한다.")
     @Test
