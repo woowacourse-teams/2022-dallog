@@ -11,7 +11,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ExternalApiConfig.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(ExternalApiConfig.class)
 @ActiveProfiles("test")
 abstract class AcceptanceTest {
 
@@ -31,3 +32,4 @@ abstract class AcceptanceTest {
         tokenRepository.deleteAll();
     }
 }
+
