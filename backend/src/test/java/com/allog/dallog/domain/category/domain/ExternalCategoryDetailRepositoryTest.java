@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
-import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchExternalCategoryDetailException;
 import com.allog.dallog.domain.member.domain.Member;
