@@ -12,7 +12,6 @@ import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.config.TokenConfig;
 import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
