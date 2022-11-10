@@ -7,12 +7,15 @@ import com.allog.dallog.domain.categoryrole.exception.ManagingCategoryLimitExces
 import com.allog.dallog.domain.categoryrole.exception.NoSuchCategoryRoleException;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.LockModeType;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long> {
 
+    @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT cr "
             + "FROM CategoryRole cr "
             + "WHERE cr.member.id = :memberId AND cr.category.id = :categoryId")
@@ -24,9 +27,6 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     @EntityGraph(attributePaths = {"category", "category.member"})
     List<CategoryRole> findByMemberId(final Long memberId);
 
-    List<CategoryRole> findByCategoryIdAndCategoryRoleType(final Long categoryId,
-                                                           final CategoryRoleType categoryRoleType);
-
     @Query("SELECT count(cr) "
             + "FROM CategoryRole cr "
             + "WHERE cr.categoryRoleType = :categoryRoleType "
@@ -36,8 +36,6 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     int countByCategoryIdAndCategoryRoleType(final Long categoryId, final CategoryRoleType categoryRoleType);
 
     void deleteByCategoryId(final Long categoryId);
-
-    void deleteByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
     default CategoryRole getByMemberIdAndCategoryId(final Long memberId, final Long categoryId) {
         return findByMemberIdAndCategoryId(memberId, categoryId)

@@ -91,7 +91,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             NoPermissionException.class,
-            NoCategoryAuthorityException.class
+            NoCategoryAuthorityException.class,
     })
     public ResponseEntity<ErrorResponse> handleNoPermission(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

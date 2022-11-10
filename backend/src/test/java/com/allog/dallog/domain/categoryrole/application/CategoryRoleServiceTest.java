@@ -29,6 +29,7 @@ import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class CategoryRoleServiceTest extends ServiceTest {
 
@@ -67,6 +68,7 @@ class CategoryRoleServiceTest extends ServiceTest {
                 .isInstanceOf(ManagingCategoryLimitExcessException.class);
     }
 
+    @Transactional
     @DisplayName("ADMIN 회원이 구독자의 역할을 변경할 수 있다")
     @Test
     void ADMIN_회원이_구독자의_역할을_변경할_수_있다() {
@@ -109,6 +111,7 @@ class CategoryRoleServiceTest extends ServiceTest {
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
+    @Transactional
     @DisplayName("ADMIN 회원이 다른 관리자 회원의 역할을 변경할 수 있다")
     @Test
     void ADMIN_회원이_다른_관리자_회원의_역할을_변경할_수_있다() {
@@ -133,6 +136,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         assertThat(actual.getCategoryRoleType()).isEqualTo(NONE);
     }
 
+    @Transactional
     @DisplayName("ADMIN 회원이 자기자신의 역할을 변경할 수 있다.")
     @Test
     void ADMIN_회원이_자기자신의_역할을_변경할_수_있다() {

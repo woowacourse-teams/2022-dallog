@@ -65,6 +65,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 class CategoryServiceTest extends ServiceTest {
 
@@ -138,6 +139,7 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual).hasSize(2);
     }
 
+    @Transactional
     @DisplayName("카테고리 생성 시 생성자에 대한 카테고리 역할을 ADMIN으로 생성한다.")
     @Test
     void 카테고리_생성_시_생성자에_대한_카테고리_역할을_ADMIN으로_생성한다() {
@@ -530,6 +532,7 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchSubscriptionException.class);
     }
 
+    @Transactional
     @DisplayName("카테고리 삭제 시 연관된 카테고리 역할 엔티티도 모두 제거된다.")
     @Test
     void 카테고리_삭제_시_연관된_카테고리_역할_엔티티도_모두_제거된다() {
