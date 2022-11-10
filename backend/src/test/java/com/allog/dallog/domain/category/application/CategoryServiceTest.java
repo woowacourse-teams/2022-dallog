@@ -120,11 +120,11 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 개인_카테고리_응답 = categoryService.save(나인.회원().getId(), 개인_카테고리_생성_요청);
 
         // then
-        Category 개인_카테고리 = categoryRepository.findById(개인_카테고리_응답.getId()).get();
+        Category actual = categoryRepository.findById(개인_카테고리_응답.getId()).get();
 
         assertAll(() -> {
-            assertThat(개인_카테고리.getName()).isEqualTo(개인_카테고리_이름);
-            assertThat(개인_카테고리.isPersonal()).isTrue();
+            assertThat(actual.getName()).isEqualTo(개인_카테고리_이름);
+            assertThat(actual.isPersonal()).isTrue();
         });
     }
 
@@ -138,8 +138,8 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.save(나인.회원().getId(), 취업_카테고리_생성_요청);
 
         // then
-        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(나인.회원().getId());
-        assertThat(구독_정보들).hasSize(1);
+        List<Subscription> actual = subscriptionRepository.findByMemberId(나인.회원().getId());
+        assertThat(actual).hasSize(1);
     }
 
     @Transactional
@@ -153,8 +153,8 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 응답 = categoryService.save(나인.회원().getId(), 취업_카테고리_생성_요청);
 
         // then
-        CategoryRole 카테고리_권한 = categoryRoleRepository.getByMemberIdAndCategoryId(나인.회원().getId(), 응답.getId());
-        assertThat(카테고리_권한.getCategoryRoleType()).isEqualTo(ADMIN);
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(나인.회원().getId(), 응답.getId());
+        assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
     }
 
     @DisplayName("카테고리를 등록할 떄 이름이 공백이거나 길이가 20을 초과하면 예외를 발생한다.")
@@ -181,10 +181,10 @@ class CategoryServiceTest extends ServiceTest {
         CategoryResponse 응답 = categoryService.save(나인.회원().getId(), 외부_카테고리_생성_요청);
 
         // then
-        Category 외부_카테고리 = categoryRepository.findById(응답.getId()).get();
+        Category actual = categoryRepository.findById(응답.getId()).get();
         assertAll(() -> {
-            assertThat(외부_카테고리.getName()).isEqualTo(외부_카테고리_이름);
-            assertThat(외부_카테고리.getCategoryType()).isEqualTo(GOOGLE);
+            assertThat(actual.getName()).isEqualTo(외부_카테고리_이름);
+            assertThat(actual.getCategoryType()).isEqualTo(GOOGLE);
         });
     }
 
@@ -211,8 +211,8 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.save(나인.회원().getId(), 외부_카테고리_생성_요청);
 
         // then
-        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(나인.회원().getId());
-        assertThat(구독_정보들).hasSize(1);
+        List<Subscription> actual = subscriptionRepository.findByMemberId(나인.회원().getId());
+        assertThat(actual).hasSize(1);
     }
 
     @DisplayName("저장된 회원의 개인 카테고리를 생성하고 자동으로 구독하고 카테고리 역할을 부여한다.")
@@ -341,9 +341,8 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.update(나인.회원().getId(), 나인.카테고리().getId(), 카테고리_수정_요청);
 
         //then
-        Category 취업_카테고리 = categoryRepository.getById(나인.카테고리().getId());
-
-        assertThat(취업_카테고리.getName()).isEqualTo("새로운 취업 카테고리 이름");
+        Category actual = categoryRepository.getById(나인.카테고리().getId());
+        assertThat(actual.getName()).isEqualTo("새로운 취업 카테고리 이름");
     }
 
     @DisplayName("권한이 ADMIN이 아닌 카테고리를 수정하면 예외를 발생한다.")
