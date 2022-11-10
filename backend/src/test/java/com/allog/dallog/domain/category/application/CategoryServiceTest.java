@@ -16,7 +16,6 @@ import static com.allog.dallog.common.Constants.취업_일정_제목;
 import static com.allog.dallog.common.Constants.취업_일정_종료일;
 import static com.allog.dallog.common.Constants.취업_카테고리_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
@@ -220,16 +219,18 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 저장된_회원의_개인_카테고리를_생성하고_자동으로_구독하고_카테고리_역할을_부여한다() {
         // given
-        Member 파랑 = memberRepository.save(파랑());
-        MemberSavedEvent event = new MemberSavedEvent(파랑.getId());
+        네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
+                .회원();
+
+        MemberSavedEvent event = new MemberSavedEvent(네오.회원().getId());
 
         // when
         categoryService.savePersonalCategory(event);
 
         // then
-        List<Category> categories = categoryRepository.findByMemberId(파랑.getId());
-        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(파랑.getId());
-        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(파랑.getId());
+        List<Category> categories = categoryRepository.findByMemberId(네오.회원().getId());
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(네오.회원().getId());
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(네오.회원().getId());
 
         assertAll(() -> {
             assertThat(categories).hasSize(1)
@@ -276,6 +277,7 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getCategories()).hasSize(2);
     }
 
+    @Transactional
     @DisplayName("관리권한이 ADMIN인 카테고리 목록을 조회한다.")
     @Test
     void 관리권한이_ADMIN인_카테고리_목록을_조회한다() {
@@ -465,6 +467,7 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchSubscriptionException.class);
     }
 
+    @Transactional
     @DisplayName("카테고리를 삭제할 때 카테고리 권한도 모두 삭제한다.")
     @Test
     void 카테고리를_삭제할_때_카테고리_권한도_모두_삭제한다() {
