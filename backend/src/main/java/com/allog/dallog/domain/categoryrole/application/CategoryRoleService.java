@@ -5,7 +5,6 @@ import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
-import com.allog.dallog.domain.categoryrole.exception.CategoryRoleConcurrencyException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import java.util.List;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -36,7 +35,7 @@ public class CategoryRoleService {
 
             roleOfTargetMember.changeRole(request.getCategoryRoleType());
         } catch (final ObjectOptimisticLockingFailureException e) {
-            throw new CategoryRoleConcurrencyException();
+            throw NotAbleToChangeRoleException.concurrentIssue();
         }
     }
 
