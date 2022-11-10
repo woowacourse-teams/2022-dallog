@@ -9,11 +9,9 @@ import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@Import({ExternalApiConfig.class, JpaConfig.class})
+@SpringBootTest(classes = ExternalApiConfig.class)
 @ActiveProfiles("test")
 public class ServiceTest {
 
@@ -25,9 +23,6 @@ public class ServiceTest {
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
-
-    @Autowired
-    private TokenRepository tokenRepository;
 
     @AfterEach
     void afterEach() {
