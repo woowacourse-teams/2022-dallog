@@ -78,16 +78,6 @@ public class CategoryService {
         return new CategoryResponse(savedCategory);
     }
 
-    private void subscribeCategory(final Member member, final Category category) {
-        Color color = Color.pick(colorPicker.pickNumber());
-        subscriptionRepository.save(new Subscription(member, category, color));
-    }
-
-    private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
-        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
-        categoryRoleRepository.save(categoryRole);
-    }
-
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
         List<Category> externalCategories = categoryRepository
@@ -110,6 +100,16 @@ public class CategoryService {
 
         subscribeCategory(member, category);
         createCategoryRoleAsAdminToCreator(member, category);
+    }
+
+    private void subscribeCategory(final Member member, final Category category) {
+        Color color = Color.pick(colorPicker.pickNumber());
+        subscriptionRepository.save(new Subscription(member, category, color));
+    }
+
+    private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
+        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
+        categoryRoleRepository.save(categoryRole);
     }
 
     public CategoriesResponse findNormalByName(final String name) {
