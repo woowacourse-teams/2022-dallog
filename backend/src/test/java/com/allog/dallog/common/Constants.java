@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class Constants {
 
-    public static final String 제이슨_이메일 = "jason@email.com";
-    public static final String 제이슨_이름 = "jason";
-    public static final String 제이슨_프로필_URL = "/jason.png";
+    public static final String 나인_이메일 = "nine@email.com";
+    public static final String 나인_이름 = "nine";
+    public static final String 나인_프로필_URL = "/nine.png";
 
-    public static final String 네오_이메일 = "neo@email.com";
-    public static final String 네오_이름 = "neo";
-    public static final String 네오_프로필_URL = "/neo.png";
+    public static final String 티거_이메일 = "tigger@email.com";
+    public static final String 티거_이름 = "tigger";
+    public static final String 티거_프로필_URL = "/tigger.png";
 
     public static final String 개인_카테고리_이름 = "개인 카테고리";
     public static final String 취업_카테고리_이름 = "취업 카테고리";
