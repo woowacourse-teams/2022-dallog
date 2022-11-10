@@ -89,13 +89,13 @@ class CategoryServiceTest extends ServiceTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    private User 네오;
-    private User 제이슨;
+    private BusinessBuilder 네오;
+    private BusinessBuilder 제이슨;
 
     @BeforeEach
     void setUp() {
-        네오 = new User();
-        제이슨 = new User();
+        네오 = new BusinessBuilder();
+        제이슨 = new BusinessBuilder();
     }
 
     @DisplayName("카테고리를 등록한다.")
@@ -105,7 +105,7 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        CategoryResponse actual = categoryService.save(네오.계정().getId(), 취업_카테고리_생성_요청);
+        CategoryResponse actual = categoryService.save(네오.회원().getId(), 취업_카테고리_생성_요청);
 
         // then
         assertThat(actual.getName()).isEqualTo(취업_카테고리_이름);
@@ -118,7 +118,7 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        CategoryResponse 개인_카테고리_응답 = categoryService.save(네오.계정().getId(), 개인_카테고리_생성_요청);
+        CategoryResponse 개인_카테고리_응답 = categoryService.save(네오.회원().getId(), 개인_카테고리_생성_요청);
 
         // then
         Category 개인_카테고리 = categoryRepository.findById(개인_카테고리_응답.getId()).get();
@@ -136,10 +136,10 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        categoryService.save(네오.계정().getId(), 취업_카테고리_생성_요청);
+        categoryService.save(네오.회원().getId(), 취업_카테고리_생성_요청);
 
         // then
-        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(네오.계정().getId());
+        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(네오.회원().getId());
         assertThat(구독_정보들).hasSize(1);
     }
 
@@ -151,10 +151,10 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        CategoryResponse 응답 = categoryService.save(네오.계정().getId(), 취업_카테고리_생성_요청);
+        CategoryResponse 응답 = categoryService.save(네오.회원().getId(), 취업_카테고리_생성_요청);
 
         // then
-        CategoryRole 카테고리_권한 = categoryRoleRepository.getByMemberIdAndCategoryId(네오.계정().getId(), 응답.getId());
+        CategoryRole 카테고리_권한 = categoryRoleRepository.getByMemberIdAndCategoryId(네오.회원().getId(), 응답.getId());
         assertThat(카테고리_권한.getCategoryRoleType()).isEqualTo(ADMIN);
     }
 
@@ -168,7 +168,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryCreateRequest 카테고리_생성_요청 = new CategoryCreateRequest(invalidName, NORMAL);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(네오.계정().getId(), 카테고리_생성_요청))
+        assertThatThrownBy(() -> categoryService.save(네오.회원().getId(), 카테고리_생성_요청))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
@@ -179,7 +179,7 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        CategoryResponse 응답 = categoryService.save(네오.계정().getId(), 외부_카테고리_생성_요청);
+        CategoryResponse 응답 = categoryService.save(네오.회원().getId(), 외부_카테고리_생성_요청);
 
         // then
         Category 외부_카테고리 = categoryRepository.findById(응답.getId()).get();
@@ -195,10 +195,10 @@ class CategoryServiceTest extends ServiceTest {
         // given
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
-        categoryService.save(네오.계정().getId(), 외부_카테고리_생성_요청);
+        categoryService.save(네오.회원().getId(), 외부_카테고리_생성_요청);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(네오.계정().getId(), 외부_카테고리_생성_요청))
+        assertThatThrownBy(() -> categoryService.save(네오.회원().getId(), 외부_카테고리_생성_요청))
                 .isInstanceOf(ExistExternalCategoryException.class);
     }
 
@@ -209,10 +209,10 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when
-        categoryService.save(네오.계정().getId(), 외부_카테고리_생성_요청);
+        categoryService.save(네오.회원().getId(), 외부_카테고리_생성_요청);
 
         // then
-        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(네오.계정().getId());
+        List<Subscription> 구독_정보들 = subscriptionRepository.findByMemberId(네오.회원().getId());
         assertThat(구독_정보들).hasSize(1);
     }
 
@@ -288,10 +288,10 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL)
                 .카테고리를_구독한다(네오.카테고리());
 
-        네오.내_카테고리_관리_권한을_부여한다(제이슨.계정());
+        네오.내_카테고리_관리_권한을_부여한다(제이슨.회원());
 
         // when
-        CategoriesResponse actual = categoryService.findScheduleEditableCategories(제이슨.계정().getId());
+        CategoriesResponse actual = categoryService.findScheduleEditableCategories(제이슨.회원().getId());
 
         // then
         assertThat(actual.getCategories().size()).isEqualTo(3);
@@ -336,7 +336,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
 
         // when
-        categoryService.update(네오.계정().getId(), 네오.카테고리().getId(), 카테고리_수정_요청);
+        categoryService.update(네오.회원().getId(), 네오.카테고리().getId(), 카테고리_수정_요청);
 
         //then
         Category 취업_카테고리 = categoryRepository.getById(네오.카테고리().getId());
@@ -357,7 +357,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
 
         // when & then
-        assertThatThrownBy(() -> categoryService.update(제이슨.계정().getId(), 네오.카테고리().getId(), 카테고리_수정_요청))
+        assertThatThrownBy(() -> categoryService.update(제이슨.회원().getId(), 네오.카테고리().getId(), 카테고리_수정_요청))
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
@@ -370,7 +370,7 @@ class CategoryServiceTest extends ServiceTest {
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
 
         // when & then
-        assertThatThrownBy(() -> categoryService.update(네오.계정().getId(), -1L, 카테고리_수정_요청))
+        assertThatThrownBy(() -> categoryService.update(네오.회원().getId(), -1L, 카테고리_수정_요청))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -382,7 +382,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
 
         // when
-        categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
+        categoryService.delete(네오.회원().getId(), 네오.카테고리().getId());
 
         //then
         assertThatThrownBy(() -> categoryRepository.getById(네오.카테고리().getId()))
@@ -400,7 +400,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_구독한다(네오.카테고리());
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(제이슨.계정().getId(), 네오.카테고리().getId()))
+        assertThatThrownBy(() -> categoryService.delete(제이슨.회원().getId(), 네오.카테고리().getId()))
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
@@ -414,7 +414,7 @@ class CategoryServiceTest extends ServiceTest {
         }
 
         // when & then
-        assertThatThrownBy(() -> categoryService.save(네오.계정().getId(), BE_일정_생성_요청))
+        assertThatThrownBy(() -> categoryService.save(네오.회원().getId(), BE_일정_생성_요청))
                 .isInstanceOf(ManagingCategoryLimitExcessException.class);
     }
 
@@ -425,7 +425,7 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(네오.계정().getId(), -1L))
+        assertThatThrownBy(() -> categoryService.delete(네오.회원().getId(), -1L))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -438,7 +438,7 @@ class CategoryServiceTest extends ServiceTest {
                 .일정을_등록한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // when
-        categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
+        categoryService.delete(네오.회원().getId(), 네오.카테고리().getId());
 
         // then
         assertAll(() -> {
@@ -458,7 +458,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_구독한다(네오.카테고리());
 
         // when
-        categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
+        categoryService.delete(네오.회원().getId(), 네오.카테고리().getId());
 
         // then
         assertThatThrownBy(() -> subscriptionRepository.getById(제이슨.구독().getId()))
@@ -472,11 +472,11 @@ class CategoryServiceTest extends ServiceTest {
         네오.회원_가입을_한다(네오_이메일, 네오_이름, 네오_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
 
-        CategoryRole 권한 = categoryRoleRepository.getByMemberIdAndCategoryId(네오.계정().getId(),
+        CategoryRole 권한 = categoryRoleRepository.getByMemberIdAndCategoryId(네오.회원().getId(),
                 네오.카테고리().getId());
 
         // when
-        categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
+        categoryService.delete(네오.회원().getId(), 네오.카테고리().getId());
 
         // then
         boolean actual = categoryRoleRepository.findById(권한.getId()).isPresent();
@@ -491,7 +491,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_등록한다(개인_카테고리_이름, PERSONAL);
 
         // when & then
-        assertThatThrownBy(() -> categoryService.delete(네오.계정().getId(), 네오.카테고리().getId()))
+        assertThatThrownBy(() -> categoryService.delete(네오.회원().getId(), 네오.카테고리().getId()))
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
@@ -503,14 +503,14 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_등록한다(외부_카테고리_이름, GOOGLE);
 
         // when
-        categoryService.delete(네오.계정().getId(), 네오.카테고리().getId());
+        categoryService.delete(네오.회원().getId(), 네오.카테고리().getId());
 
         // then
         assertThatThrownBy(() -> categoryService.findDetailCategoryById(네오.카테고리().getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    private final class User {
+    private final class BusinessBuilder {
 
         private Member member;
         private Category category;
@@ -518,13 +518,13 @@ class CategoryServiceTest extends ServiceTest {
         private Subscription subscription;
         private Schedule schedule;
 
-        private User 회원_가입을_한다(final String email, final String name, final String profile) {
+        private BusinessBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
             Member member = new Member(email, name, profile, SocialType.GOOGLE);
             this.member = memberRepository.save(member);
             return this;
         }
 
-        private User 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+        private BusinessBuilder 카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
             Category category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
             Subscription subscription = new Subscription(this.member, category, COLOR_1);
@@ -534,7 +534,7 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private User 카테고리를_구독한다(final Category category) {
+        private BusinessBuilder 카테고리를_구독한다(final Category category) {
             Subscription subscription = new Subscription(this.member, category, COLOR_1);
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
             this.subscription = subscriptionRepository.save(subscription);
@@ -542,7 +542,7 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private User 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private BusinessBuilder 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
@@ -550,14 +550,14 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private User 일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
-                              final String memo) {
+        private BusinessBuilder 일정을_등록한다(final String title, final LocalDateTime start, final LocalDateTime end,
+                                         final String memo) {
             Schedule schedule = new Schedule(this.category, title, start, end, memo);
             this.schedule = scheduleRepository.save(schedule);
             return this;
         }
 
-        private Member 계정() {
+        private Member 회원() {
             return member;
         }
 
