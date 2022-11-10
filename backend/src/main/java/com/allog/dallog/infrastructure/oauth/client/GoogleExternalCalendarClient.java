@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -56,6 +57,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     }
 
     @Override
+    @Cacheable(value = "googleCalendar", key = "#internalCategoryId+#externalCalendarId+#startDateTime+#endDateTime")
     public List<IntegrationSchedule> getExternalCalendarSchedules(final String accessToken,
                                                                   final Long internalCategoryId,
                                                                   final String externalCalendarId,
