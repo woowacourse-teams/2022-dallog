@@ -4,10 +4,10 @@ import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
-import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.exception.CategoryRoleConcurrencyException;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
+import java.util.List;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,38 +26,44 @@ public class CategoryRoleService {
     public void updateRole(final Long loginMemberId, final Long memberId, final Long categoryId,
                            final CategoryRoleUpdateRequest request) {
         try {
-            CategoryRoleType roleType = request.getCategoryRoleType();
+            List<CategoryRole> categoryRolesInCategory = categoryRoleRepository.findByCategoryId(categoryId);
+            CategoryRole roleOfTargetMember = getCategoryRole(memberId, categoryRolesInCategory);
 
-            validateAuthority(loginMemberId, categoryId);
-            validateSoleAdmin(memberId, categoryId);
-            categoryRoleRepository.validateManagingCategoryLimit(memberId, roleType);
+            validateLoginMemberAuthority(loginMemberId, categoryRolesInCategory); // 요청 유저 권한 검증
+            validateIsTargetMemberSoleAdmin(categoryRolesInCategory, roleOfTargetMember); // 대상 유저가 유일한 어드민이 아닌지 검증
+            validateCategoryType(roleOfTargetMember.getCategory()); // 카테고리가 개인, 외부 카테고리가 아닌지 검증
+            categoryRoleRepository.validateManagingCategoryLimit(memberId, request.getCategoryRoleType()); // 관리 개수 검증
 
-            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(memberId, categoryId);
-
-            validateCategoryType(categoryRole);
-
-            categoryRole.changeRole(roleType);
+            roleOfTargetMember.changeRole(request.getCategoryRoleType());
         } catch (final ObjectOptimisticLockingFailureException e) {
             throw new CategoryRoleConcurrencyException();
         }
     }
 
-    private void validateAuthority(final Long loginMemberId, final Long categoryId) {
-        CategoryRole loginMemberCategoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(loginMemberId,
-                categoryId);
+    private CategoryRole getCategoryRole(final Long memberId, final List<CategoryRole> categoryRoles) {
+        return categoryRoles.stream()
+                .filter(it -> it.getMember().getId().equals(memberId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private void validateLoginMemberAuthority(final Long loginMemberId, final List<CategoryRole> categoryRoles) {
+        CategoryRole loginMemberCategoryRole = categoryRoles.stream()
+                .filter(categoryRole -> categoryRole.getMember().getId().equals(loginMemberId))
+                .findFirst()
+                .orElseThrow();
+
         loginMemberCategoryRole.validateAuthority(CategoryAuthority.CHANGE_ROLE_OF_SUBSCRIBER);
     }
 
-    private void validateSoleAdmin(final Long memberId, final Long categoryId) {
-        boolean isSoleAdmin = categoryRoleRepository.isMemberSoleAdminInCategory(memberId, categoryId);
-        if (isSoleAdmin) {
-            throw new NotAbleToChangeRoleException("변경 대상 회원이 유일한 관리자이므로 다른 역할로 변경할 수 없습니다.");
+    private void validateIsTargetMemberSoleAdmin(final List<CategoryRole> categoryRoles,
+                                                 final CategoryRole categoryRole) {
+        if (categoryRole.isAdmin() && categoryRoles.size() == 1) {
+            throw new NotAbleToChangeRoleException();
         }
     }
 
-    private void validateCategoryType(final CategoryRole categoryRole) {
-        Category category = categoryRole.getCategory();
-
+    private void validateCategoryType(final Category category) {
         if (!category.isNormal()) {
             throw new NotAbleToChangeRoleException("개인 카테고리 또는 외부 카테고리에 대한 회원의 역할을 변경할 수 없습니다.");
         }

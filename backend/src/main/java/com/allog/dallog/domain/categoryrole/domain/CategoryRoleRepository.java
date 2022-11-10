@@ -27,9 +27,6 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     @EntityGraph(attributePaths = {"category", "category.member"})
     List<CategoryRole> findByMemberId(final Long memberId);
 
-    List<CategoryRole> findByCategoryIdAndCategoryRoleType(final Long categoryId,
-                                                           final CategoryRoleType categoryRoleType);
-
     @Query("SELECT count(cr) "
             + "FROM CategoryRole cr "
             + "WHERE cr.categoryRoleType = :categoryRoleType "
@@ -39,8 +36,6 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     int countByCategoryIdAndCategoryRoleType(final Long categoryId, final CategoryRoleType categoryRoleType);
 
     void deleteByCategoryId(final Long categoryId);
-
-    void deleteByMemberIdAndCategoryId(final Long memberId, final Long categoryId);
 
     default CategoryRole getByMemberIdAndCategoryId(final Long memberId, final Long categoryId) {
         return findByMemberIdAndCategoryId(memberId, categoryId)
