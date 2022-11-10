@@ -6,15 +6,12 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
-import com.allog.dallog.global.config.JpaConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@Import(ExternalApiConfig.class)
+@SpringBootTest(classes = ExternalApiConfig.class)
 @ActiveProfiles("test")
 public class ServiceTest {
 
