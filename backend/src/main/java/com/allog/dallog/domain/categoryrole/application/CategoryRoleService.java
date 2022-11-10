@@ -1,10 +1,13 @@
 package com.allog.dallog.domain.categoryrole.application;
 
+import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.FIND_SUBSCRIBERS;
+
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.domain.categoryrole.dto.response.SubscribersResponse;
 import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleException;
 import java.util.List;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -19,6 +22,14 @@ public class CategoryRoleService {
 
     public CategoryRoleService(final CategoryRoleRepository categoryRoleRepository) {
         this.categoryRoleRepository = categoryRoleRepository;
+    }
+
+    public SubscribersResponse findSubscribers(final Long loginMemberId, final Long categoryId) {
+        CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(loginMemberId, categoryId);
+        categoryRole.validateAuthority(FIND_SUBSCRIBERS);
+
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByCategoryId(categoryId);
+        return new SubscribersResponse(categoryRoles);
     }
 
     @Transactional

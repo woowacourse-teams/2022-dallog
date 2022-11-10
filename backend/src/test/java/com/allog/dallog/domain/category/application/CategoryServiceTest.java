@@ -6,6 +6,7 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성
 import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_이름;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_이름;
+import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_이름;
@@ -16,8 +17,8 @@ import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한�
 import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.대한민국_공휴일_이름;
 import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
+import static com.allog.dallog.common.fixtures.MemberFixtures.파랑;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
 import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
 import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.레벨_인터뷰_생성_요청;
@@ -33,8 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.CategoryFixtures;
 import com.allog.dallog.domain.auth.application.AuthService;
+import com.allog.dallog.domain.auth.event.MemberSavedEvent;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
+import com.allog.dallog.domain.category.domain.CategoryType;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoriesResponse;
@@ -55,11 +58,10 @@ import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
 import com.allog.dallog.domain.subscription.application.SubscriptionService;
+import com.allog.dallog.domain.subscription.domain.Subscription;
+import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,6 +76,9 @@ class CategoryServiceTest extends ServiceTest {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private ScheduleService scheduleService;
@@ -114,7 +119,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         CategoryResponse 내_일정_응답 = categoryService.save(후디.getId(), 내_일정_생성_요청);
-        Category 내_일정 = categoryRepository.findById(내_일정_응답.getId()).get();
+        Category 내_일정 = categoryRepository.getById(내_일정_응답.getId());
 
         // then
         assertAll(() -> {
@@ -131,9 +136,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         categoryService.save(파랑_id, 공통_일정_생성_요청);
-
-        SubscriptionsResponse subscriptions = subscriptionService.findByMemberId(파랑_id);
-        List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
+        List<Subscription> actual = subscriptionRepository.findByMemberId(파랑_id);
 
         // then
         assertThat(actual).hasSize(2);
@@ -176,7 +179,7 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         CategoryResponse 후디_대한민국_공휴일_카테고리_응답 = categoryService.save(후디.getId(), 대한민국_공휴일_생성_요청);
-        Category 후디_대한민국_공휴일_카테고리 = categoryRepository.findById(후디_대한민국_공휴일_카테고리_응답.getId()).get();
+        Category 후디_대한민국_공휴일_카테고리 = categoryRepository.getById(후디_대한민국_공휴일_카테고리_응답.getId());
 
         // then
         assertAll(() -> {
@@ -208,12 +211,38 @@ class CategoryServiceTest extends ServiceTest {
 
         // when
         categoryService.save(파랑_id, 대한민국_공휴일_생성_요청);
-
-        SubscriptionsResponse subscriptions = subscriptionService.findByMemberId(파랑_id);
-        List<SubscriptionResponse> actual = subscriptions.getSubscriptions();
+        List<Subscription> actual = subscriptionRepository.findByMemberId(파랑_id);
 
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @DisplayName("저장된 회원의 개인 카테고리를 생성하고 자동으로 구독하고 카테고리 역할을 부여한다.")
+    @Test
+    void 저장된_회원의_개인_카테고리를_생성하고_자동으로_구독하고_카테고리_역할을_부여한다() {
+        // given
+        Member 파랑 = memberRepository.save(파랑());
+        MemberSavedEvent event = new MemberSavedEvent(파랑.getId());
+
+        // when
+        categoryService.savePersonalCategory(event);
+
+        // then
+        List<Category> categories = categoryRepository.findByMemberId(파랑.getId());
+        List<Subscription> subscriptions = subscriptionRepository.findByMemberId(파랑.getId());
+        List<CategoryRole> categoryRoles = categoryRoleRepository.findByMemberId(파랑.getId());
+
+        assertAll(() -> {
+            assertThat(categories).hasSize(1)
+                    .extracting("categoryType")
+                    .containsExactly(CategoryType.PERSONAL);
+            assertThat(subscriptions).hasSize(1)
+                    .extracting("checked")
+                    .containsExactly(true);
+            assertThat(categoryRoles).hasSize(1)
+                    .extracting("categoryRoleType")
+                    .containsExactly(ADMIN);
+        });
     }
 
     @DisplayName("검색어를 받아 제목에 검색어가 포함된 카테고리를 가져온다.")
@@ -242,8 +271,8 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리는_전체_조회_대상에서_제외된다() {
         // given
-        authService.generateAccessAndRefreshToken(후디.getOAuthMember());
-        authService.generateAccessAndRefreshToken(리버.getOAuthMember());
+        Member 파랑 = memberRepository.save(파랑());
+        categoryRepository.save(내_일정(파랑));
 
         // when
         CategoriesResponse response = categoryService.findNormalByName("");
@@ -276,11 +305,9 @@ class CategoryServiceTest extends ServiceTest {
         CategoriesResponse actual = categoryService.findScheduleEditableCategories(관리자.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual.getCategories().size()).isEqualTo(5);
-            assertThat(actual.getCategories().stream().map(CategoryResponse::getName).collect(Collectors.toList()))
-                    .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
-        });
+        assertThat(actual.getCategories()).hasSize(5)
+                .extracting("name")
+                .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
     }
 
     @DisplayName("회원이 ADMIN으로 있는 카테고리 목록을 조회한다.")
@@ -307,11 +334,9 @@ class CategoryServiceTest extends ServiceTest {
         CategoriesResponse actual = categoryService.findAdminCategories(관리자.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual.getCategories().size()).isEqualTo(5);
-            assertThat(actual.getCategories().stream().map(CategoryResponse::getName).collect(Collectors.toList()))
-                    .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
-        });
+        assertThat(actual.getCategories()).hasSize(5)
+                .extracting("name")
+                .containsExactly(공통_일정_이름, BE_일정_이름, FE_일정_이름, 매트_아고라_이름, 후디_JPA_스터디_이름);
     }
 
     @DisplayName("id를 통해 카테고리를 단건 조회한다.")
@@ -528,8 +553,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.delete(관리자.getId(), 공통_일정.getId());
 
         // then
-        assertThatThrownBy(() -> subscriptionService.findById(구독.getId()))
-                .isInstanceOf(NoSuchSubscriptionException.class);
+        assertThat(subscriptionRepository.existsById(구독.getId())).isFalse();
     }
 
     @Transactional

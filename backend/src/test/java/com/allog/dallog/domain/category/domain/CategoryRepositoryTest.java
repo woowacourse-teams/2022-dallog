@@ -171,48 +171,4 @@ class CategoryRepositoryTest extends RepositoryTest {
                     .isTrue();
         });
     }
-
-    @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 있으면 true를 반환한다.")
-    @Test
-    void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_있으면_true를_반환한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-
-        // when
-        boolean actual = categoryRepository.existsByIdAndMemberId(공통_일정.getId(), 관리자.getId());
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @DisplayName("카테고리 id와 회원의 id가 모두 일치하는 카테고리가 없으면 false를 반환한다.")
-    @Test
-    void 카테고리_id와_회원의_id가_모두_일치하는_카테고리가_없으면_false를_반환한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
-
-        // when
-        boolean actual = categoryRepository.existsByIdAndMemberId(공통_일정.getId(), 0L);
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
-    @DisplayName("특정 회원이 만든 카테고리를 모두 삭제한다")
-    @Test
-    void 특정_회원이_만든_카테고리를_모두_삭제한다() {
-        // given
-        Member 관리자 = memberRepository.save(관리자());
-        categoryRepository.save(공통_일정(관리자));
-        categoryRepository.save(BE_일정(관리자));
-
-        // when
-        categoryRepository.deleteByMemberId(관리자.getId());
-
-        // then
-        assertThat(categoryRepository.findByMemberId(관리자.getId()))
-                .hasSize(0);
-    }
 }

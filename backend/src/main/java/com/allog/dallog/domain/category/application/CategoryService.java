@@ -1,10 +1,12 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 import static com.allog.dallog.domain.categoryrole.domain.CategoryRoleType.ADMIN;
 
+import com.allog.dallog.domain.auth.event.MemberSavedEvent;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.domain.CategoryRepository;
 import com.allog.dallog.domain.category.domain.CategoryType;
@@ -31,12 +33,15 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @Service
 public class CategoryService {
+
+    private static final String PERSONAL_CATEGORY_NAME = "내 일정";
 
     private final CategoryRepository categoryRepository;
     private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
@@ -73,16 +78,6 @@ public class CategoryService {
         return new CategoryResponse(savedCategory);
     }
 
-    private void subscribeCategory(final Member member, final Category category) {
-        Color color = Color.pick(colorPicker.pickNumber());
-        subscriptionRepository.save(new Subscription(member, category, color));
-    }
-
-    private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
-        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
-        categoryRoleRepository.save(categoryRole);
-    }
-
     @Transactional
     public CategoryResponse save(final Long memberId, final ExternalCategoryCreateRequest request) {
         List<Category> externalCategories = categoryRepository
@@ -95,6 +90,26 @@ public class CategoryService {
         externalCategoryDetailRepository.save(new ExternalCategoryDetail(category, request.getExternalId()));
 
         return response;
+    }
+
+    @Transactional
+    @EventListener
+    public void savePersonalCategory(final MemberSavedEvent event) {
+        Member member = memberRepository.getById(event.getMemberId());
+        Category category = categoryRepository.save(new Category(PERSONAL_CATEGORY_NAME, member, PERSONAL));
+
+        subscribeCategory(member, category);
+        createCategoryRoleAsAdminToCreator(member, category);
+    }
+
+    private void subscribeCategory(final Member member, final Category category) {
+        Color color = Color.pick(colorPicker.pickNumber());
+        subscriptionRepository.save(new Subscription(member, category, color));
+    }
+
+    private void createCategoryRoleAsAdminToCreator(final Member member, final Category category) {
+        CategoryRole categoryRole = new CategoryRole(category, member, ADMIN);
+        categoryRoleRepository.save(categoryRole);
     }
 
     public CategoriesResponse findNormalByName(final String name) {

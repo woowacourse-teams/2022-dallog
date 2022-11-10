@@ -1,7 +1,8 @@
-package com.allog.dallog.domain.member.dto.response;
+package com.allog.dallog.domain.categoryrole.dto.response;
 
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.domain.member.dto.response.MemberResponse;
 
 public class MemberWithRoleTypeResponse {
 
