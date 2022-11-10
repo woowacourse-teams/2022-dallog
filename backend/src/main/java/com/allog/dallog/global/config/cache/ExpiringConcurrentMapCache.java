@@ -25,6 +25,7 @@ public class ExpiringConcurrentMapCache extends ConcurrentMapCache {
         }
 
         expires.remove(key);
+        super.evict(key);
         return null;
     }
 
