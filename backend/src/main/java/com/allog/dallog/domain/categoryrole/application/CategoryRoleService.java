@@ -37,7 +37,7 @@ public class CategoryRoleService {
             validateCategoryType(categoryRole);
 
             categoryRole.changeRole(roleType);
-        } catch (ObjectOptimisticLockingFailureException e) {
+        } catch (final ObjectOptimisticLockingFailureException e) {
             throw new CategoryRoleConcurrencyException();
         }
     }
