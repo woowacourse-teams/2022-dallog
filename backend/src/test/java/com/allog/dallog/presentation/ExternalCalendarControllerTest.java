@@ -21,35 +21,20 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.exception.ExistExternalCategoryException;
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(ExternalCalendarController.class)
 class ExternalCalendarControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private ExternalCalendarService externalCalendarService;
-
-    @MockBean
-    private CategoryService categoryService;
 
     @DisplayName("외부 캘린더의 일정을 조회하면 상태코드 200을 반환한다.")
     @Test

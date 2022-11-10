@@ -24,26 +24,14 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.auth.application.OAuthUri;
 import com.allog.dallog.domain.auth.exception.InvalidTokenException;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
-import com.allog.dallog.presentation.auth.AuthController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(AuthController.class)
 class AuthControllerTest extends ControllerTest {
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private OAuthUri oAuthUri;
 
     @DisplayName("OAuth 소셜 로그인을 위한 링크와 상태코드 200을 반환한다.")
     @Test

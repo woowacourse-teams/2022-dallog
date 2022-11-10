@@ -29,10 +29,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.exception.NoPermissionException;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.subscription.application.SubscriptionService;
 import com.allog.dallog.domain.subscription.domain.Color;
 import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
@@ -41,22 +39,13 @@ import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(SubscriptionController.class)
 class SubscriptionControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaa.bbbbb.ccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private SubscriptionService subscriptionService;
 
     @DisplayName("회원과 카테고리 정보를 기반으로 구독한다.")
     @Test

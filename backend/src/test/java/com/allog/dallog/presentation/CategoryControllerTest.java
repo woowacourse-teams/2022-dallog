@@ -40,8 +40,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.domain.Category;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
@@ -50,7 +48,6 @@ import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.category.exception.InvalidCategoryException;
 import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.domain.CategoryAuthority;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRole;
 import com.allog.dallog.domain.categoryrole.domain.CategoryRoleType;
@@ -62,27 +59,15 @@ import com.allog.dallog.domain.categoryrole.exception.NotAbleToChangeRoleExcepti
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-@WebMvcTest(CategoryController.class)
 class CategoryControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
     private static final String INVALID_CATEGORY_NAME = "20글자를 초과하는 유효하지 않은 카테고리 이름";
     private static final String CATEGORY_NAME_OVER_LENGTH_EXCEPTION_MESSAGE = "카테고리 이름의 길이는 20을 초과할 수 없습니다.";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private CategoryService categoryService;
-
-    @MockBean
-    private CategoryRoleService categoryRoleService;
 
     @DisplayName("카테고리를 생성한다.")
     @Test
@@ -590,7 +575,8 @@ class CategoryControllerTest extends ControllerTest {
                 new CategoryRole(카테고리, 후디(), NONE)
         );
 
-        given(categoryRoleService.findSubscribers(any(), any())).willReturn(new SubscribersResponse(categoryRoles));
+        given(categoryRoleService.findSubscribers(any(), any()))
+                .willReturn(new SubscribersResponse(categoryRoles));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/categories/{categoryId}/subscribers", categoryId)

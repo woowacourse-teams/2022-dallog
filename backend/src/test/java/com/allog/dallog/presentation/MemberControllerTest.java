@@ -20,28 +20,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.application.AuthService;
-import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(MemberController.class)
 class MemberControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer aaaaaaaa.bbbbbbbb.cccccccc";
-
-    @MockBean
-    private AuthService authService;
-
-    @MockBean
-    private MemberService memberService;
 
     @DisplayName("자신의 회원 정보를 조회한다.")
     @Test
