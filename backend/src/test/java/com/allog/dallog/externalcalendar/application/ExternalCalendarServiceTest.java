@@ -51,8 +51,8 @@ class ExternalCalendarServiceTest extends ServiceTest {
         private Member member;
 
         private IntegrationLogicBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
-            this.member = new Member(email, name, profile, SocialType.GOOGLE);
-            memberRepository.save(member);
+            Member member = new Member(email, name, profile, SocialType.GOOGLE);
+            this.member = memberRepository.save(member);
             oAuthTokenRepository.save(OAUTH_TOKEN(member));
             return this;
         }
