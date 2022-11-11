@@ -55,7 +55,6 @@ import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionException;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -87,19 +86,10 @@ class CategoryServiceTest extends ServiceTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    private GivenBuilder 나인;
-    private GivenBuilder 티거;
-
-    @BeforeEach
-    void setUp() {
-        나인 = new GivenBuilder();
-        티거 = new GivenBuilder();
-    }
-
     @Test
     void 카테고리를_생성한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         CategoryResponse actual = categoryService.save(나인.회원().getId(), 취업_카테고리_생성_요청);
@@ -111,7 +101,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 개인_카테고리를_생성한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         CategoryResponse 개인_카테고리_응답 = categoryService.save(나인.회원().getId(), 개인_카테고리_생성_요청);
@@ -128,7 +118,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_생성할_때_자동으로_구독한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         categoryService.save(나인.회원().getId(), 취업_카테고리_생성_요청);
@@ -142,7 +132,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_생성할_때_권한을_최고_관리자로_생성한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         CategoryResponse 응답 = categoryService.save(나인.회원().getId(), 취업_카테고리_생성_요청);
@@ -156,7 +146,7 @@ class CategoryServiceTest extends ServiceTest {
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 카테고리를_생성할_때_이름이_공백이거나_길이가_20을_초과하면_예외가_발생한다(final String invalidName) {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         CategoryCreateRequest 카테고리_생성_요청 = new CategoryCreateRequest(invalidName, NORMAL);
 
@@ -168,7 +158,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 외부_카테고리를_생성한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         CategoryResponse 응답 = categoryService.save(나인.회원().getId(), 외부_카테고리_생성_요청);
@@ -184,7 +174,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 중복되는_외부_카테고리를_생성하면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         categoryService.save(나인.회원().getId(), 외부_카테고리_생성_요청);
 
@@ -196,7 +186,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 외부_카테고리를_생성할_때_자동으로_구독한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when
         categoryService.save(나인.회원().getId(), 외부_카테고리_생성_요청);
@@ -209,8 +199,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 저장된_회원의_개인_카테고리를_생성하고_자동으로_구독하고_카테고리_역할을_부여한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .회원();
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         MemberSavedEvent event = new MemberSavedEvent(나인.회원().getId());
 
@@ -238,7 +227,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 제목에_검색어가_포함된_카테고리를_가져온다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(외부_카테고리_이름, GOOGLE)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .카테고리를_생성한다(스터디_카테고리_이름, NORMAL);
@@ -253,7 +242,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 제목에_검색어가_포함된_카테고리를_가져올때_개인_카테고리는_제외한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(개인_카테고리_이름, PERSONAL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .카테고리를_생성한다(스터디_카테고리_이름, NORMAL);
@@ -269,10 +258,10 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 관리권한이_최고_관리자인_카테고리_목록을_조회한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(스터디_카테고리_이름, NORMAL);
 
-        티거.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_생성한다(스터디_카테고리_이름, NORMAL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .카테고리를_구독한다(나인.카테고리());
@@ -289,7 +278,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void id로_카테고리_단건_조회한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when
@@ -305,7 +294,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void id로_카테고리_단건_조회할_때_없으면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when & then
@@ -316,7 +305,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 권한이_최고_관리자인_카테고리를_수정한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
@@ -332,10 +321,10 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 권한이_최고_관리자가_아닌_카테고리를_수정하면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        티거.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_구독한다(나인.카테고리());
 
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
@@ -348,7 +337,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_수정할_때_카테고리가_없으면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         CategoryUpdateRequest 카테고리_수정_요청 = new CategoryUpdateRequest("새로운 취업 카테고리 이름");
 
@@ -360,7 +349,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 권한이_최고_관리자인_카테고리를_삭제한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when
@@ -374,10 +363,10 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 권한이_최고_관리자가_아닌_카테고리를_삭제하려_하면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        티거.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_구독한다(나인.카테고리());
 
         // when & then
@@ -388,7 +377,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_생성할_때_최고_관리자인_카테고리가_50개면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
         for (int i = 0; i < 50; i++) {
             나인.카테고리를_생성한다("카테고리 " + i, NORMAL);
         }
@@ -401,7 +390,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 없는_카테고리를_삭제하려_하면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when & then
         assertThatThrownBy(() -> categoryService.delete(나인.회원().getId(), -1L))
@@ -411,7 +400,7 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_삭제할_때_생성한_일정도_모두_삭제한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
@@ -428,10 +417,10 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_삭제할_때_구독_정보도_모두_삭제한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        티거.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_구독한다(나인.카테고리());
 
         // when
@@ -446,11 +435,10 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 카테고리를_삭제할_때_카테고리_권한도_모두_삭제한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        CategoryRole 권한 = categoryRoleRepository.getByMemberIdAndCategoryId(나인.회원().getId(),
-                나인.카테고리().getId());
+        CategoryRole 권한 = categoryRoleRepository.getByMemberIdAndCategoryId(나인.회원().getId(), 나인.카테고리().getId());
 
         // when
         categoryService.delete(나인.회원().getId(), 나인.카테고리().getId());
@@ -461,9 +449,9 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 개인_카테고리는_삭제할_수_없다() {
+    void 개인_카테고리를_삭제하려_하면_예외가_발생한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(개인_카테고리_이름, PERSONAL);
 
         // when & then
@@ -474,14 +462,14 @@ class CategoryServiceTest extends ServiceTest {
     @Test
     void 외부_서비스_연동_카테고리를_삭제한다() {
         // given
-        나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(외부_카테고리_이름, GOOGLE);
 
         // when
         categoryService.delete(나인.회원().getId(), 나인.카테고리().getId());
 
         // then
-        assertThatThrownBy(() -> categoryService.findDetailCategoryById(나인.카테고리().getId()))
+        assertThatThrownBy(() -> categoryRepository.findById(나인.카테고리().getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
@@ -547,5 +535,13 @@ class CategoryServiceTest extends ServiceTest {
         private Schedule 카테고리_일정() {
             return schedule;
         }
+    }
+
+    private GivenBuilder 나인() {
+        return new GivenBuilder();
+    }
+
+    private GivenBuilder 티거() {
+        return new GivenBuilder();
     }
 }
