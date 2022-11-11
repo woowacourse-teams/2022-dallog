@@ -1,20 +1,20 @@
 package com.allog.dallog.domain.category.application;
 
 import static com.allog.dallog.common.Constants.개인_카테고리_이름;
-import static com.allog.dallog.common.Constants.티거_이름;
-import static com.allog.dallog.common.Constants.티거_이메일;
-import static com.allog.dallog.common.Constants.티거_프로필_URL;
-import static com.allog.dallog.common.Constants.스터디_카테고리_이름;
-import static com.allog.dallog.common.Constants.외부_카테고리_ID;
-import static com.allog.dallog.common.Constants.외부_카테고리_이름;
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
 import static com.allog.dallog.common.Constants.나인_프로필_URL;
+import static com.allog.dallog.common.Constants.스터디_카테고리_이름;
+import static com.allog.dallog.common.Constants.외부_카테고리_ID;
+import static com.allog.dallog.common.Constants.외부_카테고리_이름;
 import static com.allog.dallog.common.Constants.취업_일정_메모;
 import static com.allog.dallog.common.Constants.취업_일정_시작일;
 import static com.allog.dallog.common.Constants.취업_일정_제목;
 import static com.allog.dallog.common.Constants.취업_일정_종료일;
 import static com.allog.dallog.common.Constants.취업_카테고리_이름;
+import static com.allog.dallog.common.Constants.티거_이름;
+import static com.allog.dallog.common.Constants.티거_이메일;
+import static com.allog.dallog.common.Constants.티거_프로필_URL;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
 import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
@@ -56,7 +56,6 @@ import com.allog.dallog.domain.subscription.exception.NoSuchSubscriptionExceptio
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -97,7 +96,6 @@ class CategoryServiceTest extends ServiceTest {
         티거 = new IntegrationLogicBuilder();
     }
 
-    @DisplayName("카테고리를 등록한다.")
     @Test
     void 카테고리를_등록한다() {
         // given
@@ -110,9 +108,8 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getName()).isEqualTo(취업_카테고리_이름);
     }
 
-    @DisplayName("PERSONAl 카테고리를 등록한다.")
     @Test
-    void PERSONAL_카테고리를_등록한다() {
+    void 개인_카테고리를_등록한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
@@ -128,7 +125,6 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("카테고리를 등록할 때 자동으로 구독한다.")
     @Test
     void 카테고리를_등록할_때_자동으로_구독한다() {
         // given
@@ -143,9 +139,8 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Transactional
-    @DisplayName("카테고리 등록할 때 권한을 ADMIN으로 등록한다.")
     @Test
-    void 카테고리를_등록할_때_권한을_ADMIN으로_등록한다() {
+    void 카테고리를_등록할_때_권한을_최고_관리자로_등록한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
@@ -157,7 +152,6 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getCategoryRoleType()).isEqualTo(ADMIN);
     }
 
-    @DisplayName("카테고리를 등록할 떄 이름이 공백이거나 길이가 20을 초과하면 예외를 발생한다.")
     @ParameterizedTest
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
     void 카테고리를_등록할_때_이름이_공백이거나_길이가_20을_초과하면_예외를_발생한다(final String invalidName) {
@@ -171,7 +165,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
-    @DisplayName("외부 카테고리를 등록한다.")
     @Test
     void 외부_카테고리를_등록한다() {
         // given
@@ -188,7 +181,6 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("중복되는 외부 카테고리를 등록하면 예외를 발생한다.")
     @Test
     void 중복되는_외부_카테고리를_등록하면_예외를_발생한다() {
         // given
@@ -201,7 +193,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(ExistExternalCategoryException.class);
     }
 
-    @DisplayName("외부 카테고리를 등록할 때 자동으로 구독한다.")
     @Test
     void 외부_카테고리를_등록할_때_자동으로_구독한다() {
         // given
@@ -215,7 +206,6 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    @DisplayName("저장된 회원의 개인 카테고리를 생성하고 자동으로 구독하고 카테고리 역할을 부여한다.")
     @Test
     void 저장된_회원의_개인_카테고리를_생성하고_자동으로_구독하고_카테고리_역할을_부여한다() {
         // given
@@ -245,7 +235,6 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("검색어가 제목에 있는 카테고리를 가져온다.")
     @Test
     void 검색어가_제목에_있는_카테고리를_가져온다() {
         // given
@@ -261,7 +250,6 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getCategories()).hasSize(1);
     }
 
-    @DisplayName("검색어가 제목에 있는 카테고리를 가져올때 개인 카테고리는 제외한다.")
     @Test
     void 검색어가_제목에_있는_카테고리를_가져올때_개인_카테고리는_제외한다() {
         // given
@@ -278,9 +266,8 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Transactional
-    @DisplayName("관리권한이 ADMIN인 카테고리 목록을 조회한다.")
     @Test
-    void 관리권한이_ADMIN인_카테고리_목록을_조회한다() {
+    void 관리권한이_최고_관리자인_카테고리_목록을_조회한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(스터디_카테고리_이름, NORMAL);
@@ -299,7 +286,6 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getCategories().size()).isEqualTo(3);
     }
 
-    @DisplayName("id로 카테고리 단건 조회한다.")
     @Test
     void id로_카테고리_단건_조회한다() {
         // given
@@ -316,7 +302,6 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("id로 카테고리 단건 조회할 때 없으면 예외를 발생한다.")
     @Test
     void id로_카테고리_단건_조회할_때_없으면_예외를_발생한다() {
         // given
@@ -328,9 +313,8 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("권한이 ADMIN인 카테고리를 수정한다.")
     @Test
-    void 권한이_ADMIN인_카테고리를_수정한다() {
+    void 권한이_최고_관리자인_카테고리를_수정한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -345,9 +329,8 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual.getName()).isEqualTo("새로운 취업 카테고리 이름");
     }
 
-    @DisplayName("권한이 ADMIN이 아닌 카테고리를 수정하면 예외를 발생한다.")
     @Test
-    void 권한이_ADMIN이_아닌_카테고리를_수정하면_예외를_발생한다() {
+    void 권한이_최고_관리자가_아닌_카테고리를_수정하면_예외를_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -362,7 +345,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
-    @DisplayName("카테고리를 수정할 때 카테고리가 없으면 예외를 발생한다.")
     @Test
     void 카테고리를_수정할_때_카테고리가_없으면_예외를_발생한다() {
         // given
@@ -375,9 +357,8 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("권한이 ADMIN인 카테고리를 삭제한다.")
     @Test
-    void 권한이_ADMIN인_카테고리를_삭제한다() {
+    void 권한이_최고_관리자인_카테고리를_삭제한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -390,9 +371,8 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("권한이 ADMIN이 아닌 카테고리를 삭제하려 하면 예외를 발생한다.")
     @Test
-    void 권한이_ADMIN이_아닌_카테고리를_삭제하려_하면_예외를_발생한다() {
+    void 권한이_최고_관리자가_아닌_카테고리를_삭제하려_하면_예외를_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -405,9 +385,8 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoCategoryAuthorityException.class);
     }
 
-    @DisplayName("카테고리를 등록할 때 ADMIN인 카테고리가 50개면 예외를 발생한다.")
     @Test
-    void 카테고리를_등록할_때_ADMIN인_카테고리가_50개면_예외를_발생한다() {
+    void 카테고리를_등록할_때_최고_관리자인_카테고리가_50개면_예외를_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
         for (int i = 0; i < 50; i++) {
@@ -419,7 +398,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(ManagingCategoryLimitExcessException.class);
     }
 
-    @DisplayName("없는 카테고리를 삭제하려 하면 예외를 발생한다.")
     @Test
     void 없는_카테고리를_삭제하려_하면_예외를_발생한다() {
         // given
@@ -430,7 +408,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    @DisplayName("카테고리를 삭제할 때 등록한 일정도 모두 삭제한다.")
     @Test
     void 카테고리를_삭제할_때_등록한_일정도_모두_삭제한다() {
         // given
@@ -448,7 +425,6 @@ class CategoryServiceTest extends ServiceTest {
         });
     }
 
-    @DisplayName("카테고리를 삭제할 때 구독 정보도 모두 삭제한다.")
     @Test
     void 카테고리를_삭제할_때_구독_정보도_모두_삭제한다() {
         // given
@@ -467,7 +443,6 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Transactional
-    @DisplayName("카테고리를 삭제할 때 카테고리 권한도 모두 삭제한다.")
     @Test
     void 카테고리를_삭제할_때_카테고리_권한도_모두_삭제한다() {
         // given
@@ -485,9 +460,8 @@ class CategoryServiceTest extends ServiceTest {
         assertThat(actual).isFalse();
     }
 
-    @DisplayName("PERSONAL 카테고리는 삭제할 수 없다.")
     @Test
-    void PERSONAL_카테고리는_삭제할_수_없다() {
+    void 개인_카테고리는_삭제할_수_없다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(개인_카테고리_이름, PERSONAL);
@@ -497,7 +471,6 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(InvalidCategoryException.class);
     }
 
-    @DisplayName("외부 서비스 연동 카테고리를 삭제한다.")
     @Test
     void 외부_서비스_연동_카테고리를_삭제한다() {
         // given
