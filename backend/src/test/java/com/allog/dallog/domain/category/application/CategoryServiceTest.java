@@ -154,7 +154,7 @@ class CategoryServiceTest extends ServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "일이삼사오육칠팔구십일이삼사오육칠팔구십일", "알록달록 알록달록 알록달록 알록달록 알록달록 알록달록 카테고리"})
-    void 카테고리를_등록할_때_이름이_공백이거나_길이가_20을_초과하면_예외를_발생한다(final String invalidName) {
+    void 카테고리를_등록할_때_이름이_공백이거나_길이가_20을_초과하면_예외가_발생한다(final String invalidName) {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
@@ -182,7 +182,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 중복되는_외부_카테고리를_등록하면_예외를_발생한다() {
+    void 중복되는_외부_카테고리를_등록하면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
@@ -236,7 +236,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 검색어가_제목에_있는_카테고리를_가져온다() {
+    void 제목에_검색어가_있는_카테고리를_가져온다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(외부_카테고리_이름, GOOGLE)
@@ -251,7 +251,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 검색어가_제목에_있는_카테고리를_가져올때_개인_카테고리는_제외한다() {
+    void 제목에_검색어가_있는_카테고리를_가져올때_개인_카테고리는_제외한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(개인_카테고리_이름, PERSONAL)
@@ -303,7 +303,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void id로_카테고리_단건_조회할_때_없으면_예외를_발생한다() {
+    void id로_카테고리_단건_조회할_때_없으면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -330,7 +330,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 권한이_최고_관리자가_아닌_카테고리를_수정하면_예외를_발생한다() {
+    void 권한이_최고_관리자가_아닌_카테고리를_수정하면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -346,7 +346,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 카테고리를_수정할_때_카테고리가_없으면_예외를_발생한다() {
+    void 카테고리를_수정할_때_카테고리가_없으면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
@@ -372,7 +372,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 권한이_최고_관리자가_아닌_카테고리를_삭제하려_하면_예외를_발생한다() {
+    void 권한이_최고_관리자가_아닌_카테고리를_삭제하려_하면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_등록한다(취업_카테고리_이름, NORMAL);
@@ -386,7 +386,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 카테고리를_등록할_때_최고_관리자인_카테고리가_50개면_예외를_발생한다() {
+    void 카테고리를_등록할_때_최고_관리자인_카테고리가_50개면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
         for (int i = 0; i < 50; i++) {
@@ -399,7 +399,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 없는_카테고리를_삭제하려_하면_예외를_발생한다() {
+    void 없는_카테고리를_삭제하려_하면_예외가_발생한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
