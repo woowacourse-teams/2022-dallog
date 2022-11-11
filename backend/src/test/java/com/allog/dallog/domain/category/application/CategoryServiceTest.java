@@ -87,13 +87,13 @@ class CategoryServiceTest extends ServiceTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    private IntegrationLogicBuilder 나인;
-    private IntegrationLogicBuilder 티거;
+    private GivenBuilder 나인;
+    private GivenBuilder 티거;
 
     @BeforeEach
     void setUp() {
-        나인 = new IntegrationLogicBuilder();
-        티거 = new IntegrationLogicBuilder();
+        나인 = new GivenBuilder();
+        티거 = new GivenBuilder();
     }
 
     @Test
@@ -485,7 +485,7 @@ class CategoryServiceTest extends ServiceTest {
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 
-    private final class IntegrationLogicBuilder {
+    private final class GivenBuilder {
 
         private Member member;
         private Category category;
@@ -493,13 +493,13 @@ class CategoryServiceTest extends ServiceTest {
         private Subscription subscription;
         private Schedule schedule;
 
-        private IntegrationLogicBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
+        private GivenBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
             Member member = new Member(email, name, profile, SocialType.GOOGLE);
             this.member = memberRepository.save(member);
             return this;
         }
 
-        private IntegrationLogicBuilder 카테고리를_생성한다(final String categoryName, final CategoryType categoryType) {
+        private GivenBuilder 카테고리를_생성한다(final String categoryName, final CategoryType categoryType) {
             Category category = new Category(categoryName, this.member, categoryType);
             CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
             Subscription subscription = new Subscription(this.member, category, COLOR_1);
@@ -509,7 +509,7 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private IntegrationLogicBuilder 카테고리를_구독한다(final Category category) {
+        private GivenBuilder 카테고리를_구독한다(final Category category) {
             Subscription subscription = new Subscription(this.member, category, COLOR_1);
             CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
             this.subscription = subscriptionRepository.save(subscription);
@@ -517,7 +517,7 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private IntegrationLogicBuilder 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private GivenBuilder 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
@@ -525,8 +525,8 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private IntegrationLogicBuilder 일정을_생성한다(final String title, final LocalDateTime start, final LocalDateTime end,
-                                                 final String memo) {
+        private GivenBuilder 일정을_생성한다(final String title, final LocalDateTime start, final LocalDateTime end,
+                                      final String memo) {
             Schedule schedule = new Schedule(this.category, title, start, end, memo);
             this.schedule = scheduleRepository.save(schedule);
             return this;
