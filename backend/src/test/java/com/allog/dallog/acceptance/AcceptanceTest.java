@@ -27,10 +27,6 @@ abstract class AcceptanceTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-    }
-
-    @AfterEach
-    void afterEach() {
         databaseCleaner.execute();
         tokenRepository.deleteAll();
     }

@@ -469,7 +469,7 @@ class CategoryServiceTest extends ServiceTest {
         categoryService.delete(나인.회원().getId(), 나인.카테고리().getId());
 
         // then
-        assertThatThrownBy(() -> categoryRepository.findById(나인.카테고리().getId()))
+        assertThatThrownBy(() -> categoryRepository.getById(나인.카테고리().getId()))
                 .isInstanceOf(NoSuchCategoryException.class);
     }
 

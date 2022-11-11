@@ -6,7 +6,7 @@ import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.domain.TokenRepository;
 import com.allog.dallog.domain.auth.dto.OAuthMember;
 import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,8 +24,8 @@ public class ServiceTest {
     @Autowired
     private DatabaseCleaner databaseCleaner;
 
-    @AfterEach
-    void afterEach() {
+    @BeforeEach
+    void setUp() {
         databaseCleaner.execute();
         tokenRepository.deleteAll();
     }
