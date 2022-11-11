@@ -236,7 +236,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 제목에_검색어가_있는_카테고리를_가져온다() {
+    void 제목에_검색어가_포함된_카테고리를_가져온다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_생성한다(외부_카테고리_이름, GOOGLE)
@@ -251,7 +251,7 @@ class CategoryServiceTest extends ServiceTest {
     }
 
     @Test
-    void 제목에_검색어가_있는_카테고리를_가져올때_개인_카테고리는_제외한다() {
+    void 제목에_검색어가_포함된_카테고리를_가져올때_개인_카테고리는_제외한다() {
         // given
         나인.회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_생성한다(개인_카테고리_이름, PERSONAL)
