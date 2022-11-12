@@ -1,8 +1,8 @@
 package com.allog.dallog.common.config;
 
-import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.application.OAuthUri;
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
+import com.allog.dallog.auth.application.OAuthClient;
+import com.allog.dallog.auth.application.OAuthUri;
+import com.allog.dallog.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.infrastructure.oauth.client.StubExternalCalendarClient;
 import com.allog.dallog.infrastructure.oauth.client.StubOAuthClient;
 import com.allog.dallog.infrastructure.oauth.uri.StubOAuthUri;

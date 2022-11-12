@@ -5,8 +5,11 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
 import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.categoryrole.domain.CategoryAuthority;
+import com.allog.dallog.categoryrole.domain.CategoryRole;
+import com.allog.dallog.categoryrole.domain.CategoryRoleType;
+import com.allog.dallog.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

@@ -1,8 +1,8 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.domain.auth.application.OAuthClient;
-import com.allog.dallog.domain.auth.dto.OAuthMember;
-import com.allog.dallog.domain.auth.dto.response.OAuthAccessTokenResponse;
+import com.allog.dallog.auth.application.OAuthClient;
+import com.allog.dallog.auth.dto.OAuthMember;
+import com.allog.dallog.auth.dto.response.OAuthAccessTokenResponse;
 import com.allog.dallog.global.config.properties.GoogleProperties;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleTokenResponse;
 import com.allog.dallog.infrastructure.oauth.dto.UserInfo;

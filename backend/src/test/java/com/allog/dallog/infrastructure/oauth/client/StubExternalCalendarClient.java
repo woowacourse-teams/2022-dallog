@@ -6,9 +6,9 @@ import static com.allog.dallog.common.fixtures.ExternalCalendarFixtures.우아�
 import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.레벨3_방학;
 import static com.allog.dallog.common.fixtures.IntegrationScheduleFixtures.포수타;
 
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.externalcalendar.application.ExternalCalendarClient;
+import com.allog.dallog.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
 import java.util.List;
 
 public class StubExternalCalendarClient implements ExternalCalendarClient {

@@ -5,8 +5,9 @@ import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
-import com.allog.dallog.domain.member.dto.response.MemberResponse;
+import com.allog.dallog.member.application.MemberService;
+import com.allog.dallog.member.dto.request.MemberUpdateRequest;
+import com.allog.dallog.member.dto.response.MemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

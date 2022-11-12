@@ -35,10 +35,13 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.RepositoryTest;
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.category.domain.CategoryRepository;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.schedule.domain.Schedule;
+import com.allog.dallog.schedule.domain.ScheduleRepository;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;

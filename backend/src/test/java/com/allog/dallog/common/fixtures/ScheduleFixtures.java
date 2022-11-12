@@ -1,9 +1,9 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.schedule.domain.Schedule;
-import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
-import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.schedule.domain.Schedule;
+import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import java.time.LocalDateTime;
 
 public class ScheduleFixtures {

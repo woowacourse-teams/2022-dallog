@@ -1,9 +1,11 @@
 package com.allog.dallog.domain.categoryrole.domain;
 
-import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
-import static com.allog.dallog.domain.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
+import static com.allog.dallog.categoryrole.domain.CategoryAuthority.ADD_SCHEDULE;
+import static com.allog.dallog.categoryrole.domain.CategoryAuthority.UPDATE_SCHEDULE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.categoryrole.domain.CategoryAuthority;
+import com.allog.dallog.categoryrole.domain.CategoryRoleType;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

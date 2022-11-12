@@ -9,8 +9,9 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.schedule.exception.InvalidScheduleException;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.schedule.domain.Schedule;
+import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

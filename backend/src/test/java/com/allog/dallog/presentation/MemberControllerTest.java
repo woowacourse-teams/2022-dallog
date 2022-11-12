@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
-import com.allog.dallog.domain.member.exception.NoSuchMemberException;
+import com.allog.dallog.member.dto.request.MemberUpdateRequest;
+import com.allog.dallog.member.exception.NoSuchMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

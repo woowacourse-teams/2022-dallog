@@ -1,7 +1,7 @@
 package com.allog.dallog.infrastructure.oauth.dto;
 
-import com.allog.dallog.domain.category.domain.CategoryType;
-import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.category.domain.CategoryType;
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

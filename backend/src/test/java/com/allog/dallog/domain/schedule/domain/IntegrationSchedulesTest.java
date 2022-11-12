@@ -1,8 +1,10 @@
 package com.allog.dallog.domain.schedule.domain;
 
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.schedule.domain.IntegrationSchedules;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

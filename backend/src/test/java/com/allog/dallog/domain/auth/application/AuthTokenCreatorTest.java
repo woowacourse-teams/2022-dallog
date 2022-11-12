@@ -2,8 +2,9 @@ package com.allog.dallog.domain.auth.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.auth.application.TokenCreator;
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.auth.domain.AuthToken;
+import com.allog.dallog.auth.domain.AuthToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

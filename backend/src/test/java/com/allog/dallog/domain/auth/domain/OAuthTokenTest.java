@@ -4,7 +4,8 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.auth.domain.OAuthToken;
+import com.allog.dallog.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.auth.domain.OAuthToken;
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.auth.domain.OAuthToken;
+import com.allog.dallog.member.domain.Member;
 
 public class OAuthTokenFixtures {
 

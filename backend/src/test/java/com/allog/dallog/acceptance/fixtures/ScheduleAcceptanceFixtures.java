@@ -3,8 +3,8 @@ package com.allog.dallog.acceptance.fixtures;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_메모;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.알록달록_회의_제목;
 
-import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
-import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.schedule.dto.request.ScheduleUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

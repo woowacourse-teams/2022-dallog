@@ -1,6 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
+import com.allog.dallog.category.dto.request.ExternalCategoryCreateRequest;
 
 public class ExternalCategoryFixtures {
 

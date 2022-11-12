@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.common.config.TokenConfig;
-import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
-import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
-import com.allog.dallog.domain.auth.dto.response.OAuthUriResponse;
+import com.allog.dallog.auth.dto.request.TokenRenewalRequest;
+import com.allog.dallog.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.auth.dto.response.OAuthUriResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;

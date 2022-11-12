@@ -3,7 +3,9 @@ package com.allog.dallog.domain.auth.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
+import com.allog.dallog.auth.domain.InMemoryAuthTokenRepository;
+import com.allog.dallog.auth.domain.TokenRepository;
+import com.allog.dallog.auth.exception.NoSuchTokenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

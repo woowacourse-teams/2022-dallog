@@ -8,8 +8,10 @@ import static com.allog.dallog.common.fixtures.SubscriptionFixtures.색상1_구�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.member.domain.Member;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.subscription.domain.Color;
+import com.allog.dallog.subscription.domain.Subscription;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

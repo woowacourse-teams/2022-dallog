@@ -2,7 +2,8 @@ package com.allog.dallog.domain.auth.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.domain.auth.exception.NoSuchTokenException;
+import com.allog.dallog.auth.domain.AuthToken;
+import com.allog.dallog.auth.exception.NoSuchTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -4,8 +4,9 @@ package com.allog.dallog.domain.subscription.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.allog.dallog.domain.subscription.application.ColorPicker;
-import com.allog.dallog.domain.subscription.exception.InvalidSubscriptionException;
+import com.allog.dallog.subscription.application.ColorPicker;
+import com.allog.dallog.subscription.domain.Color;
+import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

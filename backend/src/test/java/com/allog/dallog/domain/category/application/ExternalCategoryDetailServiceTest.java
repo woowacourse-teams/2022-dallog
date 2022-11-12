@@ -5,12 +5,14 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_FE_일정
 import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.category.application.CategoryService;
+import com.allog.dallog.category.application.ExternalCategoryDetailService;
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.category.domain.CategoryRepository;
+import com.allog.dallog.category.domain.ExternalCategoryDetail;
+import com.allog.dallog.category.domain.ExternalCategoryDetailRepository;
+import com.allog.dallog.category.dto.response.CategoryResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

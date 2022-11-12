@@ -5,10 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.common.fixtures.MemberFixtures;
-import com.allog.dallog.domain.auth.domain.OAuthTokenRepository;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.auth.domain.OAuthTokenRepository;
+import com.allog.dallog.externalcalendar.application.ExternalCalendarService;
+import com.allog.dallog.externalcalendar.dto.ExternalCalendarsResponse;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

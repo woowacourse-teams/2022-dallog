@@ -1,6 +1,7 @@
 package com.allog.dallog.domain.auth.application;
 
-import com.allog.dallog.domain.auth.exception.InvalidTokenException;
+import com.allog.dallog.auth.application.TokenProvider;
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;

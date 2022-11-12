@@ -24,7 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.exception.InvalidTokenException;
+import com.allog.dallog.auth.exception.InvalidTokenException;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

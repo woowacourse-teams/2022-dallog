@@ -1,9 +1,9 @@
 package com.allog.dallog.common.fixtures;
 
-import static com.allog.dallog.domain.member.domain.SocialType.GOOGLE;
+import static com.allog.dallog.member.domain.SocialType.GOOGLE;
 
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.dto.response.MemberResponse;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.dto.response.MemberResponse;
 
 public class MemberFixtures {
 

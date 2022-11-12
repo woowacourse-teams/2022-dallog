@@ -3,6 +3,7 @@ package com.allog.dallog.domain.schedule.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.allog.dallog.schedule.domain.Period;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

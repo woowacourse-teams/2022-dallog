@@ -1,6 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.externalcalendar.dto.ExternalCalendar;
 
 public class ExternalCalendarFixtures {
 

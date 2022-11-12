@@ -10,8 +10,8 @@ import static com.allog.dallog.common.fixtures.ExternalCategoryFixtures.우아�
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
+import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.externalcalendar.dto.ExternalCalendarsResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

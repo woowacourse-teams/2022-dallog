@@ -4,9 +4,11 @@ import static com.allog.dallog.common.fixtures.MemberFixtures.매트;
 import static com.allog.dallog.common.fixtures.OAuthTokenFixtures.REFRESH_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.auth.domain.OAuthToken;
+import com.allog.dallog.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.common.annotation.RepositoryTest;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

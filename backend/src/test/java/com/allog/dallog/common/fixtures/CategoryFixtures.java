@@ -1,15 +1,15 @@
 package com.allog.dallog.common.fixtures;
 
-import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
-import static com.allog.dallog.domain.category.domain.CategoryType.PERSONAL;
+import static com.allog.dallog.category.domain.CategoryType.GOOGLE;
+import static com.allog.dallog.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.category.domain.CategoryType.PERSONAL;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.domain.category.dto.response.CategoryDetailResponse;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.dto.response.MemberResponse;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.response.CategoryDetailResponse;
+import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.dto.response.MemberResponse;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 

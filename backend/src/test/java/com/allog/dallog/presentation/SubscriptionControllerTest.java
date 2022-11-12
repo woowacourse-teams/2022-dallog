@@ -29,13 +29,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.dto.request.SubscriptionUpdateRequest;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionsResponse;
-import com.allog.dallog.domain.subscription.exception.ExistSubscriptionException;
+import com.allog.dallog.auth.exception.NoPermissionException;
+import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.subscription.domain.Color;
+import com.allog.dallog.subscription.dto.request.SubscriptionUpdateRequest;
+import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
+import com.allog.dallog.subscription.exception.ExistSubscriptionException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

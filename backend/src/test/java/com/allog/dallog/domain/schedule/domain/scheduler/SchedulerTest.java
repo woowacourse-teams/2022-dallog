@@ -17,13 +17,14 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_31일_0시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_7월_7일_16시_0분;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.날짜_2022년_8월_15일_14시_0분;
-import static com.allog.dallog.domain.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.category.domain.CategoryType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
-import com.allog.dallog.domain.schedule.domain.Period;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.schedule.domain.Period;
+import com.allog.dallog.schedule.domain.scheduler.Scheduler;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

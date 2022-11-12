@@ -27,14 +27,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.allog.dallog.domain.auth.exception.NoPermissionException;
-import com.allog.dallog.domain.category.exception.NoSuchCategoryException;
-import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
-import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponse;
-import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
-import com.allog.dallog.domain.schedule.exception.NoSuchScheduleException;
-import com.allog.dallog.domain.subscription.domain.Color;
+import com.allog.dallog.auth.exception.NoPermissionException;
+import com.allog.dallog.category.exception.NoSuchCategoryException;
+import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
+import com.allog.dallog.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.schedule.dto.response.IntegrationScheduleResponse;
+import com.allog.dallog.schedule.dto.response.IntegrationScheduleResponses;
+import com.allog.dallog.schedule.exception.NoSuchScheduleException;
+import com.allog.dallog.subscription.domain.Color;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
