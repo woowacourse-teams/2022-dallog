@@ -1,14 +1,14 @@
 package com.allog.dallog.global.config.cache;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 
 public class ExpiringConcurrentMapCache extends ConcurrentMapCache {
 
-    private final Map<Object, LocalDateTime> expires = new HashMap<>();
+    private final Map<Object, LocalDateTime> expires = new ConcurrentHashMap<>();
     private final long expireAfter;
 
     public ExpiringConcurrentMapCache(final String name, final long expireAfter) {
