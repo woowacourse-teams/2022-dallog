@@ -1,6 +1,5 @@
 package com.allog.dallog.global.config;
 
-import com.allog.dallog.presentation.auth.AuthenticationPrincipalArgumentResolver;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final List<String> allowOriginUrlPatterns;
-    private final AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver;
+    private final HandlerMethodArgumentResolver authenticationPrincipalArgumentResolver;
 
     public WebConfig(@Value("${cors.allow-origin.urls}") final List<String> allowOriginUrlPatterns,
-                     final AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver) {
+                     final HandlerMethodArgumentResolver authenticationPrincipalArgumentResolver) {
         this.allowOriginUrlPatterns = allowOriginUrlPatterns;
         this.authenticationPrincipalArgumentResolver = authenticationPrincipalArgumentResolver;
     }

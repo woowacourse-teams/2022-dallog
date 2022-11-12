@@ -1,10 +1,10 @@
-package com.allog.dallog.presentation;
+package com.allog.dallog.domain.member.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.member.application.MemberService;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
 import com.allog.dallog.domain.member.dto.response.MemberResponse;
-import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.allog.dallog.presentation.auth;
+package com.allog.dallog.domain.auth.presentation;
 
 import com.allog.dallog.domain.auth.application.AuthService;
 import com.allog.dallog.domain.auth.dto.LoginMember;

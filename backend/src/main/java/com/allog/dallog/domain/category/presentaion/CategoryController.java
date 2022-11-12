@@ -1,6 +1,7 @@
-package com.allog.dallog.presentation;
+package com.allog.dallog.domain.category.presentaion;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
@@ -10,7 +11,6 @@ import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.categoryrole.application.CategoryRoleService;
 import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import com.allog.dallog.domain.categoryrole.dto.response.SubscribersResponse;
-import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;

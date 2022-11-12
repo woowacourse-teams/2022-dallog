@@ -1,12 +1,12 @@
-package com.allog.dallog.presentation;
+package com.allog.dallog.domain.externalcalendar.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.category.application.CategoryService;
 import com.allog.dallog.domain.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.domain.category.dto.response.CategoryResponse;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarService;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendarsResponse;
-import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;

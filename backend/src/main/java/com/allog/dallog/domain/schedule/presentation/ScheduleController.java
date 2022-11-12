@@ -1,6 +1,7 @@
-package com.allog.dallog.presentation;
+package com.allog.dallog.domain.schedule.presentation;
 
 import com.allog.dallog.domain.auth.dto.LoginMember;
+import com.allog.dallog.domain.auth.presentation.AuthenticationPrincipal;
 import com.allog.dallog.domain.schedule.application.CheckedSchedulesFinder;
 import com.allog.dallog.domain.schedule.application.ScheduleService;
 import com.allog.dallog.domain.schedule.dto.request.DateRangeRequest;
@@ -8,7 +9,6 @@ import com.allog.dallog.domain.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.domain.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
-import com.allog.dallog.presentation.auth.AuthenticationPrincipal;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
