@@ -10,7 +10,6 @@ import com.allog.dallog.domain.member.domain.Member;
 import com.allog.dallog.domain.member.domain.MemberRepository;
 import com.allog.dallog.domain.member.domain.SocialType;
 import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +24,11 @@ class MemberServiceTest extends ServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private IntegrationLogicBuilder 나인;
-
-    @BeforeEach
-    void setUp() {
-        나인 = new IntegrationLogicBuilder();
-    }
-
     @DisplayName("회원을 조회한다.")
     @Test
     void 회원을_조회한다() {
         // given
-        나인.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when & then
         assertThat(memberService.findById(나인.회원().getId()).getId())
@@ -47,7 +39,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void 회원의_이름을_수정한다() {
         // given
-        나인.회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);;
 
         // when
         memberService.update(나인.회원().getId(), 나인_이름_수정_요청);
@@ -57,11 +49,11 @@ class MemberServiceTest extends ServiceTest {
         assertThat(actual.getDisplayName()).isEqualTo("텐");
     }
 
-    private final class IntegrationLogicBuilder {
+    private final class GivenBuilder {
 
         private Member member;
 
-        private IntegrationLogicBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
+        private GivenBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
             Member member = new Member(email, name, profile, SocialType.GOOGLE);
             this.member = memberRepository.save(member);
             return this;
@@ -70,5 +62,9 @@ class MemberServiceTest extends ServiceTest {
         private Member 회원() {
             return member;
         }
+    }
+
+    private GivenBuilder 나인() {
+        return new GivenBuilder();
     }
 }
