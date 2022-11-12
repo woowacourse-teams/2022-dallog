@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
 
     public static final String GOOGLE_CALENDAR = "googleCalendar";
-    private static final long EXPIRE_AFTER = 60 * 15;
+    private static final long EXPIRE_AFTER = 60 * 60 * 3;
 
     @Bean
     public CacheManager cacheManager() {
