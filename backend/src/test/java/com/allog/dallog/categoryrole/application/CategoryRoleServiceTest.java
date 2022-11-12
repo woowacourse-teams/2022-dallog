@@ -60,7 +60,7 @@ class CategoryRoleServiceTest extends ServiceTest {
     private SubscriptionRepository subscriptionRepository;
 
     @Test
-    void 카테고리의_구독자_목록을_가져온다() {
+    void 카테고리의_구독자_목록을_조회한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
