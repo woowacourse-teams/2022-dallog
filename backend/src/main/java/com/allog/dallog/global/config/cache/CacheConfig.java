@@ -11,12 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class CacheConfig {
 
+    public static final String GOOGLE_CALENDAR = "googleCalendar";
     private static final long EXPIRE_AFTER = 60 * 15;
 
     @Bean
     public CacheManager cacheManager() {
         SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
-        simpleCacheManager.setCaches(List.of(new ExpiringConcurrentMapCache("googleCalendar", EXPIRE_AFTER)));
+        simpleCacheManager.setCaches(List.of(new ExpiringConcurrentMapCache(GOOGLE_CALENDAR, EXPIRE_AFTER)));
 
         return simpleCacheManager;
     }
