@@ -3,6 +3,7 @@ package com.allog.dallog.infrastructure.oauth.client;
 import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
 import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.global.config.cache.CacheConfig;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;
 import com.allog.dallog.infrastructure.oauth.exception.OAuthException;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -56,6 +58,7 @@ public class GoogleExternalCalendarClient implements ExternalCalendarClient {
     }
 
     @Override
+    @Cacheable(value = CacheConfig.GOOGLE_CALENDAR, key = "#internalCategoryId+#externalCalendarId+#startDateTime+#endDateTime")
     public List<IntegrationSchedule> getExternalCalendarSchedules(final String accessToken,
                                                                   final Long internalCategoryId,
                                                                   final String externalCalendarId,
