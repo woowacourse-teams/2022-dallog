@@ -1,8 +1,8 @@
 package com.allog.dallog.acceptance.fixtures;
 
-import com.allog.dallog.domain.category.dto.request.CategoryCreateRequest;
-import com.allog.dallog.domain.category.dto.request.CategoryUpdateRequest;
-import com.allog.dallog.domain.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.category.dto.request.CategoryCreateRequest;
+import com.allog.dallog.category.dto.request.CategoryUpdateRequest;
+import com.allog.dallog.categoryrole.dto.request.CategoryRoleUpdateRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

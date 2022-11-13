@@ -1,6 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.uri;
 
-import com.allog.dallog.domain.auth.application.OAuthUri;
+import com.allog.dallog.auth.application.OAuthUri;
 
 public class StubOAuthUri implements OAuthUri {
 

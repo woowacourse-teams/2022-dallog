@@ -1,6 +1,6 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.auth.dto.OAuthMember;
+import com.allog.dallog.auth.dto.OAuthMember;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 

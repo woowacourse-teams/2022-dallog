@@ -1,6 +1,6 @@
 package com.allog.dallog.acceptance.fixtures;
 
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

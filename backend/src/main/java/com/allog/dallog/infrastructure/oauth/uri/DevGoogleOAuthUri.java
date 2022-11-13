@@ -1,6 +1,6 @@
 package com.allog.dallog.infrastructure.oauth.uri;
 
-import com.allog.dallog.domain.auth.application.OAuthUri;
+import com.allog.dallog.auth.application.OAuthUri;
 import com.allog.dallog.global.config.properties.GoogleProperties;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

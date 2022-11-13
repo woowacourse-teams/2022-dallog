@@ -1,11 +1,11 @@
 package com.allog.dallog.common.fixtures;
 
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.subscription.domain.Color;
-import com.allog.dallog.domain.subscription.domain.Subscription;
-import com.allog.dallog.domain.subscription.dto.response.SubscriptionResponse;
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.subscription.domain.Color;
+import com.allog.dallog.subscription.domain.Subscription;
+import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
 
 public class SubscriptionFixtures {
 

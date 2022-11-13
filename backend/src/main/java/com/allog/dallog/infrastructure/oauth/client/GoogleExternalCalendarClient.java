@@ -1,8 +1,8 @@
 package com.allog.dallog.infrastructure.oauth.client;
 
-import com.allog.dallog.domain.externalcalendar.application.ExternalCalendarClient;
-import com.allog.dallog.domain.externalcalendar.dto.ExternalCalendar;
-import com.allog.dallog.domain.schedule.domain.IntegrationSchedule;
+import com.allog.dallog.externalcalendar.application.ExternalCalendarClient;
+import com.allog.dallog.externalcalendar.dto.ExternalCalendar;
+import com.allog.dallog.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.global.config.cache.CacheConfig;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarEventsResponse;
 import com.allog.dallog.infrastructure.oauth.dto.GoogleCalendarListResponse;

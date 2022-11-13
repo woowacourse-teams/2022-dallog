@@ -1,8 +1,8 @@
 package com.allog.dallog.acceptance.fixtures;
 
-import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
-import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.auth.dto.request.TokenRenewalRequest;
+import com.allog.dallog.auth.dto.request.TokenRequest;
+import com.allog.dallog.auth.dto.response.AccessAndRefreshTokenResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

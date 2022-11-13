@@ -6,10 +6,10 @@ import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
 import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
 import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
 
-import com.allog.dallog.domain.auth.dto.request.TokenRenewalRequest;
-import com.allog.dallog.domain.auth.dto.request.TokenRequest;
-import com.allog.dallog.domain.auth.dto.response.AccessAndRefreshTokenResponse;
-import com.allog.dallog.domain.auth.dto.response.AccessTokenResponse;
+import com.allog.dallog.auth.dto.request.TokenRenewalRequest;
+import com.allog.dallog.auth.dto.request.TokenRequest;
+import com.allog.dallog.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.allog.dallog.auth.dto.response.AccessTokenResponse;
 
 public class AuthFixtures {
 

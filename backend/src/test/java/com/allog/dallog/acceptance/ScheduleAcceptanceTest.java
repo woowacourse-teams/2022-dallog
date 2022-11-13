@@ -32,9 +32,9 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_세번째
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_첫번째_일정;
 
 import com.allog.dallog.common.fixtures.OAuthFixtures;
-import com.allog.dallog.domain.category.dto.response.CategoryResponse;
-import com.allog.dallog.domain.schedule.dto.request.ScheduleUpdateRequest;
-import com.allog.dallog.domain.schedule.dto.response.ScheduleResponse;
+import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.schedule.dto.request.ScheduleUpdateRequest;
+import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
