@@ -266,7 +266,7 @@ class CategoryServiceTest extends ServiceTest {
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .카테고리를_구독한다(나인.카테고리());
 
-        나인.내_카테고리_관리_권한을_부여한다(티거.회원());
+        나인.내_카테고리에_대한_관리_권한을_부여한다(티거.회원());
 
         // when
         CategoriesResponse actual = categoryService.findScheduleEditableCategories(티거.회원().getId());
@@ -513,7 +513,7 @@ class CategoryServiceTest extends ServiceTest {
             return this;
         }
 
-        private GivenBuilder 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private GivenBuilder 내_카테고리에_대한_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);

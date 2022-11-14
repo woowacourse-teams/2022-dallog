@@ -118,7 +118,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_구독한다(나인.카테고리());
 
-        나인.내_카테고리_관리_권한을_부여한다(티거.회원());
+        나인.내_카테고리에_대한_관리_권한을_부여한다(티거.회원());
 
         // when
         categoryRoleService.updateRole(티거.회원().getId(), 나인.회원().getId(), 나인.카테고리().getId(), 카테고리_관리권한_해제_요청);
@@ -156,7 +156,7 @@ class CategoryRoleServiceTest extends ServiceTest {
         GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
                 .카테고리를_구독한다(나인.카테고리());
 
-        나인.내_카테고리_관리_권한을_부여한다(티거.회원());
+        나인.내_카테고리에_대한_관리_권한을_부여한다(티거.회원());
 
         // when
         categoryRoleService.updateRole(나인.회원().getId(), 나인.회원().getId(), 나인.카테고리().getId(), 카테고리_관리권한_해제_요청);
@@ -250,7 +250,7 @@ class CategoryRoleServiceTest extends ServiceTest {
             return this;
         }
 
-        private GivenBuilder 내_카테고리_관리_권한을_부여한다(final Member otherMember) {
+        private GivenBuilder 내_카테고리에_대한_관리_권한을_부여한다(final Member otherMember) {
             CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
                     category.getId());
             categoryRole.changeRole(ADMIN);
