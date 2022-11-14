@@ -42,7 +42,7 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     private SubscriptionRepository subscriptionRepository;
 
     @Test
-    void 월별_일정_조회를_하면_회원의_외부_서비스_카테고리_전체를_조회한다() {
+    void 월별_일정을_조회하면_회원의_외부_카테고리_전체를_조회한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .외부_카테고리를_등록한다(외부_카테고리_이름, GOOGLE);
