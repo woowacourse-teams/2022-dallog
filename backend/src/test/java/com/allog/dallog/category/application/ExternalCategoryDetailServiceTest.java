@@ -1,27 +1,26 @@
-package com.allog.dallog.domain.category.application;
+package com.allog.dallog.category.application;
 
+import static com.allog.dallog.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
 import static com.allog.dallog.common.Constants.나인_프로필_URL;
 import static com.allog.dallog.common.Constants.외부_카테고리_ID;
 import static com.allog.dallog.common.Constants.외부_카테고리_이름;
-import static com.allog.dallog.domain.category.domain.CategoryType.GOOGLE;
-import static com.allog.dallog.domain.subscription.domain.Color.COLOR_1;
+import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.allog.dallog.category.domain.Category;
+import com.allog.dallog.category.domain.CategoryRepository;
+import com.allog.dallog.category.domain.CategoryType;
+import com.allog.dallog.category.domain.ExternalCategoryDetail;
+import com.allog.dallog.category.domain.ExternalCategoryDetailRepository;
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.category.domain.Category;
-import com.allog.dallog.domain.category.domain.CategoryRepository;
-import com.allog.dallog.domain.category.domain.CategoryType;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetail;
-import com.allog.dallog.domain.category.domain.ExternalCategoryDetailRepository;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.domain.SocialType;
-import com.allog.dallog.domain.subscription.domain.Subscription;
-import com.allog.dallog.domain.subscription.domain.SubscriptionRepository;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.subscription.domain.Subscription;
+import com.allog.dallog.subscription.domain.SubscriptionRepository;
 import java.util.List;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

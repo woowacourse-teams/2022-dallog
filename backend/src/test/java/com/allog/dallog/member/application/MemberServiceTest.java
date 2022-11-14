@@ -1,4 +1,4 @@
-package com.allog.dallog.domain.member.application;
+package com.allog.dallog.member.application;
 
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
@@ -6,10 +6,10 @@ import static com.allog.dallog.common.Constants.나인_프로필_URL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.domain.member.domain.Member;
-import com.allog.dallog.domain.member.domain.MemberRepository;
-import com.allog.dallog.domain.member.domain.SocialType;
-import com.allog.dallog.domain.member.dto.request.MemberUpdateRequest;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.member.dto.request.MemberUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
