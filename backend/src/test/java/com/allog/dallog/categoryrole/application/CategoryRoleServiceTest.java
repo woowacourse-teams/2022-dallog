@@ -34,7 +34,6 @@ import com.allog.dallog.member.domain.MemberRepository;
 import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.domain.SubscriptionRepository;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +89,7 @@ class CategoryRoleServiceTest extends ServiceTest {
     }
 
     @Test
-    void 관리자_역할로_변경하려는_회원이_이미_50개_이상의_카테고리에_관리자_권한이_있으면_예외가_발생한다() {
+    void 관리자_역할로_변경하려는_회원이_이미_50개_이상의_카테고리에_권한이_있으면_예외가_발생한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -110,7 +109,7 @@ class CategoryRoleServiceTest extends ServiceTest {
 
     @Transactional
     @Test
-    void 카테고리_관리권한이_관리자인_회원이_다른_관리자의_권한을_변경한다() {
+    void 카테고리_권한이_관리자인_회원이_다른_관리자의_권한을_변경한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -130,7 +129,7 @@ class CategoryRoleServiceTest extends ServiceTest {
 
     @Transactional
     @Test
-    void 카테고리_관리권한이_최고_관리자인_회원이_구독자의_권한을_변경한다() {
+    void 카테고리_권한이_관리자인_회원이_구독자의_권한을_변경한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -148,7 +147,7 @@ class CategoryRoleServiceTest extends ServiceTest {
 
     @Transactional
     @Test
-    void 카테고리_관리권한이_관리자인_회원이_자신의_관리자_권한을_변경한다() {
+    void 카테고리_권한이_관리자인_회원이_자신의_권한을_변경한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -167,7 +166,7 @@ class CategoryRoleServiceTest extends ServiceTest {
     }
 
     @Test
-    void 카테고리_관리권한이_없는_회원이_다른_회원의_관리권한을_변경하려하면_예외가_발생한다() {
+    void 카테고리_권한이_없는_회원이_다른_회원의_권한을_변경하려하면_예외가_발생한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -183,7 +182,7 @@ class CategoryRoleServiceTest extends ServiceTest {
     }
 
     @Test
-    void 유일한_카테고리_관리자인_회원이_자신의_관리자_권한을_변경하려_하면_예외가_발생한다() {
+    void 유일한_카테고리_관리자인_회원이_자신의_권한을_변경하려_하면_예외가_발생한다() {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
@@ -194,7 +193,6 @@ class CategoryRoleServiceTest extends ServiceTest {
                 .isInstanceOf(NotAbleToChangeRoleException.class);
     }
 
-    @DisplayName("개인 카테고리에 대한 회원의 역할을 변경할 경우 예외가 발생한다.")
     @Test
     void 개인_카테고리에_대한_회원의_권한을_변경하려_하면_예외가_발생한다() {
         // given
