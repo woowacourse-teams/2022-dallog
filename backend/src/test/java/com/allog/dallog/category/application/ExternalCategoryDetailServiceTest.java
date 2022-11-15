@@ -1,18 +1,26 @@
 package com.allog.dallog.category.application;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_BE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.외부_FE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
+import static com.allog.dallog.category.domain.CategoryType.GOOGLE;
+import static com.allog.dallog.common.Constants.나인_이름;
+import static com.allog.dallog.common.Constants.나인_이메일;
+import static com.allog.dallog.common.Constants.나인_프로필_URL;
+import static com.allog.dallog.common.Constants.외부_카테고리_ID;
+import static com.allog.dallog.common.Constants.외부_카테고리_이름;
+import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
+import com.allog.dallog.category.domain.CategoryType;
 import com.allog.dallog.category.domain.ExternalCategoryDetail;
 import com.allog.dallog.category.domain.ExternalCategoryDetailRepository;
-import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.subscription.domain.Subscription;
+import com.allog.dallog.subscription.domain.SubscriptionRepository;
 import java.util.List;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +30,7 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     private ExternalCategoryDetailService externalCategoryDetailService;
 
     @Autowired
-    private CategoryService categoryService;
+    private MemberRepository memberRepository;
 
     @Autowired
     private ExternalCategoryDetailRepository externalCategoryDetailRepository;
@@ -30,25 +38,48 @@ class ExternalCategoryDetailServiceTest extends ServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @DisplayName("월별 일정 조회 시, 회원 ID로 해당하는 외부 연동 카테고리 전체를 조회한다.")
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
     @Test
-    void 월별_일정_조회_시_회원_ID로_해당하는_외부_연동_카테고리의_전체를_조회한다() {
+    void 월별_일정을_조회하면_회원의_외부_카테고리_전체를_조회한다() {
         // given
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-
-        CategoryResponse 외부_BE_일정_응답 = categoryService.save(리버_id, 외부_BE_일정_생성_요청);
-        Category 외부_BE_일정 = categoryRepository.getById(외부_BE_일정_응답.getId());
-
-        CategoryResponse 외부_FE_일정_응답 = categoryService.save(리버_id, 외부_FE_일정_생성_요청);
-        Category 외부_FE_일정 = categoryRepository.getById(외부_FE_일정_응답.getId());
-
-        externalCategoryDetailRepository.save(new ExternalCategoryDetail(외부_BE_일정, "1111111"));
-        externalCategoryDetailRepository.save(new ExternalCategoryDetail(외부_FE_일정, "2222222"));
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .외부_카테고리를_등록한다(외부_카테고리_이름, GOOGLE);
 
         // when
-        List<ExternalCategoryDetail> details = externalCategoryDetailService.findByMemberId(리버_id);
+        List<ExternalCategoryDetail> actual = externalCategoryDetailService.findByMemberId(나인.회원().getId());
 
         // then
-        assertThat(details).hasSize(2);
+        assertThat(actual).hasSize(1);
+    }
+
+    private final class GivenBuilder {
+
+        private Member member;
+
+        private GivenBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
+            Member member = new Member(email, name, profile, SocialType.GOOGLE);
+            this.member = memberRepository.save(member);
+            return this;
+        }
+
+        private GivenBuilder 외부_카테고리를_등록한다(final String categoryName, final CategoryType categoryType) {
+            Category category = new Category(categoryName, this.member, categoryType);
+            ExternalCategoryDetail externalCategoryDetail = new ExternalCategoryDetail(category, 외부_카테고리_ID);
+            Subscription subscription = new Subscription(this.member, category, COLOR_1);
+            categoryRepository.save(category);
+            externalCategoryDetailRepository.save(externalCategoryDetail);
+            subscriptionRepository.save(subscription);
+            return this;
+        }
+
+        private Member 회원() {
+            return member;
+        }
+    }
+
+    private GivenBuilder 나인() {
+        return new GivenBuilder();
     }
 }

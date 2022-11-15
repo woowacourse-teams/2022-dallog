@@ -1,46 +1,70 @@
 package com.allog.dallog.member.application;
 
-import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
+import static com.allog.dallog.common.Constants.나인_이름;
+import static com.allog.dallog.common.Constants.나인_이메일;
+import static com.allog.dallog.common.Constants.나인_프로필_URL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.allog.dallog.common.annotation.ServiceTest;
+import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.member.domain.MemberRepository;
+import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.member.dto.request.MemberUpdateRequest;
-import com.allog.dallog.member.dto.response.MemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class MemberServiceTest extends ServiceTest {
 
+    private final MemberUpdateRequest 나인_이름_수정_요청 = new MemberUpdateRequest("텐");
+
     @Autowired
     private MemberService memberService;
 
-    @DisplayName("id를 통해 회원을 단건 조회한다.")
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @DisplayName("회원을 조회한다.")
     @Test
-    void id를_통해_회원을_단건_조회한다() {
+    void 회원을_조회한다() {
         // given
-        Long 파랑_id = toMemberId(파랑.getOAuthMember());
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
 
         // when & then
-        assertThat(memberService.findById(파랑_id).getId())
-                .isEqualTo(파랑_id);
+        assertThat(memberService.findById(나인.회원().getId()).getId())
+                .isEqualTo(나인.회원().getId());
     }
 
     @DisplayName("회원의 이름을 수정한다.")
     @Test
     void 회원의_이름을_수정한다() {
         // given
-        Long 매트_id = toMemberId(매트.getOAuthMember());
-
-        String 패트_이름 = "패트";
-        MemberUpdateRequest 매트_수정_요청 = new MemberUpdateRequest(패트_이름);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);;
 
         // when
-        memberService.update(매트_id, 매트_수정_요청);
+        memberService.update(나인.회원().getId(), 나인_이름_수정_요청);
 
         // then
-        MemberResponse actual = memberService.findById(매트_id);
-        assertThat(actual.getDisplayName()).isEqualTo(패트_이름);
+        Member actual = memberRepository.getById(나인.회원().getId());
+        assertThat(actual.getDisplayName()).isEqualTo("텐");
+    }
+
+    private final class GivenBuilder {
+
+        private Member member;
+
+        private GivenBuilder 회원_가입을_한다(final String email, final String name, final String profile) {
+            Member member = new Member(email, name, profile, SocialType.GOOGLE);
+            this.member = memberRepository.save(member);
+            return this;
+        }
+
+        private Member 회원() {
+            return member;
+        }
+    }
+
+    private GivenBuilder 나인() {
+        return new GivenBuilder();
     }
 }
