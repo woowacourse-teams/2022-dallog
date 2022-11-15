@@ -1,27 +1,26 @@
 package com.allog.dallog.subscription.application;
 
-import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_이름;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.FE_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
-import static com.allog.dallog.common.fixtures.MemberFixtures.관리자;
-import static com.allog.dallog.common.fixtures.MemberFixtures.후디;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.관리자;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.리버;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.매트;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.파랑;
-import static com.allog.dallog.common.fixtures.OAuthFixtures.후디;
+import static com.allog.dallog.category.domain.CategoryType.NORMAL;
+import static com.allog.dallog.category.domain.CategoryType.PERSONAL;
+import static com.allog.dallog.categoryrole.domain.CategoryRoleType.ADMIN;
+import static com.allog.dallog.categoryrole.domain.CategoryRoleType.NONE;
+import static com.allog.dallog.common.Constants.나인_이름;
+import static com.allog.dallog.common.Constants.나인_이메일;
+import static com.allog.dallog.common.Constants.나인_프로필_URL;
+import static com.allog.dallog.common.Constants.스터디_카테고리_이름;
+import static com.allog.dallog.common.Constants.취업_카테고리_이름;
+import static com.allog.dallog.common.Constants.티거_이름;
+import static com.allog.dallog.common.Constants.티거_이메일;
+import static com.allog.dallog.common.Constants.티거_프로필_URL;
+import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.exception.NoPermissionException;
-import com.allog.dallog.category.application.CategoryService;
 import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
-import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.category.domain.CategoryType;
 import com.allog.dallog.categoryrole.domain.CategoryRole;
 import com.allog.dallog.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.categoryrole.domain.CategoryRoleType;
@@ -29,7 +28,8 @@ import com.allog.dallog.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.common.annotation.ServiceTest;
 import com.allog.dallog.member.domain.Member;
 import com.allog.dallog.member.domain.MemberRepository;
-import com.allog.dallog.subscription.domain.Color;
+import com.allog.dallog.member.domain.SocialType;
+import com.allog.dallog.schedule.domain.Schedule;
 import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.subscription.dto.request.SubscriptionUpdateRequest;
@@ -37,9 +37,8 @@ import com.allog.dallog.subscription.dto.response.SubscriptionResponse;
 import com.allog.dallog.subscription.dto.response.SubscriptionsResponse;
 import com.allog.dallog.subscription.exception.ExistSubscriptionException;
 import com.allog.dallog.subscription.exception.InvalidSubscriptionException;
+import com.allog.dallog.subscription.exception.NoSuchSubscriptionException;
 import com.allog.dallog.subscription.exception.NotAbleToUnsubscribeException;
-import java.util.List;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -48,8 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 class SubscriptionServiceTest extends ServiceTest {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final SubscriptionUpdateRequest 구독_정보_변경_요청 = new SubscriptionUpdateRequest(COLOR_1, true);
 
     @Autowired
     private SubscriptionService subscriptionService;
@@ -66,243 +64,256 @@ class SubscriptionServiceTest extends ServiceTest {
     @Autowired
     private CategoryRoleRepository categoryRoleRepository;
 
-    @DisplayName("새로운 구독을 생성한다.")
     @Test
-    void 새로운_구독을_생성한다() {
+    void 구독을_생성한다() {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Long 리버_id = toMemberId(리버.getOAuthMember());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
         // when
-        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
+        SubscriptionResponse response = subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId());
 
         // then
-        assertThat(response.getCategory().getName()).isEqualTo(BE_일정_이름);
+        assertThat(response.getCategory().getName()).isEqualTo(취업_카테고리_이름);
     }
 
-    @DisplayName("자신이 생성하지 않은 개인 카테고리를 구독시 예외가 발생한다.")
     @Test
-    void 자신이_생성하지_않은_개인_카테고리를_구독시_예외가_발생한다() {
+    void 타인의_개인_카테고리를_구독하려하면_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse 후디_개인_학습_일정 = categoryService.save(후디_id, 내_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
-        Long 매트_id = toMemberId(매트.getOAuthMember());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(매트_id, 후디_개인_학습_일정.getId()))
+        assertThatThrownBy(() -> subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId()))
                 .isInstanceOf(NoPermissionException.class)
                 .hasMessage("구독 권한이 없는 카테고리입니다.");
     }
 
-    @DisplayName("이미 존재하는 구독 정보를 저장할 경우 예외를 던진다.")
     @Test
-    void 이미_존재하는_구독_정보를_저장할_경우_예외를_던진다() {
+    void 이미_구독한_카테고리를_다시_구독하려하면_예외가_발생한다() {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.save(후디_id, BE_일정.getId()))
+        assertThatThrownBy(() -> subscriptionService.save(나인.회원().getId(), 나인.카테고리().getId()))
                 .isInstanceOf(ExistSubscriptionException.class);
     }
 
-    @DisplayName("구독 id를 기반으로 단건 조회한다.")
     @Test
-    void 구독_id를_기반으로_단건_조회한다() {
+    void 단건_구독_정보를_조회한다() {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-        SubscriptionResponse 빨간색_구독 = subscriptionService.save(리버_id, BE_일정.getId());
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
         // when
-        Subscription subscription = subscriptionRepository.getById(빨간색_구독.getId());
+        Subscription actual = subscriptionRepository.getById(나인.구독().getId());
 
         // then
-        assertAll(() -> {
-            assertThat(subscription.getId()).isEqualTo(빨간색_구독.getId());
-            assertThat(subscription.getCategory().getId()).isEqualTo(BE_일정.getId());
-        });
+        assertThat(actual.getCategory().getId()).isEqualTo(나인.카테고리().getId());
     }
 
-    @DisplayName("회원 정보를 기반으로 구독 정보를 조회한다.")
     @Test
-    void 회원_정보를_기반으로_구독_정보를_조회한다() {
+    void 회원의_구독_목록을_조회한다() {
         // given
-        Long 관리자_id = toMemberId(관리자.getOAuthMember());
-        Long 매트_id = toMemberId(매트.getOAuthMember());
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(리버_id, FE_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        subscriptionService.save(후디_id, 공통_일정.getId());
-        subscriptionService.save(후디_id, BE_일정.getId());
-        subscriptionService.save(후디_id, FE_일정.getId());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+                .카테고리를_구독한다(나인.카테고리());
+
+        나인.카테고리를_생성한다(스터디_카테고리_이름, NORMAL);
+        티거.카테고리를_구독한다(나인.카테고리());
 
         // when
-        SubscriptionsResponse subscriptionsResponse = subscriptionService.findByMemberId(후디_id);
+        SubscriptionsResponse actual = subscriptionService.findByMemberId(티거.회원().getId());
 
         // then
-        assertThat(subscriptionsResponse.getSubscriptions()).hasSize(4);
+        assertThat(actual.getSubscriptions()).hasSize(2);
     }
 
-    @DisplayName("category id를 기반으로 구독 정보를 조회한다.")
-    @Test
-    void category_id를_기반으로_구독_정보를_조회한다() {
-        // given
-        Long 파랑_id = toMemberId(파랑.getOAuthMember());
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-        Long 매트_id = toMemberId(매트.getOAuthMember());
-
-        CategoryResponse BE_일정 = categoryService.save(매트_id, BE_일정_생성_요청);
-        subscriptionService.save(파랑_id, BE_일정.getId());
-        subscriptionService.save(리버_id, BE_일정.getId());
-        subscriptionService.save(후디_id, BE_일정.getId());
-
-        // when
-        List<Subscription> actual = subscriptionRepository.findByCategoryId(BE_일정.getId());
-
-        // then
-        assertThat(actual).hasSize(4);
-    }
-
-    @DisplayName("구독 정보를 수정한다.")
     @Test
     void 구독_정보를_수정한다() {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
-
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
-        Color color = Color.COLOR_1;
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when
-        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(color, true);
-        subscriptionService.update(response.getId(), 리버_id, request);
+        subscriptionService.update(나인.구독().getId(), 나인.회원().getId(), 구독_정보_변경_요청);
 
         // then
+        Subscription actual = subscriptionRepository.getById(나인.구독().getId());
         assertAll(() -> {
-            assertThat(request.getColor()).isEqualTo(color);
-            assertThat(request.isChecked()).isTrue();
+            assertThat(actual.getColor()).isEqualTo(COLOR_1);
+            assertThat(actual.isChecked()).isTrue();
         });
     }
 
-    @DisplayName("구독 정보 수정 시 존재하지 않는 색상인 경우 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#", "#00FF00"})
-    void 구독_정보_수정_시_존재하지_않는_색상인_경우_예외를_던진다(final String colorCode) {
+    void 존재하지_않는_색상으로_구독_정보를_수정하려_하면_예외가_발생한다(final String colorCode) {
         // given
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        CategoryResponse BE_일정 = categoryService.save(후디_id, BE_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Long 리버_id = toMemberId(리버.getOAuthMember());
-        SubscriptionResponse response = subscriptionService.save(리버_id, BE_일정.getId());
+        SubscriptionUpdateRequest 잘못된_구독_변경_요청 = new SubscriptionUpdateRequest(colorCode, true);
 
-        // when
-        SubscriptionUpdateRequest request = new SubscriptionUpdateRequest(colorCode, true);
-
-        // then
-        assertThatThrownBy(() -> subscriptionService.update(response.getId(), 리버_id, request))
+        // when & then
+        assertThatThrownBy(() -> subscriptionService.update(나인.구독().getId(), 나인.회원().getId(), 잘못된_구독_변경_요청))
                 .isInstanceOf(InvalidSubscriptionException.class);
     }
 
-    @DisplayName("구독 정보를 삭제한다.")
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        Long 관리자_id = toMemberId(관리자.getOAuthMember());
-        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
-        CategoryResponse BE_일정 = categoryService.save(관리자_id, BE_일정_생성_요청);
-        CategoryResponse FE_일정 = categoryService.save(관리자_id, FE_일정_생성_요청);
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Long 후디_id = toMemberId(후디.getOAuthMember());
-        SubscriptionResponse response = subscriptionService.save(후디_id, 공통_일정.getId());
-        subscriptionService.save(후디_id, BE_일정.getId());
-        subscriptionService.save(후디_id, FE_일정.getId());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+                .카테고리를_구독한다(나인.카테고리());
 
         // when
-        subscriptionService.delete(response.getId(), 후디_id);
+        subscriptionService.delete(티거.구독().getId(), 티거.회원().getId());
 
         // then
-        assertThat(subscriptionService.findByMemberId(후디_id).getSubscriptions()).hasSize(3);
+        assertThatThrownBy(() -> subscriptionRepository.getById(티거.구독().getId()))
+                .isInstanceOf(NoSuchSubscriptionException.class);
     }
 
-    @DisplayName("자신의 구독 정보가 아닌 구독을 삭제할 경우 예외를 던진다.")
     @Test
-    void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외를_던진다() {
+    void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외가_발생한다() {
         // given
-        Long 관리자_id = toMemberId(관리자.getOAuthMember());
-        Long 파랑_id = toMemberId(파랑.getOAuthMember());
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        CategoryResponse 공통_일정 = categoryService.save(관리자_id, 공통_일정_생성_요청);
-        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(파랑_id, 공통_일정.getId());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+                .카테고리를_구독한다(나인.카테고리());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 관리자_id))
+        assertThatThrownBy(() -> subscriptionService.delete(티거.구독().getId(), 나인.회원().getId()))
                 .isInstanceOf(NoPermissionException.class);
     }
 
     @Transactional
-    @DisplayName("카테고리를 구독하면 카테고리에 대한 NONE 역할이 생성된다")
     @Test
-    void 카테고리를_구독하면_카테고리에_대한_NONE_역할이_생성된다() {
+    void 카테고리를_구독하면_카테고리에_대한_구독자_권한이_생성된다() {
         // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
 
         // when
-        Member 후디 = memberRepository.save(후디());
-        subscriptionService.save(후디.getId(), 공통_일정.getId());
-
-        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
+        subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId());
 
         // then
+        CategoryRole actual = categoryRoleRepository.getByMemberIdAndCategoryId(티거.회원().getId(), 나인.카테고리().getId());
         assertThat(actual.getCategoryRoleType()).isEqualTo(CategoryRoleType.NONE);
     }
 
     @Transactional
-    @DisplayName("카테고리를 구독 해제하면 카테고리에 대한 역할이 제거된다")
     @Test
-    void 카테고리를_구독_해제하면_카테고리에_대한_역할이_제거된다() {
+    void 카테고리를_구독_해제하면_카테고리에_대한_권한이_제거된다() {
         // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Member 후디 = memberRepository.save(후디());
-        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+                .카테고리를_구독한다(나인.카테고리());
 
         // when
-        subscriptionService.delete(공통_일정_구독.getId(), 후디.getId());
+        subscriptionService.delete(티거.구독().getId(), 티거.회원().getId());
 
         // then
-        assertThatThrownBy(() -> categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId()))
+        assertThatThrownBy(() -> categoryRoleRepository.getByMemberIdAndCategoryId(티거.회원().getId(), 나인.카테고리().getId()))
                 .isInstanceOf(NoSuchCategoryRoleException.class);
     }
 
     @Transactional
-    @DisplayName("카테고리 역할이 NONE이 아닌 경우 카테고리를 구독 해제할 수 없다")
     @Test
-    void 카테고리_역할이_NONE이_아닌_경우_카테고리를_구독_해제할_수_없다() {
+    void 카테고리_권한이_관리자_일때_구독_해제를_하려하면_예외가_발생한다() {
         // given
-        Member 관리자 = memberRepository.save(관리자());
-        Category 공통_일정 = categoryRepository.save(공통_일정(관리자));
+        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
+                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        Member 후디 = memberRepository.save(후디());
-        SubscriptionResponse 공통_일정_구독 = subscriptionService.save(후디.getId(), 공통_일정.getId());
+        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
+                .카테고리를_구독한다(나인.카테고리());
 
-        CategoryRole 역할 = categoryRoleRepository.getByMemberIdAndCategoryId(후디.getId(), 공통_일정.getId());
-        역할.changeRole(CategoryRoleType.ADMIN);
+        나인.카테고리_관리_권한을_부여한다(티거.회원(), 나인.카테고리());
 
         // when & then
-        assertThatThrownBy(() -> subscriptionService.delete(공통_일정_구독.getId(), 후디.getId()))
+        assertThatThrownBy(() -> subscriptionService.delete(티거.구독().getId(), 티거.회원().getId()))
                 .isInstanceOf(NotAbleToUnsubscribeException.class);
+    }
+
+    private GivenBuilder 나인() {
+        return new GivenBuilder();
+    }
+
+    private GivenBuilder 티거() {
+        return new GivenBuilder();
+    }
+
+    private final class GivenBuilder {
+
+        private Member member;
+        private Category category;
+        private CategoryRole categoryRole;
+        private Subscription subscription;
+        private Schedule schedule;
+
+        private GivenBuilder 회원_가입을_한다(final String email, final String name,
+                                       final String profile) {
+            Member member = new Member(email, name, profile, SocialType.GOOGLE);
+            this.member = memberRepository.save(member);
+            return this;
+        }
+
+        private GivenBuilder 카테고리를_생성한다(final String categoryName,
+                                        final CategoryType categoryType) {
+            Category category = new Category(categoryName, this.member, categoryType);
+            CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
+            Subscription subscription = new Subscription(this.member, category, COLOR_1);
+            this.category = categoryRepository.save(category);
+            this.categoryRole = categoryRoleRepository.save(categoryRole);
+            this.subscription = subscriptionRepository.save(subscription);
+            return this;
+        }
+
+        private GivenBuilder 카테고리를_구독한다(final Category category) {
+            Subscription subscription = new Subscription(this.member, category, COLOR_1);
+            CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
+            this.subscription = subscriptionRepository.save(subscription);
+            this.categoryRole = categoryRoleRepository.save(categoryRole);
+            return this;
+        }
+
+        private GivenBuilder 카테고리_관리_권한을_부여한다(final Member otherMember, final Category category) {
+            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
+                    category.getId());
+            categoryRole.changeRole(ADMIN);
+            categoryRoleRepository.save(categoryRole);
+            return this;
+        }
+
+        private Member 회원() {
+            return member;
+        }
+
+        private Category 카테고리() {
+            return category;
+        }
+
+        private Subscription 구독() {
+            return subscription;
+        }
+
+        private Schedule 카테고리_일정() {
+            return schedule;
+        }
     }
 }
