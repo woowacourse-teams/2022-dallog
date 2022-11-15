@@ -56,7 +56,7 @@ import com.allog.dallog.categoryrole.dto.response.SubscribersResponse;
 import com.allog.dallog.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.categoryrole.exception.NotAbleToChangeRoleException;
-import com.allog.dallog.common.ControllerTest;
+import com.allog.dallog.common.annotation.ControllerTest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

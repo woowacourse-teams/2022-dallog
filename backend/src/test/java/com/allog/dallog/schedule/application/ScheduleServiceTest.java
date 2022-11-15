@@ -2,8 +2,6 @@ package com.allog.dallog.schedule.application;
 
 import static com.allog.dallog.category.domain.CategoryType.GOOGLE;
 import static com.allog.dallog.category.domain.CategoryType.NORMAL;
-import static com.allog.dallog.categoryrole.domain.CategoryRoleType.ADMIN;
-import static com.allog.dallog.categoryrole.domain.CategoryRoleType.NONE;
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
 import static com.allog.dallog.common.Constants.나인_프로필_URL;
@@ -17,28 +15,19 @@ import static com.allog.dallog.common.Constants.취업_일정_시작일;
 import static com.allog.dallog.common.Constants.취업_일정_제목;
 import static com.allog.dallog.common.Constants.취업_일정_종료일;
 import static com.allog.dallog.common.Constants.취업_카테고리_이름;
-import static com.allog.dallog.common.Constants.티거_이름;
-import static com.allog.dallog.common.Constants.티거_이메일;
-import static com.allog.dallog.common.Constants.티거_프로필_URL;
-import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.auth.domain.OAuthToken;
 import com.allog.dallog.auth.domain.OAuthTokenRepository;
 import com.allog.dallog.auth.exception.NoPermissionException;
-import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
-import com.allog.dallog.category.domain.CategoryType;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
-import com.allog.dallog.categoryrole.domain.CategoryRole;
 import com.allog.dallog.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.common.builder.GivenBuilder;
 import com.allog.dallog.member.domain.MemberRepository;
-import com.allog.dallog.member.domain.SocialType;
 import com.allog.dallog.schedule.domain.IntegrationSchedule;
 import com.allog.dallog.schedule.domain.Schedule;
 import com.allog.dallog.schedule.domain.ScheduleRepository;
@@ -50,7 +39,6 @@ import com.allog.dallog.schedule.dto.response.IntegrationScheduleResponses;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import com.allog.dallog.schedule.exception.InvalidScheduleException;
 import com.allog.dallog.schedule.exception.NoSuchScheduleException;
-import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.domain.SubscriptionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -88,8 +76,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 관리_권한이_있는_회원은_카테고리에_새로운_일정을_생성할_수_있다() {
         // given & when
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // then
@@ -99,12 +86,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 관리_권한이_없는_회원이_카고리에_새로운_일정을_생성하려_하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(티거.회원().getId(), 나인.카테고리().getId(), 취업_일정_생성_요청))
@@ -115,12 +100,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_관리_권한이_없으면_새로운_일정을_생성할_때_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         나인.카테고리_관리_권한을_부여한다(티거.회원(), 나인.카테고리());
         티거.카테고리_관리_권한을_해제한다(나인.회원(), 나인.카테고리());
@@ -133,8 +116,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_일정_제목의_길이가_50을_초과하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         String 잘못된_일정_제목 = "일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일이삼사오육칠팔구십일일이삼사오육칠팔구십일";
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(잘못된_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
@@ -147,8 +129,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_일정_메모의_길이가_255를_초과하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         String 잘못된_일정_메모 = "1".repeat(256);
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 잘못된_일정_메모);
@@ -161,8 +142,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 새로운_일정을_생성_할_때_종료일시가_시작일시_이전이라면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         ScheduleCreateRequest 잘못된_일정_생성_요청 = new ScheduleCreateRequest(취업_일정_제목, 취업_일정_종료일, 취업_일정_시작일, 취업_일정_메모);
 
@@ -174,7 +154,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 존재하지_않는_카테고리에_일정을_추가하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL);
+        GivenBuilder 나인 = 나인();
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(나인.회원().getId(), 0L, 취업_일정_생성_요청)).
@@ -184,8 +164,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 외부_연동_카테고리에_일정을_추가하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, GOOGLE);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, GOOGLE);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.save(나인.회원().getId(), 나인.카테고리().getId(), 취업_일정_생성_요청)).
@@ -195,8 +174,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 단건_일정을_조회한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // when
@@ -226,8 +204,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 월별_일정_조회를_하면_통합일정_정보를_반환한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모)
                 .일정을_생성한다(면접_일정_제목, 면접_일정_시작일, 면접_일정_종료일, 면접_일정_메모);
 
@@ -272,8 +249,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정을_수정한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // when
@@ -296,12 +272,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 관리_권한이_없는_회원이_카테고리의_일정을_수정하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when & then
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(나인.카테고리().getId(), "제목", 취업_일정_시작일, 취업_일정_종료일, "메모");
@@ -314,12 +288,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_관리_권한이_없으면_카테고리의_일정을_수정할_떄_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         나인.카테고리_관리_권한을_부여한다(티거.회원(), 나인.카테고리());
         티거.카테고리_관리_권한을_해제한다(나인.회원(), 나인.카테고리());
@@ -334,8 +306,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 존재하지_않은_일정을_수정하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when & then
         ScheduleUpdateRequest 일정_수정_요청 = new ScheduleUpdateRequest(나인.카테고리().getId(), "제목", 취업_일정_시작일, 취업_일정_종료일, "메모");
@@ -347,8 +318,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 일정의_카테고리를_변경한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         Schedule 기존_일정 = 나인.카테고리_일정();
@@ -366,8 +336,7 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 관리_권한이_있는_회원은_카테고리의_일정을_삭제할_수_있다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
         // when
@@ -381,12 +350,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 관리_권한이_없는_회원이_카테고리의_일정을_삭제하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when & then
         assertThatThrownBy(() -> scheduleService.delete(나인.카테고리_일정().getId(), 티거.회원().getId()))
@@ -397,12 +364,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 카테고리_생성자라도_관리_권한이_없으면_일정을_삭제하려할때_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         나인.카테고리_관리_권한을_부여한다(티거.회원(), 나인.카테고리());
         티거.카테고리_관리_권한을_해제한다(나인.회원(), 나인.카테고리());
@@ -415,96 +380,10 @@ class ScheduleServiceTest extends ServiceTest {
     @Test
     void 존재하지_않은_일정을_삭제하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when & then
         assertThatThrownBy(() -> scheduleService.delete(0L, 나인.회원().getId()))
                 .isInstanceOf(NoSuchScheduleException.class);
-    }
-
-    private GivenBuilder 나인() {
-        return new GivenBuilder();
-    }
-
-    private GivenBuilder 티거() {
-        return new GivenBuilder();
-    }
-
-    private final class GivenBuilder {
-
-        private Member member;
-        private Category category;
-        private CategoryRole categoryRole;
-        private Subscription subscription;
-        private Schedule schedule;
-
-        private GivenBuilder 회원_가입을_한다(final String email, final String name,
-                                       final String profile) {
-            Member member = new Member(email, name, profile, SocialType.GOOGLE);
-            this.member = memberRepository.save(member);
-            OAuthToken oAuthToken = new OAuthToken(this.member, "aaa");
-            oAuthTokenRepository.save(oAuthToken);
-            return this;
-        }
-
-        private GivenBuilder 카테고리를_생성한다(final String categoryName,
-                                        final CategoryType categoryType) {
-            Category category = new Category(categoryName, this.member, categoryType);
-            CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
-            this.category = categoryRepository.save(category);
-            this.categoryRole = categoryRoleRepository.save(categoryRole);
-            this.subscription = subscriptionRepository.save(subscription);
-            return this;
-        }
-
-        private GivenBuilder 카테고리를_구독한다(final Category category) {
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
-            CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
-            this.subscription = subscriptionRepository.save(subscription);
-            this.categoryRole = categoryRoleRepository.save(categoryRole);
-            return this;
-        }
-
-        private GivenBuilder 카테고리_관리_권한을_부여한다(final Member otherMember, final Category category) {
-            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
-                    category.getId());
-            categoryRole.changeRole(ADMIN);
-            categoryRoleRepository.save(categoryRole);
-            return this;
-        }
-
-        private GivenBuilder 카테고리_관리_권한을_해제한다(final Member otherMember, final Category category) {
-            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
-                    category.getId());
-            categoryRole.changeRole(NONE);
-            categoryRoleRepository.save(categoryRole);
-            return this;
-        }
-
-        private GivenBuilder 일정을_생성한다(final String title, final LocalDateTime start,
-                                      final LocalDateTime end,
-                                      final String memo) {
-            Schedule schedule = new Schedule(this.category, title, start, end, memo);
-            this.schedule = scheduleRepository.save(schedule);
-            return this;
-        }
-
-        private Member 회원() {
-            return member;
-        }
-
-        private Category 카테고리() {
-            return category;
-        }
-
-        private Subscription 구독() {
-            return subscription;
-        }
-
-        private Schedule 카테고리_일정() {
-            return schedule;
-        }
     }
 }

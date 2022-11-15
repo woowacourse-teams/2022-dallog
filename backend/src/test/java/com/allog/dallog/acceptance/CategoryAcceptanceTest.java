@@ -13,6 +13,7 @@ import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상�
 import static com.allog.dallog.acceptance.fixtures.CommonAcceptanceFixtures.상태코드_204가_반환된다;
 import static com.allog.dallog.acceptance.fixtures.MemberAcceptanceFixtures.자신의_정보를_조회한다;
 import static com.allog.dallog.acceptance.fixtures.SubscriptionAcceptanceFixtures.카테고리를_구독한다;
+import static com.allog.dallog.categoryrole.domain.CategoryRoleType.ADMIN;
 import static com.allog.dallog.common.fixtures.AuthFixtures.GOOGLE_PROVIDER;
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_MEMBER_인증_코드;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.BE_일정_생성_요청;
@@ -21,15 +22,14 @@ import static com.allog.dallog.common.fixtures.CategoryFixtures.공통_일정_�
 import static com.allog.dallog.common.fixtures.CategoryFixtures.내_일정_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.매트_아고라_생성_요청;
 import static com.allog.dallog.common.fixtures.CategoryFixtures.후디_JPA_스터디_생성_요청;
-import static com.allog.dallog.categoryrole.domain.CategoryRoleType.ADMIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.category.dto.response.CategoriesResponse;
 import com.allog.dallog.category.dto.response.CategoryDetailResponse;
 import com.allog.dallog.category.dto.response.CategoryResponse;
 import com.allog.dallog.categoryrole.dto.request.CategoryRoleUpdateRequest;
+import com.allog.dallog.common.fixtures.OAuthFixtures;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;

@@ -8,5 +8,5 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 @Import(JpaConfig.class)
 @ActiveProfiles("test")
-public class RepositoryTest {
+public abstract class RepositoryTest {
 }

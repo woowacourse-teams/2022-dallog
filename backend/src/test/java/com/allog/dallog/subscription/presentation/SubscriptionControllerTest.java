@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.dto.response.CategoryResponse;
-import com.allog.dallog.common.ControllerTest;
+import com.allog.dallog.common.annotation.ControllerTest;
 import com.allog.dallog.subscription.domain.Color;
 import com.allog.dallog.subscription.dto.request.SubscriptionUpdateRequest;
 import com.allog.dallog.subscription.dto.response.SubscriptionResponse;

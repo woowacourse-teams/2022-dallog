@@ -2,10 +2,10 @@ package com.allog.dallog.infrastructure.oauth.client;
 
 import static com.allog.dallog.common.fixtures.AuthFixtures.STUB_OAUTH_ACCESS_TOKEN;
 
-import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.auth.application.OAuthClient;
 import com.allog.dallog.auth.dto.OAuthMember;
 import com.allog.dallog.auth.dto.response.OAuthAccessTokenResponse;
+import com.allog.dallog.common.fixtures.OAuthFixtures;
 
 public class StubOAuthClient implements OAuthClient {
 

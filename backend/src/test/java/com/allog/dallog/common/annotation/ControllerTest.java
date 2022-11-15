@@ -1,4 +1,4 @@
-package com.allog.dallog.common;
+package com.allog.dallog.common.annotation;
 
 import com.allog.dallog.auth.application.AuthService;
 import com.allog.dallog.auth.application.OAuthUri;

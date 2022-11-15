@@ -2,8 +2,6 @@ package com.allog.dallog.subscription.application;
 
 import static com.allog.dallog.category.domain.CategoryType.NORMAL;
 import static com.allog.dallog.category.domain.CategoryType.PERSONAL;
-import static com.allog.dallog.categoryrole.domain.CategoryRoleType.ADMIN;
-import static com.allog.dallog.categoryrole.domain.CategoryRoleType.NONE;
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
 import static com.allog.dallog.common.Constants.나인_프로필_URL;
@@ -18,18 +16,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.allog.dallog.auth.exception.NoPermissionException;
-import com.allog.dallog.category.domain.Category;
 import com.allog.dallog.category.domain.CategoryRepository;
-import com.allog.dallog.category.domain.CategoryType;
 import com.allog.dallog.categoryrole.domain.CategoryRole;
 import com.allog.dallog.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.categoryrole.domain.CategoryRoleType;
 import com.allog.dallog.categoryrole.exception.NoSuchCategoryRoleException;
 import com.allog.dallog.common.annotation.ServiceTest;
-import com.allog.dallog.member.domain.Member;
+import com.allog.dallog.common.builder.GivenBuilder;
 import com.allog.dallog.member.domain.MemberRepository;
-import com.allog.dallog.member.domain.SocialType;
-import com.allog.dallog.schedule.domain.Schedule;
 import com.allog.dallog.subscription.domain.Subscription;
 import com.allog.dallog.subscription.domain.SubscriptionRepository;
 import com.allog.dallog.subscription.dto.request.SubscriptionUpdateRequest;
@@ -67,10 +61,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독을_생성한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 티거 = 티거();
 
         // when
         SubscriptionResponse response = subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId());
@@ -82,10 +75,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 타인의_개인_카테고리를_구독하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 티거 = 티거();
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId()))
@@ -96,8 +88,7 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 이미_구독한_카테고리를_다시_구독하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.save(나인.회원().getId(), 나인.카테고리().getId()))
@@ -107,8 +98,7 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 단건_구독_정보를_조회한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, PERSONAL);
 
         // when
         Subscription actual = subscriptionRepository.getById(나인.구독().getId());
@@ -120,11 +110,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 회원의_구독_목록을_조회한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         나인.카테고리를_생성한다(스터디_카테고리_이름, NORMAL);
         티거.카테고리를_구독한다(나인.카테고리());
@@ -139,8 +127,7 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독_정보를_수정한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         // when
         subscriptionService.update(나인.구독().getId(), 나인.회원().getId(), 구독_정보_변경_요청);
@@ -157,8 +144,7 @@ class SubscriptionServiceTest extends ServiceTest {
     @ValueSource(strings = {"#111", "#1111", "#11111", "123456", "#**1234", "##12345", "334172#", "#00FF00"})
     void 존재하지_않는_색상으로_구독_정보를_수정하려_하면_예외가_발생한다(final String colorCode) {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
         SubscriptionUpdateRequest 잘못된_구독_변경_요청 = new SubscriptionUpdateRequest(colorCode, true);
 
@@ -170,11 +156,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 구독_정보를_삭제한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when
         subscriptionService.delete(티거.구독().getId(), 티거.회원().getId());
@@ -187,11 +171,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 자신의_구독_정보가_아닌_구독을_삭제할_경우_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.delete(티거.구독().getId(), 나인.회원().getId()))
@@ -202,10 +184,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 카테고리를_구독하면_카테고리에_대한_구독자_권한이_생성된다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL);
+        GivenBuilder 티거 = 티거();
 
         // when
         subscriptionService.save(티거.회원().getId(), 나인.카테고리().getId());
@@ -219,11 +200,9 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 카테고리를_구독_해제하면_카테고리에_대한_권한이_제거된다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         // when
         subscriptionService.delete(티거.구독().getId(), 티거.회원().getId());
@@ -237,83 +216,14 @@ class SubscriptionServiceTest extends ServiceTest {
     @Test
     void 카테고리_권한이_관리자_일때_구독_해제를_하려하면_예외가_발생한다() {
         // given
-        GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
-                .카테고리를_생성한다(취업_카테고리_이름, NORMAL);
+        GivenBuilder 나인 = 나인().카테고리를_생성한다(취업_카테고리_이름, NORMAL);
 
-        GivenBuilder 티거 = 티거().회원_가입을_한다(티거_이메일, 티거_이름, 티거_프로필_URL)
-                .카테고리를_구독한다(나인.카테고리());
+        GivenBuilder 티거 = 티거().카테고리를_구독한다(나인.카테고리());
 
         나인.카테고리_관리_권한을_부여한다(티거.회원(), 나인.카테고리());
 
         // when & then
         assertThatThrownBy(() -> subscriptionService.delete(티거.구독().getId(), 티거.회원().getId()))
                 .isInstanceOf(NotAbleToUnsubscribeException.class);
-    }
-
-    private GivenBuilder 나인() {
-        return new GivenBuilder();
-    }
-
-    private GivenBuilder 티거() {
-        return new GivenBuilder();
-    }
-
-    private final class GivenBuilder {
-
-        private Member member;
-        private Category category;
-        private CategoryRole categoryRole;
-        private Subscription subscription;
-        private Schedule schedule;
-
-        private GivenBuilder 회원_가입을_한다(final String email, final String name,
-                                       final String profile) {
-            Member member = new Member(email, name, profile, SocialType.GOOGLE);
-            this.member = memberRepository.save(member);
-            return this;
-        }
-
-        private GivenBuilder 카테고리를_생성한다(final String categoryName,
-                                        final CategoryType categoryType) {
-            Category category = new Category(categoryName, this.member, categoryType);
-            CategoryRole categoryRole = new CategoryRole(category, this.member, ADMIN);
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
-            this.category = categoryRepository.save(category);
-            this.categoryRole = categoryRoleRepository.save(categoryRole);
-            this.subscription = subscriptionRepository.save(subscription);
-            return this;
-        }
-
-        private GivenBuilder 카테고리를_구독한다(final Category category) {
-            Subscription subscription = new Subscription(this.member, category, COLOR_1);
-            CategoryRole categoryRole = new CategoryRole(category, this.member, NONE);
-            this.subscription = subscriptionRepository.save(subscription);
-            this.categoryRole = categoryRoleRepository.save(categoryRole);
-            return this;
-        }
-
-        private GivenBuilder 카테고리_관리_권한을_부여한다(final Member otherMember, final Category category) {
-            CategoryRole categoryRole = categoryRoleRepository.getByMemberIdAndCategoryId(otherMember.getId(),
-                    category.getId());
-            categoryRole.changeRole(ADMIN);
-            categoryRoleRepository.save(categoryRole);
-            return this;
-        }
-
-        private Member 회원() {
-            return member;
-        }
-
-        private Category 카테고리() {
-            return category;
-        }
-
-        private Subscription 구독() {
-            return subscription;
-        }
-
-        private Schedule 카테고리_일정() {
-            return schedule;
-        }
     }
 }
