@@ -49,7 +49,8 @@ public interface CategoryRoleRepository extends JpaRepository<CategoryRole, Long
     default void validateManagingCategoryLimit(final Long memberId, final CategoryRoleType categoryRoleType) {
         int memberAdminCount = countByMemberIdAndCategoryRoleType(memberId, CategoryRoleType.ADMIN);
 
-        if (!categoryRoleType.equals(CategoryRoleType.NONE) && memberAdminCount >= CategoryRole.MAX_MANAGING_CATEGORY_COUNT) {
+        if (!categoryRoleType.equals(CategoryRoleType.NONE)
+                && memberAdminCount >= CategoryRole.MAX_MANAGING_CATEGORY_COUNT) {
             throw new ManagingCategoryLimitExcessException();
         }
     }
