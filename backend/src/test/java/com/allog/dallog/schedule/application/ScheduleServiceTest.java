@@ -30,10 +30,10 @@ import static com.allog.dallog.common.Constants.취업_카테고리_이름;
 import static com.allog.dallog.common.Constants.티거_이름;
 import static com.allog.dallog.common.Constants.티거_이메일;
 import static com.allog.dallog.common.Constants.티거_프로필_URL;
-import static com.allog.dallog.common.Constants.핵클_일정_메모;
-import static com.allog.dallog.common.Constants.핵클_일정_시작일;
-import static com.allog.dallog.common.Constants.핵클_일정_제목;
-import static com.allog.dallog.common.Constants.핵클_일정_종료일;
+import static com.allog.dallog.common.Constants.면접_일정_메모;
+import static com.allog.dallog.common.Constants.면접_일정_시작일;
+import static com.allog.dallog.common.Constants.면접_일정_제목;
+import static com.allog.dallog.common.Constants.면접_일정_종료일;
 import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -243,7 +243,7 @@ class ScheduleServiceTest extends ServiceTest {
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
                 .일정을_생성한다(취업_일정_제목, 취업_일정_시작일, 취업_일정_종료일, 취업_일정_메모)
-                .일정을_생성한다(핵클_일정_제목, 핵클_일정_시작일, 핵클_일정_종료일, 핵클_일정_메모);
+                .일정을_생성한다(면접_일정_제목, 면접_일정_시작일, 면접_일정_종료일, 면접_일정_메모);
 
         // when
         List<IntegrationSchedule> actual = scheduleService.findInternalByMemberIdAndDateRange(나인.회원().getId(),

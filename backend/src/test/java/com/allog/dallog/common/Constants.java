@@ -23,10 +23,10 @@ public class Constants {
     public static final LocalDateTime 취업_일정_시작일 = LocalDateTime.of(2022, 7, 1, 0, 0);
     public static final LocalDateTime 취업_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
 
-    public static final String 핵클_일정_제목 = "취업 일정";
-    public static final String 핵클_일정_메모 = "취업 일정 메모";
-    public static final LocalDateTime 핵클_일정_시작일 = LocalDateTime.of(2022, 7, 3, 0, 0);
-    public static final LocalDateTime 핵클_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
+    public static final String 면접_일정_제목 = "취업 일정";
+    public static final String 면접_일정_메모 = "취업 일정 메모";
+    public static final LocalDateTime 면접_일정_시작일 = LocalDateTime.of(2022, 7, 3, 0, 0);
+    public static final LocalDateTime 면접_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
 
     public static final LocalDateTime 날짜_2022년_7월_1일_0시_0분 = LocalDateTime.of(2022, 7, 1, 0, 0);
     public static final LocalDateTime 날짜_2022년_7월_7일_16시_0분 = LocalDateTime.of(2022, 7, 7, 16, 0);
