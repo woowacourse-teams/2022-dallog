@@ -7,32 +7,34 @@ import com.allog.dallog.categoryrole.domain.CategoryRoleRepository;
 import com.allog.dallog.member.domain.MemberRepository;
 import com.allog.dallog.schedule.domain.ScheduleRepository;
 import com.allog.dallog.subscription.domain.SubscriptionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BuilderSupporter {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final OAuthTokenRepository oAuthTokenRepository;
+    private final CategoryRepository categoryRepository;
+    private final ExternalCategoryDetailRepository externalCategoryDetailRepository;
+    private final CategoryRoleRepository categoryRoleRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final ScheduleRepository scheduleRepository;
 
-    @Autowired
-    private OAuthTokenRepository oAuthTokenRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ExternalCategoryDetailRepository externalCategoryDetailRepository;
-
-    @Autowired
-    private CategoryRoleRepository categoryRoleRepository;
-
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+    public BuilderSupporter(final MemberRepository memberRepository,
+                            final OAuthTokenRepository oAuthTokenRepository,
+                            final CategoryRepository categoryRepository,
+                            final ExternalCategoryDetailRepository externalCategoryDetailRepository,
+                            final CategoryRoleRepository categoryRoleRepository,
+                            final SubscriptionRepository subscriptionRepository,
+                            final ScheduleRepository scheduleRepository) {
+        this.memberRepository = memberRepository;
+        this.oAuthTokenRepository = oAuthTokenRepository;
+        this.categoryRepository = categoryRepository;
+        this.externalCategoryDetailRepository = externalCategoryDetailRepository;
+        this.categoryRoleRepository = categoryRoleRepository;
+        this.subscriptionRepository = subscriptionRepository;
+        this.scheduleRepository = scheduleRepository;
+    }
 
     public MemberRepository memberRepository() {
         return memberRepository;

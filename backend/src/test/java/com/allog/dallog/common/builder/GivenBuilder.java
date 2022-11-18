@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 public final class GivenBuilder {
 
     private final BuilderSupporter bs;
-
     private Member member;
     private Category category;
     private CategoryRole categoryRole;
