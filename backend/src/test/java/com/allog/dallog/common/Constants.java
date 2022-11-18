@@ -27,19 +27,4 @@ public class Constants {
     public static final String 면접_일정_메모 = "취업 일정 메모";
     public static final LocalDateTime 면접_일정_시작일 = LocalDateTime.of(2022, 7, 3, 0, 0);
     public static final LocalDateTime 면접_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
-
-    public static final LocalDateTime 날짜_2022년_7월_1일_0시_0분 = LocalDateTime.of(2022, 7, 1, 0, 0);
-    public static final LocalDateTime 날짜_2022년_7월_7일_16시_0분 = LocalDateTime.of(2022, 7, 7, 16, 0);
-    public static final LocalDateTime 날짜_2022년_7월_10일_0시_0분 = LocalDateTime.of(2022, 7, 10, 0, 0);
-    public static final LocalDateTime 날짜_2022년_7월_11일_0시_0분 = LocalDateTime.of(2022, 7, 11, 0, 0);
-    public static final LocalDateTime 날짜_2022년_7월_15일_16시_0분 = LocalDateTime.of(2022, 7, 15, 16, 0);
-    public static final LocalDateTime 날짜_2022년_7월_16일_16시_0분 = LocalDateTime.of(2022, 7, 16, 16, 0);
-    public static final LocalDateTime 날짜_2022년_7월_16일_16시_1분 = LocalDateTime.of(2022, 7, 16, 16, 1);
-    public static final LocalDateTime 날짜_2022년_7월_16일_18시_0분 = LocalDateTime.of(2022, 7, 16, 18, 0);
-    public static final LocalDateTime 날짜_2022년_7월_16일_20시_0분 = LocalDateTime.of(2022, 7, 16, 20, 0);
-    public static final LocalDateTime 날짜_2022년_7월_27일_0시_0분 = LocalDateTime.of(2022, 7, 27, 0, 0);
-    public static final LocalDateTime 날짜_2022년_7월_28일_0시_0분 = LocalDateTime.of(2022, 7, 28, 0, 0);
-    public static final LocalDateTime 날짜_2022년_7월_31일_0시_0분 = LocalDateTime.of(2022, 7, 31, 0, 0);
-    public static final LocalDateTime 날짜_2022년_8월_15일_14시_0분 = LocalDateTime.of(2022, 8, 15, 14, 0);
-    public static final LocalDateTime 날짜_2022년_8월_15일_17시_0분 = LocalDateTime.of(2022, 8, 15, 17, 0);
 }

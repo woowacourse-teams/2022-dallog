@@ -7,20 +7,10 @@ import static com.allog.dallog.categoryrole.domain.CategoryRoleType.NONE;
 import static com.allog.dallog.common.Constants.나인_이름;
 import static com.allog.dallog.common.Constants.나인_이메일;
 import static com.allog.dallog.common.Constants.나인_프로필_URL;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_10일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_11일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_15일_16시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_16일_16시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_16일_16시_1분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_16일_18시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_16일_20시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_1일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_27일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_28일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_31일_0시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_7월_7일_16시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_8월_15일_14시_0분;
-import static com.allog.dallog.common.Constants.날짜_2022년_8월_15일_17시_0분;
+import static com.allog.dallog.common.Constants.면접_일정_메모;
+import static com.allog.dallog.common.Constants.면접_일정_시작일;
+import static com.allog.dallog.common.Constants.면접_일정_제목;
+import static com.allog.dallog.common.Constants.면접_일정_종료일;
 import static com.allog.dallog.common.Constants.스터디_카테고리_이름;
 import static com.allog.dallog.common.Constants.취업_일정_메모;
 import static com.allog.dallog.common.Constants.취업_일정_시작일;
@@ -30,10 +20,6 @@ import static com.allog.dallog.common.Constants.취업_카테고리_이름;
 import static com.allog.dallog.common.Constants.티거_이름;
 import static com.allog.dallog.common.Constants.티거_이메일;
 import static com.allog.dallog.common.Constants.티거_프로필_URL;
-import static com.allog.dallog.common.Constants.면접_일정_메모;
-import static com.allog.dallog.common.Constants.면접_일정_시작일;
-import static com.allog.dallog.common.Constants.면접_일정_제목;
-import static com.allog.dallog.common.Constants.면접_일정_종료일;
 import static com.allog.dallog.subscription.domain.Color.COLOR_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -258,15 +244,15 @@ class ScheduleServiceTest extends ServiceTest {
         // given
         GivenBuilder 나인 = 나인().회원_가입을_한다(나인_이메일, 나인_이름, 나인_프로필_URL)
                 .카테고리를_생성한다(취업_카테고리_이름, NORMAL)
-                .일정을_생성한다("첫번째 장기 일정", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_8월_15일_14시_0분, "")
-                .일정을_생성한다("두번째 장기 일정", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_31일_0시_0분, "")
-                .일정을_생성한다("세번째 장기 일정", 날짜_2022년_7월_1일_0시_0분, 날짜_2022년_7월_16일_16시_1분, "")
-                .일정을_생성한다("네번째 장기 일정", 날짜_2022년_7월_7일_16시_0분, 날짜_2022년_7월_15일_16시_0분, "")
-                .일정을_생성한다("다섯번째 장기 일정", 날짜_2022년_7월_31일_0시_0분, 날짜_2022년_8월_15일_17시_0분, "")
-                .일정을_생성한다("첫번째 종일 일정", 날짜_2022년_7월_10일_0시_0분, 날짜_2022년_7월_11일_0시_0분, "")
-                .일정을_생성한다("두번째 종일 일정", 날짜_2022년_7월_27일_0시_0분, 날짜_2022년_7월_28일_0시_0분, "")
-                .일정을_생성한다("첫번째 몇시간 일정", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_20시_0분, "")
-                .일정을_생성한다("두번째 몇시간 일정", 날짜_2022년_7월_16일_16시_0분, 날짜_2022년_7월_16일_18시_0분, "");
+                .일정을_생성한다("첫번째 장기 일정", LocalDateTime.of(2022, 7, 1, 0, 0), LocalDateTime.of(2022, 8, 15, 14, 0), "")
+                .일정을_생성한다("두번째 장기 일정", LocalDateTime.of(2022, 7, 1, 0, 0), LocalDateTime.of(2022, 7, 31, 0, 0), "")
+                .일정을_생성한다("세번째 장기 일정", LocalDateTime.of(2022, 7, 1, 0, 0), LocalDateTime.of(2022, 7, 16, 16, 1), "")
+                .일정을_생성한다("네번째 장기 일정", LocalDateTime.of(2022, 7, 7, 16, 0), LocalDateTime.of(2022, 7, 15, 16, 0), "")
+                .일정을_생성한다("다섯번째 장기 일정", LocalDateTime.of(2022, 7, 31, 0, 0), LocalDateTime.of(2022, 8, 15, 17, 0), "")
+                .일정을_생성한다("첫번째 종일 일정", LocalDateTime.of(2022, 7, 10, 0, 0), LocalDateTime.of(2022, 7, 11, 0, 0), "")
+                .일정을_생성한다("두번째 종일 일정", LocalDateTime.of(2022, 7, 27, 0, 0), LocalDateTime.of(2022, 7, 28, 0, 0), "")
+                .일정을_생성한다("첫번째 몇시간 일정", LocalDateTime.of(2022, 7, 16, 16, 0), LocalDateTime.of(2022, 7, 16, 20, 0), "")
+                .일정을_생성한다("두번째 몇시간 일정", LocalDateTime.of(2022, 7, 16, 16, 0), LocalDateTime.of(2022, 7, 16, 18, 0), "");
 
         // when
         IntegrationScheduleResponses actual = scheduleService.findByCategoryIdAndDateRange(나인.카테고리().getId(),
