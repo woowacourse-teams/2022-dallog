@@ -22,4 +22,9 @@ public class Constants {
     public static final String 취업_일정_메모 = "취업 일정 메모";
     public static final LocalDateTime 취업_일정_시작일 = LocalDateTime.of(2022, 7, 1, 0, 0);
     public static final LocalDateTime 취업_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
+
+    public static final String 면접_일정_제목 = "취업 일정";
+    public static final String 면접_일정_메모 = "취업 일정 메모";
+    public static final LocalDateTime 면접_일정_시작일 = LocalDateTime.of(2022, 7, 3, 0, 0);
+    public static final LocalDateTime 면접_일정_종료일 = LocalDateTime.of(2022, 7, 7, 16, 0);
 }
