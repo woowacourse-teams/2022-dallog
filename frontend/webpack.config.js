@@ -3,8 +3,6 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require('compression-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -26,10 +24,6 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'babel-loader',
-      },
-      {
-        test: /\\.css$/,
-        use: [prod ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jp(e*)g|gif)$/,
@@ -57,7 +51,6 @@ module.exports = {
       favicon: './src/assets/dallog_color.png',
     }),
     new Dotenv(),
-    new MiniCssExtractPlugin(),
     new BundleAnalyzerPlugin({
       analyzerMode: 'disabled',
       generateStatsFile: true,
@@ -72,6 +65,6 @@ module.exports = {
     hot: true,
   },
   optimization: {
-    minimizer: ['...', new CssMinimizerPlugin()],
+    minimizer: ['...'],
   },
 };
