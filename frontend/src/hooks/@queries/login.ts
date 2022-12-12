@@ -26,6 +26,7 @@ function useAuth(code: string | null) {
   const { openSnackBar } = useSnackBar();
 
   const { mutate } = useMutation<UserStateType, AxiosError>(() => loginApi.auth(code), {
+    retry: 0,
     onError: () => onErrorAuth(),
     onSuccess: ({ accessToken, refreshToken }) => {
       onSuccessAuth(accessToken, refreshToken);
