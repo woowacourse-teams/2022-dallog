@@ -1,0 +1,52 @@
+name: Backend CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.SUBMODULE_TOKEN}}
+          submodules: true
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+
+      - name: Build with Gradle For RestDocs
+        run: ./gradlew bootJar
+
+      - name: Build with Gradle
+        run: ./gradlew bootJar
+
+      - name: Deploy use SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.LINODE_HOST}}
+          username: ${{secrets.LINODE_USERNAME}}
+          password: ${{secrets.LINODE_PASSWORD}}
+          source: "./backend/build/libs/*.jar"
+          target: "/root/cd_application"
+          strip_components: 3
+
+      - name: Run Application use SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.LINODE_HOST}}
+          username: ${{secrets.LINODE_USERNAME}}
+          password: ${{secrets.LINODE_PASSWORD}}
+          script_stop: true
+          script: sh /root/cd_application/run.sh
