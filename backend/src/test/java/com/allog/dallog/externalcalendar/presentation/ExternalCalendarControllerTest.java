@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.category.dto.request.ExternalCategoryCreateRequest;
 import com.allog.dallog.category.exception.ExistExternalCategoryException;
-import com.allog.dallog.common.ControllerTest;
+import com.allog.dallog.common.annotation.ControllerTest;
 import com.allog.dallog.externalcalendar.dto.ExternalCalendar;
 import com.allog.dallog.externalcalendar.dto.ExternalCalendarsResponse;
 import java.util.List;

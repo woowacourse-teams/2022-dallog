@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.exception.NoSuchCategoryException;
-import com.allog.dallog.common.ControllerTest;
+import com.allog.dallog.common.annotation.ControllerTest;
 import com.allog.dallog.schedule.dto.request.ScheduleCreateRequest;
 import com.allog.dallog.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.schedule.dto.response.IntegrationScheduleResponse;

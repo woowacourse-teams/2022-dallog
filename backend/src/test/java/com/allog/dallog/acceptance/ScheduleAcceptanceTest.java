@@ -31,8 +31,8 @@ import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_두번째
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_세번째_일정;
 import static com.allog.dallog.common.fixtures.ScheduleFixtures.종일_첫번째_일정;
 
-import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.category.dto.response.CategoryResponse;
+import com.allog.dallog.common.fixtures.OAuthFixtures;
 import com.allog.dallog.schedule.dto.request.ScheduleUpdateRequest;
 import com.allog.dallog.schedule.dto.response.ScheduleResponse;
 import io.restassured.response.ExtractableResponse;
