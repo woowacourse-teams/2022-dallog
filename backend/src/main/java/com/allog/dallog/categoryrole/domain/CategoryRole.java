@@ -1,7 +1,7 @@
 package com.allog.dallog.categoryrole.domain;
 
 import com.allog.dallog.category.domain.Category;
-import com.allog.dallog.common.BaseEntity;
+import com.allog.dallog.global.entity.BaseEntity;
 import com.allog.dallog.categoryrole.exception.NoCategoryAuthorityException;
 import com.allog.dallog.member.domain.Member;
 import javax.persistence.Entity;

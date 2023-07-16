@@ -2,7 +2,7 @@ package com.allog.dallog.category.domain;
 
 import com.allog.dallog.auth.exception.NoPermissionException;
 import com.allog.dallog.category.exception.InvalidCategoryException;
-import com.allog.dallog.common.BaseEntity;
+import com.allog.dallog.global.entity.BaseEntity;
 import com.allog.dallog.member.domain.Member;
 import javax.persistence.Column;
 import javax.persistence.Entity;

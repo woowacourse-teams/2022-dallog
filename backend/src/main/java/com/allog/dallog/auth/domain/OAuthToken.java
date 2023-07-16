@@ -1,6 +1,6 @@
 package com.allog.dallog.auth.domain;
 
-import com.allog.dallog.common.BaseEntity;
+import com.allog.dallog.global.entity.BaseEntity;
 import com.allog.dallog.member.domain.Member;
 import java.util.Objects;
 import javax.persistence.Column;

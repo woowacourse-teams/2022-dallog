@@ -1,6 +1,6 @@
 package com.allog.dallog.category.domain;
 
-import com.allog.dallog.common.BaseEntity;
+import com.allog.dallog.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
