@@ -1,4 +1,4 @@
-package com.allog.dallog.common;
+package com.allog.dallog.global.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

@@ -1,6 +1,6 @@
 package com.allog.dallog.member.domain;
 
-import com.allog.dallog.common.BaseEntity;
+import com.allog.dallog.global.entity.BaseEntity;
 import com.allog.dallog.member.exception.InvalidMemberException;
 import java.util.Objects;
 import java.util.regex.Matcher;
